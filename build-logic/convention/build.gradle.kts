@@ -19,3 +19,28 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
 }
+
+gradlePlugin {
+    plugins {
+        register("androidApplicationCompose") {
+            id = "dodamdodam.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+        register("androidApplication") {
+            id = "dodamdodam.android.application"
+            implementationClass = "AndroidApplicationConventionPlugin"
+        }
+        register("androidLibraryCompose") {
+            id = "dodamdodam.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
+        register("androidLibrary") {
+            id = "dodamdodam.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
+        register("jvmLibrary") {
+            id = "dodamdodam.jvm.library"
+            implementationClass = "JvmLibraryConventionPlugin"
+        }
+    }
+}
