@@ -1,17 +1,13 @@
 plugins {
     id("dodamdodam.android.application.compose")
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("dodamdodam.android.application")
 }
 
 android {
     namespace = "kr.hs.dgsw.smartschool.dodamdodam"
-    compileSdk = 34
 
     defaultConfig {
         applicationId = "kr.hs.dgsw.smartschool.dodamdodam"
-        minSdk = 26
-        targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
 
@@ -29,13 +25,6 @@ android {
                 "proguard-rules.pro",
             )
         }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     packaging {
