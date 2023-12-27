@@ -34,5 +34,9 @@ gradlePlugin {
             id = "dodamdodam.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
+        register("androidLibrary") {
+            id = "dodamdodam.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
     }
 }
