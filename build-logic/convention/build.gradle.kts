@@ -26,5 +26,9 @@ gradlePlugin {
             id = "dodamdodam.android.application.compose"
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
+        register("androidApplication") {
+            id = "dodamdodam.android.application"
+            implementationClass = "AndroidApplicationConventionPlugin"
+        }
     }
 }
