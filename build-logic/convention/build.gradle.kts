@@ -19,3 +19,12 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
 }
+
+gradlePlugin {
+    plugins {
+        register("androidApplicationCompose") {
+            id = "dodamdodam.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+    }
+}
