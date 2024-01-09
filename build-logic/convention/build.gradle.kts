@@ -4,43 +4,54 @@ plugins {
     `kotlin-dsl`
 }
 
+group = "com.b1nd.dodam.buildlogic"
+
+repositories {
+    google()
+    mavenCentral()
+    gradlePluginPortal()
+}
+
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-}
-
 dependencies {
-    compileOnly(libs.android.gradlePlugin)
-    compileOnly(libs.kotlin.gradlePlugin)
+    implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.android.gradle.plugin)
 }
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = "dodamdodam.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
-        }
+        // primitives
         register("androidApplication") {
-            id = "dodamdodam.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
+            id = "b1nd.dodam.primitive.android.application"
+            implementationClass = "com.b1nd.dodam.primitive.AndroidApplicationPlugin"
         }
-        register("androidLibraryCompose") {
-            id = "dodamdodam.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        register("androidCompose") {
+            id = "b1nd.dodam.primitive.android.compose"
+            implementationClass = "com.b1nd.dodam.primitive.AndroidComposePlugin"
         }
-        register("androidLibrary") {
-            id = "dodamdodam.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
+        register("androidHilt") {
+            id = "b1nd.dodam.primitive.android.hilt"
+            implementationClass = "com.b1nd.dodam.primitive.AndroidHiltPlugin"
         }
-        register("jvmLibrary") {
-            id = "dodamdodam.jvm.library"
-            implementationClass = "JvmLibraryConventionPlugin"
+        register("androidKotlin") {
+            id = "b1nd.dodam.primitive.android.kotlin"
+            implementationClass = "com.b1nd.dodam.primitive.AndroidKotlinPlugin"
+        }
+        register("android") {
+            id = "b1nd.dodam.primitive.android"
+            implementationClass = "com.b1nd.dodam.primitive.AndroidPlugin"
+        }
+        // convention
+        register("androidFeature") {
+            id = "b1nd.dodam.convention.android.feature"
+            implementationClass = "com.b1nd.dodam.convention.AndroidFeaturePlugin"
         }
     }
 }

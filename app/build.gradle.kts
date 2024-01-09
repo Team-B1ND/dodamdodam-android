@@ -1,15 +1,17 @@
 plugins {
-    id("dodamdodam.android.application.compose")
-    id("dodamdodam.android.application")
+    id("b1nd.dodam.primitive.android.application")
+    id("b1nd.dodam.primitive.android.kotlin")
+    id("b1nd.dodam.primitive.android.compose")
+    id("b1nd.dodam.primitive.android.hilt")
 }
 
 android {
-    namespace = "kr.hs.dgsw.smartschool.dodamdodam"
+    namespace = "com.b1nd.dodam"
 
     defaultConfig {
-        applicationId = "kr.hs.dgsw.smartschool.dodamdodam"
-        versionCode = 1
-        versionName = "1.0.0"
+        applicationId = "com.b1nd.dodam"
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.appVersion.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -26,23 +28,11 @@ android {
             )
         }
     }
-
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    testImplementation(libs.junit4)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-
-    implementation(libs.androidx.navigation.compose)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.androidx.test.espresso)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
 }
