@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.spotless)
 
     alias(libs.plugins.ksp).apply(false)
+    alias(libs.plugins.hilt).apply(false)
 }
 
 subprojects {
