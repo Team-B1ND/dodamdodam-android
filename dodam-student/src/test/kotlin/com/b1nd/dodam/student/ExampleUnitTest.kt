@@ -1,4 +1,4 @@
-package com.b1nd.dodam
+package com.b1nd.dodam.student
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

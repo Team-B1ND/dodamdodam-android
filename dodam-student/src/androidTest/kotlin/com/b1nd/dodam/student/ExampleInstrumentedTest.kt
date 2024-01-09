@@ -1,4 +1,4 @@
-package com.b1nd.dodam
+package com.b1nd.dodam.student
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
