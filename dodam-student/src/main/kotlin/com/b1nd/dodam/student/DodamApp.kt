@@ -11,7 +11,7 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
     DodamdodamandroidTheme {
         NavHost(
             navController = navController,
-            startDestination = "" // TODO : Set startDestination
+            startDestination = "",
         ) {
             // TODO : Add navigation composable
         }
