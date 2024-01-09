@@ -1,4 +1,4 @@
-package com.b1nd.dodam.theme
+package com.b1nd.dodam.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
