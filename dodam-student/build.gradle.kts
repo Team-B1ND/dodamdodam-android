@@ -6,10 +6,10 @@ plugins {
 }
 
 android {
-    namespace = "com.b1nd.dodam"
+    namespace = "com.b1nd.dodam.student"
 
     defaultConfig {
-        applicationId = "com.b1nd.dodam"
+        applicationId = "com.b1nd.dodam.student"
         versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.appVersion.get()
 
@@ -31,6 +31,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:designsystem"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
