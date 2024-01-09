@@ -1,4 +1,4 @@
-package com.b1nd.dodam.theme
+package com.b1nd.dodam.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
