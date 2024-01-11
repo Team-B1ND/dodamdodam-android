@@ -1,6 +1,7 @@
 package com.b1nd.dodam.designsystem.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -21,6 +22,7 @@ val NotoSansKR = Typography(
         fontSize = 22.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.35.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     titleMedium = TextStyle(
         fontFamily = NotoSansKrFontFamily,
@@ -28,6 +30,7 @@ val NotoSansKR = Typography(
         fontSize = 18.sp,
         lineHeight = 23.sp,
         letterSpacing = 0.38.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     titleSmall = TextStyle(
         fontFamily = NotoSansKrFontFamily,
@@ -35,6 +38,7 @@ val NotoSansKR = Typography(
         fontSize = 16.sp,
         lineHeight = 21.sp,
         letterSpacing = 0.15.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     labelLarge = TextStyle(
         fontFamily = NotoSansKrFontFamily,
@@ -42,6 +46,7 @@ val NotoSansKR = Typography(
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     labelMedium = TextStyle(
         fontFamily = NotoSansKrFontFamily,
@@ -49,6 +54,7 @@ val NotoSansKR = Typography(
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     labelSmall = TextStyle(
         fontFamily = NotoSansKrFontFamily,
@@ -56,6 +62,7 @@ val NotoSansKR = Typography(
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     bodyLarge = TextStyle(
         fontFamily = NotoSansKrFontFamily,
@@ -63,6 +70,7 @@ val NotoSansKR = Typography(
         fontSize = 18.sp,
         lineHeight = 26.sp,
         letterSpacing = 0.15.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     bodyMedium = TextStyle(
         fontFamily = NotoSansKrFontFamily,
@@ -70,6 +78,7 @@ val NotoSansKR = Typography(
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
     bodySmall = TextStyle(
         fontFamily = NotoSansKrFontFamily,
@@ -77,5 +86,6 @@ val NotoSansKR = Typography(
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
 )
