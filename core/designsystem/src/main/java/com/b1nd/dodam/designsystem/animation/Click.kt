@@ -8,16 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.graphicsLayer
 
-fun Modifier.bounceClick(
-    interactionSource: InteractionSource
-) = composed {
+fun Modifier.bounceClick(interactionSource: InteractionSource) = composed {
     val isPressed by interactionSource.collectIsPressedAsState()
     val scale by animateFloatAsState(
         if (isPressed) {
             0.97f
         } else {
             1f
-        }
+        },
     )
     this
         .graphicsLayer {
