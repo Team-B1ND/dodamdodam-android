@@ -87,7 +87,7 @@ fun DodamdodamandroidTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = NotoSansKR,
         content = content,
     )
 }
