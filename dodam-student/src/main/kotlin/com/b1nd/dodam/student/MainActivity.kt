@@ -6,7 +6,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
-import com.b1nd.dodam.designsystem.theme.DodamdodamandroidTheme
+import com.b1nd.dodam.designsystem.theme.DodamTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     ),
                 )
             }
-            DodamdodamandroidTheme {
+            DodamTheme {
                 DodamApp()
             }
         }
