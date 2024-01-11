@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.b1nd.dodam.designsystem.theme.DodamdodamandroidTheme
+import com.b1nd.dodam.designsystem.theme.DodamTheme
 
 @Composable
 fun DodamApp(navController: NavHostController = rememberNavController()) {
-    DodamdodamandroidTheme {
+    DodamTheme {
         NavHost(
             navController = navController,
             startDestination = "",

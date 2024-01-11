@@ -81,5 +81,13 @@ dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hil
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
+# custom plugin
+dodam-android-feature = { id = "b1nd.dodam.convention.android.feature", version = "unspecified" }
+dodam-android = { id = "b1nd.dodam.primitive.android", version = "unspecified" }
+dodam-android-kotlin = { id = "b1nd.dodam.primitive.android.kotlin", version = "unspecified" }
+dodam-android-compose = { id = "b1nd.dodam.primitive.android.compose", version = "unspecified" }
+dodam-android-hilt = { id = "b1nd.dodam.primitive.android.hilt", version = "unspecified" }
+dodam-android-application = { id = "b1nd.dodam.primitive.android.application", version = "unspecified" }
+
 [bundles]
 compose-implementation = ["androidx-compose-ui", "androidx-compose-ui-foundation", "androidx-compose-ui-graphics", "androidx-compose-lifecycle", "androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview", "androidx-compose-material3"]

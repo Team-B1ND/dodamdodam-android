@@ -1,7 +1,7 @@
 plugins {
-    id("b1nd.dodam.primitive.android")
-    id("b1nd.dodam.primitive.android.kotlin")
-    id("b1nd.dodam.primitive.android.compose")
+    alias(libs.plugins.dodam.android)
+    alias(libs.plugins.dodam.android.kotlin)
+    alias(libs.plugins.dodam.android.compose)
 }
 
 android {
