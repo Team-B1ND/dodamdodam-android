@@ -1,8 +1,8 @@
 plugins {
-    id("b1nd.dodam.primitive.android.application")
-    id("b1nd.dodam.primitive.android.kotlin")
-    id("b1nd.dodam.primitive.android.compose")
-    id("b1nd.dodam.primitive.android.hilt")
+    alias(libs.plugins.dodam.android.application)
+    alias(libs.plugins.dodam.android.kotlin)
+    alias(libs.plugins.dodam.android.compose)
+    alias(libs.plugins.dodam.android.hilt)
 }
 
 android {
@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:designsystem"))
+    implementation(projects.core.designsystem)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
