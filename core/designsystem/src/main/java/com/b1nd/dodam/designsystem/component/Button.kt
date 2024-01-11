@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,7 +61,7 @@ fun DodamFullWidthButton(
     elevation: ButtonElevation? = null,
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     Button(
         onClick = onClick,
@@ -125,7 +124,7 @@ fun DodamLargeButton(
     elevation: ButtonElevation? = null,
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     Button(
         onClick = onClick,
@@ -187,7 +186,7 @@ fun DodamMediumButton(
     elevation: ButtonElevation? = null,
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     Button(
         onClick = onClick,
@@ -249,7 +248,7 @@ fun DodamSmallButton(
     elevation: ButtonElevation? = null,
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     Button(
         onClick = onClick,
@@ -277,7 +276,7 @@ private fun DodamFullWidthButtonPreview() {
     DodamTheme {
         DodamFullWidthButton(
             onClick = {},
-            text = "버튼"
+            text = "버튼",
         )
     }
 }
@@ -288,7 +287,7 @@ private fun DodamLargeButtonPreview() {
     DodamTheme {
         DodamLargeButton(
             onClick = {},
-            text = "버튼"
+            text = "버튼",
         )
     }
 }
@@ -299,7 +298,7 @@ private fun DodamMediumButtonPreview() {
     DodamTheme {
         DodamMediumButton(
             onClick = {},
-            text = "버튼"
+            text = "버튼",
         )
     }
 }
@@ -310,7 +309,7 @@ private fun DodamSmallButtonPreview() {
     DodamTheme {
         DodamSmallButton(
             onClick = {},
-            text = "버튼"
+            text = "버튼",
         )
     }
 }
