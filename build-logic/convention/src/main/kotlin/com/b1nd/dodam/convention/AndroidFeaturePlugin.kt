@@ -7,10 +7,10 @@ class AndroidFeaturePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("b1nd.dodamdodam.primitive.android")
-                apply("b1nd.dodamdodam.primitive.android.kotlin")
-                apply("b1nd.dodamdodam.primitive.android.compose")
-                apply("b1nd.dodamdodam.primitive.android.hilt")
+                apply("b1nd.dodam.primitive.android")
+                apply("b1nd.dodam.primitive.android.kotlin")
+                apply("b1nd.dodam.primitive.android.compose")
+                apply("b1nd.dodam.primitive.android.hilt")
             }
         }
     }
