@@ -67,8 +67,7 @@ fun DodamFullWidthButton(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(48.dp)
-            .bounceClick(interactionSource),
+            .height(48.dp),
         enabled = enabled,
         shape = shape,
         colors = colors,
@@ -129,8 +128,7 @@ fun DodamLargeButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .height(48.dp)
-            .bounceClick(interactionSource),
+            .height(48.dp),
         enabled = enabled,
         shape = shape,
         colors = colors,
@@ -191,8 +189,7 @@ fun DodamMediumButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .height(36.dp)
-            .bounceClick(interactionSource),
+            .height(36.dp),
         enabled = enabled,
         shape = shape,
         colors = colors,
@@ -253,8 +250,7 @@ fun DodamSmallButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .height(28.dp)
-            .bounceClick(interactionSource),
+            .height(28.dp),
         enabled = enabled,
         shape = shape,
         colors = colors,
