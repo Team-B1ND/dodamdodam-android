@@ -10,10 +10,7 @@ const val ONBOARDING_ROUTE = "onboarding"
 
 fun NavController.navigateToOnboarding(navOptions: NavOptions) = navigate(ONBOARDING_ROUTE, navOptions)
 
-fun NavGraphBuilder.onboardingScreen(
-    onRegisterClick: () -> Unit,
-    onLoginClick: () -> Unit,
-) {
+fun NavGraphBuilder.onboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
     composable(route = ONBOARDING_ROUTE) {
         OnboardingScreen(
             onRegisterClick = onRegisterClick,

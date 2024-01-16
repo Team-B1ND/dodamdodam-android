@@ -29,19 +29,16 @@ import com.b1nd.dodam.designsystem.theme.Black
 import com.b1nd.dodam.designsystem.theme.White
 
 @Composable
-internal fun OnboardingScreen(
-    onRegisterClick: () -> Unit,
-    onLoginClick: () -> Unit,
-) {
+internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         Image(
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(id = R.drawable.onboarding_background),
             contentDescription = "onboarding background",
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Canvas(
@@ -49,9 +46,9 @@ internal fun OnboardingScreen(
             onDraw = {
                 drawRect(
                     color = Black,
-                    alpha = 0.5f
+                    alpha = 0.5f,
                 )
-            }
+            },
         )
 
         Column(
@@ -59,13 +56,13 @@ internal fun OnboardingScreen(
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
                 .systemBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(80.dp))
 
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.onboarding_logo),
-                contentDescription = "dodam logo"
+                contentDescription = "dodam logo",
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -73,14 +70,14 @@ internal fun OnboardingScreen(
             Text(
                 text = "[부사] 어린아이가 탈 없이 잘 놀며 자라는 모양.",
                 color = White,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
             DodamFullWidthButton(
                 onClick = onRegisterClick,
-                text = "시작하기"
+                text = "시작하기",
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -89,18 +86,18 @@ internal fun OnboardingScreen(
                 Text(
                     text = "이미 계정이 있나요?",
                     color = White,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
                 )
                 Spacer(modifier = Modifier.width(2.dp))
                 Text(
                     modifier = Modifier.clickable(
                         interactionSource = NoInteractionSource(),
                         indication = null,
-                        onClick = onLoginClick
+                        onClick = onLoginClick,
                     ),
                     text = "로그인",
                     color = White,
-                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
                 )
             }
 
