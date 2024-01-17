@@ -11,11 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.R
 
 @Composable
-fun CheckCircleIcon(
-    modifier: Modifier = Modifier,
-    contentDescription: String? = null,
-    tint: Color = Gray300
-) {
+fun CheckCircleIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = ImageVector.vectorResource(R.drawable.check_circle),
@@ -25,11 +21,7 @@ fun CheckCircleIcon(
 }
 
 @Composable
-fun CheckIcon(
-    modifier: Modifier = Modifier,
-    contentDescription: String? = null,
-    tint: Color = Gray300
-) {
+fun CheckIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = ImageVector.vectorResource(R.drawable.check),
@@ -39,11 +31,7 @@ fun CheckIcon(
 }
 
 @Composable
-fun RightArrowIcon(
-    modifier: Modifier = Modifier,
-    contentDescription: String? = null,
-    tint: Color = Gray300
-) {
+fun RightArrowIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = ImageVector.vectorResource(R.drawable.right_arrow),
