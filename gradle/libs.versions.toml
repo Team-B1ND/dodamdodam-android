@@ -23,6 +23,7 @@ androidx-hilt-navigation-compose = "1.1.0"
 dagger-hilt = "2.50"
 spotless = "6.23.3"
 material = "1.11.0"
+bottomsheetdialog = "1.3.1"
 
 # test
 junit = "4.13.2"
@@ -66,6 +67,7 @@ hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" 
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
 hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+bottomsheetdialog-compose = { group = "com.holix.android", name = "bottomsheetdialog-compose", version.ref = "bottomsheetdialog" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }

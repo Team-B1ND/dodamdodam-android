@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.designsystem.animation.bounceClick
 import com.b1nd.dodam.designsystem.theme.DodamTheme
 
 /**
@@ -67,8 +66,7 @@ fun DodamFullWidthButton(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(48.dp)
-            .bounceClick(interactionSource),
+            .height(48.dp),
         enabled = enabled,
         shape = shape,
         colors = colors,
@@ -129,8 +127,7 @@ fun DodamLargeButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .height(48.dp)
-            .bounceClick(interactionSource),
+            .height(48.dp),
         enabled = enabled,
         shape = shape,
         colors = colors,
@@ -191,8 +188,7 @@ fun DodamMediumButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .height(36.dp)
-            .bounceClick(interactionSource),
+            .height(36.dp),
         enabled = enabled,
         shape = shape,
         colors = colors,
@@ -253,8 +249,7 @@ fun DodamSmallButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .height(28.dp)
-            .bounceClick(interactionSource),
+            .height(28.dp),
         enabled = enabled,
         shape = shape,
         colors = colors,
