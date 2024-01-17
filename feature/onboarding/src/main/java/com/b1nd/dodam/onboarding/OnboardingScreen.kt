@@ -48,10 +48,7 @@ import com.holix.android.bottomsheetdialog.compose.BottomSheetDialog
 import com.holix.android.bottomsheetdialog.compose.BottomSheetDialogProperties
 
 @Composable
-internal fun OnboardingScreen(
-    onRegisterClick: () -> Unit,
-    onLoginClick: () -> Unit,
-) {
+internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
     var showBottomSheet by remember { mutableStateOf(false) }
     var isTermsChecked by remember { mutableStateOf(false) }
     var isPrivacyChecked by remember { mutableStateOf(false) }
@@ -138,8 +135,8 @@ internal fun OnboardingScreen(
             onDismissRequest = { showBottomSheet = false },
             properties = BottomSheetDialogProperties(
                 dismissWithAnimation = true,
-                enableEdgeToEdge = true
-            )
+                enableEdgeToEdge = true,
+            ),
         ) {
             Column(
                 modifier = Modifier
@@ -147,7 +144,7 @@ internal fun OnboardingScreen(
                     .fillMaxWidth()
                     .background(White)
                     .navigationBarsPadding()
-                    .padding(24.dp)
+                    .padding(24.dp),
             ) {
                 Row(
                     modifier = Modifier
@@ -155,7 +152,7 @@ internal fun OnboardingScreen(
                         .border(
                             width = 1.5.dp,
                             color = MaterialTheme.colorScheme.outline,
-                            shape = RoundedCornerShape(10.dp)
+                            shape = RoundedCornerShape(10.dp),
                         )
                         .padding(12.dp)
                         .clickable(
@@ -165,8 +162,7 @@ internal fun OnboardingScreen(
                             if (isPrivacyChecked && isTermsChecked) {
                                 isPrivacyChecked = false
                                 isTermsChecked = false
-                            }
-                            else {
+                            } else {
                                 isPrivacyChecked = true
                                 isTermsChecked = true
                             }
@@ -179,7 +175,7 @@ internal fun OnboardingScreen(
                     Text(
                         text = "모두 동의합니다",
                         color = Gray900,
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                 }
 
@@ -194,9 +190,9 @@ internal fun OnboardingScreen(
                             .clickable(
                                 interactionSource = NoInteractionSource(),
                                 indication = null,
-                                onClick = { isTermsChecked = !isTermsChecked }
+                                onClick = { isTermsChecked = !isTermsChecked },
                             ),
-                        tint = if (isTermsChecked) Blue500 else Gray300
+                        tint = if (isTermsChecked) Blue500 else Gray300,
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -204,7 +200,7 @@ internal fun OnboardingScreen(
                     Text(
                         text = "(필수) 서비스 이용약관",
                         color = Gray800,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -223,9 +219,9 @@ internal fun OnboardingScreen(
                             .clickable(
                                 interactionSource = NoInteractionSource(),
                                 indication = null,
-                                onClick = { isPrivacyChecked = !isPrivacyChecked }
+                                onClick = { isPrivacyChecked = !isPrivacyChecked },
                             ),
-                        tint = if (isPrivacyChecked) Blue500 else Gray300
+                        tint = if (isPrivacyChecked) Blue500 else Gray300,
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -233,7 +229,7 @@ internal fun OnboardingScreen(
                     Text(
                         text = "(필수) 개인정보 수집 및 이용에 대한 안내",
                         color = Gray800,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -246,7 +242,7 @@ internal fun OnboardingScreen(
                 DodamFullWidthButton(
                     onClick = onRegisterClick,
                     enabled = isPrivacyChecked && isTermsChecked,
-                    text = "다음"
+                    text = "다음",
                 )
             }
         }
