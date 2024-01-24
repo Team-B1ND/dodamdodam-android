@@ -1,5 +1,6 @@
 package com.b1nd.dodam.designsystem.component
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,12 +30,20 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.animation.NoInteractionSource
+import com.b1nd.dodam.designsystem.icons.Calendar
+import com.b1nd.dodam.designsystem.icons.Home
+import com.b1nd.dodam.designsystem.icons.Meal
+import com.b1nd.dodam.designsystem.icons.More
+import com.b1nd.dodam.designsystem.icons.Out
+import com.b1nd.dodam.designsystem.theme.DodamTheme
 import kotlin.math.roundToInt
 
 @Composable
@@ -120,6 +129,24 @@ fun DodamBottomNavigation(navController: NavHostController, bottomNavigationItem
                 }
             }
         }
+    }
+}
+
+@Composable
+@Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+private fun DodamBottomNavigationPreview() {
+    DodamTheme {
+        DodamBottomNavigation(
+            navController = rememberNavController(),
+            bottomNavigationItems = listOf(
+                BottomNavigationItem("home", Home),
+                BottomNavigationItem("meal", Meal),
+                BottomNavigationItem("out", Out),
+                BottomNavigationItem("schedule", Calendar),
+                BottomNavigationItem("more", More)
+            )
+        )
     }
 }
 
