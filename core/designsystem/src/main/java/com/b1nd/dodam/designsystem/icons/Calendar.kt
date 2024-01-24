@@ -9,20 +9,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-
-private var _Calendar: ImageVector? = null
+private var vector: ImageVector? = null
 
 public val Calendar: ImageVector
     get() {
-        if (_Calendar != null) {
-            return _Calendar!!
+        if (vector != null) {
+            return vector!!
         }
-        _Calendar = ImageVector.Builder(
+        vector = ImageVector.Builder(
             name = "Calendar",
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             path(
                 fill = SolidColor(Color(0xFF000000)),
@@ -33,7 +32,7 @@ public val Calendar: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.EvenOdd
+                pathFillType = PathFillType.EvenOdd,
             ) {
                 moveTo(13f, 4f)
                 curveTo(11.3431f, 4f, 10f, 5.3431f, 10f, 7f)
@@ -103,6 +102,5 @@ public val Calendar: ImageVector
                 close()
             }
         }.build()
-        return _Calendar!!
+        return vector!!
     }
-

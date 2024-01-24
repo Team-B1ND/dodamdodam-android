@@ -9,19 +9,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-private var _Meal: ImageVector? = null
+private var vector: ImageVector? = null
 
 public val Meal: ImageVector
     get() {
-        if (_Meal != null) {
-            return _Meal!!
+        if (vector != null) {
+            return vector!!
         }
-        _Meal = ImageVector.Builder(
+        vector = ImageVector.Builder(
             name = "Meal",
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             path(
                 fill = SolidColor(Color(0xFF000000)),
@@ -32,7 +32,7 @@ public val Meal: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(5f, 29f)
                 curveTo(5f, 18.5066f, 13.5066f, 10f, 24f, 10f)
@@ -52,7 +52,7 @@ public val Meal: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(21.3618f, 4.72361f)
                 curveTo(21.1956f, 4.3912f, 21.4373f, 4f, 21.809f, 4f)
@@ -74,7 +74,7 @@ public val Meal: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.EvenOdd
+                pathFillType = PathFillType.EvenOdd,
             ) {
                 moveTo(4f, 39f)
                 verticalLineTo(39.5f)
@@ -86,6 +86,5 @@ public val Meal: ImageVector
                 close()
             }
         }.build()
-        return _Meal!!
+        return vector!!
     }
-

@@ -9,19 +9,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-private var _More: ImageVector? = null
+private var vector: ImageVector? = null
 
 public val More: ImageVector
     get() {
-        if (_More != null) {
-            return _More!!
+        if (vector != null) {
+            return vector!!
         }
-        _More = ImageVector.Builder(
+        vector = ImageVector.Builder(
             name = "More",
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             path(
                 fill = SolidColor(Color(0xFF000000)),
@@ -32,7 +32,7 @@ public val More: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(6.5f, 6.5f)
                 horizontalLineTo(41.5f)
@@ -54,7 +54,7 @@ public val More: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(6.5f, 21.5f)
                 horizontalLineTo(41.5f)
@@ -76,7 +76,7 @@ public val More: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(6.5f, 36.5f)
                 horizontalLineTo(41.5f)
@@ -90,6 +90,5 @@ public val More: ImageVector
                 close()
             }
         }.build()
-        return _More!!
+        return vector!!
     }
-
