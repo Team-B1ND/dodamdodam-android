@@ -38,16 +38,12 @@ import com.b1nd.dodam.designsystem.animation.NoInteractionSource
 import kotlin.math.roundToInt
 
 @Composable
-fun DodamBottomNavigation(
-    navController: NavHostController,
-    bottomNavigationItems: List<BottomNavigationItem>,
-) {
+fun DodamBottomNavigation(navController: NavHostController, bottomNavigationItems: List<BottomNavigationItem>) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceVariant,
         contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
     ) {
-
         Row(
             Modifier
                 .padding(horizontal = 12.dp)
@@ -68,18 +64,17 @@ fun DodamBottomNavigation(
                     modifier = Modifier
                         .offset { IntOffset(x, 0) }
                         .size(with(density) { size.toDpSize() }),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     Box(
                         modifier = Modifier
                             .background(
                                 color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(12.dp),
                             )
-                            .size(40.dp)
+                            .size(40.dp),
                     )
                 }
-
 
                 Row {
                     var selectedIndex: Int by remember { mutableIntStateOf(0) }
@@ -106,9 +101,11 @@ fun DodamBottomNavigation(
                                     modifier = Modifier.size(24.dp),
                                     imageVector = item.icon,
                                     contentDescription = null,
-                                    tint = if (selectedIndex == index)
+                                    tint = if (selectedIndex == index) {
                                         MaterialTheme.colorScheme.onPrimary
-                                    else MaterialTheme.colorScheme.onSurfaceVariant
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    },
                                 )
                             },
                             modifier = Modifier
@@ -130,5 +127,5 @@ private val BottomNavigationHeight = 64.dp
 
 data class BottomNavigationItem(
     val route: String,
-    val icon: ImageVector
+    val icon: ImageVector,
 )

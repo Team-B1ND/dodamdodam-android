@@ -9,19 +9,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-private var _Out: ImageVector? = null
+private var vector: ImageVector? = null
 
 public val Out: ImageVector
     get() {
-        if (_Out != null) {
-            return _Out!!
+        if (vector != null) {
+            return vector!!
         }
-        _Out = ImageVector.Builder(
+        vector = ImageVector.Builder(
             name = "Out",
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             path(
                 fill = SolidColor(Color(0xFF000000)),
@@ -32,7 +32,7 @@ public val Out: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.EvenOdd
+                pathFillType = PathFillType.EvenOdd,
             ) {
                 moveTo(8.5f, 4f)
                 curveTo(6.0147f, 4f, 4f, 6.0147f, 4f, 8.5f)
@@ -64,7 +64,7 @@ public val Out: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.EvenOdd
+                pathFillType = PathFillType.EvenOdd,
             ) {
                 moveTo(32.9261f, 13.6818f)
                 lineTo(7f, 6f)
@@ -81,6 +81,5 @@ public val Out: ImageVector
                 close()
             }
         }.build()
-        return _Out!!
+        return vector!!
     }
-

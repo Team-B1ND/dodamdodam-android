@@ -10,19 +10,19 @@ import androidx.compose.ui.graphics.vector.group
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-private var _Home: ImageVector? = null
+private var vector: ImageVector? = null
 
 public val Home: ImageVector
     get() {
-        if (_Home != null) {
-            return _Home!!
+        if (vector != null) {
+            return vector!!
         }
-        _Home = ImageVector.Builder(
+        vector = ImageVector.Builder(
             name = "Home",
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             group {
                 path(
@@ -34,7 +34,7 @@ public val Home: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(22.1259f, 5.49927f)
                     curveTo(23.2216f, 4.6227f, 24.7784f, 4.6227f, 25.8741f, 5.4993f)
@@ -59,6 +59,5 @@ public val Home: ImageVector
                 }
             }
         }.build()
-        return _Home!!
+        return vector!!
     }
-
