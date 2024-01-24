@@ -144,8 +144,8 @@ private fun DodamBottomNavigationPreview() {
                 BottomNavigationItem("meal", Meal),
                 BottomNavigationItem("out", Out),
                 BottomNavigationItem("schedule", Calendar),
-                BottomNavigationItem("more", More)
-            )
+                BottomNavigationItem("more", More),
+            ),
         )
     }
 }
