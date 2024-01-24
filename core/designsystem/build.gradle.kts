@@ -10,3 +10,7 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 }
+
+dependencies {
+    api(libs.androidx.compose.material)
+}
