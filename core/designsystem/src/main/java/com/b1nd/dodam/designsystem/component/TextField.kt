@@ -2,6 +2,7 @@ package com.b1nd.dodam.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,6 +51,7 @@ fun DodamTextField(
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
+    isPasswordVisible: Boolean = false,
     isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -58,78 +60,90 @@ fun DodamTextField(
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.shape,
-    colors: TextFieldColors = TextFieldDefaults.colors()
+    colors: TextFieldColors = TextFieldDefaults.colors(),
 ) {
     var isFocused by remember { mutableStateOf(false) }
-    var isPasswordVisible by remember { mutableStateOf(true) }
+    var isSlashEye by remember { mutableStateOf(isPasswordVisible) }
     TextField(
         value = value,
         textStyle = textStyle,
         onValueChange = onValueChange,
         modifier = modifier
             .background(
-                color = Color.Transparent
+                color = Color.Transparent,
             )
             .fillMaxWidth()
             .onFocusChanged { isFocused = it.isFocused },
         shape = shape,
         isError = isError,
+        enabled = enabled,
+        readOnly = readOnly,
+        prefix = prefix,
+        suffix = suffix,
         keyboardActions = keyboardActions,
         keyboardOptions = keyboardOptions,
         maxLines = maxLines,
         minLines = minLines,
         colors = colors,
+        supportingText = supportingText,
         interactionSource = interactionSource,
-        visualTransformation = if (isPassword && isPasswordVisible) PasswordVisualTransformation()
-        else VisualTransformation.None,
+        visualTransformation = if (isPassword && !isSlashEye) {
+            PasswordVisualTransformation()
+        } else {
+            VisualTransformation.None
+        },
         label = {
             Text(
                 hint,
-                style = if (!isFocused)
+                style = if (isFocused || value.isNotEmpty()) {
+                    MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 12.sp,
+                    )
+                } else {
                     MaterialTheme.typography.bodyMedium
-                else MaterialTheme.typography.bodyMedium.copy(
-                    fontSize = 12.sp
-                ),
-                color = if (isError) MaterialTheme.colorScheme.error else if (isFocused) MaterialTheme.colorScheme.primary else Gray400
+                },
+                color = if (isError) MaterialTheme.colorScheme.error else if (isFocused) MaterialTheme.colorScheme.primary else Gray400,
             )
         },
         trailingIcon = {
-            Row {
-                if (!isError) {
+            if (!isError) {
+                Row {
                     if (isPassword) {
-                        if (isPasswordVisible)
+                        if (!isSlashEye) {
                             IconButton(
-                                onClick = { isPasswordVisible = !isPasswordVisible },
+                                onClick = { isSlashEye = !isSlashEye },
                                 modifier = Modifier
                                     .background(Color.Transparent)
-                                    .size(24.dp)
+                                    .size(24.dp),
                             ) {
                                 EyeIcon()
-                            } else {
+                            }
+                        } else {
                             IconButton(
-                                onClick = { isPasswordVisible = !isPasswordVisible },
+                                onClick = { isSlashEye = !isSlashEye },
                                 modifier = Modifier
                                     .background(Color.Transparent)
-                                    .size(24.dp)
+                                    .size(24.dp),
                             ) {
                                 EyeSlashIcon()
                             }
                         }
+                        Spacer(modifier = Modifier.size(16.dp))
                     }
-                    Spacer(modifier = Modifier.size(16.dp))
                     IconButton(
                         onClick = { onClickCancel() },
                         modifier = Modifier
                             .background(Color.Transparent)
-                            .size(24.dp)
+                            .size(24.dp),
                     ) {
                         CancelIcon()
                     }
-                } else {
-                    ErrorIcon()
+                    if (isPassword) Spacer(modifier = Modifier.size(12.dp))
                 }
+            } else {
+                ErrorIcon()
             }
-        }
+        },
     )
 }
 
@@ -138,12 +152,42 @@ fun DodamTextField(
 fun DodamTextFieldPreview() {
     var value = remember { mutableStateOf("") }
     DodamTheme {
-        DodamTextField(
-            onValueChange = { value.value = it },
-            value = value.value,
-            hint = "hint",
-            isError = true,
-            onClickCancel = { value.value = "" },
-            isPassword = true,)
+        Column(modifier = Modifier.background(color = Color.Transparent)) {
+            DodamTextField(
+                onValueChange = { value.value = it },
+                value = value.value,
+                hint = "id",
+                onClickCancel = { value.value = "" },
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            DodamTextField(
+                value = "12345678",
+                onValueChange = { value.value = it },
+                onClickCancel = { value.value = "" },
+                hint = "password",
+                isPassword = true,
+                isPasswordVisible = false,
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            DodamTextField(
+                value = "12345678",
+                onValueChange = { value.value = it },
+                onClickCancel = { value.value = "" },
+                hint = "password",
+                isPassword = true,
+                isPasswordVisible = true,
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            DodamTextField(
+                value = "12345678",
+                onValueChange = { value.value = it },
+                onClickCancel = { value.value = "" },
+                hint = "password",
+                isError = true,
+                isPassword = true,
+                isPasswordVisible = false,
+                supportingText = { Text(text = "비밀번호가 일치하지 않습니다.") },
+            )
+        }
     }
 }

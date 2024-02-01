@@ -1,18 +1,17 @@
 package com.b1nd.dodam.designsystem.icons
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.group
-import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-
+import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
@@ -20,19 +19,19 @@ private fun VectorPreview() {
     Image(Error, null)
 }
 
-private var _Error: ImageVector? = null
+private var vector: ImageVector? = null
 
 public val Error: ImageVector
     get() {
-        if (_Error != null) {
-            return _Error!!
+        if (vector != null) {
+            return vector!!
         }
-        _Error = ImageVector.Builder(
+        vector = ImageVector.Builder(
             name = "Error",
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             group {
                 path(
@@ -44,7 +43,7 @@ public val Error: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(43.2961f, 23.9939f)
                     curveTo(43.2961f, 34.9318f, 34.41f, 43.9877f, 23.6464f, 43.9877f)
@@ -69,6 +68,5 @@ public val Error: ImageVector
                 }
             }
         }.build()
-        return _Error!!
+        return vector!!
     }
-
