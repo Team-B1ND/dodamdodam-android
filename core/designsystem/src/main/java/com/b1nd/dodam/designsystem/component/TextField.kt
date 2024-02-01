@@ -181,7 +181,7 @@ fun DodamTextFieldPreview() {
                 onClickCancel = { value.value = "" },
             )
             DodamTextField(
-                value = "12345678",
+                value = value.value,
                 onValueChange = { value.value = it },
                 onClickCancel = { value.value = "" },
                 hint = "password",
@@ -189,15 +189,7 @@ fun DodamTextFieldPreview() {
                 isPasswordVisible = false,
             )
             DodamTextField(
-                value = "12345678",
-                onValueChange = { value.value = it },
-                onClickCancel = { value.value = "" },
-                hint = "password",
-                isPassword = true,
-                isPasswordVisible = true,
-            )
-            DodamTextField(
-                value = "12345678",
+                value = value.value,
                 onValueChange = { value.value = it },
                 onClickCancel = { value.value = "" },
                 hint = "password",
