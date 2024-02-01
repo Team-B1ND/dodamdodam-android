@@ -1,11 +1,13 @@
 package com.b1nd.dodam.designsystem.component
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -35,7 +37,6 @@ import com.b1nd.dodam.designsystem.theme.DodamTheme
 import com.b1nd.dodam.designsystem.theme.ErrorIcon
 import com.b1nd.dodam.designsystem.theme.EyeIcon
 import com.b1nd.dodam.designsystem.theme.EyeSlashIcon
-import com.b1nd.dodam.designsystem.theme.Gray400
 
 @Composable
 fun DodamTextField(
@@ -50,17 +51,30 @@ fun DodamTextField(
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
-    supportingText: @Composable (() -> Unit)? = null,
+    supportingText: String = "",
     isPasswordVisible: Boolean = false,
     isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    singleLine: Boolean = false,
+    singleLine: Boolean = true,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.shape,
-    colors: TextFieldColors = TextFieldDefaults.colors(),
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        errorContainerColor = Color.Transparent,
+        errorIndicatorColor = MaterialTheme.colorScheme.error,
+        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+        focusedTextColor = MaterialTheme.colorScheme.onBackground,
+        errorTextColor = MaterialTheme.colorScheme.onBackground,
+        unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+        focusedLabelColor = MaterialTheme.colorScheme.primary,
+        errorLabelColor = MaterialTheme.colorScheme.error,
+        unfocusedLabelColor = MaterialTheme.colorScheme.tertiary,
+    ),
 ) {
     var isFocused by remember { mutableStateOf(false) }
     var isSlashEye by remember { mutableStateOf(isPasswordVisible) }
@@ -69,9 +83,6 @@ fun DodamTextField(
         textStyle = textStyle,
         onValueChange = onValueChange,
         modifier = modifier
-            .background(
-                color = Color.Transparent,
-            )
             .fillMaxWidth()
             .onFocusChanged { isFocused = it.isFocused },
         shape = shape,
@@ -80,12 +91,19 @@ fun DodamTextField(
         readOnly = readOnly,
         prefix = prefix,
         suffix = suffix,
+        singleLine = singleLine,
         keyboardActions = keyboardActions,
         keyboardOptions = keyboardOptions,
         maxLines = maxLines,
         minLines = minLines,
         colors = colors,
-        supportingText = supportingText,
+        supportingText = {
+            Text(
+                text = supportingText,
+                style = MaterialTheme.typography.bodyMedium,
+                fontSize = 12.sp,
+            )
+        },
         interactionSource = interactionSource,
         visualTransformation = if (isPassword && !isSlashEye) {
             PasswordVisualTransformation()
@@ -100,45 +118,48 @@ fun DodamTextField(
                         fontSize = 12.sp,
                     )
                 } else {
-                    MaterialTheme.typography.bodyMedium
+                    MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 16.sp,
+                    )
                 },
-                color = if (isError) MaterialTheme.colorScheme.error else if (isFocused) MaterialTheme.colorScheme.primary else Gray400,
             )
         },
         trailingIcon = {
             if (!isError) {
-                Row {
-                    if (isPassword) {
-                        if (!isSlashEye) {
-                            IconButton(
-                                onClick = { isSlashEye = !isSlashEye },
-                                modifier = Modifier
-                                    .background(Color.Transparent)
-                                    .size(24.dp),
-                            ) {
-                                EyeIcon()
+                if (isFocused) {
+                    Row {
+                        if (isPassword) {
+                            if (!isSlashEye) {
+                                IconButton(
+                                    onClick = { isSlashEye = !isSlashEye },
+                                    modifier = Modifier
+                                        .background(Color.Transparent)
+                                        .size(24.dp),
+                                ) {
+                                    EyeIcon()
+                                }
+                            } else {
+                                IconButton(
+                                    onClick = { isSlashEye = !isSlashEye },
+                                    modifier = Modifier
+                                        .background(Color.Transparent)
+                                        .size(24.dp),
+                                ) {
+                                    EyeSlashIcon()
+                                }
                             }
-                        } else {
-                            IconButton(
-                                onClick = { isSlashEye = !isSlashEye },
-                                modifier = Modifier
-                                    .background(Color.Transparent)
-                                    .size(24.dp),
-                            ) {
-                                EyeSlashIcon()
-                            }
+                            Spacer(modifier = Modifier.size(16.dp))
                         }
-                        Spacer(modifier = Modifier.size(16.dp))
+                        IconButton(
+                            onClick = { onClickCancel() },
+                            modifier = Modifier
+                                .background(Color.Transparent)
+                                .size(24.dp),
+                        ) {
+                            CancelIcon()
+                        }
+                        if (isPassword) Spacer(modifier = Modifier.size(12.dp))
                     }
-                    IconButton(
-                        onClick = { onClickCancel() },
-                        modifier = Modifier
-                            .background(Color.Transparent)
-                            .size(24.dp),
-                    ) {
-                        CancelIcon()
-                    }
-                    if (isPassword) Spacer(modifier = Modifier.size(12.dp))
                 }
             } else {
                 ErrorIcon()
@@ -147,19 +168,19 @@ fun DodamTextField(
     )
 }
 
-@Preview
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES, backgroundColor = 0x000000)
+@Preview(showBackground = true)
 @Composable
 fun DodamTextFieldPreview() {
     var value = remember { mutableStateOf("") }
     DodamTheme {
-        Column(modifier = Modifier.background(color = Color.Transparent)) {
+        Column {
             DodamTextField(
                 onValueChange = { value.value = it },
                 value = value.value,
                 hint = "id",
                 onClickCancel = { value.value = "" },
             )
-            Spacer(modifier = Modifier.size(16.dp))
             DodamTextField(
                 value = "12345678",
                 onValueChange = { value.value = it },
@@ -168,7 +189,6 @@ fun DodamTextFieldPreview() {
                 isPassword = true,
                 isPasswordVisible = false,
             )
-            Spacer(modifier = Modifier.size(16.dp))
             DodamTextField(
                 value = "12345678",
                 onValueChange = { value.value = it },
@@ -177,7 +197,6 @@ fun DodamTextFieldPreview() {
                 isPassword = true,
                 isPasswordVisible = true,
             )
-            Spacer(modifier = Modifier.size(16.dp))
             DodamTextField(
                 value = "12345678",
                 onValueChange = { value.value = it },
@@ -186,7 +205,7 @@ fun DodamTextFieldPreview() {
                 isError = true,
                 isPassword = true,
                 isPasswordVisible = false,
-                supportingText = { Text(text = "비밀번호가 일치하지 않습니다.") },
+                supportingText = "비밀번호가 일치하지 않습니다.",
             )
         }
     }
