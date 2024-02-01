@@ -1,17 +1,17 @@
 package com.b1nd.dodam.designsystem.icons
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.group
-import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
@@ -19,19 +19,19 @@ private fun VectorPreview() {
     Image(Eye, null)
 }
 
-private var _Eye: ImageVector? = null
+private var vector: ImageVector? = null
 
 public val Eye: ImageVector
     get() {
-        if (_Eye != null) {
-            return _Eye!!
+        if (vector != null) {
+            return vector!!
         }
-        _Eye = ImageVector.Builder(
+        vector = ImageVector.Builder(
             name = "Eye",
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             group {
                 path(
@@ -43,7 +43,7 @@ public val Eye: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(23.8924f, 35.9998f)
                     curveTo(35.7546f, 35.9998f, 43.7806f, 26.4575f, 43.7806f, 23.5097f)
@@ -66,5 +66,5 @@ public val Eye: ImageVector
                 }
             }
         }.build()
-        return _Eye!!
+        return vector!!
     }

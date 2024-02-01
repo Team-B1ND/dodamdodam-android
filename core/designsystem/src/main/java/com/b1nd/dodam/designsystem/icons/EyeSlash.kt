@@ -1,17 +1,17 @@
 package com.b1nd.dodam.designsystem.icons
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.group
-import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
@@ -19,19 +19,19 @@ private fun VectorPreview() {
     Image(EyeSlash, null)
 }
 
-private var _EyeSlash: ImageVector? = null
+private var vector: ImageVector? = null
 
 public val EyeSlash: ImageVector
     get() {
-        if (_EyeSlash != null) {
-            return _EyeSlash!!
+        if (vector != null) {
+            return vector!!
         }
-        _EyeSlash = ImageVector.Builder(
+        vector = ImageVector.Builder(
             name = "EyeSlash",
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             group {
                 path(
@@ -43,7 +43,7 @@ public val EyeSlash: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(16.5173f, 20.722f)
                     curveTo(16.088f, 21.7238f, 15.8522f, 22.8363f, 15.8522f, 24.013f)
@@ -87,7 +87,7 @@ public val EyeSlash: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(35.209f, 37.2289f)
                     curveTo(35.661f, 37.7069f, 36.3799f, 37.7314f, 36.8559f, 37.2289f)
@@ -100,5 +100,5 @@ public val EyeSlash: ImageVector
                 }
             }
         }.build()
-        return _EyeSlash!!
+        return vector!!
     }

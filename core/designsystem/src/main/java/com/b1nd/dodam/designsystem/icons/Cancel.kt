@@ -1,17 +1,17 @@
 package com.b1nd.dodam.designsystem.icons
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.group
-import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
@@ -19,19 +19,19 @@ private fun VectorPreview() {
     Image(Cancel, null)
 }
 
-private var _Cancel: ImageVector? = null
+private var vector: ImageVector? = null
 
 public val Cancel: ImageVector
     get() {
-        if (_Cancel != null) {
-            return _Cancel!!
+        if (vector != null) {
+            return vector!!
         }
-        _Cancel = ImageVector.Builder(
+        vector = ImageVector.Builder(
             name = "Cancel",
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             group {
                 path(
@@ -43,7 +43,7 @@ public val Cancel: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(43.7117f, 23.9938f)
                     curveTo(43.7117f, 34.9318f, 34.7314f, 43.9876f, 23.8541f, 43.9876f)
@@ -78,5 +78,5 @@ public val Cancel: ImageVector
                 }
             }
         }.build()
-        return _Cancel!!
+        return vector!!
     }
