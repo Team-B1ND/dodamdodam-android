@@ -91,7 +91,7 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "[부사] 어린아이가 탈 없이 잘 놀며 자라는 모양.",
+                text = "어린아이가 탈 없이 잘 놀며 자라는 모양.",
                 color = White,
                 style = MaterialTheme.typography.bodyMedium,
             )
