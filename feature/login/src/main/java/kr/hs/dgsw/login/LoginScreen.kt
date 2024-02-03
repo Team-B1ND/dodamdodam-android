@@ -1,13 +1,9 @@
 package kr.hs.dgsw.login
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,14 +11,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.component.DodamFullWidthButton
-import com.b1nd.dodam.designsystem.component.DodamLargeButton
-import com.b1nd.dodam.designsystem.component.DodamMediumButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.theme.BackIcon
 import com.b1nd.dodam.designsystem.theme.DodamTheme
@@ -32,27 +24,34 @@ internal fun LoginScreen(onBackClick: () -> Unit, onLoginClick: () -> Unit) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     Column {
-        BackIcon(modifier = Modifier
-            .statusBarsPadding()
-            .padding(16.dp)
-            .clickable {
-                onBackClick()
-            })
-        Column(modifier = Modifier
-            .padding(start = 24.dp, end = 24.dp, bottom = 32.dp)
+        BackIcon(
+            modifier = Modifier
+                .statusBarsPadding()
+                .padding(16.dp)
+                .clickable {
+                    onBackClick()
+                },
+        )
+        Column(
+            modifier = Modifier
+                .padding(start = 24.dp, end = 24.dp, bottom = 32.dp),
         ) {
-            Text(text = "아이디와 비밀번호를\n입력해주세요",
+            Text(
+                text = "아이디와 비밀번호를\n입력해주세요",
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(bottom = 32.dp)
+                modifier = Modifier.padding(bottom = 32.dp),
             )
-            DodamTextField(value = id,
+            DodamTextField(
+                value = id,
                 onValueChange = { id = it },
                 onClickCancel = { id = "" },
                 hint = "아이디",
                 textStyle = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = 32.dp))
-            DodamTextField(value = password,
+                modifier = Modifier.padding(bottom = 32.dp),
+            )
+            DodamTextField(
+                value = password,
                 onValueChange = { password = it },
                 onClickCancel = { password = "" },
                 isPassword = true,
@@ -77,7 +76,7 @@ internal fun LoginScreen(onBackClick: () -> Unit, onLoginClick: () -> Unit) {
             modifier = Modifier.padding(horizontal = 24.dp),
             onClick = { /*TODO*/ },
             text = "로그인",
-            enabled = id.isNotEmpty() && password.isNotEmpty()
+            enabled = id.isNotEmpty() && password.isNotEmpty(),
 
         )
     }
@@ -88,7 +87,8 @@ internal fun LoginScreen(onBackClick: () -> Unit, onLoginClick: () -> Unit) {
 fun LoginScreenPreview() {
     DodamTheme {
         LoginScreen(
-            {}, {}
+            {},
+            {},
         )
     }
 }

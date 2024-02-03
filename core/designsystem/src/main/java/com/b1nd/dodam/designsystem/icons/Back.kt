@@ -1,18 +1,17 @@
 package com.b1nd.dodam.designsystem.icons
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.group
-import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-
+import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
@@ -32,7 +31,7 @@ public val Back: ImageVector
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             group {
                 path(
@@ -44,7 +43,7 @@ public val Back: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(4f, 23.9675f)
                     curveTo(4f, 24.5907f, 4.2732f, 25.195f, 4.7446f, 25.6463f)
@@ -75,4 +74,3 @@ public val Back: ImageVector
         }.build()
         return vector!!
     }
-

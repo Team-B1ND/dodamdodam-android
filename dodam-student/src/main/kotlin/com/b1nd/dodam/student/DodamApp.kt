@@ -23,7 +23,7 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
             )
             loginScreen(
                 onBackClick = { navController.popBackStack() },
-                onClickLogin = { /* TODO: Login */ }
+                onClickLogin = { /* TODO: Login */ },
             )
         }
     }

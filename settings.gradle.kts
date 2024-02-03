@@ -21,5 +21,5 @@ include(
     ":dodam-student",
     ":core:designsystem",
     ":feature:onboarding",
+    ":feature:login",
 )
-include(":feature:login")
