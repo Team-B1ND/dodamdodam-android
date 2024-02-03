@@ -37,6 +37,33 @@ import com.b1nd.dodam.designsystem.theme.ErrorIcon
 import com.b1nd.dodam.designsystem.theme.EyeIcon
 import com.b1nd.dodam.designsystem.theme.EyeSlashIcon
 
+/**
+ * Dodam TextField
+ *
+ * @param value:  the input text to be shown in the text field
+ * @param onValueChange: the callback that is triggered when the input service updates the text. An updated text comes as a parameter of the callback
+ * @param onClickCancel: TextField cancel button click callback
+ * @param modifier: the Modifier to be applied to this text field
+ * @param hint: when the input text is empty, the hint is displayed in the text field
+ * @param isPassword: is this text field for password input, if this is true, the eye icon is displayed to show/hide the password
+ * @param enabled: ontrols the enabled state of this text field. When false, this component will not respond to user input, and it will appear visually disabled and disabled to accessibility services.
+ * @param readOnly: controls the editable state of the text field. When true, the text field cannot be modified. However, a user can focus it and copy text from it. Read-only text fields are usually used to display pre-filled forms that a user cannot edit.
+ * @param textStyle: the style to be applied to the input text. Defaults to LocalTextStyle.
+ * @param prefix: the optional prefix to be displayed before the input text in the text field
+ * @param suffix: the optional suffix to be displayed after the input text in the text field
+ * @param supportingText: the optional supporting text to be displayed below the text field
+ * @param isPasswordVisible: the optional initial visibility of the password. If this is true, the password is visible, if isPassword is false this parameter is ignored
+ * @param isError: indicates if the text field's current value is in error. If set to true, the label, bottom indicator and trailing icon by default will be displayed in error color
+ * @param keyboardOptions: software keyboard options that contains configuration such as
+ * @param keyboardActions: keyboardActions - when the input service emits an IME action, the corresponding callback is called. Note that this IME action may be different from what you specified in KeyboardOptions.imeAction.
+ * @param singleLine: the optional single line state of the text field. When true, the text field will be displayed in a single line
+ * @param maxLines: the optional maximum lines of the text field. Defaults to 1
+ * @param minLines: the optional minimum lines of the text field. Defaults to 1
+ * @param interactionSource: the MutableInteractionSource representing the stream of Interactions for this text field. You can create and pass in your own remembered instance to observe Interactions and customize the appearance / behavior of this text field in different states.
+ * @param shape: defines the shape of this text field's container. Defaults to TextFieldDefaults.shape
+ * @param colors: the optional colors to be applied to the text field. Defaults to TextFieldDefaults.colors
+ * */
+
 @Composable
 fun DodamTextField(
     value: String,
