@@ -22,3 +22,4 @@ include(
     ":core:designsystem",
     ":feature:onboarding",
 )
+include(":feature:login")
