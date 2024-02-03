@@ -10,7 +10,7 @@ const val LOGIN_ROUTE = "login"
 
 fun NavController.navigationToLogin(navOptions: NavOptions?) = navigate(LOGIN_ROUTE, navOptions)
 
-fun NavGraphBuilder.onboardingScreen(onClickLogin: () -> Unit) {
+fun NavGraphBuilder.loginScreen(onClickLogin: () -> Unit) {
     composable(route = LOGIN_ROUTE) {
         LoginScreen(
 
