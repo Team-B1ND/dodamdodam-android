@@ -10,6 +10,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.R
 import com.b1nd.dodam.designsystem.icons.Calendar
+import com.b1nd.dodam.designsystem.icons.Cancel
+import com.b1nd.dodam.designsystem.icons.Error
+import com.b1nd.dodam.designsystem.icons.Eye
+import com.b1nd.dodam.designsystem.icons.EyeSlash
 import com.b1nd.dodam.designsystem.icons.Home
 import com.b1nd.dodam.designsystem.icons.Meal
 import com.b1nd.dodam.designsystem.icons.More
@@ -90,6 +94,46 @@ fun MoreIcon(modifier: Modifier = Modifier, contentDescription: String? = null, 
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = More,
+        contentDescription = contentDescription,
+        tint = tint,
+    )
+}
+
+@Composable
+fun EyeIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+    Icon(
+        modifier = modifier.size(24.dp),
+        imageVector = Eye,
+        contentDescription = contentDescription,
+        tint = tint,
+    )
+}
+
+@Composable
+fun EyeSlashIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+    Icon(
+        modifier = modifier.size(24.dp),
+        imageVector = EyeSlash,
+        contentDescription = contentDescription,
+        tint = tint,
+    )
+}
+
+@Composable
+fun CancelIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+    Icon(
+        modifier = modifier.size(24.dp),
+        imageVector = Cancel,
+        contentDescription = contentDescription,
+        tint = tint,
+    )
+}
+
+@Composable
+fun ErrorIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Red500) {
+    Icon(
+        modifier = modifier.size(24.dp),
+        imageVector = Error,
         contentDescription = contentDescription,
         tint = tint,
     )
