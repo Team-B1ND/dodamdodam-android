@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.R
+import com.b1nd.dodam.designsystem.icons.Back
 import com.b1nd.dodam.designsystem.icons.Calendar
 import com.b1nd.dodam.designsystem.icons.Cancel
 import com.b1nd.dodam.designsystem.icons.Error
@@ -134,6 +135,16 @@ fun ErrorIcon(modifier: Modifier = Modifier, contentDescription: String? = null,
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = Error,
+        contentDescription = contentDescription,
+        tint = tint,
+    )
+}
+
+@Composable
+fun BackIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Black) {
+    Icon(
+        modifier = modifier.size(24.dp),
+        imageVector = Back,
         contentDescription = contentDescription,
         tint = tint,
     )
