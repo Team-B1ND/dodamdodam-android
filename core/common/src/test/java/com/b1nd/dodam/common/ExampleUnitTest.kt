@@ -1,4 +1,4 @@
-package kr.hs.dgsw.register
+package com.b1nd.dodam.common
 
 import org.junit.Test
 

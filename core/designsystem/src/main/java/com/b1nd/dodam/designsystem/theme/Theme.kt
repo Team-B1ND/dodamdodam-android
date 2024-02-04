@@ -87,7 +87,7 @@ fun DodamTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = NotoSansKR,
+        typography = Pretendard,
         content = content,
     )
 }
