@@ -23,3 +23,4 @@ include(
     ":feature:onboarding",
     ":feature:register",
 )
+include(":core:common")
