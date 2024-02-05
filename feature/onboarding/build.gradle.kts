@@ -10,6 +10,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.designsystem)
+    implementation(projects.designsystem)
     implementation(libs.bottomsheetdialog.compose)
 }
