@@ -38,8 +38,6 @@ androidx-test-espresso = "3.5.1"
 # gradle plugin
 agp = "8.2.2"
 ksp = "1.9.22-1.0.16"
-appcompat = "1.6.1"
-uiDesktop = "1.6.2"
 
 [libraries]
 # kotlin
