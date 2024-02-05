@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -140,6 +141,136 @@ fun DodamTextField(
             Text(
                 hint,
                 style = if (isFocused || value.isNotEmpty()) {
+                    MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 12.sp,
+                    )
+                } else {
+                    MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 16.sp,
+                    )
+                },
+            )
+        },
+        trailingIcon = {
+            if (!isError) {
+                if (isFocused) {
+                    Row {
+                        if (isPassword) {
+                            if (!isSlashEye) {
+                                IconButton(
+                                    onClick = { isSlashEye = !isSlashEye },
+                                    modifier = Modifier
+                                        .background(Color.Transparent)
+                                        .size(24.dp),
+                                ) {
+                                    EyeIcon()
+                                }
+                            } else {
+                                IconButton(
+                                    onClick = { isSlashEye = !isSlashEye },
+                                    modifier = Modifier
+                                        .background(Color.Transparent)
+                                        .size(24.dp),
+                                ) {
+                                    EyeSlashIcon()
+                                }
+                            }
+                            Spacer(modifier = Modifier.size(16.dp))
+                        }
+                        IconButton(
+                            onClick = { onClickCancel() },
+                            modifier = Modifier
+                                .background(Color.Transparent)
+                                .size(24.dp),
+                        ) {
+                            CancelIcon()
+                        }
+                        if (isPassword) Spacer(modifier = Modifier.size(12.dp))
+                    }
+                }
+            } else {
+                ErrorIcon()
+            }
+        },
+    )
+}
+
+@Composable
+fun DodamTextField(
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    onClickCancel: () -> Unit,
+    modifier: Modifier = Modifier,
+    hint: String = "",
+    isPassword: Boolean = false,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    prefix: @Composable (() -> Unit)? = null,
+    suffix: @Composable (() -> Unit)? = null,
+    supportingText: String = "",
+    isPasswordVisible: Boolean = false,
+    isError: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = true,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    minLines: Int = 1,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    shape: Shape = TextFieldDefaults.shape,
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        errorContainerColor = Color.Transparent,
+        errorIndicatorColor = MaterialTheme.colorScheme.error,
+        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+        focusedTextColor = MaterialTheme.colorScheme.onBackground,
+        errorTextColor = MaterialTheme.colorScheme.onBackground,
+        unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+        focusedLabelColor = MaterialTheme.colorScheme.primary,
+        errorLabelColor = MaterialTheme.colorScheme.error,
+        unfocusedLabelColor = MaterialTheme.colorScheme.tertiary,
+    ),
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    var isSlashEye by remember { mutableStateOf(isPasswordVisible) }
+    TextField(
+        value = value,
+        textStyle = textStyle,
+        onValueChange = onValueChange,
+        modifier = modifier
+            .fillMaxWidth()
+            .onFocusChanged { isFocused = it.isFocused },
+        shape = shape,
+        isError = isError,
+        enabled = enabled,
+        readOnly = readOnly,
+        prefix = prefix,
+        suffix = suffix,
+        singleLine = singleLine,
+        keyboardActions = keyboardActions,
+        keyboardOptions = keyboardOptions,
+        maxLines = maxLines,
+        minLines = minLines,
+        colors = colors,
+        supportingText = {
+            Text(
+                text = supportingText,
+                style = MaterialTheme.typography.bodyMedium,
+                fontSize = 12.sp,
+            )
+        },
+        interactionSource = interactionSource,
+        visualTransformation = if (isPassword && !isSlashEye) {
+            PasswordVisualTransformation()
+        } else {
+            VisualTransformation.None
+        },
+        label = {
+            Text(
+                hint,
+                style = if (isFocused || value.text.isNotEmpty()) {
                     MaterialTheme.typography.bodyMedium.copy(
                         fontSize = 12.sp,
                     )
