@@ -15,7 +15,4 @@ dependencies {
     api(libs.kotlinx.collections.immutable)
 
     api(libs.hilt.core)
-
-    testImplementation(libs.ktor.client.mock)
-    testImplementation(libs.junit)
 }
