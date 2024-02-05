@@ -1,4 +1,4 @@
-package kr.hs.dgsw.register.navigation
+package com.b1nd.dodam.register.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

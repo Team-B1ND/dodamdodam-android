@@ -86,6 +86,7 @@ fun DodamTextField(
     singleLine: Boolean = true,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.shape,
     colors: TextFieldColors = TextFieldDefaults.colors(
@@ -135,7 +136,7 @@ fun DodamTextField(
         visualTransformation = if (isPassword && !isSlashEye) {
             PasswordVisualTransformation()
         } else {
-            VisualTransformation.None
+            visualTransformation
         },
         label = {
             Text(
@@ -205,6 +206,7 @@ fun DodamTextField(
     isPassword: Boolean = false,
     enabled: Boolean = true,
     readOnly: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
@@ -265,7 +267,7 @@ fun DodamTextField(
         visualTransformation = if (isPassword && !isSlashEye) {
             PasswordVisualTransformation()
         } else {
-            VisualTransformation.None
+            visualTransformation
         },
         label = {
             Text(

@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.common.PhoneVisualTransformation
 import com.b1nd.dodam.common.addFocusCleaner
 import com.b1nd.dodam.designsystem.component.DodamFullWidthButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
@@ -111,11 +112,20 @@ fun InfoScreen(onBackClick: () -> Unit, onNextClick: () -> Unit) {
             AnimatedVisibility(visible = isEmailValid) {
                 DodamTextField(
                     value = phoneNumber,
-                    onValueChange = { phoneNumber = it },
+                    onValueChange = {
+                        if (it.length == 13) {
+                            focusManager.clearFocus()
+                        }
+                        phoneNumber = it
+                    },
                     onClickCancel = { phoneNumber = "" },
                     hint = "전화번호",
+                    visualTransformation = PhoneVisualTransformation("000-0000-0000", '0'),
                     modifier = Modifier.padding(top = 24.dp),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search,
+                        keyboardType = KeyboardType.Number,
+                    ),
                     keyboardActions = KeyboardActions(onSearch = {
                         focusManager.clearFocus()
                         isPhoneNumberValid = true
@@ -141,21 +151,16 @@ fun InfoScreen(onBackClick: () -> Unit, onNextClick: () -> Unit) {
                     value = classInfoText,
                     onValueChange = {
                         classInfo = it.text.replace("[^0-9]".toRegex(), "")
+                        Log.d("InfoScreen: ", "classInfo: $classInfo  it: ${it.text}")
                         when (it.text.length) {
                             1 -> {
-                                Log.d("InfoScreen: ", "classInfo: $classInfo  it: ${it.text}")
                                 classInfoText = TextFieldValue(
                                     text = classInfo + "학년",
-                                    selection = TextRange((classInfo + "학년").length)
-                                )
-                                Log.d(
-                                    "InfoScreen: ",
-                                    "classInfo: $classInfo  classInfoText: ${classInfoText.text}, it: $it"
+                                    selection = TextRange(3)
                                 )
                             }
 
                             2 -> {
-                                Log.d("InfoScreen: ", "Here is 2: $classInfo  it: ${it.text}")
                                 classInfoText = TextFieldValue(
                                     text = "",
                                     selection = TextRange.Zero
@@ -164,52 +169,30 @@ fun InfoScreen(onBackClick: () -> Unit, onNextClick: () -> Unit) {
                             }
 
                             4 -> {
-                                Log.d("InfoScreen: 123", "classInfo: $classInfo  it: ${it.text}")
                                 classInfoText = TextFieldValue(
                                     text = classInfo[0] + "학년 " + classInfo[1] + "반",
-                                    selection = TextRange((classInfo[0] + "학년 " + classInfo[1] + "반").length)
-                                )
-                                Log.d(
-                                    "InfoScreen: ",
-                                    "classInfo: $classInfo  classInfoText: ${classInfoText.text}, it: $it"
+                                    selection = TextRange(6)
                                 )
                             }
 
                             5 -> {
-                                Log.d("InfoScreen: ", "classInfo: $classInfo  it: ${it.text}")
                                 classInfoText = TextFieldValue(
                                     text = classInfo[0] + "학년",
-                                    selection = TextRange((classInfo[0] + "학년").length)
-                                )
-                                Log.d(
-                                    "InfoScreen: ",
-                                    "classInfo: $classInfo  classInfoText: ${classInfoText.text}, it: $it"
+                                    selection = TextRange(3)
                                 )
                             }
 
                             7 -> {
                                 classInfoText = TextFieldValue(
                                     text = classInfo[0] + "학년 " + classInfo[1] + "반 " + classInfo[2] + "번",
-                                    selection = TextRange((classInfo[0] + "학년 " + classInfo[1] + "반 " + classInfo[2] + "번").length)
-                                )
-                                Log.d(
-                                    "InfoScreen: ",
-                                    "classInfo: $classInfo  classInfoText: ${classInfoText.text}, it: $it"
+                                    selection = TextRange(9)
                                 )
                             }
 
                             8 -> {
                                 classInfoText = TextFieldValue(
                                     text = classInfo[0] + "학년 " + classInfo[1] + "반",
-                                    selection = TextRange(
-                                        (
-                                                classInfo[0] + "학년 " + classInfo[1] + "반"
-                                                ).length
-                                    )
-                                )
-                                Log.d(
-                                    "InfoScreen: ",
-                                    "classInfo: $classInfo  classInfoText: $classInfoText"
+                                    selection = TextRange(6)
                                 )
                                 isClassInfoValid = true
                             }
@@ -217,15 +200,7 @@ fun InfoScreen(onBackClick: () -> Unit, onNextClick: () -> Unit) {
                             9 -> {
                                 classInfoText = TextFieldValue(
                                     text = classInfo[0] + "학년 " + classInfo[1] + "반 " + classInfo[3] + "번",
-                                    selection = TextRange(
-                                        (
-                                                classInfo[0] + "학년 " + classInfo[1] + "반 " + classInfo[3] + "번"
-                                                ).length
-                                    )
-                                )
-                                Log.d(
-                                    "InfoScreen: ",
-                                    "classInfo: $classInfo  classInfoText: $classInfoText"
+                                    selection = TextRange(9)
                                 )
                             }
 
@@ -233,15 +208,7 @@ fun InfoScreen(onBackClick: () -> Unit, onNextClick: () -> Unit) {
                                 classInfoText = TextFieldValue(
                                     text =
                                     classInfo[0] + "학년 " + classInfo[1] + "반 " + classInfo[2] + classInfo[3] + "번",
-                                    selection = TextRange(
-                                        (
-                                                classInfo[0] + "학년 " + classInfo[1] + "반 " + classInfo[2] + classInfo[3] + "번"
-                                                ).length
-                                    )
-                                )
-                                Log.d(
-                                    "InfoScreen: ",
-                                    "classInfo: $classInfo  classInfoText: $classInfoText"
+                                    selection = TextRange(10)
                                 )
                                 focusManager.clearFocus(true)
                                 isClassInfoValid = true
