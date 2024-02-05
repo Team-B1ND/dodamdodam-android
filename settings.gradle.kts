@@ -36,3 +36,4 @@ include(
     ":data:meal",
     ":network:register",
 )
+include(":feature-student:main")
