@@ -22,4 +22,6 @@ include(
     ":designsystem",
     ":feature:onboarding",
     ":network:core",
+    ":network:meal",
+    ":common",
 )
