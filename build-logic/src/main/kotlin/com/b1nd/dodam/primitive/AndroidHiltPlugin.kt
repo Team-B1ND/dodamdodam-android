@@ -24,7 +24,7 @@ class AndroidHiltPlugin : Plugin<Project> {
                 }
             }
             dependencies {
-                implementation(libs.library("hilt"))
+                implementation(libs.library("hilt-android"))
                 ksp(libs.library("hilt-compiler"))
             }
         }
