@@ -19,7 +19,9 @@ dependencyResolutionManagement {
 rootProject.name = "dodamdodam-android"
 include(
     ":dodam-student",
-    ":core:designsystem",
+    ":designsystem",
     ":feature:onboarding",
-    ":feature:login",
+    ":network:core",
+    ":network:meal",
+    ":common",
 )
