@@ -87,14 +87,9 @@ ktor-client-logging-jvm = { group = "io.ktor", name = "ktor-client-logging-jvm",
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
 androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
-<<<<<<< HEAD
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-=======
 ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref = "ktor" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-
->>>>>>> origin/develop
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
