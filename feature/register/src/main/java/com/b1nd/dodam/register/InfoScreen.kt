@@ -25,8 +25,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.common.PhoneVisualTransformation
-import com.b1nd.dodam.common.addFocusCleaner
+import com.b1nd.dodam.designsystem.util.PhoneVisualTransformation
+import com.b1nd.dodam.designsystem.util.addFocusCleaner
 import com.b1nd.dodam.designsystem.component.DodamFullWidthButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.theme.BackIcon
@@ -113,7 +113,10 @@ fun InfoScreen(onBackClick: () -> Unit, onNextClick: () -> Unit) {
                     },
                     onClickCancel = { phoneNumber = TextFieldState() },
                     hint = "전화번호",
-                    visualTransformation = PhoneVisualTransformation("000-0000-0000", '0'),
+                    visualTransformation = PhoneVisualTransformation(
+                        "000-0000-0000",
+                        '0'
+                    ),
                     modifier = Modifier.padding(top = 24.dp),
                     isError = phoneNumber.isError,
                     supportingText = if (phoneNumber.isError) phoneNumber.errorMessage else "",

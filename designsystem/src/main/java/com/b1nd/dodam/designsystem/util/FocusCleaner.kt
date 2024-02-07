@@ -1,4 +1,4 @@
-package com.b1nd.dodam.common
+package com.b1nd.dodam.designsystem.util
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.Modifier
