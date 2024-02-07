@@ -21,6 +21,7 @@ include(
     ":dodam-student",
     ":designsystem",
     ":feature:onboarding",
+    ":feature:login",
     ":network:core",
     ":network:meal",
     ":common",
