@@ -74,10 +74,9 @@ internal fun LoginScreen(onBackClick: () -> Unit, onLoginClick: () -> Unit) {
 //        }
         DodamFullWidthButton(
             modifier = Modifier.padding(horizontal = 24.dp),
-            onClick = { /*TODO*/ },
+            onClick = { onLoginClick() },
             text = "로그인",
             enabled = id.isNotEmpty() && password.isNotEmpty(),
-
         )
     }
 }
