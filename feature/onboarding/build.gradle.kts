@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.dodam.android.feature)
+    alias(libs.plugins.dodam.kotlin.serialization)
 }
 
 android {
@@ -10,6 +11,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.designsystem)
+    implementation(projects.designsystem)
     implementation(libs.bottomsheetdialog.compose)
 }
