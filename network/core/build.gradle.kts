@@ -1,18 +1,14 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.dodam.kotlin)
+    alias(libs.plugins.dodam.kotlin.serialization)
 }
 
 dependencies {
     api(libs.ktor.client.core)
     implementation(libs.ktor.client.logging.jvm)
     implementation(libs.ktor.client.cio)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
-
-    api(libs.kotlinx.serialization.json)
-    api(libs.kotlinx.coroutines.core)
-    api(libs.kotlinx.collections.immutable)
+    api(libs.ktor.client.content.negotiation)
+    api(libs.ktor.serialization.kotlinx.json)
 
     api(libs.hilt.core)
 }
