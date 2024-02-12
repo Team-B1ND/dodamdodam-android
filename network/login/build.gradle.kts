@@ -6,7 +6,6 @@ plugins {
 dependencies {
     api(projects.network.core)
     implementation(projects.common)
-
     implementation(libs.kotlinx.collections.immutable)
 
     testImplementation(libs.ktor.client.mock)
