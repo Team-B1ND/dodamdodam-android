@@ -13,5 +13,5 @@ import javax.inject.Singleton
 internal interface DataSourceModule {
     @Binds
     @Singleton
-    fun bindsMealDataSource(mealService: LoginService): LoginDataSource
+    fun bindsLoginDataSource(loginService: LoginService): LoginDataSource
 }

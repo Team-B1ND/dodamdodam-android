@@ -5,5 +5,5 @@ import com.b1nd.dodam.network.login.mdoel.LoginResponse
 import kotlinx.coroutines.flow.Flow
 
 interface LoginDataSource {
-    fun login(id: String, password: String): Flow<Response<LoginResponse>>
+    fun login(id: String, pw: String): Flow<Response<LoginResponse>>
 }
