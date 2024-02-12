@@ -26,3 +26,4 @@ include(
     ":network:meal",
     ":common",
 )
+include(":network:login")
