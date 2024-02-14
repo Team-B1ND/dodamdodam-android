@@ -9,3 +9,8 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 }
+
+dependencies {
+    implementation(projects.designsystem)
+    implementation(projects.featureStudent.home)
+}
