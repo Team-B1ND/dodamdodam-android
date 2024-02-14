@@ -37,4 +37,5 @@ include(
     ":network:register",
     ":feature-student:main",
     ":feature-student:home",
+    ":ui-test-main",
 )
