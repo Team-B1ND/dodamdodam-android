@@ -60,6 +60,7 @@ fun DodamBottomNavigation(navController: NavHostController, bottomNavigationItem
                 .height(BottomNavigationHeight)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Box {
                 var selectedXOffset by remember { mutableIntStateOf(0) }
