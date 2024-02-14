@@ -35,5 +35,6 @@ include(
     ":data:register",
     ":data:meal",
     ":network:register",
+    ":feature-student:main",
+    ":feature-student:home",
 )
-include(":feature-student:main")
