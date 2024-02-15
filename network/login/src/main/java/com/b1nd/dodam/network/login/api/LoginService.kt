@@ -5,7 +5,7 @@ import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.login.datasource.LoginDataSource
-import com.b1nd.dodam.network.login.mdoel.LoginResponse
+import com.b1nd.dodam.network.login.model.LoginResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

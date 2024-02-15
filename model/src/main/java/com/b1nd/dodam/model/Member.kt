@@ -1,8 +1,5 @@
-package com.b1nd.dodam.network.login.mdoel
+package com.b1nd.dodam.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Member(
     val email: String,
     val id: String,

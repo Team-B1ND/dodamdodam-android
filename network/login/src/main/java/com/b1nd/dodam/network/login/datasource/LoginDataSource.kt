@@ -1,7 +1,7 @@
 package com.b1nd.dodam.network.login.datasource
 
 import com.b1nd.dodam.network.core.model.Response
-import com.b1nd.dodam.network.login.mdoel.LoginResponse
+import com.b1nd.dodam.network.login.model.LoginResponse
 import kotlinx.coroutines.flow.Flow
 
 interface LoginDataSource {

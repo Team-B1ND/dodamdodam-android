@@ -27,3 +27,5 @@ include(
     ":common",
 )
 include(":network:login")
+include(":data:login")
+include(":model")
