@@ -54,11 +54,11 @@ class LoginServiceTest {
             }
         }
 
-        loginService = LoginService(client, testDispatcher)
+        loginService = LoginService(client)
     }
 
     @Test
     fun testDeserializationOfLogin() = runTest(testDispatcher) {
-        loginService.login("1", encryptSHA512("1")).first().data
+        loginService.login("1", encryptSHA512("1")).data
     }
 }

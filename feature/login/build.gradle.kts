@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "kr.hs.dgsw.login"
+    namespace = "com.b1nd.dodam.login"
 
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
@@ -11,6 +11,6 @@ android {
 }
 
 dependencies {
+    implementation(projects.data.login)
     implementation(projects.designsystem)
-    implementation(libs.bottomsheetdialog.compose)
 }
