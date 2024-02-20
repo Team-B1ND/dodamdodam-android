@@ -108,6 +108,7 @@ dodam-android = { id = "b1nd.dodam.primitive.android", version = "unspecified" }
 dodam-android-kotlin = { id = "b1nd.dodam.primitive.android.kotlin", version = "unspecified" }
 dodam-android-compose = { id = "b1nd.dodam.primitive.android.compose", version = "unspecified" }
 dodam-android-hilt = { id = "b1nd.dodam.primitive.android.hilt", version = "unspecified" }
+dodam-hilt = { id = "b1nd.dodam.primitive.hilt", version = "unspecified" }
 dodam-android-application = { id = "b1nd.dodam.primitive.android.application", version = "unspecified" }
 dodam-kotlin = { id = "b1nd.dodam.convention.kotlin", version = "unspecified" }
 dodam-kotlin-serialization = { id = "b1nd.dodam.primitive.kotlin.serialization", version = "unspecified" }
