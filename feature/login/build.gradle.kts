@@ -11,6 +11,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.common)
     implementation(projects.data.login)
     implementation(projects.designsystem)
 }

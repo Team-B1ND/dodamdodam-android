@@ -10,5 +10,5 @@ internal fun LoginResponse.toModel() = Member(
     name = this.member.name,
     profileImage = this.member.profileImage,
     role = this.member.role,
-    status = this.member.status
+    status = this.member.status,
 )

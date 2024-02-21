@@ -30,7 +30,7 @@ class LoginServiceTest {
                         "status": 200,
                         "message": "로그인 성공",
                         "data": {
-                            "member": {
+                            "memberResonse": {
                                 "id": "1",
                                 "name": "도현욱",
                                 "email": "wsi1212@dgsw.hs.kr",
