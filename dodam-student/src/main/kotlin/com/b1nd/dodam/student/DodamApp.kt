@@ -7,8 +7,8 @@ import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.theme.DodamTheme
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
-import kr.hs.dgsw.login.navigation.loginScreen
-import kr.hs.dgsw.login.navigation.navigationToLogin
+import com.b1nd.dodam.login.navigation.loginScreen
+import com.b1nd.dodam.login.navigation.navigationToLogin
 
 @Composable
 fun DodamApp(navController: NavHostController = rememberNavController()) {
@@ -23,7 +23,7 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
             )
             loginScreen(
                 onBackClick = { navController.popBackStack() },
-                onClickLogin = { /* TODO: Login */ },
+                navigateToMain = { /* TODO: Login */ },
             )
         }
     }
