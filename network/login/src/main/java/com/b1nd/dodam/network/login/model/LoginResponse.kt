@@ -4,7 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LoginResponse(
-    val member: MemberResponse,
     val refreshToken: String,
     val token: String
 )
