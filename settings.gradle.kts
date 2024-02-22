@@ -38,4 +38,6 @@ include(
     ":feature-student:main",
     ":feature-student:home",
     ":ui-test-main",
+    ":data:meal",
+    ":model",
 )

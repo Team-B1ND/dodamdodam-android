@@ -13,4 +13,5 @@ android {
 dependencies {
     implementation(projects.designsystem)
     implementation(projects.featureStudent.home)
+    implementation(projects.feature.meal)
 }

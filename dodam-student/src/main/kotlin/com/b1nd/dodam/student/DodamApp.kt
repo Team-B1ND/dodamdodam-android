@@ -14,6 +14,8 @@ import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
 import com.b1nd.dodam.register.navigation.navigateToInfo
+import com.b1nd.dodam.student.main.navigation.mainScreen
+import com.b1nd.dodam.student.main.navigation.navigateToMain
 
 @Composable
 fun DodamApp(navController: NavHostController = rememberNavController()) {
@@ -26,6 +28,7 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
                 onRegisterClick = { navController.navigateToInfo() },
                 onLoginClick = { navController.navigationToLogin() },
             )
+            mainScreen()
             infoScreen(
                 onNextClick = { name, grade, room, number, email, phoneNumber ->
                     navController.navigateToAuth(
