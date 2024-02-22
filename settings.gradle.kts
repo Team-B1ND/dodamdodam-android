@@ -23,9 +23,11 @@ include(
     ":feature:onboarding",
     ":feature:login",
     ":network:core",
+    ":network:login",
     ":network:meal",
+    ":data:login",
+    ":model",
     ":common",
 )
-include(":network:login")
-include(":data:login")
-include(":model")
+include(":keystore")
+include(":datastore")

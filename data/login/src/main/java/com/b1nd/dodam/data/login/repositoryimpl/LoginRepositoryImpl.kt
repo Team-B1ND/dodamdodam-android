@@ -6,7 +6,7 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.data.login.mapper.toModel
 import com.b1nd.dodam.data.login.repository.LoginRepository
-import com.b1nd.dodam.model.Member
+import com.b1nd.dodam.model.Token
 import com.b1nd.dodam.network.login.datasource.LoginDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +19,7 @@ internal class LoginRepositoryImpl @Inject constructor(
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher
 ) : LoginRepository {
 
-    override fun login(id: String, pw: String): Flow<Result<Member>> {
+    override fun login(id: String, pw: String): Flow<Result<Token>> {
         return flow {
             emit(
                 loginDataSource.login(id, pw).toModel()
