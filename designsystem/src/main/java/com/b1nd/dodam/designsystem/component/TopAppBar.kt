@@ -9,10 +9,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,7 +53,7 @@ fun DodamTopAppBar(
                     .clickable(onClick = onIconClick!!),
                 imageVector = icon,
                 contentDescription = null,
-                tint = contentColorFor(containerColor),
+                tint = contentColor,
             )
         }
     }
@@ -64,6 +63,7 @@ fun DodamTopAppBar(
 fun DodamTopAppBar(
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.background,
+    contentColor: Color = MaterialTheme.colorScheme.onBackground,
     titleIcon: @Composable () -> Unit,
     icon: ImageVector? = null,
     onIconClick: (() -> Unit)? = null,
@@ -74,7 +74,7 @@ fun DodamTopAppBar(
             .height(48.dp)
             .background(containerColor)
             .padding(horizontal = 24.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         titleIcon()
 
@@ -91,7 +91,7 @@ fun DodamTopAppBar(
                     ),
                 imageVector = icon,
                 contentDescription = null,
-                tint = contentColorFor(containerColor),
+                tint = contentColor,
             )
         }
     }
