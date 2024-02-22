@@ -56,6 +56,10 @@ gradlePlugin {
             id = "b1nd.dodam.primitive.kotlin.serialization"
             implementationClass = "com.b1nd.dodam.primitive.KotlinSerializationPlugin"
         }
+        register("hilt") {
+            id = "b1nd.dodam.primitive.hilt"
+            implementationClass = "com.b1nd.dodam.primitive.HiltPlugin"
+        }
         // convention
         register("androidFeature") {
             id = "b1nd.dodam.convention.android.feature"
