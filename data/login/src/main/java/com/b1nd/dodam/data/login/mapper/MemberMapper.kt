@@ -4,6 +4,5 @@ import com.b1nd.dodam.model.Token
 import com.b1nd.dodam.network.login.model.LoginResponse
 
 internal fun LoginResponse.toModel() = Token(
-    token = token,
-    refreshToken = refreshToken
+    accessToken = accessToken,
 )

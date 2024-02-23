@@ -1,81 +1,72 @@
 package com.b1nd.dodam.keystore
 
-import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import java.io.InputStream
-import java.io.OutputStream
+import android.security.keystore.KeyProtection
+import android.util.Base64
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class KeyStoreManager {
-    private val keyStore = KeyStore.getInstance("AndroidKeyStore").apply {
-        load(null)
+@Singleton
+class KeyStoreManager @Inject constructor() {
+    init {
+        KeyStore.getInstance(KEY_PROVIDER).apply {
+            load(null)
+        }.setEntry(
+            KEY_ALIAS,
+            KeyStore.SecretKeyEntry(
+                KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES).apply {
+                    init(256)
+                }.generateKey(),
+            ),
+            KeyProtection.Builder(KeyProperties.PURPOSE_DECRYPT or KeyProperties.PURPOSE_ENCRYPT)
+                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                .build(),
+        )
     }
-    private val keyStoreAlias = "dodam_key"
 
-    private val encryptCipher = Cipher.getInstance(TRANSFORMATION).apply {
-        init(Cipher.ENCRYPT_MODE, getKey())
-    }
-
-    private fun getDecryptionCipher(iv: ByteArray): Cipher {
-        return Cipher.getInstance(TRANSFORMATION).apply {
-            init(Cipher.DECRYPT_MODE, getKey(), IvParameterSpec(iv))
+    fun encrypt(plainText: String): String {
+        val keyStore = KeyStore.getInstance(KEY_PROVIDER).apply {
+            load(null)
         }
-    }
+        val secretKey = keyStore.getKey(KEY_ALIAS, null)
 
-    private fun getKey(): SecretKey {
-        val existingKey = keyStore.getEntry(keyStoreAlias, null) as KeyStore.SecretKeyEntry?
-        return existingKey?.secretKey ?: createKey()
-    }
-
-    private fun createKey(): SecretKey {
-        return KeyGenerator.getInstance(ALGORITHM).apply {
-            init(
-                KeyGenParameterSpec.Builder(
-                    "dodam_key",
-                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-                )
-                    .setBlockModes(BLOCK_MODE)
-                    .setEncryptionPaddings(PADDING)
-                    .setUserAuthenticationRequired(false)
-                    .setRandomizedEncryptionRequired(true)
-                    .build()
-            )
-        }.generateKey()
-    }
-
-    fun encrypt(data: ByteArray, outputStream: OutputStream): ByteArray {
-        val encryptedData = encryptCipher.doFinal(data)
-        outputStream.use {
-            it.write(encryptCipher.iv.size)
-            it.write(encryptCipher.iv)
-            it.write(encryptedData.size)
-            it.write(encryptedData)
+        val cipher = Cipher.getInstance(CIPHER_OPTION).apply {
+            init(Cipher.ENCRYPT_MODE, secretKey)
         }
-        return encryptedData
+
+        val encryptedText = Base64.encodeToString(cipher.doFinal(plainText.toByteArray()), Base64.DEFAULT)
+        val iv = Base64.encodeToString(cipher.iv, Base64.DEFAULT)
+
+        return "$encryptedText.$iv"
     }
 
-    fun decrypt(inputStream: InputStream): ByteArray {
-        return inputStream.use {
-            val ivSize = it.read()
-            val iv = ByteArray(ivSize)
-            it.read(iv)
-
-            val encryptedDataSize = it.read()
-            val encryptedData = ByteArray(encryptedDataSize)
-            it.read(encryptedData)
-
-            getDecryptionCipher(iv).doFinal(encryptedData)
+    fun decrypt(encryptedText: String): String {
+        val keyStore = KeyStore.getInstance(KEY_PROVIDER).apply {
+            load(null)
         }
+        val secretKey = keyStore.getKey(KEY_ALIAS, null)
+
+        val splitEncryptedText = encryptedText.split(".")
+        val encryptTarget = Base64.decode(splitEncryptedText[0], Base64.DEFAULT)
+        val iv = Base64.decode(splitEncryptedText[1], Base64.DEFAULT)
+
+        val cipher = Cipher.getInstance(CIPHER_OPTION).apply {
+            init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(iv))
+        }
+
+        return String(cipher.doFinal(encryptTarget))
     }
 
     companion object {
-        private const val ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
-        private const val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
-        private const val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
-        private const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING"
+        private const val KEY_PROVIDER = "AndroidKeyStore"
+
+        private const val KEY_ALIAS = "DODAMDODAM_KEY"
+
+        private const val CIPHER_OPTION = "AES/CBC/PKCS7Padding"
     }
 }
