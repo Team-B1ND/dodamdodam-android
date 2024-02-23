@@ -31,9 +31,6 @@ class LoginViewModel @Inject constructor(
                         token = token.data.accessToken,
 
                     )
-                    datastoreRepository.user.collect {
-                        Log.d("loginViewModel DataStore : id : ", it.id + " pw : " + it.pw + " token : " + it.token)
-                    }
                     _event.emit(Event.NavigateToMain)
                 }
 

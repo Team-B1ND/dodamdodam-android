@@ -28,6 +28,6 @@ include(
     ":data:login",
     ":model",
     ":common",
+    ":keystore",
+    ":datastore"
 )
-include(":keystore")
-include(":datastore")
