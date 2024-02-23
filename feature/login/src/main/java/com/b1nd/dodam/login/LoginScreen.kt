@@ -27,7 +27,11 @@ import com.b1nd.dodam.login.viewmodel.Event
 import com.b1nd.dodam.login.viewmodel.LoginViewModel
 
 @Composable
-internal fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit) {
+internal fun LoginScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
+    navigateToMain: () -> Unit
+) {
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect { event ->
             when (event) {

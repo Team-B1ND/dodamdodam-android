@@ -19,7 +19,7 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
         ) {
             onboardingScreen(
                 onRegisterClick = { /* TODO: Navigate to Register Screen */ },
-                onLoginClick = { navController.navigationToLogin(navOptions = null) },
+                onLoginClick = { navController.navigationToLogin() },
             )
             loginScreen(
                 onBackClick = { navController.popBackStack() },
