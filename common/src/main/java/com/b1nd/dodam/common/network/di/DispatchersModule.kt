@@ -1,4 +1,4 @@
-package com.b1nd.dodam.common.di
+package com.b1nd.dodam.common.network.di
 
 import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType

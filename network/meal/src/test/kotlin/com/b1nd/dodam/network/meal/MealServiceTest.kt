@@ -24,7 +24,7 @@ class MealServiceTest {
     @Before
     fun setUp() {
         val client = HttpClient(
-            MockEngine { request ->
+            MockEngine { _ ->
                 respond(
                     content = """
                     {

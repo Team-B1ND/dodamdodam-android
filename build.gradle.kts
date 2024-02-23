@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.dagger.hilt).apply(false)
     alias(libs.plugins.kotlinx.serialization).apply(false)
     alias(libs.plugins.spotless)
+    alias(libs.plugins.android.library).apply(false)
 }
 
 subprojects {
@@ -16,6 +17,7 @@ subprojects {
     extensions.configure<SpotlessExtension> {
         kotlin {
             target("**/*.kt")
+            target("**/test/**.kt")
             targetExclude("${layout.buildDirectory}/**/*.kt")
             ktlint()
                 .setEditorConfigPath("${project.rootDir}/spotless/.editorconfig")

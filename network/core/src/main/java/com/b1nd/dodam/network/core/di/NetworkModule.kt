@@ -11,6 +11,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.observer.ResponseObserver
 import io.ktor.client.request.accept
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -37,6 +38,11 @@ object NetworkModule {
             }
             install(Logging) {
                 level = LogLevel.ALL
+            }
+            install(ResponseObserver) {
+                onResponse { response ->
+                    println("$response")
+                }
             }
             install(HttpTimeout) {
                 requestTimeoutMillis = TIME_OUT

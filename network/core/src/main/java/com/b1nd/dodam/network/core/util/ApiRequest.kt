@@ -16,5 +16,8 @@ suspend inline fun <T> safeRequest(crossinline request: suspend () -> T): T {
     } catch (e: ServerResponseException) {
         // 5xx - response
         throw e
+    } catch (e: Exception) {
+        println("Exception: $e")
+        throw e
     }
 }
