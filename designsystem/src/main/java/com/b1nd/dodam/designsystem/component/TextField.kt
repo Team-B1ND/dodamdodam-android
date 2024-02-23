@@ -197,7 +197,7 @@ fun DodamTextField(
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES, backgroundColor = 0x000000)
 @Preview(showBackground = true)
 @Composable
-fun DodamTextFieldPreview() {
+private fun DodamTextFieldPreview() {
     var value = remember { mutableStateOf("") }
     DodamTheme {
         Column {

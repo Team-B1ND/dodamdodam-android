@@ -21,6 +21,7 @@ androidx-lifecycle = "2.6.2"
 androidx-navigation = "2.7.6"
 androidx-hilt-navigation-compose = "1.1.0"
 androidx-material = "1.5.4"
+datastore = "1.0.0"
 
 # third party
 dagger-hilt = "2.50"
@@ -38,6 +39,7 @@ androidx-test-espresso = "3.5.1"
 agp = "8.2.2"
 ksp = "1.9.22-1.0.16"
 appcompat = "1.6.1"
+uiDesktop = "1.6.2"
 
 [libraries]
 # kotlin
@@ -68,6 +70,7 @@ androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "and
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-navigation = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
+androidx-datastore-preference = { group = "androidx.datastore",name = "datastore-preferences", version.ref = "datastore" }
 
 # third party
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt" }
@@ -91,7 +94,6 @@ ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref =
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
-
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
@@ -108,6 +110,7 @@ dodam-android = { id = "b1nd.dodam.primitive.android", version = "unspecified" }
 dodam-android-kotlin = { id = "b1nd.dodam.primitive.android.kotlin", version = "unspecified" }
 dodam-android-compose = { id = "b1nd.dodam.primitive.android.compose", version = "unspecified" }
 dodam-android-hilt = { id = "b1nd.dodam.primitive.android.hilt", version = "unspecified" }
+dodam-hilt = { id = "b1nd.dodam.primitive.hilt", version = "unspecified" }
 dodam-android-application = { id = "b1nd.dodam.primitive.android.application", version = "unspecified" }
 dodam-kotlin = { id = "b1nd.dodam.convention.kotlin", version = "unspecified" }
 dodam-kotlin-serialization = { id = "b1nd.dodam.primitive.kotlin.serialization", version = "unspecified" }
