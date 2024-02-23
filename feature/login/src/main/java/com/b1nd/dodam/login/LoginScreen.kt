@@ -27,11 +27,7 @@ import com.b1nd.dodam.login.viewmodel.Event
 import com.b1nd.dodam.login.viewmodel.LoginViewModel
 
 @Composable
-internal fun LoginScreen(
-    viewModel: LoginViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    navigateToMain: () -> Unit
-) {
+internal fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit) {
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect { event ->
             when (event) {
@@ -51,7 +47,7 @@ internal fun LoginScreen(
         onIdChange = { id = it },
         onPwChange = { password = it },
         id = id,
-        pw = password
+        pw = password,
     )
 }
 
@@ -70,16 +66,15 @@ private fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
         BackIcon(
             modifier = Modifier
-
                 .padding(16.dp)
                 .clickable {
                     onBackClick()
                 },
-            tint = MaterialTheme.colorScheme.onBackground
+            tint = MaterialTheme.colorScheme.onBackground,
         )
         Column(
             modifier = Modifier

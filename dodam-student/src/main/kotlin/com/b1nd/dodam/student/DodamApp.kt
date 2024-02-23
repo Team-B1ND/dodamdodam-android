@@ -5,10 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.theme.DodamTheme
-import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
-import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
+import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
+import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 
 @Composable
 fun DodamApp(navController: NavHostController = rememberNavController()) {
