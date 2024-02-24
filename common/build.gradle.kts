@@ -1,8 +1,5 @@
 plugins {
     alias(libs.plugins.dodam.kotlin)
+    alias(libs.plugins.dodam.hilt)
 }
 
-dependencies {
-    implementation(libs.hilt.core)
-    implementation(libs.kotlinx.coroutines.core)
-}
