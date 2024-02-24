@@ -38,4 +38,5 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(projects.feature.onboarding)
     implementation(projects.feature.register)
+    implementation(projects.feature.login)
 }

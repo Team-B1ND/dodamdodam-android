@@ -40,6 +40,10 @@ gradlePlugin {
             id = "b1nd.dodam.primitive.android.hilt"
             implementationClass = "com.b1nd.dodam.primitive.AndroidHiltPlugin"
         }
+        register("hilt") {
+            id = "b1nd.dodam.primitive.hilt"
+            implementationClass = "com.b1nd.dodam.primitive.HiltPlugin"
+        }
         register("androidKotlin") {
             id = "b1nd.dodam.primitive.android.kotlin"
             implementationClass = "com.b1nd.dodam.primitive.AndroidKotlinPlugin"
