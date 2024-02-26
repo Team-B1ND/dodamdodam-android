@@ -5,6 +5,5 @@ plugins {
 
 dependencies {
     implementation(projects.common)
-    implementation(projects.network.core)
     implementation(projects.network.register)
 }
