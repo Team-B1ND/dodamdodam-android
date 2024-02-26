@@ -6,6 +6,7 @@ import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.model.TokenRequest
 import com.b1nd.dodam.network.core.model.TokenResponse
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,12 +25,15 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.accept
 import io.ktor.client.request.get
+import io.ktor.client.request.host
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.single
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
@@ -62,6 +66,10 @@ object NetworkModule {
             }
             install(Auth) {
                 bearer {
+                    loadTokens {
+                        val accessToken = datastore.user.first().token
+                        BearerTokens(accessToken, "")
+                    }
                     refreshTokens {
                         val user = datastore.user.first()
                         val accessToken = client.post(DodamUrl.Auth.LOGIN) {
@@ -72,6 +80,12 @@ object NetworkModule {
                         datastore.saveToken(accessToken)
 
                         BearerTokens(accessToken, "")
+                    }
+                    sendWithoutRequest { request ->
+                        when (request.url.toString()) {
+                            DodamUrl.Auth.LOGIN -> false
+                            else -> true
+                        }
                     }
                 }
             }

@@ -1,8 +1,9 @@
 package com.b1nd.dodam.keystore
 
+import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import android.security.keystore.KeyProtection
-import android.util.Base64
+import com.b1nd.dodam.keystore.util.decode
+import com.b1nd.dodam.keystore.util.encode
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -12,48 +13,46 @@ import javax.inject.Singleton
 
 @Singleton
 class KeyStoreManager @Inject constructor() {
-    init {
-        KeyStore.getInstance(KEY_PROVIDER).apply {
-            load(null)
-        }.setEntry(
-            KEY_ALIAS,
-            KeyStore.SecretKeyEntry(
-                KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES).apply {
-                    init(256)
-                }.generateKey(),
-            ),
-            KeyProtection.Builder(KeyProperties.PURPOSE_DECRYPT or KeyProperties.PURPOSE_ENCRYPT)
-                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                .build(),
-        )
+
+    private val keyStore = KeyStore.getInstance(KEY_PROVIDER).apply {
+        load(null)
     }
 
-    fun encrypt(plainText: String): String {
-        val keyStore = KeyStore.getInstance(KEY_PROVIDER).apply {
-            load(null)
+    private val secretKey = if (keyStore.containsAlias(KEY_ALIAS)) {
+        val secretKeyEntry = keyStore.getEntry(KEY_ALIAS, null) as KeyStore.SecretKeyEntry
+        secretKeyEntry.secretKey
+    } else {
+        val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, KEY_PROVIDER)
+        val parameterSpec = KeyGenParameterSpec.Builder(
+            KEY_ALIAS,
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+        ).run {
+            setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+            setDigests(KeyProperties.DIGEST_SHA256)
+            setUserAuthenticationRequired(false)
+            build()
         }
-        val secretKey = keyStore.getKey(KEY_ALIAS, null)
+        keyGenerator.init(parameterSpec)
+        keyGenerator.generateKey()
+    }
 
+    @Synchronized
+    fun encrypt(plainText: String): String {
         val cipher = Cipher.getInstance(CIPHER_OPTION).apply {
             init(Cipher.ENCRYPT_MODE, secretKey)
         }
+        val encryptedText = cipher.doFinal(plainText.toByteArray())
 
-        val encryptedText = Base64.encodeToString(cipher.doFinal(plainText.toByteArray()), Base64.DEFAULT)
-        val iv = Base64.encodeToString(cipher.iv, Base64.DEFAULT)
-
-        return "$encryptedText.$iv"
+        return "${encryptedText.encode()}.${cipher.iv.encode()}"
     }
 
+    @Synchronized
     fun decrypt(encryptedText: String): String {
-        val keyStore = KeyStore.getInstance(KEY_PROVIDER).apply {
-            load(null)
-        }
-        val secretKey = keyStore.getKey(KEY_ALIAS, null)
-
         val splitEncryptedText = encryptedText.split(".")
-        val encryptTarget = Base64.decode(splitEncryptedText[0], Base64.DEFAULT)
-        val iv = Base64.decode(splitEncryptedText[1], Base64.DEFAULT)
+
+        val encryptTarget = splitEncryptedText[0].decode()
+        val iv = splitEncryptedText[1].decode()
 
         val cipher = Cipher.getInstance(CIPHER_OPTION).apply {
             init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(iv))
