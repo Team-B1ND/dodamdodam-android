@@ -9,6 +9,7 @@ import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
+import com.b1nd.dodam.register.navigation.INFO_ROUTE
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
@@ -22,13 +23,20 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
             startDestination = ONBOARDING_ROUTE,
         ) {
             onboardingScreen(
-                onRegisterClick = { navController.navigateToInfo(null) },
-                onLoginClick = { /* TODO: Navigation to Login Screen */ },
-                onRegisterClick = { /* TODO: Navigate to Register Screen */ },
+                onRegisterClick = { navController.navigateToInfo() },
                 onLoginClick = { navController.navigationToLogin() },
             )
             infoScreen(
-                onNextClick = { navController.navigateToAuth(null) },
+                onNextClick = { name, grade, room, number, email, phoneNumber ->
+                    navController.navigateToAuth(
+                        name = name,
+                        grade = grade,
+                        room = room,
+                        number = number,
+                        email = email,
+                        phoneNumber = phoneNumber
+                    )
+                },
                 onBackClick = { navController.popBackStack() },
             )
             authScreen(

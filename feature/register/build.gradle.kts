@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.dodam.android.feature)
+    alias(libs.plugins.dodam.hilt)
 }
 
 android {
@@ -11,6 +12,7 @@ android {
 
 dependencies {
     implementation(projects.designsystem)
+    implementation(projects.data.register)
     implementation(libs.bottomsheetdialog.compose)
     implementation(projects.common)
 }

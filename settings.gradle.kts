@@ -30,5 +30,7 @@ include(
     ":model",
     ":common",
     ":keystore",
-    ":datastore"
+    ":datastore",
+    ":data:register",
+    ":network:register"
 )

@@ -1,7 +1,7 @@
-package com.b1nd.dodam.network.login.di
+package com.b1nd.dodam.network.register.di
 
-import com.b1nd.dodam.network.login.api.LoginService
-import com.b1nd.dodam.network.login.datasource.LoginDataSource
+import com.b1nd.dodam.network.register.api.LoginService
+import com.b1nd.dodam.network.register.datasource.LoginDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
