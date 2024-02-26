@@ -31,6 +31,7 @@ class PhoneVisualTransformation(val mask: String, val maskNumber: Char) : Visual
 
         return TransformedText(annotatedString, PhoneOffsetMapper(mask, maskNumber))
     }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is PhoneVisualTransformation) return false
