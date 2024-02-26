@@ -5,7 +5,9 @@ import com.b1nd.dodam.datastore.model.User
 import com.b1nd.dodam.keystore.KeyStoreManager
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
+import javax.inject.Singleton
 
+@Singleton
 class DatastoreRepository @Inject constructor(
     private val dataStore: DataStore<User>,
     private val keyStoreManager: KeyStoreManager,
@@ -23,6 +25,14 @@ class DatastoreRepository @Inject constructor(
                 id = keyStoreManager.encrypt(id),
                 pw = keyStoreManager.encrypt(pw),
                 token = token,
+            )
+        }
+    }
+
+    suspend fun saveToken(token: String) {
+        dataStore.updateData { user ->
+            user.copy(
+                token = token
             )
         }
     }
