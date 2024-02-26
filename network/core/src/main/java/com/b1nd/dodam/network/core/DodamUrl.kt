@@ -7,7 +7,7 @@ object DodamUrl {
     const val MEAL = "$TEST_URL/meal"
     const val AUTH = "$TEST_URL/auth"
     const val MEMBER = "$TEST_URL/member"
-
+    const val WAKEUP_SONG = "$BASE_URL/wakeup-song"
     object Meal {
         const val MONTH = "$MEAL/month"
     }
@@ -18,5 +18,9 @@ object DodamUrl {
 
     object Member {
         const val REGISTER = "$MEMBER/join-student"
+    }
+
+    object WakeupSong {
+        const val ALLOWED = "$WAKEUP_SONG/allowed"
     }
 }

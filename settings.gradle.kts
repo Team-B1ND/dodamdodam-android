@@ -41,3 +41,5 @@ include(
     ":data:meal",
     ":model",
 )
+include(":network:wakeup-song")
+include(":data:wakeup-song")
