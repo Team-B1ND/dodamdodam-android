@@ -42,7 +42,7 @@ internal class RegisterService @Inject constructor(
                         room = room
                     )
                 )
-            }.body<RegisterResponse>()
+            }.body<Response<Unit>>()
         }
     }
 }

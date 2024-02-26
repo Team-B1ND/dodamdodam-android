@@ -32,26 +32,57 @@ internal fun LoginScreen(
     onBackClick: () -> Unit,
     navigateToMain: () -> Unit
 ) {
+    var idError by remember { mutableStateOf("") }
+    var pwError by remember { mutableStateOf("") }
+    var id by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect { event ->
             when (event) {
                 is Event.NavigateToMain -> navigateToMain()
+                is Event.Error -> {
+                    when (event.message) {
+                        "해당 멤버를 찾지 못함" -> {
+                            idError = "계정을 찾을 수 없어요"
+                        }
+
+                        "비밀번호가 일치하지 않음" -> {
+                            pwError = "비밀번호가 일치하지 않아요"
+                        }
+
+                        else -> {
+                            pwError = event.message
+                        }
+                    }
+                }
             }
         }
     }
-    var id by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
     LoginScreen(
         onBackClick = onBackClick,
         onLoginClick = {
             viewModel.login(id, password)
         },
-        onIdCancel = { id = "" },
-        onPwCancel = { password = "" },
-        onIdChange = { id = it },
-        onPwChange = { password = it },
+        onIdCancel = {
+            id = ""
+            idError = ""
+        },
+        onPwCancel = {
+            password = ""
+            pwError = ""
+        },
+        onIdChange = {
+            id = it
+            idError = ""
+        },
+        onPwChange = {
+            password = it
+            pwError = ""
+        },
         id = id,
+        idError = idError,
         pw = password,
+        pwError = pwError,
     )
 }
 
@@ -60,7 +91,9 @@ private fun LoginScreen(
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
     id: String,
+    idError: String,
     pw: String,
+    pwError: String,
     onIdChange: (String) -> Unit,
     onPwChange: (String) -> Unit,
     onIdCancel: () -> Unit,
@@ -95,6 +128,8 @@ private fun LoginScreen(
                 onValueChange = onIdChange,
                 onClickCancel = onIdCancel,
                 hint = "아이디",
+                isError = idError.isNotBlank(),
+                supportingText = idError,
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(bottom = 32.dp),
             )
@@ -104,6 +139,8 @@ private fun LoginScreen(
                 onClickCancel = onPwCancel,
                 isPassword = true,
                 isPasswordVisible = false,
+                isError = pwError.isNotBlank(),
+                supportingText = pwError,
                 hint = "비밀번호",
                 textStyle = MaterialTheme.typography.bodyMedium,
             )
@@ -139,7 +176,9 @@ fun LoginScreenPreview() {
             onBackClick = { },
             onLoginClick = { },
             id = "아이디",
+            idError = "",
             pw = "비밀번호",
+            pwError = "",
             onIdChange = { },
             onPwChange = { },
             onIdCancel = { },
