@@ -48,13 +48,6 @@ fun AuthScreen(
     var passwordState by remember { mutableStateOf(TextFieldState()) }
     var confirmPasswordState by remember { mutableStateOf(TextFieldState()) }
     val focusManager = LocalFocusManager.current
-    LaunchedEffect(viewModel.event) {
-        viewModel.event.collect { event ->
-            when (event) {
-                is Event.NavigateToMain -> navigateToMain()
-            }
-        }
-    }
     LaunchedEffect(idState.isValid) {
         if (idState.isValid) {
             focusManager.moveFocus(FocusDirection.Down)
@@ -69,6 +62,50 @@ fun AuthScreen(
         viewModel.event.collect { event ->
             when (event) {
                 is Event.NavigateToMain -> navigateToMain()
+                is Event.Error -> {
+                    when (event.message) {
+                        "해당 멤버를 찾지 못함" -> {
+                            idState = idState.copy(
+                                value = idState.value,
+                                isValid = idState.isValid,
+                                isError = true,
+                                errorMessage = "계정을 찾을 수 없어요"
+                            )
+                        }
+                        "비밀번호가 일치하지 않음" -> {
+                            passwordState = passwordState.copy(
+                                value = passwordState.value,
+                                isValid = passwordState.isValid,
+                                isError = true,
+                                errorMessage = "비밀번호가 일치하지 않아요"
+                            )
+                        }
+                        "유효한 Enum 값이 아닙니다." -> {
+                            idState = idState.copy(
+                                value = idState.value,
+                                isValid = idState.isValid,
+                                isError = true,
+                                errorMessage = "이메일을 다시 입력해주세요"
+                            )
+                        }
+                        "이미 존재하는 유저" -> {
+                            idState = idState.copy(
+                                value = idState.value,
+                                isValid = idState.isValid,
+                                isError = true,
+                                errorMessage = "이미 가입된 이메일 입니다. 다른 이메일을 입력해주세요."
+                            )
+                        }
+                        else -> {
+                            idState = idState.copy(
+                                value = idState.value,
+                                isValid = idState.isValid,
+                                isError = true,
+                                errorMessage = event.message
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -184,7 +221,7 @@ fun AuthScreen(
                 hint = "아이디",
                 modifier = Modifier.padding(top = 24.dp),
                 isError = idState.isError,
-                supportingText = if (idState.isError) idState.errorMessage else "아이디는 5~20글자 이내여야 합니다.",
+                supportingText = if (idState.isError) idState.errorMessage else "아이디는 영문 + 숫자 5~20글자 이내여야 합니다.",
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = {
                     idState = isIdValid(idState)
@@ -194,7 +231,6 @@ fun AuthScreen(
             AnimatedVisibility(visible = confirmPasswordState.isValid) {
                 DodamFullWidthButton(
                     onClick = {
-                        Log.d( "AuthScreen: ", "email: $email, grade: $grade, id: ${idState.value}, name: $name, number: $number, phone: $phoneNumber, pw: ${passwordState.value}, room: $room")
                         viewModel.register(
                             email = email,
                             grade = grade.toInt(),

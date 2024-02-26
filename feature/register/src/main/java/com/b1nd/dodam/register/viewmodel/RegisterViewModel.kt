@@ -41,9 +41,14 @@ class RegisterViewModel @Inject constructor(
             room = room
         ).collect { result ->
             when (result) {
-                is Result.Success -> { _event.emit(Event.NavigateToMain) }
+                is Result.Success -> {
+                    _event.emit(Event.NavigateToMain)
+                }
+
                 is Result.Error -> {
-                    Log.e( "register: ", result.exception.message.toString()) }
+                    _event.emit(Event.Error(result.exception.message ?: "알 수 없는 오류가 발생했습니다."))
+                }
+
                 is Result.Loading -> {}
             }
         }
@@ -52,4 +57,5 @@ class RegisterViewModel @Inject constructor(
 
 sealed interface Event {
     data object NavigateToMain : Event
+    data class Error(val message: String) : Event
 }

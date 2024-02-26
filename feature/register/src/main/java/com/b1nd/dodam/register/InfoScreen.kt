@@ -340,16 +340,6 @@ fun InfoScreen(
             AnimatedVisibility(visible = phoneNumberState.isValid && emailState.isValid && classInfoState.isValid && nameState.isValid) {
                 DodamFullWidthButton(
                     onClick = {
-                        Log.d(
-                            "InfoScreen: ",
-                            "name: ${nameState.value} grade: ${
-                                classInfoState.value.substring(0, 1).toInt()
-                            } room: ${classInfoState.value} number: ${
-                                classInfoState.value.substring(
-                                    2
-                                ).toInt()
-                            } email: ${emailState.value} phoneNumber: ${phoneNumberState.value}"
-                        )
                         onNextClick(
                             nameState.value,
                             classInfoState.value[0].toString(),

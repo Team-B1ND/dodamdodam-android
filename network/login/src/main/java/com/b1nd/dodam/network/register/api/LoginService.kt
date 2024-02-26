@@ -22,7 +22,7 @@ internal class LoginService @Inject constructor(
             client.post(DodamUrl.Auth.LOGIN) {
                 contentType(ContentType.Application.Json)
                 setBody(LoginRequest(id, pw))
-            }.body<Response<LoginResponse>>().data
+            }.body<Response<LoginResponse>>()
         }
     }
 }
