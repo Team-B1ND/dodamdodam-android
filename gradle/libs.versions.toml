@@ -29,7 +29,7 @@ spotless = "6.23.3"
 material = "1.11.0"
 bottomsheetdialog = "1.3.1"
 ktor = "2.3.8"
-logback = "1.5.0"
+coil = "2.6.0"
 
 # test
 junit = "4.13.2"
@@ -86,6 +86,7 @@ ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-conte
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
