@@ -1,11 +1,11 @@
-package com.b1nd.dodam.network.login.api
+package com.b1nd.dodam.network.register.api
 
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.safeRequest
-import com.b1nd.dodam.network.login.datasource.LoginDataSource
-import com.b1nd.dodam.network.login.model.LoginRequest
-import com.b1nd.dodam.network.login.model.LoginResponse
+import com.b1nd.dodam.network.register.datasource.LoginDataSource
+import com.b1nd.dodam.network.register.model.LoginRequest
+import com.b1nd.dodam.network.register.model.LoginResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post

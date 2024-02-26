@@ -1,4 +1,4 @@
-package com.b1nd.dodam.network.login.model
+package com.b1nd.dodam.network.register.model
 
 import kotlinx.serialization.Serializable
 

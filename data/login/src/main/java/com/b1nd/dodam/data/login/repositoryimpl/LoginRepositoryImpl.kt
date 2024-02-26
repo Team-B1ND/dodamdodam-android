@@ -7,7 +7,7 @@ import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.data.login.mapper.toModel
 import com.b1nd.dodam.data.login.repository.LoginRepository
 import com.b1nd.dodam.model.Token
-import com.b1nd.dodam.network.login.datasource.LoginDataSource
+import com.b1nd.dodam.network.register.datasource.LoginDataSource
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow

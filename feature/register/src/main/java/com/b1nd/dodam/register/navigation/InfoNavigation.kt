@@ -8,9 +8,12 @@ import com.b1nd.dodam.register.InfoScreen
 
 const val INFO_ROUTE = "info"
 
-fun NavController.navigateToInfo(navOptions: NavOptions?) = navigate(INFO_ROUTE, navOptions)
+fun NavController.navigateToInfo(navOptions: NavOptions? = null) = navigate(INFO_ROUTE, navOptions)
 
-fun NavGraphBuilder.infoScreen(onNextClick: () -> Unit, onBackClick: () -> Unit) {
+fun NavGraphBuilder.infoScreen(
+    onNextClick: (String, String, String, String, String, String) -> Unit,
+    onBackClick: () -> Unit
+) {
     composable(route = INFO_ROUTE) {
         InfoScreen(
             onNextClick = onNextClick,
