@@ -7,12 +7,10 @@ plugins {
 }
 
 android {
-    android {
-        namespace = "com.b1nd.dodam.data.login"
+    namespace = "com.b1nd.dodam.data.login"
 
-        defaultConfig {
-            consumerProguardFiles("consumer-rules.pro")
-        }
+    defaultConfig {
+        consumerProguardFiles("consumer-rules.pro")
     }
 }
 

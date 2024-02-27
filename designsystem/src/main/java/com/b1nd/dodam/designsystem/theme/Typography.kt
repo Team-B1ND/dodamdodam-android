@@ -17,7 +17,7 @@ val PretendardFontFamily = FontFamily(
     Font(R.font.pretendard_semi_bold, FontWeight.SemiBold),
 )
 
-val NotoSansKR = Typography(
+val Pretendard = Typography(
     headlineLarge = TextStyle(
         fontFamily = PretendardFontFamily,
         fontWeight = FontWeight.Bold,

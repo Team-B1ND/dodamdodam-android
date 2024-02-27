@@ -22,6 +22,7 @@ include(
     ":designsystem",
     ":feature:onboarding",
     ":feature:login",
+    ":feature:register",
     ":network:core",
     ":network:login",
     ":network:meal",
@@ -29,5 +30,7 @@ include(
     ":model",
     ":common",
     ":keystore",
-    ":datastore"
+    ":datastore",
+    ":data:register",
+    ":network:register"
 )

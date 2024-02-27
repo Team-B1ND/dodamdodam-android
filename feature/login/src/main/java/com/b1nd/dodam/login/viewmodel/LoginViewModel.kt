@@ -35,7 +35,7 @@ class LoginViewModel @Inject constructor(
                 }
 
                 is Result.Error -> {
-                    Log.e("loginViewModel Error : ", token.exception.message.toString())
+                    _event.emit(Event.Error(token.exception.message ?: "알 수 없는 오류가 발생했습니다."))
                 }
 
                 is Result.Loading -> {}
@@ -46,4 +46,5 @@ class LoginViewModel @Inject constructor(
 
 sealed interface Event {
     data object NavigateToMain : Event
+    data class Error(val message: String) : Event
 }
