@@ -1,17 +1,16 @@
 import com.b1nd.dodam.dsl.android
 
 plugins {
-    alias(libs.plugins.dodam.kotlin)
-    alias(libs.plugins.dodam.hilt)
+    alias(libs.plugins.dodam.android)
+    alias(libs.plugins.dodam.android.kotlin)
+    alias(libs.plugins.dodam.android.hilt)
 }
 
 android {
-    android {
-        namespace = "com.b1nd.dodam.data.register"
+    namespace = "com.b1nd.dodam.data.register"
 
-        defaultConfig {
-            consumerProguardFiles("consumer-rules.pro")
-        }
+    defaultConfig {
+        consumerProguardFiles("consumer-rules.pro")
     }
 }
 
