@@ -13,5 +13,6 @@ object DodamUrl {
 
     object Auth {
         const val LOGIN = "$AUTH/login"
+        const val REGISTER = "$AUTH/join-student"
     }
 }

@@ -2,6 +2,7 @@ package com.b1nd.dodam.designsystem.theme
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,7 +22,7 @@ import com.b1nd.dodam.designsystem.icons.More
 import com.b1nd.dodam.designsystem.icons.Out
 
 @Composable
-fun CheckCircleIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun CheckCircleIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = ImageVector.vectorResource(R.drawable.check_circle),
@@ -31,7 +32,7 @@ fun CheckCircleIcon(modifier: Modifier = Modifier, contentDescription: String? =
 }
 
 @Composable
-fun CheckIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun CheckIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = ImageVector.vectorResource(R.drawable.check),
@@ -41,7 +42,7 @@ fun CheckIcon(modifier: Modifier = Modifier, contentDescription: String? = null,
 }
 
 @Composable
-fun RightArrowIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun RightArrowIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = ImageVector.vectorResource(R.drawable.right_arrow),
@@ -51,7 +52,7 @@ fun RightArrowIcon(modifier: Modifier = Modifier, contentDescription: String? = 
 }
 
 @Composable
-fun HomeIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun HomeIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = Home,
@@ -61,7 +62,7 @@ fun HomeIcon(modifier: Modifier = Modifier, contentDescription: String? = null, 
 }
 
 @Composable
-fun MealIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun MealIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = Meal,
@@ -71,7 +72,7 @@ fun MealIcon(modifier: Modifier = Modifier, contentDescription: String? = null, 
 }
 
 @Composable
-fun OutIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun OutIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = Out,
@@ -81,7 +82,7 @@ fun OutIcon(modifier: Modifier = Modifier, contentDescription: String? = null, t
 }
 
 @Composable
-fun CalendarIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun CalendarIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = Calendar,
@@ -91,7 +92,7 @@ fun CalendarIcon(modifier: Modifier = Modifier, contentDescription: String? = nu
 }
 
 @Composable
-fun MoreIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun MoreIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = More,
@@ -101,7 +102,7 @@ fun MoreIcon(modifier: Modifier = Modifier, contentDescription: String? = null, 
 }
 
 @Composable
-fun EyeIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun EyeIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = Eye,
@@ -111,7 +112,7 @@ fun EyeIcon(modifier: Modifier = Modifier, contentDescription: String? = null, t
 }
 
 @Composable
-fun EyeSlashIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun EyeSlashIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = EyeSlash,
@@ -121,7 +122,7 @@ fun EyeSlashIcon(modifier: Modifier = Modifier, contentDescription: String? = nu
 }
 
 @Composable
-fun CancelIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Gray300) {
+fun CancelIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = Cancel,
@@ -131,7 +132,7 @@ fun CancelIcon(modifier: Modifier = Modifier, contentDescription: String? = null
 }
 
 @Composable
-fun ErrorIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Red500) {
+fun ErrorIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.error) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = Error,
@@ -141,7 +142,7 @@ fun ErrorIcon(modifier: Modifier = Modifier, contentDescription: String? = null,
 }
 
 @Composable
-fun BackIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = Black) {
+fun BackIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.onBackground) {
     Icon(
         modifier = modifier.size(24.dp),
         imageVector = Back,

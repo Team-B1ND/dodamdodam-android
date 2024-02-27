@@ -63,6 +63,11 @@ object NetworkModule {
                     }
                 }
                 level = LogLevel.ALL
+                logger =  object : Logger {
+                    override fun log(message: String) {
+                        println(message)
+                    }
+                }
             }
             install(Auth) {
                 bearer {
@@ -75,7 +80,7 @@ object NetworkModule {
                         val accessToken = client.post(DodamUrl.Auth.LOGIN) {
                             markAsRefreshTokenRequest()
                             setBody(TokenRequest(id = user.id, pw = user.pw))
-                        }.body<Response<TokenResponse>>().data.accessToken
+                        }.body<Response<TokenResponse>>().data?.accessToken ?: ""
 
                         datastore.saveToken(accessToken)
 
