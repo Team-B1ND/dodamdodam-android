@@ -23,6 +23,7 @@ include(
     ":feature:onboarding",
     ":feature:login",
     ":feature:register",
+    ":feature:meal",
     ":network:core",
     ":network:login",
     ":network:meal",
