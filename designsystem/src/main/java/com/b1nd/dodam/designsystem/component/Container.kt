@@ -24,22 +24,15 @@ import com.b1nd.dodam.designsystem.animation.NoInteractionSource
 import com.b1nd.dodam.designsystem.icons.ChevronRight
 
 @Composable
-fun DodamContainer(
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    title: String,
-    showNextButton: Boolean = false,
-    onNextClick: (() -> Unit)? = null,
-    content: @Composable () -> Unit,
-) {
+fun DodamContainer(modifier: Modifier = Modifier, icon: ImageVector, title: String, showNextButton: Boolean = false, onNextClick: (() -> Unit)? = null, content: @Composable () -> Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
             )
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -52,13 +45,13 @@ fun DodamContainer(
                         shape = RoundedCornerShape(100),
                     )
                     .padding(8.dp),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     modifier = Modifier.size(20.dp),
                     imageVector = icon,
                     contentDescription = "icon",
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }
 
@@ -67,7 +60,7 @@ fun DodamContainer(
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -79,17 +72,17 @@ fun DodamContainer(
                         .clickable(
                             interactionSource = NoInteractionSource(),
                             indication = null,
-                            onClick = onNextClick!!
+                            onClick = onNextClick!!,
                         ),
                     imageVector = ChevronRight,
                     contentDescription = "next",
-                    tint = MaterialTheme.colorScheme.tertiary
+                    tint = MaterialTheme.colorScheme.tertiary,
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
-        
+
         content()
     }
 }

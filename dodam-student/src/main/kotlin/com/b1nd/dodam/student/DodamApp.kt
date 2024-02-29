@@ -6,7 +6,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.b1nd.dodam.designsystem.theme.DodamTheme
-import com.b1nd.dodam.login.navigation.LOGIN_ROUTE
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.meal.navigation.mealScreen
@@ -16,15 +15,16 @@ import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
 import com.b1nd.dodam.register.navigation.navigateToInfo
+import com.b1nd.dodam.student.main.navigation.MAIN_ROUTE
 import com.b1nd.dodam.student.main.navigation.mainScreen
 import com.b1nd.dodam.student.main.navigation.navigateToMain
 
 @Composable
-fun DodamApp(navController: NavHostController = rememberNavController()) {
+fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavController()) {
     DodamTheme {
         NavHost(
             navController = navController,
-            startDestination = ONBOARDING_ROUTE,
+            startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
         ) {
             onboardingScreen(
                 onRegisterClick = { navController.navigateToInfo() },
@@ -51,11 +51,13 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
             loginScreen(
                 onBackClick = { navController.popBackStack() },
                 navigateToMain = {
-                    navController.navigateToMain(navOptions {
-                        popUpTo(ONBOARDING_ROUTE) {
-                            inclusive = true
-                        }
-                    })
+                    navController.navigateToMain(
+                        navOptions {
+                            popUpTo(ONBOARDING_ROUTE) {
+                                inclusive = true
+                            }
+                        },
+                    )
                 },
             )
             mealScreen()

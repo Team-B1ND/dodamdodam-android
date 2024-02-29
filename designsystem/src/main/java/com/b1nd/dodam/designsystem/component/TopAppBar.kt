@@ -74,7 +74,7 @@ fun DodamTopAppBar(
             .height(48.dp)
             .background(containerColor)
             .padding(horizontal = 24.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         titleIcon()
 

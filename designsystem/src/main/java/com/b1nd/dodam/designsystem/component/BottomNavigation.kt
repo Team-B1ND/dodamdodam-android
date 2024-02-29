@@ -39,8 +39,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.animation.NoInteractionSource
 import com.b1nd.dodam.designsystem.icons.Calendar
-import com.b1nd.dodam.designsystem.icons.Home
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
+import com.b1nd.dodam.designsystem.icons.Home
 import com.b1nd.dodam.designsystem.icons.More
 import com.b1nd.dodam.designsystem.icons.Out
 import com.b1nd.dodam.designsystem.theme.DodamTheme
@@ -60,7 +60,7 @@ fun DodamBottomNavigation(navController: NavHostController, bottomNavigationItem
                 .height(BottomNavigationHeight)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box {
                 var selectedXOffset by remember { mutableIntStateOf(0) }

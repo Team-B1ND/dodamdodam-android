@@ -24,13 +24,13 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.observer.ResponseObserver
 import io.ktor.client.request.accept
+import io.ktor.client.request.get
+import io.ktor.client.request.host
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.util.InternalAPI
-import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 

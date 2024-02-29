@@ -1,17 +1,16 @@
 package com.b1nd.dodam.designsystem.icons
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-
+import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
@@ -31,7 +30,7 @@ public val DodamLogo: ImageVector
             defaultWidth = 88.dp,
             defaultHeight = 22.dp,
             viewportWidth = 88f,
-            viewportHeight = 22f
+            viewportHeight = 22f,
         ).apply {
             path(
                 fill = SolidColor(Color(0xFF0083F0)),
@@ -42,7 +41,7 @@ public val DodamLogo: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(0.0660301f, 18.0651f)
                 curveTo(1.976f, 18.0651f, 5.1928f, 18.0651f, 8.5101f, 18.0651f)
@@ -74,7 +73,7 @@ public val DodamLogo: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(22.6841f, 0.477377f)
                 curveTo(24.9962f, 0.3769f, 32.3345f, 0.3769f, 34.7471f, 0.4774f)
@@ -118,7 +117,7 @@ public val DodamLogo: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(44.3975f, 18.0651f)
                 curveTo(46.3075f, 18.0651f, 49.5243f, 18.0651f, 52.9421f, 18.0651f)
@@ -150,7 +149,7 @@ public val DodamLogo: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(67.0155f, 0.477377f)
                 curveTo(69.3275f, 0.3769f, 76.6658f, 0.3769f, 79.0784f, 0.4774f)
@@ -188,4 +187,3 @@ public val DodamLogo: ImageVector
         }.build()
         return vector!!
     }
-

@@ -42,11 +42,11 @@ internal fun MainScreen(navController: NavHostController = rememberNavController
     )
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         NavHost(
             navController = navController,
-            startDestination = HOME_ROUTE
+            startDestination = HOME_ROUTE,
         ) {
             homeScreen()
         }
@@ -61,19 +61,19 @@ internal fun MainScreen(navController: NavHostController = rememberNavController
                         listOf(
                             MaterialTheme.colorScheme.surface.copy(alpha = 0f),
                             MaterialTheme.colorScheme.surface,
-                        )
-                    )
-                )
+                        ),
+                    ),
+                ),
         )
 
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .align(Alignment.BottomCenter)
+                .align(Alignment.BottomCenter),
         ) {
             DodamBottomNavigation(
                 navController = navController,
-                bottomNavigationItems = bottomNavItems
+                bottomNavigationItems = bottomNavItems,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
