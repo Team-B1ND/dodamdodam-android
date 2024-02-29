@@ -23,12 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 object DataStoreModule {
     @Provides
     @Singleton
-    fun providesUserPreferencesDataStore(
-        @ApplicationContext context: Context,
-        @Dispatcher(DispatcherType.IO) ioDispatcher: CoroutineDispatcher,
-        @ApplicationScope scope: CoroutineScope,
-        serializer: UserSerializer,
-    ): DataStore<User> = DataStoreFactory.create(
+    fun providesUserPreferencesDataStore(@ApplicationContext context: Context, @Dispatcher(DispatcherType.IO) ioDispatcher: CoroutineDispatcher, @ApplicationScope scope: CoroutineScope, serializer: UserSerializer): DataStore<User> = DataStoreFactory.create(
         serializer = serializer,
         scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
     ) {

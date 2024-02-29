@@ -6,14 +6,28 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
-import com.b1nd.dodam.designsystem.theme.DodamTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import kotlinx.coroutines.flow.first
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject lateinit var datastoreRepository: DatastoreRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            var isLogin by remember { mutableStateOf(false) }
+
+            LaunchedEffect(Unit) {
+                isLogin = datastoreRepository.user.first().token.isNotEmpty()
+            }
+
             LaunchedEffect(Unit) {
                 enableEdgeToEdge(
                     statusBarStyle = SystemBarStyle.auto(
@@ -26,9 +40,8 @@ class MainActivity : ComponentActivity() {
                     ),
                 )
             }
-            DodamTheme {
-                DodamApp()
-            }
+
+            DodamApp(isLogin)
         }
     }
 }

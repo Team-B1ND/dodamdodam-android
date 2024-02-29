@@ -9,7 +9,7 @@ data class HomeUiState(
     val meal: Triple<String, String, String> = Triple(
         "아침을 불러오고 있어요.",
         "점심을 불러오고 있어요.",
-        "저녁을 불러오고 있어요."
+        "저녁을 불러오고 있어요.",
     ),
-    val wakeupSongs: ImmutableList<WakeupSong> = persistentListOf()
+    val wakeupSongs: ImmutableList<WakeupSong> = persistentListOf(),
 )
