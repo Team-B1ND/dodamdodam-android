@@ -10,6 +10,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -30,6 +31,8 @@ private val DarkColorScheme =
         surfaceVariant = Gray900,
         onSurfaceVariant = White,
         outline = Gray700,
+        inverseSurface = Color(0xFF222222),
+        inverseOnSurface = Color(0xFF6C6C6C),
     )
 
 private val LightColorScheme =
@@ -47,6 +50,8 @@ private val LightColorScheme =
         surfaceVariant = White,
         onSurfaceVariant = Gray900,
         outline = Gray300,
+        inverseSurface = Color(0xFFC6DFF3),
+        inverseOnSurface = Color(0xFF72ADDC),
 
         /* Other default colors to override
         background = Color(0xFFFFFBFE),
