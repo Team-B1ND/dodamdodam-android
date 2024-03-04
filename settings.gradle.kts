@@ -33,5 +33,6 @@ include(
     ":keystore",
     ":datastore",
     ":data:register",
-    ":network:register"
+    ":data:meal",
+    ":network:register",
 )
