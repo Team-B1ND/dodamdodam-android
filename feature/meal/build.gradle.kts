@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.projects
+
 plugins {
     alias(libs.plugins.dodam.android.feature)
 }
@@ -14,5 +16,6 @@ dependencies {
     implementation(projects.common)
     implementation(projects.datastore)
     implementation(projects.designsystem)
+    implementation(projects.model)
     implementation(libs.androidx.datastore.preference)
 }

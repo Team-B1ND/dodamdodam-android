@@ -43,7 +43,7 @@ fun MealCard(
     border: BorderStroke? = null,
     title: String,
     calorie: Int,
-    menu: List<String>,
+    menu: String,
 ) {
     Card(
         shape = shape,
@@ -84,7 +84,7 @@ fun MealCard(
         }
         Text(
             text = menu
-                .joinToString("\n")
+                .replace(", ", "\n")
                 .replace("[*#]".toRegex(), ""),
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
@@ -100,7 +100,7 @@ fun MealCardPreview() {
         MealCard(
             title = "아침",
             calorie = 500,
-            menu = listOf("*밥", "김치", "#동인동 찜갈비", "김")
+            menu = "*밥, 김치, #동인동 찜갈비, 김"
         )
     }
 }
