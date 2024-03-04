@@ -5,6 +5,7 @@ object DodamUrl {
 
     const val MEAL = "$BASE_URL/meal"
     const val AUTH = "$BASE_URL/auth"
+
     object Meal {
         const val CALORIE = "$MEAL/calorie"
         const val MONTH = "$MEAL/month"

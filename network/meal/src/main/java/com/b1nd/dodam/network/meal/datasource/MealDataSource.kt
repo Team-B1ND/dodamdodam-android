@@ -7,9 +7,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
 interface MealDataSource {
-    fun getMeal(year: Int, month: Int, day: Int): Flow<Response<MealResponse>>
-    fun getCalorie(year: Int, month: Int, day: Int): Flow<Response<CalorieResponse>>
-    fun getMealOfMonth(year: Int, month: Int): Flow<Response<ImmutableList<CalorieResponse>>>
+    fun getMeal(year: Int, month: Int, day: Int): MealResponse
+    fun getCalorie(year: Int, month: Int, day: Int): CalorieResponse
+    fun getMealOfMonth(year: Int, month: Int): ImmutableList<MealResponse>
 
-    fun getCalorieOfMonth(year: Int, month: Int): Flow<Response<ImmutableList<CalorieResponse>>>
+    fun getCalorieOfMonth(year: Int, month: Int): ImmutableList<CalorieResponse>
 }
