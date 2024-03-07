@@ -1,5 +1,6 @@
 package com.b1nd.dodam.wakeupsong.model
 
+import com.b1nd.dodam.network.core.model.NetworkStatus
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,7 +12,7 @@ data class WakeupSongResponse(
     val videoUrl: String,
     val duration: String,
     val channelTitle: String,
-    val status: NetworkWakeupSongStatus,
+    val status: NetworkStatus,
     val playDate: String,
     val createdDate: String,
 )

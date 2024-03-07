@@ -16,6 +16,7 @@ android {
 
 dependencies {
     implementation(projects.model)
+    implementation(projects.data.core)
     implementation(projects.network.wakeupSong)
     implementation(projects.common)
 

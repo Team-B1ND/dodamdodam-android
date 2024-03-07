@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
             var isLogin by remember { mutableStateOf(false) }
 
             LaunchedEffect(Unit) {
-                isLogin = datastoreRepository.user.first().token.isNotEmpty()
+                isLogin = datastoreRepository.token.first().isNotEmpty()
             }
 
             LaunchedEffect(Unit) {

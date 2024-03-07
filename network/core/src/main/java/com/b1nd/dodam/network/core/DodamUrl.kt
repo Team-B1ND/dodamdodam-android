@@ -8,6 +8,7 @@ object DodamUrl {
     const val AUTH = "$TEST_URL/auth"
     const val MEMBER = "$TEST_URL/member"
     const val WAKEUP_SONG = "$BASE_URL/wakeup-song"
+    const val OUT = "$TEST_URL/out"
     object Meal {
         const val MONTH = "$MEAL/month"
     }
@@ -22,5 +23,12 @@ object DodamUrl {
 
     object WakeupSong {
         const val ALLOWED = "$WAKEUP_SONG/allowed"
+    }
+
+    object Out {
+        const val OUTSLEEPING = "$OUT/out-sleeping"
+        const val OUTGOING = "$OUT/out-going"
+        const val OUTSLEEPING_MY = "$OUT/outsleeping/my"
+        const val OUTGOING_MY = "$OUT/outgoing/my"
     }
 }

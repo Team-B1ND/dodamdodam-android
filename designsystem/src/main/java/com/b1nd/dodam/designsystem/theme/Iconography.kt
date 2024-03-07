@@ -19,7 +19,7 @@ import com.b1nd.dodam.designsystem.icons.EyeSlash
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
 import com.b1nd.dodam.designsystem.icons.Home
 import com.b1nd.dodam.designsystem.icons.More
-import com.b1nd.dodam.designsystem.icons.Out
+import com.b1nd.dodam.designsystem.icons.Door
 
 @Composable
 fun CheckCircleIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
@@ -75,7 +75,7 @@ fun MealIcon(modifier: Modifier = Modifier, contentDescription: String? = null, 
 fun OutIcon(modifier: Modifier = Modifier, contentDescription: String? = null, tint: Color = MaterialTheme.colorScheme.tertiary) {
     Icon(
         modifier = modifier.size(24.dp),
-        imageVector = Out,
+        imageVector = Door,
         contentDescription = contentDescription,
         tint = tint,
     )
