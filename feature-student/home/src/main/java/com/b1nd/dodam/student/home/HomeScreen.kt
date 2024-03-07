@@ -2,12 +2,7 @@ package com.b1nd.dodam.student.home
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,14 +38,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.b1nd.dodam.data.core.model.Status
+import com.b1nd.dodam.data.outing.model.OutType
 import com.b1nd.dodam.designsystem.component.DodamCircularProgress
 import com.b1nd.dodam.designsystem.component.DodamContainer
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
@@ -61,15 +55,9 @@ import com.b1nd.dodam.designsystem.icons.Door
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
 import com.b1nd.dodam.designsystem.icons.MoonPlus
 import com.b1nd.dodam.designsystem.icons.Note
-import com.b1nd.dodam.designsystem.theme.PretendardFontFamily
-import com.b1nd.dodam.model.OutType
-import com.b1nd.dodam.model.Status
-import java.time.Duration
+import kotlinx.datetime.toJavaLocalDateTime
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalAmount
-import java.time.temporal.TemporalUnit
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -419,18 +407,12 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 }
                             } else {
                                 val out = uiState.out.first()
-                                val pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                                val startOutDate = LocalDateTime.parse(out.startOutDate, pattern)
-                                val endOutDate = if (out.type == OutType.OUTGOING) {
-                                    LocalDateTime.parse(out.endOutDate, pattern)
-                                } else LocalDateTime.parse(out.arrivedDate, pattern)
-
-                                val outProgress =  1 - ChronoUnit.MICROS.between(
-                                    startOutDate,
+                                val outProgress = 1 - ChronoUnit.MICROS.between(
+                                    out.startAt.toJavaLocalDateTime(),
                                     current
                                 ).toFloat() / ChronoUnit.MICROS.between(
-                                    startOutDate,
-                                    endOutDate
+                                    out.startAt.toJavaLocalDateTime(),
+                                    out.endAt.toJavaLocalDateTime()
                                 )
 
                                 when (out.status) {
@@ -444,10 +426,10 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                             Spacer(modifier = Modifier.width(12.dp))
                                             Column {
                                                 Text(
-                                                    text = if (out.type == OutType.OUTGOING) {
-                                                        val date =
-                                                            endOutDate.minusHours(current.hour.toLong())
-                                                                .minusMinutes(current.minute.toLong())
+                                                    text = if (out.outType == OutType.OUTING) {
+                                                        val date = out.endAt.toJavaLocalDateTime()
+                                                            .minusHours(current.hour.toLong())
+                                                            .minusMinutes(current.minute.toLong())
                                                         buildAnnotatedString {
                                                             if (date.hour > 0) append("${date.hour}시간 ${date.minute}분 ")
                                                             else append("${date.minute}분 ")
@@ -460,7 +442,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                             }
                                                         }
                                                     } else {
-                                                        val date = endOutDate
+                                                        val date = out.endAt.toJavaLocalDateTime()
                                                             .minusDays(current.dayOfMonth.toLong())
                                                             .minusHours(current.hour.toLong())
                                                             .minusMinutes(current.minute.toLong())
@@ -482,16 +464,16 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                 )
                                                 Spacer(modifier = Modifier.height(4.dp))
                                                 Text(
-                                                    text = if (out.type == OutType.OUTGOING) {
+                                                    text = if (out.outType == OutType.OUTING) {
                                                         String.format(
                                                             "%02d:%02d 복귀",
-                                                            endOutDate.hour,
-                                                            endOutDate.minute
+                                                            out.endAt.hour,
+                                                            out.endAt.minute
                                                         )
                                                     } else String.format(
                                                         "%02d:%02d 까지",
-                                                        endOutDate.monthValue,
-                                                        endOutDate.dayOfMonth
+                                                        out.endAt.monthNumber,
+                                                        out.endAt.dayOfMonth
                                                     ),
                                                     style = MaterialTheme.typography.labelMedium,
                                                     color = MaterialTheme.colorScheme.tertiary,
@@ -500,18 +482,18 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                         }
                                     }
 
-                                    Status.DENIED -> {
+                                    Status.REJECTED -> {
                                         Column(modifier = it) {
                                             Text(
-                                                text = "${if (out.type == OutType.OUTGOING) "외출" else "외박"}이 거절되었어요",
+                                                text = "${if (out.outType == OutType.OUTING) "외출" else "외박"}이 거절되었어요",
                                                 style = MaterialTheme.typography.labelMedium,
                                                 color = MaterialTheme.colorScheme.tertiary,
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
                                             Text(
-                                                text = "사유 보러가기",
+                                                text = "다시 신청하기",
                                                 style = MaterialTheme.typography.titleSmall,
-                                                color = MaterialTheme.colorScheme.error,
+                                                color = MaterialTheme.colorScheme.primary,
                                             )
                                         }
                                     }
@@ -532,7 +514,17 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                 )
                                                 Spacer(modifier = Modifier.height(4.dp))
                                                 Text(
-                                                    text = "${startOutDate.monthValue}.${startOutDate.dayOfMonth} 시작",
+                                                    text = if (out.outType == OutType.OUTING) {
+                                                        String.format(
+                                                            "%02d:%02d 시작",
+                                                            out.startAt.hour,
+                                                            out.startAt.minute
+                                                        )
+                                                    } else String.format(
+                                                        "%02d:%02d 시작",
+                                                        out.startAt.monthNumber,
+                                                        out.startAt.dayOfMonth
+                                                    ),
                                                     style = MaterialTheme.typography.labelMedium,
                                                     color = MaterialTheme.colorScheme.tertiary,
                                                 )

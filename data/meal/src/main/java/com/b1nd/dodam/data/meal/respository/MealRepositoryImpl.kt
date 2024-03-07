@@ -8,13 +8,13 @@ import com.b1nd.dodam.data.meal.MealRepository
 import com.b1nd.dodam.data.meal.model.Meal
 import com.b1nd.dodam.data.meal.model.toModel
 import com.b1nd.dodam.network.meal.datasource.MealDataSource
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 
 internal class MealRepositoryImpl @Inject constructor(
     private val network: MealDataSource,

@@ -1,7 +1,7 @@
 package com.b1nd.dodam.wakeupsong
 
 import com.b1nd.dodam.common.result.Result
-import com.b1nd.dodam.model.WakeupSong
+import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 

@@ -5,9 +5,9 @@ import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.data.outing.OutingRepository
-import com.b1nd.dodam.data.outing.mapper.toModel
-import com.b1nd.dodam.model.OutType
-import com.b1nd.dodam.model.Outing
+import com.b1nd.dodam.data.outing.model.OutType
+import com.b1nd.dodam.data.outing.model.Outing
+import com.b1nd.dodam.data.outing.model.toModel
 import com.b1nd.dodam.network.outing.datasource.OutingDataSource
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -26,11 +26,11 @@ internal class OutingRepositoryImpl @Inject constructor(
 
     override fun getMyOut(): Flow<Result<ImmutableList<Outing>>> {
         return combine(
-            flow { emit(network.getMyOutGoing()) },
-            flow { emit(network.getMyOutSleeping()) }
-        ) { outGoingResponse, outSleepingResponse ->
-            outSleepingResponse.map { it.toModel(OutType.OUTSLEEPING) }.toPersistentList().addAll(
-                outGoingResponse.map { it.toModel(OutType.OUTGOING) }
+            flow { emit(network.getMyOuting()) },
+            flow { emit(network.getMySleepover()) }
+        ) { outingResponse, sleepoverResponse ->
+            sleepoverResponse.map { it.toModel(OutType.SLEEPOVER) }.toPersistentList().addAll(
+                outingResponse.map { it.toModel(OutType.OUTING) }
             ).toImmutableList()
         }.asResult().flowOn(dispatcher)
     }

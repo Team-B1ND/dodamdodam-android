@@ -33,7 +33,6 @@ include(
     ":data:login",
     ":data:wakeup-song",
     ":data:outing",
-    ":model",
     ":common",
     ":keystore",
     ":datastore",

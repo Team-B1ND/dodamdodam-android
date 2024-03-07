@@ -53,9 +53,9 @@ class HomeViewModel @Inject constructor(
                                     it.copy(
                                         isLoading = false,
                                         meal = persistentListOf(
-                                            result.data.breakfast,
-                                            result.data.lunch,
-                                            result.data.dinner,
+                                            result.data.breakfast?.details?.joinToString(", ") { menu -> menu.name },
+                                            result.data.lunch?.details?.joinToString(", ") { menu -> menu.name },
+                                            result.data.dinner?.details?.joinToString(", ") { menu -> menu.name },
                                         ),
                                     )
                                 }
@@ -102,9 +102,7 @@ class HomeViewModel @Inject constructor(
                                 it.copy(
                                     isLoading = false,
                                     out = result.data.sortedBy { out ->
-                                        val pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                                        val localDateTime = LocalDateTime.parse(out.startOutDate, pattern)
-                                        localDateTime
+                                        out.startAt
                                     }.toImmutableList(),
                                 )
                             }
