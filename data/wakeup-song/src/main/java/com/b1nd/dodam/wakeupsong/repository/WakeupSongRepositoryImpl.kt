@@ -4,10 +4,10 @@ import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
-import com.b1nd.dodam.model.WakeupSong
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import com.b1nd.dodam.wakeupsong.datasource.WakeupSongDataSource
-import com.b1nd.dodam.wakeupsong.mapper.toModel
+import com.b1nd.dodam.wakeupsong.model.WakeupSong
+import com.b1nd.dodam.wakeupsong.model.toModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList

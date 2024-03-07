@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 enum class NetworkStatus {
     ALLOWED,
     PENDING,
-    DENIED,
+    REJECTED,
 }

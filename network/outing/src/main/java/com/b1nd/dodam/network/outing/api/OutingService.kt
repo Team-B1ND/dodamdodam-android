@@ -15,16 +15,16 @@ import javax.inject.Inject
 internal class OutingService @Inject constructor(
     private val client: HttpClient
 ) : OutingDataSource {
-    override suspend fun getMyOutSleeping(): ImmutableList<OutingResponse> {
+    override suspend fun getMySleepover(): ImmutableList<OutingResponse> {
         return safeRequest {
-            client.get(DodamUrl.Out.OUTSLEEPING_MY)
+            client.get(DodamUrl.Out.SLEEPOVER_MY)
                 .body<Response<List<OutingResponse>>>()
         }.toImmutableList()
     }
 
-    override suspend fun getMyOutGoing(): ImmutableList<OutingResponse> {
+    override suspend fun getMyOuting(): ImmutableList<OutingResponse> {
         return safeRequest {
-            client.get(DodamUrl.Out.OUTGOING_MY)
+            client.get(DodamUrl.Out.OUTING_MY)
                 .body<Response<List<OutingResponse>>>()
         }.toImmutableList()
     }

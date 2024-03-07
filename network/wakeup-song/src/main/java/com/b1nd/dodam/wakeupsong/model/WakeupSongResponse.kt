@@ -10,9 +10,6 @@ data class WakeupSongResponse(
     val videoTitle: String,
     val videoId: String,
     val videoUrl: String,
-    val duration: String,
     val channelTitle: String,
     val status: NetworkStatus,
-    val playDate: String,
-    val createdDate: String,
 )

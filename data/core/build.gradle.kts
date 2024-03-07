@@ -18,7 +18,6 @@ android {
 
 dependencies {
     implementation(projects.network.core)
-    implementation(projects.model)
     implementation(projects.common)
 
     implementation(libs.kotlinx.collections.immutable)
