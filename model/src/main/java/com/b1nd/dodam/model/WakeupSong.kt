@@ -8,7 +8,7 @@ data class WakeupSong(
     val videoUrl: String,
     val duration: String,
     val channelTitle: String,
-    val status: WakeupSongStatus,
+    val status: Status,
     val playDate: String,
     val createdDate: String,
 )

@@ -1,6 +1,13 @@
 package com.b1nd.dodam.student.home
 
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,16 +42,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.b1nd.dodam.designsystem.component.DodamCircularProgress
 import com.b1nd.dodam.designsystem.component.DodamContainer
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.shimmerEffect
 import com.b1nd.dodam.designsystem.icons.Bell
 import com.b1nd.dodam.designsystem.icons.DodamLogo
+import com.b1nd.dodam.designsystem.icons.Door
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
+import com.b1nd.dodam.designsystem.icons.MoonPlus
 import com.b1nd.dodam.designsystem.icons.Note
+import com.b1nd.dodam.designsystem.theme.PretendardFontFamily
+import com.b1nd.dodam.model.OutType
+import com.b1nd.dodam.model.Status
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalAmount
+import java.time.temporal.TemporalUnit
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -52,8 +77,11 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
     val scrollState = rememberScrollState()
-    val mealPagerState = rememberPagerState { 3 }
+    val mealPagerState = rememberPagerState { uiState.meal.filterNotNull().size }
     val wakeupSongPagerState = rememberPagerState { uiState.wakeupSongs.size }
+
+    val context = LocalContext.current
+    val current = LocalDateTime.now()
 
     Box {
         Column(
@@ -72,141 +100,130 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
             DodamContainer(
                 icon = ForkAndKnife,
-                title = "오늘의 급식",
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateContentSize(),
-                ) {
-                    if (uiState.isLoading) {
-                        Column {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(20.dp)
-                                    .background(
-                                        shimmerEffect(),
-                                        RoundedCornerShape(4.dp),
-                                    ),
-                            )
-
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                            Row(Modifier.fillMaxWidth()) {
+                title = "오늘의 " + when (uiState.meal.filterNotNull()[mealPagerState.currentPage]) {
+                    uiState.meal[0] -> "조식"
+                    uiState.meal[1] -> "중식"
+                    uiState.meal[2] -> "석식"
+                    else -> "급식"
+                },
+                content = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateContentSize(),
+                    ) {
+                        if (uiState.isLoading) {
+                            Column(
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            ) {
                                 Box(
                                     modifier = Modifier
-                                        .weight(0.7f)
+                                        .fillMaxWidth()
                                         .height(20.dp)
                                         .background(
                                             shimmerEffect(),
                                             RoundedCornerShape(4.dp),
                                         ),
                                 )
-                                Spacer(modifier = Modifier.weight(0.3f))
-                            }
-                        }
-                    } else {
-                        HorizontalPager(state = mealPagerState) { page ->
-                            Text(
-                                text = when (page) {
-                                    0 -> uiState.meal.first
-                                    1 -> uiState.meal.second
-                                    else -> uiState.meal.third
-                                },
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                        }
-                        Row(
-                            Modifier.align(Alignment.End),
-                        ) {
-                            repeat(mealPagerState.pageCount) { iteration ->
-                                val color = if (mealPagerState.currentPage == iteration) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.secondary
-                                }
 
-                                Box(
-                                    modifier = Modifier
-                                        .padding(2.dp)
-                                        .clip(CircleShape)
-                                        .background(color)
-                                        .size(5.dp),
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+                                Spacer(modifier = Modifier.height(4.dp))
 
-            DodamContainer(
-                icon = Note,
-                title = "오늘의 기상송",
-                showNextButton = true,
-                onNextClick = {},
-            ) {
-                Column(
-                    modifier = Modifier
-                        .animateContentSize(),
-                ) {
-                    if (uiState.isLoading) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .background(
-                                        shimmerEffect(),
-                                        RoundedCornerShape(12.dp),
-                                    ),
-                            )
-
-                            Spacer(modifier = Modifier.width(12.dp))
-
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                            ) {
                                 Row(Modifier.fillMaxWidth()) {
                                     Box(
                                         modifier = Modifier
-                                            .weight(0.9f)
+                                            .weight(0.7f)
                                             .height(20.dp)
                                             .background(
                                                 shimmerEffect(),
                                                 RoundedCornerShape(4.dp),
                                             ),
                                     )
-                                    Spacer(modifier = Modifier.weight(0.1f))
+                                    Spacer(modifier = Modifier.weight(0.3f))
                                 }
+                            }
+                        } else {
 
-                                Spacer(modifier = Modifier.height(4.dp))
+                            if (uiState.meal.filterNotNull().isEmpty()) {
+                                Column(modifier = it) {
+                                    Text(
+                                        text = "오늘은 급식이 없어요",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.tertiary,
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = "내일 급식 보러가기",
+                                        style = MaterialTheme.typography.titleSmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
+                            } else {
+                                HorizontalPager(
+                                    modifier = it,
+                                    state = mealPagerState
+                                ) { page ->
+                                    Text(
+                                        text = uiState.meal.filterNotNull()[page],
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                    )
+                                }
+                                if (uiState.meal.filterNotNull().size > 1) {
+                                    Row(
+                                        Modifier
+                                            .align(Alignment.End)
+                                            .padding(end = 16.dp),
+                                    ) {
+                                        repeat(mealPagerState.pageCount) { iteration ->
+                                            val color =
+                                                if (mealPagerState.currentPage == iteration) {
+                                                    MaterialTheme.colorScheme.primary
+                                                } else {
+                                                    MaterialTheme.colorScheme.secondary
+                                                }
 
-                                Box(
-                                    modifier = Modifier
-                                        .width(50.dp)
-                                        .height(20.dp)
-                                        .background(
-                                            shimmerEffect(),
-                                            RoundedCornerShape(4.dp),
-                                        ),
-                                )
+                                            Box(
+                                                modifier = Modifier
+                                                    .padding(2.dp)
+                                                    .clip(CircleShape)
+                                                    .background(color)
+                                                    .size(5.dp),
+                                            )
+                                        }
+                                    }
+                                }
                             }
                         }
-                    } else {
-                        HorizontalPager(state = wakeupSongPagerState) { page ->
+                    }
+                },
+                onClickContent = {}
+            )
+
+            DodamContainer(
+                icon = Note,
+                title = "오늘의 기상송",
+                showNextButton = true,
+                onNextClick = {
+                    // TODO : Navigate to wakeup song screen
+                },
+                content = {
+                    Column(
+                        modifier = Modifier
+                            .animateContentSize(),
+                    ) {
+                        if (uiState.isLoading) {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
                             ) {
-                                AsyncImage(
+                                Box(
                                     modifier = Modifier
                                         .size(100.dp)
-                                        .clip(RoundedCornerShape(12.dp)),
-                                    model = uiState.wakeupSongs[page].thumbnailUrl,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(12.dp),
+                                        ),
                                 )
 
                                 Spacer(modifier = Modifier.width(12.dp))
@@ -214,43 +231,338 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 Column(
                                     modifier = Modifier.fillMaxWidth(),
                                 ) {
-                                    Text(
-                                        text = uiState.wakeupSongs[page].videoTitle,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
+                                    Row(Modifier.fillMaxWidth()) {
+                                        Box(
+                                            modifier = Modifier
+                                                .weight(0.9f)
+                                                .height(20.dp)
+                                                .background(
+                                                    shimmerEffect(),
+                                                    RoundedCornerShape(4.dp),
+                                                ),
+                                        )
+                                        Spacer(modifier = Modifier.weight(0.1f))
+                                    }
 
                                     Spacer(modifier = Modifier.height(4.dp))
 
-                                    Text(
-                                        text = uiState.wakeupSongs[page].channelTitle,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.tertiary,
+                                    Box(
+                                        modifier = Modifier
+                                            .width(50.dp)
+                                            .height(20.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(4.dp),
+                                            ),
                                     )
                                 }
                             }
-                        }
-                        Row(
-                            Modifier.align(Alignment.End),
-                        ) {
-                            repeat(wakeupSongPagerState.pageCount) { iteration ->
-                                val color = if (wakeupSongPagerState.currentPage == iteration) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.secondary
+                        } else {
+                            if (uiState.wakeupSongs.isEmpty()) {
+                                Column(modifier = it) {
+                                    Text(
+                                        text = "승인된 기상송이 없어요",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.tertiary,
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = "기상송 신청하기",
+                                        style = MaterialTheme.typography.titleSmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
                                 }
+                            } else {
+                                HorizontalPager(
+                                    modifier = it,
+                                    state = wakeupSongPagerState
+                                ) { page ->
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                    ) {
+                                        AsyncImage(
+                                            modifier = Modifier
+                                                .size(100.dp)
+                                                .clip(RoundedCornerShape(12.dp)),
+                                            model = uiState.wakeupSongs[page].thumbnailUrl,
+                                            contentDescription = null,
+                                            contentScale = ContentScale.Crop,
+                                        )
 
-                                Box(
-                                    modifier = Modifier
-                                        .padding(2.dp)
-                                        .clip(CircleShape)
-                                        .background(color)
-                                        .size(5.dp),
-                                )
+                                        Spacer(modifier = Modifier.width(12.dp))
+
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                        ) {
+                                            Text(
+                                                text = uiState.wakeupSongs[page].videoTitle,
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            )
+
+                                            Spacer(modifier = Modifier.height(4.dp))
+
+                                            Text(
+                                                text = uiState.wakeupSongs[page].channelTitle,
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.tertiary,
+                                            )
+                                        }
+                                    }
+                                }
+                                Row(
+                                    Modifier
+                                        .align(Alignment.End)
+                                        .padding(end = 16.dp),
+                                ) {
+                                    repeat(wakeupSongPagerState.pageCount) { iteration ->
+                                        val color =
+                                            if (wakeupSongPagerState.currentPage == iteration) {
+                                                MaterialTheme.colorScheme.primary
+                                            } else {
+                                                MaterialTheme.colorScheme.secondary
+                                            }
+
+                                        Box(
+                                            modifier = Modifier
+                                                .padding(2.dp)
+                                                .clip(CircleShape)
+                                                .background(color)
+                                                .size(5.dp),
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
+                },
+                onClickContent = {
+                    if (uiState.wakeupSongs.isEmpty()) {
+                        // TODO : Navigate to wakeup song request screen
+                    } else {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(uiState.wakeupSongs[wakeupSongPagerState.currentPage].videoUrl)
+                            )
+                        )
+                    }
                 }
+            )
+
+            Row {
+                DodamContainer(
+                    modifier = Modifier.weight(1f),
+                    icon = Door,
+                    title = "외출 외박",
+                    content = {
+                        if (uiState.isLoading) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(70.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(100),
+                                        ),
+                                )
+
+                                Spacer(modifier = Modifier.width(12.dp))
+
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Row(Modifier.fillMaxWidth()) {
+                                        Box(
+                                            modifier = Modifier
+                                                .weight(0.9f)
+                                                .height(20.dp)
+                                                .background(
+                                                    shimmerEffect(),
+                                                    RoundedCornerShape(4.dp),
+                                                ),
+                                        )
+                                        Spacer(modifier = Modifier.weight(0.1f))
+                                    }
+
+                                    Spacer(modifier = Modifier.height(4.dp))
+
+                                    Box(
+                                        modifier = Modifier
+                                            .width(50.dp)
+                                            .height(15.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(4.dp),
+                                            ),
+                                    )
+                                }
+                            }
+                        } else {
+                            if (uiState.out.isEmpty()) {
+                                Column(modifier = it) {
+                                    Text(
+                                        text = "외출, 외박이 필요하다면",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.tertiary,
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = "외출/외박 신청하기",
+                                        style = MaterialTheme.typography.titleSmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
+                            } else {
+                                val out = uiState.out.first()
+                                val pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                val startOutDate = LocalDateTime.parse(out.startOutDate, pattern)
+                                val endOutDate = if (out.type == OutType.OUTGOING) {
+                                    LocalDateTime.parse(out.endOutDate, pattern)
+                                } else LocalDateTime.parse(out.arrivedDate, pattern)
+
+                                val outProgress =  1 - ChronoUnit.MICROS.between(
+                                    startOutDate,
+                                    current
+                                ).toFloat() / ChronoUnit.MICROS.between(
+                                    startOutDate,
+                                    endOutDate
+                                )
+
+                                when (out.status) {
+                                    Status.ALLOWED -> {
+                                        Row(modifier = it) {
+                                            DodamCircularProgress(
+                                                progress = outProgress,
+                                                color = MaterialTheme.colorScheme.primary,
+                                                backgroundColor = MaterialTheme.colorScheme.secondary,
+                                            )
+                                            Spacer(modifier = Modifier.width(12.dp))
+                                            Column {
+                                                Text(
+                                                    text = if (out.type == OutType.OUTGOING) {
+                                                        val date =
+                                                            endOutDate.minusHours(current.hour.toLong())
+                                                                .minusMinutes(current.minute.toLong())
+                                                        buildAnnotatedString {
+                                                            if (date.hour > 0) append("${date.hour}시간 ${date.minute}분 ")
+                                                            else append("${date.minute}분 ")
+                                                            withStyle(
+                                                                style = MaterialTheme.typography.labelMedium.copy(
+                                                                    MaterialTheme.colorScheme.tertiary
+                                                                ).toSpanStyle()
+                                                            ) {
+                                                                append("남음")
+                                                            }
+                                                        }
+                                                    } else {
+                                                        val date = endOutDate
+                                                            .minusDays(current.dayOfMonth.toLong())
+                                                            .minusHours(current.hour.toLong())
+                                                            .minusMinutes(current.minute.toLong())
+                                                        buildAnnotatedString {
+                                                            if (date.dayOfMonth > 0) append("${date.dayOfMonth}일 ")
+                                                            else if (date.hour > 0) "${date.hour}시간 ${date.minute}분 "
+                                                            else "${date.minute}분 "
+                                                            withStyle(
+                                                                style = MaterialTheme.typography.labelMedium.copy(
+                                                                    MaterialTheme.colorScheme.tertiary
+                                                                ).toSpanStyle()
+                                                            ) {
+                                                                append("까지")
+                                                            }
+                                                        }
+                                                    },
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                )
+                                                Spacer(modifier = Modifier.height(4.dp))
+                                                Text(
+                                                    text = if (out.type == OutType.OUTGOING) {
+                                                        String.format(
+                                                            "%02d:%02d 복귀",
+                                                            endOutDate.hour,
+                                                            endOutDate.minute
+                                                        )
+                                                    } else String.format(
+                                                        "%02d:%02d 까지",
+                                                        endOutDate.monthValue,
+                                                        endOutDate.dayOfMonth
+                                                    ),
+                                                    style = MaterialTheme.typography.labelMedium,
+                                                    color = MaterialTheme.colorScheme.tertiary,
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                    Status.DENIED -> {
+                                        Column(modifier = it) {
+                                            Text(
+                                                text = "${if (out.type == OutType.OUTGOING) "외출" else "외박"}이 거절되었어요",
+                                                style = MaterialTheme.typography.labelMedium,
+                                                color = MaterialTheme.colorScheme.tertiary,
+                                            )
+                                            Spacer(modifier = Modifier.height(4.dp))
+                                            Text(
+                                                text = "사유 보러가기",
+                                                style = MaterialTheme.typography.titleSmall,
+                                                color = MaterialTheme.colorScheme.error,
+                                            )
+                                        }
+                                    }
+
+                                    Status.PENDING -> {
+                                        Row(modifier = it) {
+                                            DodamCircularProgress(
+                                                progress = outProgress,
+                                                color = MaterialTheme.colorScheme.tertiary,
+                                                backgroundColor = MaterialTheme.colorScheme.secondary,
+                                            )
+                                            Spacer(modifier = Modifier.width(12.dp))
+                                            Column {
+                                                Text(
+                                                    text = "대기중",
+                                                    style = MaterialTheme.typography.titleSmall,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                )
+                                                Spacer(modifier = Modifier.height(4.dp))
+                                                Text(
+                                                    text = "${startOutDate.monthValue}.${startOutDate.dayOfMonth} 시작",
+                                                    style = MaterialTheme.typography.labelMedium,
+                                                    color = MaterialTheme.colorScheme.tertiary,
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    onClickContent = {
+                        if (uiState.out.isEmpty()) {
+                            // TODO : Navigate to outing request screen
+                        } else {
+                            // TODO : Navigate to outing screen
+                        }
+                    }
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                DodamContainer(
+                    modifier = Modifier.weight(1f),
+                    icon = MoonPlus,
+                    title = "심야 자습",
+                    content = {
+
+                    },
+                    onClickContent = {}
+                )
             }
         }
 

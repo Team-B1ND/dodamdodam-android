@@ -19,15 +19,20 @@ dependencyResolutionManagement {
 rootProject.name = "dodamdodam-android"
 include(
     ":dodam-student",
+    ":ui-test-main",
     ":designsystem",
     ":feature:onboarding",
     ":feature:login",
-    ":feature:register",
-    ":feature:meal",
     ":network:core",
     ":network:login",
     ":network:meal",
+    ":network:wakeup-song",
+    ":network:outing",
+    ":data:core",
+    ":data:meal",
     ":data:login",
+    ":data:wakeup-song",
+    ":data:outing",
     ":model",
     ":common",
     ":keystore",
@@ -38,8 +43,4 @@ include(
     ":feature-student:main",
     ":feature-student:home",
     ":ui-test-main",
-    ":data:meal",
-    ":model",
 )
-include(":network:wakeup-song")
-include(":data:wakeup-song")

@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 
 private var vector: ImageVector? = null
 
-public val Out: ImageVector
+public val Door: ImageVector
     get() {
         if (vector != null) {
             return vector!!

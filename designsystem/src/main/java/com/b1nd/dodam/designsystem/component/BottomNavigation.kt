@@ -42,7 +42,7 @@ import com.b1nd.dodam.designsystem.icons.Calendar
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
 import com.b1nd.dodam.designsystem.icons.Home
 import com.b1nd.dodam.designsystem.icons.More
-import com.b1nd.dodam.designsystem.icons.Out
+import com.b1nd.dodam.designsystem.icons.Door
 import com.b1nd.dodam.designsystem.theme.DodamTheme
 import kotlin.math.roundToInt
 
@@ -143,7 +143,7 @@ private fun DodamBottomNavigationPreview() {
             bottomNavigationItems = listOf(
                 BottomNavigationItem("home", Home),
                 BottomNavigationItem("meal", ForkAndKnife),
-                BottomNavigationItem("out", Out),
+                BottomNavigationItem("out", Door),
                 BottomNavigationItem("schedule", Calendar),
                 BottomNavigationItem("more", More),
             ),
