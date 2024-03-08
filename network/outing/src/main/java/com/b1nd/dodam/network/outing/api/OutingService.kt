@@ -17,14 +17,14 @@ internal class OutingService @Inject constructor(
 ) : OutingDataSource {
     override suspend fun getMySleepover(): ImmutableList<OutingResponse> {
         return safeRequest {
-            client.get(DodamUrl.Out.SLEEPOVER_MY)
+            client.get(DodamUrl.Sleepover.MY)
                 .body<Response<List<OutingResponse>>>()
         }.toImmutableList()
     }
 
     override suspend fun getMyOuting(): ImmutableList<OutingResponse> {
         return safeRequest {
-            client.get(DodamUrl.Out.OUTING_MY)
+            client.get(DodamUrl.Outing.MY)
                 .body<Response<List<OutingResponse>>>()
         }.toImmutableList()
     }

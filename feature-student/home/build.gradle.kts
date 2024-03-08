@@ -17,6 +17,7 @@ dependencies {
     implementation(projects.data.outing)
     implementation(projects.common)
     implementation(projects.data.core)
+    implementation(projects.data.nightStudy)
 
     implementation(libs.coil.compose)
     implementation(libs.kotlinx.datetime)

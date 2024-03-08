@@ -33,8 +33,7 @@ fun DodamContainer(
     title: String,
     showNextButton: Boolean = false,
     onNextClick: (() -> Unit)? = null,
-    content: @Composable (Modifier) -> Unit,
-    onClickContent: () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -96,13 +95,7 @@ fun DodamContainer(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        content(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp)
-                .bounceClick(onClick = onClickContent)
-                .padding(6.dp),
-        )
+        content()
 
         Spacer(modifier = Modifier.height(10.dp))
     }

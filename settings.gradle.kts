@@ -43,3 +43,5 @@ include(
     ":feature-student:home",
     ":ui-test-main",
 )
+include(":network:night-study")
+include(":data:night-study")
