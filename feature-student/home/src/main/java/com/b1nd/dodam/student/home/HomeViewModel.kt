@@ -5,8 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.meal.MealRepository
+import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.outing.OutingRepository
 import com.b1nd.dodam.student.home.model.HomeUiState
+import com.b1nd.dodam.student.home.model.MealUiState
+import com.b1nd.dodam.student.home.model.NightStudyUiState
+import com.b1nd.dodam.student.home.model.OutUiState
+import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -14,6 +19,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
@@ -26,6 +32,7 @@ class HomeViewModel @Inject constructor(
     private val mealRepository: MealRepository,
     private val wakeupSongRepository: WakeupSongRepository,
     private val outingRepository: OutingRepository,
+    private val nightStudyRepository: NightStudyRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
@@ -51,44 +58,55 @@ class HomeViewModel @Inject constructor(
                             is Result.Success ->
                                 _uiState.update {
                                     it.copy(
-                                        isLoading = false,
-                                        meal = persistentListOf(
-                                            result.data.breakfast?.details?.joinToString(", ") { menu -> menu.name },
-                                            result.data.lunch?.details?.joinToString(", ") { menu -> menu.name },
-                                            result.data.dinner?.details?.joinToString(", ") { menu -> menu.name },
+                                        mealUiState = MealUiState.Success(
+                                            persistentListOf(
+                                                result.data.breakfast?.details?.joinToString(", ") { menu -> menu.name },
+                                                result.data.lunch?.details?.joinToString(", ") { menu -> menu.name },
+                                                result.data.dinner?.details?.joinToString(", ") { menu -> menu.name },
+                                            )
                                         ),
                                     )
                                 }
 
-                            is Result.Error -> Log.e("getMeal", result.exception.message.toString())
+                            is Result.Error -> {
+                                Log.e("getMeal", result.exception.message.toString())
+                                _uiState.update {
+                                    it.copy(
+                                        mealUiState = MealUiState.Error(result.exception.message.toString())
+                                    )
+                                }
+                            }
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    isLoading = true,
+                                    mealUiState = MealUiState.Loading
                                 )
                             }
                         }
                     }
             }
             launch {
-                wakeupSongRepository.getAllowedWakeupSongs(2024, 2, 26)
+                wakeupSongRepository.getAllowedWakeupSongs(current.year, current.monthValue, current.dayOfMonth)
                     .collect { result ->
                         when (result) {
                             is Result.Success -> _uiState.update {
                                 it.copy(
-                                    isLoading = false,
-                                    wakeupSongs = result.data,
+                                    wakeupSongUiState = WakeupSongUiState.Success(result.data)
                                 )
                             }
 
-                            is Result.Error -> Log.e(
-                                "getWakeupSong",
-                                result.exception.message.toString()
-                            )
+                            is Result.Error -> {
+                                Log.e("getWakeupSong", result.exception.message.toString())
+                                _uiState.update {
+                                    it.copy(
+                                        wakeupSongUiState = WakeupSongUiState.Error(result.exception.message.toString())
+                                    )
+                                }
+                            }
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    isLoading = true,
+                                    wakeupSongUiState = WakeupSongUiState.Loading
                                 )
                             }
                         }
@@ -100,22 +118,62 @@ class HomeViewModel @Inject constructor(
                         when (result) {
                             is Result.Success -> _uiState.update {
                                 it.copy(
-                                    isLoading = false,
-                                    out = result.data.sortedBy { out ->
-                                        out.startAt
-                                    }.toImmutableList(),
+                                    outUiState = OutUiState.Success(
+                                        result.data.minByOrNull { out ->
+                                            out.startAt
+                                        }
+                                    ),
                                 )
                             }
 
-                            is Result.Error -> Log.e(
-                                "getMyOutSleeping",
-                                result.exception.message.toString()
-                            )
+                            is Result.Error -> {
+                                Log.e("getMyOutSleeping", result.exception.message.toString())
+                                _uiState.update {
+                                    it.copy(
+                                        outUiState = OutUiState.Error(
+                                            result.exception.message.toString()
+                                        )
+                                    )
+                                }
+                            }
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    isLoading = true,
+                                    outUiState = OutUiState.Loading
                                 )
+                            }
+                        }
+                    }
+            }
+            launch {
+                nightStudyRepository.getMyNightStudy()
+                    .collect { result ->
+                        when (result) {
+                            is Result.Success -> _uiState.update {
+                                it.copy(
+                                    nightStudyUiState = NightStudyUiState.Success(
+                                        result.data.minByOrNull { nightStudy ->
+                                            nightStudy.startAt
+                                        },
+                                    )
+                                )
+                            }
+
+                            is Result.Loading -> _uiState.update {
+                                it.copy(
+                                    nightStudyUiState = NightStudyUiState.Loading
+                                )
+                            }
+
+                            is Result.Error -> {
+                                Log.e("getMyNightStudy", result.exception.message.toString())
+                                _uiState.update {
+                                    it.copy(
+                                        nightStudyUiState = NightStudyUiState.Error(
+                                            result.exception.message.toString()
+                                        )
+                                    )
+                                }
                             }
                         }
                     }
