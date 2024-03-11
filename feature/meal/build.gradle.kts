@@ -16,6 +16,8 @@ dependencies {
     implementation(projects.common)
     implementation(projects.datastore)
     implementation(projects.designsystem)
-    implementation(projects.model)
+    implementation(projects.data.meal)
+    implementation(libs.material)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.androidx.datastore.preference)
 }

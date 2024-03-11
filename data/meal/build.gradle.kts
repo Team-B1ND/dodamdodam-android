@@ -7,15 +7,18 @@ plugins {
 }
 
 android {
-    namespace = "com.b1nd.dodam.data.meal"
+    android {
+        namespace = "com.b1nd.dodam.data.meal"
 
-    defaultConfig {
-        consumerProguardFiles("consumer-rules.pro")
+        defaultConfig {
+            consumerProguardFiles("consumer-rules.pro")
+        }
     }
 }
 
 dependencies {
-    api(projects.model)
-    implementation(projects.common)
     implementation(projects.network.meal)
+    implementation(projects.common)
+
+    implementation(libs.kotlinx.collections.immutable)
 }

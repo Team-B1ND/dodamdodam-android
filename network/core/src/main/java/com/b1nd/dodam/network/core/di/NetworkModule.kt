@@ -3,10 +3,8 @@ package com.b1nd.dodam.network.core.di
 import android.util.Log
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.network.core.DodamUrl
-import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.model.TokenRequest
 import com.b1nd.dodam.network.core.model.TokenResponse
-import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,16 +22,12 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.accept
-import io.ktor.client.request.get
-import io.ktor.client.request.host
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.single
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
@@ -43,9 +37,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideKtorClient(
-        datastore: DatastoreRepository,
-    ): HttpClient {
+    fun provideKtorClient(datastore: DatastoreRepository): HttpClient {
         return HttpClient(CIO) {
             install(ContentNegotiation) {
                 json(
@@ -57,17 +49,12 @@ object NetworkModule {
                 )
             }
             install(Logging) {
-                logger =  object : Logger {
+                logger = object : Logger {
                     override fun log(message: String) {
                         Log.i("HttpClient", message)
                     }
                 }
                 level = LogLevel.ALL
-                logger =  object : Logger {
-                    override fun log(message: String) {
-                        println(message)
-                    }
-                }
             }
             install(Auth) {
                 bearer {
@@ -80,7 +67,7 @@ object NetworkModule {
                         val accessToken = client.post(DodamUrl.Auth.LOGIN) {
                             markAsRefreshTokenRequest()
                             setBody(TokenRequest(id = user.id, pw = user.pw))
-                        }.body<Response<TokenResponse>>().data?.accessToken ?: ""
+                        }.body<TokenResponse>().accessToken
 
                         datastore.saveToken(accessToken)
 
@@ -89,6 +76,7 @@ object NetworkModule {
                     sendWithoutRequest { request ->
                         when (request.url.toString()) {
                             DodamUrl.Auth.LOGIN -> false
+                            DodamUrl.Member.REGISTER -> false
                             else -> true
                         }
                     }
