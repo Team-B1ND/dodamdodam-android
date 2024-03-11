@@ -4,8 +4,8 @@ import androidx.datastore.core.DataStore
 import com.b1nd.dodam.datastore.model.User
 import com.b1nd.dodam.keystore.KeyStoreManager
 import javax.inject.Inject
-import kotlinx.coroutines.flow.map
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.map
 
 @Singleton
 class DatastoreRepository @Inject constructor(
@@ -19,6 +19,11 @@ class DatastoreRepository @Inject constructor(
             token = it.token,
         )
     }
+
+    val token = dataStore.data.map {
+        it.token
+    }
+
     suspend fun saveUser(id: String, pw: String, token: String) {
         dataStore.updateData { user ->
             user.copy(
@@ -32,7 +37,7 @@ class DatastoreRepository @Inject constructor(
     suspend fun saveToken(token: String) {
         dataStore.updateData { user ->
             user.copy(
-                token = token
+                token = token,
             )
         }
     }

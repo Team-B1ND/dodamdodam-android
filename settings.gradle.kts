@@ -23,6 +23,7 @@ include(
     ":feature:onboarding",
     ":feature:login",
     ":feature:register",
+    ":feature:meal",
     ":network:core",
     ":network:login",
     ":network:meal",
@@ -32,5 +33,6 @@ include(
     ":keystore",
     ":datastore",
     ":data:register",
-    ":network:register"
+    ":data:meal",
+    ":network:register",
 )

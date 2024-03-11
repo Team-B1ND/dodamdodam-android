@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RegisterResponse(
     val message: String,
-    val status: Int
+    val status: Int,
 )

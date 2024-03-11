@@ -15,8 +15,7 @@ subprojects {
 
     extensions.configure<SpotlessExtension> {
         kotlin {
-            target("**/*.kt")
-            target("**/test/**.kt")
+            target("**/*.kt", "**/test/**.kt", "**/androidTest/**.kt")
             targetExclude("${layout.buildDirectory}/**/*.kt")
             ktlint()
                 .setEditorConfigPath("${project.rootDir}/spotless/.editorconfig")

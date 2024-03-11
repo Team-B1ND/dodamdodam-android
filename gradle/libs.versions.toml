@@ -15,7 +15,7 @@ kotlinx-datetime = "0.5.0"
 # android
 androidx-activity-compose = "1.8.2"
 androidx-compose-compiler = "1.5.8"
-androidx-compose-bom = "2024.01.00"
+androidx-compose-bom = "2024.02.00"
 androidx-core = "1.12.0"
 androidx-lifecycle = "2.6.2"
 androidx-navigation = "2.7.6"
@@ -49,6 +49,7 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 # android
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }

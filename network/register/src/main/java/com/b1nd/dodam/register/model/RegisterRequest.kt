@@ -12,5 +12,5 @@ data class RegisterRequest(
     @SerialName("number") val number: Int,
     @SerialName("phone") val phone: String,
     @SerialName("pw") val pw: String,
-    @SerialName("room") val room: Int
+    @SerialName("room") val room: Int,
 )

@@ -39,4 +39,5 @@ dependencies {
     implementation(projects.feature.onboarding)
     implementation(projects.feature.register)
     implementation(projects.feature.login)
+    implementation(projects.feature.meal)
 }
