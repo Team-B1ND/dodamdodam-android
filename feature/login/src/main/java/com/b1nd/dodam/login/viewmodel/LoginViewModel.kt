@@ -1,9 +1,7 @@
 package com.b1nd.dodam.login.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.b1nd.dodam.common.encryptSHA512
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.login.repository.LoginRepository
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
@@ -11,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -22,7 +19,7 @@ class LoginViewModel @Inject constructor(
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
     fun login(id: String, pw: String) = viewModelScope.launch {
-        loginRepository.login(id, encryptSHA512(pw)).collect { token ->
+        loginRepository.login(id, pw).collect { token ->
             when (token) {
                 is Result.Success -> {
                     datastoreRepository.saveUser(

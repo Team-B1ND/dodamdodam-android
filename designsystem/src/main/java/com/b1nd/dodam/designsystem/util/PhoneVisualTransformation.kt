@@ -44,7 +44,6 @@ class PhoneVisualTransformation(val mask: String, val maskNumber: Char) : Visual
     }
 }
 
-
 private class PhoneOffsetMapper(val mask: String, val numberChar: Char) : OffsetMapping {
 
     override fun originalToTransformed(offset: Int): Int {
@@ -56,6 +55,5 @@ private class PhoneOffsetMapper(val mask: String, val numberChar: Char) : Offset
         return offset + noneDigitCount
     }
 
-    override fun transformedToOriginal(offset: Int): Int =
-        offset - mask.take(offset).count { it != numberChar }
+    override fun transformedToOriginal(offset: Int): Int = offset - mask.take(offset).count { it != numberChar }
 }
