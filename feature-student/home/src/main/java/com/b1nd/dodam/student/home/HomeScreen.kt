@@ -31,6 +31,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -77,7 +81,6 @@ import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
@@ -85,7 +88,7 @@ import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
@@ -95,7 +98,25 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val current = LocalDateTime.now()
 
-    Box {
+    var isRefreshing by remember { mutableStateOf(false) }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            isRefreshing = true
+            viewModel.run {
+                fetchMeal()
+                fetchWakeupSong()
+                fetchOut()
+                fetchNightStudy()
+                fetchSchedule()
+            }
+        })
+
+    Box(
+        modifier = Modifier
+            .pullRefresh(pullRefreshState),
+        contentAlignment = Alignment.TopCenter
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -124,6 +145,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 content = {
                     when (val mealUiState = uiState.mealUiState) {
                         is MealUiState.Success -> {
+                            isRefreshing = false
                             val mealPagerState = rememberPagerState { mealUiState.data.size }
                             val filteredMeal = mealUiState.data.filterNotNull()
 
@@ -201,6 +223,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         }
 
                         is MealUiState.Error -> {
+                            isRefreshing = false
                             DefaultText(
                                 onClick = { viewModel.fetchMeal() },
                                 label = "급식을 불러올 수 없어요",
@@ -1024,9 +1047,14 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
             }
         }
 
+        PullRefreshIndicator(
+            modifier = Modifier.padding(top =  36.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()),
+            refreshing = isRefreshing,
+            state = pullRefreshState
+        )
+
         DodamTopAppBar(
             modifier = Modifier
-                .align(Alignment.TopCenter)
                 .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f))
                 .statusBarsPadding(),
             containerColor = Color.Transparent,
