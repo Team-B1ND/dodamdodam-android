@@ -137,6 +137,7 @@ fun MealScreen(
                 }
                 if (!uiState.isLoading) {
                     items(uiState.meal.size) { index ->
+                        val isToday = index == 0
                         if (!isCanScroll) {
                             val nextMonth = current.plusMonths(1)
                             viewModel.fetchMealOfMonth(nextMonth.year, nextMonth.monthValue)
@@ -145,7 +146,7 @@ fun MealScreen(
                         val meal = uiState.meal[index]
                         val date = meal.date
                         MealColumn(
-                            isActive = index == 0,
+                            isActive = isToday,
                             date = LocalDate.of(date.year, date.monthNumber, date.dayOfMonth)
                         ) {
 
@@ -153,7 +154,7 @@ fun MealScreen(
                                 MealCard(
                                     title = "아침",
                                     meal = meal,
-                                    isActive = index == 0 && currentMealType == 1,
+                                    isActive = isToday && currentMealType == 1,
                                 )
                             }
 
@@ -161,7 +162,7 @@ fun MealScreen(
                                 MealCard(
                                     title = "점심",
                                     meal = meal,
-                                    isActive = index == 0 && currentMealType == 2,
+                                    isActive = isToday && currentMealType == 2,
                                 )
                             }
 
@@ -169,15 +170,16 @@ fun MealScreen(
                                 MealCard(
                                     title = "저녁",
                                     meal = meal,
-                                    isActive = index == 0 && currentMealType == 3,
+                                    isActive = isToday && currentMealType == 3,
                                 )
                             }
                         }
                     }
                 } else if (viewModel.isFirst.value == true) {
                     items(3) { index ->
+                        val isToday = index == 0
                         MealColumn(
-                            isActive = index == 0,
+                            isActive = isToday,
                             date = LocalDate.now()
                         ) {
                             MealCard(isLoading = true)
