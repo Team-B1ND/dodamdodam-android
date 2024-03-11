@@ -9,5 +9,5 @@ data class Menu(
 
 internal fun MenuResponse.toModel(): Menu = Menu(
     name = name,
-    allergies = allergies
+    allergies = allergies,
 )

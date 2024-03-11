@@ -28,7 +28,7 @@ fun DodamTopAppBar(
     contentColor: Color = MaterialTheme.colorScheme.onBackground,
     title: String,
     icon: ImageVector? = null,
-    onIconClick: (() -> Unit)? = null
+    onIconClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = modifier
@@ -66,7 +66,7 @@ fun DodamTopAppBar(
     containerColor: Color = MaterialTheme.colorScheme.background,
     titleIcon: @Composable () -> Unit,
     icon: ImageVector? = null,
-    onIconClick: (() -> Unit)? = null
+    onIconClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = modifier

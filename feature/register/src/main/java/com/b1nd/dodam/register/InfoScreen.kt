@@ -41,8 +41,8 @@ fun InfoScreen(
         room: String,
         number: String,
         email: String,
-        phoneNumber: String
-    ) -> Unit
+        phoneNumber: String,
+    ) -> Unit,
 ) {
     var nameState by remember { mutableStateOf(TextFieldState()) }
     var phoneNumberState by remember { mutableStateOf(TextFieldState()) }
@@ -85,24 +85,23 @@ fun InfoScreen(
                     if (phoneNumberState.value.isNotEmpty()) {
                         phoneNumberState = isPhoneNumberValid(phoneNumberState)
                     }
-                }
-            )
-    )
-    {
+                },
+            ),
+    ) {
         BackIcon(
             modifier = Modifier
                 .padding(16.dp)
                 .statusBarsPadding()
-                .clickable { onBackClick() }
+                .clickable { onBackClick() },
         )
         Column(
             modifier = Modifier
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 24.dp),
         ) {
             Text(
-                text = if (emailState.isValid && classInfoState.isValid && nameState.isValid) {
+                text = if (setOf(nameState, emailState, classInfoState).all { it.isValid }) {
                     "전화번호를 입력해주세요"
-                } else if (classInfoState.isValid && nameState.isValid) {
+                } else if (setOf(nameState, classInfoState).all { it.isValid }) {
                     "이메일을 입력해주세요"
                 } else if (nameState.isValid) {
                     "학반번호를 입력해주세요"
@@ -111,9 +110,9 @@ fun InfoScreen(
                 },
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = 8.dp),
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
-            AnimatedVisibility(visible = emailState.isValid && nameState.isValid && classInfoState.isValid) {
+            AnimatedVisibility(visible = setOf(nameState, emailState, classInfoState).all { it.isValid }) {
                 DodamTextField(
                     value = phoneNumberState.value,
                     onValueChange = {
@@ -130,14 +129,14 @@ fun InfoScreen(
                     hint = "전화번호",
                     visualTransformation = PhoneVisualTransformation(
                         "000-0000-0000",
-                        '0'
+                        '0',
                     ),
                     modifier = Modifier.padding(top = 24.dp),
                     isError = phoneNumberState.isError,
                     supportingText = if (phoneNumberState.isError) phoneNumberState.errorMessage else "",
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Search,
-                        keyboardType = KeyboardType.Number
+                        keyboardType = KeyboardType.Number,
                     ),
                     keyboardActions = KeyboardActions(onSearch = {
                         phoneNumberState = isPhoneNumberValid(phoneNumberState)
@@ -168,125 +167,128 @@ fun InfoScreen(
                         classInfoState = TextFieldState(
                             it.text.replace("[^0-9]".toRegex(), ""),
                             classInfoState.isValid,
-                            classInfoState.isError
+                            classInfoState.isError,
                         )
                         when (it.text.length) {
                             1 -> { // 학년을 입력한 경우: "" (0글자)
                                 classInfoText = TextFieldValue(
-                                    text = classInfoState.value + "학년",
-                                    selection = TextRange(3)
+                                    text = classInfoState.getValueAsString(1),
+                                    selection = TextRange(3),
                                 )
                                 classInfoState =
                                     classInfoState.copy(
-                                        value = classInfoText.text,
+                                        value = classInfoText.text[0].toString(),
                                         isValid = false,
                                         isError = false,
-                                        errorMessage = ""
+                                        errorMessage = "",
                                     )
                             }
 
                             2 -> { // 학년이 입력되었을 때 삭제를 누른 경우: 2학년 (3글자)
                                 classInfoText = classInfoText.copy(
                                     text = "",
-                                    selection = TextRange.Zero
+                                    selection = TextRange.Zero,
                                 )
                                 classInfoState = classInfoState.copy(
                                     value = "",
                                     isValid = false,
                                     isError = false,
-                                    errorMessage = ""
+                                    errorMessage = "",
                                 )
                             }
 
                             4 -> { // 학년이 입력되었을 때 반을 입력한 경우: 2학년 (3글자)
                                 classInfoText = classInfoText.copy(
-                                    text = classInfoState.value[0] + "학년 " + classInfoState.value[1] + "반",
-                                    selection = TextRange(6)
+                                    text = classInfoState.getValueAsString(2),
+                                    selection = TextRange(6),
                                 )
                                 classInfoState = classInfoState.copy(
                                     value = classInfoState.value.substring(0, 2),
                                     isValid = false,
                                     isError = false,
-                                    errorMessage = ""
+                                    errorMessage = "",
                                 )
                             }
 
                             5 -> { // 학년, 반이 입력되었을 때 삭제를 누른 경우: 2학년 4반 (6글자)
                                 classInfoText = classInfoText.copy(
-                                    text = classInfoState.value[0] + "학년",
-                                    selection = TextRange(3)
+                                    text = classInfoState.getValueAsString(1),
+                                    selection = TextRange(3),
                                 )
                                 classInfoState =
                                     classInfoState.copy(
                                         value = classInfoState.value.substring(0, 1),
                                         isValid = false,
                                         isError = false,
-                                        errorMessage = ""
+                                        errorMessage = "",
                                     )
                             }
 
                             7 -> { // 학년, 반이 입력되었을 때 학번을 입력할 경우: 2학년 4반 (6글자)
                                 classInfoText = classInfoText.copy(
-                                    text = classInfoState.value[0] + "학년 " + classInfoState.value[1] + "반 " + classInfoState.value[2] + "번",
-                                    selection = TextRange(9)
+                                    text = classInfoState.getValueAsString(),
+                                    selection = TextRange(9),
                                 )
                                 classInfoState = classInfoState.copy(
                                     value = classInfoState.value.substring(0, 3),
                                     isValid = false,
                                     isError = false,
-                                    errorMessage = ""
+                                    errorMessage = "",
                                 )
                             }
 
                             8 -> { // 학번이 한자리인 상황에서 삭제를 누를 경우: 2학년 4반 6번 (9글자)
                                 classInfoText = classInfoText.copy(
-                                    text = classInfoState.value[0] + "학년 " + classInfoState.value[1] + "반",
-                                    selection = TextRange(6)
+                                    text = classInfoState.getValueAsString(2),
+                                    selection = TextRange(6),
                                 )
                                 classInfoState =
                                     classInfoState.copy(
                                         value = classInfoState.value.substring(0, 2),
                                         isValid = false,
                                         isError = false,
-                                        errorMessage = ""
+                                        errorMessage = "",
                                     )
                             }
 
                             9 -> { // 학번이 두자리인 상황에서 삭제를 누를 경우: 2학년 4반 06번 (10글자)
                                 if (classInfoState.value[2] == '0') { // 학번의 십의자리가 0일 떄는 십의자리가 사리지고 아니면 일의자리가 사라짐
                                     classInfoText = classInfoText.copy(
-                                        text = classInfoState.value[0] + "학년 " + classInfoState.value[1] + "반 " + classInfoState.value[3] + "번",
-                                        selection = TextRange(9)
+                                        text = classInfoState.getValueAsString(lastIndex = 3),
+                                        selection = TextRange(9),
                                     )
                                     classInfoState =
                                         classInfoState.copy(
                                             value = classInfoState.value.substring(
                                                 0,
-                                                2
+                                                2,
                                             ) + classInfoState.value[3],
                                             isValid = classInfoState.isValid,
                                             isError = false,
-                                            errorMessage = ""
+                                            errorMessage = "",
                                         )
                                 } else {
                                     classInfoText = classInfoText.copy(
-                                        text = classInfoState.value[0] + "학년 " + classInfoState.value[1] + "반 " + classInfoState.value[2] + "번",
-                                        selection = TextRange(9)
+                                        text = classInfoState.getValueAsString(),
+                                        selection = TextRange(9),
                                     )
                                     classInfoState =
                                         classInfoState.copy(
                                             value = classInfoState.value.substring(0, 3),
                                             isValid = classInfoState.isValid,
                                             isError = false,
-                                            errorMessage = ""
+                                            errorMessage = "",
                                         )
                                 }
                             }
                             // 학번이 한자리인 경우에서 입력할 경우: 2학년 4반 6번 (9글자)
                             10 -> {
                                 classInfoText = classInfoText.copy(
-                                    text = classInfoState.value[0] + "학년 " + classInfoState.value[1] + "반 " + classInfoState.value[2] + classInfoState.value[3] + "번",
-                                    selection = TextRange(10)
+                                    text = classInfoState.getValueAsString(
+                                        lastIndex = 3,
+                                        lastPrefix = 2,
+                                    ),
+                                    selection = TextRange(10),
                                 )
                                 classInfoState = isClassInfoValid(classInfoState)
                             }
@@ -295,13 +297,13 @@ fun InfoScreen(
                     onClickCancel = {
                         classInfoText = classInfoText.copy(
                             text = "",
-                            selection = TextRange.Zero
+                            selection = TextRange.Zero,
                         )
                         classInfoState = classInfoState.copy(
                             value = "",
                             isValid = false,
                             isError = false,
-                            errorMessage = ""
+                            errorMessage = "",
                         )
                         focusManager.clearFocus()
                     },
@@ -311,7 +313,7 @@ fun InfoScreen(
                     modifier = Modifier.padding(top = 24.dp),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Search,
-                        keyboardType = KeyboardType.Number
+                        keyboardType = KeyboardType.Number,
                     ),
                     keyboardActions = KeyboardActions(onSearch = {
                         focusManager.clearFocus()
@@ -335,7 +337,7 @@ fun InfoScreen(
                     nameState = isNameValid(nameState)
                 }),
             )
-            AnimatedVisibility(visible = phoneNumberState.isValid && emailState.isValid && classInfoState.isValid && nameState.isValid) {
+            AnimatedVisibility(visible = setOf(phoneNumberState, emailState, classInfoState, nameState).all { it.isValid }) {
                 DodamFullWidthButton(
                     onClick = {
                         onNextClick(
@@ -350,9 +352,9 @@ fun InfoScreen(
                     text = "다음",
                     modifier = Modifier.padding(top = 24.dp),
                     enabled = nameState.value.length in 2..4 &&
-                            classInfoState.value.length == 4 &&
-                            emailState.value.isNotBlank() &&
-                            phoneNumberState.value.length == 11
+                        classInfoState.value.length == 4 &&
+                        emailState.value.isNotBlank() &&
+                        phoneNumberState.value.length == 11,
                 )
             }
         }
@@ -365,14 +367,14 @@ private fun isNameValid(nameState: TextFieldState): TextFieldState {
             value = nameState.value,
             isValid = true,
             isError = false,
-            errorMessage = ""
+            errorMessage = "",
         )
     } else {
         TextFieldState(
             value = nameState.value,
             isValid = false,
             isError = true,
-            errorMessage = "이름은 2~4글자로 입력해주세요"
+            errorMessage = "이름은 2~4글자로 입력해주세요",
         )
     }
 }
@@ -380,12 +382,12 @@ private fun isNameValid(nameState: TextFieldState): TextFieldState {
 private fun isClassInfoValid(classInfoState: TextFieldState): TextFieldState {
     return when (classInfoState.value.length) {
         in 3..4 -> { // 학 반 번호가 모두 입력되었다면
-            if (classInfoState.value[0] !in '1'..'3') { // 학년이 1~3학년이 아니라면
+            if (classInfoState.value[0].toString().toInt() !in 1..3) { // 학년이 1~3학년이 아니라면
                 TextFieldState(
                     value = classInfoState.value,
                     isValid = false,
                     isError = true,
-                    errorMessage = "학년을 다시 확인해주세요."
+                    errorMessage = "학년을 다시 확인해주세요.",
                 )
             }
             if (classInfoState.value[1] !in '1'..'4') { // 학반이 1~4반이 아니라면
@@ -393,7 +395,7 @@ private fun isClassInfoValid(classInfoState: TextFieldState): TextFieldState {
                     value = classInfoState.value,
                     isValid = false,
                     isError = true,
-                    errorMessage = "반을 다시 확인해주세요."
+                    errorMessage = "반을 다시 확인해주세요.",
                 )
             }
             if (classInfoState.value.length == 3) { // 학번을 한글자로 입력했다면
@@ -401,49 +403,42 @@ private fun isClassInfoValid(classInfoState: TextFieldState): TextFieldState {
                     TextFieldState(
                         value = classInfoState.value.substring(
                             0,
-                            2
+                            2,
                         ) + "0" + classInfoState.value[2],
                         isValid = true,
                         isError = false,
-                        errorMessage = ""
+                        errorMessage = "",
                     )
                 } else { // 학번이 1~9사이가 아님
                     TextFieldState(
                         value = classInfoState.value,
                         isValid = false,
                         isError = true,
-                        errorMessage = "번호를 다시 확인해주세요."
+                        errorMessage = "번호를 다시 확인해주세요.",
                     )
                 }
             } else { // 학번을 4글자로 입력했다면
-                if ((classInfoState.value[2].toString() +
-                            classInfoState.value[3].toString())
+                if ((
+                        classInfoState.value[2].toString() +
+                            classInfoState.value[3].toString()
+                        )
                         .toInt() in 1..25
                 ) { // 학번이 1~25 사이인가
                     TextFieldState(
                         value = classInfoState.value,
                         isValid = true,
                         isError = false,
-                        errorMessage = ""
+                        errorMessage = "",
                     )
                 } else { // 학번이 1~25 사이가 아니라면
                     TextFieldState(
                         value = classInfoState.value,
                         isValid = false,
                         isError = true,
-                        errorMessage = "번호를 다시 확인해주세요."
+                        errorMessage = "번호를 다시 확인해주세요.",
                     )
                 }
             }
-        }
-
-        2 -> { // 번호가 입력되지 않았다면
-            TextFieldState(
-                value = classInfoState.value,
-                isValid = false,
-                isError = true,
-                errorMessage = "번호를 입력해주세요"
-            )
         }
 
         1 -> { // 반 번호가 입력되지 않았다면
@@ -451,7 +446,16 @@ private fun isClassInfoValid(classInfoState: TextFieldState): TextFieldState {
                 value = classInfoState.value,
                 isValid = false,
                 isError = true,
-                errorMessage = "반 번호를 입력해주세요"
+                errorMessage = "반 번호를 입력해주세요",
+            )
+        }
+
+        2 -> { // 번호가 입력되지 않았다면
+            TextFieldState(
+                value = classInfoState.value,
+                isValid = false,
+                isError = true,
+                errorMessage = "번호를 입력해주세요",
             )
         }
 
@@ -460,7 +464,7 @@ private fun isClassInfoValid(classInfoState: TextFieldState): TextFieldState {
                 value = classInfoState.value,
                 isValid = false,
                 isError = true,
-                errorMessage = "학년 반 번호를 입력해주세요"
+                errorMessage = "학년 반 번호를 입력해주세요",
             )
         }
     }
@@ -472,14 +476,14 @@ private fun isEmailValid(emailState: TextFieldState): TextFieldState {
             value = emailState.value,
             isValid = true,
             isError = false,
-            errorMessage = ""
+            errorMessage = "",
         )
     } else {
         TextFieldState(
             value = emailState.value,
             isValid = false,
             isError = true,
-            errorMessage = "이메일을 입력해주세요"
+            errorMessage = "이메일을 입력해주세요",
         )
     }
 }
@@ -490,14 +494,14 @@ private fun isPhoneNumberValid(phoneNumber: TextFieldState): TextFieldState {
             value = phoneNumber.value,
             isValid = true,
             isError = false,
-            errorMessage = ""
+            errorMessage = "",
         )
     } else {
         TextFieldState(
             value = phoneNumber.value,
             isValid = false,
             isError = true,
-            errorMessage = "전화번호를 입력해주세요"
+            errorMessage = "전화번호를 입력해주세요",
         )
     }
 }

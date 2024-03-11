@@ -27,11 +27,7 @@ import com.b1nd.dodam.login.viewmodel.Event
 import com.b1nd.dodam.login.viewmodel.LoginViewModel
 
 @Composable
-internal fun LoginScreen(
-    viewModel: LoginViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    navigateToMain: () -> Unit
-) {
+internal fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit) {
     var idError by remember { mutableStateOf("") }
     var pwError by remember { mutableStateOf("") }
     var id by remember { mutableStateOf("") }

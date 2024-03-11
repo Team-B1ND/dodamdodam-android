@@ -12,7 +12,6 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
@@ -86,7 +85,7 @@ class MealServiceTest {
                                             "name": "발아현미밥",
                                             "allergies": []
                                         },
-                                        { 
+                                        {
                                             "name": "맑은쇠고기무국1",
                                             "allergies": [
                                                 5,
@@ -204,80 +203,80 @@ class MealServiceTest {
                     listOf(
                         MenuResponse(
                             "쇠고기우엉볶음밥",
-                            listOf(5, 6, 16)
+                            listOf(5, 6, 16),
                         ),
                         MenuResponse(
                             "불고기치즈파니니",
-                            listOf(1, 2, 5, 6, 10, 13)
+                            listOf(1, 2, 5, 6, 10, 13),
                         ),
                         MenuResponse(
                             "계란실파국",
-                            listOf(1, 5, 6)
+                            listOf(1, 5, 6),
                         ),
                         MenuResponse(
                             "오이생채",
-                            listOf(13)
+                            listOf(13),
                         ),
                         MenuResponse(
                             "배추김치",
-                            listOf(9)
+                            listOf(9),
                         ),
                     ),
-                    709.9f
+                    709.9f,
                 ),
                 lunch = MealDetailResponse(
                     listOf(
                         MenuResponse(
                             "발아현미밥",
-                            listOf()
+                            listOf(),
                         ),
                         MenuResponse(
                             "맑은쇠고기무국1",
-                            listOf(5, 6, 16)
+                            listOf(5, 6, 16),
                         ),
                         MenuResponse(
                             "매운갈비찜",
-                            listOf(5, 6, 10, 13)
+                            listOf(5, 6, 10, 13),
                         ),
                         MenuResponse(
                             "핫스모크연어스테이크/소스",
-                            listOf(1, 2, 5, 6)
+                            listOf(1, 2, 5, 6),
                         ),
                         MenuResponse(
                             "배추김치",
-                            listOf(9)
+                            listOf(9),
                         ),
                         MenuResponse(
                             "눈사람도너츠",
-                            listOf(1, 2, 5, 6)
+                            listOf(1, 2, 5, 6),
                         ),
                     ),
-                    1084.6f
+                    1084.6f,
                 ),
                 dinner = MealDetailResponse(
                     listOf(
                         MenuResponse(
                             "추가밥",
-                            listOf()
+                            listOf(),
                         ),
                         MenuResponse(
                             "돈코츠라멘",
-                            listOf(1, 2, 5, 6, 10, 13, 15, 16)
+                            listOf(1, 2, 5, 6, 10, 13, 15, 16),
                         ),
                         MenuResponse(
                             "오징어야채볶음",
-                            listOf(5, 6, 13, 17)
+                            listOf(5, 6, 13, 17),
                         ),
                         MenuResponse(
                             "배추김치",
-                            listOf(9)
+                            listOf(9),
                         ),
                         MenuResponse(
                             "크럼블치킨/",
-                            listOf(1, 2, 5, 6, 15, 18)
+                            listOf(1, 2, 5, 6, 15, 18),
                         ),
                     ),
-                    1542.2f
+                    1542.2f,
                 ),
             ),
             mealService.getMeal(2024, 2, 1),

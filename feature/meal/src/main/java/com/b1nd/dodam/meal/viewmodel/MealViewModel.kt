@@ -8,6 +8,8 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.meal.MealRepository
 import com.b1nd.dodam.meal.MealUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDate
+import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,14 +18,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.toJavaLocalDate
-import java.time.LocalDate
-import javax.inject.Inject
 
 @HiltViewModel
 class MealViewModel @Inject constructor(
-    private val mealRepository: MealRepository
+    private val mealRepository: MealRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MealUiState())
     val uiState = _uiState.asStateFlow()
@@ -42,11 +41,15 @@ class MealViewModel @Inject constructor(
                         is Result.Success -> {
                             it.copy(
                                 isLoading = false,
-                                meal = (it.meal.toPersistentList()
-                                    .addAll(result.data.filter { meal ->
-                                        val date = meal.date.toJavaLocalDate()
-                                        date.isAfter(LocalDate.now().minusDays(1))
-                                    })).toImmutableList()
+                                meal = (
+                                    it.meal.toPersistentList()
+                                        .addAll(
+                                            result.data.filter { meal ->
+                                                val date = meal.date.toJavaLocalDate()
+                                                date.isAfter(LocalDate.now().minusDays(1))
+                                            },
+                                        )
+                                    ).toImmutableList(),
                             )
                         }
 
@@ -60,7 +63,7 @@ class MealViewModel @Inject constructor(
 
                         is Result.Loading -> {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }
@@ -68,7 +71,6 @@ class MealViewModel @Inject constructor(
             }
         }
     }
-
 
     fun fetchMealOfMonth(year: Int, month: Int) {
         if (isFirst.value == true) {
@@ -80,7 +82,7 @@ class MealViewModel @Inject constructor(
                             is Result.Success -> {
                                 it.copy(
                                     meal = (it.meal + result.data).toImmutableList(),
-                                    endReached = true
+                                    endReached = true,
                                 )
                             }
 
@@ -88,13 +90,13 @@ class MealViewModel @Inject constructor(
                                 _event.emit(Event.Error(result.exception.message.toString()))
                                 Log.e("ERROR", result.exception.stackTraceToString())
                                 it.copy(
-                                    endReached = true
+                                    endReached = true,
                                 )
                             }
 
                             is Result.Loading -> {
                                 it.copy(
-                                    endReached = true
+                                    endReached = true,
                                 )
                             }
                         }
