@@ -1,6 +1,5 @@
 package com.b1nd.dodam.register
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +41,7 @@ fun AuthScreen(
     phoneNumber: String,
     viewModel: RegisterViewModel = hiltViewModel(),
     navigateToMain: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     var idState by remember { mutableStateOf(TextFieldState()) }
     var passwordState by remember { mutableStateOf(TextFieldState()) }
@@ -69,7 +68,7 @@ fun AuthScreen(
                                 value = idState.value,
                                 isValid = idState.isValid,
                                 isError = true,
-                                errorMessage = "계정을 찾을 수 없어요"
+                                errorMessage = "계정을 찾을 수 없어요",
                             )
                         }
                         "비밀번호가 일치하지 않음" -> {
@@ -77,7 +76,7 @@ fun AuthScreen(
                                 value = passwordState.value,
                                 isValid = passwordState.isValid,
                                 isError = true,
-                                errorMessage = "비밀번호가 일치하지 않아요"
+                                errorMessage = "비밀번호가 일치하지 않아요",
                             )
                         }
                         "유효한 Enum 값이 아닙니다." -> {
@@ -85,7 +84,7 @@ fun AuthScreen(
                                 value = idState.value,
                                 isValid = idState.isValid,
                                 isError = true,
-                                errorMessage = "이메일을 다시 입력해주세요"
+                                errorMessage = "이메일을 다시 입력해주세요",
                             )
                         }
                         "이미 존재하는 유저" -> {
@@ -93,7 +92,7 @@ fun AuthScreen(
                                 value = idState.value,
                                 isValid = idState.isValid,
                                 isError = true,
-                                errorMessage = "이미 가입된 이메일 입니다. 다른 이메일을 입력해주세요."
+                                errorMessage = "이미 가입된 이메일 입니다. 다른 이메일을 입력해주세요.",
                             )
                         }
                         else -> {
@@ -101,7 +100,7 @@ fun AuthScreen(
                                 value = idState.value,
                                 isValid = idState.isValid,
                                 isError = true,
-                                errorMessage = event.message
+                                errorMessage = event.message,
                             )
                         }
                     }
@@ -126,17 +125,18 @@ fun AuthScreen(
                         confirmPasswordState =
                             isConfirmPasswordValid(passwordState, confirmPasswordState)
                     }
-                })
+                },
+            ),
     ) {
         BackIcon(
             modifier = Modifier
                 .padding(16.dp)
                 .statusBarsPadding()
-                .clickable { onBackClick() }
+                .clickable { onBackClick() },
         )
         Column(
             modifier = Modifier
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 24.dp),
         ) {
             Text(
                 text = if (passwordState.isValid) {
@@ -148,7 +148,7 @@ fun AuthScreen(
                 },
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = 8.dp),
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
             AnimatedVisibility(visible = passwordState.isValid && idState.isValid) {
                 DodamTextField(
@@ -159,7 +159,7 @@ fun AuthScreen(
                                 value = it,
                                 isValid = confirmPasswordState.isValid,
                                 isError = false,
-                                errorMessage = ""
+                                errorMessage = "",
                             )
                     },
                     modifier = Modifier.padding(top = 24.dp),
@@ -185,7 +185,7 @@ fun AuthScreen(
                                 value = it,
                                 isValid = passwordState.isValid,
                                 isError = false,
-                                errorMessage = ""
+                                errorMessage = "",
                             )
                     },
                     modifier = Modifier.padding(top = 24.dp),
@@ -209,7 +209,7 @@ fun AuthScreen(
                             value = it,
                             isValid = idState.isValid,
                             isError = false,
-                            errorMessage = ""
+                            errorMessage = "",
                         )
                     }
                     if (it.length == 20) {
@@ -239,14 +239,14 @@ fun AuthScreen(
                             number = number.toInt(),
                             phone = phoneNumber,
                             pw = passwordState.value,
-                            room = room.toInt()
+                            room = room.toInt(),
                         )
                     },
                     text = "다음",
                     modifier = Modifier.padding(top = 32.dp),
                     enabled = idState.value.isNotBlank() &&
-                            passwordState.value.isNotBlank() &&
-                            confirmPasswordState.value.isNotBlank()
+                        passwordState.value.isNotBlank() &&
+                        confirmPasswordState.value.isNotBlank(),
                 )
             }
         }
@@ -257,22 +257,22 @@ private fun isIdValid(idState: TextFieldState): TextFieldState {
     return if ((idState.value.length in 5..20) &&
         idState.value.matches(
             Regex(
-                "^[A-Za-z0-9]+\$"
-            )
+                "^[A-Za-z0-9]+\$",
+            ),
         )
     ) {
         TextFieldState(
             idState.value,
             isValid = true,
             isError = false,
-            errorMessage = ""
+            errorMessage = "",
         )
     } else {
         TextFieldState(
             idState.value,
             isValid = false,
             isError = true,
-            errorMessage = "아이디는 5~20글자 이내여야 합니다."
+            errorMessage = "아이디는 5~20글자 이내여야 합니다.",
         )
     }
 }
@@ -281,43 +281,40 @@ private fun isPasswordValid(passwordState: TextFieldState): TextFieldState {
     return if (passwordState.value.length >= 8 &&
         passwordState.value.matches(
             Regex(
-                "^[A-Za-z0-9!@#\$%^&*()]+\$"
-            )
+                "^[A-Za-z0-9!@#\$%^&*()]+\$",
+            ),
         )
     ) {
         TextFieldState(
             passwordState.value,
             isValid = true,
             isError = false,
-            errorMessage = ""
+            errorMessage = "",
         )
     } else {
         TextFieldState(
             passwordState.value,
             isValid = false,
             isError = true,
-            errorMessage = "영문 + 숫자 8자리 이상이여야 합니다."
+            errorMessage = "영문 + 숫자 8자리 이상이여야 합니다.",
         )
     }
 }
 
-private fun isConfirmPasswordValid(
-    passwordState: TextFieldState,
-    confirmPasswordState: TextFieldState
-): TextFieldState {
+private fun isConfirmPasswordValid(passwordState: TextFieldState, confirmPasswordState: TextFieldState): TextFieldState {
     return if (passwordState.value == confirmPasswordState.value) {
         TextFieldState(
             confirmPasswordState.value,
             isValid = true,
             isError = false,
-            errorMessage = ""
+            errorMessage = "",
         )
     } else {
         TextFieldState(
             confirmPasswordState.value,
             isValid = false,
             isError = true,
-            errorMessage = "비밀번호가 일치하지 않습니다."
+            errorMessage = "비밀번호가 일치하지 않습니다.",
         )
     }
 }

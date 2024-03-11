@@ -18,4 +18,3 @@ suspend inline fun defaultSafeRequest(crossinline request: suspend () -> Default
         else -> throw RuntimeException(response.message)
     }
 }
-

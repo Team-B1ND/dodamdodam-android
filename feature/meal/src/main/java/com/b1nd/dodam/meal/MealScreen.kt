@@ -44,11 +44,7 @@ import java.time.LocalTime
 import kotlin.math.roundToInt
 
 @Composable
-fun MealColumn(
-    date: LocalDate,
-    isActive: Boolean = false,
-    content: @Composable ColumnScope.() -> Unit
-) {
+fun MealColumn(date: LocalDate, isActive: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -57,7 +53,7 @@ fun MealColumn(
             modifier = Modifier
                 .background(
                     if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.inverseSurface,
-                    RoundedCornerShape(100)
+                    RoundedCornerShape(100),
                 )
                 .padding(horizontal = 60.dp, vertical = 6.dp),
         ) {
@@ -73,15 +69,15 @@ fun MealColumn(
                         "목",
                         "금",
                         "토",
-                        "일"
-                    )[date.dayOfWeek.value - 1]
+                        "일",
+                    )[date.dayOfWeek.value - 1],
                 ),
                 style = MaterialTheme.typography.bodyMedium,
-                color = if (isActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.inverseOnSurface
+                color = if (isActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.inverseOnSurface,
             )
         }
         Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             content()
         }
@@ -89,9 +85,7 @@ fun MealColumn(
 }
 
 @Composable
-fun MealScreen(
-    viewModel: MealViewModel = hiltViewModel(),
-) {
+fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
     val current = LocalDateTime.now()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -106,10 +100,9 @@ fun MealScreen(
     Box(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -121,17 +114,17 @@ fun MealScreen(
                 item {
                     Spacer(
                         modifier = Modifier.height(
-                            28.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-                        )
+                            28.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
+                        ),
                     )
                 }
                 item {
-                    Box(modifier = Modifier.fillMaxWidth()){
+                    Box(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             modifier = Modifier.align(Alignment.CenterStart),
                             text = "급식",
                             style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }
@@ -147,9 +140,8 @@ fun MealScreen(
                         val date = meal.date
                         MealColumn(
                             isActive = isToday,
-                            date = LocalDate.of(date.year, date.monthNumber, date.dayOfMonth)
+                            date = LocalDate.of(date.year, date.monthNumber, date.dayOfMonth),
                         ) {
-
                             meal.breakfast?.let { meal ->
                                 MealCard(
                                     title = "아침",
@@ -180,7 +172,7 @@ fun MealScreen(
                         val isToday = index == 0
                         MealColumn(
                             isActive = isToday,
-                            date = LocalDate.now()
+                            date = LocalDate.now(),
                         ) {
                             MealCard(isLoading = true)
                             MealCard(isLoading = true)
@@ -199,7 +191,7 @@ fun MealScreen(
                     Spacer(
                         modifier = Modifier
                             .navigationBarsPadding()
-                            .padding(bottom = 20.dp)
+                            .padding(bottom = 20.dp),
                     )
                 }
             }
@@ -220,39 +212,33 @@ private fun isBetween(startHour: Int, startMinute: Int, endHour: Int, endMinute:
     val current = LocalDateTime.now()
     val startDate = LocalDateTime.of(
         current.toLocalDate(),
-        LocalTime.of(startHour, startMinute)
+        LocalTime.of(startHour, startMinute),
     )
     val endDate = LocalDateTime.of(
         current.toLocalDate(),
-        LocalTime.of(endHour, endMinute)
+        LocalTime.of(endHour, endMinute),
     )
     return current.isAfter(startDate) && current.isBefore(endDate)
 }
 
 @Composable
-fun MealCard(
-    modifier: Modifier = Modifier,
-    isLoading: Boolean = false,
-    isActive: Boolean = false,
-    title: String = "",
-    meal: MealDetail? = null,
-) {
+fun MealCard(modifier: Modifier = Modifier, isLoading: Boolean = false, isActive: Boolean = false, title: String = "", meal: MealDetail? = null) {
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(20.dp))
             .padding(16.dp),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             if (!isLoading) {
                 Box(
                     modifier = Modifier
                         .background(
                             if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
-                            shape = RoundedCornerShape(100)
+                            shape = RoundedCornerShape(100),
                         )
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
                 ) {
                     Text(
                         text = title,
@@ -265,11 +251,11 @@ fun MealCard(
                     modifier = Modifier
                         .background(
                             brush = shimmerEffect(),
-                            shape = RoundedCornerShape(100)
+                            shape = RoundedCornerShape(100),
                         )
                         .width(50.dp)
                         .height(25.dp)
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -284,10 +270,10 @@ fun MealCard(
                     modifier = Modifier
                         .background(
                             brush = shimmerEffect(),
-                            shape = RoundedCornerShape(100)
+                            shape = RoundedCornerShape(100),
                         )
                         .width(60.dp)
-                        .height(20.dp)
+                        .height(20.dp),
                 )
             }
         }
@@ -316,15 +302,15 @@ fun MealCard(
         } else {
             Column {
                 val widths = listOf(150, 100, 75, 120, 60, 80)
-                widths.forEach{ size ->
+                widths.forEach { size ->
                     Box(
                         modifier = Modifier
                             .heightIn(19.dp)
                             .widthIn(size.dp)
                             .background(
                                 brush = shimmerEffect(),
-                                RoundedCornerShape(8.dp)
-                            )
+                                RoundedCornerShape(8.dp),
+                            ),
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                 }

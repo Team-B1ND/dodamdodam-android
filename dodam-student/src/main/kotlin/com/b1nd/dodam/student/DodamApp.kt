@@ -8,10 +8,8 @@ import com.b1nd.dodam.designsystem.theme.DodamTheme
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.meal.navigation.mealScreen
-import com.b1nd.dodam.meal.navigation.navigationToMeal
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
-import com.b1nd.dodam.register.navigation.INFO_ROUTE
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
@@ -36,7 +34,7 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
                         room = room,
                         number = number,
                         email = email,
-                        phoneNumber = phoneNumber
+                        phoneNumber = phoneNumber,
                     )
                 },
                 onBackClick = { navController.popBackStack() },

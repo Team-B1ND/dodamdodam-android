@@ -25,7 +25,7 @@ class KeyStoreManager @Inject constructor() {
         val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, KEY_PROVIDER)
         val parameterSpec = KeyGenParameterSpec.Builder(
             KEY_ALIAS,
-            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
         ).run {
             setBlockModes(KeyProperties.BLOCK_MODE_CBC)
             setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)

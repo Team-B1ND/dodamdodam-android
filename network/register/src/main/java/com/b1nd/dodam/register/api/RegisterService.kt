@@ -15,16 +15,7 @@ internal class RegisterService @Inject constructor(
     private val client: HttpClient,
 ) : RegisterDataSource {
 
-    override suspend fun register(
-        email: String,
-        grade: Int,
-        id: String,
-        name: String,
-        number: Int,
-        phone: String,
-        pw: String,
-        room: Int
-    ) {
+    override suspend fun register(email: String, grade: Int, id: String, name: String, number: Int, phone: String, pw: String, room: Int) {
         return defaultSafeRequest {
             client.post(DodamUrl.Member.REGISTER) {
                 setBody(
@@ -36,8 +27,8 @@ internal class RegisterService @Inject constructor(
                         number = number,
                         phone = phone,
                         pw = pw,
-                        room = room
-                    )
+                        room = room,
+                    ),
                 )
             }.body<DefaultResponse>()
         }
