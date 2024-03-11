@@ -71,7 +71,7 @@ object NetworkModule {
                         val accessToken = client.post(DodamUrl.Auth.LOGIN) {
                             markAsRefreshTokenRequest()
                             setBody(TokenRequest(id = user.id, pw = user.pw))
-                        }.body<TokenResponse>().accessToken
+                        }.body<Response<TokenResponse>>().data.accessToken
 
                         datastore.saveToken(accessToken)
 

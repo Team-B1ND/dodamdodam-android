@@ -2,7 +2,10 @@ package com.b1nd.dodam.student.home
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,9 +15,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -42,20 +47,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.outing.model.OutType
+import com.b1nd.dodam.data.schedule.model.Grade
+import com.b1nd.dodam.data.schedule.model.Schedule
 import com.b1nd.dodam.designsystem.animation.bounceClick
 import com.b1nd.dodam.designsystem.component.DodamCircularProgress
 import com.b1nd.dodam.designsystem.component.DodamContainer
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.shimmerEffect
 import com.b1nd.dodam.designsystem.icons.Bell
+import com.b1nd.dodam.designsystem.icons.Calendar
 import com.b1nd.dodam.designsystem.icons.DodamLogo
 import com.b1nd.dodam.designsystem.icons.Door
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
@@ -64,9 +74,14 @@ import com.b1nd.dodam.designsystem.icons.Note
 import com.b1nd.dodam.student.home.model.MealUiState
 import com.b1nd.dodam.student.home.model.NightStudyUiState
 import com.b1nd.dodam.student.home.model.OutUiState
+import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -99,8 +114,11 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
             DodamContainer(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .animateContentSize(),
+                    .animateContentSize(
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessLow
+                        )
+                    ),
                 icon = ForkAndKnife,
                 title = mealTitle,
                 content = {
@@ -116,12 +134,13 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                     body = "내일 급식 보러가기"
                                 )
                             } else {
-                                mealTitle = "오늘의 " + when (filteredMeal[mealPagerState.currentPage]) {
-                                    mealUiState.data[0] -> "아침"
-                                    mealUiState.data[1] -> "점심"
-                                    mealUiState.data[2] -> "저녁"
-                                    else -> "급식"
-                                }
+                                mealTitle =
+                                    "오늘의 " + when (filteredMeal[mealPagerState.currentPage]) {
+                                        mealUiState.data[0] -> "아침"
+                                        mealUiState.data[1] -> "점심"
+                                        mealUiState.data[2] -> "저녁"
+                                        else -> "급식"
+                                    }
 
                                 HorizontalPager(
                                     modifier = Modifier
@@ -151,7 +170,8 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                         is MealUiState.Loading -> {
                             Column(
-                                modifier = Modifier.padding(horizontal = 16.dp)
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
                             ) {
                                 Box(
                                     modifier = Modifier
@@ -181,13 +201,23 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         }
 
                         is MealUiState.Error -> {
-
+                            DefaultText(
+                                onClick = { viewModel.fetchMeal() },
+                                label = "급식을 불러올 수 없어요",
+                                body = "다시 불러오기"
+                            )
                         }
                     }
                 }
             )
 
             DodamContainer(
+                modifier = Modifier
+                    .animateContentSize(
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessLow
+                        )
+                    ),
                 icon = Note,
                 title = "오늘의 기상송",
                 showNextButton = true,
@@ -195,131 +225,130 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                     // TODO : Navigate to wakeup song screen
                 },
                 content = {
-                    Column(
-                        modifier = Modifier
-                            .animateContentSize(),
-                    ) {
-                        when (val wakeupSongUiState = uiState.wakeupSongUiState) {
-                            is WakeupSongUiState.Success -> {
-                                val wakeupSongPagerState =
-                                    rememberPagerState { wakeupSongUiState.data.size }
+                    when (val wakeupSongUiState = uiState.wakeupSongUiState) {
+                        is WakeupSongUiState.Success -> {
+                            val wakeupSongPagerState =
+                                rememberPagerState { wakeupSongUiState.data.size }
 
-                                if (wakeupSongUiState.data.isEmpty()) {
-                                    DefaultText(
-                                        onClick = { /* TODO : Navigate to request wakeup song screen */ },
-                                        label = "승인된 기상송이 없어요",
-                                        body = "기상송 신청하기"
-                                    )
-                                } else {
-                                    HorizontalPager(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 10.dp)
-                                            .bounceClick {
-                                                context.startActivity(
-                                                    Intent(
-                                                        Intent.ACTION_VIEW,
-                                                        Uri.parse(wakeupSongUiState.data[wakeupSongPagerState.currentPage].videoUrl)
-                                                    )
-                                                )
-                                            }
-                                            .padding(6.dp),
-                                        state = wakeupSongPagerState
-                                    ) { page ->
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                        ) {
-                                            AsyncImage(
-                                                modifier = Modifier
-                                                    .size(100.dp)
-                                                    .clip(RoundedCornerShape(12.dp)),
-                                                model = wakeupSongUiState.data[page].thumbnailUrl,
-                                                contentDescription = null,
-                                                contentScale = ContentScale.Crop,
-                                            )
-
-                                            Spacer(modifier = Modifier.width(12.dp))
-
-                                            Column(
-                                                modifier = Modifier.fillMaxWidth(),
-                                            ) {
-                                                Text(
-                                                    text = wakeupSongUiState.data[page].videoTitle,
-                                                    style = MaterialTheme.typography.bodyMedium,
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                )
-
-                                                Spacer(modifier = Modifier.height(4.dp))
-
-                                                Text(
-                                                    text = wakeupSongUiState.data[page].channelTitle,
-                                                    style = MaterialTheme.typography.bodySmall,
-                                                    color = MaterialTheme.colorScheme.tertiary,
-                                                )
-                                            }
-                                        }
-                                    }
-                                    PagerIndicator(
-                                        modifier = Modifier
-                                            .align(Alignment.End)
-                                            .padding(end = 16.dp),
-                                        size = wakeupSongPagerState.pageCount,
-                                        currentPage = wakeupSongPagerState.currentPage,
-                                    )
-                                }
-                            }
-
-                            is WakeupSongUiState.Loading -> {
-                                Row(
+                            if (wakeupSongUiState.data.isEmpty()) {
+                                DefaultText(
+                                    onClick = { /* TODO : Navigate to request wakeup song screen */ },
+                                    label = "승인된 기상송이 없어요",
+                                    body = "기상송 신청하기"
+                                )
+                            } else {
+                                HorizontalPager(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 16.dp),
-                                ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(100.dp)
-                                            .background(
-                                                shimmerEffect(),
-                                                RoundedCornerShape(12.dp),
-                                            ),
-                                    )
-
-                                    Spacer(modifier = Modifier.width(12.dp))
-
-                                    Column(
+                                        .padding(horizontal = 10.dp)
+                                        .bounceClick {
+                                            context.startActivity(
+                                                Intent(
+                                                    Intent.ACTION_VIEW,
+                                                    Uri.parse(wakeupSongUiState.data[wakeupSongPagerState.currentPage].videoUrl)
+                                                )
+                                            )
+                                        }
+                                        .padding(6.dp),
+                                    state = wakeupSongPagerState
+                                ) { page ->
+                                    Row(
                                         modifier = Modifier.fillMaxWidth(),
                                     ) {
-                                        Row(Modifier.fillMaxWidth()) {
-                                            Box(
-                                                modifier = Modifier
-                                                    .weight(0.9f)
-                                                    .height(20.dp)
-                                                    .background(
-                                                        shimmerEffect(),
-                                                        RoundedCornerShape(4.dp),
-                                                    ),
+                                        AsyncImage(
+                                            modifier = Modifier
+                                                .size(100.dp)
+                                                .clip(RoundedCornerShape(12.dp)),
+                                            model = wakeupSongUiState.data[page].thumbnailUrl,
+                                            contentDescription = null,
+                                            contentScale = ContentScale.Crop,
+                                        )
+
+                                        Spacer(modifier = Modifier.width(12.dp))
+
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                        ) {
+                                            Text(
+                                                text = wakeupSongUiState.data[page].videoTitle,
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             )
-                                            Spacer(modifier = Modifier.weight(0.1f))
+
+                                            Spacer(modifier = Modifier.height(4.dp))
+
+                                            Text(
+                                                text = wakeupSongUiState.data[page].channelTitle,
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.tertiary,
+                                            )
                                         }
+                                    }
+                                }
+                                PagerIndicator(
+                                    modifier = Modifier
+                                        .align(Alignment.End)
+                                        .padding(end = 16.dp),
+                                    size = wakeupSongPagerState.pageCount,
+                                    currentPage = wakeupSongPagerState.currentPage,
+                                )
+                            }
+                        }
 
-                                        Spacer(modifier = Modifier.height(4.dp))
+                        is WakeupSongUiState.Loading -> {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(12.dp),
+                                        ),
+                                )
 
+                                Spacer(modifier = Modifier.width(12.dp))
+
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Row(Modifier.fillMaxWidth()) {
                                         Box(
                                             modifier = Modifier
-                                                .width(50.dp)
+                                                .weight(0.9f)
                                                 .height(20.dp)
                                                 .background(
                                                     shimmerEffect(),
                                                     RoundedCornerShape(4.dp),
                                                 ),
                                         )
+                                        Spacer(modifier = Modifier.weight(0.1f))
                                     }
+
+                                    Spacer(modifier = Modifier.height(4.dp))
+
+                                    Box(
+                                        modifier = Modifier
+                                            .width(50.dp)
+                                            .height(20.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(4.dp),
+                                            ),
+                                    )
                                 }
                             }
+                        }
 
-                            is WakeupSongUiState.Error -> {
-
-                            }
+                        is WakeupSongUiState.Error -> {
+                            DefaultText(
+                                onClick = { viewModel.fetchWakeupSong() },
+                                label = "기상송을 불러올 수 없어요",
+                                body = "다시 불러오기"
+                            )
                         }
                     }
                 }
@@ -327,7 +356,14 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
             Row {
                 DodamContainer(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .animateContentSize(
+                            animationSpec = spring(
+                                stiffness = Spring.StiffnessLow
+                            )
+                        )
+                        .weight(1f)
+                        .fillMaxHeight(),
                     icon = Door,
                     title = "외출 외박",
                     content = {
@@ -375,7 +411,9 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                                                                 OutType.SLEEPOVER -> {
                                                                     date.minusDays(current.dayOfMonth.toLong())
-                                                                    if (date.dayOfMonth > 0) append("${date.dayOfMonth}일 ")
+                                                                    if (date.dayOfMonth > 0) append(
+                                                                        "${date.dayOfMonth}일 "
+                                                                    )
                                                                     else if (date.hour > 0) "${date.hour}시간 ${date.minute}분 "
                                                                     else "${date.minute}분 "
                                                                 }
@@ -523,7 +561,11 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             }
 
                             is OutUiState.Error -> {
-
+                                DefaultText(
+                                    onClick = { viewModel.fetchOut() },
+                                    label = "외출, 외박을 불러올 수 없어요",
+                                    body = "다시 불러오기"
+                                )
                             }
                         }
                     }
@@ -532,7 +574,14 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 Spacer(modifier = Modifier.width(12.dp))
 
                 DodamContainer(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .animateContentSize(
+                            animationSpec = spring(
+                                stiffness = Spring.StiffnessLow
+                            )
+                        ),
                     icon = MoonPlus,
                     title = "심야 자습",
                     content = {
@@ -630,7 +679,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                     )
                                                     Spacer(modifier = Modifier.height(4.dp))
                                                     Text(
-                                                        text =  String.format(
+                                                        text = String.format(
                                                             "%02d:%02d 시작",
                                                             nightStudy.startAt.monthNumber,
                                                             nightStudy.startAt.dayOfMonth
@@ -700,11 +749,278 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             }
 
                             is NightStudyUiState.Error -> {
-
+                                DefaultText(
+                                    onClick = { viewModel.fetchNightStudy() },
+                                    label = "심야 자습을 불러올 수 없어요",
+                                    body = "다시 불러오기"
+                                )
                             }
                         }
                     }
                 )
+            }
+
+            DodamContainer(
+                modifier = Modifier
+                    .animateContentSize(
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessLow
+                        )
+                    ),
+                icon = Calendar,
+                title = "가까운 일정",
+                showNextButton = true,
+                onNextClick = { }
+            ) {
+                when (val scheduleUiState = uiState.scheduleUiState) {
+                    is ScheduleUiState.Success -> {
+                        if (scheduleUiState.data.isEmpty()) {
+                            DefaultText(
+                                onClick = { /*TODO : Navigate to schedule screen*/ },
+                                label = "한 달간 일정이 없어요",
+                                body = "전체 일정 확인하기"
+                            )
+                        } else {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateContentSize()
+                                    .padding(horizontal = 10.dp)
+                                    .bounceClick { /*TODO : Navigate to schedule screen*/ }
+                                    .padding(6.dp)
+                            ) {
+                                val currentDate = current.toKotlinLocalDateTime().date
+                                val latestSchedule = scheduleUiState.data.first()
+
+                                ScheduleComponent(
+                                    modifier = Modifier.weight(1f),
+                                    title = if (currentDate in latestSchedule.startDate..latestSchedule.endDate) "오늘"
+                                    else if (currentDate.plus(DatePeriod(days = 1)) in latestSchedule.startDate..latestSchedule.endDate) "내일"
+                                    else "D - ${latestSchedule.startDate.dayOfYear - currentDate.dayOfYear}",
+                                    titleColor = if (currentDate in latestSchedule.startDate..latestSchedule.endDate) MaterialTheme.colorScheme.primary
+                                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                                    label = if (currentDate in latestSchedule.startDate..latestSchedule.endDate) {
+                                        String.format(
+                                            "%d월 %d일 (%s)",
+                                            currentDate.monthNumber,
+                                            currentDate.dayOfMonth,
+                                            listOf(
+                                                "월",
+                                                "화",
+                                                "수",
+                                                "목",
+                                                "금",
+                                                "토",
+                                                "일"
+                                            )[currentDate.dayOfWeek.value - 1]
+                                        )
+                                    } else {
+                                        String.format(
+                                            "%d월 %d일 (%s)",
+                                            latestSchedule.startDate.monthNumber,
+                                            latestSchedule.startDate.dayOfMonth,
+                                            listOf(
+                                                "월",
+                                                "화",
+                                                "수",
+                                                "목",
+                                                "금",
+                                                "토",
+                                                "일"
+                                            )[latestSchedule.startDate.dayOfWeek.value - 1]
+                                        )
+                                    },
+                                    body = scheduleUiState.data.filter {
+                                        if (currentDate in latestSchedule.startDate..latestSchedule.endDate) { // 오늘 일정이 있는 경우
+                                            currentDate in it.startDate..it.endDate
+                                        } else if (currentDate.plus(DatePeriod(days = 1)) in latestSchedule.startDate..latestSchedule.endDate) { // 내일 일정이 있는 경우
+                                            currentDate.plus(DatePeriod(days = 1)) in it.startDate..it.endDate
+                                        } else {
+                                            latestSchedule.startDate == it.startDate
+                                        }
+                                    },
+                                )
+
+                                val tomorrow = currentDate.plus(DatePeriod(days = 1))
+                                val nextSchedule =
+                                    if (tomorrow in latestSchedule.startDate..latestSchedule.endDate) {
+                                        latestSchedule
+                                    } else {
+                                        scheduleUiState.data.firstOrNull {
+                                            latestSchedule.endDate <= it.startDate
+                                        }
+                                    }
+
+                                if (nextSchedule != null) {
+                                    Spacer(modifier = Modifier.width(12.dp))
+
+                                    ScheduleComponent(
+                                        modifier = Modifier.weight(1f),
+                                        title = if (tomorrow in nextSchedule.startDate..nextSchedule.endDate) "내일"
+                                        else "D - ${nextSchedule.startDate.dayOfYear - currentDate.dayOfYear}",
+                                        titleColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        label = if (tomorrow in nextSchedule.startDate..nextSchedule.endDate) {
+                                            String.format(
+                                                "%d월 %d일 (%s)",
+                                                tomorrow.monthNumber,
+                                                tomorrow.dayOfMonth,
+                                                listOf(
+                                                    "월",
+                                                    "화",
+                                                    "수",
+                                                    "목",
+                                                    "금",
+                                                    "토",
+                                                    "일"
+                                                )[tomorrow.dayOfWeek.value - 1]
+                                            )
+                                        } else {
+                                            String.format(
+                                                "%d월 %d일 (%s)",
+                                                nextSchedule.startDate.monthNumber,
+                                                nextSchedule.startDate.dayOfMonth,
+                                                listOf(
+                                                    "월",
+                                                    "화",
+                                                    "수",
+                                                    "목",
+                                                    "금",
+                                                    "토",
+                                                    "일"
+                                                )[nextSchedule.startDate.dayOfWeek.value - 1]
+                                            )
+                                        },
+                                        body = scheduleUiState.data.filter {
+                                            if (tomorrow in nextSchedule.startDate..nextSchedule.endDate) {
+                                                tomorrow in it.startDate..it.endDate
+                                            } else {
+                                                nextSchedule.startDate == it.startDate
+                                            }
+                                        },
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    is ScheduleUiState.Loading -> {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                        ) {
+                            Column(
+                                modifier = Modifier.weight(1f),
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .width(36.dp)
+                                        .height(20.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(4.dp),
+                                        ),
+                                )
+
+                                Spacer(modifier = Modifier.height(2.dp))
+
+                                Box(
+                                    modifier = Modifier
+                                        .width(70.dp)
+                                        .height(14.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(4.dp),
+                                        ),
+                                )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Box(
+                                    modifier = Modifier
+                                        .width(120.dp)
+                                        .height(20.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(4.dp),
+                                        ),
+                                )
+
+                                Spacer(modifier = Modifier.height(4.dp))
+
+                                Box(
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                        .height(20.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(4.dp),
+                                        ),
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            Column(
+                                modifier = Modifier.weight(1f),
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .width(36.dp)
+                                        .height(20.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(4.dp),
+                                        ),
+                                )
+
+                                Spacer(modifier = Modifier.height(2.dp))
+
+                                Box(
+                                    modifier = Modifier
+                                        .width(70.dp)
+                                        .height(14.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(4.dp),
+                                        ),
+                                )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Box(
+                                    modifier = Modifier
+                                        .width(120.dp)
+                                        .height(20.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(4.dp),
+                                        ),
+                                )
+
+                                Spacer(modifier = Modifier.height(4.dp))
+
+                                Box(
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                        .height(20.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(4.dp),
+                                        ),
+                                )
+                            }
+                        }
+                    }
+
+                    is ScheduleUiState.Error -> {
+                        DefaultText(
+                            onClick = { viewModel.fetchSchedule() },
+                            label = "일정을 불러올 수 없어요",
+                            body = "다시 불러오기"
+                        )
+                    }
+                }
             }
         }
 
@@ -780,5 +1096,63 @@ private fun DefaultText(
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.primary,
         )
+    }
+}
+
+@Composable
+private fun ScheduleComponent(
+    modifier: Modifier = Modifier,
+    title: String,
+    titleColor: Color,
+    label: String,
+    body: List<Schedule>,
+) {
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleSmall,
+            color = titleColor,
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.tertiary,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        body.forEach {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(12.dp)
+                        .background(
+                            when (it.targetGrades.first()) {
+                                Grade.GRADE_1 -> Color(0xFFFCA800)
+                                Grade.GRADE_2 -> Color(0xFF3FBDE5)
+                                Grade.GRADE_3 -> Color(0xFFA252E1)
+                                Grade.GRADE_ALL -> Color(0xFFF97E6D)
+                                Grade.GRADE_ETC -> Color(0xFF0167BC)
+                            },
+                            CircleShape
+                        )
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
+                Text(
+                    text = it.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+        }
     }
 }

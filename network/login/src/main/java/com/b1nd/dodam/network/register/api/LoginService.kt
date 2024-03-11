@@ -18,9 +18,11 @@ internal class LoginService @Inject constructor(
     private val client: HttpClient,
 ) : LoginDataSource {
     override suspend fun login(id: String, pw: String): LoginResponse {
-        return client.post(DodamUrl.Auth.LOGIN) {
-            contentType(ContentType.Application.Json)
-            setBody(LoginRequest(id, pw))
-        }.body<LoginResponse>()
+        return safeRequest {
+            client.post(DodamUrl.Auth.LOGIN) {
+                contentType(ContentType.Application.Json)
+                setBody(LoginRequest(id, pw))
+            }.body<Response<LoginResponse>>()
+        }
     }
 }
