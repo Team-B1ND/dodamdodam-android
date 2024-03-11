@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.contentColorFor
@@ -21,18 +22,26 @@ import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.animation.NoInteractionSource
 
 @Composable
-fun DodamTopAppBar(modifier: Modifier = Modifier, containerColor: Color = MaterialTheme.colorScheme.background, title: String, icon: ImageVector? = null, onIconClick: (() -> Unit)? = null) {
+fun DodamTopAppBar(
+    modifier: Modifier = Modifier,
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    contentColor: Color = MaterialTheme.colorScheme.onBackground,
+    title: String,
+    icon: ImageVector? = null,
+    onIconClick: (() -> Unit)? = null
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(containerColor)
+            .statusBarsPadding()
             .height(48.dp)
             .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = title,
-            color = contentColorFor(containerColor),
+            color = contentColor,
             style = MaterialTheme.typography.headlineSmall,
         )
 
@@ -52,7 +61,13 @@ fun DodamTopAppBar(modifier: Modifier = Modifier, containerColor: Color = Materi
 }
 
 @Composable
-fun DodamTopAppBar(modifier: Modifier = Modifier, containerColor: Color = MaterialTheme.colorScheme.background, titleIcon: @Composable () -> Unit, icon: ImageVector? = null, onIconClick: (() -> Unit)? = null) {
+fun DodamTopAppBar(
+    modifier: Modifier = Modifier,
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    titleIcon: @Composable () -> Unit,
+    icon: ImageVector? = null,
+    onIconClick: (() -> Unit)? = null
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()

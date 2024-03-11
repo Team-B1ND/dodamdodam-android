@@ -7,6 +7,8 @@ import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.theme.DodamTheme
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
+import com.b1nd.dodam.meal.navigation.mealScreen
+import com.b1nd.dodam.meal.navigation.navigationToMeal
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import com.b1nd.dodam.register.navigation.INFO_ROUTE
@@ -23,8 +25,8 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
             startDestination = ONBOARDING_ROUTE,
         ) {
             onboardingScreen(
-                onRegisterClick = { navController.navigateToInfo() },
-                onLoginClick = { navController.navigationToLogin() },
+                onRegisterClick = { navController.navigationToLogin() },
+                onLoginClick = { navController.navigationToMeal() },
             )
             infoScreen(
                 onNextClick = { name, grade, room, number, email, phoneNumber ->
@@ -47,6 +49,7 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
                 onBackClick = { navController.popBackStack() },
                 navigateToMain = { /* TODO: Login */ },
             )
+            mealScreen()
         }
     }
 }

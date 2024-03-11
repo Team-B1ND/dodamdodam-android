@@ -1,17 +1,14 @@
 package com.b1nd.dodam.register.api
 
 import com.b1nd.dodam.network.core.DodamUrl
-import com.b1nd.dodam.network.core.model.Response
-import com.b1nd.dodam.network.core.util.safeRequest
+import com.b1nd.dodam.network.core.model.DefaultResponse
+import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.register.datasource.RegisterDataSource
 import com.b1nd.dodam.register.model.RegisterRequest
-import com.b1nd.dodam.register.model.RegisterResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
 import javax.inject.Inject
 
 internal class RegisterService @Inject constructor(
@@ -28,8 +25,8 @@ internal class RegisterService @Inject constructor(
         pw: String,
         room: Int
     ) {
-        return safeRequest {
-            client.post(DodamUrl.Auth.REGISTER) {
+        return defaultSafeRequest {
+            client.post(DodamUrl.Member.REGISTER) {
                 setBody(
                     RegisterRequest(
                         email = email,
@@ -42,7 +39,7 @@ internal class RegisterService @Inject constructor(
                         room = room
                     )
                 )
-            }.body<Response<Unit>>()
+            }.body<DefaultResponse>()
         }
     }
 }

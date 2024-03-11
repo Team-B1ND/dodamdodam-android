@@ -46,7 +46,8 @@ class RegisterViewModel @Inject constructor(
                 }
 
                 is Result.Error -> {
-                    _event.emit(Event.Error(result.exception.message ?: "알 수 없는 오류가 발생했습니다."))
+                    Log.e("Error", result.exception.stackTraceToString())
+                    _event.emit(Event.Error(result.exception.message.toString()))
                 }
 
                 is Result.Loading -> {}
