@@ -37,32 +37,28 @@ class MealViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             mealRepository.getMealOfMonth(current.year, current.monthValue).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        _uiState.update {
+                _uiState.update {
+                    when (result) {
+                        is Result.Success -> {
                             it.copy(
                                 isLoading = false,
                                 meal = (it.meal.toPersistentList()
                                     .addAll(result.data.filter { meal ->
                                         val date = meal.date.toJavaLocalDate()
                                         date.isAfter(LocalDate.now().minusDays(1))
-                                    })).toImmutableList(),
+                                    })).toImmutableList()
                             )
                         }
-                    }
 
-                    is Result.Error -> {
-                        _uiState.update {
+                        is Result.Error -> {
+                            _event.emit(Event.Error(result.exception.message.toString()))
+                            Log.e("ERROR", result.exception.stackTraceToString())
                             it.copy(
                                 isLoading = false,
                             )
                         }
-                        _event.emit(Event.Error(result.exception.message.toString()))
-                        Log.e("ERROR", result.exception.stackTraceToString())
-                    }
 
-                    is Result.Loading -> {
-                        _uiState.update {
+                        is Result.Loading -> {
                             it.copy(
                                 isLoading = true
                             )
@@ -73,33 +69,30 @@ class MealViewModel @Inject constructor(
         }
     }
 
+
     fun fetchMealOfMonth(year: Int, month: Int) {
         if (isFirst.value == true) {
             isFirst.value = false
             viewModelScope.launch {
                 mealRepository.getMealOfMonth(year, month).collect { result ->
-                    when (result) {
-                        is Result.Success -> {
-                            _uiState.update {
+                    _uiState.update {
+                        when (result) {
+                            is Result.Success -> {
                                 it.copy(
                                     meal = (it.meal + result.data).toImmutableList(),
                                     endReached = true
                                 )
                             }
-                        }
 
-                        is Result.Error -> {
-                            _event.emit(Event.Error(result.exception.message.toString()))
-                            _uiState.update {
+                            is Result.Error -> {
+                                _event.emit(Event.Error(result.exception.message.toString()))
+                                Log.e("ERROR", result.exception.stackTraceToString())
                                 it.copy(
                                     endReached = true
                                 )
                             }
-                            Log.e("ERROR", result.exception.stackTraceToString())
-                        }
 
-                        is Result.Loading -> {
-                            _uiState.update {
+                            is Result.Loading -> {
                                 it.copy(
                                     endReached = true
                                 )
