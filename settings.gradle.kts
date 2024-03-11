@@ -45,3 +45,5 @@ include(
 )
 include(":network:night-study")
 include(":data:night-study")
+include(":network:schedule")
+include(":data:schedule")

@@ -2,6 +2,7 @@ package com.b1nd.dodam.student.home.model
 
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.outing.model.Outing
+import com.b1nd.dodam.data.schedule.model.Schedule
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import kotlinx.collections.immutable.ImmutableList
 
@@ -9,7 +10,8 @@ data class HomeUiState(
     val mealUiState: MealUiState = MealUiState.Loading,
     val wakeupSongUiState: WakeupSongUiState = WakeupSongUiState.Loading,
     val outUiState: OutUiState = OutUiState.Loading,
-    val nightStudyUiState: NightStudyUiState = NightStudyUiState.Loading
+    val nightStudyUiState: NightStudyUiState = NightStudyUiState.Loading,
+    val scheduleUiState: ScheduleUiState = ScheduleUiState.Loading,
 )
 
 sealed interface MealUiState {
@@ -34,4 +36,10 @@ sealed interface NightStudyUiState {
     data class Success(val data: NightStudy?) : NightStudyUiState
     data object Loading : NightStudyUiState
     data class Error(val message: String) : NightStudyUiState
+}
+
+sealed interface ScheduleUiState {
+    data class Success(val data: ImmutableList<Schedule>) : ScheduleUiState
+    data object Loading : ScheduleUiState
+    data class Error(val message: String) : ScheduleUiState
 }

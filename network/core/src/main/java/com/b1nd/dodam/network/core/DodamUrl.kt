@@ -11,6 +11,7 @@ object DodamUrl {
     const val OUTING = "$TEST_URL/out-going"
     const val MEMBER = "$TEST_URL/member"
     const val NIGHT_STUDY = "$TEST_URL/night-study"
+    const val SCHEDULE = "$TEST_URL/schedule"
 
     object Meal {
         const val MONTH = "$MEAL/month"
@@ -38,5 +39,9 @@ object DodamUrl {
 
     object NightStudy {
         const val MY = "$NIGHT_STUDY/my"
+    }
+
+    object Schedule {
+        const val SEARCH = "$SCHEDULE/search"
     }
 }
