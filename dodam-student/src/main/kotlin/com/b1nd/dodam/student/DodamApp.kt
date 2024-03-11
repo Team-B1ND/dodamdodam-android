@@ -25,8 +25,8 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
             startDestination = ONBOARDING_ROUTE,
         ) {
             onboardingScreen(
-                onRegisterClick = { navController.navigationToLogin() },
-                onLoginClick = { navController.navigationToMeal() },
+                onRegisterClick = { navController.navigateToInfo() },
+                onLoginClick = { navController.navigationToLogin() },
             )
             infoScreen(
                 onNextClick = { name, grade, room, number, email, phoneNumber ->
