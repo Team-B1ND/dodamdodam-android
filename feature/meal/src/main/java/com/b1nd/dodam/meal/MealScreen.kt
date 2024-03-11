@@ -40,6 +40,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -140,6 +141,16 @@ fun MealScreen(
                         )
                     )
                 }
+                item {
+                    Box(modifier = Modifier.fillMaxWidth()){
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterStart),
+                            text = "급식",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                }
                 if (!uiState.isLoading) {
                     items(uiState.meal.size) { index ->
                         if (!isCanScroll) {
@@ -207,11 +218,15 @@ fun MealScreen(
                 }
             }
         }
-        DodamTopAppBar(
-            title = "급식",
-            contentColor = MaterialTheme.colorScheme.onSurface,
-            containerColor = MaterialTheme.colorScheme.surface,
-        )
+//        TODO : composable for allergy sign
+//        DodamTopAppBar(
+//            title = "",
+//            contentColor = MaterialTheme.colorScheme.onSurface,
+//            containerColor = Color.Transparent,
+//            modifier = Modifier.background(
+//                MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+//            )
+//        )
     }
 }
 
@@ -339,53 +354,6 @@ fun PreviewMealCard() {
         Column {
             MealCard(title = "아침", isLoading = true)
             MealCard(title = "아침")
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun example() {
-    val refreshScope = rememberCoroutineScope()
-    var refreshing by remember { mutableStateOf(false) }
-
-    fun refresh() = refreshScope.launch {
-        refreshing = true
-        delay(3000)
-        refreshing = false
-    }
-
-    val state = rememberPullRefreshState(refreshing, ::refresh)
-    val scrollState = rememberScrollState()
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.DarkGray)
-            .pullRefresh(state)//state 적용
-            .verticalScroll(scrollState)
-    ) {
-        Box(
-            modifier = Modifier
-                .background(Color.White)
-                .fillMaxWidth()
-                .height(
-                    if (refreshing) { //새로고침 중이면 높이 고정
-                        140.dp
-                    } else { //당기기 정도에 따라 0~140dp까지 크기가 늘어남
-                        lerp(0.dp, 140.dp, state.progress.coerceIn(0f..1f))
-                    }
-                )
-        ) {
-            if (refreshing) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(70.dp)
-                        .align(Alignment.Center),
-                    color = Color.Red,
-                    strokeWidth = 3.dp,
-                )
-            }
         }
     }
 }
