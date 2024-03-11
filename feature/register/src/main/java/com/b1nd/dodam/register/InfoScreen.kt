@@ -1,6 +1,5 @@
 package com.b1nd.dodam.register
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -292,7 +291,6 @@ fun InfoScreen(
                                 classInfoState = isClassInfoValid(classInfoState)
                             }
                         }
-                        Log.d("InfoScreen: ", "classInfo: $classInfoState  it: ${it.text}")
                     },
                     onClickCancel = {
                         classInfoText = classInfoText.copy(
@@ -380,7 +378,6 @@ private fun isNameValid(nameState: TextFieldState): TextFieldState {
 }
 
 private fun isClassInfoValid(classInfoState: TextFieldState): TextFieldState {
-    Log.d("isClassInfoValid", "value : ${classInfoState.value}")
     return when (classInfoState.value.length) {
         in 3..4 -> { // 학 반 번호가 모두 입력되었다면
             if (classInfoState.value[0] !in '1'..'3') { // 학년이 1~3학년이 아니라면
@@ -488,7 +485,6 @@ private fun isEmailValid(emailState: TextFieldState): TextFieldState {
 }
 
 private fun isPhoneNumberValid(phoneNumber: TextFieldState): TextFieldState {
-    Log.d("InfoScreen", "phoneNumber: ${phoneNumber.value}")
     return if (phoneNumber.value.length == 11) {
         TextFieldState(
             value = phoneNumber.value,

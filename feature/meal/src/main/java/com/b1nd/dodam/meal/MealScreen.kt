@@ -1,6 +1,5 @@
 package com.b1nd.dodam.meal
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -145,7 +144,6 @@ fun MealScreen(
                     items(uiState.meal.size) { index ->
                         if (!isCanScroll) {
                             val nextMonth = current.plusMonths(1)
-                            Log.d("MealScreen: ", "${nextMonth.year}년 ${nextMonth.monthValue}월")
                             viewModel.fetchMealOfMonth(nextMonth.year, nextMonth.monthValue)
                         }
 
