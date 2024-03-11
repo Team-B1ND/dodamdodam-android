@@ -330,11 +330,11 @@ fun MealCard(
         } else {
             Column {
                 val widths = listOf(150, 100, 75, 120, 60, 80)
-                repeat(6) { index ->
+                widths.forEach{ size ->
                     Box(
                         modifier = Modifier
                             .heightIn(19.dp)
-                            .widthIn(widths[index].dp)
+                            .widthIn(size.dp)
                             .background(
                                 brush = shimmerEffect(),
                                 RoundedCornerShape(8.dp)
