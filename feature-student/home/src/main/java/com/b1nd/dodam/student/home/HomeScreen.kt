@@ -8,6 +8,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -67,6 +68,7 @@ import com.b1nd.dodam.designsystem.animation.bounceClick
 import com.b1nd.dodam.designsystem.component.DodamCircularProgress
 import com.b1nd.dodam.designsystem.component.DodamContainer
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.component.LoadingDotsIndicator
 import com.b1nd.dodam.designsystem.component.shimmerEffect
 import com.b1nd.dodam.designsystem.icons.Bell
 import com.b1nd.dodam.designsystem.icons.Calendar
@@ -75,6 +77,7 @@ import com.b1nd.dodam.designsystem.icons.Door
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
 import com.b1nd.dodam.designsystem.icons.MoonPlus
 import com.b1nd.dodam.designsystem.icons.Note
+import com.b1nd.dodam.student.home.model.BannerUiState
 import com.b1nd.dodam.student.home.model.MealUiState
 import com.b1nd.dodam.student.home.model.NightStudyUiState
 import com.b1nd.dodam.student.home.model.OutUiState
@@ -109,6 +112,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 fetchOut()
                 fetchNightStudy()
                 fetchSchedule()
+                fetchBanner()
             }
         })
 
@@ -130,6 +134,45 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                     36.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
                 ),
             )
+
+            when (val bannerUiState = uiState.bannerUiState) {
+                is BannerUiState.Success -> {
+                    if (bannerUiState.data.isNotEmpty()) {
+                        val bannerPagerState = rememberPagerState { bannerUiState.data.size }
+
+                        Box {
+                            HorizontalPager(
+                                state = bannerPagerState
+                            ) { page ->
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(90.dp)
+                                        .clickable {
+                                            context.startActivity(
+                                                Intent(
+                                                    Intent.ACTION_VIEW,
+                                                    Uri.parse(bannerUiState.data[page].redirectUrl)
+                                                )
+                                            )
+                                        },
+                                    model = bannerUiState.data[page].imageUrl,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                            PagerIndicator(
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(end = 16.dp, bottom = 16.dp),
+                                size = bannerPagerState.pageCount,
+                                currentPage = bannerPagerState.currentPage,
+                            )
+                        }
+                    }
+                }
+                is BannerUiState.None -> {}
+            }
 
             var mealTitle by remember { mutableStateOf("오늘의 급식") }
 
@@ -190,7 +233,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             }
                         }
 
-                        is MealUiState.Loading -> {
+                        is MealUiState.Shimmer -> {
                             Column(
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp)
@@ -219,6 +262,15 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                     )
                                     Spacer(modifier = Modifier.weight(0.3f))
                                 }
+                            }
+                        }
+
+                        is MealUiState.Loading -> {
+                            Box(
+                                modifier = Modifier.fillMaxWidth().height(50.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                LoadingDotsIndicator()
                             }
                         }
 
@@ -318,7 +370,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             }
                         }
 
-                        is WakeupSongUiState.Loading -> {
+                        is WakeupSongUiState.Shimmer -> {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -363,6 +415,15 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                             ),
                                     )
                                 }
+                            }
+                        }
+
+                        is WakeupSongUiState.Loading -> {
+                            Box(
+                                modifier = Modifier.fillMaxWidth().height(50.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                LoadingDotsIndicator()
                             }
                         }
 
@@ -535,7 +596,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 }
                             }
 
-                            is OutUiState.Loading -> {
+                            is OutUiState.Shimmer -> {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -580,6 +641,15 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                 ),
                                         )
                                     }
+                                }
+                            }
+
+                            is OutUiState.Loading -> {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    LoadingDotsIndicator()
                                 }
                             }
 
@@ -723,7 +793,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 }
                             }
 
-                            is NightStudyUiState.Loading -> {
+                            is NightStudyUiState.Shimmer -> {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -768,6 +838,15 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                 ),
                                         )
                                     }
+                                }
+                            }
+
+                            is NightStudyUiState.Loading -> {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    LoadingDotsIndicator()
                                 }
                             }
 
@@ -926,7 +1005,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         }
                     }
 
-                    is ScheduleUiState.Loading -> {
+                    is ScheduleUiState.Shimmer -> {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -1036,6 +1115,15 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         }
                     }
 
+                    is ScheduleUiState.Loading -> {
+                        Box(
+                            modifier = Modifier.fillMaxWidth().height(50.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            LoadingDotsIndicator()
+                        }
+                    }
+
                     is ScheduleUiState.Error -> {
                         DefaultText(
                             onClick = { viewModel.fetchSchedule() },
@@ -1048,7 +1136,9 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         }
 
         PullRefreshIndicator(
-            modifier = Modifier.padding(top =  36.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()),
+            modifier = Modifier.padding(
+                top = 36.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+            ),
             refreshing = isRefreshing,
             state = pullRefreshState
         )

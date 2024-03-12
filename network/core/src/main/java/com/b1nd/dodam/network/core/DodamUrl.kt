@@ -12,6 +12,7 @@ object DodamUrl {
     const val MEMBER = "$TEST_URL/member"
     const val NIGHT_STUDY = "$TEST_URL/night-study"
     const val SCHEDULE = "$TEST_URL/schedule"
+    const val BANNER = "$TEST_URL/banner"
 
     object Meal {
         const val MONTH = "$MEAL/month"
@@ -43,5 +44,9 @@ object DodamUrl {
 
     object Schedule {
         const val SEARCH = "$SCHEDULE/search"
+    }
+
+    object Banner {
+        const val ACTIVE = "$BANNER/active"
     }
 }
