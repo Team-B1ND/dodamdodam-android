@@ -8,13 +8,13 @@ import com.b1nd.dodam.data.banner.BannerRepository
 import com.b1nd.dodam.data.banner.model.Banner
 import com.b1nd.dodam.data.banner.model.toModel
 import com.b1nd.dodam.network.banner.datasource.BannerDataSource
+import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import javax.inject.Inject
 
 internal class BannerRepositoryImpl @Inject constructor(
     private val bannerDataSource: BannerDataSource,

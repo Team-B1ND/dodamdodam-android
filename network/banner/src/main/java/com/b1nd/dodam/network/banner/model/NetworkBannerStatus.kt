@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class NetworkBannerStatus {
     ACTIVE,
-    DEACTIVATED
+    DEACTIVATED,
 }

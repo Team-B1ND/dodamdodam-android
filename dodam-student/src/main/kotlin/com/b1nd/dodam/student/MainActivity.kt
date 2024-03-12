@@ -8,13 +8,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,7 +62,7 @@ class MainActivity : ComponentActivity() {
                     Box(
                         modifier = Modifier
                             .background(MaterialTheme.colorScheme.background)
-                            .fillMaxSize()
+                            .fillMaxSize(),
                     ) {
                         Icon(
                             modifier = Modifier
@@ -74,7 +70,7 @@ class MainActivity : ComponentActivity() {
                                 .align(Alignment.Center),
                             imageVector = DodamLogo,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.primary,
                         )
 
                         Icon(
@@ -83,7 +79,7 @@ class MainActivity : ComponentActivity() {
                                 .align(Alignment.BottomCenter),
                             imageVector = B1ndLogo,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }

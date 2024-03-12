@@ -22,11 +22,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoadingDotsIndicator(
-    pointColor: Color = MaterialTheme.colorScheme.tertiary,
-    color: Color = MaterialTheme.colorScheme.secondary,
-    delay: Long = 300
-) {
+fun LoadingDotsIndicator(pointColor: Color = MaterialTheme.colorScheme.tertiary, color: Color = MaterialTheme.colorScheme.secondary, delay: Long = 300) {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         repeat(3) {
             val animColor = remember { Animatable(pointColor) }
@@ -39,7 +35,7 @@ fun LoadingDotsIndicator(
                         animationSpec = infiniteRepeatable(
                             animation = tween(
                                 durationMillis = 500,
-                                easing = LinearEasing
+                                easing = LinearEasing,
                             ),
                             repeatMode = RepeatMode.Reverse,
                         ),
@@ -47,9 +43,11 @@ fun LoadingDotsIndicator(
                 }
             }
 
-            Box(modifier = Modifier
-                .size(8.dp)
-                .background(animColor.value, CircleShape))
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .background(animColor.value, CircleShape),
+            )
         }
     }
 }

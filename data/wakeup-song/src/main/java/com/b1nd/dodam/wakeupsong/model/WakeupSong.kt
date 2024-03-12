@@ -22,4 +22,3 @@ internal fun WakeupSongResponse.toModel(): WakeupSong = WakeupSong(
     channelTitle = channelTitle,
     status = status.toModel(),
 )
-

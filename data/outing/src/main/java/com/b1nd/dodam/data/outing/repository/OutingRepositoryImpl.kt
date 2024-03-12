@@ -9,6 +9,7 @@ import com.b1nd.dodam.data.outing.model.OutType
 import com.b1nd.dodam.data.outing.model.Outing
 import com.b1nd.dodam.data.outing.model.toModel
 import com.b1nd.dodam.network.outing.datasource.OutingDataSource
+import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import javax.inject.Inject
 
 internal class OutingRepositoryImpl @Inject constructor(
     private val network: OutingDataSource,
@@ -27,10 +27,10 @@ internal class OutingRepositoryImpl @Inject constructor(
     override fun getMyOut(): Flow<Result<ImmutableList<Outing>>> {
         return combine(
             flow { emit(network.getMyOuting()) },
-            flow { emit(network.getMySleepover()) }
+            flow { emit(network.getMySleepover()) },
         ) { outingResponse, sleepoverResponse ->
             sleepoverResponse.map { it.toModel(OutType.SLEEPOVER) }.toPersistentList().addAll(
-                outingResponse.map { it.toModel(OutType.OUTING) }
+                outingResponse.map { it.toModel(OutType.OUTING) },
             ).toImmutableList()
         }.asResult().flowOn(dispatcher)
     }

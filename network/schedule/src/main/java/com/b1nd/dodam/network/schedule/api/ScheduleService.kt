@@ -9,17 +9,14 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
 
 internal class ScheduleService @Inject constructor(
-    private val client: HttpClient
+    private val client: HttpClient,
 ) : ScheduleDataSource {
-    override suspend fun getScheduleBetweenPeriods(
-        startDate: String,
-        endDate: String
-    ): ImmutableList<ScheduleResponse> {
+    override suspend fun getScheduleBetweenPeriods(startDate: String, endDate: String): ImmutableList<ScheduleResponse> {
         return safeRequest {
             client.get(DodamUrl.Schedule.SEARCH) {
                 parameter("startDate", startDate)

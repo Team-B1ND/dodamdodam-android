@@ -6,14 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.banner.BannerRepository
 import com.b1nd.dodam.data.meal.MealRepository
-import com.b1nd.dodam.data.meal.model.Meal
-import com.b1nd.dodam.data.meal.model.MealDetail
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.outing.OutingRepository
 import com.b1nd.dodam.data.schedule.ScheduleRepository
-import com.b1nd.dodam.data.schedule.model.Grade
-import com.b1nd.dodam.data.schedule.model.Schedule
-import com.b1nd.dodam.data.schedule.model.ScheduleType
 import com.b1nd.dodam.student.home.model.BannerUiState
 import com.b1nd.dodam.student.home.model.HomeUiState
 import com.b1nd.dodam.student.home.model.MealUiState
@@ -23,25 +18,19 @@ import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDate
+import java.time.LocalDateTime
+import javax.inject.Inject
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.plus
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
-import okhttp3.internal.immutableListOf
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -62,15 +51,19 @@ class HomeViewModel @Inject constructor(
                 current.month,
                 current.dayOfMonth,
                 19,
-                10
-            )
+                10,
+            ),
         )
-    ) current.plusDays(1) else current
+    ) {
+        current.plusDays(1)
+    } else {
+        current
+    }
 
     private val localDate = current.toKotlinLocalDateTime().date
     private val nextDate = localDate.plus(DatePeriod(months = 1))
 
-    init{
+    init {
         viewModelScope.launch {
             launch {
                 mealRepository.getMeal(mealTime.year, mealTime.monthValue, mealTime.dayOfMonth)
@@ -84,7 +77,7 @@ class HomeViewModel @Inject constructor(
                                                 result.data.breakfast?.details?.joinToString(", ") { menu -> menu.name },
                                                 result.data.lunch?.details?.joinToString(", ") { menu -> menu.name },
                                                 result.data.dinner?.details?.joinToString(", ") { menu -> menu.name },
-                                            )
+                                            ),
                                         ),
                                     )
                                 }
@@ -93,14 +86,14 @@ class HomeViewModel @Inject constructor(
                                 Log.e("getMeal", result.exception.message.toString())
                                 _uiState.update {
                                     it.copy(
-                                        mealUiState = MealUiState.Error(result.exception.message.toString())
+                                        mealUiState = MealUiState.Error(result.exception.message.toString()),
                                     )
                                 }
                             }
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    mealUiState = MealUiState.Shimmer
+                                    mealUiState = MealUiState.Shimmer,
                                 )
                             }
                         }
@@ -110,13 +103,13 @@ class HomeViewModel @Inject constructor(
                 wakeupSongRepository.getAllowedWakeupSongs(
                     current.year,
                     current.monthValue,
-                    current.dayOfMonth
+                    current.dayOfMonth,
                 )
                     .collect { result ->
                         when (result) {
                             is Result.Success -> _uiState.update {
                                 it.copy(
-                                    wakeupSongUiState = WakeupSongUiState.Success(result.data)
+                                    wakeupSongUiState = WakeupSongUiState.Success(result.data),
                                 )
                             }
 
@@ -124,14 +117,14 @@ class HomeViewModel @Inject constructor(
                                 Log.e("getWakeupSong", result.exception.message.toString())
                                 _uiState.update {
                                     it.copy(
-                                        wakeupSongUiState = WakeupSongUiState.Error(result.exception.message.toString())
+                                        wakeupSongUiState = WakeupSongUiState.Error(result.exception.message.toString()),
                                     )
                                 }
                             }
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    wakeupSongUiState = WakeupSongUiState.Shimmer
+                                    wakeupSongUiState = WakeupSongUiState.Shimmer,
                                 )
                             }
                         }
@@ -146,7 +139,7 @@ class HomeViewModel @Inject constructor(
                                     outUiState = OutUiState.Success(
                                         result.data.minByOrNull { out ->
                                             out.startAt
-                                        }
+                                        },
                                     ),
                                 )
                             }
@@ -156,15 +149,15 @@ class HomeViewModel @Inject constructor(
                                 _uiState.update {
                                     it.copy(
                                         outUiState = OutUiState.Error(
-                                            result.exception.message.toString()
-                                        )
+                                            result.exception.message.toString(),
+                                        ),
                                     )
                                 }
                             }
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    outUiState = OutUiState.Shimmer
+                                    outUiState = OutUiState.Shimmer,
                                 )
                             }
                         }
@@ -180,13 +173,13 @@ class HomeViewModel @Inject constructor(
                                         result.data.minByOrNull { nightStudy ->
                                             nightStudy.startAt
                                         },
-                                    )
+                                    ),
                                 )
                             }
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    nightStudyUiState = NightStudyUiState.Shimmer
+                                    nightStudyUiState = NightStudyUiState.Shimmer,
                                 )
                             }
 
@@ -195,8 +188,8 @@ class HomeViewModel @Inject constructor(
                                 _uiState.update {
                                     it.copy(
                                         nightStudyUiState = NightStudyUiState.Error(
-                                            result.exception.message.toString()
-                                        )
+                                            result.exception.message.toString(),
+                                        ),
                                     )
                                 }
                             }
@@ -212,7 +205,7 @@ class HomeViewModel @Inject constructor(
                         is Result.Success -> {
                             _uiState.update {
                                 it.copy(
-                                    scheduleUiState = ScheduleUiState.Success(result.data)
+                                    scheduleUiState = ScheduleUiState.Success(result.data),
                                 )
                             }
                         }
@@ -239,7 +232,7 @@ class HomeViewModel @Inject constructor(
                             is Result.Success -> {
                                 _uiState.update {
                                     it.copy(
-                                        bannerUiState = BannerUiState.Success(result.data)
+                                        bannerUiState = BannerUiState.Success(result.data),
                                     )
                                 }
                             }
@@ -260,7 +253,7 @@ class HomeViewModel @Inject constructor(
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(
-                                bannerUiState = BannerUiState.Success(result.data)
+                                bannerUiState = BannerUiState.Success(result.data),
                             )
                         }
                     }
@@ -284,7 +277,7 @@ class HomeViewModel @Inject constructor(
                                         result.data.breakfast?.details?.joinToString(", ") { menu -> menu.name },
                                         result.data.lunch?.details?.joinToString(", ") { menu -> menu.name },
                                         result.data.dinner?.details?.joinToString(", ") { menu -> menu.name },
-                                    )
+                                    ),
                                 ),
                             )
                         }
@@ -293,7 +286,7 @@ class HomeViewModel @Inject constructor(
                         Log.e("getMeal", result.exception.message.toString())
                         _uiState.update {
                             it.copy(
-                                mealUiState = MealUiState.Error(result.exception.message.toString())
+                                mealUiState = MealUiState.Error(result.exception.message.toString()),
                             )
                         }
                     }
@@ -301,7 +294,7 @@ class HomeViewModel @Inject constructor(
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                mealUiState = MealUiState.Loading
+                                mealUiState = MealUiState.Loading,
                             )
                         }
                         delay(DELAY_TIME)
@@ -314,13 +307,13 @@ class HomeViewModel @Inject constructor(
         wakeupSongRepository.getAllowedWakeupSongs(
             current.year,
             current.monthValue,
-            current.dayOfMonth
+            current.dayOfMonth,
         )
             .collect { result ->
                 when (result) {
                     is Result.Success -> _uiState.update {
                         it.copy(
-                            wakeupSongUiState = WakeupSongUiState.Success(result.data)
+                            wakeupSongUiState = WakeupSongUiState.Success(result.data),
                         )
                     }
 
@@ -328,7 +321,7 @@ class HomeViewModel @Inject constructor(
                         Log.e("fetchWakeupSong", result.exception.message.toString())
                         _uiState.update {
                             it.copy(
-                                wakeupSongUiState = WakeupSongUiState.Error(result.exception.message.toString())
+                                wakeupSongUiState = WakeupSongUiState.Error(result.exception.message.toString()),
                             )
                         }
                     }
@@ -336,7 +329,7 @@ class HomeViewModel @Inject constructor(
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                wakeupSongUiState = WakeupSongUiState.Loading
+                                wakeupSongUiState = WakeupSongUiState.Loading,
                             )
                         }
                         delay(DELAY_TIME)
@@ -354,7 +347,7 @@ class HomeViewModel @Inject constructor(
                             outUiState = OutUiState.Success(
                                 result.data.minByOrNull { out ->
                                     out.startAt
-                                }
+                                },
                             ),
                         )
                     }
@@ -364,8 +357,8 @@ class HomeViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 outUiState = OutUiState.Error(
-                                    result.exception.message.toString()
-                                )
+                                    result.exception.message.toString(),
+                                ),
                             )
                         }
                     }
@@ -373,7 +366,7 @@ class HomeViewModel @Inject constructor(
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                outUiState = OutUiState.Loading
+                                outUiState = OutUiState.Loading,
                             )
                         }
                         delay(DELAY_TIME)
@@ -392,14 +385,14 @@ class HomeViewModel @Inject constructor(
                                 result.data.minByOrNull { nightStudy ->
                                     nightStudy.startAt
                                 },
-                            )
+                            ),
                         )
                     }
 
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                nightStudyUiState = NightStudyUiState.Loading
+                                nightStudyUiState = NightStudyUiState.Loading,
                             )
                         }
                         delay(DELAY_TIME)
@@ -410,8 +403,8 @@ class HomeViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 nightStudyUiState = NightStudyUiState.Error(
-                                    result.exception.message.toString()
-                                )
+                                    result.exception.message.toString(),
+                                ),
                             )
                         }
                     }
@@ -428,7 +421,7 @@ class HomeViewModel @Inject constructor(
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
-                            scheduleUiState = ScheduleUiState.Success(result.data)
+                            scheduleUiState = ScheduleUiState.Success(result.data),
                         )
                     }
                 }

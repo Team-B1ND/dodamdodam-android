@@ -1,7 +1,6 @@
 package com.b1nd.dodam.designsystem.component
 
 import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.size
@@ -36,9 +35,9 @@ fun DodamCircularProgress(
         animationSpec = tween(
             durationMillis = animDuration,
             delayMillis = animDelay,
-            easing = FastOutLinearInEasing
+            easing = FastOutLinearInEasing,
         ),
-        label = ""
+        label = "",
     )
 
     LaunchedEffect(Unit) {
@@ -51,6 +50,6 @@ fun DodamCircularProgress(
         strokeWidth = strokeWidth,
         color = color,
         backgroundColor = backgroundColor,
-        strokeCap = strokeCap
+        strokeCap = strokeCap,
     )
 }

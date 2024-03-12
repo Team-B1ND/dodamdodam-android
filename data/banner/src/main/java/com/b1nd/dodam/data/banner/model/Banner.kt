@@ -18,5 +18,5 @@ internal fun BannerResponse.toModel(): Banner = Banner(
     redirectUrl = redirectUrl,
     title = title,
     status = status.toModel(),
-    expireAt = expireAt
+    expireAt = expireAt,
 )
