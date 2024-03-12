@@ -1,18 +1,17 @@
 package com.b1nd.dodam.designsystem.icons
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.group
-import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-
+import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
@@ -32,7 +31,7 @@ public val B1ndLogo: ImageVector
             defaultWidth = 102.41.dp,
             defaultHeight = 28.34.dp,
             viewportWidth = 102.41f,
-            viewportHeight = 28.34f
+            viewportHeight = 28.34f,
         ).apply {
             group {
                 path(
@@ -44,7 +43,7 @@ public val B1ndLogo: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(7.15f, 22.63f)
                     horizontalLineToRelative(1.62f)
@@ -109,7 +108,7 @@ public val B1ndLogo: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(84.94f, 22.09f)
                     horizontalLineToRelative(1.69f)
@@ -147,7 +146,7 @@ public val B1ndLogo: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(67.14f, 11.28f)
                     curveToRelative(0f, -0.6f, 0.11f, -1.16f, 0.34f, -1.69f)
@@ -177,7 +176,7 @@ public val B1ndLogo: ImageVector
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1.0f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(67.14f, 23.94f)
                     curveToRelative(0f, -0.6f, 0.11f, -1.16f, 0.34f, -1.69f)
@@ -202,4 +201,3 @@ public val B1ndLogo: ImageVector
         }.build()
         return vector!!
     }
-

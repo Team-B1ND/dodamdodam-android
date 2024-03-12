@@ -7,5 +7,5 @@ data class Token(
 )
 
 internal fun LoginResponse.toModel(): Token = Token(
-    accessToken = accessToken
+    accessToken = accessToken,
 )

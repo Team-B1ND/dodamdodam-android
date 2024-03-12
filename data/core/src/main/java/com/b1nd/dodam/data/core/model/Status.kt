@@ -5,7 +5,7 @@ import com.b1nd.dodam.network.core.model.NetworkStatus
 enum class Status {
     PENDING,
     ALLOWED,
-    REJECTED
+    REJECTED,
 }
 
 fun NetworkStatus.toModel(): Status = when (this) {

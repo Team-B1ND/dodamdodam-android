@@ -2,7 +2,6 @@ package com.b1nd.dodam.student.home
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -20,14 +19,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -44,7 +41,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,7 +49,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -84,15 +79,14 @@ import com.b1nd.dodam.student.home.model.NightStudyUiState
 import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.temporal.ChronoUnit
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.plus
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
-import java.lang.IndexOutOfBoundsException
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -117,12 +111,13 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 fetchSchedule()
                 fetchBanner()
             }
-        })
+        },
+    )
 
     Box(
         modifier = Modifier
             .pullRefresh(pullRefreshState),
-        contentAlignment = Alignment.TopCenter
+        contentAlignment = Alignment.TopCenter,
     ) {
         Column(
             modifier = Modifier
@@ -145,7 +140,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                         Box {
                             HorizontalPager(
-                                state = bannerPagerState
+                                state = bannerPagerState,
                             ) { page ->
                                 AsyncImage(
                                     modifier = Modifier
@@ -155,13 +150,13 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                             context.startActivity(
                                                 Intent(
                                                     Intent.ACTION_VIEW,
-                                                    Uri.parse(bannerUiState.data[page].redirectUrl)
-                                                )
+                                                    Uri.parse(bannerUiState.data[page].redirectUrl),
+                                                ),
                                             )
                                         },
                                     model = bannerUiState.data[page].imageUrl,
                                     contentDescription = null,
-                                    contentScale = ContentScale.Crop
+                                    contentScale = ContentScale.Crop,
                                 )
                             }
                             PagerIndicator(
@@ -184,8 +179,8 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 modifier = Modifier
                     .animateContentSize(
                         animationSpec = spring(
-                            stiffness = Spring.StiffnessLow
-                        )
+                            stiffness = Spring.StiffnessLow,
+                        ),
                     ),
                 icon = ForkAndKnife,
                 title = mealTitle,
@@ -238,13 +233,13 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 DefaultText(
                                     onClick = { /* TODO : Navigate to Meal Screen*/ },
                                     label = "오늘은 급식이 없어요",
-                                    body = "내일 급식 보러가기"
+                                    body = "내일 급식 보러가기",
                                 )
                             } else {
                                 mealTitle =
                                     if (currentTime > LocalTime.of(
                                             19,
-                                            10
+                                            10,
                                         )
                                     ) {
                                         "내일의 "
@@ -257,7 +252,6 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                         else -> "급식"
                                     }
 
-
                                 HorizontalPager(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -266,7 +260,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                             // TODO : Navigate to Meal Screen
                                         }
                                         .padding(6.dp),
-                                    state = mealPagerState
+                                    state = mealPagerState,
                                 ) { page ->
                                     Text(
                                         text = filteredMeal[page],
@@ -287,7 +281,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         is MealUiState.Shimmer -> {
                             Column(
                                 modifier = Modifier
-                                    .padding(horizontal = 16.dp)
+                                    .padding(horizontal = 16.dp),
                             ) {
                                 Box(
                                     modifier = Modifier
@@ -321,7 +315,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(50.dp),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 LoadingDotsIndicator()
                             }
@@ -332,19 +326,19 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             DefaultText(
                                 onClick = { viewModel.fetchMeal() },
                                 label = "급식을 불러올 수 없어요",
-                                body = "다시 불러오기"
+                                body = "다시 불러오기",
                             )
                         }
                     }
-                }
+                },
             )
 
             DodamContainer(
                 modifier = Modifier
                     .animateContentSize(
                         animationSpec = spring(
-                            stiffness = Spring.StiffnessLow
-                        )
+                            stiffness = Spring.StiffnessLow,
+                        ),
                     ),
                 icon = Note,
                 title = "오늘의 기상송",
@@ -362,7 +356,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 DefaultText(
                                     onClick = { /* TODO : Navigate to request wakeup song screen */ },
                                     label = "승인된 기상송이 없어요",
-                                    body = "기상송 신청하기"
+                                    body = "기상송 신청하기",
                                 )
                             } else {
                                 HorizontalPager(
@@ -373,12 +367,12 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                             context.startActivity(
                                                 Intent(
                                                     Intent.ACTION_VIEW,
-                                                    Uri.parse(wakeupSongUiState.data[wakeupSongPagerState.currentPage].videoUrl)
-                                                )
+                                                    Uri.parse(wakeupSongUiState.data[wakeupSongPagerState.currentPage].videoUrl),
+                                                ),
                                             )
                                         }
                                         .padding(6.dp),
-                                    state = wakeupSongPagerState
+                                    state = wakeupSongPagerState,
                                 ) { page ->
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
@@ -476,7 +470,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(50.dp),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 LoadingDotsIndicator()
                             }
@@ -486,11 +480,11 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             DefaultText(
                                 onClick = { viewModel.fetchWakeupSong() },
                                 label = "기상송을 불러올 수 없어요",
-                                body = "다시 불러오기"
+                                body = "다시 불러오기",
                             )
                         }
                     }
-                }
+                },
             )
 
             Row {
@@ -498,8 +492,8 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                     modifier = Modifier
                         .animateContentSize(
                             animationSpec = spring(
-                                stiffness = Spring.StiffnessLow
-                            )
+                                stiffness = Spring.StiffnessLow,
+                            ),
                         )
                         .weight(1f)
                         .fillMaxHeight(),
@@ -511,10 +505,10 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 outUiState.data?.let { out ->
                                     val outProgress = 1 - ChronoUnit.MICROS.between(
                                         out.startAt.toJavaLocalDateTime(),
-                                        current
+                                        current,
                                     ).toFloat() / ChronoUnit.MICROS.between(
                                         out.startAt.toJavaLocalDateTime(),
-                                        out.endAt.toJavaLocalDateTime()
+                                        out.endAt.toJavaLocalDateTime(),
                                     )
 
                                     when (out.status) {
@@ -526,7 +520,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                     .bounceClick {
                                                         // TODO : Navigate to my out screen
                                                     }
-                                                    .padding(6.dp)
+                                                    .padding(6.dp),
                                             ) {
                                                 DodamCircularProgress(
                                                     progress = outProgress,
@@ -544,23 +538,30 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                                                             when (out.outType) {
                                                                 OutType.OUTING -> {
-                                                                    if (date.hour > 0) append("${date.hour}시간 ${date.minute}분 ")
-                                                                    else append("${date.minute}분 ")
+                                                                    if (date.hour > 0) {
+                                                                        append("${date.hour}시간 ${date.minute}분 ")
+                                                                    } else {
+                                                                        append("${date.minute}분 ")
+                                                                    }
                                                                 }
 
                                                                 OutType.SLEEPOVER -> {
                                                                     date.minusDays(current.dayOfMonth.toLong())
-                                                                    if (date.dayOfMonth > 0) append(
-                                                                        "${date.dayOfMonth}일 "
-                                                                    )
-                                                                    else if (date.hour > 0) "${date.hour}시간 ${date.minute}분 "
-                                                                    else "${date.minute}분 "
+                                                                    if (date.dayOfMonth > 0) {
+                                                                        append(
+                                                                            "${date.dayOfMonth}일 ",
+                                                                        )
+                                                                    } else if (date.hour > 0) {
+                                                                        "${date.hour}시간 ${date.minute}분 "
+                                                                    } else {
+                                                                        "${date.minute}분 "
+                                                                    }
                                                                 }
                                                             }
                                                             withStyle(
                                                                 style = MaterialTheme.typography.labelMedium.copy(
-                                                                    MaterialTheme.colorScheme.tertiary
-                                                                ).toSpanStyle()
+                                                                    MaterialTheme.colorScheme.tertiary,
+                                                                ).toSpanStyle(),
                                                             ) {
                                                                 append("남음")
                                                             }
@@ -576,13 +577,13 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                             OutType.OUTING -> String.format(
                                                                 "%02d:%02d 복귀",
                                                                 out.endAt.hour,
-                                                                out.endAt.minute
+                                                                out.endAt.minute,
                                                             )
 
                                                             OutType.SLEEPOVER -> String.format(
                                                                 "%02d:%02d 까지",
                                                                 out.endAt.monthNumber,
-                                                                out.endAt.dayOfMonth
+                                                                out.endAt.dayOfMonth,
                                                             )
                                                         },
                                                         style = MaterialTheme.typography.labelMedium,
@@ -596,7 +597,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                             DefaultText(
                                                 onClick = { /* TODO : Navigate to request out screen */ },
                                                 label = "${if (out.outType == OutType.OUTING) "외출" else "외박"}이 거절되었어요",
-                                                body = "다시 신청하기"
+                                                body = "다시 신청하기",
                                             )
                                         }
 
@@ -608,7 +609,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                     .bounceClick {
                                                         // TODO : Navigate to my out screen
                                                     }
-                                                    .padding(6.dp)
+                                                    .padding(6.dp),
                                             ) {
                                                 DodamCircularProgress(
                                                     progress = outProgress,
@@ -628,13 +629,15 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                             String.format(
                                                                 "%02d:%02d 시작",
                                                                 out.startAt.hour,
-                                                                out.startAt.minute
+                                                                out.startAt.minute,
                                                             )
-                                                        } else String.format(
-                                                            "%02d:%02d 시작",
-                                                            out.startAt.monthNumber,
-                                                            out.startAt.dayOfMonth
-                                                        ),
+                                                        } else {
+                                                            String.format(
+                                                                "%02d:%02d 시작",
+                                                                out.startAt.monthNumber,
+                                                                out.startAt.dayOfMonth,
+                                                            )
+                                                        },
                                                         style = MaterialTheme.typography.labelMedium,
                                                         color = MaterialTheme.colorScheme.tertiary,
                                                     )
@@ -646,7 +649,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                     DefaultText(
                                         onClick = { /* TODO : Navigate to request Out Screen */ },
                                         label = "외출, 외박이 필요하다면",
-                                        body = "외출/외박 신청하기"
+                                        body = "외출/외박 신청하기",
                                     )
                                 }
                             }
@@ -704,7 +707,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(50.dp),
-                                    contentAlignment = Alignment.Center
+                                    contentAlignment = Alignment.Center,
                                 ) {
                                     LoadingDotsIndicator()
                                 }
@@ -714,11 +717,11 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 DefaultText(
                                     onClick = { viewModel.fetchOut() },
                                     label = "외출, 외박을 불러올 수 없어요",
-                                    body = "다시 불러오기"
+                                    body = "다시 불러오기",
                                 )
                             }
                         }
-                    }
+                    },
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -729,8 +732,8 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         .fillMaxHeight()
                         .animateContentSize(
                             animationSpec = spring(
-                                stiffness = Spring.StiffnessLow
-                            )
+                                stiffness = Spring.StiffnessLow,
+                            ),
                         ),
                     icon = MoonPlus,
                     title = "심야 자습",
@@ -740,10 +743,10 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 nightStudyUiState.data?.let { nightStudy ->
                                     val nightStudyProgress = 1 - ChronoUnit.MICROS.between(
                                         nightStudy.startAt.toJavaLocalDate(),
-                                        current
+                                        current,
                                     ).toFloat() / ChronoUnit.MICROS.between(
                                         nightStudy.startAt.toJavaLocalDate(),
-                                        nightStudy.endAt.toJavaLocalDate()
+                                        nightStudy.endAt.toJavaLocalDate(),
                                     )
 
                                     when (nightStudy.status) {
@@ -755,7 +758,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                     .bounceClick {
                                                         // TODO : Navigate to my night study screen
                                                     }
-                                                    .padding(6.dp)
+                                                    .padding(6.dp),
                                             ) {
                                                 DodamCircularProgress(
                                                     progress = nightStudyProgress,
@@ -772,8 +775,8 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                             append("${date.dayOfMonth}일 ")
                                                             withStyle(
                                                                 style = MaterialTheme.typography.labelMedium.copy(
-                                                                    MaterialTheme.colorScheme.tertiary
-                                                                ).toSpanStyle()
+                                                                    MaterialTheme.colorScheme.tertiary,
+                                                                ).toSpanStyle(),
                                                             ) {
                                                                 append("남음")
                                                             }
@@ -788,7 +791,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                         text = String.format(
                                                             "%02d:%02d 까지",
                                                             nightStudy.endAt.monthNumber,
-                                                            nightStudy.endAt.dayOfMonth
+                                                            nightStudy.endAt.dayOfMonth,
                                                         ),
                                                         style = MaterialTheme.typography.labelMedium,
                                                         color = MaterialTheme.colorScheme.tertiary,
@@ -801,7 +804,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                             DefaultText(
                                                 onClick = { /* TODO : Navigate to request night study screen */ },
                                                 label = "심야 자습이 거절되었어요",
-                                                body = "다시 신청하기"
+                                                body = "다시 신청하기",
                                             )
                                         }
 
@@ -813,7 +816,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                     .bounceClick {
                                                         // TODO : Navigate to my night study screen
                                                     }
-                                                    .padding(6.dp)
+                                                    .padding(6.dp),
                                             ) {
                                                 DodamCircularProgress(
                                                     progress = nightStudyProgress,
@@ -832,7 +835,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                         text = String.format(
                                                             "%02d:%02d 시작",
                                                             nightStudy.startAt.monthNumber,
-                                                            nightStudy.startAt.dayOfMonth
+                                                            nightStudy.startAt.dayOfMonth,
                                                         ),
                                                         style = MaterialTheme.typography.labelMedium,
                                                         color = MaterialTheme.colorScheme.tertiary,
@@ -845,7 +848,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                     DefaultText(
                                         onClick = { /* TODO : Navigate to request night study screen */ },
                                         label = "공부할 시간이 필요하다면",
-                                        body = "심야 자습 신청하기"
+                                        body = "심야 자습 신청하기",
                                     )
                                 }
                             }
@@ -903,7 +906,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(50.dp),
-                                    contentAlignment = Alignment.Center
+                                    contentAlignment = Alignment.Center,
                                 ) {
                                     LoadingDotsIndicator()
                                 }
@@ -913,11 +916,11 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 DefaultText(
                                     onClick = { viewModel.fetchNightStudy() },
                                     label = "심야 자습을 불러올 수 없어요",
-                                    body = "다시 불러오기"
+                                    body = "다시 불러오기",
                                 )
                             }
                         }
-                    }
+                    },
                 )
             }
 
@@ -925,13 +928,13 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 modifier = Modifier
                     .animateContentSize(
                         animationSpec = spring(
-                            stiffness = Spring.StiffnessLow
-                        )
+                            stiffness = Spring.StiffnessLow,
+                        ),
                     ),
                 icon = Calendar,
                 title = "가까운 일정",
                 showNextButton = true,
-                onNextClick = { }
+                onNextClick = { },
             ) {
                 when (val scheduleUiState = uiState.scheduleUiState) {
                     is ScheduleUiState.Success -> {
@@ -939,7 +942,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             DefaultText(
                                 onClick = { /*TODO : Navigate to schedule screen*/ },
                                 label = "한 달간 일정이 없어요",
-                                body = "전체 일정 확인하기"
+                                body = "전체 일정 확인하기",
                             )
                         } else {
                             Row(
@@ -948,18 +951,25 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                     .animateContentSize()
                                     .padding(horizontal = 10.dp)
                                     .bounceClick { /*TODO : Navigate to schedule screen*/ }
-                                    .padding(6.dp)
+                                    .padding(6.dp),
                             ) {
                                 val currentDate = current.toKotlinLocalDateTime().date
                                 val latestSchedule = scheduleUiState.data.first()
 
                                 ScheduleComponent(
                                     modifier = Modifier.weight(1f),
-                                    title = if (currentDate in latestSchedule.startDate..latestSchedule.endDate) "오늘"
-                                    else if (currentDate.plus(DatePeriod(days = 1)) in latestSchedule.startDate..latestSchedule.endDate) "내일"
-                                    else "D - ${latestSchedule.startDate.dayOfYear - currentDate.dayOfYear}",
-                                    titleColor = if (currentDate in latestSchedule.startDate..latestSchedule.endDate) MaterialTheme.colorScheme.primary
-                                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                                    title = if (currentDate in latestSchedule.startDate..latestSchedule.endDate) {
+                                        "오늘"
+                                    } else if (currentDate.plus(DatePeriod(days = 1)) in latestSchedule.startDate..latestSchedule.endDate) {
+                                        "내일"
+                                    } else {
+                                        "D - ${latestSchedule.startDate.dayOfYear - currentDate.dayOfYear}"
+                                    },
+                                    titleColor = if (currentDate in latestSchedule.startDate..latestSchedule.endDate) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    },
                                     label = if (currentDate in latestSchedule.startDate..latestSchedule.endDate) {
                                         String.format(
                                             "%d월 %d일 (%s)",
@@ -972,8 +982,8 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                 "목",
                                                 "금",
                                                 "토",
-                                                "일"
-                                            )[currentDate.dayOfWeek.value - 1]
+                                                "일",
+                                            )[currentDate.dayOfWeek.value - 1],
                                         )
                                     } else {
                                         String.format(
@@ -987,8 +997,8 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                 "목",
                                                 "금",
                                                 "토",
-                                                "일"
-                                            )[latestSchedule.startDate.dayOfWeek.value - 1]
+                                                "일",
+                                            )[latestSchedule.startDate.dayOfWeek.value - 1],
                                         )
                                     },
                                     body = scheduleUiState.data.filter {
@@ -1017,8 +1027,11 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                                     ScheduleComponent(
                                         modifier = Modifier.weight(1f),
-                                        title = if (tomorrow in nextSchedule.startDate..nextSchedule.endDate) "내일"
-                                        else "D - ${nextSchedule.startDate.dayOfYear - currentDate.dayOfYear}",
+                                        title = if (tomorrow in nextSchedule.startDate..nextSchedule.endDate) {
+                                            "내일"
+                                        } else {
+                                            "D - ${nextSchedule.startDate.dayOfYear - currentDate.dayOfYear}"
+                                        },
                                         titleColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                         label = if (tomorrow in nextSchedule.startDate..nextSchedule.endDate) {
                                             String.format(
@@ -1032,8 +1045,8 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                     "목",
                                                     "금",
                                                     "토",
-                                                    "일"
-                                                )[tomorrow.dayOfWeek.value - 1]
+                                                    "일",
+                                                )[tomorrow.dayOfWeek.value - 1],
                                             )
                                         } else {
                                             String.format(
@@ -1047,8 +1060,8 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                     "목",
                                                     "금",
                                                     "토",
-                                                    "일"
-                                                )[nextSchedule.startDate.dayOfWeek.value - 1]
+                                                    "일",
+                                                )[nextSchedule.startDate.dayOfWeek.value - 1],
                                             )
                                         },
                                         body = scheduleUiState.data.filter {
@@ -1179,7 +1192,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(50.dp),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             LoadingDotsIndicator()
                         }
@@ -1189,7 +1202,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         DefaultText(
                             onClick = { viewModel.fetchSchedule() },
                             label = "일정을 불러올 수 없어요",
-                            body = "다시 불러오기"
+                            body = "다시 불러오기",
                         )
                     }
                 }
@@ -1198,10 +1211,10 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
         PullRefreshIndicator(
             modifier = Modifier.padding(
-                top = 36.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                top = 36.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
             ),
             refreshing = isRefreshing,
-            state = pullRefreshState
+            state = pullRefreshState,
         )
 
         DodamTopAppBar(
@@ -1226,11 +1239,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun PagerIndicator(
-    modifier: Modifier = Modifier,
-    size: Int,
-    currentPage: Int,
-) {
+private fun PagerIndicator(modifier: Modifier = Modifier, size: Int, currentPage: Int) {
     if (size > 1) {
         Row(modifier = modifier) {
             repeat(size) { iteration ->
@@ -1254,17 +1263,13 @@ private fun PagerIndicator(
 }
 
 @Composable
-private fun DefaultText(
-    onClick: () -> Unit,
-    label: String,
-    body: String,
-) {
+private fun DefaultText(onClick: () -> Unit, label: String, body: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
             .bounceClick(onClick)
-            .padding(6.dp)
+            .padding(6.dp),
     ) {
         Text(
             text = label,
@@ -1281,15 +1286,9 @@ private fun DefaultText(
 }
 
 @Composable
-private fun ScheduleComponent(
-    modifier: Modifier = Modifier,
-    title: String,
-    titleColor: Color,
-    label: String,
-    body: List<Schedule>,
-) {
+private fun ScheduleComponent(modifier: Modifier = Modifier, title: String, titleColor: Color, label: String, body: List<Schedule>) {
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = title,
@@ -1306,7 +1305,7 @@ private fun ScheduleComponent(
 
         body.forEach {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Box(
                     modifier = Modifier
@@ -1319,8 +1318,8 @@ private fun ScheduleComponent(
                                 Grade.GRADE_ALL -> Color(0xFFF97E6D)
                                 Grade.GRADE_ETC -> Color(0xFF0167BC)
                             },
-                            CircleShape
-                        )
+                            CircleShape,
+                        ),
                 )
 
                 Spacer(modifier = Modifier.width(4.dp))
@@ -1330,7 +1329,7 @@ private fun ScheduleComponent(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))

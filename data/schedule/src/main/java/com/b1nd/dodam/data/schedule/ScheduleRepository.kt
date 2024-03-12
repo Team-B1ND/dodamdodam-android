@@ -7,8 +7,5 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 
 interface ScheduleRepository {
-    fun getScheduleBetweenPeriods(
-        startDate: LocalDate,
-        endDate: LocalDate,
-    ): Flow<Result<ImmutableList<Schedule>>>
+    fun getScheduleBetweenPeriods(startDate: LocalDate, endDate: LocalDate): Flow<Result<ImmutableList<Schedule>>>
 }

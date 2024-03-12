@@ -8,5 +8,5 @@ data class StudentResponse(
     val name: String,
     val grade: Int,
     val room: Int,
-    val number: Int
+    val number: Int,
 )

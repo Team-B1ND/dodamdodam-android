@@ -1,7 +1,6 @@
 package com.b1nd.dodam.network.core.di
 
 import android.util.Log
-import com.b1nd.dodam.common.encryptSHA512
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.TokenRequest

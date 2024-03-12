@@ -7,7 +7,7 @@ data class Student(
     val name: String,
     val grade: Int,
     val room: Int,
-    val number: Int
+    val number: Int,
 )
 
 fun StudentResponse.toModel(): Student = Student(

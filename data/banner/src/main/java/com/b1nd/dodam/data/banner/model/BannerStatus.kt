@@ -4,7 +4,7 @@ import com.b1nd.dodam.network.banner.model.NetworkBannerStatus
 
 enum class BannerStatus {
     ACTIVE,
-    DEACTIVATED
+    DEACTIVATED,
 }
 
 internal fun NetworkBannerStatus.toModel(): BannerStatus = when (this) {

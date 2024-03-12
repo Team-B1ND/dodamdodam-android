@@ -5,7 +5,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.b1nd.dodam.designsystem.theme.DodamTheme
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.meal.navigation.mealScreen

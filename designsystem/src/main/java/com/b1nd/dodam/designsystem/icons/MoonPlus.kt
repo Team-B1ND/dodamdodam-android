@@ -1,16 +1,16 @@
 package com.b1nd.dodam.designsystem.icons
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
@@ -30,7 +30,7 @@ public val MoonPlus: ImageVector
             defaultWidth = 48.dp,
             defaultHeight = 48.dp,
             viewportWidth = 48f,
-            viewportHeight = 48f
+            viewportHeight = 48f,
         ).apply {
             path(
                 fill = SolidColor(Color(0xFF000000)),
@@ -41,7 +41,7 @@ public val MoonPlus: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(24.7551f, 44f)
                 curveTo(33.3939f, 44f, 40.5399f, 39.5247f, 43.72f, 32.0562f)
@@ -65,7 +65,7 @@ public val MoonPlus: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(36.75f, 5.75f)
                 curveTo(36.75f, 4.7835f, 35.9665f, 4f, 35f, 4f)
@@ -85,7 +85,7 @@ public val MoonPlus: ImageVector
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1.0f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(40.25f, 12.75f)
                 curveTo(41.2165f, 12.75f, 42f, 11.9665f, 42f, 11f)
@@ -99,4 +99,3 @@ public val MoonPlus: ImageVector
         }.build()
         return vector!!
     }
-
