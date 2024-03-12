@@ -65,6 +65,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            delay(3000L)
             launch {
                 mealRepository.getMeal(mealTime.year, mealTime.monthValue, mealTime.dayOfMonth)
                     .collect { result ->
