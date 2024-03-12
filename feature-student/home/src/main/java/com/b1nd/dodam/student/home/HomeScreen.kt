@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -88,7 +89,9 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
+import java.lang.IndexOutOfBoundsException
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
@@ -171,6 +174,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         }
                     }
                 }
+
                 is BannerUiState.None -> {}
             }
 
@@ -189,8 +193,46 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                     when (val mealUiState = uiState.mealUiState) {
                         is MealUiState.Success -> {
                             isRefreshing = false
-                            val mealPagerState = rememberPagerState { mealUiState.data.size }
                             val filteredMeal = mealUiState.data.filterNotNull()
+                            val mealPagerState = rememberPagerState { filteredMeal.size }
+
+                            val currentTime = current.toLocalTime()
+
+                            LaunchedEffect(Unit) {
+                                if (currentTime <= LocalTime.of(8, 10)) {
+                                    mealUiState.data[0]?.let {
+                                        mealPagerState.animateScrollToPage(0)
+                                    }
+                                } else if (currentTime <= LocalTime.of(13, 30)) {
+                                    mealUiState.data[0]?.let {
+                                        mealUiState.data[1]?.let {
+                                            mealPagerState.animateScrollToPage(1)
+                                        }
+                                    } ?: run {
+                                        mealUiState.data[1]?.let {
+                                            mealPagerState.animateScrollToPage(0)
+                                        }
+                                    }
+                                } else if (currentTime <= LocalTime.of(19, 10)) {
+                                    mealUiState.data[0]?.let {
+                                        mealUiState.data[1]?.let {
+                                            mealPagerState.animateScrollToPage(2)
+                                        } ?: run {
+                                            mealPagerState.animateScrollToPage(1)
+                                        }
+                                    } ?: run {
+                                        mealUiState.data[1]?.let {
+                                            mealPagerState.animateScrollToPage(1)
+                                        } ?: run {
+                                            mealPagerState.animateScrollToPage(0)
+                                        }
+                                    }
+                                } else {
+                                    mealUiState.data[0]?.let {
+                                        mealPagerState.animateScrollToPage(0)
+                                    }
+                                }
+                            }
 
                             if (filteredMeal.isEmpty()) {
                                 DefaultText(
@@ -200,12 +242,17 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 )
                             } else {
                                 mealTitle =
-                                    "오늘의 " + when (filteredMeal[mealPagerState.currentPage]) {
+                                    if (currentTime > LocalTime.of(
+                                            19,
+                                            10
+                                        )
+                                    ) "내일의 " else "오늘의 " + when (filteredMeal[mealPagerState.currentPage]) {
                                         mealUiState.data[0] -> "아침"
                                         mealUiState.data[1] -> "점심"
                                         mealUiState.data[2] -> "저녁"
                                         else -> "급식"
                                     }
+
 
                                 HorizontalPager(
                                     modifier = Modifier
@@ -267,7 +314,9 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                         is MealUiState.Loading -> {
                             Box(
-                                modifier = Modifier.fillMaxWidth().height(50.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 LoadingDotsIndicator()
@@ -420,7 +469,9 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                         is WakeupSongUiState.Loading -> {
                             Box(
-                                modifier = Modifier.fillMaxWidth().height(50.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 LoadingDotsIndicator()
@@ -646,7 +697,9 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                             is OutUiState.Loading -> {
                                 Box(
-                                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(50.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     LoadingDotsIndicator()
@@ -843,7 +896,9 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                             is NightStudyUiState.Loading -> {
                                 Box(
-                                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(50.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     LoadingDotsIndicator()
@@ -1117,7 +1172,9 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                     is ScheduleUiState.Loading -> {
                         Box(
-                            modifier = Modifier.fillMaxWidth().height(50.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             LoadingDotsIndicator()
@@ -1170,22 +1227,24 @@ private fun PagerIndicator(
     size: Int,
     currentPage: Int,
 ) {
-    Row(modifier = modifier) {
-        repeat(size) { iteration ->
-            val color =
-                if (currentPage == iteration) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.secondary
-                }
+    if (size > 1) {
+        Row(modifier = modifier) {
+            repeat(size) { iteration ->
+                val color =
+                    if (currentPage == iteration) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.secondary
+                    }
 
-            Box(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .clip(CircleShape)
-                    .background(color)
-                    .size(5.dp),
-            )
+                Box(
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .clip(CircleShape)
+                        .background(color)
+                        .size(5.dp),
+                )
+            }
         }
     }
 }

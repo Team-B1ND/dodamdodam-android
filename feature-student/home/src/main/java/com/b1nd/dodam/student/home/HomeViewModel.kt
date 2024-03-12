@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.banner.BannerRepository
 import com.b1nd.dodam.data.meal.MealRepository
+import com.b1nd.dodam.data.meal.model.Meal
+import com.b1nd.dodam.data.meal.model.MealDetail
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.outing.OutingRepository
 import com.b1nd.dodam.data.schedule.ScheduleRepository
@@ -68,7 +70,7 @@ class HomeViewModel @Inject constructor(
     private val localDate = current.toKotlinLocalDateTime().date
     private val nextDate = localDate.plus(DatePeriod(months = 1))
 
-    init {
+    init{
         viewModelScope.launch {
             launch {
                 mealRepository.getMeal(mealTime.year, mealTime.monthValue, mealTime.dayOfMonth)
