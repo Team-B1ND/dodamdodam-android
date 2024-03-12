@@ -21,46 +21,44 @@ import com.b1nd.dodam.student.main.navigation.navigateToMain
 
 @Composable
 fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavController()) {
-    DodamTheme {
-        NavHost(
-            navController = navController,
-            startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
-        ) {
-            onboardingScreen(
-                onRegisterClick = { navController.navigateToInfo() },
-                onLoginClick = { navController.navigationToLogin() },
-            )
-            mainScreen()
-            infoScreen(
-                onNextClick = { name, grade, room, number, email, phoneNumber ->
-                    navController.navigateToAuth(
-                        name = name,
-                        grade = grade,
-                        room = room,
-                        number = number,
-                        email = email,
-                        phoneNumber = phoneNumber,
-                    )
-                },
-                onBackClick = { navController.popBackStack() },
-            )
-            authScreen(
-                onRegisterClick = { /* TODO: Navigation to Info Screen */ },
-                onBackClick = { navController.popBackStack() },
-            )
-            loginScreen(
-                onBackClick = { navController.popBackStack() },
-                navigateToMain = {
-                    navController.navigateToMain(
-                        navOptions {
-                            popUpTo(ONBOARDING_ROUTE) {
-                                inclusive = true
-                            }
-                        },
-                    )
-                },
-            )
-            mealScreen()
-        }
+    NavHost(
+        navController = navController,
+        startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
+    ) {
+        onboardingScreen(
+            onRegisterClick = { navController.navigateToInfo() },
+            onLoginClick = { navController.navigationToLogin() },
+        )
+        mainScreen()
+        infoScreen(
+            onNextClick = { name, grade, room, number, email, phoneNumber ->
+                navController.navigateToAuth(
+                    name = name,
+                    grade = grade,
+                    room = room,
+                    number = number,
+                    email = email,
+                    phoneNumber = phoneNumber,
+                )
+            },
+            onBackClick = { navController.popBackStack() },
+        )
+        authScreen(
+            onRegisterClick = { /* TODO: Navigation to Info Screen */ },
+            onBackClick = { navController.popBackStack() },
+        )
+        loginScreen(
+            onBackClick = { navController.popBackStack() },
+            navigateToMain = {
+                navController.navigateToMain(
+                    navOptions {
+                        popUpTo(ONBOARDING_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
+        )
+        mealScreen()
     }
 }
