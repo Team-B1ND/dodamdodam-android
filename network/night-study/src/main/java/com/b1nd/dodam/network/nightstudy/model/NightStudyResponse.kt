@@ -12,7 +12,7 @@ data class NightStudyResponse(
     val content: String,
     val status: NetworkStatus,
     val doNeedPhone: Boolean,
-    val reasonForPhone: String,
+    val reasonForPhone: String?,
     val student: StudentResponse,
     val place: String,
     val startAt: LocalDate,

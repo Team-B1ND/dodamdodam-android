@@ -741,10 +741,10 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         when (val nightStudyUiState = uiState.nightStudyUiState) {
                             is NightStudyUiState.Success -> {
                                 nightStudyUiState.data?.let { nightStudy ->
-                                    val nightStudyProgress = 1 - ChronoUnit.MICROS.between(
+                                    val nightStudyProgress = 1 - ChronoUnit.DAYS.between(
                                         nightStudy.startAt.toJavaLocalDate(),
                                         current,
-                                    ).toFloat() / ChronoUnit.MICROS.between(
+                                    ).toFloat() / ChronoUnit.DAYS.between(
                                         nightStudy.startAt.toJavaLocalDate(),
                                         nightStudy.endAt.toJavaLocalDate(),
                                     )
