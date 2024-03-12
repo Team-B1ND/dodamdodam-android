@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.data.banner.BannerRepository
 import com.b1nd.dodam.data.meal.MealRepository
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.outing.OutingRepository
@@ -11,6 +12,7 @@ import com.b1nd.dodam.data.schedule.ScheduleRepository
 import com.b1nd.dodam.data.schedule.model.Grade
 import com.b1nd.dodam.data.schedule.model.Schedule
 import com.b1nd.dodam.data.schedule.model.ScheduleType
+import com.b1nd.dodam.student.home.model.BannerUiState
 import com.b1nd.dodam.student.home.model.HomeUiState
 import com.b1nd.dodam.student.home.model.MealUiState
 import com.b1nd.dodam.student.home.model.NightStudyUiState
@@ -46,6 +48,7 @@ class HomeViewModel @Inject constructor(
     private val outingRepository: OutingRepository,
     private val nightStudyRepository: NightStudyRepository,
     private val scheduleRepository: ScheduleRepository,
+    private val bannerRepository: BannerRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
@@ -95,7 +98,7 @@ class HomeViewModel @Inject constructor(
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    mealUiState = MealUiState.Loading
+                                    mealUiState = MealUiState.Shimmer
                                 )
                             }
                         }
@@ -126,7 +129,7 @@ class HomeViewModel @Inject constructor(
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    wakeupSongUiState = WakeupSongUiState.Loading
+                                    wakeupSongUiState = WakeupSongUiState.Shimmer
                                 )
                             }
                         }
@@ -159,7 +162,7 @@ class HomeViewModel @Inject constructor(
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    outUiState = OutUiState.Loading
+                                    outUiState = OutUiState.Shimmer
                                 )
                             }
                         }
@@ -181,7 +184,7 @@ class HomeViewModel @Inject constructor(
 
                             is Result.Loading -> _uiState.update {
                                 it.copy(
-                                    nightStudyUiState = NightStudyUiState.Loading
+                                    nightStudyUiState = NightStudyUiState.Shimmer
                                 )
                             }
 
@@ -214,7 +217,7 @@ class HomeViewModel @Inject constructor(
 
                         is Result.Loading -> {
                             _uiState.update {
-                                it.copy(scheduleUiState = ScheduleUiState.Loading)
+                                it.copy(scheduleUiState = ScheduleUiState.Shimmer)
                             }
                         }
 
@@ -227,7 +230,44 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             }
+            launch {
+                bannerRepository.getActiveBanner()
+                    .collect { result ->
+                        when (result) {
+                            is Result.Success -> {
+                                _uiState.update {
+                                    it.copy(
+                                        bannerUiState = BannerUiState.Success(result.data)
+                                    )
+                                }
+                            }
+                            is Result.Loading -> {}
+                            is Result.Error -> {
+                                Log.e("getBanner", result.exception.stackTraceToString())
+                            }
+                        }
+                    }
+            }
         }
+    }
+
+    fun fetchBanner() = viewModelScope.launch {
+        bannerRepository.getActiveBanner()
+            .collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                bannerUiState = BannerUiState.Success(result.data)
+                            )
+                        }
+                    }
+                    is Result.Loading -> {}
+                    is Result.Error -> {
+                        Log.e("fetchBanner", result.exception.stackTraceToString())
+                    }
+                }
+            }
     }
 
     fun fetchMeal() = viewModelScope.launch {
@@ -256,10 +296,13 @@ class HomeViewModel @Inject constructor(
                         }
                     }
 
-                    is Result.Loading -> _uiState.update {
-                        it.copy(
-                            mealUiState = MealUiState.Loading
-                        )
+                    is Result.Loading -> {
+                        _uiState.update {
+                            it.copy(
+                                mealUiState = MealUiState.Loading
+                            )
+                        }
+                        delay(DELAY_TIME)
                     }
                 }
             }
@@ -288,10 +331,13 @@ class HomeViewModel @Inject constructor(
                         }
                     }
 
-                    is Result.Loading -> _uiState.update {
-                        it.copy(
-                            wakeupSongUiState = WakeupSongUiState.Loading
-                        )
+                    is Result.Loading -> {
+                        _uiState.update {
+                            it.copy(
+                                wakeupSongUiState = WakeupSongUiState.Loading
+                            )
+                        }
+                        delay(DELAY_TIME)
                     }
                 }
             }
@@ -322,10 +368,13 @@ class HomeViewModel @Inject constructor(
                         }
                     }
 
-                    is Result.Loading -> _uiState.update {
-                        it.copy(
-                            outUiState = OutUiState.Loading
-                        )
+                    is Result.Loading -> {
+                        _uiState.update {
+                            it.copy(
+                                outUiState = OutUiState.Loading
+                            )
+                        }
+                        delay(DELAY_TIME)
                     }
                 }
             }
@@ -345,10 +394,13 @@ class HomeViewModel @Inject constructor(
                         )
                     }
 
-                    is Result.Loading -> _uiState.update {
-                        it.copy(
-                            nightStudyUiState = NightStudyUiState.Loading
-                        )
+                    is Result.Loading -> {
+                        _uiState.update {
+                            it.copy(
+                                nightStudyUiState = NightStudyUiState.Loading
+                            )
+                        }
+                        delay(DELAY_TIME)
                     }
 
                     is Result.Error -> {
@@ -383,6 +435,7 @@ class HomeViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(scheduleUiState = ScheduleUiState.Loading)
                     }
+                    delay(DELAY_TIME)
                 }
 
                 is Result.Error -> {
@@ -393,5 +446,9 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    companion object {
+        const val DELAY_TIME = 1000L
     }
 }
