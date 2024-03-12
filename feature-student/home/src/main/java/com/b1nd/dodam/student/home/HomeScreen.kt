@@ -246,7 +246,11 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                             19,
                                             10
                                         )
-                                    ) "내일의 " else "오늘의 " + when (filteredMeal[mealPagerState.currentPage]) {
+                                    ) {
+                                        "내일의 "
+                                    } else {
+                                        "오늘의 "
+                                    } + when (filteredMeal[mealPagerState.currentPage]) {
                                         mealUiState.data[0] -> "아침"
                                         mealUiState.data[1] -> "점심"
                                         mealUiState.data[2] -> "저녁"
