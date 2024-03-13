@@ -95,7 +95,7 @@ fun DodamTopAppBar(
                         ),
                     imageVector = icon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.tertiary,
+                    tint = contentColor,
                 )
             }
         }

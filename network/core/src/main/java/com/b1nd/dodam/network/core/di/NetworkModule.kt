@@ -3,6 +3,7 @@ package com.b1nd.dodam.network.core.di
 import android.util.Log
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.network.core.DodamUrl
+import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.model.TokenRequest
 import com.b1nd.dodam.network.core.model.TokenResponse
 import dagger.Module
@@ -33,6 +34,7 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

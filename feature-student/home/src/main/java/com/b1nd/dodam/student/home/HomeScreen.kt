@@ -2,6 +2,7 @@ package com.b1nd.dodam.student.home
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -512,91 +513,99 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                                     when (out.status) {
                                         Status.ALLOWED -> {
-                                            Row(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(horizontal = 10.dp)
-                                                    .bounceClick {
-                                                        // TODO : Navigate to my out screen
-                                                    }
-                                                    .padding(6.dp),
-                                            ) {
-                                                DodamCircularProgress(
-                                                    progress = outProgress,
-                                                    color = MaterialTheme.colorScheme.primary,
-                                                    backgroundColor = MaterialTheme.colorScheme.secondary,
+                                            if (outProgress < 0) {
+                                                DefaultText(
+                                                    onClick = { /* TODO : Navigate to request Out Screen */ },
+                                                    label = "외출, 외박이 필요하다면",
+                                                    body = "외출/외박 신청하기",
                                                 )
-                                                Spacer(modifier = Modifier.width(12.dp))
-                                                Column {
-                                                    Text(
-                                                        text = buildAnnotatedString {
-                                                            val day = ChronoUnit.DAYS.between(
-                                                                current,
-                                                                out.endAt.toJavaLocalDateTime(),
-                                                            )
-                                                            val hour = ChronoUnit.HOURS.between(
-                                                                current,
-                                                                out.endAt.toJavaLocalDateTime(),
-                                                            )
-                                                            val minute = ChronoUnit.MINUTES.between(
-                                                                current,
-                                                                out.endAt.toJavaLocalDateTime(),
-                                                            )
-
-                                                            when (out.outType) {
-                                                                OutType.OUTING -> {
-                                                                    append(
-                                                                        if (hour > 0) {
-                                                                            "${hour}시간 "
-                                                                        } else {
-                                                                            "${minute}분 "
-                                                                        },
-                                                                    )
-                                                                }
-
-                                                                OutType.SLEEPOVER -> {
-                                                                    append(
-                                                                        if (day > 0) {
-                                                                            "${day}일 "
-                                                                        } else if (hour > 0) {
-                                                                            "${hour}시간 "
-                                                                        } else {
-                                                                            "${minute}분 "
-                                                                        },
-                                                                    )
-                                                                }
-                                                            }
-                                                            withStyle(
-                                                                style = MaterialTheme.typography.labelMedium.copy(
-                                                                    MaterialTheme.colorScheme.tertiary,
-                                                                ).toSpanStyle(),
-                                                            ) {
-                                                                append("남음")
-                                                            }
-                                                        },
-                                                        style = MaterialTheme.typography.bodyMedium,
-                                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            } else {
+                                                Row(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(horizontal = 10.dp)
+                                                        .bounceClick {
+                                                            // TODO : Navigate to my out screen
+                                                        }
+                                                        .padding(6.dp),
+                                                ) {
+                                                    DodamCircularProgress(
+                                                        progress = outProgress,
+                                                        color = MaterialTheme.colorScheme.primary,
+                                                        backgroundColor = MaterialTheme.colorScheme.secondary,
                                                     )
+                                                    Spacer(modifier = Modifier.width(12.dp))
+                                                    Column {
+                                                        Text(
+                                                            text = buildAnnotatedString {
+                                                                val day = ChronoUnit.DAYS.between(
+                                                                    current,
+                                                                    out.endAt.toJavaLocalDateTime(),
+                                                                )
+                                                                val hour = ChronoUnit.HOURS.between(
+                                                                    current,
+                                                                    out.endAt.toJavaLocalDateTime(),
+                                                                )
+                                                                val minute = ChronoUnit.MINUTES.between(
+                                                                    current,
+                                                                    out.endAt.toJavaLocalDateTime(),
+                                                                )
 
-                                                    Spacer(modifier = Modifier.height(4.dp))
+                                                                when (out.outType) {
+                                                                    OutType.OUTING -> {
+                                                                        append(
+                                                                            if (hour > 0) {
+                                                                                "${hour}시간 "
+                                                                            } else {
+                                                                                "${minute}분 "
+                                                                            },
+                                                                        )
+                                                                    }
 
-                                                    Text(
-                                                        text = when (out.outType) {
-                                                            OutType.OUTING -> String.format(
-                                                                "%02d:%02d 복귀",
-                                                                out.endAt.hour,
-                                                                out.endAt.minute,
-                                                            )
+                                                                    OutType.SLEEPOVER -> {
+                                                                        append(
+                                                                            if (day > 0) {
+                                                                                "${day}일 "
+                                                                            } else if (hour > 0) {
+                                                                                "${hour}시간 "
+                                                                            } else {
+                                                                                "${minute}분 "
+                                                                            },
+                                                                        )
+                                                                    }
+                                                                }
+                                                                withStyle(
+                                                                    style = MaterialTheme.typography.labelMedium.copy(
+                                                                        MaterialTheme.colorScheme.tertiary,
+                                                                    ).toSpanStyle(),
+                                                                ) {
+                                                                    append("남음")
+                                                                }
+                                                            },
+                                                            style = MaterialTheme.typography.bodyMedium,
+                                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                        )
 
-                                                            OutType.SLEEPOVER -> String.format(
-                                                                "%02d.%02d 까지",
-                                                                out.endAt.monthNumber,
-                                                                out.endAt.dayOfMonth,
-                                                            )
-                                                        },
-                                                        style = MaterialTheme.typography.labelMedium,
-                                                        color = MaterialTheme.colorScheme.tertiary,
-                                                    )
+                                                        Spacer(modifier = Modifier.height(4.dp))
+
+                                                        Text(
+                                                            text = when (out.outType) {
+                                                                OutType.OUTING -> String.format(
+                                                                    "%02d:%02d 복귀",
+                                                                    out.endAt.hour,
+                                                                    out.endAt.minute,
+                                                                )
+
+                                                                OutType.SLEEPOVER -> String.format(
+                                                                    "%02d.%02d 까지",
+                                                                    out.endAt.monthNumber,
+                                                                    out.endAt.dayOfMonth,
+                                                                )
+                                                            },
+                                                            style = MaterialTheme.typography.labelMedium,
+                                                            color = MaterialTheme.colorScheme.tertiary,
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }
@@ -759,69 +768,77 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                                     when (nightStudy.status) {
                                         Status.ALLOWED -> {
-                                            Row(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(horizontal = 10.dp)
-                                                    .bounceClick {
-                                                        // TODO : Navigate to my night study screen
-                                                    }
-                                                    .padding(6.dp),
-                                            ) {
-                                                DodamCircularProgress(
-                                                    progress = nightStudyProgress,
-                                                    color = MaterialTheme.colorScheme.primary,
-                                                    backgroundColor = MaterialTheme.colorScheme.secondary,
+                                            if (nightStudyProgress < 0) {
+                                                DefaultText(
+                                                    onClick = { /* TODO : Navigate to request night study screen */ },
+                                                    label = "공부할 시간이 필요하다면",
+                                                    body = "심야 자습 신청하기",
                                                 )
-                                                Spacer(modifier = Modifier.width(12.dp))
-                                                Column {
-                                                    Text(
-                                                        text = buildAnnotatedString {
-                                                            val day = ChronoUnit.DAYS.between(
-                                                                current,
-                                                                nightStudy.endAt.toJavaLocalDateTime(),
-                                                            )
-                                                            val hour = ChronoUnit.HOURS.between(
-                                                                current,
-                                                                nightStudy.endAt.toJavaLocalDateTime(),
-                                                            )
-                                                            val minute = ChronoUnit.MINUTES.between(
-                                                                current,
-                                                                nightStudy.endAt.toJavaLocalDateTime(),
-                                                            )
-
-                                                            append(
-                                                                if (day > 0) {
-                                                                    "${day}일 "
-                                                                } else if (hour > 0) {
-                                                                    "${hour}시간 "
-                                                                } else {
-                                                                    "${minute}분 "
-                                                                },
-                                                            )
-                                                            withStyle(
-                                                                style = MaterialTheme.typography.labelMedium.copy(
-                                                                    MaterialTheme.colorScheme.tertiary,
-                                                                ).toSpanStyle(),
-                                                            ) {
-                                                                append("남음")
-                                                            }
-                                                        },
-                                                        style = MaterialTheme.typography.bodyMedium,
-                                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            } else {
+                                                Row(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(horizontal = 10.dp)
+                                                        .bounceClick {
+                                                            // TODO : Navigate to my night study screen
+                                                        }
+                                                        .padding(6.dp),
+                                                ) {
+                                                    DodamCircularProgress(
+                                                        progress = nightStudyProgress,
+                                                        color = MaterialTheme.colorScheme.primary,
+                                                        backgroundColor = MaterialTheme.colorScheme.secondary,
                                                     )
+                                                    Spacer(modifier = Modifier.width(12.dp))
+                                                    Column {
+                                                        Text(
+                                                            text = buildAnnotatedString {
+                                                                val day = ChronoUnit.DAYS.between(
+                                                                    current,
+                                                                    nightStudy.endAt.toJavaLocalDateTime(),
+                                                                )
+                                                                val hour = ChronoUnit.HOURS.between(
+                                                                    current,
+                                                                    nightStudy.endAt.toJavaLocalDateTime(),
+                                                                )
+                                                                val minute = ChronoUnit.MINUTES.between(
+                                                                    current,
+                                                                    nightStudy.endAt.toJavaLocalDateTime(),
+                                                                )
 
-                                                    Spacer(modifier = Modifier.height(4.dp))
+                                                                append(
+                                                                    if (day > 0) {
+                                                                        "${day}일 "
+                                                                    } else if (hour > 0) {
+                                                                        "${hour}시간 "
+                                                                    } else {
+                                                                        "${minute}분 "
+                                                                    },
+                                                                )
+                                                                withStyle(
+                                                                    style = MaterialTheme.typography.labelMedium.copy(
+                                                                        MaterialTheme.colorScheme.tertiary,
+                                                                    ).toSpanStyle(),
+                                                                ) {
+                                                                    append("남음")
+                                                                }
+                                                            },
+                                                            style = MaterialTheme.typography.bodyMedium,
+                                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                        )
 
-                                                    Text(
-                                                        text = String.format(
-                                                            "%02d:%02d 까지",
-                                                            nightStudy.endAt.monthNumber,
-                                                            nightStudy.endAt.dayOfMonth,
-                                                        ),
-                                                        style = MaterialTheme.typography.labelMedium,
-                                                        color = MaterialTheme.colorScheme.tertiary,
-                                                    )
+                                                        Spacer(modifier = Modifier.height(4.dp))
+
+                                                        Text(
+                                                            text = String.format(
+                                                                "%02d:%02d 까지",
+                                                                nightStudy.endAt.monthNumber,
+                                                                nightStudy.endAt.dayOfMonth,
+                                                            ),
+                                                            style = MaterialTheme.typography.labelMedium,
+                                                            color = MaterialTheme.colorScheme.tertiary,
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }

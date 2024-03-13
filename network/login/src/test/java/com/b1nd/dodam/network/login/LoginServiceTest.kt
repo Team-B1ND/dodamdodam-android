@@ -1,12 +1,11 @@
-package com.b1nd.dodam.network.register
+package com.b1nd.dodam.network.login
 
-import com.b1nd.dodam.network.register.api.LoginService
-import com.b1nd.dodam.network.register.model.LoginResponse
+import com.b1nd.dodam.network.login.api.LoginService
+import com.b1nd.dodam.network.login.model.LoginResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf

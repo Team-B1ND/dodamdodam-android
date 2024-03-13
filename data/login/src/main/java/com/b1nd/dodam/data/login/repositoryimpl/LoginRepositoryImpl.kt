@@ -7,8 +7,7 @@ import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.data.login.model.Token
 import com.b1nd.dodam.data.login.model.toModel
 import com.b1nd.dodam.data.login.repository.LoginRepository
-import com.b1nd.dodam.model.Token
-import com.b1nd.dodam.network.register.datasource.LoginDataSource
+import com.b1nd.dodam.network.login.datasource.LoginDataSource
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +22,7 @@ internal class LoginRepositoryImpl @Inject constructor(
     override fun login(id: String, pw: String): Flow<Result<Token>> {
         return flow {
             emit(
-                loginDataSource.login(id, pw).toModel(),
+                loginDataSource.login(id, pw).toModel()
             )
         }.asResult().flowOn(dispatcher)
     }
