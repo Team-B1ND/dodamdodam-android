@@ -65,7 +65,6 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            delay(3000L)
             launch {
                 mealRepository.getMeal(mealTime.year, mealTime.monthValue, mealTime.dayOfMonth)
                     .collect { result ->
@@ -204,6 +203,10 @@ class HomeViewModel @Inject constructor(
                 ).collect { result ->
                     when (result) {
                         is Result.Success -> {
+
+                            result.data.filter { result.data.first().endDate <= it.startDate }.forEach {
+                                Log.d("TEST", it.endDate.toString() + " : " + it.startDate.toString())
+                            }
                             _uiState.update {
                                 it.copy(
                                     scheduleUiState = ScheduleUiState.Success(result.data),
@@ -258,7 +261,9 @@ class HomeViewModel @Inject constructor(
                             )
                         }
                     }
-                    is Result.Loading -> {}
+                    is Result.Loading -> {
+
+                    }
                     is Result.Error -> {
                         Log.e("fetchBanner", result.exception.stackTraceToString())
                     }

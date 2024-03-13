@@ -2,6 +2,7 @@ package com.b1nd.dodam.student.home
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -83,6 +84,8 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.atTime
 import kotlinx.datetime.plus
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
@@ -145,7 +148,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                 AsyncImage(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(90.dp)
+                                        .clip(RoundedCornerShape(20.dp))
                                         .clickable {
                                             context.startActivity(
                                                 Intent(
@@ -156,7 +159,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                         },
                                     model = bannerUiState.data[page].imageUrl,
                                     contentDescription = null,
-                                    contentScale = ContentScale.Crop,
+                                    contentScale = ContentScale.FillWidth,
                                 )
                             }
                             PagerIndicator(
@@ -503,10 +506,10 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         when (val outUiState = uiState.outUiState) {
                             is OutUiState.Success -> {
                                 outUiState.data?.let { out ->
-                                    val outProgress = 1 - ChronoUnit.MICROS.between(
+                                    val outProgress = 1 - ChronoUnit.SECONDS.between(
                                         out.startAt.toJavaLocalDateTime(),
                                         current,
-                                    ).toFloat() / ChronoUnit.MICROS.between(
+                                    ).toFloat() / ChronoUnit.SECONDS.between(
                                         out.startAt.toJavaLocalDateTime(),
                                         out.endAt.toJavaLocalDateTime(),
                                     )
@@ -531,31 +534,34 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                 Column {
                                                     Text(
                                                         text = buildAnnotatedString {
-                                                            val date =
+                                                            val day = ChronoUnit.DAYS.between(
+                                                                current,
                                                                 out.endAt.toJavaLocalDateTime()
-                                                                    .minusHours(current.hour.toLong())
-                                                                    .minusMinutes(current.minute.toLong())
+                                                            )
+                                                            val hour = ChronoUnit.HOURS.between(
+                                                                current,
+                                                                out.endAt.toJavaLocalDateTime()
+                                                            )
+                                                            val minute = ChronoUnit.MINUTES.between(
+                                                                current,
+                                                                out.endAt.toJavaLocalDateTime()
+                                                            )
 
                                                             when (out.outType) {
                                                                 OutType.OUTING -> {
-                                                                    if (date.hour > 0) {
-                                                                        append("${date.hour}시간 ${date.minute}분 ")
-                                                                    } else {
-                                                                        append("${date.minute}분 ")
-                                                                    }
+                                                                    append(
+                                                                        if (hour > 0) "${hour}시간 "
+                                                                        else "${minute}분 "
+                                                                    )
                                                                 }
 
                                                                 OutType.SLEEPOVER -> {
-                                                                    date.minusDays(current.dayOfMonth.toLong())
-                                                                    if (date.dayOfMonth > 0) {
-                                                                        append(
-                                                                            "${date.dayOfMonth}일 ",
-                                                                        )
-                                                                    } else if (date.hour > 0) {
-                                                                        "${date.hour}시간 ${date.minute}분 "
-                                                                    } else {
-                                                                        "${date.minute}분 "
-                                                                    }
+                                                                    append(
+                                                                        if (day > 0) "${day}일 "
+                                                                        else if (hour > 0) "${hour}시간 "
+                                                                        else "${minute}분 "
+                                                                    )
+
                                                                 }
                                                             }
                                                             withStyle(
@@ -581,7 +587,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                             )
 
                                                             OutType.SLEEPOVER -> String.format(
-                                                                "%02d:%02d 까지",
+                                                                "%02d.%02d 까지",
                                                                 out.endAt.monthNumber,
                                                                 out.endAt.dayOfMonth,
                                                             )
@@ -633,7 +639,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                             )
                                                         } else {
                                                             String.format(
-                                                                "%02d:%02d 시작",
+                                                                "%02d.%02d 시작",
                                                                 out.startAt.monthNumber,
                                                                 out.startAt.dayOfMonth,
                                                             )
@@ -741,12 +747,12 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         when (val nightStudyUiState = uiState.nightStudyUiState) {
                             is NightStudyUiState.Success -> {
                                 nightStudyUiState.data?.let { nightStudy ->
-                                    val nightStudyProgress = 1 - ChronoUnit.DAYS.between(
-                                        nightStudy.startAt.toJavaLocalDate(),
+                                    val nightStudyProgress = 1 - ChronoUnit.SECONDS.between(
+                                        nightStudy.startAt.toJavaLocalDateTime(),
                                         current,
-                                    ).toFloat() / ChronoUnit.DAYS.between(
-                                        nightStudy.startAt.toJavaLocalDate(),
-                                        nightStudy.endAt.toJavaLocalDate(),
+                                    ).toFloat() / ChronoUnit.SECONDS.between(
+                                        nightStudy.startAt.toJavaLocalDateTime(),
+                                        nightStudy.endAt.toJavaLocalDateTime(),
                                     )
 
                                     when (nightStudy.status) {
@@ -769,10 +775,24 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                 Column {
                                                     Text(
                                                         text = buildAnnotatedString {
-                                                            val date =
-                                                                nightStudy.endAt.toJavaLocalDate()
-                                                                    .minusDays(current.dayOfMonth.toLong())
-                                                            append("${date.dayOfMonth}일 ")
+                                                            val day = ChronoUnit.DAYS.between(
+                                                                current,
+                                                                nightStudy.endAt.toJavaLocalDateTime()
+                                                            )
+                                                            val hour = ChronoUnit.HOURS.between(
+                                                                current,
+                                                                nightStudy.endAt.toJavaLocalDateTime()
+                                                            )
+                                                            val minute = ChronoUnit.MINUTES.between(
+                                                                current,
+                                                                nightStudy.endAt.toJavaLocalDateTime()
+                                                            )
+
+                                                            append(
+                                                                if (day > 0) "${day}일 "
+                                                                else if (hour > 0) "${hour}시간 "
+                                                                else "${minute}분 "
+                                                            )
                                                             withStyle(
                                                                 style = MaterialTheme.typography.labelMedium.copy(
                                                                     MaterialTheme.colorScheme.tertiary,
@@ -833,7 +853,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                     Spacer(modifier = Modifier.height(4.dp))
                                                     Text(
                                                         text = String.format(
-                                                            "%02d:%02d 시작",
+                                                            "%02d.%02d 시작",
                                                             nightStudy.startAt.monthNumber,
                                                             nightStudy.startAt.dayOfMonth,
                                                         ),
@@ -1017,9 +1037,9 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                     if (tomorrow in latestSchedule.startDate..latestSchedule.endDate) {
                                         latestSchedule
                                     } else {
-                                        scheduleUiState.data.firstOrNull {
-                                            latestSchedule.endDate <= it.startDate
-                                        }
+                                        scheduleUiState.data.asSequence()
+                                            .filter { latestSchedule.endDate < it.startDate }
+                                            .firstOrNull()
                                     }
 
                                 if (nextSchedule != null) {
@@ -1207,6 +1227,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                     }
                 }
             }
+            Spacer(modifier = Modifier.height(150.dp))
         }
 
         PullRefreshIndicator(
@@ -1219,7 +1240,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
         DodamTopAppBar(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f))
+                .background(MaterialTheme.colorScheme.surface)
                 .statusBarsPadding(),
             containerColor = Color.Transparent,
             titleIcon = {
@@ -1234,6 +1255,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
             onIconClick = {
                 // TODO : Navigate to notification screen
             },
+            isCollapsed = scrollState.value > 0
         )
     }
 }
@@ -1286,7 +1308,13 @@ private fun DefaultText(onClick: () -> Unit, label: String, body: String) {
 }
 
 @Composable
-private fun ScheduleComponent(modifier: Modifier = Modifier, title: String, titleColor: Color, label: String, body: List<Schedule>) {
+private fun ScheduleComponent(
+    modifier: Modifier = Modifier,
+    title: String,
+    titleColor: Color,
+    label: String,
+    body: List<Schedule>
+) {
     Column(
         modifier = modifier,
     ) {
@@ -1311,12 +1339,16 @@ private fun ScheduleComponent(modifier: Modifier = Modifier, title: String, titl
                     modifier = Modifier
                         .size(12.dp)
                         .background(
-                            when (it.targetGrades.first()) {
-                                Grade.GRADE_1 -> Color(0xFFFCA800)
-                                Grade.GRADE_2 -> Color(0xFF3FBDE5)
-                                Grade.GRADE_3 -> Color(0xFFA252E1)
-                                Grade.GRADE_ALL -> Color(0xFFF97E6D)
-                                Grade.GRADE_ETC -> Color(0xFF0167BC)
+                            if (it.targetGrades.isEmpty()) {
+                                Color(0xFF0167BC)
+                            } else {
+                                when (it.targetGrades.first()) {
+                                    Grade.GRADE_1 -> Color(0xFFFCA800)
+                                    Grade.GRADE_2 -> Color(0xFF3FBDE5)
+                                    Grade.GRADE_3 -> Color(0xFFA252E1)
+                                    Grade.GRADE_ALL -> Color(0xFFF97E6D)
+                                    Grade.GRADE_ETC -> Color(0xFF0167BC)
+                                }
                             },
                             CircleShape,
                         ),

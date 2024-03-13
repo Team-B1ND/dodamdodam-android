@@ -6,6 +6,7 @@ import com.b1nd.dodam.data.core.model.toModel
 import com.b1nd.dodam.network.nightstudy.model.NightStudyResponse
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.atTime
 
 data class NightStudy(
     val id: Long,
@@ -15,8 +16,8 @@ data class NightStudy(
     val reasonForPhone: String?,
     val student: Student,
     val place: String,
-    val startAt: LocalDate,
-    val endAt: LocalDate,
+    val startAt: LocalDateTime,
+    val endAt: LocalDateTime,
     val createdAt: LocalDateTime,
     val modifiedAt: LocalDateTime,
 )
@@ -29,8 +30,8 @@ internal fun NightStudyResponse.toModel(): NightStudy = NightStudy(
     reasonForPhone = reasonForPhone,
     student = student.toModel(),
     place = place,
-    startAt = startAt,
-    endAt = endAt,
+    startAt = startAt.atTime(hour = 23, minute = 0, second = 0),
+    endAt = endAt.atTime(hour = 23, minute = 0, second = 0),
     createdAt = createdAt,
     modifiedAt = modifiedAt,
 )

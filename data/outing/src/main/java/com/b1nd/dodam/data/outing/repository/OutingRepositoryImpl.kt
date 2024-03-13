@@ -29,8 +29,8 @@ internal class OutingRepositoryImpl @Inject constructor(
             flow { emit(network.getMyOuting()) },
             flow { emit(network.getMySleepover()) },
         ) { outingResponse, sleepoverResponse ->
-            sleepoverResponse.map { it.toModel(OutType.SLEEPOVER) }.toPersistentList().addAll(
-                outingResponse.map { it.toModel(OutType.OUTING) },
+            sleepoverResponse.map { it.toModel() }.toPersistentList().addAll(
+                outingResponse.map { it.toModel() },
             ).toImmutableList()
         }.asResult().flowOn(dispatcher)
     }
