@@ -75,7 +75,7 @@ fun DodamTopAppBar(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .height(48.dp)
+                .height(58.dp)
                 .background(containerColor)
                 .padding(horizontal = 24.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -95,7 +95,7 @@ fun DodamTopAppBar(
                         ),
                     imageVector = icon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface,
+                    tint = MaterialTheme.colorScheme.tertiary,
                 )
             }
         }
