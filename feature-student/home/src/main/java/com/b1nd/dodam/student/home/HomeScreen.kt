@@ -132,7 +132,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         ) {
             Spacer(
                 modifier = Modifier.height(
-                    36.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
+                    46.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
                 ),
             )
 
@@ -985,11 +985,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                     } else {
                                         "D - ${latestSchedule.startDate.dayOfYear - currentDate.dayOfYear}"
                                     },
-                                    titleColor = if (currentDate in latestSchedule.startDate..latestSchedule.endDate) {
-                                        MaterialTheme.colorScheme.primary
-                                    } else {
-                                        MaterialTheme.colorScheme.onSurfaceVariant
-                                    },
+                                    titleColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                     label = if (currentDate in latestSchedule.startDate..latestSchedule.endDate) {
                                         String.format(
                                             "%d월 %d일 (%s)",

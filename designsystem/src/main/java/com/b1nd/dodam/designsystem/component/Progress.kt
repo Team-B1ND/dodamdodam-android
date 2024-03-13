@@ -26,7 +26,7 @@ fun DodamCircularProgress(
     color: Color = MaterialTheme.colorScheme.primary,
     backgroundColor: Color = MaterialTheme.colorScheme.secondary,
     strokeCap: StrokeCap = StrokeCap.Round,
-    animDuration: Int = 300,
+    animDuration: Int = 500,
     animDelay: Int = 0,
 ) {
     var animationPlayed by remember { mutableStateOf(false) }

@@ -37,7 +37,7 @@ fun DodamContainer(
             .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(18.dp),
             ),
     ) {
         Spacer(modifier = Modifier.height(16.dp))
@@ -50,14 +50,14 @@ fun DodamContainer(
             Box(
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.65f),
                         shape = RoundedCornerShape(100),
                     )
                     .padding(8.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(16.dp),
                     imageVector = icon,
                     contentDescription = "icon",
                     tint = MaterialTheme.colorScheme.onPrimary,
