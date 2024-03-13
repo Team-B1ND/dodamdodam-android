@@ -7,7 +7,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
-import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import com.b1nd.dodam.register.navigation.authScreen
@@ -58,6 +57,5 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
                 )
             },
         )
-        mealScreen()
     }
 }

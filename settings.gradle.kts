@@ -23,29 +23,31 @@ include(
     ":designsystem",
     ":feature:onboarding",
     ":feature:login",
+    ":feature:meal",
+    ":feature:register",
+    ":feature-student:main",
+    ":feature-student:home",
     ":network:core",
     ":network:login",
     ":network:meal",
     ":network:wakeup-song",
     ":network:outing",
+    ":network:night-study",
+    ":network:register",
+    ":network:schedule",
+    ":network:banner",
     ":data:core",
     ":data:meal",
     ":data:login",
     ":data:wakeup-song",
     ":data:outing",
+    ":data:register",
+    ":data:meal",
+    ":data:night-study",
+    ":data:schedule",
+    ":data:banner",
     ":common",
     ":keystore",
     ":datastore",
-    ":data:register",
-    ":data:meal",
-    ":network:register",
-    ":feature-student:main",
-    ":feature-student:home",
     ":ui-test-main",
 )
-include(":network:night-study")
-include(":data:night-study")
-include(":network:schedule")
-include(":data:schedule")
-include(":network:banner")
-include(":data:banner")
