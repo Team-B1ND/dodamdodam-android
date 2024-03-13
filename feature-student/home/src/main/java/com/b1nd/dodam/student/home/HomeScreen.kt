@@ -2,7 +2,6 @@ package com.b1nd.dodam.student.home
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -84,10 +83,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.atTime
 import kotlinx.datetime.plus
-import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 
@@ -536,32 +532,38 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                         text = buildAnnotatedString {
                                                             val day = ChronoUnit.DAYS.between(
                                                                 current,
-                                                                out.endAt.toJavaLocalDateTime()
+                                                                out.endAt.toJavaLocalDateTime(),
                                                             )
                                                             val hour = ChronoUnit.HOURS.between(
                                                                 current,
-                                                                out.endAt.toJavaLocalDateTime()
+                                                                out.endAt.toJavaLocalDateTime(),
                                                             )
                                                             val minute = ChronoUnit.MINUTES.between(
                                                                 current,
-                                                                out.endAt.toJavaLocalDateTime()
+                                                                out.endAt.toJavaLocalDateTime(),
                                                             )
 
                                                             when (out.outType) {
                                                                 OutType.OUTING -> {
                                                                     append(
-                                                                        if (hour > 0) "${hour}시간 "
-                                                                        else "${minute}분 "
+                                                                        if (hour > 0) {
+                                                                            "${hour}시간 "
+                                                                        } else {
+                                                                            "${minute}분 "
+                                                                        },
                                                                     )
                                                                 }
 
                                                                 OutType.SLEEPOVER -> {
                                                                     append(
-                                                                        if (day > 0) "${day}일 "
-                                                                        else if (hour > 0) "${hour}시간 "
-                                                                        else "${minute}분 "
+                                                                        if (day > 0) {
+                                                                            "${day}일 "
+                                                                        } else if (hour > 0) {
+                                                                            "${hour}시간 "
+                                                                        } else {
+                                                                            "${minute}분 "
+                                                                        },
                                                                     )
-
                                                                 }
                                                             }
                                                             withStyle(
@@ -777,21 +779,25 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                         text = buildAnnotatedString {
                                                             val day = ChronoUnit.DAYS.between(
                                                                 current,
-                                                                nightStudy.endAt.toJavaLocalDateTime()
+                                                                nightStudy.endAt.toJavaLocalDateTime(),
                                                             )
                                                             val hour = ChronoUnit.HOURS.between(
                                                                 current,
-                                                                nightStudy.endAt.toJavaLocalDateTime()
+                                                                nightStudy.endAt.toJavaLocalDateTime(),
                                                             )
                                                             val minute = ChronoUnit.MINUTES.between(
                                                                 current,
-                                                                nightStudy.endAt.toJavaLocalDateTime()
+                                                                nightStudy.endAt.toJavaLocalDateTime(),
                                                             )
 
                                                             append(
-                                                                if (day > 0) "${day}일 "
-                                                                else if (hour > 0) "${hour}시간 "
-                                                                else "${minute}분 "
+                                                                if (day > 0) {
+                                                                    "${day}일 "
+                                                                } else if (hour > 0) {
+                                                                    "${hour}시간 "
+                                                                } else {
+                                                                    "${minute}분 "
+                                                                },
                                                             )
                                                             withStyle(
                                                                 style = MaterialTheme.typography.labelMedium.copy(
@@ -1251,7 +1257,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
             onIconClick = {
                 // TODO : Navigate to notification screen
             },
-            isCollapsed = scrollState.value > 0
+            isCollapsed = scrollState.value > 0,
         )
     }
 }
@@ -1304,13 +1310,7 @@ private fun DefaultText(onClick: () -> Unit, label: String, body: String) {
 }
 
 @Composable
-private fun ScheduleComponent(
-    modifier: Modifier = Modifier,
-    title: String,
-    titleColor: Color,
-    label: String,
-    body: List<Schedule>
-) {
+private fun ScheduleComponent(modifier: Modifier = Modifier, title: String, titleColor: Color, label: String, body: List<Schedule>) {
     Column(
         modifier = modifier,
     ) {
