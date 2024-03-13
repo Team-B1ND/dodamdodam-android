@@ -4,7 +4,10 @@ import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.core.model.Student
 import com.b1nd.dodam.data.core.model.toModel
 import com.b1nd.dodam.network.outing.model.OutingResponse
+import com.b1nd.dodam.network.outing.model.SleepoverResponse
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.atTime
 
 data class Outing(
     val id: Long,
@@ -23,9 +26,9 @@ enum class OutType {
     SLEEPOVER,
 }
 
-internal fun OutingResponse.toModel(outType: OutType): Outing = Outing(
+internal fun OutingResponse.toModel(): Outing = Outing(
     id = id,
-    outType = outType,
+    outType = OutType.OUTING,
     reason = reason,
     status = status.toModel(),
     student = student.toModel(),
@@ -33,4 +36,16 @@ internal fun OutingResponse.toModel(outType: OutType): Outing = Outing(
     endAt = endAt,
     createdAt = createdAt,
     modifiedAt = modifiedAt,
+)
+
+internal fun SleepoverResponse.toModel(): Outing = Outing(
+    id = id,
+    outType = OutType.SLEEPOVER,
+    reason = reason,
+    status = status.toModel(),
+    student = student.toModel(),
+    startAt = startAt.atTime(21, 0, 0),
+    endAt = endAt.atTime(21, 0, 0),
+    createdAt = createdAt,
+    modifiedAt = modifiedAt
 )
