@@ -262,7 +262,6 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                     is Result.Loading -> {
-
                     }
                     is Result.Error -> {
                         Log.e("fetchBanner", result.exception.stackTraceToString())

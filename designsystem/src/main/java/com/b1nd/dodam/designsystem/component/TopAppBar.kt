@@ -105,7 +105,7 @@ fun DodamTopAppBar(
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter),
                 color = MaterialTheme.colorScheme.secondary,
-                thickness = 1.dp
+                thickness = 1.dp,
             )
         }
     }

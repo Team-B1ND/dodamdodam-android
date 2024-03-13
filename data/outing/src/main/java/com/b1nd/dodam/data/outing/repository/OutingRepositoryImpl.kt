@@ -5,7 +5,6 @@ import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.data.outing.OutingRepository
-import com.b1nd.dodam.data.outing.model.OutType
 import com.b1nd.dodam.data.outing.model.Outing
 import com.b1nd.dodam.data.outing.model.toModel
 import com.b1nd.dodam.network.outing.datasource.OutingDataSource

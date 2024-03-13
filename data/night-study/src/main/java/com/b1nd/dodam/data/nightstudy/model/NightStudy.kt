@@ -4,7 +4,6 @@ import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.core.model.Student
 import com.b1nd.dodam.data.core.model.toModel
 import com.b1nd.dodam.network.nightstudy.model.NightStudyResponse
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.atTime
 

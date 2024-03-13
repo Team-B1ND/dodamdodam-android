@@ -6,7 +6,6 @@ import com.b1nd.dodam.data.core.model.toModel
 import com.b1nd.dodam.network.outing.model.OutingResponse
 import com.b1nd.dodam.network.outing.model.SleepoverResponse
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.LocalTime
 import kotlinx.datetime.atTime
 
 data class Outing(
@@ -47,5 +46,5 @@ internal fun SleepoverResponse.toModel(): Outing = Outing(
     startAt = startAt.atTime(21, 0, 0),
     endAt = endAt.atTime(21, 0, 0),
     createdAt = createdAt,
-    modifiedAt = modifiedAt
+    modifiedAt = modifiedAt,
 )
