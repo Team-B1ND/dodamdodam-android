@@ -2,7 +2,6 @@ package com.b1nd.dodam.student.home
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -1329,13 +1328,7 @@ private fun DefaultText(onClick: () -> Unit, label: String, body: String) {
 }
 
 @Composable
-private fun ScheduleComponent(
-    modifier: Modifier = Modifier,
-    title: String,
-    titleColor: Color,
-    label: String,
-    body: List<Schedule>
-) {
+private fun ScheduleComponent(modifier: Modifier = Modifier, title: String, titleColor: Color, label: String, body: List<Schedule>) {
     Column(
         modifier = modifier,
     ) {

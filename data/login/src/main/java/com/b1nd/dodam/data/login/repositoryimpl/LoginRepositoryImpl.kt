@@ -22,7 +22,7 @@ internal class LoginRepositoryImpl @Inject constructor(
     override fun login(id: String, pw: String): Flow<Result<Token>> {
         return flow {
             emit(
-                loginDataSource.login(id, pw).toModel()
+                loginDataSource.login(id, pw).toModel(),
             )
         }.asResult().flowOn(dispatcher)
     }
