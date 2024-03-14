@@ -1,0 +1,73 @@
+--알레르기
+CREATE TABLE Allergie (
+    id INTEGER PRIMARY KEY,
+    name TEXT
+);
+
+--음식이 가지는 알레르기들
+CREATE TABLE Allergie_Set (
+    menu_id INTEGER,
+    allergie_id INTEGER,
+    FOREIGN KEY (menu_id) REFERENCES Menu(id),
+    FOREIGN KEY (allergie_id) REFERENCES Allergie(id)
+);
+
+--음식
+CREATE TABLE Menu (
+    id INTEGER PRIMARY KEY,
+    name TEXT
+);
+
+--급식이 가지는 음식들
+CREATE TABLE Menu_Set (
+    meal_id INTEGER,
+    menu_Id INTEGER,
+    FOREIGN KEY (meal_id) REFERENCES Meal(id),
+    FOREIGN KEY (menu_Id) REFERENCES Menu(id)
+);
+
+--급식
+CREATE TABLE Meal (
+      id INTEGER PRIMARY KEY,
+      calorie INTEGER,
+      type TEXT --아침 / 점심 / 저녁
+);
+
+--하루에 제공되는 급식들
+CREATE TABLE Meal_Set (
+    meal_info_id INTEGER,
+    meal_id INTEGER,
+    FOREIGN KEY (meal_info_id) REFERENCES MealInfo(id),
+    FOREIGN KEY (meal_id) REFERENCES Meal(id)
+);
+
+--하루 급식
+CREATE TABLE MealInfo (
+    id INTEGER PRIMARY KEY,
+    date TEXT --날짜
+);
+
+-- some_long INTEGER,           -- Stored as INTEGER in db, retrieved as Long
+--     some_double REAL,            -- Stored as REAL in db, retrieved as Double
+--     some_string TEXT,            -- Stored as TEXT in db, retrieved as String
+--     some_blob BLOB               -- Stored as BLOB in db, retrieved as ByteArray
+
+-- 1. 날짜에 맞게 MealInfo를 조회함. MealInfo의 id를 구해야함.
+-- 2. MealInfo의 id로 Meal_Set에서 Meal들을 구해야함.
+-- 3. 이 Meal들의 id들로 Menu_Set에서 Menu들을 구해야함.
+-- 4. 이 Menu들의 id들로 Allergie_Set에서 Allergie들을 구해야함.
+
+-- 1. 날짜에 맞게 MealInfo를 조회함. MealInfo의 id를 구해야함.
+SELECT id FROM MealInfo WHERE date = '날짜';
+
+-- 2. MealInfo의 id로 Meal_Set에서 Meal들을 구해야함.
+SELECT meal_id FROM Meal_Set WHERE meal_info_id = (SELECT id FROM MealInfo WHERE date = '날짜');
+
+-- 3. 이 Meal들의 id들로 Menu_Set에서 Menu들을 구해야함.
+SELECT menu_Id FROM Menu_Set WHERE meal_id IN (SELECT meal_id FROM Meal_Set WHERE meal_info_id = (SELECT id FROM MealInfo WHERE date = '날짜'));
+
+-- 4. 이 Menu들의 id들로 Allergie_Set에서 Allergie들을 구해야함.
+SELECT a.name FROM Allergie a
+JOIN Allergie_Set als ON a.id = als.allergie_id
+JOIN Menu m ON als.menu_id = m.id
+WHERE m.id IN (SELECT menu_Id FROM Menu_Set WHERE meal_id IN (SELECT meal_id FROM Meal_Set WHERE meal_info_id = (SELECT id FROM MealInfo WHERE date = '날짜')));

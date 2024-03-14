@@ -15,7 +15,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-
 rootProject.name = "dodamdodam-android"
 include(
     ":dodam-student",
@@ -35,4 +34,6 @@ include(
     ":data:register",
     ":data:meal",
     ":network:register",
+    ":database:meal",
+    ":database:core"
 )
