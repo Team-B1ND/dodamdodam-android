@@ -3,6 +3,7 @@ package com.b1nd.dodam.network.core.di
 import android.util.Log
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.network.core.DodamUrl
+import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.model.TokenRequest
 import com.b1nd.dodam.network.core.model.TokenResponse
 import dagger.Module
@@ -22,6 +23,7 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.accept
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -67,7 +69,7 @@ object NetworkModule {
                         val accessToken = client.post(DodamUrl.Auth.LOGIN) {
                             markAsRefreshTokenRequest()
                             setBody(TokenRequest(id = user.id, pw = user.pw))
-                        }.body<TokenResponse>().accessToken
+                        }.body<Response<TokenResponse>>().data.accessToken
 
                         datastore.saveToken(accessToken)
 

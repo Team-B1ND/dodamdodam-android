@@ -1,7 +1,10 @@
 package com.b1nd.dodam.designsystem.component
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,10 +42,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.animation.NoInteractionSource
 import com.b1nd.dodam.designsystem.icons.Calendar
+import com.b1nd.dodam.designsystem.icons.Door
+import com.b1nd.dodam.designsystem.icons.ForkAndKnife
 import com.b1nd.dodam.designsystem.icons.Home
-import com.b1nd.dodam.designsystem.icons.Meal
 import com.b1nd.dodam.designsystem.icons.More
-import com.b1nd.dodam.designsystem.icons.Out
 import com.b1nd.dodam.designsystem.theme.DodamTheme
 import kotlin.math.roundToInt
 
@@ -60,6 +63,7 @@ fun DodamBottomNavigation(navController: NavHostController, bottomNavigationItem
                 .height(BottomNavigationHeight)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box {
                 var selectedXOffset by remember { mutableIntStateOf(0) }
@@ -106,15 +110,24 @@ fun DodamBottomNavigation(navController: NavHostController, bottomNavigationItem
                                 }
                             },
                             icon = {
-                                Icon(
-                                    modifier = Modifier.size(24.dp),
-                                    imageVector = item.icon,
-                                    contentDescription = null,
-                                    tint = if (selectedIndex == index) {
+                                val animColor by animateColorAsState(
+                                    targetValue = if (selectedIndex == index) {
                                         MaterialTheme.colorScheme.onPrimary
                                     } else {
                                         MaterialTheme.colorScheme.onSurfaceVariant
                                     },
+                                    animationSpec = tween(
+                                        durationMillis = 150,
+                                        easing = LinearEasing,
+                                    ),
+                                    label = "",
+                                )
+
+                                Icon(
+                                    modifier = Modifier.size(24.dp),
+                                    imageVector = item.icon,
+                                    contentDescription = null,
+                                    tint = animColor,
                                 )
                             },
                             modifier = Modifier
@@ -141,8 +154,8 @@ private fun DodamBottomNavigationPreview() {
             navController = rememberNavController(),
             bottomNavigationItems = listOf(
                 BottomNavigationItem("home", Home),
-                BottomNavigationItem("meal", Meal),
-                BottomNavigationItem("out", Out),
+                BottomNavigationItem("meal", ForkAndKnife),
+                BottomNavigationItem("out", Door),
                 BottomNavigationItem("schedule", Calendar),
                 BottomNavigationItem("more", More),
             ),
