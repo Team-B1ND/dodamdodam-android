@@ -1,6 +1,7 @@
 package com.b1nd.dodam.student.home
 
 import android.util.Log
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
@@ -18,6 +19,7 @@ import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -73,12 +75,12 @@ class HomeViewModel @Inject constructor(
                                 _uiState.update {
                                     it.copy(
                                         mealUiState = MealUiState.Success(
-                                            persistentListOf(
+                                            data = persistentListOf(
                                                 result.data.breakfast?.details?.joinToString(", ") { menu -> menu.name },
                                                 result.data.lunch?.details?.joinToString(", ") { menu -> menu.name },
                                                 result.data.dinner?.details?.joinToString(", ") { menu -> menu.name },
                                             ),
-                                        ),
+                                        )
                                     )
                                 }
 

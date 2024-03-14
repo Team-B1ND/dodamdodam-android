@@ -1,7 +1,13 @@
 package com.b1nd.dodam.designsystem.component
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +24,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
@@ -47,7 +55,10 @@ import com.b1nd.dodam.designsystem.theme.DodamTheme
 import kotlin.math.roundToInt
 
 @Composable
-fun DodamBottomNavigation(navController: NavHostController, bottomNavigationItems: List<BottomNavigationItem>) {
+fun DodamBottomNavigation(
+    navController: NavHostController,
+    bottomNavigationItems: List<BottomNavigationItem>
+) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceVariant,
         contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -107,15 +118,21 @@ fun DodamBottomNavigation(navController: NavHostController, bottomNavigationItem
                                 }
                             },
                             icon = {
+                                val animColor by animateColorAsState(
+                                    targetValue = if (selectedIndex == index)
+                                        MaterialTheme.colorScheme.onPrimary
+                                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                                    animationSpec = tween(
+                                        durationMillis = 150,
+                                        easing = LinearEasing
+                                    ), label = ""
+                                )
+
                                 Icon(
                                     modifier = Modifier.size(24.dp),
                                     imageVector = item.icon,
                                     contentDescription = null,
-                                    tint = if (selectedIndex == index) {
-                                        MaterialTheme.colorScheme.onPrimary
-                                    } else {
-                                        MaterialTheme.colorScheme.onSurfaceVariant
-                                    },
+                                    tint = animColor,
                                 )
                             },
                             modifier = Modifier
