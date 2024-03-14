@@ -193,36 +193,36 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             val currentTime = current.toLocalTime()
 
                             LaunchedEffect(Unit) {
-                                if (currentTime <= LocalTime.of(8, 10)) {
-                                    mealUiState.data[0]?.let {
+                                if (currentTime <= LocalTime.of(8, 10)) { // 아침 식사 시간 전이라면
+                                    mealUiState.data[0]?.let { // 아침 급식이 있다면
                                         mealPagerState.animateScrollToPage(0)
                                     }
-                                } else if (currentTime <= LocalTime.of(13, 30)) {
-                                    mealUiState.data[0]?.let {
-                                        mealUiState.data[1]?.let {
+                                } else if (currentTime <= LocalTime.of(13, 30)) { // 점심 식사 시간 전이라면
+                                    mealUiState.data[0]?.let { // 아침 급식이 있다면
+                                        mealUiState.data[1]?.let { // 점심 급식이 있다면
                                             mealPagerState.animateScrollToPage(1)
                                         }
-                                    } ?: run {
-                                        mealUiState.data[1]?.let {
+                                    } ?: run { // 아침 급식이 없다면
+                                        mealUiState.data[1]?.let { // 점심 급식이 있다면
                                             mealPagerState.animateScrollToPage(0)
                                         }
                                     }
-                                } else if (currentTime <= LocalTime.of(19, 10)) {
-                                    mealUiState.data[0]?.let {
-                                        mealUiState.data[1]?.let {
+                                } else if (currentTime <= LocalTime.of(19, 10)) { // 저녁 식사 시간 전이라면
+                                    mealUiState.data[0]?.let { // 아침 급식이 있다면
+                                        mealUiState.data[1]?.let { // 점심 급식이 있다면
                                             mealPagerState.animateScrollToPage(2)
-                                        } ?: run {
+                                        } ?: run { // 점심 급식이 없다면
                                             mealPagerState.animateScrollToPage(1)
                                         }
-                                    } ?: run {
-                                        mealUiState.data[1]?.let {
+                                    } ?: run { // 아침 급식이 없다면
+                                        mealUiState.data[1]?.let { // 점심 급식이 있다면
                                             mealPagerState.animateScrollToPage(1)
-                                        } ?: run {
+                                        } ?: run { // 점심 급식이 없다면
                                             mealPagerState.animateScrollToPage(0)
                                         }
                                     }
-                                } else {
-                                    mealUiState.data[0]?.let {
+                                } else { // 저녁 식사 시간이 지났다면
+                                    mealUiState.data[0]?.let { // 다음날 아침이 있다면
                                         mealPagerState.animateScrollToPage(0)
                                     }
                                 }
@@ -1042,9 +1042,9 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                         )
                                     },
                                     body = scheduleUiState.data.filter {
-                                        if (currentDate in latestSchedule.startDate..latestSchedule.endDate) { // 오늘 일정이 있는 경우
+                                        if (currentDate in latestSchedule.startDate..latestSchedule.endDate) { // 오늘 일정이 있다면
                                             currentDate in it.startDate..it.endDate
-                                        } else if (currentDate.plus(DatePeriod(days = 1)) in latestSchedule.startDate..latestSchedule.endDate) { // 내일 일정이 있는 경우
+                                        } else if (currentDate.plus(DatePeriod(days = 1)) in latestSchedule.startDate..latestSchedule.endDate) { // 내일 일정이 있다면
                                             currentDate.plus(DatePeriod(days = 1)) in it.startDate..it.endDate
                                         } else {
                                             latestSchedule.startDate == it.startDate
@@ -1054,15 +1054,15 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                                 val tomorrow = currentDate.plus(DatePeriod(days = 1))
                                 val nextSchedule =
-                                    if (latestSchedule.startDate != latestSchedule.endDate && tomorrow in latestSchedule.startDate..latestSchedule.endDate) {
+                                    if (latestSchedule.startDate != latestSchedule.endDate && tomorrow in latestSchedule.startDate..latestSchedule.endDate) {  // 내일 일정이 있다면
                                         latestSchedule
-                                    } else {
+                                    } else { // 한 달 내의 다음 일정이 있는지 검사
                                         scheduleUiState.data.asSequence()
                                             .filter { latestSchedule.endDate < it.startDate }
                                             .firstOrNull()
                                     }
 
-                                if (nextSchedule != null) {
+                                if (nextSchedule != null) { // 한 달 내의 다음 일정이 있다면
                                     Spacer(modifier = Modifier.width(12.dp))
 
                                     ScheduleComponent(
