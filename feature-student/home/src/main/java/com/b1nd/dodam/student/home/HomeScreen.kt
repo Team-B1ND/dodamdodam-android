@@ -1054,7 +1054,10 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                                 val tomorrow = currentDate.plus(DatePeriod(days = 1))
                                 val nextSchedule =
-                                    if (latestSchedule.startDate != latestSchedule.endDate && tomorrow in latestSchedule.startDate..latestSchedule.endDate) {  // 내일 일정이 있다면
+                                    if (
+                                        latestSchedule.startDate != latestSchedule.endDate &&
+                                        tomorrow in latestSchedule.startDate..latestSchedule.endDate
+                                    ) { // 내일 일정이 있다면
                                         latestSchedule
                                     } else { // 한 달 내의 다음 일정이 있는지 검사
                                         scheduleUiState.data.asSequence()
