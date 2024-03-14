@@ -546,10 +546,11 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                                     current,
                                                                     out.endAt.toJavaLocalDateTime(),
                                                                 )
-                                                                val minute = ChronoUnit.MINUTES.between(
-                                                                    current,
-                                                                    out.endAt.toJavaLocalDateTime(),
-                                                                )
+                                                                val minute =
+                                                                    ChronoUnit.MINUTES.between(
+                                                                        current,
+                                                                        out.endAt.toJavaLocalDateTime(),
+                                                                    )
 
                                                                 when (out.outType) {
                                                                     OutType.OUTING -> {
@@ -801,10 +802,11 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                                                                     current,
                                                                     nightStudy.endAt.toJavaLocalDateTime(),
                                                                 )
-                                                                val minute = ChronoUnit.MINUTES.between(
-                                                                    current,
-                                                                    nightStudy.endAt.toJavaLocalDateTime(),
-                                                                )
+                                                                val minute =
+                                                                    ChronoUnit.MINUTES.between(
+                                                                        current,
+                                                                        nightStudy.endAt.toJavaLocalDateTime(),
+                                                                    )
 
                                                                 append(
                                                                     if (day > 0) {
@@ -1053,7 +1055,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                                 val tomorrow = currentDate.plus(DatePeriod(days = 1))
                                 val nextSchedule =
-                                    if (tomorrow in latestSchedule.startDate..latestSchedule.endDate) {
+                                    if (latestSchedule.startDate != latestSchedule.endDate && tomorrow in latestSchedule.startDate..latestSchedule.endDate) {
                                         latestSchedule
                                     } else {
                                         scheduleUiState.data.asSequence()
@@ -1327,7 +1329,13 @@ private fun DefaultText(onClick: () -> Unit, label: String, body: String) {
 }
 
 @Composable
-private fun ScheduleComponent(modifier: Modifier = Modifier, title: String, titleColor: Color, label: String, body: List<Schedule>) {
+private fun ScheduleComponent(
+    modifier: Modifier = Modifier,
+    title: String,
+    titleColor: Color,
+    label: String,
+    body: List<Schedule>
+) {
     Column(
         modifier = modifier,
     ) {
