@@ -37,7 +37,8 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(projects.feature.onboarding)
+    implementation(projects.featureStudent.main)
     implementation(projects.feature.register)
     implementation(projects.feature.login)
-    implementation(projects.feature.meal)
+    implementation(projects.datastore)
 }

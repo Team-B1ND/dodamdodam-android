@@ -15,7 +15,6 @@ android {
 }
 
 dependencies {
-    api(projects.model)
     implementation(projects.common)
     implementation(projects.network.login)
 }

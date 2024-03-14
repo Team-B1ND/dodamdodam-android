@@ -22,7 +22,7 @@ private val DarkColorScheme =
         onPrimary = White,
         secondary = Gray800,
         tertiary = Gray600,
-        surface = Black,
+        surface = Color(0xFF0F0F0F),
         onSurface = Gray100,
         background = Black,
         onBackground = White,
@@ -41,7 +41,7 @@ private val LightColorScheme =
         onPrimary = White,
         secondary = Gray200,
         tertiary = Gray400,
-        surface = Blue50,
+        surface = Color(0xFFF2F5F8),
         onSurface = Gray900,
         background = White,
         onBackground = Black,
@@ -79,13 +79,14 @@ fun DodamTheme(
             }
 
             darkTheme -> DarkColorScheme
+
             else -> LightColorScheme
         }
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = colorScheme.background.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
