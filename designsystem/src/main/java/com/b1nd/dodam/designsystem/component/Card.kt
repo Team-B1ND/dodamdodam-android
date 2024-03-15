@@ -33,14 +33,14 @@ fun DodamAskCard(
     currentLeftTime: String = "",
     reason: String = "",
     phoneReason: String? = null,
-    progress: Float = 0.0f
+    progress: Float = 0.0f,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(18.dp))
             .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         val (statusColor, statusText) = when (askStatus) {
             AskStatus.ALLOWED -> MaterialTheme.colorScheme.primary to "승인됨"
@@ -55,7 +55,7 @@ fun DodamAskCard(
                     .padding(
                         vertical = 4.dp,
                         horizontal = 12.dp,
-                    )
+                    ),
             ) {
                 Text(
                     text = statusText,
@@ -76,7 +76,7 @@ fun DodamAskCard(
         Text(
             text = reason,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground,
         )
         if (askStatus != AskStatus.REJECTED) {
             Spacer(modifier = Modifier.height(12.dp))
@@ -88,18 +88,18 @@ fun DodamAskCard(
                         modifier = Modifier
                             .weight(1f)
                             .padding(end = 16.dp)
-                            .align(Alignment.Bottom)
+                            .align(Alignment.Bottom),
                     ) {
                         Row(verticalAlignment = Alignment.Bottom) {
                             Text(
                                 text = currentLeftTime,
-                                style = MaterialTheme.typography.titleSmall
+                                style = MaterialTheme.typography.titleSmall,
                             )
                             if (currentLeftTime.isNotBlank()) {
                                 Text(
                                     text = " 남음",
                                     style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.tertiary
+                                    color = MaterialTheme.colorScheme.tertiary,
                                 )
                             }
                         }
@@ -111,12 +111,12 @@ fun DodamAskCard(
                             Text(
                                 text = startTimeText,
                                 style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.tertiary
+                                color = MaterialTheme.colorScheme.tertiary,
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = startTime,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
@@ -124,12 +124,12 @@ fun DodamAskCard(
                             Text(
                                 text = endTimeText,
                                 style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.tertiary
+                                color = MaterialTheme.colorScheme.tertiary,
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = endTime,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
                             )
                         }
                     }
@@ -167,7 +167,7 @@ fun DodamAskCardPreview() {
             startTimeText = "시작",
             endTime = "3월 14일",
             endTimeText = "종료",
-            phoneReason = "웹툰보고싶어용 ㅠㅠasdassdaasdasdasdasdasdasdasdasdasdasdasdas"
+            phoneReason = "웹툰보고싶어용 ㅠㅠㅠㅠㅠㅠㅠ asd assdaasdasdasdasd",
         )
     }
 }

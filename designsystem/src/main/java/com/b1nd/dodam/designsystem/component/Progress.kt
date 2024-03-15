@@ -96,7 +96,6 @@ fun DodamLinearProgress(
     )
 }
 
-
 @Preview
 @Composable
 fun DodamProgressPreview() {
