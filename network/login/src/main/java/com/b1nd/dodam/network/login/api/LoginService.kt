@@ -1,5 +1,6 @@
 package com.b1nd.dodam.network.login.api
 
+import android.util.Log
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.safeRequest
@@ -20,7 +21,6 @@ internal class LoginService @Inject constructor(
     override suspend fun login(id: String, pw: String): LoginResponse {
         return safeRequest {
             client.post(DodamUrl.Auth.LOGIN) {
-                contentType(ContentType.Application.Json)
                 setBody(LoginRequest(id, pw))
             }.body<Response<LoginResponse>>()
         }

@@ -83,10 +83,10 @@ class HomeViewModel @Inject constructor(
                                 }
 
                             is Result.Error -> {
-                                Log.e("getMeal", result.exception.message.toString())
+                                Log.e("getMeal", result.error.toString())
                                 _uiState.update {
                                     it.copy(
-                                        mealUiState = MealUiState.Error(result.exception.message.toString()),
+                                        mealUiState = MealUiState.Error(result.error.toString()),
                                     )
                                 }
                             }
@@ -114,10 +114,10 @@ class HomeViewModel @Inject constructor(
                             }
 
                             is Result.Error -> {
-                                Log.e("getWakeupSong", result.exception.message.toString())
+                                Log.e("getWakeupSong", result.error.toString())
                                 _uiState.update {
                                     it.copy(
-                                        wakeupSongUiState = WakeupSongUiState.Error(result.exception.message.toString()),
+                                        wakeupSongUiState = WakeupSongUiState.Error(result.error.toString()),
                                     )
                                 }
                             }
@@ -145,11 +145,11 @@ class HomeViewModel @Inject constructor(
                             }
 
                             is Result.Error -> {
-                                Log.e("getMyOutSleeping", result.exception.message.toString())
+                                Log.e("getMyOutSleeping", result.error.toString())
                                 _uiState.update {
                                     it.copy(
                                         outUiState = OutUiState.Error(
-                                            result.exception.message.toString(),
+                                            result.error.toString(),
                                         ),
                                     )
                                 }
@@ -184,11 +184,11 @@ class HomeViewModel @Inject constructor(
                             }
 
                             is Result.Error -> {
-                                Log.e("getMyNightStudy", result.exception.message.toString())
+                                Log.e("getMyNightStudy", result.error.toString())
                                 _uiState.update {
                                     it.copy(
                                         nightStudyUiState = NightStudyUiState.Error(
-                                            result.exception.message.toString(),
+                                            result.error.toString(),
                                         ),
                                     )
                                 }
@@ -203,10 +203,6 @@ class HomeViewModel @Inject constructor(
                 ).collect { result ->
                     when (result) {
                         is Result.Success -> {
-
-                            result.data.filter { result.data.first().endDate <= it.startDate }.forEach {
-                                Log.d("TEST", it.endDate.toString() + " : " + it.startDate.toString())
-                            }
                             _uiState.update {
                                 it.copy(
                                     scheduleUiState = ScheduleUiState.Success(result.data),
@@ -221,9 +217,9 @@ class HomeViewModel @Inject constructor(
                         }
 
                         is Result.Error -> {
-                            Log.e("getSchedule", result.exception.stackTraceToString())
+                            Log.e("getSchedule", result.error.stackTraceToString())
                             _uiState.update {
-                                it.copy(scheduleUiState = ScheduleUiState.Error(result.exception.message.toString()))
+                                it.copy(scheduleUiState = ScheduleUiState.Error(result.error.toString()))
                             }
                         }
                     }
@@ -242,7 +238,7 @@ class HomeViewModel @Inject constructor(
                             }
                             is Result.Loading -> {}
                             is Result.Error -> {
-                                Log.e("getBanner", result.exception.stackTraceToString())
+                                Log.e("getBanner", result.error.stackTraceToString())
                             }
                         }
                     }
@@ -264,7 +260,7 @@ class HomeViewModel @Inject constructor(
                     is Result.Loading -> {
                     }
                     is Result.Error -> {
-                        Log.e("fetchBanner", result.exception.stackTraceToString())
+                        Log.e("fetchBanner", result.error.stackTraceToString())
                     }
                 }
             }
@@ -288,10 +284,10 @@ class HomeViewModel @Inject constructor(
                         }
 
                     is Result.Error -> {
-                        Log.e("getMeal", result.exception.message.toString())
+                        Log.e("getMeal", result.error.toString())
                         _uiState.update {
                             it.copy(
-                                mealUiState = MealUiState.Error(result.exception.message.toString()),
+                                mealUiState = MealUiState.Error(result.error.toString()),
                             )
                         }
                     }
@@ -323,10 +319,10 @@ class HomeViewModel @Inject constructor(
                     }
 
                     is Result.Error -> {
-                        Log.e("fetchWakeupSong", result.exception.message.toString())
+                        Log.e("fetchWakeupSong", result.error.toString())
                         _uiState.update {
                             it.copy(
-                                wakeupSongUiState = WakeupSongUiState.Error(result.exception.message.toString()),
+                                wakeupSongUiState = WakeupSongUiState.Error(result.error.toString()),
                             )
                         }
                     }
@@ -358,11 +354,11 @@ class HomeViewModel @Inject constructor(
                     }
 
                     is Result.Error -> {
-                        Log.e("fetchMyOutSleeping", result.exception.message.toString())
+                        Log.e("fetchMyOutSleeping", result.error.toString())
                         _uiState.update {
                             it.copy(
                                 outUiState = OutUiState.Error(
-                                    result.exception.message.toString(),
+                                    result.error.toString(),
                                 ),
                             )
                         }
@@ -404,11 +400,11 @@ class HomeViewModel @Inject constructor(
                     }
 
                     is Result.Error -> {
-                        Log.e("fetchMyNightStudy", result.exception.message.toString())
+                        Log.e("fetchMyNightStudy", result.error.toString())
                         _uiState.update {
                             it.copy(
                                 nightStudyUiState = NightStudyUiState.Error(
-                                    result.exception.message.toString(),
+                                    result.error.toString(),
                                 ),
                             )
                         }
@@ -439,9 +435,9 @@ class HomeViewModel @Inject constructor(
                 }
 
                 is Result.Error -> {
-                    Log.e("fetchSchedule", result.exception.stackTraceToString())
+                    Log.e("fetchSchedule", result.error.stackTraceToString())
                     _uiState.update {
-                        it.copy(scheduleUiState = ScheduleUiState.Error(result.exception.message.toString()))
+                        it.copy(scheduleUiState = ScheduleUiState.Error(result.error.toString()))
                     }
                 }
             }

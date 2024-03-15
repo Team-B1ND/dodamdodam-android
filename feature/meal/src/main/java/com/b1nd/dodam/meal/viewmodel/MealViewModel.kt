@@ -54,8 +54,8 @@ class MealViewModel @Inject constructor(
                         }
 
                         is Result.Error -> {
-                            _event.emit(Event.Error(result.exception.message.toString()))
-                            Log.e("ERROR", result.exception.stackTraceToString())
+                            _event.emit(Event.Error(result.error.message.toString()))
+                            Log.e("ERROR", result.error.message.toString())
                             it.copy(
                                 isLoading = false,
                             )
@@ -87,8 +87,8 @@ class MealViewModel @Inject constructor(
                             }
 
                             is Result.Error -> {
-                                _event.emit(Event.Error(result.exception.message.toString()))
-                                Log.e("ERROR", result.exception.stackTraceToString())
+                                _event.emit(Event.Error(result.error.message.toString()))
+                                Log.e("ERROR", result.error.message.toString())
                                 it.copy(
                                     endReached = true,
                                 )
