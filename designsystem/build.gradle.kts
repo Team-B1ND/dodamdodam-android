@@ -13,4 +13,5 @@ android {
 
 dependencies {
     api(libs.androidx.compose.material)
+    implementation(libs.kotlinx.datetime)
 }
