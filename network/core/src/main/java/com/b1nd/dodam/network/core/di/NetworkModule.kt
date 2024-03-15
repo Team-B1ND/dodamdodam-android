@@ -1,6 +1,7 @@
 package com.b1nd.dodam.network.core.di
 
 import android.util.Log
+import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
@@ -61,15 +62,19 @@ object NetworkModule {
             install(Auth) {
                 bearer {
                     loadTokens {
-                        val accessToken = datastore.user.first().token
-                        BearerTokens(accessToken, "")
+                        try {
+                            val accessToken = datastore.user.first().token
+                            BearerTokens(accessToken, "")
+                        } catch (e: IndexOutOfBoundsException) {
+                            throw UnauthorizedException("${e.message}")
+                        }
                     }
                     refreshTokens {
                         val user = datastore.user.first()
                         val accessToken = client.post(DodamUrl.Auth.LOGIN) {
                             markAsRefreshTokenRequest()
                             setBody(TokenRequest(id = user.id, pw = user.pw))
-                        }.body<Response<TokenResponse>>().data.accessToken
+                        }.body<Response<TokenResponse>>().data?.accessToken ?: ""
 
                         datastore.saveToken(accessToken)
 

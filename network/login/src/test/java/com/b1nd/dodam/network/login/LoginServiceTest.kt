@@ -1,5 +1,6 @@
 package com.b1nd.dodam.network.login
 
+import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.network.login.api.LoginService
 import com.b1nd.dodam.network.login.model.LoginResponse
 import io.ktor.client.HttpClient
@@ -27,9 +28,9 @@ class LoginServiceTest {
             MockEngine { _ ->
                 respond(
                     content = """
-                    {"status":200,"message":"로그인 성공","data":{"accessToken":"token"}}
+                    {"status":401,"message":"비밀번호 틀림"}}
                     """.trimIndent(),
-                    status = HttpStatusCode.OK,
+                    status = HttpStatusCode.Unauthorized,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
             },
@@ -49,10 +50,8 @@ class LoginServiceTest {
     @Test
     fun testDeserializationOfLogin() = runTest(testDispatcher) {
         assertEquals(
-            LoginResponse(
-                accessToken = "token",
-            ),
-            loginService.login("qwerlove10", "kim01387005!"),
+            UnauthorizedException("비밀번호 틀림"),
+            loginService.login("student", "1"),
         )
     }
 }
