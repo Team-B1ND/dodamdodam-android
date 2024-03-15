@@ -25,13 +25,14 @@ import com.b1nd.dodam.designsystem.theme.DodamTheme
 @Composable
 fun DodamAskCard(
     askStatus: AskStatus,
-    showLabel: Boolean = false,
+    labelText: String? = null,
     startTime: String = "",
     startTimeText: String = "",
     endTime: String = "",
     endTimeText: String = "",
     currentLeftTime: String = "",
     reason: String = "",
+    rejectedReason: String? = null,
     phoneReason: String? = null,
     progress: Float = 0.0f,
 ) {
@@ -64,9 +65,9 @@ fun DodamAskCard(
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            if (!showLabel) {
+            labelText?.let {
                 Text(
-                    text = currentLeftTime,
+                    text = labelText,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.tertiary,
                 )
@@ -78,7 +79,8 @@ fun DodamAskCard(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground,
         )
-        if (askStatus != AskStatus.REJECTED) {
+
+        if (askStatus != AskStatus.REJECTED) { // 신청이 승인, 대기중일 때
             Spacer(modifier = Modifier.height(12.dp))
             Divider(color = MaterialTheme.colorScheme.secondary)
             Spacer(modifier = Modifier.height(12.dp))
@@ -94,6 +96,7 @@ fun DodamAskCard(
                             Text(
                                 text = currentLeftTime,
                                 style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onBackground,
                             )
                             if (currentLeftTime.isNotBlank()) {
                                 Text(
@@ -117,6 +120,7 @@ fun DodamAskCard(
                             Text(
                                 text = startTime,
                                 style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
@@ -130,12 +134,13 @@ fun DodamAskCard(
                             Text(
                                 text = endTime,
                                 style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
                             )
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(22.dp))
                 phoneReason?.let {
+                    Spacer(modifier = Modifier.height(22.dp))
                     Row(verticalAlignment = Alignment.Top) {
                         Text(
                             text = "휴대폰 사유",
@@ -146,6 +151,28 @@ fun DodamAskCard(
                         Text(
                             text = it,
                             style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
+                }
+            }
+        } else { // 신청이 거절되었을 때
+            Column {
+                rejectedReason?.let {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Divider(color = MaterialTheme.colorScheme.secondary)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Row(verticalAlignment = Alignment.Top) {
+                        Text(
+                            text = "거절사유",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.tertiary,
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = rejectedReason,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }
@@ -156,18 +183,78 @@ fun DodamAskCard(
 
 @Preview
 @Composable
-fun DodamAskCardPreview() {
+fun DodamAskCardPendingPreview() {
+    DodamTheme {
+        Column {
+            DodamAskCard(
+                AskStatus.PENDING,
+                reason = "심야자습을 통해 해군부사관 취업",
+                progress = 0.5f,
+                currentLeftTime = "11일",
+                startTime = "3월 14일",
+                startTimeText = "시작",
+                endTime = "3월 14일",
+                endTimeText = "종료",
+                phoneReason = "해군 선배님들의 훈련영상 시청 (웹툰보고싶어용 ㅠㅠ)",
+            )
+            DodamAskCard(
+                AskStatus.ALLOWED,
+                reason = "홈푸드 홈푸드 신나는노래",
+                progress = 0.5f,
+                labelText = "3월 14일",
+                currentLeftTime = "30분",
+                startTime = "12시 30분",
+                startTimeText = "외출",
+                endTime = "13시 30분",
+                endTimeText = "복귀",
+            )
+            DodamAskCard(
+                AskStatus.REJECTED,
+                reason = "크킄 누가 나를 막을테지? 이것은 \"외.박\" 이란 것이다.",
+                progress = 0.5f,
+                currentLeftTime = "1시간 25분",
+                startTime = "3월 14일",
+                startTimeText = "시작",
+                endTime = "3월 14일",
+                endTimeText = "종료",
+                rejectedReason = "아앗... 그앞은 나 \"도현욱\"이 지키고 있다.",
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun DodamAskCardAllowedPreview() {
     DodamTheme {
         DodamAskCard(
-            AskStatus.PENDING,
-            reason = "123123",
+            AskStatus.ALLOWED,
+            reason = "홈푸드 홈푸드 신나는노래",
+            progress = 0.5f,
+            labelText = "3월 14일",
+            currentLeftTime = "30분",
+            startTime = "12시 30분",
+            startTimeText = "외출",
+            endTime = "13시 30분",
+            endTimeText = "복귀",
+        )
+    }
+}
+
+@Preview
+@Composable
+fun DodamAskCardRejectedPreview() {
+    DodamTheme {
+        DodamAskCard(
+            AskStatus.REJECTED,
+            reason = "크킄 누가 나를 막을테지? 이것은 \"외.박\" 이란 것이다.",
             progress = 0.5f,
             currentLeftTime = "1시간 25분",
             startTime = "3월 14일",
             startTimeText = "시작",
             endTime = "3월 14일",
             endTimeText = "종료",
-            phoneReason = "웹툰보고싶어용 ㅠㅠㅠㅠㅠㅠㅠ asd assdaasdasdasdasd",
+            rejectedReason = "아앗... 그앞은 나 \"도현욱\"이 지키고 있다.",
         )
     }
 }
