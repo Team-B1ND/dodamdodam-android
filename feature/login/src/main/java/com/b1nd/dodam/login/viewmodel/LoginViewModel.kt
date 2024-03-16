@@ -23,7 +23,6 @@ class LoginViewModel @Inject constructor(
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
 
-
     fun login(id: String, pw: String) = viewModelScope.launch {
         loginRepository.login(id, pw).collect { result ->
             when (result) {
@@ -33,12 +32,12 @@ class LoginViewModel @Inject constructor(
                         pw = pw,
                         token = result.data.accessToken,
 
-                        )
+                    )
                     _event.emit(Event.NavigateToMain)
                 }
 
                 is Result.Error -> {
-                    when(result.error) {
+                    when (result.error) {
                         is ForbiddenException -> {
                             _event.emit(Event.Error("아직 계정이 승인되지 않았어요. 승인을 기다려주세요."))
                         }
