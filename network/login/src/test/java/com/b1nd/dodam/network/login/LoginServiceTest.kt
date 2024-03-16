@@ -2,7 +2,6 @@ package com.b1nd.dodam.network.login
 
 import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.network.login.api.LoginService
-import com.b1nd.dodam.network.login.model.LoginResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond

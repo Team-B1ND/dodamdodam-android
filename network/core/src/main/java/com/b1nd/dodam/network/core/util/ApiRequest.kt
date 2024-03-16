@@ -1,6 +1,5 @@
 package com.b1nd.dodam.network.core.util
 
-import android.util.Log
 import com.b1nd.dodam.common.exception.BadRequestException
 import com.b1nd.dodam.common.exception.ConflictException
 import com.b1nd.dodam.common.exception.DataNotFoundException
@@ -15,7 +14,7 @@ import com.b1nd.dodam.network.core.model.Response
 suspend inline fun <T> safeRequest(crossinline request: suspend () -> Response<T>): T {
     val response = request()
     return when (response.status) {
-        200, 201, 204 -> response.data?: throw DataNotFoundException(response.message)
+        200, 201, 204 -> response.data ?: throw DataNotFoundException(response.message)
         400 -> throw BadRequestException(response.message)
         401 -> throw UnauthorizedException(response.message)
         403 -> throw ForbiddenException(response.message)
