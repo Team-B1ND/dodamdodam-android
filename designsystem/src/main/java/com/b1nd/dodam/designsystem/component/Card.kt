@@ -90,12 +90,20 @@ fun DodamAskCard(
                         .weight(1f)
                         .align(Alignment.Bottom),
                 ) {
-                    DodamDescriptionText(
-                        descriptionMessage = "남음",
-                        message = currentLeftTime,
-                        reverse = true,
-                        alignment = Alignment.Bottom
-                    )
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text(
+                            text = currentLeftTime,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        if (currentLeftTime.isNotBlank()) {
+                            Text(
+                                text = " 남음",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.tertiary,
+                            )
+                        }
+                    }
                     Spacer(modifier = Modifier.height(8.dp))
                     DodamLinearProgress(
                         progress = progress,
@@ -145,35 +153,20 @@ fun DodamAskCard(
 fun DodamDescriptionText(
     descriptionMessage: String,
     message: String,
-    reverse: Boolean = false,
     alignment: Alignment.Vertical = Alignment.CenterVertically
 ) {
     Row(verticalAlignment = alignment) {
-        if (!reverse) {
-            Text(
-                text = descriptionMessage,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.tertiary,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        } else {
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = descriptionMessage,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.tertiary,
-            )
-        }
+        Text(
+            text = descriptionMessage,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.tertiary,
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
