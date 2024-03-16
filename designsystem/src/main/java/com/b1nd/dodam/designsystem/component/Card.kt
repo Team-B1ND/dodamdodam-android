@@ -40,7 +40,7 @@ fun DodamAskCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(18.dp))
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(16.dp),
     ) {
         val (statusColor, statusText) = when (askStatus) {
@@ -61,7 +61,7 @@ fun DodamAskCard(
                 Text(
                     text = statusText,
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.background,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -84,99 +84,95 @@ fun DodamAskCard(
             Spacer(modifier = Modifier.height(12.dp))
             Divider(color = MaterialTheme.colorScheme.secondary)
             Spacer(modifier = Modifier.height(12.dp))
-            Column {
-                Row {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 16.dp)
-                            .align(Alignment.Bottom),
-                    ) {
-                        Row(verticalAlignment = Alignment.Bottom) {
-                            Text(
-                                text = currentLeftTime,
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                            if (currentLeftTime.isNotBlank()) {
-                                Text(
-                                    text = " 남음",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.tertiary,
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        DodamLinearProgress(progress = progress, color = statusColor)
-                    }
-                    Column {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = startTimeText,
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.tertiary,
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = startTime,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = endTimeText,
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.tertiary,
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = endTime,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-                    }
+            Row {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.Bottom),
+                ) {
+                    DodamDescriptionText(
+                        descriptionMessage = "남음",
+                        message = currentLeftTime,
+                        reverse = true,
+                        alignment = Alignment.Bottom
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    DodamLinearProgress(
+                        progress = progress,
+                        color = statusColor
+                    )
                 }
-                phoneReason?.let {
-                    Spacer(modifier = Modifier.height(22.dp))
-                    Row(verticalAlignment = Alignment.Top) {
-                        Text(
-                            text = "휴대폰 사유",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.tertiary,
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
+                Spacer(modifier = Modifier.width(16.dp))
+                Column {
+                    DodamDescriptionText(
+                        descriptionMessage = startTimeText,
+                        message = startTime
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    DodamDescriptionText(
+                        descriptionMessage = endTimeText,
+                        message = endTime
+                    )
                 }
             }
+            phoneReason?.let {
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(verticalAlignment = Alignment.Top) {
+                    DodamDescriptionText(
+                        descriptionMessage = "휴대폰 사유",
+                        message = phoneReason,
+                        alignment = Alignment.Top
+                    )
+                }
+            }
+
         } else { // 신청이 거절되었을 때
-            Column {
-                rejectedReason?.let {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Divider(color = MaterialTheme.colorScheme.secondary)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Row(verticalAlignment = Alignment.Top) {
-                        Text(
-                            text = "거절사유",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.tertiary,
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = rejectedReason,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
-                }
+            rejectedReason?.let {
+                Spacer(modifier = Modifier.height(12.dp))
+                Divider(color = MaterialTheme.colorScheme.secondary)
+                Spacer(modifier = Modifier.height(12.dp))
+                DodamDescriptionText(
+                    descriptionMessage = "거절사유",
+                    message = rejectedReason,
+                    alignment = Alignment.Top
+                )
             }
+        }
+    }
+}
+
+@Composable
+fun DodamDescriptionText(
+    descriptionMessage: String,
+    message: String,
+    reverse: Boolean = false,
+    alignment: Alignment.Vertical = Alignment.CenterVertically
+) {
+    Row(verticalAlignment = alignment) {
+        if (!reverse) {
+            Text(
+                text = descriptionMessage,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.tertiary,
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else {
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = descriptionMessage,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.tertiary,
+            )
         }
     }
 }
