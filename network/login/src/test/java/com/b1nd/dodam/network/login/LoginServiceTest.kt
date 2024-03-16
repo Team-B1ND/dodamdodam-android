@@ -12,7 +12,6 @@ import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -24,10 +23,16 @@ class LoginServiceTest {
     @Before
     fun setUp() {
         val client = HttpClient(
-            MockEngine { _ ->
+            MockEngine {
                 respond(
                     content = """
-                    {"status":200,"message":"로그인 성공","data":{"accessToken":"token"}}
+                        {
+                        "status":200,
+                        "message":"로그인 성공",
+                        "data":{
+                            "accessToken":"token"
+                            }
+                        }
                     """.trimIndent(),
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
@@ -35,11 +40,7 @@ class LoginServiceTest {
             },
         ) {
             install(ContentNegotiation) {
-                json(
-                    Json {
-                        ignoreUnknownKeys = true
-                    },
-                )
+                json()
             }
         }
 
@@ -52,7 +53,7 @@ class LoginServiceTest {
             LoginResponse(
                 accessToken = "token",
             ),
-            loginService.login("qwerlove10", "kim01387005!"),
+            loginService.login("student", "12345"),
         )
     }
 }
