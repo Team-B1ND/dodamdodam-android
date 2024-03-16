@@ -36,7 +36,7 @@ fun DodamTopAppBar(
             .fillMaxWidth()
             .background(containerColor)
             .statusBarsPadding()
-            .height(48.dp)
+            .height(58.dp)
             .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
