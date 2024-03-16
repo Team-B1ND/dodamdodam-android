@@ -8,15 +8,12 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,11 +41,7 @@ import java.time.LocalTime
 import kotlin.math.roundToInt
 
 @Composable
-fun MealColumn(
-    date: LocalDate,
-    isActive: Boolean = false,
-    content: @Composable ColumnScope.() -> Unit
-) {
+fun MealColumn(date: LocalDate, isActive: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -111,7 +104,7 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                 title = "급식",
                 containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             LazyColumn(
                 modifier = Modifier
@@ -215,13 +208,7 @@ private fun isBetween(startHour: Int, startMinute: Int, endHour: Int, endMinute:
 }
 
 @Composable
-fun MealCard(
-    modifier: Modifier = Modifier,
-    isLoading: Boolean = false,
-    isActive: Boolean = false,
-    title: String = "",
-    meal: MealDetail? = null
-) {
+fun MealCard(modifier: Modifier = Modifier, isLoading: Boolean = false, isActive: Boolean = false, title: String = "", meal: MealDetail? = null) {
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(20.dp))
@@ -234,8 +221,11 @@ fun MealCard(
                 Box(
                     modifier = Modifier
                         .background(
-                            if (isActive) MaterialTheme.colorScheme.primary.copy(alpha = 0.65f)
-                            else MaterialTheme.colorScheme.tertiary,
+                            if (isActive) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.65f)
+                            } else {
+                                MaterialTheme.colorScheme.tertiary
+                            },
                             shape = RoundedCornerShape(100),
                         )
                         .padding(horizontal = 12.dp, vertical = 4.dp),
