@@ -107,19 +107,19 @@ fun DodamAskCard(
                     Spacer(modifier = Modifier.height(8.dp))
                     DodamLinearProgress(
                         progress = progress,
-                        color = statusColor
+                        color = statusColor,
                     )
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     DodamDescriptionText(
                         descriptionMessage = startTimeText,
-                        message = startTime
+                        message = startTime,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     DodamDescriptionText(
                         descriptionMessage = endTimeText,
-                        message = endTime
+                        message = endTime,
                     )
                 }
             }
@@ -129,11 +129,10 @@ fun DodamAskCard(
                     DodamDescriptionText(
                         descriptionMessage = "휴대폰 사유",
                         message = phoneReason,
-                        alignment = Alignment.Top
+                        alignment = Alignment.Top,
                     )
                 }
             }
-
         } else { // 신청이 거절되었을 때
             rejectedReason?.let {
                 Spacer(modifier = Modifier.height(12.dp))
@@ -142,7 +141,7 @@ fun DodamAskCard(
                 DodamDescriptionText(
                     descriptionMessage = "거절사유",
                     message = rejectedReason,
-                    alignment = Alignment.Top
+                    alignment = Alignment.Top,
                 )
             }
         }
@@ -150,11 +149,7 @@ fun DodamAskCard(
 }
 
 @Composable
-fun DodamDescriptionText(
-    descriptionMessage: String,
-    message: String,
-    alignment: Alignment.Vertical = Alignment.CenterVertically
-) {
+fun DodamDescriptionText(descriptionMessage: String, message: String, alignment: Alignment.Vertical = Alignment.CenterVertically) {
     Row(verticalAlignment = alignment) {
         Text(
             text = descriptionMessage,
