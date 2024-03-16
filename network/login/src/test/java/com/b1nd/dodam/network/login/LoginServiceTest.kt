@@ -1,7 +1,7 @@
 package com.b1nd.dodam.network.login
 
-import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.network.login.api.LoginService
+import com.b1nd.dodam.network.login.model.LoginResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -12,7 +12,6 @@ import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -24,22 +23,24 @@ class LoginServiceTest {
     @Before
     fun setUp() {
         val client = HttpClient(
-            MockEngine { _ ->
+            MockEngine {
                 respond(
                     content = """
-                    {"status":401,"message":"비밀번호 틀림"}}
+                        {
+                        "status":200,
+                        "message":"로그인 성공",
+                        "data":{
+                            "accessToken":"token"
+                            }
+                        }
                     """.trimIndent(),
-                    status = HttpStatusCode.Unauthorized,
+                    status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
             },
         ) {
             install(ContentNegotiation) {
-                json(
-                    Json {
-                        ignoreUnknownKeys = true
-                    },
-                )
+                json()
             }
         }
 
@@ -49,8 +50,10 @@ class LoginServiceTest {
     @Test
     fun testDeserializationOfLogin() = runTest(testDispatcher) {
         assertEquals(
-            UnauthorizedException("비밀번호 틀림"),
-            loginService.login("student", "1"),
+            LoginResponse(
+                accessToken = "token",
+            ),
+            loginService.login("student", "12345"),
         )
     }
 }
