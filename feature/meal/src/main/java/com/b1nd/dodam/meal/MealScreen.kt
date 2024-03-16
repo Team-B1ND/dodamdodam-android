@@ -8,16 +8,12 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.data.meal.model.MealDetail
+import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.shimmerEffect
 import com.b1nd.dodam.designsystem.theme.DodamTheme
 import com.b1nd.dodam.meal.viewmodel.MealViewModel
@@ -52,7 +49,7 @@ fun MealColumn(date: LocalDate, isActive: Boolean = false, content: @Composable 
         Box(
             modifier = Modifier
                 .background(
-                    if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.inverseSurface,
+                    if (isActive) MaterialTheme.colorScheme.primary.copy(alpha = 0.65f) else MaterialTheme.colorScheme.secondary,
                     RoundedCornerShape(100),
                 )
                 .padding(horizontal = 60.dp, vertical = 6.dp),
@@ -73,7 +70,7 @@ fun MealColumn(date: LocalDate, isActive: Boolean = false, content: @Composable 
                     )[date.dayOfWeek.value - 1],
                 ),
                 style = MaterialTheme.typography.bodyMedium,
-                color = if (isActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.inverseOnSurface,
+                color = if (isActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.tertiary,
             )
         }
         Column(
@@ -103,6 +100,12 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
             .fillMaxSize(),
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            DodamTopAppBar(
+                title = "급식",
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -111,23 +114,6 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 state = lazyListState,
             ) {
-                item {
-                    Spacer(
-                        modifier = Modifier.height(
-                            28.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
-                        ),
-                    )
-                }
-                item {
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            modifier = Modifier.align(Alignment.CenterStart),
-                            text = "급식",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
-                }
                 if (!uiState.isLoading) {
                     items(uiState.meal.size) { index ->
                         val isToday = index == 0
@@ -235,7 +221,11 @@ fun MealCard(modifier: Modifier = Modifier, isLoading: Boolean = false, isActive
                 Box(
                     modifier = Modifier
                         .background(
-                            if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
+                            if (isActive) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.65f)
+                            } else {
+                                MaterialTheme.colorScheme.tertiary
+                            },
                             shape = RoundedCornerShape(100),
                         )
                         .padding(horizontal = 12.dp, vertical = 4.dp),
