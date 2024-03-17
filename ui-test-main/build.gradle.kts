@@ -42,4 +42,5 @@ dependencies {
 
     implementation(projects.designsystem)
     implementation(projects.featureStudent.main)
+    implementation(projects.featureStudent.nightstudy)
 }
