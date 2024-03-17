@@ -50,4 +50,5 @@ include(
     ":keystore",
     ":datastore",
     ":ui-test-main",
+    ":feature-student:nightstudy",
 )

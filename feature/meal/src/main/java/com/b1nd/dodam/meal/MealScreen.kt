@@ -211,7 +211,7 @@ private fun isBetween(startHour: Int, startMinute: Int, endHour: Int, endMinute:
 fun MealCard(modifier: Modifier = Modifier, isLoading: Boolean = false, isActive: Boolean = false, title: String = "", meal: MealDetail? = null) {
     Column(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(20.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(18.dp))
             .padding(16.dp),
     ) {
         Row(

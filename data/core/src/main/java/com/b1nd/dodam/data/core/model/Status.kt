@@ -2,10 +2,10 @@ package com.b1nd.dodam.data.core.model
 
 import com.b1nd.dodam.network.core.model.NetworkStatus
 
-enum class Status {
-    PENDING,
-    ALLOWED,
-    REJECTED,
+enum class Status(name: String) {
+    PENDING("PENDING"),
+    ALLOWED("ALLOWED"),
+    REJECTED("REJECTED"),
 }
 
 fun NetworkStatus.toModel(): Status = when (this) {
