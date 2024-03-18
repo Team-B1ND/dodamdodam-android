@@ -41,7 +41,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.animation.NoInteractionSource
-import com.b1nd.dodam.designsystem.icons.Calendar
 import com.b1nd.dodam.designsystem.icons.Door
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
 import com.b1nd.dodam.designsystem.icons.Home

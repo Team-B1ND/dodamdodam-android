@@ -7,17 +7,17 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.nightstudy.NightStudyUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class NightStudyViewModel @Inject constructor(
-    private val nightStudyRepository: NightStudyRepository
+    private val nightStudyRepository: NightStudyRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NightStudyUiState())
     val uiState = _uiState.asStateFlow()
@@ -51,7 +51,7 @@ class NightStudyViewModel @Inject constructor(
                         is Result.Success -> {
                             it.copy(
                                 isLoading = false,
-                                nightStudy = result.data
+                                nightStudy = result.data,
                             )
                         }
                     }

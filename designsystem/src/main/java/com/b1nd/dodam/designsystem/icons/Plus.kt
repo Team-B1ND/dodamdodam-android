@@ -28,12 +28,12 @@ public val Plus: ImageVector
         }
         vector = Builder(
             name = "Group 668", defaultWidth = 44.0.dp, defaultHeight = 44.0.dp,
-            viewportWidth = 44.0f, viewportHeight = 44.0f
+            viewportWidth = 44.0f, viewportHeight = 44.0f,
         ).apply {
             path(
                 fill = SolidColor(Color(0xFFBDBDBD)), stroke = null, strokeLineWidth = 0.0f,
                 strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                pathFillType = NonZero,
             ) {
                 moveTo(11.5f, 21.9999f)
                 curveTo(11.5f, 22.7705f, 12.1364f, 23.3989f, 12.8989f, 23.3989f)

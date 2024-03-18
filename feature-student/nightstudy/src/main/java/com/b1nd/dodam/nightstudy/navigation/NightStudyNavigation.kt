@@ -8,12 +8,11 @@ import com.b1nd.dodam.nightstudy.NightStudyScreen
 
 const val NIGHT_STUDY_ROUTE = "nightstudy"
 
-fun NavController.navigateToNightStudy(navOptions: NavOptions? = null) =
-    navigate(NIGHT_STUDY_ROUTE, navOptions)
+fun NavController.navigateToNightStudy(navOptions: NavOptions? = null) = navigate(NIGHT_STUDY_ROUTE, navOptions)
 
 fun NavGraphBuilder.nightStudyScreen(onAddClick: () -> Unit) {
     composable(
-        route = NIGHT_STUDY_ROUTE
+        route = NIGHT_STUDY_ROUTE,
     ) {
         NightStudyScreen(onAddClick)
     }

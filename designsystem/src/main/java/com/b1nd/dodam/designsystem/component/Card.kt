@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.designsystem.model.AskStatus
 import com.b1nd.dodam.designsystem.theme.DodamTheme
 
 @Composable
