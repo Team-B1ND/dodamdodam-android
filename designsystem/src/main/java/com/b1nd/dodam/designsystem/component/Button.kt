@@ -1,24 +1,116 @@
 package com.b1nd.dodam.designsystem.component
 
+import android.util.Log
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.designsystem.animation.NoInteractionSource
+import com.b1nd.dodam.designsystem.animation.bounceClick
 import com.b1nd.dodam.designsystem.theme.DodamTheme
+import kotlin.math.roundToInt
+
+/**
+ * DodamToggleButton
+ *
+ * @param titles DodamToggleButtons tabs title
+ * @param onClick called when this button is clicked with index
+ * @param startIndex DodamToggleButton start selected index
+ * */
+
+@Composable
+fun DodamToggleButton(titles: List<String>, onClick: (Int) -> Unit, startIndex: Int) {
+    var selectedIndex: Int by remember { mutableIntStateOf(startIndex) }
+    var selectedXOffset by remember { mutableIntStateOf(12) }
+    val x by animateIntAsState(targetValue = selectedXOffset, label = "")
+    val boxWidth = LocalConfiguration.current.screenWidthDp / titles.size - 8
+    Box(modifier = Modifier.background(MaterialTheme.colorScheme.secondary)) {
+        Box(
+            modifier = Modifier
+                .offset {
+                    IntOffset(x, 0)
+                }
+                .padding(top = 4.dp, bottom = 4.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant,
+                        RoundedCornerShape(10.dp),
+                    )
+                    .width(boxWidth.dp)
+                    .height(43.dp),
+            )
+        }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            titles.forEachIndexed { index, title ->
+                val isSelected = selectedIndex == index
+                var xOffset by remember { mutableIntStateOf(0) }
+                Tab(
+                    interactionSource = remember { NoInteractionSource() },
+                    selected = isSelected,
+                    onClick = {
+                        selectedIndex = index
+                        selectedXOffset = xOffset
+                        onClick(index)
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(53.dp)
+                        .padding(4.dp)
+                        .bounceClick { }
+                        .onGloballyPositioned {
+                            Log.d(
+                                "onGloballyPositioned: xOffset: ",
+                                it.positionInParent().x
+                                    .roundToInt()
+                                    .toString(),
+                            )
+                            xOffset = it.positionInParent().x.roundToInt()
+                        },
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = if (isSelected) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.tertiary,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
 
 /**
  * Dodam full width button
@@ -44,6 +136,7 @@ import com.b1nd.dodam.designsystem.theme.DodamTheme
  * for this button. You can create and pass in your own `remember`ed instance to observe
  * [Interaction]s and customize the appearance / behavior of this button in different states.
  */
+
 @Composable
 fun DodamFullWidthButton(
     onClick: () -> Unit,
@@ -305,6 +398,20 @@ private fun DodamSmallButtonPreview() {
         DodamSmallButton(
             onClick = {},
             text = "버튼",
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DodamToggleButtonPreview() {
+    val title = listOf("외출", "외박")
+    val startIndex = 0
+    DodamTheme {
+        DodamToggleButton(
+            titles = title,
+            onClick = {},
+            startIndex = startIndex,
         )
     }
 }
