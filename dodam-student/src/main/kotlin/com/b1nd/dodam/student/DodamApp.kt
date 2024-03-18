@@ -7,7 +7,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
+import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
+import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
@@ -27,7 +29,11 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
             onRegisterClick = { navController.navigateToInfo() },
             onLoginClick = { navController.navigationToLogin() },
         )
-        mainScreen()
+        mainScreen(
+            onNightStudyAddClick = {
+                TODO("navigate to add nightStudy screen")
+            },
+        )
         infoScreen(
             onNextClick = { name, grade, room, number, email, phoneNumber ->
                 navController.navigateToAuth(
@@ -42,7 +48,7 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
             onBackClick = { navController.popBackStack() },
         )
         authScreen(
-            onRegisterClick = { /* TODO: Navigation to Info Screen */ },
+            onRegisterClick = { navController.navigateToOnboarding() },
             onBackClick = { navController.popBackStack() },
         )
         loginScreen(
@@ -56,6 +62,9 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
                     },
                 )
             },
+        )
+        nightStudyScreen(
+            onAddClick = { TODO("navigate to add nightStudy screen") },
         )
     }
 }
