@@ -54,7 +54,12 @@ fun DodamSegmentedButton(titles: List<String>, onClick: (Int) -> Unit, startInde
     var selectedXOffset by remember { mutableIntStateOf(12) }
     val x by animateIntAsState(targetValue = selectedXOffset, label = "")
     val boxWidth = LocalConfiguration.current.screenWidthDp / titles.size - 8
-    Box(modifier = Modifier.background(MaterialTheme.colorScheme.secondary)) {
+    Box(
+        modifier = Modifier.background(
+            MaterialTheme.colorScheme.secondary,
+            RoundedCornerShape(12.dp)
+        )
+    ) {
         Box(
             modifier = Modifier
                 .offset {
