@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.designsystem.component.DodamAskCard
 import com.b1nd.dodam.designsystem.component.DodamFullWidthButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.icons.Plus
 import com.b1nd.dodam.designsystem.icons.SmailMoon
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import java.time.LocalDateTime
@@ -41,7 +42,12 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
             .background(MaterialTheme.colorScheme.surface),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        DodamTopAppBar(title = "심야 자습", containerColor = MaterialTheme.colorScheme.surface)
+        DodamTopAppBar(
+            title = "심야 자습",
+            containerColor = MaterialTheme.colorScheme.surface,
+            icon = Plus,
+            onIconClick = onAddClick
+        )
         Box(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
