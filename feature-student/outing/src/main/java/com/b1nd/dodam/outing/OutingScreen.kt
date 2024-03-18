@@ -2,6 +2,7 @@ package com.b1nd.dodam.outing
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -78,7 +79,9 @@ fun OutingScreen(onAddOutingClick: () -> Unit, onAddSleepOverClick: () -> Unit, 
             val outingsList: List<Outing> = (uiState.outings ?: emptyList())
 
             if (outingsList.isNotEmpty()) {
-                LazyColumn {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
                     items(
                         (uiState.outings ?: emptyList())
                             .filter { outing ->
