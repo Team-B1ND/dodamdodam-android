@@ -49,7 +49,7 @@ import kotlin.math.roundToInt
  * */
 
 @Composable
-fun DodamToggleButton(titles: List<String>, onClick: (Int) -> Unit, startIndex: Int) {
+fun DodamSegmentedButton(titles: List<String>, onClick: (Int) -> Unit, startIndex: Int = 0) {
     var selectedIndex: Int by remember { mutableIntStateOf(startIndex) }
     var selectedXOffset by remember { mutableIntStateOf(12) }
     val x by animateIntAsState(targetValue = selectedXOffset, label = "")
@@ -404,11 +404,11 @@ private fun DodamSmallButtonPreview() {
 
 @Preview
 @Composable
-private fun DodamToggleButtonPreview() {
+private fun DodamSegmentedButtonPreview() {
     val title = listOf("외출", "외박")
     val startIndex = 0
     DodamTheme {
-        DodamToggleButton(
+        DodamSegmentedButton(
             titles = title,
             onClick = {},
             startIndex = startIndex,
