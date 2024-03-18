@@ -31,6 +31,7 @@ import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
+import com.b1nd.dodam.outing.nanigation.OUTING_ROUTE
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.student.home.navigation.homeScreen
 
@@ -39,7 +40,7 @@ internal fun MainScreen(navController: NavHostController = rememberNavController
     val bottomNavItems = listOf(
         BottomNavigationItem(HOME_ROUTE, Home),
         BottomNavigationItem(MEAL_ROUTE, ForkAndKnife),
-        BottomNavigationItem("", Door),
+        BottomNavigationItem(OUTING_ROUTE, Door),
         BottomNavigationItem(NIGHT_STUDY_ROUTE, MoonPlus),
         BottomNavigationItem("", More),
     )

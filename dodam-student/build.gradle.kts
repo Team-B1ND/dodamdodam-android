@@ -41,5 +41,6 @@ dependencies {
     implementation(projects.feature.register)
     implementation(projects.feature.login)
     implementation(projects.featureStudent.nightstudy)
+    implementation(projects.featureStudent.outing)
     implementation(projects.datastore)
 }

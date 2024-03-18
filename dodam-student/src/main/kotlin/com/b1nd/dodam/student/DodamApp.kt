@@ -11,6 +11,7 @@ import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
+import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
@@ -65,6 +66,9 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
         )
         nightStudyScreen(
             onAddClick = { TODO("navigate to add nightStudy screen") },
+        )
+        outingScreen (
+            onAddClick = { TODO("navigate to add outing screen") }
         )
     }
 }
