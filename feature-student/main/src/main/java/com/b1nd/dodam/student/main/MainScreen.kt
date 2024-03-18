@@ -22,7 +22,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.component.BottomNavigationItem
 import com.b1nd.dodam.designsystem.component.DodamBottomNavigation
-import com.b1nd.dodam.designsystem.icons.Calendar
 import com.b1nd.dodam.designsystem.icons.Door
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
 import com.b1nd.dodam.designsystem.icons.Home
@@ -36,10 +35,7 @@ import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.student.home.navigation.homeScreen
 
 @Composable
-internal fun MainScreen(
-    navController: NavHostController = rememberNavController(),
-    onNightStudyAddClick: () -> Unit,
-) {
+internal fun MainScreen(navController: NavHostController = rememberNavController(), onNightStudyAddClick: () -> Unit) {
     val bottomNavItems = listOf(
         BottomNavigationItem(HOME_ROUTE, Home),
         BottomNavigationItem(MEAL_ROUTE, ForkAndKnife),

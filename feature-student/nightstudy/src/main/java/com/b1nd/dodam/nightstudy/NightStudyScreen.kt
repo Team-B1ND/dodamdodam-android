@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -27,21 +26,12 @@ import com.b1nd.dodam.designsystem.component.DodamFullWidthButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.icons.SmailMoon
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toJavaLocalDateTime
-import kotlinx.datetime.toKotlinLocalDateTime
-import kotlinx.datetime.toLocalDateTime
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
-import kotlin.time.Duration
+import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
-fun NightStudyScreen(
-    onAddClick: () -> Unit,
-    viewModel: NightStudyViewModel = hiltViewModel()
-) {
+fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hiltViewModel()) {
     val current = LocalDateTime.now()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -49,13 +39,13 @@ fun NightStudyScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        DodamTopAppBar(title = "심야 자습")
+        DodamTopAppBar(title = "심야 자습", containerColor = MaterialTheme.colorScheme.surface)
         Box(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .padding(top = 12.dp)
+                .padding(top = 12.dp),
         ) {
             uiState.nightStudy?.let { nightStudyList ->
                 LazyColumn(
@@ -104,7 +94,7 @@ fun NightStudyScreen(
                             endTimeText = "종료",
                             endTime = nightStudy.endAt.monthNumber.toString() + "월 " + nightStudy.endAt.dayOfMonth + "일",
                             currentLeftTime = currentLeftTime,
-                            progress = nightStudyProgress
+                            progress = nightStudyProgress,
                         )
                     }
                 }
@@ -113,19 +103,19 @@ fun NightStudyScreen(
                     modifier = Modifier
                         .background(
                             color = MaterialTheme.colorScheme.background,
-                            RoundedCornerShape(18.dp)
+                            RoundedCornerShape(18.dp),
                         )
-                        .padding(16.dp)
+                        .padding(16.dp),
                 ) {
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Image(imageVector = SmailMoon, contentDescription = null)
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
                             text = "신청한 심야 자습이 없어요",
                             style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = MaterialTheme.colorScheme.tertiary,
                         )
                         Spacer(modifier = Modifier.height(24.dp))
                         DodamFullWidthButton(
@@ -136,7 +126,7 @@ fun NightStudyScreen(
                                 MaterialTheme.colorScheme.onSurfaceVariant,
                                 MaterialTheme.colorScheme.secondary,
                                 MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
+                            ),
                         )
                     }
                 }

@@ -27,13 +27,15 @@ public val SmailMoon: ImageVector
             return vector!!
         }
         vector = Builder(
-            name = "Full moon face", defaultWidth = 36.0.dp, defaultHeight =
-            36.0.dp, viewportWidth = 36.0f, viewportHeight = 36.0f
+            name = "Full moon face", defaultWidth = 36.0.dp,
+            defaultHeight =
+            36.0.dp,
+            viewportWidth = 36.0f, viewportHeight = 36.0f,
         ).apply {
             path(
                 fill = SolidColor(Color(0xFFFCD53F)), stroke = null, strokeLineWidth = 0.0f,
                 strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                pathFillType = NonZero,
             ) {
                 moveTo(33.7489f, 17.9614f)
                 curveTo(33.7489f, 26.6595f, 26.6976f, 33.7108f, 17.9995f, 33.7108f)
@@ -45,7 +47,7 @@ public val SmailMoon: ImageVector
             path(
                 fill = SolidColor(Color(0xFFF9C23C)), stroke = null, strokeLineWidth = 0.0f,
                 strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                pathFillType = NonZero,
             ) {
                 moveTo(2.2747f, 17.0721f)
                 curveTo(2.6721f, 16.944f, 3.0959f, 16.8748f, 3.5359f, 16.8748f)
@@ -82,7 +84,7 @@ public val SmailMoon: ImageVector
             path(
                 fill = SolidColor(Color(0xFF321B41)), stroke = null, strokeLineWidth = 0.0f,
                 strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                pathFillType = NonZero,
             ) {
                 moveTo(12.0037f, 9.0449f)
                 curveTo(10.4681f, 9.0449f, 9.2137f, 10.2906f, 9.2137f, 11.8349f)
@@ -96,7 +98,7 @@ public val SmailMoon: ImageVector
             path(
                 fill = SolidColor(Color(0xFF321B41)), stroke = null, strokeLineWidth = 0.0f,
                 strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                pathFillType = NonZero,
             ) {
                 moveTo(23.1188f, 8.4824f)
                 curveTo(23.1188f, 8.1718f, 23.3706f, 7.9199f, 23.6813f, 7.9199f)
@@ -110,7 +112,7 @@ public val SmailMoon: ImageVector
             path(
                 fill = SolidColor(Color(0xFF321B41)), stroke = null, strokeLineWidth = 0.0f,
                 strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                pathFillType = NonZero,
             ) {
                 moveTo(11.5966f, 13.9319f)
                 curveTo(11.8205f, 13.3615f, 12.3783f, 12.9599f, 13.0387f, 12.9599f)
@@ -126,7 +128,7 @@ public val SmailMoon: ImageVector
             path(
                 fill = SolidColor(Color(0xFF321B41)), stroke = null, strokeLineWidth = 0.0f,
                 strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                pathFillType = NonZero,
             ) {
                 moveTo(22.7362f, 12.9599f)
                 curveTo(22.0757f, 12.9599f, 21.518f, 13.3615f, 21.2941f, 13.9319f)
@@ -142,7 +144,7 @@ public val SmailMoon: ImageVector
             path(
                 fill = SolidColor(Color(0xFF321B41)), stroke = null, strokeLineWidth = 0.0f,
                 strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                pathFillType = NonZero,
             ) {
                 moveTo(13.4666f, 18.652f)
                 curveTo(13.1371f, 18.3225f, 12.6028f, 18.3225f, 12.2733f, 18.652f)
