@@ -41,10 +41,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.animation.NoInteractionSource
-import com.b1nd.dodam.designsystem.icons.Calendar
 import com.b1nd.dodam.designsystem.icons.Door
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
 import com.b1nd.dodam.designsystem.icons.Home
+import com.b1nd.dodam.designsystem.icons.MoonPlus
 import com.b1nd.dodam.designsystem.icons.More
 import com.b1nd.dodam.designsystem.theme.DodamTheme
 import kotlin.math.roundToInt
@@ -156,7 +156,7 @@ private fun DodamBottomNavigationPreview() {
                 BottomNavigationItem("home", Home),
                 BottomNavigationItem("meal", ForkAndKnife),
                 BottomNavigationItem("out", Door),
-                BottomNavigationItem("schedule", Calendar),
+                BottomNavigationItem("nightstudy", MoonPlus),
                 BottomNavigationItem("more", More),
             ),
         )

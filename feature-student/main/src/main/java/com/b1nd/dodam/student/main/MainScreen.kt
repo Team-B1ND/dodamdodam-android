@@ -22,23 +22,25 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.component.BottomNavigationItem
 import com.b1nd.dodam.designsystem.component.DodamBottomNavigation
-import com.b1nd.dodam.designsystem.icons.Calendar
 import com.b1nd.dodam.designsystem.icons.Door
 import com.b1nd.dodam.designsystem.icons.ForkAndKnife
 import com.b1nd.dodam.designsystem.icons.Home
+import com.b1nd.dodam.designsystem.icons.MoonPlus
 import com.b1nd.dodam.designsystem.icons.More
 import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
+import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
+import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.student.home.navigation.homeScreen
 
 @Composable
-internal fun MainScreen(navController: NavHostController = rememberNavController()) {
+internal fun MainScreen(navController: NavHostController = rememberNavController(), onNightStudyAddClick: () -> Unit) {
     val bottomNavItems = listOf(
         BottomNavigationItem(HOME_ROUTE, Home),
         BottomNavigationItem(MEAL_ROUTE, ForkAndKnife),
         BottomNavigationItem("", Door),
-        BottomNavigationItem("", Calendar),
+        BottomNavigationItem(NIGHT_STUDY_ROUTE, MoonPlus),
         BottomNavigationItem("", More),
     )
 
@@ -51,6 +53,7 @@ internal fun MainScreen(navController: NavHostController = rememberNavController
         ) {
             homeScreen()
             mealScreen()
+            nightStudyScreen(onNightStudyAddClick)
         }
 
         Box(

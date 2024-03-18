@@ -15,7 +15,9 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
             navController = navController,
             startDestination = MAIN_ROUTE,
         ) {
-            mainScreen()
+            mainScreen(onNightStudyAddClick = {
+                TODO("navigate to add nightStudy screen")
+            })
         }
     }
 }
