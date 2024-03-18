@@ -1,5 +1,6 @@
 package com.b1nd.dodam.designsystem.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,11 +10,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -168,41 +176,17 @@ fun DodamDescriptionText(descriptionMessage: String, message: String, alignment:
 @Composable
 fun DodamAskCardPendingPreview() {
     DodamTheme {
-        Column {
-            DodamAskCard(
-                askStatus = "PENDING",
-                reason = "심야자습을 통해 해군부사관 취업",
-                progress = 0.5f,
-                currentLeftTime = "11일",
-                startTime = "3월 14일",
-                startTimeText = "시작",
-                endTime = "3월 14일",
-                endTimeText = "종료",
-                phoneReason = "해군 선배님들의 훈련영상 시청 (웹툰보고싶어용 ㅠㅠ)",
-            )
-            DodamAskCard(
-                askStatus = "ALLOWED",
-                reason = "홈푸드 홈푸드 신나는노래",
-                progress = 0.5f,
-                labelText = "3월 14일",
-                currentLeftTime = "30분",
-                startTime = "12시 30분",
-                startTimeText = "외출",
-                endTime = "13시 30분",
-                endTimeText = "복귀",
-            )
-            DodamAskCard(
-                askStatus = "REJECTED",
-                reason = "크킄 누가 나를 막을테지? 이것은 \"외.박\" 이란 것이다.",
-                progress = 0.5f,
-                currentLeftTime = "1시간 25분",
-                startTime = "3월 14일",
-                startTimeText = "시작",
-                endTime = "3월 14일",
-                endTimeText = "종료",
-                rejectedReason = "아앗... 그앞은 나 \"도현욱\"이 지키고 있다.",
-            )
-        }
+        DodamAskCard(
+            askStatus = "PENDING",
+            reason = "심야자습을 통해 해군부사관 취업",
+            progress = 0.5f,
+            currentLeftTime = "11일",
+            startTime = "3월 14일",
+            startTimeText = "시작",
+            endTime = "3월 14일",
+            endTimeText = "종료",
+            phoneReason = "해군 선배님들의 훈련영상 시청 (웹툰보고싶어용 ㅠㅠ)",
+        )
     }
 }
 
@@ -239,5 +223,39 @@ fun DodamAskCardRejectedPreview() {
             endTimeText = "종료",
             rejectedReason = "아앗... 그앞은 나 \"도현욱\"이 지키고 있다.",
         )
+    }
+}
+
+@Preview
+@Composable
+fun DodamAskCardProgressPreview() {
+    DodamTheme {
+        var isOutSleeping by remember {
+            mutableStateOf(true)
+        }
+        var tests by remember {
+            mutableStateOf(mutableListOf(0.3f, 0.3f))
+        }
+        Column {
+            if (isOutSleeping) {
+                DodamAskCard(
+                    askStatus = "PENDING",
+                    progress = 1.0f,
+                )
+            }
+            Button(onClick = {
+                Log.e("TAG", "DodamAskCardProgressPreview: ${tests.size}")
+                isOutSleeping = !isOutSleeping
+                tests.add(0.5f)
+            }) {}
+            LazyColumn {
+                items(tests) { test ->
+                    DodamAskCard(
+                        askStatus = "PENDING",
+                        progress = test,
+                    )
+                }
+            }
+        }
     }
 }

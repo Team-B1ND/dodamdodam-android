@@ -32,14 +32,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.b1nd.dodam.designsystem.animation.NoInteractionSource
-import com.b1nd.dodam.designsystem.animation.bounceClick
 import com.b1nd.dodam.designsystem.theme.DodamTheme
 import kotlin.math.roundToInt
 
@@ -61,11 +58,13 @@ fun DodamSegmentedButton(titles: List<String>, onClick: (Int) -> Unit, startInde
     }
     val boxWidth =
         with(LocalDensity.current) { ((buttonWidth / titles.size).toDp() - 8.dp) }
-    Box(modifier = Modifier
-        .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(12.dp))
-        .onGloballyPositioned {
-            buttonWidth = it.size.width
-        }) {
+    Box(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(12.dp))
+            .onGloballyPositioned {
+                buttonWidth = it.size.width
+            },
+    ) {
         Box(
             modifier = Modifier
                 .offset {
@@ -414,7 +413,7 @@ private fun DodamSmallButtonPreview() {
 
 @Preview
 @Composable
-private fun DodamToggleButtonPreview() {
+private fun DodamSegmentedButtonPreview() {
     val title = listOf("외출", "외박")
     val startIndex = 0
     DodamTheme {
