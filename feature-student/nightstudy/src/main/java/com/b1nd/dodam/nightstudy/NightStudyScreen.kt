@@ -46,7 +46,7 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
             title = "심야 자습",
             containerColor = MaterialTheme.colorScheme.surface,
             icon = Plus,
-            onIconClick = onAddClick
+            onIconClick = onAddClick,
         )
         Box(
             modifier = Modifier

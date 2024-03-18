@@ -32,11 +32,17 @@ import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.outing.nanigation.OUTING_ROUTE
+import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.student.home.navigation.homeScreen
 
 @Composable
-internal fun MainScreen(navController: NavHostController = rememberNavController(), onNightStudyAddClick: () -> Unit) {
+internal fun MainScreen(
+    navController: NavHostController = rememberNavController(),
+    onNightStudyAddClick: () -> Unit,
+    onOutingAddClick: () -> Unit,
+    onSleepOverClick: () -> Unit,
+) {
     val bottomNavItems = listOf(
         BottomNavigationItem(HOME_ROUTE, Home),
         BottomNavigationItem(MEAL_ROUTE, ForkAndKnife),
@@ -55,6 +61,10 @@ internal fun MainScreen(navController: NavHostController = rememberNavController
             homeScreen()
             mealScreen()
             nightStudyScreen(onNightStudyAddClick)
+            outingScreen(
+                onOutingAddClick,
+                onSleepOverClick,
+            )
         }
 
         Box(

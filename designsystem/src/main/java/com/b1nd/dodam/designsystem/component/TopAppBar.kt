@@ -51,7 +51,7 @@ fun DodamTopAppBar(
         icon?.let {
             Icon(
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(44.dp)
                     .clickable(onClick = onIconClick!!),
                 imageVector = icon,
                 contentDescription = null,

@@ -11,8 +11,12 @@ const val MAIN_ROUTE = "main"
 
 fun NavController.navigateToMain(navOptions: NavOptions? = null) = navigate(MAIN_ROUTE, navOptions)
 
-fun NavGraphBuilder.mainScreen(onNightStudyAddClick: () -> Unit) {
+fun NavGraphBuilder.mainScreen(onNightStudyAddClick: () -> Unit, onOutingAddClick: () -> Unit, onSleepOverAddClick: () -> Unit) {
     composable(route = MAIN_ROUTE) {
-        MainScreen(onNightStudyAddClick = onNightStudyAddClick)
+        MainScreen(
+            onNightStudyAddClick = onNightStudyAddClick,
+            onOutingAddClick = onOutingAddClick,
+            onSleepOverClick = onSleepOverAddClick,
+        )
     }
 }

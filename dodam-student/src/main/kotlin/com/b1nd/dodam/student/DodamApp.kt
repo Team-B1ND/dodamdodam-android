@@ -34,6 +34,12 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
             onNightStudyAddClick = {
                 TODO("navigate to add nightStudy screen")
             },
+            onOutingAddClick = {
+                TODO("navigate to add outing screen")
+            },
+            onSleepOverAddClick = {
+                TODO("navigate to add sleep over screen")
+            },
         )
         infoScreen(
             onNextClick = { name, grade, room, number, email, phoneNumber ->
@@ -67,8 +73,9 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
         nightStudyScreen(
             onAddClick = { TODO("navigate to add nightStudy screen") },
         )
-        outingScreen (
-            onAddClick = { TODO("navigate to add outing screen") }
+        outingScreen(
+            onAddOutingClick = { TODO("navigate to add outing screen") },
+            onAddSleepOverClick = { TODO("navigate to add outing screen") },
         )
     }
 }
