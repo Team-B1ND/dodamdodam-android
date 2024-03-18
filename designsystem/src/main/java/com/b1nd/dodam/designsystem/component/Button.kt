@@ -52,7 +52,7 @@ import kotlin.math.roundToInt
  * */
 
 @Composable
-fun DodamSegmentedButton(titles: List<String>, onClick: (Int) -> Unit, startIndex: Int) {
+fun DodamSegmentedButton(titles: List<String>, onClick: (Int) -> Unit, startIndex: Int = 0) {
     var selectedIndex: Int by remember { mutableIntStateOf(startIndex) }
     var selectedXOffset by remember { mutableIntStateOf(12) }
     val x by animateIntAsState(targetValue = selectedXOffset, label = "")
@@ -62,7 +62,7 @@ fun DodamSegmentedButton(titles: List<String>, onClick: (Int) -> Unit, startInde
     val boxWidth =
         with(LocalDensity.current) { ((buttonWidth / titles.size).toDp() - 8.dp) }
     Box(modifier = Modifier
-        .background(MaterialTheme.colorScheme.secondary)
+        .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(12.dp))
         .onGloballyPositioned {
             buttonWidth = it.size.width
         }) {
