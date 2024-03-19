@@ -15,4 +15,5 @@ dependencies {
     implementation(projects.featureStudent.home)
     implementation(projects.feature.meal)
     implementation(projects.featureStudent.nightstudy)
+    implementation(projects.featureStudent.outing)
 }
