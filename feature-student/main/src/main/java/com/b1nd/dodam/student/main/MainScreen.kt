@@ -39,9 +39,9 @@ import com.b1nd.dodam.student.home.navigation.homeScreen
 @Composable
 internal fun MainScreen(
     navController: NavHostController = rememberNavController(),
-    onNightStudyAddClick: () -> Unit,
-    onOutingAddClick: () -> Unit,
-    onSleepOverClick: () -> Unit,
+    navigateToAskNightStudy: () -> Unit,
+    navigateToAddOuting: () -> Unit,
+    navigateToAddSleepOver: () -> Unit,
 ) {
     val bottomNavItems = listOf(
         BottomNavigationItem(HOME_ROUTE, Home),
@@ -60,10 +60,10 @@ internal fun MainScreen(
         ) {
             homeScreen()
             mealScreen()
-            nightStudyScreen(onNightStudyAddClick)
+            nightStudyScreen(navigateToAskNightStudy)
             outingScreen(
-                onOutingAddClick,
-                onSleepOverClick,
+                navigateToAddOuting,
+                navigateToAddSleepOver,
             )
         }
 

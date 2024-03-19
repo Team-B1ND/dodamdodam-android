@@ -16,13 +16,13 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
             startDestination = MAIN_ROUTE,
         ) {
             mainScreen(
-                onNightStudyAddClick = {
+                navigateToAskNightStudy = {
                     TODO("navigate to add nightStudy screen")
                 },
-                onOutingAddClick = {
+                navigateToAddOuting = {
                     TODO("navigate to add outing screen")
                 },
-                onSleepOverAddClick = {
+                navigateToAddSleepOver = {
                     TODO("navigate to add sleep over screen")
                 },
             )

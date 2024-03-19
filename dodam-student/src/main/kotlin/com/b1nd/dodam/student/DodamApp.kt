@@ -31,13 +31,13 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
             onLoginClick = { navController.navigationToLogin() },
         )
         mainScreen(
-            onNightStudyAddClick = {
+            navigateToAskNightStudy = {
                 TODO("navigate to add nightStudy screen")
             },
-            onOutingAddClick = {
+            navigateToAddOuting = {
                 TODO("navigate to add outing screen")
             },
-            onSleepOverAddClick = {
+            navigateToAddSleepOver = {
                 TODO("navigate to add sleep over screen")
             },
         )
