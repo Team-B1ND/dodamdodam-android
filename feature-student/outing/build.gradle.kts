@@ -12,7 +12,6 @@ android {
 
 dependencies {
     implementation(projects.common)
-    implementation(projects.datastore)
     implementation(projects.designsystem)
     implementation(projects.data.outing)
     implementation(libs.kotlinx.datetime)
