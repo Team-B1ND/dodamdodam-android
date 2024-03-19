@@ -51,4 +51,5 @@ include(
     ":datastore",
     ":ui-test-main",
     ":feature-student:nightstudy",
+    ":feature-student:outing",
 )
