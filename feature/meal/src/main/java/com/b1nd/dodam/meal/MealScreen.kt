@@ -1,5 +1,7 @@
 package com.b1nd.dodam.meal
 
+import android.content.res.Configuration
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +29,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -177,10 +181,13 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                     Spacer(
                         modifier = Modifier
                             .navigationBarsPadding()
-                            .padding(bottom = 20.dp),
+                            .padding(bottom = 100.dp),
                     )
                 }
             }
+        }
+        if (!uiState.isLoading && uiState.meal.isEmpty()) {
+            EmptyMeal(text = "이번 달 급식이 없어요", modifier = Modifier.align(Alignment.Center))
         }
 //        TODO : composable for allergy sign
 //        DodamTopAppBar(
@@ -309,13 +316,28 @@ fun MealCard(modifier: Modifier = Modifier, isLoading: Boolean = false, isActive
     }
 }
 
+@Composable
+fun EmptyMeal(text: String, modifier: Modifier = Modifier) {
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Image(
+            painter = painterResource(id = com.b1nd.dodam.designsystem.R.drawable.ic_empty),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+    }
+}
+
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewMealCard() {
     DodamTheme {
-        Column {
-            MealCard(title = "아침", isLoading = true)
-            MealCard(title = "아침")
-        }
+        EmptyMeal("이번 달 급식이 없어요")
     }
 }
