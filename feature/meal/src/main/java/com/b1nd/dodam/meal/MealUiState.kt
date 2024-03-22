@@ -7,6 +7,6 @@ import kotlinx.collections.immutable.persistentListOf
 data class MealUiState(
     val meal: ImmutableList<Meal> = persistentListOf(),
     val isLoading: Boolean = false,
-    val endReached: Boolean = false,
+    val endReached: Boolean = true,
 
 )
