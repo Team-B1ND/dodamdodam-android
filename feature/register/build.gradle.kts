@@ -11,8 +11,9 @@ android {
 }
 
 dependencies {
-    implementation(projects.designsystem)
+    implementation(libs.dodam.design.system)
     implementation(projects.data.register)
     implementation(libs.bottomsheetdialog.compose)
     implementation(projects.common)
+    implementation(projects.ui)
 }

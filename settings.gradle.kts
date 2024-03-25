@@ -54,3 +54,4 @@ include(
     ":feature-student:nightstudy",
     ":feature-student:outing",
 )
+include(":ui")

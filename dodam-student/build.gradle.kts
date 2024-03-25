@@ -31,7 +31,8 @@ android {
 }
 
 dependencies {
-    implementation(projects.designsystem)
+    implementation(libs.dodam.design.system)
+    implementation(projects.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
