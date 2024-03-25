@@ -1,5 +1,6 @@
 package com.b1nd.dodam.register.navigation
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -20,6 +21,7 @@ fun NavController.navigateToAuth(
     phoneNumber: String,
 ) = navigate("$AUTH_ROUTE/$name/$grade/$room/$number/$email/$phoneNumber", navOptions)
 
+@ExperimentalMaterial3Api
 fun NavGraphBuilder.authScreen(onRegisterClick: () -> Unit, onBackClick: () -> Unit) {
     composable(
         route = "$AUTH_ROUTE/{name}/{grade}/{room}/{number}/{email}/{phoneNumber}",

@@ -3,34 +3,52 @@ package com.b1nd.dodam.register
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.b1nd.dodam.designsystem.component.DodamFullWidthButton
-import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.designsystem.theme.BackIcon
-import com.b1nd.dodam.designsystem.util.addFocusCleaner
+import com.b1nd.dodam.dds.component.DodamDialog
+import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
+import com.b1nd.dodam.dds.component.DodamTextField
+import com.b1nd.dodam.dds.component.button.DodamCTAButton
+import com.b1nd.dodam.dds.component.button.DodamTextButton
+import com.b1nd.dodam.dds.style.EyeIcon
+import com.b1nd.dodam.dds.style.EyeSlashIcon
+import com.b1nd.dodam.dds.style.XMarkCircleIcon
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.register.viewmodel.Event
 import com.b1nd.dodam.register.viewmodel.RegisterViewModel
+import com.b1nd.dodam.ui.util.addFocusCleaner
 
+@ExperimentalMaterial3Api
 @Composable
 fun AuthScreen(
     name: String,
@@ -43,10 +61,18 @@ fun AuthScreen(
     navigateToMain: () -> Unit,
     onBackClick: () -> Unit,
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     var idState by remember { mutableStateOf(TextFieldState()) }
     var passwordState by remember { mutableStateOf(TextFieldState()) }
     var confirmPasswordState by remember { mutableStateOf(TextFieldState()) }
     val focusManager = LocalFocusManager.current
+
+    var showPassword by remember { mutableStateOf(false) }
+    var showConfirmPassword by remember { mutableStateOf(false) }
+    
+    var showDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(idState.isValid) {
         if (idState.isValid) {
             focusManager.moveFocus(FocusDirection.Down)
@@ -61,193 +87,249 @@ fun AuthScreen(
         viewModel.event.collect { event ->
             when (event) {
                 is Event.NavigateToMain -> navigateToMain()
-                is Event.Error -> {
-                    when (event.message) {
-                        "해당 멤버를 찾지 못함" -> {
-                            idState = idState.copy(
-                                value = idState.value,
-                                isValid = idState.isValid,
-                                isError = true,
-                                errorMessage = "계정을 찾을 수 없어요",
-                            )
-                        }
-                        "비밀번호가 일치하지 않음" -> {
-                            passwordState = passwordState.copy(
-                                value = passwordState.value,
-                                isValid = passwordState.isValid,
-                                isError = true,
-                                errorMessage = "비밀번호가 일치하지 않아요",
-                            )
-                        }
-                        "유효한 Enum 값이 아닙니다." -> {
-                            idState = idState.copy(
-                                value = idState.value,
-                                isValid = idState.isValid,
-                                isError = true,
-                                errorMessage = "이메일을 다시 입력해주세요",
-                            )
-                        }
-                        "이미 존재하는 유저" -> {
-                            idState = idState.copy(
-                                value = idState.value,
-                                isValid = idState.isValid,
-                                isError = true,
-                                errorMessage = "이미 가입된 이메일 입니다. 다른 이메일을 입력해주세요.",
-                            )
-                        }
-                        else -> {
-                            idState = idState.copy(
-                                value = idState.value,
-                                isValid = idState.isValid,
-                                isError = true,
-                                errorMessage = event.message,
-                            )
-                        }
-                    }
-                }
+                is Event.ShowDialog -> showDialog = true
             }
         }
     }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .addFocusCleaner(
-                focusManager = focusManager,
-                doOnClear = {
-                    if (idState.value.isNotBlank()) {
-                        idState = isIdValid(idState)
-                    }
-                    if (passwordState.value.isNotBlank()) {
-                        passwordState = isPasswordValid(passwordState)
-                    }
-                    if (confirmPasswordState.value.isNotBlank()) {
-                        confirmPasswordState =
-                            isConfirmPasswordValid(passwordState, confirmPasswordState)
-                    }
-                },
-            ),
-    ) {
-        BackIcon(
-            modifier = Modifier
-                .padding(16.dp)
-                .statusBarsPadding()
-                .clickable { onBackClick() },
+
+    if (showDialog) {
+        DodamDialog(
+            onDismissRequest = { showDialog = false },
+            confirmText = {
+                DodamTextButton(onClick = { showDialog = false }) {
+                    Text(text = "확인")
+                }
+            },
+            title = { Text(text = uiState.error) },
         )
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 24.dp),
-        ) {
-            Text(
-                text = if (passwordState.isValid) {
-                    "비밀번호를 다시 입력해주세요"
-                } else if (idState.isValid) {
-                    "비밀번호를 입력해주세요"
-                } else {
-                    "아이디를 입력해주세요"
+    }
+
+    Scaffold(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .systemBarsPadding(),
+        topBar = {
+            DodamLargeTopAppBar(
+                title = {
+                    Text(
+                        text = when {
+                            passwordState.isValid -> "비밀번호를\n확인해주세요"
+                            idState.isValid -> "비밀번호를\n입력해주세요"
+                            else -> "아이디를\n입력해주세요"
+                        }
+                    )
                 },
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = 8.dp),
-                color = MaterialTheme.colorScheme.onBackground,
+                onNavigationIconClick = onBackClick,
+                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
-            AnimatedVisibility(visible = passwordState.isValid && idState.isValid) {
+        },
+        containerColor = MaterialTheme.colorScheme.background
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .addFocusCleaner(
+                    focusManager = focusManager,
+                    doOnClear = {
+                        if (idState.value.isNotBlank()) {
+                            idState = isIdValid(idState)
+                        }
+                        if (passwordState.value.isNotBlank()) {
+                            passwordState = isPasswordValid(passwordState)
+                        }
+                        if (confirmPasswordState.value.isNotBlank()) {
+                            confirmPasswordState =
+                                isConfirmPasswordValid(passwordState, confirmPasswordState)
+                        }
+                    },
+                )
+        ) {
+            Column(
+                modifier = Modifier.padding(horizontal = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                AnimatedVisibility(visible = passwordState.isValid && idState.isValid) {
+                    DodamTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged {
+                                confirmPasswordState =
+                                    confirmPasswordState.copy(focused = it.isFocused)
+                            },
+                        value = confirmPasswordState.value,
+                        onValueChange = {
+                            confirmPasswordState =
+                                confirmPasswordState.copy(
+                                    value = it,
+                                    isValid = confirmPasswordState.isValid,
+                                    isError = false,
+                                    errorMessage = "",
+                                )
+                        },
+                        label = { Text(text = "비밀번호 확인") },
+                        trailingIcon = {
+                            if (confirmPasswordState.focused) {
+                                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    if (showConfirmPassword) {
+                                        EyeIcon(
+                                            modifier = Modifier.clickable {
+                                                showConfirmPassword = false
+                                            },
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    } else {
+                                        EyeSlashIcon(
+                                            modifier = Modifier.clickable {
+                                                showConfirmPassword = true
+                                            },
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+
+                                    XMarkCircleIcon(
+                                        modifier = Modifier.clickable {
+                                            confirmPasswordState = TextFieldState()
+                                        },
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        },
+                        isError = confirmPasswordState.isError,
+                        supportingText = if (confirmPasswordState.isError) {
+                            { Text(text = confirmPasswordState.errorMessage) }
+                        } else null,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = {
+                            confirmPasswordState =
+                                isConfirmPasswordValid(passwordState, confirmPasswordState)
+                            focusManager.clearFocus()
+                        }),
+                        visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation()
+                    )
+                }
+                AnimatedVisibility(visible = idState.isValid) {
+                    DodamTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged {
+                                passwordState =
+                                    passwordState.copy(focused = it.isFocused)
+                            },
+                        value = passwordState.value,
+                        onValueChange = {
+                            passwordState =
+                                passwordState.copy(
+                                    value = it,
+                                    isValid = passwordState.isValid,
+                                    isError = false,
+                                    errorMessage = "",
+                                )
+                        },
+                        label = { Text(text = "비밀번호") },
+                        trailingIcon = {
+                            if (passwordState.focused) {
+                                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    if (showPassword) {
+                                        EyeIcon(
+                                            modifier = Modifier.clickable {
+                                                showPassword = false
+                                            },
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    } else {
+                                        EyeSlashIcon(
+                                            modifier = Modifier.clickable {
+                                                showPassword = true
+                                            },
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+
+                                    XMarkCircleIcon(
+                                        modifier = Modifier.clickable {
+                                            passwordState = TextFieldState()
+                                        },
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        },
+                        isError = passwordState.isError,
+                        supportingText = if (passwordState.isError) {
+                            { Text(text = passwordState.errorMessage) }
+                        } else null,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardActions = KeyboardActions(onNext = {
+                            passwordState = isPasswordValid(passwordState)
+                            focusManager.clearFocus()
+                        }),
+                        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation()
+                    )
+                }
                 DodamTextField(
-                    value = confirmPasswordState.value,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged {
+                            idState = idState.copy(focused = it.isFocused)
+                        },
+                    value = idState.value,
                     onValueChange = {
-                        confirmPasswordState =
-                            confirmPasswordState.copy(
+                        if (it.length <= 20) {
+                            idState = idState.copy(
                                 value = it,
-                                isValid = confirmPasswordState.isValid,
+                                isValid = idState.isValid,
                                 isError = false,
                                 errorMessage = "",
                             )
+                        }
+                        if (it.length == 20) {
+                            idState = isIdValid(idState)
+                            focusManager.clearFocus()
+                        }
                     },
-                    modifier = Modifier.padding(top = 24.dp),
-                    hint = "비밀번호 확인",
-                    onClickCancel = { confirmPasswordState = TextFieldState() },
-                    isPassword = true,
-                    isError = confirmPasswordState.isError,
-                    supportingText = if (confirmPasswordState.isError) confirmPasswordState.errorMessage else "",
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions(onSearch = {
-                        confirmPasswordState =
-                            isConfirmPasswordValid(passwordState, confirmPasswordState)
-                        focusManager.clearFocus()
-                    }),
-                )
-            }
-            AnimatedVisibility(visible = idState.isValid) {
-                DodamTextField(
-                    value = passwordState.value,
-                    onValueChange = {
-                        passwordState =
-                            passwordState.copy(
-                                value = it,
-                                isValid = passwordState.isValid,
-                                isError = false,
-                                errorMessage = "",
+                    trailingIcon = {
+                        if (idState.focused) {
+                            XMarkCircleIcon(
+                                modifier = Modifier.clickable {
+                                    idState = TextFieldState()
+                                },
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
+                        }
                     },
-                    modifier = Modifier.padding(top = 24.dp),
-                    hint = "비밀번호",
-                    onClickCancel = { passwordState = TextFieldState() },
-                    isPassword = true,
-                    isError = passwordState.isError,
-                    supportingText = if (passwordState.isError) passwordState.errorMessage else "영문 + 숫자 8자리 이상이여야 합니다.",
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions(onSearch = {
-                        passwordState = isPasswordValid(passwordState)
-                        focusManager.clearFocus()
-                    }),
-                )
-            }
-            DodamTextField(
-                value = idState.value,
-                onValueChange = {
-                    if (it.length <= 20) {
-                        idState = idState.copy(
-                            value = it,
-                            isValid = idState.isValid,
-                            isError = false,
-                            errorMessage = "",
-                        )
-                    }
-                    if (it.length == 20) {
+                    label = { Text(text = "아이디") },
+                    isError = idState.isError,
+                    supportingText = {
+                        Text(text = if (idState.isError) idState.errorMessage else "아이디는 영문과 숫자로 5~20글자 이내여야 해요.")
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(onNext = {
                         idState = isIdValid(idState)
                         focusManager.clearFocus()
-                    }
-                },
-                onClickCancel = { idState = TextFieldState() },
-                hint = "아이디",
-                modifier = Modifier.padding(top = 24.dp),
-                isError = idState.isError,
-                supportingText = if (idState.isError) idState.errorMessage else "아이디는 영문 + 숫자 5~20글자 이내여야 합니다.",
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = {
-                    idState = isIdValid(idState)
-                    focusManager.clearFocus()
-                }),
-            )
-            AnimatedVisibility(visible = confirmPasswordState.isValid) {
-                DodamFullWidthButton(
-                    onClick = {
-                        viewModel.register(
-                            email = email,
-                            grade = grade.toInt(),
-                            id = idState.value,
-                            name = name,
-                            number = number.toInt(),
-                            phone = phoneNumber,
-                            pw = passwordState.value,
-                            room = room.toInt(),
-                        )
-                    },
-                    text = "다음",
-                    modifier = Modifier.padding(top = 32.dp),
-                    enabled = idState.value.isNotBlank() &&
+                    }),
+                )
+            }
+            DodamCTAButton(
+                enabled = idState.value.isNotBlank() &&
                         passwordState.value.isNotBlank() &&
                         confirmPasswordState.value.isNotBlank(),
-                )
+                onClick = {
+                    viewModel.register(
+                        email = email,
+                        grade = grade.toInt(),
+                        id = idState.value,
+                        name = name,
+                        number = number.toInt(),
+                        phone = phoneNumber,
+                        pw = passwordState.value,
+                        room = room.toInt(),
+                    )
+                },
+                isLoading = uiState.isLoading
+            ) {
+                Text(text = "가입하기")
             }
         }
     }
@@ -301,7 +383,10 @@ private fun isPasswordValid(passwordState: TextFieldState): TextFieldState {
     }
 }
 
-private fun isConfirmPasswordValid(passwordState: TextFieldState, confirmPasswordState: TextFieldState): TextFieldState {
+private fun isConfirmPasswordValid(
+    passwordState: TextFieldState,
+    confirmPasswordState: TextFieldState
+): TextFieldState {
     return if (passwordState.value == confirmPasswordState.value) {
         TextFieldState(
             confirmPasswordState.value,

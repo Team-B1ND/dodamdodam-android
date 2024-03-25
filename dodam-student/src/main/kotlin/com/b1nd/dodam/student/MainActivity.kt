@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
@@ -20,14 +21,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
-import com.b1nd.dodam.designsystem.icons.B1ndLogo
-import com.b1nd.dodam.designsystem.icons.DodamLogo
-import com.b1nd.dodam.designsystem.theme.DodamTheme
+import com.b1nd.dodam.dds.theme.DodamTheme
+import com.b1nd.dodam.ui.icons.B1NDLogo
+import com.b1nd.dodam.ui.icons.DodamLogo
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+@ExperimentalMaterial3Api
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject lateinit var datastoreRepository: DatastoreRepository
@@ -77,7 +79,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .size(60.dp)
                                 .align(Alignment.BottomCenter),
-                            imageVector = B1ndLogo,
+                            imageVector = B1NDLogo,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary,
                         )
