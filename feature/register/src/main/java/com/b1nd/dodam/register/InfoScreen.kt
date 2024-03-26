@@ -88,20 +88,20 @@ fun InfoScreen(
                             setOf(
                                 nameState,
                                 emailState,
-                                classInfoState
+                                classInfoState,
                             ).all { it.isValid } -> "전화번호를\n입력해주세요"
 
                             setOf(nameState, classInfoState).all { it.isValid } -> "이메일을\n입력해주세요"
                             nameState.isValid -> "학반번호를\n입력해주세요"
                             else -> "이름을\n입력해주세요"
-                        }
+                        },
                     )
                 },
                 onNavigationIconClick = onBackClick,
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -128,14 +128,15 @@ fun InfoScreen(
             Column(
                 modifier = Modifier
                     .padding(horizontal = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+                verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 AnimatedVisibility(
                     visible = setOf(
                         nameState,
                         emailState,
-                        classInfoState
-                    ).all { it.isValid }) {
+                        classInfoState,
+                    ).all { it.isValid },
+                ) {
                     DodamTextField(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -150,7 +151,7 @@ fun InfoScreen(
                                         value = it,
                                         isValid = phoneNumberState.isValid,
                                         isError = false,
-                                        errorMessage = ""
+                                        errorMessage = "",
                                     )
                             }
                             if (it.length == 11) {
@@ -164,7 +165,7 @@ fun InfoScreen(
                                     modifier = Modifier.clickable {
                                         phoneNumberState = TextFieldState()
                                     },
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                         },
@@ -176,7 +177,9 @@ fun InfoScreen(
                         isError = phoneNumberState.isError,
                         supportingText = if (phoneNumberState.isError) {
                             { Text(text = phoneNumberState.errorMessage) }
-                        } else null,
+                        } else {
+                            null
+                        },
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Done,
                             keyboardType = KeyboardType.Number,
@@ -201,7 +204,7 @@ fun InfoScreen(
                                 value = it,
                                 isValid = emailState.isValid,
                                 isError = false,
-                                errorMessage = ""
+                                errorMessage = "",
                             )
                         },
                         trailingIcon = {
@@ -210,14 +213,14 @@ fun InfoScreen(
                                     modifier = Modifier.clickable {
                                         emailState = TextFieldState()
                                     },
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                         },
                         label = { Text(text = "이메일") },
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.Email
+                            keyboardType = KeyboardType.Email,
                         ),
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.clearFocus()
@@ -381,7 +384,7 @@ fun InfoScreen(
                                         )
                                         focusManager.clearFocus()
                                     },
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                         },
@@ -389,7 +392,9 @@ fun InfoScreen(
                         isError = classInfoState.isError,
                         supportingText = if (classInfoState.isError) {
                             { Text(text = classInfoState.errorMessage) }
-                        } else null,
+                        } else {
+                            null
+                        },
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Number,
@@ -422,7 +427,7 @@ fun InfoScreen(
                                 modifier = Modifier.clickable {
                                     nameState = TextFieldState()
                                 },
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                     },
@@ -430,7 +435,9 @@ fun InfoScreen(
                     isError = nameState.isError,
                     supportingText = if (nameState.isError) {
                         { Text(text = nameState.errorMessage) }
-                    } else null,
+                    } else {
+                        null
+                    },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     keyboardActions = KeyboardActions(onNext = {
                         focusManager.clearFocus()
@@ -452,9 +459,9 @@ fun InfoScreen(
                     )
                 },
                 enabled = nameState.value.length in 2..4 &&
-                        classInfoState.value.length == 4 &&
-                        emailState.value.isNotBlank() &&
-                        phoneNumberState.value.length == 11,
+                    classInfoState.value.length == 4 &&
+                    emailState.value.isNotBlank() &&
+                    phoneNumberState.value.length == 11,
             ) {
                 Text(text = "다음")
             }
@@ -520,9 +527,9 @@ private fun isClassInfoValid(classInfoState: TextFieldState): TextFieldState {
                 }
             } else { // 학번을 4글자로 입력했다면
                 if ((
-                            classInfoState.value[2].toString() +
-                                    classInfoState.value[3].toString()
-                            )
+                        classInfoState.value[2].toString() +
+                            classInfoState.value[3].toString()
+                        )
                         .toInt() in 1..25
                 ) { // 학번이 1~25 사이인가
                     TextFieldState(

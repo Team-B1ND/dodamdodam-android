@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -70,7 +69,7 @@ fun AuthScreen(
 
     var showPassword by remember { mutableStateOf(false) }
     var showConfirmPassword by remember { mutableStateOf(false) }
-    
+
     var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(idState.isValid) {
@@ -116,14 +115,14 @@ fun AuthScreen(
                             passwordState.isValid -> "비밀번호를\n확인해주세요"
                             idState.isValid -> "비밀번호를\n입력해주세요"
                             else -> "아이디를\n입력해주세요"
-                        }
+                        },
                     )
                 },
                 onNavigationIconClick = onBackClick,
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -143,11 +142,11 @@ fun AuthScreen(
                                 isConfirmPasswordValid(passwordState, confirmPasswordState)
                         }
                     },
-                )
+                ),
         ) {
             Column(
                 modifier = Modifier.padding(horizontal = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+                verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 AnimatedVisibility(visible = passwordState.isValid && idState.isValid) {
                     DodamTextField(
@@ -176,14 +175,14 @@ fun AuthScreen(
                                             modifier = Modifier.clickable {
                                                 showConfirmPassword = false
                                             },
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     } else {
                                         EyeSlashIcon(
                                             modifier = Modifier.clickable {
                                                 showConfirmPassword = true
                                             },
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
 
@@ -191,7 +190,7 @@ fun AuthScreen(
                                         modifier = Modifier.clickable {
                                             confirmPasswordState = TextFieldState()
                                         },
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
                             }
@@ -199,7 +198,9 @@ fun AuthScreen(
                         isError = confirmPasswordState.isError,
                         supportingText = if (confirmPasswordState.isError) {
                             { Text(text = confirmPasswordState.errorMessage) }
-                        } else null,
+                        } else {
+                            null
+                        },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(onDone = {
                             confirmPasswordState =
@@ -237,14 +238,14 @@ fun AuthScreen(
                                             modifier = Modifier.clickable {
                                                 showPassword = false
                                             },
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     } else {
                                         EyeSlashIcon(
                                             modifier = Modifier.clickable {
                                                 showPassword = true
                                             },
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
 
@@ -252,7 +253,7 @@ fun AuthScreen(
                                         modifier = Modifier.clickable {
                                             passwordState = TextFieldState()
                                         },
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
                             }
@@ -260,7 +261,9 @@ fun AuthScreen(
                         isError = passwordState.isError,
                         supportingText = if (passwordState.isError) {
                             { Text(text = passwordState.errorMessage) }
-                        } else null,
+                        } else {
+                            null
+                        },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = {
                             passwordState = isPasswordValid(passwordState)
@@ -297,7 +300,7 @@ fun AuthScreen(
                                 modifier = Modifier.clickable {
                                     idState = TextFieldState()
                                 },
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                     },
@@ -316,8 +319,8 @@ fun AuthScreen(
             }
             DodamCTAButton(
                 enabled = idState.value.isNotBlank() &&
-                        passwordState.value.isNotBlank() &&
-                        confirmPasswordState.value.isNotBlank(),
+                    passwordState.value.isNotBlank() &&
+                    confirmPasswordState.value.isNotBlank(),
                 onClick = {
                     viewModel.register(
                         email = email,
@@ -330,7 +333,7 @@ fun AuthScreen(
                         room = room.toInt(),
                     )
                 },
-                isLoading = uiState.isLoading
+                isLoading = uiState.isLoading,
             ) {
                 Text(text = "가입하기")
             }
@@ -386,10 +389,7 @@ private fun isPasswordValid(passwordState: TextFieldState): TextFieldState {
     }
 }
 
-private fun isConfirmPasswordValid(
-    passwordState: TextFieldState,
-    confirmPasswordState: TextFieldState
-): TextFieldState {
+private fun isConfirmPasswordValid(passwordState: TextFieldState, confirmPasswordState: TextFieldState): TextFieldState {
     return if (passwordState.value == confirmPasswordState.value) {
         TextFieldState(
             confirmPasswordState.value,

@@ -10,13 +10,13 @@ import com.b1nd.dodam.data.login.repository.LoginRepository
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.login.model.LoginUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -36,7 +36,7 @@ class LoginViewModel @Inject constructor(
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                     datastoreRepository.saveUser(
@@ -63,10 +63,9 @@ class LoginViewModel @Inject constructor(
                         }
                         else -> {
                             _event.emit(Event.ShowDialog)
-                            _uiState.update { it.copy(error =  "알 수 없는 오류가 발생했어요") }
+                            _uiState.update { it.copy(error = "알 수 없는 오류가 발생했어요") }
                         }
                     }
-
                 }
 
                 is Result.Loading -> {

@@ -2,7 +2,6 @@ package com.b1nd.dodam.onboarding
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,8 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -41,7 +38,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.button.DodamCTAButton
 import com.b1nd.dodam.dds.foundation.DodamColor
 import com.b1nd.dodam.dds.style.BodyLarge
@@ -54,7 +50,6 @@ import com.holix.android.bottomsheetdialog.compose.BottomSheetDialogProperties
 
 @Composable
 internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
-
     val context = LocalContext.current
 
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -151,10 +146,10 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                     .fillMaxWidth()
                     .background(
                         MaterialTheme.colorScheme.background,
-                        RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+                        RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
                     )
                     .navigationBarsPadding()
-                    .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 16.dp)
+                    .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 16.dp),
             ) {
                 Row(
                     modifier = Modifier
@@ -176,15 +171,17 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                                     isPrivacyChecked = true
                                     isTermsChecked = true
                                 }
-                            }
+                            },
                         ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     CheckmarkCircleIcon(
-                        tint = if (isPrivacyChecked && isTermsChecked)
+                        tint = if (isPrivacyChecked && isTermsChecked) {
                             MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.outline
+                        } else {
+                            MaterialTheme.colorScheme.outline
+                        },
                     )
 
                     BodyLarge(text = "모두 동의합니다", color = MaterialTheme.colorScheme.onBackground)
@@ -231,7 +228,7 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
 
                         ChevronRightIcon(
                             modifier = Modifier.size(16.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
@@ -277,7 +274,7 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
 
                         ChevronRightIcon(
                             modifier = Modifier.size(16.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
