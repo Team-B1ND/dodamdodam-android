@@ -206,7 +206,8 @@ fun AuthScreen(
                                 isConfirmPasswordValid(passwordState, confirmPasswordState)
                             focusManager.clearFocus()
                         }),
-                        visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation()
+                        visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                        singleLine = true,
                     )
                 }
                 AnimatedVisibility(visible = idState.isValid) {
@@ -265,7 +266,8 @@ fun AuthScreen(
                             passwordState = isPasswordValid(passwordState)
                             focusManager.clearFocus()
                         }),
-                        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation()
+                        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                        singleLine = true,
                     )
                 }
                 DodamTextField(
@@ -309,6 +311,7 @@ fun AuthScreen(
                         idState = isIdValid(idState)
                         focusManager.clearFocus()
                     }),
+                    singleLine = true,
                 )
             }
             DodamCTAButton(
