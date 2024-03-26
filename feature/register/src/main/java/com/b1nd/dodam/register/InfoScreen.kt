@@ -185,6 +185,7 @@ fun InfoScreen(
                             phoneNumberState = isPhoneNumberValid(phoneNumberState)
                             focusManager.clearFocus()
                         }),
+                        singleLine = true,
                     )
                 }
                 AnimatedVisibility(visible = nameState.isValid && classInfoState.isValid) {
@@ -222,6 +223,7 @@ fun InfoScreen(
                             focusManager.clearFocus()
                             emailState = isEmailValid(emailState)
                         }),
+                        singleLine = true,
                     )
                 }
                 AnimatedVisibility(visible = nameState.isValid) {
@@ -396,6 +398,7 @@ fun InfoScreen(
                             focusManager.clearFocus()
                             classInfoState = isClassInfoValid(classInfoState)
                         }),
+                        singleLine = true,
                     )
                 }
                 DodamTextField(
@@ -433,6 +436,7 @@ fun InfoScreen(
                         focusManager.clearFocus()
                         nameState = isNameValid(nameState)
                     }),
+                    singleLine = true,
                 )
             }
 

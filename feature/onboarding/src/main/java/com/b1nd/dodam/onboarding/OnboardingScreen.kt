@@ -1,11 +1,15 @@
 package com.b1nd.dodam.onboarding
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,22 +33,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.button.DodamCTAButton
 import com.b1nd.dodam.dds.foundation.DodamColor
+import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.CheckmarkCircleIcon
 import com.b1nd.dodam.dds.style.CheckmarkIcon
 import com.b1nd.dodam.dds.style.ChevronRightIcon
+import com.b1nd.dodam.dds.style.LabelLarge
 import com.holix.android.bottomsheetdialog.compose.BottomSheetDialog
 import com.holix.android.bottomsheetdialog.compose.BottomSheetDialogProperties
 
 @Composable
 internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
+
+    val context = LocalContext.current
+
     var showBottomSheet by remember { mutableStateOf(false) }
     var isTermsChecked by remember { mutableStateOf(false) }
     var isPrivacyChecked by remember { mutableStateOf(false) }
@@ -136,11 +148,13 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
         ) {
             Column(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background)
+                    .background(
+                        MaterialTheme.colorScheme.background,
+                        RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+                    )
                     .navigationBarsPadding()
-                    .padding(24.dp),
+                    .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 16.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -148,21 +162,24 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                         .border(
                             width = 1.5.dp,
                             color = MaterialTheme.colorScheme.outline,
-                            shape = RoundedCornerShape(10.dp),
+                            shape = MaterialTheme.shapes.small,
                         )
-                        .padding(12.dp)
+                        .padding(vertical = 12.dp, horizontal = 16.dp)
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,
-                        ) {
-                            if (isPrivacyChecked && isTermsChecked) {
-                                isPrivacyChecked = false
-                                isTermsChecked = false
-                            } else {
-                                isPrivacyChecked = true
-                                isTermsChecked = true
+                            onClick = {
+                                if (isPrivacyChecked && isTermsChecked) {
+                                    isPrivacyChecked = false
+                                    isTermsChecked = false
+                                } else {
+                                    isPrivacyChecked = true
+                                    isTermsChecked = true
+                                }
                             }
-                        },
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     CheckmarkCircleIcon(
                         tint = if (isPrivacyChecked && isTermsChecked)
@@ -170,16 +187,10 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                         else MaterialTheme.colorScheme.outline
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Text(
-                        text = "모두 동의합니다",
-                        color = MaterialTheme.colorScheme.onBackground,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
+                    BodyLarge(text = "모두 동의합니다", color = MaterialTheme.colorScheme.onBackground)
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -196,23 +207,36 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                         tint = if (isTermsChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
 
-                    Text(
-                        text = "(필수) 서비스 이용약관",
-                        color = MaterialTheme.colorScheme.tertiary,
-                        style = MaterialTheme.typography.bodySmall,
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = {
+                                    context.startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse("http://dodam.b1nd.com/detailed-information/service-policy"),
+                                        ),
+                                    )
+                                },
+                            ),
+                    ) {
+                        LabelLarge(text = "(필수) 서비스 이용약관", color = MaterialTheme.colorScheme.tertiary)
 
-                    Spacer(modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier.weight(1f))
 
-                    ChevronRightIcon(
-                        modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                        ChevronRightIcon(
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -229,23 +253,36 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                         tint = if (isPrivacyChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
 
-                    Text(
-                        text = "(필수) 개인정보 수집 및 이용에 대한 안내",
-                        color = MaterialTheme.colorScheme.tertiary,
-                        style = MaterialTheme.typography.bodySmall,
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = {
+                                    context.startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse("http://dodam.b1nd.com/detailed-information/personal-information"),
+                                        ),
+                                    )
+                                },
+                            ),
+                    ) {
+                        LabelLarge(text = "(필수) 개인정보 수집 및 이용에 대한 안내", color = MaterialTheme.colorScheme.tertiary)
 
-                    Spacer(modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier.weight(1f))
 
-                    ChevronRightIcon(
-                        modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                        ChevronRightIcon(
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 DodamCTAButton(
                     onClick = onRegisterClick,
