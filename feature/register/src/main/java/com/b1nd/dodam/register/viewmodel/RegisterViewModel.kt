@@ -1,6 +1,5 @@
 package com.b1nd.dodam.register.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
@@ -40,7 +39,7 @@ class RegisterViewModel @Inject constructor(
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                     _event.emit(Event.NavigateToMain)
@@ -51,7 +50,7 @@ class RegisterViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            error = result.error.message.toString()
+                            error = result.error.message.toString(),
                         )
                     }
                 }
@@ -59,7 +58,7 @@ class RegisterViewModel @Inject constructor(
                 is Result.Loading -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = true
+                            isLoading = true,
                         )
                     }
                 }

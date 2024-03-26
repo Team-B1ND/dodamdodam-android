@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -44,11 +43,7 @@ import com.b1nd.dodam.login.viewmodel.LoginViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun LoginScreen(
-    viewModel: LoginViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    navigateToMain: () -> Unit
-) {
+internal fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     var idError by remember { mutableStateOf("") }
@@ -96,7 +91,7 @@ internal fun LoginScreen(
         isLoading = uiState.isLoading,
         showDialog = showDialog,
         dismissDialog = { showDialog = false },
-        errorMessage = uiState.error
+        errorMessage = uiState.error,
     )
 }
 
@@ -118,7 +113,6 @@ private fun LoginScreen(
     dismissDialog: () -> Unit,
     errorMessage: String,
 ) {
-
     var idFocused by remember { mutableStateOf(false) }
     var pwFocused by remember { mutableStateOf(false) }
 
@@ -146,17 +140,17 @@ private fun LoginScreen(
                 title = { Text(text = "아이디와 비밀번호를\n입력해주세요") },
                 onNavigationIconClick = onBackClick,
                 colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                    containerColor = MaterialTheme.colorScheme.background,
+                ),
             )
-        }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             DodamTextField(
                 modifier = Modifier
@@ -170,17 +164,19 @@ private fun LoginScreen(
                 isError = idError.isNotBlank(),
                 supportingText = if (idError.isNotBlank()) {
                     { Text(text = idError) }
-                } else null,
+                } else {
+                    null
+                },
                 trailingIcon = {
                     if (idFocused) {
                         XMarkCircleIcon(
                             modifier = Modifier.clickable {
                                 onIdCancel()
                             },
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-                }
+                },
             )
 
             DodamTextField(
@@ -196,7 +192,9 @@ private fun LoginScreen(
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 supportingText = if (pwError.isNotBlank()) {
                     { Text(text = pwError) }
-                } else null,
+                } else {
+                    null
+                },
                 trailingIcon = {
                     if (pwFocused) {
                         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -205,14 +203,14 @@ private fun LoginScreen(
                                     modifier = Modifier.clickable {
                                         showPassword = false
                                     },
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             } else {
                                 EyeSlashIcon(
                                     modifier = Modifier.clickable {
                                         showPassword = true
                                     },
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
 
@@ -220,16 +218,16 @@ private fun LoginScreen(
                                 modifier = Modifier.clickable {
                                     onPwCancel()
                                 },
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                     }
-                }
+                },
             )
             DodamCTAButton(
                 onClick = onLoginClick,
                 isLoading = isLoading,
-                enabled = id.isNotBlank() && pw.isNotBlank()
+                enabled = id.isNotBlank() && pw.isNotBlank(),
             ) {
                 Text(text = "로그인")
             }
@@ -257,7 +255,7 @@ fun LoginScreenPreview() {
             isLoading = false,
             showDialog = false,
             dismissDialog = { },
-            errorMessage = ""
+            errorMessage = "",
         )
     }
 }

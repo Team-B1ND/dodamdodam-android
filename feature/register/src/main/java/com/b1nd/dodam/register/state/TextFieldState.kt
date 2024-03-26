@@ -5,7 +5,7 @@ data class TextFieldState(
     val isValid: Boolean = false,
     val isError: Boolean = false,
     val errorMessage: String = "",
-    val focused: Boolean = false
+    val focused: Boolean = false,
 ) {
     fun getValueAsString(until: Int = 3, lastIndex: Int = 2, lastPrefix: Int? = null): String {
         fun get(index: Int) = this.value.getOrElse(index) { '0' }
