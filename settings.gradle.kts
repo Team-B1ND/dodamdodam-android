@@ -55,3 +55,4 @@ include(
     ":feature-student:outing",
     ":ui"
 )
+include(":feature-student:all")
