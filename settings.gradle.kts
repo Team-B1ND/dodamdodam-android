@@ -53,5 +53,5 @@ include(
     ":ui-test-main",
     ":feature-student:nightstudy",
     ":feature-student:outing",
+    ":ui"
 )
-include(":ui")
