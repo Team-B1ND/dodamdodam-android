@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.b1nd.dodam.all.navigation.ALL_ROUTE
-import com.b1nd.dodam.all.navigation.allScreen
+import com.b1nd.dodam.member.navigation.ALL_ROUTE
+import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.designsystem.component.BottomNavigationItem
 import com.b1nd.dodam.designsystem.component.DodamBottomNavigation
 import com.b1nd.dodam.designsystem.icons.Door

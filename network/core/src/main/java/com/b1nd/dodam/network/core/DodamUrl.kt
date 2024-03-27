@@ -24,6 +24,7 @@ object DodamUrl {
 
     object Member {
         const val REGISTER = "$MEMBER/join-student"
+        const val MY = "$MEMBER/my"
     }
 
     object WakeupSong {
