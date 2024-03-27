@@ -1,5 +1,6 @@
 package com.b1nd.dodam.student
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,6 +21,7 @@ import com.b1nd.dodam.student.main.navigation.MAIN_ROUTE
 import com.b1nd.dodam.student.main.navigation.mainScreen
 import com.b1nd.dodam.student.main.navigation.navigateToMain
 
+@ExperimentalMaterial3Api
 @Composable
 fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavController()) {
     NavHost(

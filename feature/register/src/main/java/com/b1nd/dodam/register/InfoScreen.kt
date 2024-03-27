@@ -3,14 +3,20 @@ package com.b1nd.dodam.register
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,19 +25,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.designsystem.component.DodamFullWidthButton
-import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.designsystem.theme.BackIcon
-import com.b1nd.dodam.designsystem.util.PhoneVisualTransformation
-import com.b1nd.dodam.designsystem.util.addFocusCleaner
+import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
+import com.b1nd.dodam.dds.component.DodamTextField
+import com.b1nd.dodam.dds.component.button.DodamCTAButton
+import com.b1nd.dodam.dds.style.XMarkCircleIcon
 import com.b1nd.dodam.register.state.TextFieldState
+import com.b1nd.dodam.ui.util.PhoneVisualTransformation
+import com.b1nd.dodam.ui.util.addFocusCleaner
 
+@ExperimentalMaterial3Api
 @Composable
 fun InfoScreen(
     onBackClick: () -> Unit,
@@ -66,296 +75,395 @@ fun InfoScreen(
             focusManager.moveFocus(FocusDirection.Down)
         }
     }
-    Column(
+
+    Scaffold(
         modifier = Modifier
-            .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .addFocusCleaner(
-                focusManager = focusManager,
-                doOnClear = {
-                    if (nameState.value.isNotEmpty()) {
-                        nameState = isNameValid(nameState)
-                    }
-                    if (classInfoState.value.isNotEmpty()) {
-                        classInfoState = isClassInfoValid(classInfoState)
-                    }
-                    if (emailState.value.isNotEmpty()) {
-                        emailState = isEmailValid(emailState)
-                    }
-                    if (phoneNumberState.value.isNotEmpty()) {
-                        phoneNumberState = isPhoneNumberValid(phoneNumberState)
-                    }
+            .statusBarsPadding(),
+        topBar = {
+            DodamLargeTopAppBar(
+                title = {
+                    Text(
+                        text = when {
+                            setOf(
+                                nameState,
+                                emailState,
+                                classInfoState,
+                            ).all { it.isValid } -> "전화번호를\n입력해주세요"
+
+                            setOf(nameState, classInfoState).all { it.isValid } -> "이메일을\n입력해주세요"
+                            nameState.isValid -> "학반번호를\n입력해주세요"
+                            else -> "이름을\n입력해주세요"
+                        },
+                    )
                 },
-            ),
-    ) {
-        BackIcon(
-            modifier = Modifier
-                .padding(16.dp)
-                .statusBarsPadding()
-                .clickable { onBackClick() },
-        )
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 24.dp),
-        ) {
-            Text(
-                text = if (setOf(nameState, emailState, classInfoState).all { it.isValid }) {
-                    "전화번호를 입력해주세요"
-                } else if (setOf(nameState, classInfoState).all { it.isValid }) {
-                    "이메일을 입력해주세요"
-                } else if (nameState.isValid) {
-                    "학반번호를 입력해주세요"
-                } else {
-                    "이름을 입력해주세요"
-                },
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = 8.dp),
-                color = MaterialTheme.colorScheme.onBackground,
+                onNavigationIconClick = onBackClick,
+                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
             )
-            AnimatedVisibility(visible = setOf(nameState, emailState, classInfoState).all { it.isValid }) {
-                DodamTextField(
-                    value = phoneNumberState.value,
-                    onValueChange = {
-                        if (it.length <= 11) {
-                            phoneNumberState =
-                                TextFieldState(it, phoneNumberState.isValid, false, "")
+        },
+        containerColor = MaterialTheme.colorScheme.background,
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .addFocusCleaner(
+                    focusManager = focusManager,
+                    doOnClear = {
+                        if (nameState.value.isNotEmpty()) {
+                            nameState = isNameValid(nameState)
                         }
-                        if (it.length == 11) {
+                        if (classInfoState.value.isNotEmpty()) {
+                            classInfoState = isClassInfoValid(classInfoState)
+                        }
+                        if (emailState.value.isNotEmpty()) {
+                            emailState = isEmailValid(emailState)
+                        }
+                        if (phoneNumberState.value.isNotEmpty()) {
+                            phoneNumberState = isPhoneNumberValid(phoneNumberState)
+                        }
+                    },
+                ),
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+            ) {
+                AnimatedVisibility(
+                    visible = setOf(
+                        nameState,
+                        emailState,
+                        classInfoState,
+                    ).all { it.isValid },
+                ) {
+                    DodamTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged {
+                                phoneNumberState = phoneNumberState.copy(focused = it.isFocused)
+                            },
+                        value = phoneNumberState.value,
+                        onValueChange = {
+                            if (it.length <= 11) {
+                                phoneNumberState =
+                                    phoneNumberState.copy(
+                                        value = it,
+                                        isValid = phoneNumberState.isValid,
+                                        isError = false,
+                                        errorMessage = "",
+                                    )
+                            }
+                            if (it.length == 11) {
+                                phoneNumberState = isPhoneNumberValid(phoneNumberState)
+                                focusManager.clearFocus()
+                            }
+                        },
+                        trailingIcon = {
+                            if (phoneNumberState.focused) {
+                                XMarkCircleIcon(
+                                    modifier = Modifier.clickable {
+                                        phoneNumberState = TextFieldState()
+                                    },
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                        },
+                        label = { Text(text = "전화번호") },
+                        visualTransformation = PhoneVisualTransformation(
+                            "000-0000-0000",
+                            '0',
+                        ),
+                        isError = phoneNumberState.isError,
+                        supportingText = if (phoneNumberState.isError) {
+                            { Text(text = phoneNumberState.errorMessage) }
+                        } else {
+                            null
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Number,
+                        ),
+                        keyboardActions = KeyboardActions(onDone = {
                             phoneNumberState = isPhoneNumberValid(phoneNumberState)
                             focusManager.clearFocus()
-                        }
-                    },
-                    onClickCancel = { phoneNumberState = TextFieldState() },
-                    hint = "전화번호",
-                    visualTransformation = PhoneVisualTransformation(
-                        "000-0000-0000",
-                        '0',
-                    ),
-                    modifier = Modifier.padding(top = 24.dp),
-                    isError = phoneNumberState.isError,
-                    supportingText = if (phoneNumberState.isError) phoneNumberState.errorMessage else "",
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Search,
-                        keyboardType = KeyboardType.Number,
-                    ),
-                    keyboardActions = KeyboardActions(onSearch = {
-                        phoneNumberState = isPhoneNumberValid(phoneNumberState)
-                        focusManager.clearFocus()
-                    }),
-                )
-            }
-            AnimatedVisibility(visible = nameState.isValid && classInfoState.isValid) {
-                DodamTextField(
-                    value = emailState.value,
-                    onValueChange = {
-                        emailState = TextFieldState(it, emailState.isValid, false, "")
-                    },
-                    onClickCancel = { emailState = TextFieldState() },
-                    hint = "이메일",
-                    modifier = Modifier.padding(top = 24.dp),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions(onSearch = {
-                        focusManager.clearFocus()
-                        emailState = isEmailValid(emailState)
-                    }),
-                )
-            }
-            AnimatedVisibility(visible = nameState.isValid) {
-                DodamTextField(
-                    value = classInfoText,
-                    onValueChange = {
-                        classInfoState = TextFieldState(
-                            it.text.replace("[^0-9]".toRegex(), ""),
-                            classInfoState.isValid,
-                            classInfoState.isError,
-                        )
-                        when (it.text.length) {
-                            1 -> { // 학년을 입력한 경우: "" (0글자)
-                                classInfoText = TextFieldValue(
-                                    text = classInfoState.getValueAsString(1),
-                                    selection = TextRange(3),
+                        }),
+                        singleLine = true,
+                    )
+                }
+                AnimatedVisibility(visible = nameState.isValid && classInfoState.isValid) {
+                    DodamTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged {
+                                emailState = emailState.copy(focused = it.isFocused)
+                            },
+                        value = emailState.value,
+                        onValueChange = {
+                            emailState = emailState.copy(
+                                value = it,
+                                isValid = emailState.isValid,
+                                isError = false,
+                                errorMessage = "",
+                            )
+                        },
+                        trailingIcon = {
+                            if (emailState.focused) {
+                                XMarkCircleIcon(
+                                    modifier = Modifier.clickable {
+                                        emailState = TextFieldState()
+                                    },
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
-                                classInfoState =
-                                    classInfoState.copy(
-                                        value = classInfoText.text[0].toString(),
+                            }
+                        },
+                        label = { Text(text = "이메일") },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Email,
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.clearFocus()
+                            emailState = isEmailValid(emailState)
+                        }),
+                        singleLine = true,
+                    )
+                }
+                AnimatedVisibility(visible = nameState.isValid) {
+                    DodamTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged {
+                                classInfoState = classInfoState.copy(focused = it.isFocused)
+                            },
+                        value = classInfoText,
+                        onValueChange = {
+                            classInfoState = classInfoState.copy(
+                                value = it.text.replace("[^0-9]".toRegex(), ""),
+                                isValid = classInfoState.isValid,
+                                isError = classInfoState.isError,
+                            )
+                            when (it.text.length) {
+                                1 -> { // 학년을 입력한 경우: "" (0글자)
+                                    classInfoText = TextFieldValue(
+                                        text = classInfoState.getValueAsString(1),
+                                        selection = TextRange(3),
+                                    )
+                                    classInfoState =
+                                        classInfoState.copy(
+                                            value = classInfoText.text[0].toString(),
+                                            isValid = false,
+                                            isError = false,
+                                            errorMessage = "",
+                                        )
+                                }
+
+                                2 -> { // 학년이 입력되었을 때 삭제를 누른 경우: 2학년 (3글자)
+                                    classInfoText = classInfoText.copy(
+                                        text = "",
+                                        selection = TextRange.Zero,
+                                    )
+                                    classInfoState = classInfoState.copy(
+                                        value = "",
                                         isValid = false,
                                         isError = false,
                                         errorMessage = "",
                                     )
-                            }
+                                }
 
-                            2 -> { // 학년이 입력되었을 때 삭제를 누른 경우: 2학년 (3글자)
-                                classInfoText = classInfoText.copy(
-                                    text = "",
-                                    selection = TextRange.Zero,
-                                )
-                                classInfoState = classInfoState.copy(
-                                    value = "",
-                                    isValid = false,
-                                    isError = false,
-                                    errorMessage = "",
-                                )
-                            }
-
-                            4 -> { // 학년이 입력되었을 때 반을 입력한 경우: 2학년 (3글자)
-                                classInfoText = classInfoText.copy(
-                                    text = classInfoState.getValueAsString(2),
-                                    selection = TextRange(6),
-                                )
-                                classInfoState = classInfoState.copy(
-                                    value = classInfoState.value.substring(0, 2),
-                                    isValid = false,
-                                    isError = false,
-                                    errorMessage = "",
-                                )
-                            }
-
-                            5 -> { // 학년, 반이 입력되었을 때 삭제를 누른 경우: 2학년 4반 (6글자)
-                                classInfoText = classInfoText.copy(
-                                    text = classInfoState.getValueAsString(1),
-                                    selection = TextRange(3),
-                                )
-                                classInfoState =
-                                    classInfoState.copy(
-                                        value = classInfoState.value.substring(0, 1),
-                                        isValid = false,
-                                        isError = false,
-                                        errorMessage = "",
+                                4 -> { // 학년이 입력되었을 때 반을 입력한 경우: 2학년 (3글자)
+                                    classInfoText = classInfoText.copy(
+                                        text = classInfoState.getValueAsString(2),
+                                        selection = TextRange(6),
                                     )
-                            }
-
-                            7 -> { // 학년, 반이 입력되었을 때 학번을 입력할 경우: 2학년 4반 (6글자)
-                                classInfoText = classInfoText.copy(
-                                    text = classInfoState.getValueAsString(),
-                                    selection = TextRange(9),
-                                )
-                                classInfoState = classInfoState.copy(
-                                    value = classInfoState.value.substring(0, 3),
-                                    isValid = false,
-                                    isError = false,
-                                    errorMessage = "",
-                                )
-                            }
-
-                            8 -> { // 학번이 한자리인 상황에서 삭제를 누를 경우: 2학년 4반 6번 (9글자)
-                                classInfoText = classInfoText.copy(
-                                    text = classInfoState.getValueAsString(2),
-                                    selection = TextRange(6),
-                                )
-                                classInfoState =
-                                    classInfoState.copy(
+                                    classInfoState = classInfoState.copy(
                                         value = classInfoState.value.substring(0, 2),
                                         isValid = false,
                                         isError = false,
                                         errorMessage = "",
                                     )
-                            }
+                                }
 
-                            9 -> { // 학번이 두자리인 상황에서 삭제를 누를 경우: 2학년 4반 06번 (10글자)
-                                if (classInfoState.value[2] == '0') { // 학번의 십의자리가 0일 떄는 십의자리가 사리지고 아니면 일의자리가 사라짐
+                                5 -> { // 학년, 반이 입력되었을 때 삭제를 누른 경우: 2학년 4반 (6글자)
                                     classInfoText = classInfoText.copy(
-                                        text = classInfoState.getValueAsString(lastIndex = 3),
-                                        selection = TextRange(9),
+                                        text = classInfoState.getValueAsString(1),
+                                        selection = TextRange(3),
                                     )
                                     classInfoState =
                                         classInfoState.copy(
-                                            value = classInfoState.value.substring(
-                                                0,
-                                                2,
-                                            ) + classInfoState.value[3],
-                                            isValid = classInfoState.isValid,
-                                            isError = false,
-                                            errorMessage = "",
-                                        )
-                                } else {
-                                    classInfoText = classInfoText.copy(
-                                        text = classInfoState.getValueAsString(),
-                                        selection = TextRange(9),
-                                    )
-                                    classInfoState =
-                                        classInfoState.copy(
-                                            value = classInfoState.value.substring(0, 3),
-                                            isValid = classInfoState.isValid,
+                                            value = classInfoState.value.substring(0, 1),
+                                            isValid = false,
                                             isError = false,
                                             errorMessage = "",
                                         )
                                 }
+
+                                7 -> { // 학년, 반이 입력되었을 때 학번을 입력할 경우: 2학년 4반 (6글자)
+                                    classInfoText = classInfoText.copy(
+                                        text = classInfoState.getValueAsString(),
+                                        selection = TextRange(9),
+                                    )
+                                    classInfoState = classInfoState.copy(
+                                        value = classInfoState.value.substring(0, 3),
+                                        isValid = false,
+                                        isError = false,
+                                        errorMessage = "",
+                                    )
+                                }
+
+                                8 -> { // 학번이 한자리인 상황에서 삭제를 누를 경우: 2학년 4반 6번 (9글자)
+                                    classInfoText = classInfoText.copy(
+                                        text = classInfoState.getValueAsString(2),
+                                        selection = TextRange(6),
+                                    )
+                                    classInfoState =
+                                        classInfoState.copy(
+                                            value = classInfoState.value.substring(0, 2),
+                                            isValid = false,
+                                            isError = false,
+                                            errorMessage = "",
+                                        )
+                                }
+
+                                9 -> { // 학번이 두자리인 상황에서 삭제를 누를 경우: 2학년 4반 06번 (10글자)
+                                    if (classInfoState.value[2] == '0') { // 학번의 십의자리가 0일 떄는 십의자리가 사리지고 아니면 일의자리가 사라짐
+                                        classInfoText = classInfoText.copy(
+                                            text = classInfoState.getValueAsString(lastIndex = 3),
+                                            selection = TextRange(9),
+                                        )
+                                        classInfoState =
+                                            classInfoState.copy(
+                                                value = classInfoState.value.substring(
+                                                    0,
+                                                    2,
+                                                ) + classInfoState.value[3],
+                                                isValid = classInfoState.isValid,
+                                                isError = false,
+                                                errorMessage = "",
+                                            )
+                                    } else {
+                                        classInfoText = classInfoText.copy(
+                                            text = classInfoState.getValueAsString(),
+                                            selection = TextRange(9),
+                                        )
+                                        classInfoState =
+                                            classInfoState.copy(
+                                                value = classInfoState.value.substring(0, 3),
+                                                isValid = classInfoState.isValid,
+                                                isError = false,
+                                                errorMessage = "",
+                                            )
+                                    }
+                                }
+                                // 학번이 한자리인 경우에서 입력할 경우: 2학년 4반 6번 (9글자)
+                                10 -> {
+                                    classInfoText = classInfoText.copy(
+                                        text = classInfoState.getValueAsString(
+                                            lastIndex = 3,
+                                            lastPrefix = 2,
+                                        ),
+                                        selection = TextRange(10),
+                                    )
+                                    classInfoState = isClassInfoValid(classInfoState)
+                                }
                             }
-                            // 학번이 한자리인 경우에서 입력할 경우: 2학년 4반 6번 (9글자)
-                            10 -> {
-                                classInfoText = classInfoText.copy(
-                                    text = classInfoState.getValueAsString(
-                                        lastIndex = 3,
-                                        lastPrefix = 2,
-                                    ),
-                                    selection = TextRange(10),
+                        },
+                        trailingIcon = {
+                            if (classInfoState.focused) {
+                                XMarkCircleIcon(
+                                    modifier = Modifier.clickable {
+                                        classInfoText = classInfoText.copy(
+                                            text = "",
+                                            selection = TextRange.Zero,
+                                        )
+                                        classInfoState = classInfoState.copy(
+                                            value = "",
+                                            isValid = false,
+                                            isError = false,
+                                            errorMessage = "",
+                                        )
+                                        focusManager.clearFocus()
+                                    },
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
-                                classInfoState = isClassInfoValid(classInfoState)
                             }
-                        }
-                    },
-                    onClickCancel = {
-                        classInfoText = classInfoText.copy(
-                            text = "",
-                            selection = TextRange.Zero,
-                        )
-                        classInfoState = classInfoState.copy(
-                            value = "",
+                        },
+                        label = { Text(text = "학반번호") },
+                        isError = classInfoState.isError,
+                        supportingText = if (classInfoState.isError) {
+                            { Text(text = classInfoState.errorMessage) }
+                        } else {
+                            null
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number,
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.clearFocus()
+                            classInfoState = isClassInfoValid(classInfoState)
+                        }),
+                        singleLine = true,
+                    )
+                }
+                DodamTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged {
+                            nameState = nameState.copy(focused = it.isFocused)
+                        },
+                    value = nameState.value,
+                    onValueChange = { text ->
+                        nameState = nameState.copy(
+                            value = text,
                             isValid = false,
                             isError = false,
                             errorMessage = "",
                         )
-                        focusManager.clearFocus()
                     },
-                    hint = "학반번호",
-                    isError = classInfoState.isError,
-                    supportingText = if (classInfoState.isError) classInfoState.errorMessage else "",
-                    modifier = Modifier.padding(top = 24.dp),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Search,
-                        keyboardType = KeyboardType.Number,
-                    ),
-                    keyboardActions = KeyboardActions(onSearch = {
+                    trailingIcon = {
+                        if (nameState.focused) {
+                            XMarkCircleIcon(
+                                modifier = Modifier.clickable {
+                                    nameState = TextFieldState()
+                                },
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    },
+                    label = { Text(text = "이름") },
+                    isError = nameState.isError,
+                    supportingText = if (nameState.isError) {
+                        { Text(text = nameState.errorMessage) }
+                    } else {
+                        null
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(onNext = {
                         focusManager.clearFocus()
-                        classInfoState = isClassInfoValid(classInfoState)
+                        nameState = isNameValid(nameState)
                     }),
+                    singleLine = true,
                 )
             }
-            DodamTextField(
-                value = nameState.value,
-                onValueChange = { text ->
-                    nameState = TextFieldState(text, nameState.isValid, false, "")
+
+            DodamCTAButton(
+                onClick = {
+                    onNextClick(
+                        nameState.value,
+                        classInfoState.value[0].toString(),
+                        classInfoState.value[1].toString(),
+                        classInfoState.value[2].toString() + classInfoState.value[3].toString(),
+                        emailState.value,
+                        phoneNumberState.value,
+                    )
                 },
-                onClickCancel = { nameState = TextFieldState() },
-                hint = "이름",
-                isError = nameState.isError,
-                supportingText = if (nameState.isError) nameState.errorMessage else "",
-                modifier = Modifier.padding(top = 24.dp),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = {
-                    focusManager.clearFocus()
-                    nameState = isNameValid(nameState)
-                }),
-            )
-            AnimatedVisibility(visible = setOf(phoneNumberState, emailState, classInfoState, nameState).all { it.isValid }) {
-                DodamFullWidthButton(
-                    onClick = {
-                        onNextClick(
-                            nameState.value,
-                            classInfoState.value[0].toString(),
-                            classInfoState.value[1].toString(),
-                            classInfoState.value[2].toString() + classInfoState.value[3].toString(),
-                            emailState.value,
-                            phoneNumberState.value,
-                        )
-                    },
-                    text = "다음",
-                    modifier = Modifier.padding(top = 24.dp),
-                    enabled = nameState.value.length in 2..4 &&
-                        classInfoState.value.length == 4 &&
-                        emailState.value.isNotBlank() &&
-                        phoneNumberState.value.length == 11,
-                )
+                enabled = nameState.value.length in 2..4 &&
+                    classInfoState.value.length == 4 &&
+                    emailState.value.isNotBlank() &&
+                    phoneNumberState.value.length == 11,
+            ) {
+                Text(text = "다음")
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.b1nd.dodam.designsystem.util
+package com.b1nd.dodam.ui.util
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
