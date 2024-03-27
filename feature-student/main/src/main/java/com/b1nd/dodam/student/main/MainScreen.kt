@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.b1nd.dodam.all.navigation.ALL_ROUTE
+import com.b1nd.dodam.all.navigation.allScreen
 import com.b1nd.dodam.designsystem.component.BottomNavigationItem
 import com.b1nd.dodam.designsystem.component.DodamBottomNavigation
 import com.b1nd.dodam.designsystem.icons.Door
@@ -48,7 +50,7 @@ internal fun MainScreen(
         BottomNavigationItem(MEAL_ROUTE, ForkAndKnife),
         BottomNavigationItem(OUTING_ROUTE, Door),
         BottomNavigationItem(NIGHT_STUDY_ROUTE, MoonPlus),
-        BottomNavigationItem("", More),
+        BottomNavigationItem(ALL_ROUTE, More),
     )
 
     Box(
@@ -65,6 +67,7 @@ internal fun MainScreen(
                 navigateToAddOuting,
                 navigateToAddSleepOver,
             )
+            allScreen()
         }
 
         Box(
