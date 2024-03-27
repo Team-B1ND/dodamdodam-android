@@ -53,6 +53,8 @@ include(
     ":ui-test-main",
     ":feature-student:nightstudy",
     ":feature-student:outing",
-    ":ui"
+    ":ui",
+    ":feature-student:all",
+    ":data:my",
+    ":network:my",
 )
-include(":feature-student:all")
