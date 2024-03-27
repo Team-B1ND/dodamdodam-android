@@ -55,6 +55,6 @@ include(
     ":feature-student:outing",
     ":ui",
     ":feature-student:all",
-    ":data:my",
-    ":network:my",
+    ":data:member",
+    ":network:member",
 )
