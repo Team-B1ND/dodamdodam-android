@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.vector.ImageVector.Builder
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-public val BarChart: ImageVector
+public val Setting: ImageVector
     get() {
         if (_vector != null) {
             return _vector!!
