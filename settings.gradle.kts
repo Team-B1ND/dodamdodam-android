@@ -13,6 +13,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://jitpack.io")
     }
 }
 
@@ -52,4 +53,5 @@ include(
     ":ui-test-main",
     ":feature-student:nightstudy",
     ":feature-student:outing",
+    ":ui"
 )

@@ -3,54 +3,63 @@ package com.b1nd.dodam.login
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.b1nd.dodam.designsystem.component.DodamFullWidthButton
-import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.designsystem.theme.BackIcon
-import com.b1nd.dodam.designsystem.theme.DodamTheme
+import com.b1nd.dodam.dds.component.DodamDialog
+import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
+import com.b1nd.dodam.dds.component.DodamTextField
+import com.b1nd.dodam.dds.component.button.DodamCTAButton
+import com.b1nd.dodam.dds.component.button.DodamTextButton
+import com.b1nd.dodam.dds.style.EyeIcon
+import com.b1nd.dodam.dds.style.EyeSlashIcon
+import com.b1nd.dodam.dds.style.XMarkCircleIcon
+import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.login.viewmodel.Event
 import com.b1nd.dodam.login.viewmodel.LoginViewModel
 
+@ExperimentalMaterial3Api
 @Composable
 internal fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit) {
+    val uiState by viewModel.uiState.collectAsState()
+
     var idError by remember { mutableStateOf("") }
     var pwError by remember { mutableStateOf("") }
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    var showDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect { event ->
             when (event) {
                 is Event.NavigateToMain -> navigateToMain()
-                is Event.Error -> {
-                    when (event.message) {
-                        "해당 멤버를 찾지 못함" -> {
-                            idError = "계정을 찾을 수 없어요"
-                        }
-
-                        "비밀번호가 일치하지 않음" -> {
-                            pwError = "비밀번호가 일치하지 않아요"
-                        }
-
-                        else -> {
-                            pwError = event.message
-                        }
-                    }
-                }
+                is Event.ShowDialog -> showDialog = true
+                is Event.CheckId -> idError = event.message
+                is Event.CheckPw -> pwError = event.message
             }
         }
     }
@@ -79,9 +88,14 @@ internal fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), onBackClic
         idError = idError,
         pw = password,
         pwError = pwError,
+        isLoading = uiState.isLoading,
+        showDialog = showDialog,
+        dismissDialog = { showDialog = false },
+        errorMessage = uiState.error,
     )
 }
 
+@ExperimentalMaterial3Api
 @Composable
 private fun LoginScreen(
     onBackClick: () -> Unit,
@@ -94,75 +108,134 @@ private fun LoginScreen(
     onPwChange: (String) -> Unit,
     onIdCancel: () -> Unit,
     onPwCancel: () -> Unit,
+    isLoading: Boolean,
+    showDialog: Boolean,
+    dismissDialog: () -> Unit,
+    errorMessage: String,
 ) {
-    Column(
+    var idFocused by remember { mutableStateOf(false) }
+    var pwFocused by remember { mutableStateOf(false) }
+
+    var showPassword by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        DodamDialog(
+            onDismissRequest = dismissDialog,
+            confirmText = {
+                DodamTextButton(onClick = dismissDialog) {
+                    Text(text = "확인")
+                }
+            },
+            title = { Text(text = errorMessage) },
+        )
+    }
+
+    Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .statusBarsPadding(),
-    ) {
-        BackIcon(
-            modifier = Modifier
-                .padding(16.dp)
-                .clickable {
-                    onBackClick()
-                },
-            tint = MaterialTheme.colorScheme.onBackground,
-        )
+            .systemBarsPadding(),
+        topBar = {
+            DodamLargeTopAppBar(
+                title = { Text(text = "아이디와 비밀번호를\n입력해주세요") },
+                onNavigationIconClick = onBackClick,
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                ),
+            )
+        },
+    ) { paddingValues ->
         Column(
             modifier = Modifier
-                .padding(start = 24.dp, end = 24.dp, bottom = 32.dp),
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            Text(
-                text = "아이디와 비밀번호를\n입력해주세요",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(bottom = 32.dp),
-            )
             DodamTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        idFocused = it.isFocused
+                    },
                 value = id,
                 onValueChange = onIdChange,
-                onClickCancel = onIdCancel,
-                hint = "아이디",
+                label = { Text(text = "아이디") },
                 isError = idError.isNotBlank(),
-                supportingText = idError,
-                textStyle = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = 32.dp),
+                supportingText = if (idError.isNotBlank()) {
+                    { Text(text = idError) }
+                } else {
+                    null
+                },
+                trailingIcon = {
+                    if (idFocused) {
+                        XMarkCircleIcon(
+                            modifier = Modifier.clickable {
+                                onIdCancel()
+                            },
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                },
             )
+
             DodamTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        pwFocused = it.isFocused
+                    },
                 value = pw,
                 onValueChange = onPwChange,
-                onClickCancel = onPwCancel,
-                isPassword = true,
-                isPasswordVisible = false,
+                label = { Text(text = "비밀번호") },
                 isError = pwError.isNotBlank(),
-                supportingText = pwError,
-                hint = "비밀번호",
-                textStyle = MaterialTheme.typography.bodyMedium,
+                visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                supportingText = if (pwError.isNotBlank()) {
+                    { Text(text = pwError) }
+                } else {
+                    null
+                },
+                trailingIcon = {
+                    if (pwFocused) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            if (showPassword) {
+                                EyeIcon(
+                                    modifier = Modifier.clickable {
+                                        showPassword = false
+                                    },
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            } else {
+                                EyeSlashIcon(
+                                    modifier = Modifier.clickable {
+                                        showPassword = true
+                                    },
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+
+                            XMarkCircleIcon(
+                                modifier = Modifier.clickable {
+                                    onPwCancel()
+                                },
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                },
             )
+            DodamCTAButton(
+                onClick = onLoginClick,
+                isLoading = isLoading,
+                enabled = id.isNotBlank() && pw.isNotBlank(),
+            ) {
+                Text(text = "로그인")
+            }
         }
-//        TODO: this code is use when making forget password feature
-//        Row(
-//            modifier = Modifier.fillMaxWidth(),
-//            horizontalArrangement = Arrangement.Center,
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Text(text = "비밀번호를 잊으셨나요?",
-//                style = MaterialTheme.typography.labelMedium,
-//                color = MaterialTheme.colorScheme.tertiary,)
-//            Text(text = "비밀번호 재성정",
-//                style = MaterialTheme.typography.labelMedium,
-//                color = MaterialTheme.colorScheme.onBackground,)
-//        }
-        DodamFullWidthButton(
-            modifier = Modifier.padding(horizontal = 24.dp),
-            onClick = onLoginClick,
-            text = "로그인",
-            enabled = id.isNotEmpty() && pw.isNotEmpty(),
-        )
     }
 }
 
+@ExperimentalMaterial3Api
 @Preview
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
@@ -179,6 +252,10 @@ fun LoginScreenPreview() {
             onPwChange = { },
             onIdCancel = { },
             onPwCancel = { },
+            isLoading = false,
+            showDialog = false,
+            dismissDialog = { },
+            errorMessage = "",
         )
     }
 }

@@ -1,10 +1,14 @@
 package com.b1nd.dodam.onboarding
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,29 +31,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.designsystem.animation.NoInteractionSource
-import com.b1nd.dodam.designsystem.component.DodamFullWidthButton
-import com.b1nd.dodam.designsystem.theme.Black
-import com.b1nd.dodam.designsystem.theme.Blue500
-import com.b1nd.dodam.designsystem.theme.CheckCircleIcon
-import com.b1nd.dodam.designsystem.theme.CheckIcon
-import com.b1nd.dodam.designsystem.theme.Gray300
-import com.b1nd.dodam.designsystem.theme.Gray800
-import com.b1nd.dodam.designsystem.theme.Gray900
-import com.b1nd.dodam.designsystem.theme.RightArrowIcon
-import com.b1nd.dodam.designsystem.theme.White
+import com.b1nd.dodam.dds.component.button.DodamCTAButton
+import com.b1nd.dodam.dds.foundation.DodamColor
+import com.b1nd.dodam.dds.style.BodyLarge
+import com.b1nd.dodam.dds.style.CheckmarkCircleIcon
+import com.b1nd.dodam.dds.style.CheckmarkIcon
+import com.b1nd.dodam.dds.style.ChevronRightIcon
+import com.b1nd.dodam.dds.style.LabelLarge
 import com.holix.android.bottomsheetdialog.compose.BottomSheetDialog
 import com.holix.android.bottomsheetdialog.compose.BottomSheetDialogProperties
 
 @Composable
 internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
+    val context = LocalContext.current
+
     var showBottomSheet by remember { mutableStateOf(false) }
     var isTermsChecked by remember { mutableStateOf(false) }
     var isPrivacyChecked by remember { mutableStateOf(false) }
@@ -68,7 +71,7 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
             modifier = Modifier.fillMaxSize(),
             onDraw = {
                 drawRect(
-                    color = Black,
+                    color = DodamColor.Black,
                     alpha = 0.5f,
                 )
             },
@@ -92,17 +95,17 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
 
             Text(
                 text = "어린아이가 탈 없이 잘 놀며 자라는 모양.",
-                color = White,
+                color = DodamColor.White,
                 style = MaterialTheme.typography.bodyMedium,
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
-            DodamFullWidthButton(
-                onClick = {
-                    showBottomSheet = true
+            com.b1nd.dodam.dds.component.button.DodamCTAButton(
+                onClick = { showBottomSheet = true },
+                content = {
+                    Text(text = "시작하기")
                 },
-                text = "시작하기",
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -110,18 +113,18 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
             Row {
                 Text(
                     text = "이미 계정이 있나요?",
-                    color = White,
+                    color = DodamColor.White,
                     style = MaterialTheme.typography.bodySmall,
                 )
                 Spacer(modifier = Modifier.width(2.dp))
                 Text(
                     modifier = Modifier.clickable(
-                        interactionSource = NoInteractionSource(),
+                        interactionSource = remember { MutableInteractionSource() },
                         indication = null,
                         onClick = onLoginClick,
                     ),
                     text = "로그인",
-                    color = White,
+                    color = DodamColor.White,
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
                 )
             }
@@ -140,11 +143,13 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
         ) {
             Column(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                     .fillMaxWidth()
-                    .background(White)
+                    .background(
+                        MaterialTheme.colorScheme.background,
+                        RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                    )
                     .navigationBarsPadding()
-                    .padding(24.dp),
+                    .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 16.dp),
             ) {
                 Row(
                     modifier = Modifier
@@ -152,97 +157,134 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                         .border(
                             width = 1.5.dp,
                             color = MaterialTheme.colorScheme.outline,
-                            shape = RoundedCornerShape(10.dp),
+                            shape = MaterialTheme.shapes.small,
                         )
-                        .padding(12.dp)
+                        .padding(vertical = 12.dp, horizontal = 16.dp)
                         .clickable(
-                            interactionSource = NoInteractionSource(),
+                            interactionSource = remember { MutableInteractionSource() },
                             indication = null,
-                        ) {
-                            if (isPrivacyChecked && isTermsChecked) {
-                                isPrivacyChecked = false
-                                isTermsChecked = false
-                            } else {
-                                isPrivacyChecked = true
-                                isTermsChecked = true
-                            }
-                        },
+                            onClick = {
+                                if (isPrivacyChecked && isTermsChecked) {
+                                    isPrivacyChecked = false
+                                    isTermsChecked = false
+                                } else {
+                                    isPrivacyChecked = true
+                                    isTermsChecked = true
+                                }
+                            },
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    CheckCircleIcon(tint = if (isPrivacyChecked && isTermsChecked) Blue500 else Gray300)
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Text(
-                        text = "모두 동의합니다",
-                        color = Gray900,
-                        style = MaterialTheme.typography.bodyMedium,
+                    CheckmarkCircleIcon(
+                        tint = if (isPrivacyChecked && isTermsChecked) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.outline
+                        },
                     )
+
+                    BodyLarge(text = "모두 동의합니다", color = MaterialTheme.colorScheme.onBackground)
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    CheckIcon(
+                    CheckmarkIcon(
                         modifier = Modifier
+                            .size(32.dp)
                             .clickable(
-                                interactionSource = NoInteractionSource(),
+                                interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
                                 onClick = { isTermsChecked = !isTermsChecked },
                             ),
-                        tint = if (isTermsChecked) Blue500 else Gray300,
+                        tint = if (isTermsChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
 
-                    Text(
-                        text = "(필수) 서비스 이용약관",
-                        color = Gray800,
-                        style = MaterialTheme.typography.bodySmall,
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = {
+                                    context.startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse("http://dodam.b1nd.com/detailed-information/service-policy"),
+                                        ),
+                                    )
+                                },
+                            ),
+                    ) {
+                        LabelLarge(text = "(필수) 서비스 이용약관", color = MaterialTheme.colorScheme.tertiary)
 
-                    Spacer(modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier.weight(1f))
 
-                    RightArrowIcon(tint = Gray800)
+                        ChevronRightIcon(
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    CheckIcon(
+                    CheckmarkIcon(
                         modifier = Modifier
+                            .size(32.dp)
                             .clickable(
-                                interactionSource = NoInteractionSource(),
+                                interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
                                 onClick = { isPrivacyChecked = !isPrivacyChecked },
                             ),
-                        tint = if (isPrivacyChecked) Blue500 else Gray300,
+                        tint = if (isPrivacyChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
 
-                    Text(
-                        text = "(필수) 개인정보 수집 및 이용에 대한 안내",
-                        color = Gray800,
-                        style = MaterialTheme.typography.bodySmall,
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = {
+                                    context.startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse("http://dodam.b1nd.com/detailed-information/personal-information"),
+                                        ),
+                                    )
+                                },
+                            ),
+                    ) {
+                        LabelLarge(text = "(필수) 개인정보 수집 및 이용에 대한 안내", color = MaterialTheme.colorScheme.tertiary)
 
-                    Spacer(modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier.weight(1f))
 
-                    RightArrowIcon(tint = Gray800)
+                        ChevronRightIcon(
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                DodamFullWidthButton(
+                DodamCTAButton(
                     onClick = onRegisterClick,
                     enabled = isPrivacyChecked && isTermsChecked,
-                    text = "다음",
+                    content = { Text(text = "다음") },
                 )
             }
         }
