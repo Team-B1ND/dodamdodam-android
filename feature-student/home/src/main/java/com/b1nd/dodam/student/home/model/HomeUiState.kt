@@ -1,7 +1,5 @@
 package com.b1nd.dodam.student.home.model
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import com.b1nd.dodam.data.banner.model.Banner
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.outing.model.Outing

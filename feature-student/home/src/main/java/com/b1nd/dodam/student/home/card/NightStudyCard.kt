@@ -42,9 +42,9 @@ import com.b1nd.dodam.student.home.DefaultText
 import com.b1nd.dodam.student.home.DodamContainer
 import com.b1nd.dodam.student.home.model.NightStudyUiState
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import kotlinx.datetime.toJavaLocalDateTime
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
 internal fun NightStudyCard(
@@ -107,14 +107,14 @@ internal fun NightStudyCard(
                                                 .padding(horizontal = 10.dp)
                                                 .bounceClick(
                                                     interactionSource = remember { MutableInteractionSource() },
-                                                    onClick = navigateToNightStudy
+                                                    onClick = navigateToNightStudy,
                                                 )
                                                 .padding(6.dp),
-                                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                            horizontalArrangement = Arrangement.spacedBy(12.dp),
                                         ) {
                                             DodamCircularProgressIndicator(progress = progress)
                                             Column(
-                                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                                                verticalArrangement = Arrangement.spacedBy(4.dp),
                                             ) {
                                                 Text(
                                                     text = buildAnnotatedString {
@@ -159,7 +159,7 @@ internal fun NightStudyCard(
                                                         nightStudy.endAt.monthNumber,
                                                         nightStudy.endAt.dayOfMonth,
                                                     ),
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                                 )
                                             }
                                         }
@@ -181,18 +181,18 @@ internal fun NightStudyCard(
                                             .padding(horizontal = 10.dp)
                                             .bounceClick(
                                                 interactionSource = remember { MutableInteractionSource() },
-                                                onClick = navigateToNightStudy
+                                                onClick = navigateToNightStudy,
                                             )
                                             .padding(6.dp),
-                                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                                     ) {
                                         DodamCircularProgressIndicator(progress = progress)
                                         Column(
-                                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                                            verticalArrangement = Arrangement.spacedBy(4.dp),
                                         ) {
                                             BodyMedium(
                                                 text = "대기중",
-                                                color = MaterialTheme.colorScheme.onSurface
+                                                color = MaterialTheme.colorScheme.onSurface,
                                             )
                                             LabelLarge(
                                                 text = String.format(
@@ -200,7 +200,7 @@ internal fun NightStudyCard(
                                                     nightStudy.startAt.monthNumber,
                                                     nightStudy.startAt.dayOfMonth,
                                                 ),
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             )
                                         }
                                     }
@@ -282,6 +282,6 @@ internal fun NightStudyCard(
                     }
                 }
             }
-        }
+        },
     )
 }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -19,17 +18,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.b1nd.dodam.data.banner.model.Banner
 import com.b1nd.dodam.dds.foundation.DodamShape
 import com.b1nd.dodam.student.home.PagerIndicator
 import com.b1nd.dodam.student.home.model.BannerUiState
 
 @ExperimentalFoundationApi
 @Composable
-internal fun BannerCard(
-    uiState: BannerUiState,
-    context: Context
-) {
+internal fun BannerCard(uiState: BannerUiState, context: Context) {
     when (uiState) {
         is BannerUiState.Success -> {
             val banners = remember { uiState.data }
@@ -47,8 +42,8 @@ internal fun BannerCard(
                                     context.startActivity(
                                         Intent(
                                             Intent.ACTION_VIEW,
-                                            Uri.parse(banners[page].redirectUrl)
-                                        )
+                                            Uri.parse(banners[page].redirectUrl),
+                                        ),
                                     )
                                 },
                             model = banners[page].imageUrl,

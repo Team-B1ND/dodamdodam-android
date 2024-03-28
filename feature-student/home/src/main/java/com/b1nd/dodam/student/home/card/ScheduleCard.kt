@@ -18,13 +18,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.data.schedule.model.Grade
 import com.b1nd.dodam.data.schedule.model.Schedule
@@ -37,21 +35,14 @@ import com.b1nd.dodam.student.home.DefaultText
 import com.b1nd.dodam.student.home.DodamContainer
 import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import java.time.LocalDateTime
 import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 import kotlinx.datetime.toKotlinLocalDateTime
-import java.time.LocalDateTime
 
 @ExperimentalFoundationApi
 @Composable
-internal fun ScheduleCard(
-    uiState: ScheduleUiState,
-    showShimmer: Boolean,
-    fetchSchedule: () -> Unit,
-    onContentClick: () -> Unit,
-    onNextClick: () -> Unit,
-) {
+internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchSchedule: () -> Unit, onContentClick: () -> Unit, onNextClick: () -> Unit) {
     val current = LocalDateTime.now().toKotlinLocalDateTime().date
     val tomorrow = current.plus(DatePeriod(days = 1))
 
@@ -79,10 +70,10 @@ internal fun ScheduleCard(
                                 .padding(horizontal = 10.dp)
                                 .bounceClick(
                                     interactionSource = remember { MutableInteractionSource() },
-                                    onClick = onContentClick
+                                    onClick = onContentClick,
                                 )
                                 .padding(6.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
                             val latestSchedule = remember {
                                 if (current in schedules.first().date) {
@@ -123,18 +114,22 @@ internal fun ScheduleCard(
                                     schedules.filter {
                                         latestSchedule in it.date
                                     }
-                                }
+                                },
                             )
 
                             val nextSchedule = remember {
                                 if (schedules.first().date.size > 1) {
                                     if (tomorrow in schedules.first().date) {
                                         tomorrow
-                                    } else null
+                                    } else {
+                                        null
+                                    }
                                 } else {
                                     if (schedules.size > 1) {
                                         schedules[2].date.first()
-                                    } else null
+                                    } else {
+                                        null
+                                    }
                                 }
                             }
 
@@ -158,13 +153,13 @@ internal fun ScheduleCard(
                                             "금",
                                             "토",
                                             "일",
-                                        )[it.dayOfWeek.value - 1]
+                                        )[it.dayOfWeek.value - 1],
                                     ),
                                     body = remember {
                                         schedules.filter { schedule ->
                                             it in schedule.date
                                         }
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -302,15 +297,9 @@ internal fun ScheduleCard(
     }
 }
 
-
 @ExperimentalFoundationApi
 @Composable
-private fun ScheduleComponent(
-    modifier: Modifier = Modifier,
-    title: String,
-    label: String,
-    body: List<Schedule>
-) {
+private fun ScheduleComponent(modifier: Modifier = Modifier, title: String, label: String, body: List<Schedule>) {
     Column(
         modifier = modifier,
     ) {
@@ -347,7 +336,7 @@ private fun ScheduleComponent(
                 BodyMedium(
                     modifier = Modifier.basicMarquee(),
                     text = it.name,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
