@@ -42,7 +42,7 @@ import java.time.temporal.ChronoUnit
 import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
-fun OutingScreen(onAddOutingClick: () -> Unit, onAddSleepOverClick: () -> Unit, viewModel: OutingViewModel = hiltViewModel()) {
+fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     var isOutSleeping by remember {
         mutableStateOf(false)
@@ -212,7 +212,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, onAddSleepOverClick: () -> Unit, 
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                     DodamFullWidthButton(
-                        onClick = { if (isOutSleeping) onAddSleepOverClick() else onAddOutingClick() },
+                        onClick = { onAddOutingClick() },
                         text = "$type 신청하기",
                         colors = ButtonColors(
                             MaterialTheme.colorScheme.secondary,
@@ -232,6 +232,5 @@ fun OutingScreen(onAddOutingClick: () -> Unit, onAddSleepOverClick: () -> Unit, 
 fun PreviewOutingScreen() {
     OutingScreen(
         onAddOutingClick = { /*TODO*/ },
-        onAddSleepOverClick = { /*TODO*/ },
     )
 }
