@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -43,7 +42,17 @@ import com.b1nd.dodam.member.icons.Setting
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AllScreen(viewModel: AllViewModel = hiltViewModel()) {
+fun AllScreen(
+    viewModel: AllViewModel = hiltViewModel(),
+    navigateToSetting: () -> Unit,
+    navigateToMyPoint: () -> Unit,
+    navigateToAddBus: () -> Unit,
+    navigateToAddNightStudy: () -> Unit,
+    navigateToAddOutingStudy: () -> Unit,
+    navigateToSchedule: () -> Unit,
+    navigateToWakeUpSong: () -> Unit,
+    navigateToAddWakeUpSong: () -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsState()
     Scaffold(
         modifier = Modifier
@@ -53,7 +62,9 @@ fun AllScreen(viewModel: AllViewModel = hiltViewModel()) {
                 title = { Text(text = "전체") },
                 actions = {
                     DodamIconButton(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            navigateToSetting()
+                        },
                     ) {
                         Icon(
                             modifier = Modifier.size(48.dp),
@@ -113,7 +124,7 @@ fun AllScreen(viewModel: AllViewModel = hiltViewModel()) {
                 imageVector = ImageVector.vectorResource(R.drawable.ic_bar_chart),
                 text = "내 상벌점 보기"
             ) {
-
+                navigateToMyPoint()
             }
             Spacer(modifier = Modifier.height(24.dp))
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -122,37 +133,37 @@ fun AllScreen(viewModel: AllViewModel = hiltViewModel()) {
                 imageVector = ImageVector.vectorResource(R.drawable.ic_bus),
                 text = "복귀 버스 신청하기"
             ) {
-
+                navigateToAddBus()
             }
             AllCardView(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_pencil),
                 text = "심야 자습 신청하기"
             ) {
-
+                navigateToAddNightStudy()
             }
             AllCardView(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_tent),
                 text = "외출/외박 신청하기"
             ) {
-
+                navigateToAddOutingStudy()
             }
             AllCardView(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_calendar),
                 text = "일정 보기"
             ) {
-
+                navigateToSchedule()
             }
             AllCardView(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_megaphone),
                 text = "기상송 보기"
             ) {
-
+                navigateToWakeUpSong()
             }
             AllCardView(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_musical_note),
                 text = "기상송 신청하기"
             ) {
-
+                navigateToAddWakeUpSong()
             }
         }
     }
@@ -205,7 +216,7 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun AllScreenPreview() {
+fun AllCardViewPreview() {
     DodamTheme {
         AllCardView(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_bar_chart),
