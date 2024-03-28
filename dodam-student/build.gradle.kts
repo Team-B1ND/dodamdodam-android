@@ -43,5 +43,6 @@ dependencies {
     implementation(projects.feature.login)
     implementation(projects.featureStudent.nightstudy)
     implementation(projects.featureStudent.outing)
+    implementation(projects.featureStudent.askOut)
     implementation(projects.datastore)
 }

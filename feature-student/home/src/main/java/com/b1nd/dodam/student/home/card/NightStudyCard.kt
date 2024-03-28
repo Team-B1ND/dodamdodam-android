@@ -186,7 +186,7 @@ internal fun NightStudyCard(
                                             .padding(6.dp),
                                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                                     ) {
-                                        DodamCircularProgressIndicator(progress = progress)
+                                        DodamCircularProgressIndicator(progress = progress, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                         Column(
                                             verticalArrangement = Arrangement.spacedBy(4.dp),
                                         ) {

@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.b1nd.dodam.ask_out.navigation.askOutScreen
+import com.b1nd.dodam.ask_out.navigation.navigateToAskOut
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
@@ -33,16 +35,14 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
         startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
     ) {
         onboardingScreen(
-            onRegisterClick = { navController.navigateToInfo() },
-            onLoginClick = { navController.navigationToLogin() },
+            onRegisterClick = navController::navigateToInfo,
+            onLoginClick = navController::navigationToLogin,
         )
         mainScreen(
             navigateToAskNightStudy = {
                 TODO("navigate to add nightStudy screen")
             },
-            navigateToAddOuting = {
-                TODO("navigate to add outing screen")
-            },
+            navigateToAddOuting = navController::navigateToAskOut,
             navigateToSetting = {
                 TODO("navigate to setting screen")
             },
@@ -73,14 +73,14 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
                     phoneNumber = phoneNumber,
                 )
             },
-            onBackClick = { navController.popBackStack() },
+            onBackClick = navController::popBackStack,
         )
         authScreen(
-            onRegisterClick = { navController.navigateToOnboarding() },
-            onBackClick = { navController.popBackStack() },
+            onRegisterClick = navController::navigateToOnboarding,
+            onBackClick = navController::popBackStack,
         )
         loginScreen(
-            onBackClick = { navController.popBackStack() },
+            onBackClick = navController::popBackStack,
             navigateToMain = {
                 navController.navigateToMain(
                     navOptions {
@@ -96,6 +96,9 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
         )
         outingScreen(
             onAddOutingClick = { TODO("navigate to add outing screen") },
+        )
+        askOutScreen(
+            popBackStack = navController::popBackStack
         )
     }
 }
