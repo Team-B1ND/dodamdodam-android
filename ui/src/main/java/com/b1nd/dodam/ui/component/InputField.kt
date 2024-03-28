@@ -32,7 +32,7 @@ fun InputField(
                 onClick = onClick,
             )
             .padding(paddingValues),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         text()
         Spacer(modifier = Modifier.weight(1f))

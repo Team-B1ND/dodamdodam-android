@@ -229,7 +229,7 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
             BodyLarge(
                 text = text,
                 color = MaterialTheme.colorScheme.onBackground,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
             )
             Spacer(modifier = Modifier.weight(1f))
             Icon(
