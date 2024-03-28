@@ -1,19 +1,23 @@
 package com.b1nd.dodam.student.home.model
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.b1nd.dodam.data.banner.model.Banner
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.outing.model.Outing
 import com.b1nd.dodam.data.schedule.model.Schedule
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
 
 data class HomeUiState(
+    val showShimmer: Boolean = true,
     val bannerUiState: BannerUiState = BannerUiState.None,
-    val mealUiState: MealUiState = MealUiState.Shimmer,
-    val wakeupSongUiState: WakeupSongUiState = WakeupSongUiState.Shimmer,
-    val outUiState: OutUiState = OutUiState.Shimmer,
-    val nightStudyUiState: NightStudyUiState = NightStudyUiState.Shimmer,
-    val scheduleUiState: ScheduleUiState = ScheduleUiState.Shimmer,
+    val mealUiState: MealUiState = MealUiState.Loading,
+    val wakeupSongUiState: WakeupSongUiState = WakeupSongUiState.Loading,
+    val outUiState: OutUiState = OutUiState.Loading,
+    val nightStudyUiState: NightStudyUiState = NightStudyUiState.Loading,
+    val scheduleUiState: ScheduleUiState = ScheduleUiState.Loading,
 )
 
 sealed interface BannerUiState {
@@ -22,36 +26,31 @@ sealed interface BannerUiState {
 }
 
 sealed interface MealUiState {
-    data class Success(val data: ImmutableList<String?>) : MealUiState
-    data object Shimmer : MealUiState
+    data class Success(val data: ImmutableMap<String, String>) : MealUiState
     data object Loading : MealUiState
-    data class Error(val message: String) : MealUiState
+    data object Error : MealUiState
 }
 
 sealed interface WakeupSongUiState {
     data class Success(val data: ImmutableList<WakeupSong>) : WakeupSongUiState
-    data object Shimmer : WakeupSongUiState
     data object Loading : WakeupSongUiState
-    data class Error(val message: String) : WakeupSongUiState
+    data object Error : WakeupSongUiState
 }
 
 sealed interface OutUiState {
     data class Success(val data: Outing?) : OutUiState
-    data object Shimmer : OutUiState
     data object Loading : OutUiState
-    data class Error(val message: String) : OutUiState
+    data object Error : OutUiState
 }
 
 sealed interface NightStudyUiState {
     data class Success(val data: NightStudy?) : NightStudyUiState
-    data object Shimmer : NightStudyUiState
     data object Loading : NightStudyUiState
-    data class Error(val message: String) : NightStudyUiState
+    data object Error : NightStudyUiState
 }
 
 sealed interface ScheduleUiState {
     data class Success(val data: ImmutableList<Schedule>) : ScheduleUiState
-    data object Shimmer : ScheduleUiState
     data object Loading : ScheduleUiState
-    data class Error(val message: String) : ScheduleUiState
+    data object Error : ScheduleUiState
 }
