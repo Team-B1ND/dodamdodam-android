@@ -10,7 +10,6 @@ data class ScheduleResponse(
     val name: String,
     val place: NetworkPlace?,
     val type: NetworkScheduleType,
-    val startDate: LocalDate,
-    val endDate: LocalDate,
+    val date: List<LocalDate>,
     val targetGrades: List<NetworkGrade>,
 )
