@@ -38,7 +38,7 @@ import com.b1nd.dodam.dds.foundation.DodamIcons
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.theme.DodamTheme
-import com.b1nd.dodam.member.icons.Setting
+import com.b1nd.dodam.ui.icons.Setting
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -121,7 +121,7 @@ fun AllScreen(
             }
             Spacer(modifier = Modifier.height(12.dp))
             AllCardView(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_bar_chart),
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_bar_chart),
                 text = "내 상벌점 보기"
             ) {
                 navigateToMyPoint()
@@ -130,37 +130,37 @@ fun AllScreen(
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
             AllCardView(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_bus),
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_bus),
                 text = "복귀 버스 신청하기"
             ) {
                 navigateToAddBus()
             }
             AllCardView(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_pencil),
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_pencil),
                 text = "심야 자습 신청하기"
             ) {
                 navigateToAddNightStudy()
             }
             AllCardView(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_tent),
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_tent),
                 text = "외출/외박 신청하기"
             ) {
                 navigateToAddOutingStudy()
             }
             AllCardView(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_calendar),
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_calendar),
                 text = "일정 보기"
             ) {
                 navigateToSchedule()
             }
             AllCardView(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_megaphone),
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_megaphone),
                 text = "기상송 보기"
             ) {
                 navigateToWakeUpSong()
             }
             AllCardView(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_musical_note),
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_musical_note),
                 text = "기상송 신청하기"
             ) {
                 navigateToAddWakeUpSong()
@@ -219,7 +219,7 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
 fun AllCardViewPreview() {
     DodamTheme {
         AllCardView(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_bar_chart),
+            imageVector = ImageVector.vectorResource(id = com.b1nd.dodam.ui.R.drawable.ic_bar_chart),
             onClick = {},
             text = "test"
         )

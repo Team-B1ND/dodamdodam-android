@@ -22,9 +22,6 @@ class AllViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AllUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _event = MutableSharedFlow<Event>()
-    val event = _event.asSharedFlow()
-
     init {
         viewModelScope.launch {
             memberRepository.getMyInfo().collect { result ->
