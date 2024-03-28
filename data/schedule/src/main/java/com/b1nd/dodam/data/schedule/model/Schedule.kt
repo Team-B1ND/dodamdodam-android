@@ -12,8 +12,7 @@ data class Schedule(
     val name: String,
     val place: Place?,
     val type: ScheduleType,
-    val startDate: LocalDate,
-    val endDate: LocalDate,
+    val date: ImmutableList<LocalDate>,
     val targetGrades: ImmutableList<Grade>,
 )
 internal fun ScheduleResponse.toModel(): Schedule = Schedule(
@@ -21,7 +20,6 @@ internal fun ScheduleResponse.toModel(): Schedule = Schedule(
     name = name,
     place = place?.toModel(),
     type = type.toModel(),
-    startDate = startDate,
-    endDate = endDate,
+    date = date.toImmutableList(),
     targetGrades = targetGrades.map { it.toModel() }.toImmutableList(),
 )

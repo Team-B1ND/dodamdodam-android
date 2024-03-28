@@ -20,8 +20,10 @@ import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.inject.Inject
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -45,16 +47,7 @@ class HomeViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     private val current = LocalDateTime.now()
-    private val mealTime = if (current.isAfter(
-            LocalDateTime.of(
-                current.year,
-                current.month,
-                current.dayOfMonth,
-                19,
-                10,
-            ),
-        )
-    ) {
+    private val mealTime = if (current.toLocalTime() > LocalTime.of(19, 10)) {
         current.plusDays(1)
     } else {
         current
@@ -72,12 +65,13 @@ class HomeViewModel @Inject constructor(
                             is Result.Success ->
                                 _uiState.update {
                                     it.copy(
+                                        showShimmer = false,
                                         mealUiState = MealUiState.Success(
-                                            data = persistentListOf(
-                                                result.data.breakfast?.details?.joinToString(", ") { menu -> menu.name },
-                                                result.data.lunch?.details?.joinToString(", ") { menu -> menu.name },
-                                                result.data.dinner?.details?.joinToString(", ") { menu -> menu.name },
-                                            ),
+                                            persistentMapOf(
+                                                "아침" to (result.data.breakfast?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
+                                                "점심" to (result.data.lunch?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
+                                                "저녁" to (result.data.dinner?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
+                                            ).filterValues { meal -> meal.isNotBlank() }.toImmutableMap(),
                                         ),
                                     )
                                 }
@@ -86,15 +80,14 @@ class HomeViewModel @Inject constructor(
                                 Log.e("getMeal", result.error.toString())
                                 _uiState.update {
                                     it.copy(
-                                        mealUiState = MealUiState.Error(result.error.toString()),
+                                        showShimmer = false,
+                                        mealUiState = MealUiState.Error,
                                     )
                                 }
                             }
 
                             is Result.Loading -> _uiState.update {
-                                it.copy(
-                                    mealUiState = MealUiState.Shimmer,
-                                )
+                                it.copy(showShimmer = true)
                             }
                         }
                     }
@@ -109,6 +102,7 @@ class HomeViewModel @Inject constructor(
                         when (result) {
                             is Result.Success -> _uiState.update {
                                 it.copy(
+                                    showShimmer = false,
                                     wakeupSongUiState = WakeupSongUiState.Success(result.data),
                                 )
                             }
@@ -117,15 +111,14 @@ class HomeViewModel @Inject constructor(
                                 Log.e("getWakeupSong", result.error.toString())
                                 _uiState.update {
                                     it.copy(
-                                        wakeupSongUiState = WakeupSongUiState.Error(result.error.toString()),
+                                        showShimmer = false,
+                                        wakeupSongUiState = WakeupSongUiState.Error,
                                     )
                                 }
                             }
 
                             is Result.Loading -> _uiState.update {
-                                it.copy(
-                                    wakeupSongUiState = WakeupSongUiState.Shimmer,
-                                )
+                                it.copy(showShimmer = true)
                             }
                         }
                     }
@@ -141,6 +134,7 @@ class HomeViewModel @Inject constructor(
                                             out.startAt
                                         },
                                     ),
+                                    showShimmer = false,
                                 )
                             }
 
@@ -148,17 +142,14 @@ class HomeViewModel @Inject constructor(
                                 Log.e("getMyOutSleeping", result.error.toString())
                                 _uiState.update {
                                     it.copy(
-                                        outUiState = OutUiState.Error(
-                                            result.error.toString(),
-                                        ),
+                                        outUiState = OutUiState.Error,
+                                        showShimmer = false,
                                     )
                                 }
                             }
 
                             is Result.Loading -> _uiState.update {
-                                it.copy(
-                                    outUiState = OutUiState.Shimmer,
-                                )
+                                it.copy(showShimmer = true)
                             }
                         }
                     }
@@ -174,22 +165,20 @@ class HomeViewModel @Inject constructor(
                                             nightStudy.startAt
                                         },
                                     ),
+                                    showShimmer = false,
                                 )
                             }
 
                             is Result.Loading -> _uiState.update {
-                                it.copy(
-                                    nightStudyUiState = NightStudyUiState.Shimmer,
-                                )
+                                it.copy(showShimmer = true)
                             }
 
                             is Result.Error -> {
                                 Log.e("getMyNightStudy", result.error.toString())
                                 _uiState.update {
                                     it.copy(
-                                        nightStudyUiState = NightStudyUiState.Error(
-                                            result.error.toString(),
-                                        ),
+                                        nightStudyUiState = NightStudyUiState.Error,
+                                        showShimmer = false,
                                     )
                                 }
                             }
@@ -206,20 +195,24 @@ class HomeViewModel @Inject constructor(
                             _uiState.update {
                                 it.copy(
                                     scheduleUiState = ScheduleUiState.Success(result.data),
+                                    showShimmer = false,
                                 )
                             }
                         }
 
                         is Result.Loading -> {
                             _uiState.update {
-                                it.copy(scheduleUiState = ScheduleUiState.Shimmer)
+                                it.copy(showShimmer = true)
                             }
                         }
 
                         is Result.Error -> {
                             Log.e("getSchedule", result.error.stackTraceToString())
                             _uiState.update {
-                                it.copy(scheduleUiState = ScheduleUiState.Error(result.error.toString()))
+                                it.copy(
+                                    scheduleUiState = ScheduleUiState.Error,
+                                    showShimmer = false,
+                                )
                             }
                         }
                     }
@@ -257,8 +250,8 @@ class HomeViewModel @Inject constructor(
                             )
                         }
                     }
-                    is Result.Loading -> {
-                    }
+                    is Result.Loading -> {}
+
                     is Result.Error -> {
                         Log.e("fetchBanner", result.error.stackTraceToString())
                     }
@@ -274,11 +267,11 @@ class HomeViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 mealUiState = MealUiState.Success(
-                                    persistentListOf(
-                                        result.data.breakfast?.details?.joinToString(", ") { menu -> menu.name },
-                                        result.data.lunch?.details?.joinToString(", ") { menu -> menu.name },
-                                        result.data.dinner?.details?.joinToString(", ") { menu -> menu.name },
-                                    ),
+                                    persistentMapOf(
+                                        "아침" to (result.data.breakfast?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
+                                        "점심" to (result.data.lunch?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
+                                        "저녁" to (result.data.dinner?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
+                                    ).filterValues { meal -> meal.isNotBlank() }.toImmutableMap(),
                                 ),
                             )
                         }
@@ -287,7 +280,7 @@ class HomeViewModel @Inject constructor(
                         Log.e("getMeal", result.error.toString())
                         _uiState.update {
                             it.copy(
-                                mealUiState = MealUiState.Error(result.error.toString()),
+                                mealUiState = MealUiState.Error,
                             )
                         }
                     }
@@ -322,7 +315,7 @@ class HomeViewModel @Inject constructor(
                         Log.e("fetchWakeupSong", result.error.toString())
                         _uiState.update {
                             it.copy(
-                                wakeupSongUiState = WakeupSongUiState.Error(result.error.toString()),
+                                wakeupSongUiState = WakeupSongUiState.Error,
                             )
                         }
                     }
@@ -357,9 +350,7 @@ class HomeViewModel @Inject constructor(
                         Log.e("fetchMyOutSleeping", result.error.toString())
                         _uiState.update {
                             it.copy(
-                                outUiState = OutUiState.Error(
-                                    result.error.toString(),
-                                ),
+                                outUiState = OutUiState.Error,
                             )
                         }
                     }
@@ -403,9 +394,7 @@ class HomeViewModel @Inject constructor(
                         Log.e("fetchMyNightStudy", result.error.toString())
                         _uiState.update {
                             it.copy(
-                                nightStudyUiState = NightStudyUiState.Error(
-                                    result.error.toString(),
-                                ),
+                                nightStudyUiState = NightStudyUiState.Error,
                             )
                         }
                     }
@@ -437,7 +426,7 @@ class HomeViewModel @Inject constructor(
                 is Result.Error -> {
                     Log.e("fetchSchedule", result.error.stackTraceToString())
                     _uiState.update {
-                        it.copy(scheduleUiState = ScheduleUiState.Error(result.error.toString()))
+                        it.copy(scheduleUiState = ScheduleUiState.Error)
                     }
                 }
             }

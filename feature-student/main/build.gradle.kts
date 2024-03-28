@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.designsystem)
+    implementation(libs.dodam.design.system)
     implementation(projects.featureStudent.home)
     implementation(projects.feature.meal)
     implementation(projects.featureStudent.nightstudy)
