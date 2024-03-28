@@ -1,5 +1,8 @@
 package com.b1nd.dodam.member.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class MyInfoResponse(
     val createdAt: String,
     val email: String,
@@ -10,6 +13,6 @@ data class MyInfoResponse(
     val profileImage: String?,
     val role: String,
     val status: String,
-    val studentResponse: StudentResponse?,
-    val teacherResponse: TeacherResponse?,
+    val student: StudentResponse?,
+    val teacher: TeacherResponse?,
 )
