@@ -36,21 +36,13 @@ internal class OutingRepositoryImpl @Inject constructor(
         }.asResult().flowOn(dispatcher)
     }
 
-    override fun askOuting(
-        reason: String,
-        startAt: LocalDateTime,
-        endAt: LocalDateTime
-    ): Flow<Result<Unit>> {
+    override fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime): Flow<Result<Unit>> {
         return flow {
             emit(network.askOuting(reason, startAt, endAt))
         }.asResult().flowOn(dispatcher)
     }
 
-    override fun askSleepover(
-        reason: String,
-        startAt: LocalDate,
-        endAt: LocalDate
-    ): Flow<Result<Unit>> {
+    override fun askSleepover(reason: String, startAt: LocalDate, endAt: LocalDate): Flow<Result<Unit>> {
         return flow {
             emit(network.askSleepover(reason, startAt, endAt))
         }.asResult().flowOn(dispatcher)

@@ -1,7 +1,6 @@
-package com.b1nd.dodam.ask_out
+package com.b1nd.dodam.askout
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
 import com.b1nd.dodam.dds.component.DodamTextField
 import com.b1nd.dodam.dds.component.button.DodamCTAButton
@@ -47,18 +45,15 @@ import com.b1nd.dodam.ui.component.InputField
 import com.commandiron.wheel_picker_compose.WheelDatePicker
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
 import com.holix.android.bottomsheetdialog.compose.BottomSheetDialog
-import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun AskOutScreen(
-    viewModel: AskOutViewModel = hiltViewModel(),
-    popBackStack: () -> Unit
-) {
+internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackStack: () -> Unit) {
     val scrollState = rememberScrollState()
     var selectedIndex by remember { mutableIntStateOf(0) }
 
@@ -86,14 +81,14 @@ internal fun AskOutScreen(
 
     if (showDateTimePicker.first) {
         BottomSheetDialog(
-            onDismissRequest = { showDateTimePicker = Pair(false, "") }
+            onDismissRequest = { showDateTimePicker = Pair(false, "") },
         ) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .background(
                         MaterialTheme.colorScheme.surfaceContainerHigh,
-                        DodamShape.ExtraLarge
+                        DodamShape.ExtraLarge,
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -104,8 +99,8 @@ internal fun AskOutScreen(
                         .height(4.dp)
                         .background(
                             MaterialTheme.colorScheme.onSurfaceVariant,
-                            CircleShape
-                        )
+                            CircleShape,
+                        ),
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -125,7 +120,7 @@ internal fun AskOutScreen(
                         } else {
                             outingEndDateTime = it
                         }
-                    }
+                    },
                 )
             }
         }
@@ -138,7 +133,7 @@ internal fun AskOutScreen(
                     .padding(horizontal = 16.dp)
                     .background(
                         MaterialTheme.colorScheme.surfaceContainerHigh,
-                        DodamShape.ExtraLarge
+                        DodamShape.ExtraLarge,
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -149,8 +144,8 @@ internal fun AskOutScreen(
                         .height(4.dp)
                         .background(
                             MaterialTheme.colorScheme.onSurfaceVariant,
-                            CircleShape
-                        )
+                            CircleShape,
+                        ),
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -170,7 +165,7 @@ internal fun AskOutScreen(
                         } else {
                             sleepoverEndDate = it
                         }
-                    }
+                    },
                 )
             }
         }
@@ -184,14 +179,14 @@ internal fun AskOutScreen(
             DodamSmallTopAppBar(
                 title = { Text(text = "외출/외박 신청하기") },
                 onNavigationIconClick = popBackStack,
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
             )
-        }
+        },
     ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(paddingValues),
         ) {
             Column(
                 modifier = Modifier
@@ -201,20 +196,20 @@ internal fun AskOutScreen(
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = 8.dp),
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     DodamSegmentedButtonRow(selectedIndex = selectedIndex) {
                         DodamSegment(
                             selected = selectedIndex == 0,
-                            onClick = { selectedIndex = 0 }
+                            onClick = { selectedIndex = 0 },
                         ) {
                             Text(text = "외출")
                         }
                         DodamSegment(
                             selected = selectedIndex == 1,
-                            onClick = { selectedIndex = 1 }
+                            onClick = { selectedIndex = 1 },
                         ) {
                             Text(text = "외박")
                         }
@@ -233,7 +228,7 @@ internal fun AskOutScreen(
                             }
                         },
                         textStyle = MaterialTheme.typography.bodyLarge,
-                        label = { Text(text = if (selectedIndex == 0) "외출 사유" else "외박 사유") }
+                        label = { Text(text = if (selectedIndex == 0) "외출 사유" else "외박 사유") },
                     )
                 }
 
@@ -251,13 +246,13 @@ internal fun AskOutScreen(
                         BodyLarge(
                             text = if (selectedIndex == 0) "외출일시" else "외박일자",
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = MaterialTheme.colorScheme.tertiary,
                         )
                     },
                     content = {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
                         ) {
                             BodyLarge(
                                 text = if (selectedIndex == 0) {
@@ -266,14 +261,14 @@ internal fun AskOutScreen(
                                     sleepoverStartDate.format(DateTimeFormatter.ofPattern("MM월 dd일"))
                                 },
                                 fontWeight = FontWeight.Normal,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.primary,
                             )
                             ChevronRightIcon(
                                 modifier = Modifier.size(16.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
-                    }
+                    },
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -290,13 +285,13 @@ internal fun AskOutScreen(
                         BodyLarge(
                             text = if (selectedIndex == 0) "복귀일시" else "복귀일자",
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = MaterialTheme.colorScheme.tertiary,
                         )
                     },
                     content = {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
                         ) {
                             BodyLarge(
                                 text = if (selectedIndex == 0) {
@@ -305,14 +300,14 @@ internal fun AskOutScreen(
                                     sleepoverEndDate.format(DateTimeFormatter.ofPattern("MM월 dd일"))
                                 },
                                 fontWeight = FontWeight.Normal,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.primary,
                             )
                             ChevronRightIcon(
                                 modifier = Modifier.size(16.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
-                    }
+                    },
                 )
             }
 
@@ -323,13 +318,13 @@ internal fun AskOutScreen(
                         viewModel.askOuting(
                             outingReason,
                             outingStartDateTime.toKotlinLocalDateTime(),
-                            outingEndDateTime.toKotlinLocalDateTime()
+                            outingEndDateTime.toKotlinLocalDateTime(),
                         )
                     } else {
                         viewModel.askSleepover(
                             sleepoverReason,
                             sleepoverStartDate.toKotlinLocalDate(),
-                            sleepoverEndDate.toKotlinLocalDate()
+                            sleepoverEndDate.toKotlinLocalDate(),
                         )
                     }
                 },
@@ -337,7 +332,7 @@ internal fun AskOutScreen(
                     outingReason.isNotBlank()
                 } else {
                     sleepoverReason.isNotBlank()
-                }
+                },
             ) {
                 Text(text = "확인")
             }

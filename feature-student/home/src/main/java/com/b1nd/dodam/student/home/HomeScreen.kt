@@ -71,10 +71,7 @@ import com.b1nd.dodam.ui.icons.DodamLogo
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-internal fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
-    navigateToAskOut: () -> Unit,
-) {
+internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateToAskOut: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
@@ -99,7 +96,7 @@ internal fun HomeScreen(
                 fetchBanner()
             }
         },
-        navigateToAskOut = navigateToAskOut
+        navigateToAskOut = navigateToAskOut,
     )
 }
 
