@@ -29,6 +29,8 @@ import com.b1nd.dodam.designsystem.icons.MoonPlus
 import com.b1nd.dodam.designsystem.icons.More
 import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
+import com.b1nd.dodam.member.navigation.ALL_ROUTE
+import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.outing.nanigation.OUTING_ROUTE
@@ -41,14 +43,19 @@ internal fun MainScreen(
     navController: NavHostController = rememberNavController(),
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
-    navigateToAddSleepOver: () -> Unit,
+    navigateToSetting: () -> Unit,
+    navigateToMyPoint: () -> Unit,
+    navigateToAddBus: () -> Unit,
+    navigateToSchedule: () -> Unit,
+    navigateToWakeUpSong: () -> Unit,
+    navigateToAddWakeUpSong: () -> Unit,
 ) {
     val bottomNavItems = listOf(
         BottomNavigationItem(HOME_ROUTE, Home),
         BottomNavigationItem(MEAL_ROUTE, ForkAndKnife),
         BottomNavigationItem(OUTING_ROUTE, Door),
         BottomNavigationItem(NIGHT_STUDY_ROUTE, MoonPlus),
-        BottomNavigationItem("", More),
+        BottomNavigationItem(ALL_ROUTE, More),
     )
 
     Box(
@@ -63,7 +70,16 @@ internal fun MainScreen(
             nightStudyScreen(navigateToAskNightStudy)
             outingScreen(
                 navigateToAddOuting,
-                navigateToAddSleepOver,
+            )
+            allScreen(
+                navigateToSetting,
+                navigateToMyPoint,
+                navigateToAddBus,
+                navigateToAskNightStudy,
+                navigateToAddOuting,
+                navigateToSchedule,
+                navigateToWakeUpSong,
+                navigateToAddWakeUpSong,
             )
         }
 

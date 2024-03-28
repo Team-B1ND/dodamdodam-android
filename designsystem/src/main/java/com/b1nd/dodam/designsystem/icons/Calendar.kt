@@ -1,5 +1,7 @@
 package com.b1nd.dodam.designsystem.icons
 
+import androidx.compose.foundation.Image
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.SolidColor
@@ -7,6 +9,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 private var vector: ImageVector? = null
@@ -104,3 +107,9 @@ public val Calendar: ImageVector
         }.build()
         return vector!!
     }
+
+@Preview
+@Composable
+fun PreviewCalender() {
+    Image(imageVector = Calendar, contentDescription = null)
+}
