@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 
 internal class OutingRepositoryImpl @Inject constructor(
     private val network: OutingDataSource,
@@ -31,6 +33,18 @@ internal class OutingRepositoryImpl @Inject constructor(
             sleepoverResponse.map { it.toModel() }.toPersistentList().addAll(
                 outingResponse.map { it.toModel() },
             ).toImmutableList()
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime): Flow<Result<Unit>> {
+        return flow {
+            emit(network.askOuting(reason, startAt, endAt))
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun askSleepover(reason: String, startAt: LocalDate, endAt: LocalDate): Flow<Result<Unit>> {
+        return flow {
+            emit(network.askSleepover(reason, startAt, endAt))
         }.asResult().flowOn(dispatcher)
     }
 }

@@ -211,7 +211,7 @@ internal fun OutCard(
                                             .padding(6.dp),
                                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                                     ) {
-                                        DodamCircularProgressIndicator(progress = outProgress)
+                                        DodamCircularProgressIndicator(progress = outProgress, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                             BodyMedium(
                                                 text = "대기중",
