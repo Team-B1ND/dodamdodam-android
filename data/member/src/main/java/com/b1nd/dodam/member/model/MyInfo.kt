@@ -24,6 +24,6 @@ internal fun MyInfoResponse.toModel(): MyInfo = MyInfo(
     profileImage = profileImage,
     role = role,
     status = status,
-    student = studentResponse?.toModel(),
-    teacher = teacherResponse?.toModel(),
+    student = student?.toModel(),
+    teacher = teacher?.toModel(),
 )
