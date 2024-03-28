@@ -43,7 +43,6 @@ internal fun MainScreen(
     navController: NavHostController = rememberNavController(),
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
-    navigateToAddSleepOver: () -> Unit,
     navigateToSetting: () -> Unit,
     navigateToMyPoint: () -> Unit,
     navigateToAddBus: () -> Unit,
@@ -71,7 +70,6 @@ internal fun MainScreen(
             nightStudyScreen(navigateToAskNightStudy)
             outingScreen(
                 navigateToAddOuting,
-                navigateToAddSleepOver,
             )
             allScreen(
                 navigateToSetting,

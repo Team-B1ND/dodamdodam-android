@@ -39,9 +39,6 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
             navigateToAddOuting = {
                 TODO("navigate to add outing screen")
             },
-            navigateToAddSleepOver = {
-                TODO("navigate to add sleep over screen")
-            },
             navigateToSetting = {
                 TODO("navigate to setting screen")
             },
@@ -95,7 +92,6 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
         )
         outingScreen(
             onAddOutingClick = { TODO("navigate to add outing screen") },
-            onAddSleepOverClick = { TODO("navigate to add outing screen") },
         )
     }
 }
