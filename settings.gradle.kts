@@ -57,4 +57,5 @@ include(
     ":feature-student:all",
     ":data:member",
     ":network:member",
+    ":feature-student:wakeup-song",
 )
