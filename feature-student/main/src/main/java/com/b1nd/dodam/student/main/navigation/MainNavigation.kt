@@ -1,5 +1,8 @@
 package com.b1nd.dodam.student.main.navigation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -10,6 +13,9 @@ const val MAIN_ROUTE = "main"
 
 fun NavController.navigateToMain(navOptions: NavOptions? = null) = navigate(MAIN_ROUTE, navOptions)
 
+@ExperimentalMaterialApi
+@ExperimentalFoundationApi
+@ExperimentalMaterial3Api
 fun NavGraphBuilder.mainScreen(navigateToAskNightStudy: () -> Unit, navigateToAddOuting: () -> Unit, navigateToAddSleepOver: () -> Unit) {
     composable(route = MAIN_ROUTE) {
         MainScreen(

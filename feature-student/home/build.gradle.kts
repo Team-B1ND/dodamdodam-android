@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.designsystem)
+    implementation(libs.dodam.design.system)
     implementation(projects.data.meal)
     implementation(projects.data.wakeupSong)
     implementation(projects.data.outing)
@@ -20,8 +20,7 @@ dependencies {
     implementation(projects.data.nightStudy)
     implementation(projects.data.schedule)
     implementation(projects.data.banner)
-
+    implementation(projects.ui)
     implementation(libs.coil.compose)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.material)
 }
