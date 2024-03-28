@@ -10,10 +10,10 @@ const val OUTING_ROUTE = "outing"
 
 fun NavController.navigateToOuting(navOptions: NavOptions? = null) = navigate(OUTING_ROUTE, navOptions)
 
-fun NavGraphBuilder.outingScreen(onAddOutingClick: () -> Unit, onAddSleepOverClick: () -> Unit) {
+fun NavGraphBuilder.outingScreen(onAddOutingClick: () -> Unit) {
     composable(
         route = OUTING_ROUTE,
     ) {
-        OutingScreen(onAddOutingClick, onAddSleepOverClick)
+        OutingScreen(onAddOutingClick)
     }
 }

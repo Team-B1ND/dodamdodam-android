@@ -27,6 +27,8 @@ import com.b1nd.dodam.dds.component.rememberDodamNavigationItem
 import com.b1nd.dodam.dds.foundation.DodamIcons
 import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
+import com.b1nd.dodam.member.navigation.ALL_ROUTE
+import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.outing.nanigation.OUTING_ROUTE
@@ -43,14 +45,19 @@ internal fun MainScreen(
     navController: NavHostController = rememberNavController(),
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
-    navigateToAddSleepOver: () -> Unit,
+    navigateToSetting: () -> Unit,
+    navigateToMyPoint: () -> Unit,
+    navigateToAddBus: () -> Unit,
+    navigateToSchedule: () -> Unit,
+    navigateToWakeUpSong: () -> Unit,
+    navigateToAddWakeUpSong: () -> Unit,
 ) {
     val navItems = persistentListOf(
         rememberDodamNavigationItem(HOME_ROUTE, DodamIcons.Home),
         rememberDodamNavigationItem(MEAL_ROUTE, DodamIcons.ForkAndKnife),
         rememberDodamNavigationItem(OUTING_ROUTE, DodamIcons.DoorOpen),
         rememberDodamNavigationItem(NIGHT_STUDY_ROUTE, DodamIcons.MoonPlus),
-        rememberDodamNavigationItem("", DodamIcons.Menu),
+        rememberDodamNavigationItem(ALL_ROUTE, DodamIcons.Menu),
     )
 
     Box(
@@ -65,7 +72,16 @@ internal fun MainScreen(
             nightStudyScreen(navigateToAskNightStudy)
             outingScreen(
                 navigateToAddOuting,
-                navigateToAddSleepOver,
+            )
+            allScreen(
+                navigateToSetting,
+                navigateToMyPoint,
+                navigateToAddBus,
+                navigateToAskNightStudy,
+                navigateToAddOuting,
+                navigateToSchedule,
+                navigateToWakeUpSong,
+                navigateToAddWakeUpSong,
             )
         }
 

@@ -53,5 +53,8 @@ include(
     ":ui-test-main",
     ":feature-student:nightstudy",
     ":feature-student:outing",
-    ":ui"
+    ":ui",
+    ":feature-student:all",
+    ":data:member",
+    ":network:member",
 )
