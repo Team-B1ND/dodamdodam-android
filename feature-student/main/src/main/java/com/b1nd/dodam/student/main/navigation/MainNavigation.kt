@@ -13,7 +13,6 @@ fun NavController.navigateToMain(navOptions: NavOptions? = null) = navigate(MAIN
 fun NavGraphBuilder.mainScreen(
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
-    navigateToAddSleepOver: () -> Unit,
     navigateToSetting: () -> Unit,
     navigateToMyPoint: () -> Unit,
     navigateToAddBus: () -> Unit,
@@ -25,7 +24,6 @@ fun NavGraphBuilder.mainScreen(
         MainScreen(
             navigateToAskNightStudy = navigateToAskNightStudy,
             navigateToAddOuting = navigateToAddOuting,
-            navigateToAddSleepOver = navigateToAddSleepOver,
             navigateToSetting = navigateToSetting,
             navigateToMyPoint = navigateToMyPoint,
             navigateToAddBus = navigateToAddBus,
