@@ -31,4 +31,16 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
             .asResult()
             .flowOn(dispatcher)
     }
+
+    override fun getMyWakeupSongs(): Flow<Result<ImmutableList<WakeupSong>>> {
+        return flow {
+            emit(
+                network.getMyWakeupSongs()
+                    .map { it.toModel() }
+                    .toImmutableList()
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
 }
