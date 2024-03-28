@@ -66,13 +66,15 @@ import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.ui.icons.DodamLogo
-import kotlinx.datetime.plus
 
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+internal fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    navigateToAskOut: () -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
@@ -97,6 +99,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 fetchBanner()
             }
         },
+        navigateToAskOut = navigateToAskOut
     )
 }
 
@@ -117,6 +120,7 @@ private fun HomeScreen(
     fetchNightStudy: () -> Unit,
     fetchSchedule: () -> Unit,
     onRefresh: () -> Unit,
+    navigateToAskOut: () -> Unit,
 ) {
     val scrollState = rememberLazyListState()
 
@@ -215,7 +219,7 @@ private fun HomeScreen(
                             uiState = outUiState,
                             showShimmer = showShimmer,
                             navigateToOut = { /*TODO : Navigate to Out screen*/ },
-                            navigateToOutApply = { /*TODO : Navigate to Ask Out screen*/ },
+                            navigateToOutApply = navigateToAskOut,
                         ) {
                         }
 
@@ -326,7 +330,7 @@ internal fun DodamContainer(
             Box(
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.65f),
+                        color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(100),
                     )
                     .padding(7.dp),
