@@ -10,12 +10,28 @@ const val MAIN_ROUTE = "main"
 
 fun NavController.navigateToMain(navOptions: NavOptions? = null) = navigate(MAIN_ROUTE, navOptions)
 
-fun NavGraphBuilder.mainScreen(navigateToAskNightStudy: () -> Unit, navigateToAddOuting: () -> Unit, navigateToAddSleepOver: () -> Unit) {
+fun NavGraphBuilder.mainScreen(
+    navigateToAskNightStudy: () -> Unit,
+    navigateToAddOuting: () -> Unit,
+    navigateToAddSleepOver: () -> Unit,
+    navigateToSetting: () -> Unit,
+    navigateToMyPoint: () -> Unit,
+    navigateToAddBus: () -> Unit,
+    navigateToSchedule: () -> Unit,
+    navigateToWakeUpSong: () -> Unit,
+    navigateToAddWakeUpSong: () -> Unit,
+) {
     composable(route = MAIN_ROUTE) {
         MainScreen(
             navigateToAskNightStudy = navigateToAskNightStudy,
             navigateToAddOuting = navigateToAddOuting,
             navigateToAddSleepOver = navigateToAddSleepOver,
+            navigateToSetting = navigateToSetting,
+            navigateToMyPoint = navigateToMyPoint,
+            navigateToAddBus = navigateToAddBus,
+            navigateToSchedule = navigateToSchedule,
+            navigateToWakeUpSong = navigateToWakeUpSong,
+            navigateToAddWakeUpSong = navigateToAddWakeUpSong
         )
     }
 }

@@ -44,6 +44,12 @@ internal fun MainScreen(
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
     navigateToAddSleepOver: () -> Unit,
+    navigateToSetting: () -> Unit,
+    navigateToMyPoint: () -> Unit,
+    navigateToAddBus: () -> Unit,
+    navigateToSchedule: () -> Unit,
+    navigateToWakeUpSong: () -> Unit,
+    navigateToAddWakeUpSong: () -> Unit,
 ) {
     val bottomNavItems = listOf(
         BottomNavigationItem(HOME_ROUTE, Home),
@@ -67,7 +73,16 @@ internal fun MainScreen(
                 navigateToAddOuting,
                 navigateToAddSleepOver,
             )
-            allScreen()
+            allScreen(
+                navigateToSetting,
+                navigateToMyPoint,
+                navigateToAddBus,
+                navigateToAskNightStudy,
+                navigateToAddOuting,
+                navigateToSchedule,
+                navigateToWakeUpSong,
+                navigateToAddWakeUpSong
+            )
         }
 
         Box(

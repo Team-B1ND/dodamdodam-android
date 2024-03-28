@@ -42,6 +42,24 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
             navigateToAddSleepOver = {
                 TODO("navigate to add sleep over screen")
             },
+            navigateToSetting = {
+                TODO("navigate to setting screen")
+            },
+            navigateToMyPoint = {
+                TODO("navigate to add my point screen")
+            },
+            navigateToAddBus = {
+                TODO("navigate to add add bus screen")
+            },
+            navigateToSchedule = {
+                TODO("navigate to schedule screen")
+            },
+            navigateToWakeUpSong = {
+                TODO("navigate to wake up song screen")
+            },
+            navigateToAddWakeUpSong = {
+                TODO("navigate to add wake up song screen")
+            },
         )
         infoScreen(
             onNextClick = { name, grade, room, number, email, phoneNumber ->
