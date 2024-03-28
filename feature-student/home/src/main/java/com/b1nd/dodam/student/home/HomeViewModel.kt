@@ -18,11 +18,10 @@ import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.immutableMapOf
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.inject.Inject
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.delay
@@ -34,7 +33,6 @@ import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.plus
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
-import java.time.LocalTime
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -51,7 +49,9 @@ class HomeViewModel @Inject constructor(
     private val current = LocalDateTime.now()
     private val mealTime = if (current.toLocalTime() > LocalTime.of(19, 10)) {
         current.plusDays(1)
-    } else { current }
+    } else {
+        current
+    }
 
     private val localDate = current.toKotlinLocalDateTime().date
     private val nextDate = localDate.plus(DatePeriod(months = 1))
@@ -71,7 +71,7 @@ class HomeViewModel @Inject constructor(
                                                 "아침" to (result.data.breakfast?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
                                                 "점심" to (result.data.lunch?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
                                                 "저녁" to (result.data.dinner?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
-                                            ).filterValues { meal -> meal.isNotBlank() }.toImmutableMap()
+                                            ).filterValues { meal -> meal.isNotBlank() }.toImmutableMap(),
                                         ),
                                     )
                                 }
@@ -81,7 +81,7 @@ class HomeViewModel @Inject constructor(
                                 _uiState.update {
                                     it.copy(
                                         showShimmer = false,
-                                        mealUiState = MealUiState.Error
+                                        mealUiState = MealUiState.Error,
                                     )
                                 }
                             }
@@ -112,7 +112,7 @@ class HomeViewModel @Inject constructor(
                                 _uiState.update {
                                     it.copy(
                                         showShimmer = false,
-                                        wakeupSongUiState = WakeupSongUiState.Error
+                                        wakeupSongUiState = WakeupSongUiState.Error,
                                     )
                                 }
                             }
@@ -134,7 +134,7 @@ class HomeViewModel @Inject constructor(
                                             out.startAt
                                         },
                                     ),
-                                    showShimmer = false
+                                    showShimmer = false,
                                 )
                             }
 
@@ -143,7 +143,7 @@ class HomeViewModel @Inject constructor(
                                 _uiState.update {
                                     it.copy(
                                         outUiState = OutUiState.Error,
-                                        showShimmer = false
+                                        showShimmer = false,
                                     )
                                 }
                             }
@@ -165,7 +165,7 @@ class HomeViewModel @Inject constructor(
                                             nightStudy.startAt
                                         },
                                     ),
-                                    showShimmer = false
+                                    showShimmer = false,
                                 )
                             }
 
@@ -178,7 +178,7 @@ class HomeViewModel @Inject constructor(
                                 _uiState.update {
                                     it.copy(
                                         nightStudyUiState = NightStudyUiState.Error,
-                                        showShimmer = false
+                                        showShimmer = false,
                                     )
                                 }
                             }
@@ -195,7 +195,7 @@ class HomeViewModel @Inject constructor(
                             _uiState.update {
                                 it.copy(
                                     scheduleUiState = ScheduleUiState.Success(result.data),
-                                    showShimmer = false
+                                    showShimmer = false,
                                 )
                             }
                         }
@@ -211,7 +211,7 @@ class HomeViewModel @Inject constructor(
                             _uiState.update {
                                 it.copy(
                                     scheduleUiState = ScheduleUiState.Error,
-                                    showShimmer = false
+                                    showShimmer = false,
                                 )
                             }
                         }
@@ -271,7 +271,7 @@ class HomeViewModel @Inject constructor(
                                         "아침" to (result.data.breakfast?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
                                         "점심" to (result.data.lunch?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
                                         "저녁" to (result.data.dinner?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
-                                    ).filterValues { meal -> meal.isNotBlank() }.toImmutableMap()
+                                    ).filterValues { meal -> meal.isNotBlank() }.toImmutableMap(),
                                 ),
                             )
                         }
@@ -280,7 +280,7 @@ class HomeViewModel @Inject constructor(
                         Log.e("getMeal", result.error.toString())
                         _uiState.update {
                             it.copy(
-                                mealUiState = MealUiState.Error
+                                mealUiState = MealUiState.Error,
                             )
                         }
                     }
@@ -315,7 +315,7 @@ class HomeViewModel @Inject constructor(
                         Log.e("fetchWakeupSong", result.error.toString())
                         _uiState.update {
                             it.copy(
-                                wakeupSongUiState = WakeupSongUiState.Error
+                                wakeupSongUiState = WakeupSongUiState.Error,
                             )
                         }
                     }
@@ -350,7 +350,7 @@ class HomeViewModel @Inject constructor(
                         Log.e("fetchMyOutSleeping", result.error.toString())
                         _uiState.update {
                             it.copy(
-                                outUiState = OutUiState.Error
+                                outUiState = OutUiState.Error,
                             )
                         }
                     }
@@ -394,7 +394,7 @@ class HomeViewModel @Inject constructor(
                         Log.e("fetchMyNightStudy", result.error.toString())
                         _uiState.update {
                             it.copy(
-                                nightStudyUiState = NightStudyUiState.Error
+                                nightStudyUiState = NightStudyUiState.Error,
                             )
                         }
                     }

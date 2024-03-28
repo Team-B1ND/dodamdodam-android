@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -85,7 +84,7 @@ internal fun WakeupSongCard(
                                                     ),
                                                 )
                                             },
-                                            interactionSource = remember { MutableInteractionSource() }
+                                            interactionSource = remember { MutableInteractionSource() },
                                         )
                                         .padding(6.dp),
                                     state = wakeupSongPagerState,
@@ -107,11 +106,10 @@ internal fun WakeupSongCard(
                                         Column(
                                             modifier = Modifier.fillMaxWidth(),
                                         ) {
-
                                             BodyMedium(
                                                 modifier = Modifier.basicMarquee(),
                                                 text = wakeupSongs[page].videoTitle,
-                                                color = MaterialTheme.colorScheme.onSurface
+                                                color = MaterialTheme.colorScheme.onSurface,
                                             )
 
                                             Spacer(modifier = Modifier.height(4.dp))
@@ -120,7 +118,7 @@ internal fun WakeupSongCard(
                                                 modifier = Modifier.basicMarquee(),
                                                 text = wakeupSongs[page].channelTitle,
                                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                fontWeight = FontWeight.Normal
+                                                fontWeight = FontWeight.Normal,
                                             )
                                         }
                                     }
@@ -202,6 +200,6 @@ internal fun WakeupSongCard(
                     }
                 }
             }
-        }
+        },
     )
 }

@@ -91,7 +91,7 @@ internal fun MainScreen(
                 .align(Alignment.BottomCenter),
         ) {
             DodamNavigationBar(
-                navigationItems = navItems
+                navigationItems = navItems,
             ) { item ->
                 navController.navigate(item.route) {
                     popUpTo(navController.graph.findStartDestination().id) {

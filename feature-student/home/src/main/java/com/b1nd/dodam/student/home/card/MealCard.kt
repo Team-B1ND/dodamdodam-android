@@ -12,14 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,18 +34,12 @@ import com.b1nd.dodam.student.home.DodamContainer
 import com.b1nd.dodam.student.home.PagerIndicator
 import com.b1nd.dodam.student.home.model.MealUiState
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalTime
+import kotlinx.collections.immutable.toImmutableList
 
 @ExperimentalFoundationApi
 @Composable
-internal fun MealCard(
-    uiState: MealUiState,
-    showShimmer: Boolean,
-    onContentClick: () -> Unit,
-    fetchMeal: () -> Unit,
-) {
+internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick: () -> Unit, fetchMeal: () -> Unit) {
     val currentTime = LocalTime.now()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
@@ -70,27 +62,37 @@ internal fun MealCard(
                             else -> "오늘의 "
                         } + uiState.data.keys.toImmutableList()[mealPagerState.currentPage]
 
-
                         LaunchedEffect(Unit) {
                             if (isRefreshing || playOnlyOnce) {
                                 when {
                                     currentTime <= LocalTime.of(8, 10) -> { // 아침 식사 시간 전이라면
-                                        if (meals.isNotEmpty()) { mealPagerState.animateScrollToPage(page = 0) } // 아침 급식이 있다면
+                                        if (meals.isNotEmpty()) {
+                                            mealPagerState.animateScrollToPage(page = 0)
+                                        } // 아침 급식이 있다면
                                     }
 
                                     currentTime <= LocalTime.of(13, 30) -> { // 점심 식사 시간 전이라면
-                                        if (meals.size > 1) { mealPagerState.animateScrollToPage(1) }
-                                        else if (meals.isNotEmpty()) { mealPagerState.animateScrollToPage(0) }
+                                        if (meals.size > 1) {
+                                            mealPagerState.animateScrollToPage(1)
+                                        } else if (meals.isNotEmpty()) {
+                                            mealPagerState.animateScrollToPage(0)
+                                        }
                                     }
 
                                     currentTime <= LocalTime.of(19, 10) -> { // 저녁 식사 시간 전이라면
-                                        if (meals.size > 2) { mealPagerState.animateScrollToPage(2) }
-                                        else if (meals.size > 1) { mealPagerState.animateScrollToPage(1) }
-                                        else if (meals.isNotEmpty()) { mealPagerState.animateScrollToPage(0) }
+                                        if (meals.size > 2) {
+                                            mealPagerState.animateScrollToPage(2)
+                                        } else if (meals.size > 1) {
+                                            mealPagerState.animateScrollToPage(1)
+                                        } else if (meals.isNotEmpty()) {
+                                            mealPagerState.animateScrollToPage(0)
+                                        }
                                     }
 
                                     else -> { // 저녁 식사 시간이 지났다면
-                                        if (meals.isNotEmpty()) { mealPagerState.animateScrollToPage(page = 0) } // 다음날 아침이 있다면
+                                        if (meals.isNotEmpty()) {
+                                            mealPagerState.animateScrollToPage(page = 0)
+                                        } // 다음날 아침이 있다면
                                     }
                                 }
                                 playOnlyOnce = false
@@ -107,14 +109,14 @@ internal fun MealCard(
                                         .padding(horizontal = 10.dp)
                                         .bounceClick(
                                             interactionSource = remember { MutableInteractionSource() },
-                                            onClick = onContentClick
+                                            onClick = onContentClick,
                                         )
                                         .padding(6.dp),
                                     state = mealPagerState,
                                 ) { page ->
                                     BodyMedium(
                                         text = meals[page],
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = MaterialTheme.colorScheme.onSurface,
                                     )
                                 }
 

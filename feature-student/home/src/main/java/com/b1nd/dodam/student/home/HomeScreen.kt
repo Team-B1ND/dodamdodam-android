@@ -1,82 +1,49 @@
 package com.b1nd.dodam.student.home
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
-import com.b1nd.dodam.data.core.model.Status
-import com.b1nd.dodam.data.outing.model.OutType
-import com.b1nd.dodam.data.schedule.model.Grade
-import com.b1nd.dodam.data.schedule.model.Schedule
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.DodamTopAppBar
 import com.b1nd.dodam.dds.component.button.DodamIconButton
@@ -86,7 +53,6 @@ import com.b1nd.dodam.dds.style.BellIcon
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.style.TitleLarge
-import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.student.home.card.BannerCard
 import com.b1nd.dodam.student.home.card.MealCard
 import com.b1nd.dodam.student.home.card.NightStudyCard
@@ -94,22 +60,13 @@ import com.b1nd.dodam.student.home.card.OutCard
 import com.b1nd.dodam.student.home.card.ScheduleCard
 import com.b1nd.dodam.student.home.card.WakeupSongCard
 import com.b1nd.dodam.student.home.model.BannerUiState
-import com.b1nd.dodam.student.home.model.HomeUiState
 import com.b1nd.dodam.student.home.model.MealUiState
 import com.b1nd.dodam.student.home.model.NightStudyUiState
 import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.ui.icons.DodamLogo
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.temporal.ChronoUnit
-import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.plus
-import kotlinx.datetime.toJavaLocalDateTime
-import kotlinx.datetime.toKotlinLocalDateTime
 
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
@@ -139,10 +96,9 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 fetchSchedule()
                 fetchBanner()
             }
-        }
+        },
     )
 }
-
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -191,7 +147,7 @@ private fun HomeScreen(
                             modifier = Modifier.width(90.dp),
                             imageVector = DodamLogo,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.primary,
                         )
                     },
                     actions = {
@@ -205,11 +161,11 @@ private fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(1.dp)
-                            .background(MaterialTheme.colorScheme.outlineVariant)
+                            .background(MaterialTheme.colorScheme.outlineVariant),
                     )
                 }
             }
-        }
+        },
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -223,7 +179,7 @@ private fun HomeScreen(
                     .background(MaterialTheme.colorScheme.surface)
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                state = scrollState
+                state = scrollState,
             ) {
                 item {
                     BannerCard(
@@ -248,7 +204,7 @@ private fun HomeScreen(
                         navigateToWakeupSongApply = { /* TODO : Navigate to Wakeup apply screen */ },
                         showShimmer = showShimmer,
                         fetchWakeupSong = fetchWakeupSong,
-                        context = context
+                        context = context,
                     )
                 }
 
@@ -259,8 +215,8 @@ private fun HomeScreen(
                             uiState = outUiState,
                             showShimmer = showShimmer,
                             navigateToOut = { /*TODO : Navigate to Out screen*/ },
-                            navigateToOutApply = { /*TODO : Navigate to Ask Out screen*/ }) {
-
+                            navigateToOutApply = { /*TODO : Navigate to Ask Out screen*/ },
+                        ) {
                         }
 
                         Spacer(modifier = Modifier.width(12.dp))
@@ -281,8 +237,8 @@ private fun HomeScreen(
                         uiState = scheduleUiState,
                         showShimmer = showShimmer,
                         fetchSchedule = fetchSchedule,
-                        onContentClick = { /*TODO : Navigate to Schedule screen*/ }) {
-
+                        onContentClick = { /*TODO : Navigate to Schedule screen*/ },
+                    ) {
                     }
                 }
 
@@ -332,7 +288,7 @@ internal fun DefaultText(onClick: () -> Unit, label: String, body: String) {
             .padding(horizontal = 10.dp)
             .bounceClick(
                 onClick = onClick,
-                interactionSource = remember { MutableInteractionSource() }
+                interactionSource = remember { MutableInteractionSource() },
             )
             .padding(6.dp),
     ) {
@@ -389,7 +345,7 @@ internal fun DodamContainer(
             TitleLarge(
                 text = title,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 20.sp
+                fontSize = 20.sp,
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -416,4 +372,3 @@ internal fun DodamContainer(
         Spacer(modifier = Modifier.height(10.dp))
     }
 }
-
