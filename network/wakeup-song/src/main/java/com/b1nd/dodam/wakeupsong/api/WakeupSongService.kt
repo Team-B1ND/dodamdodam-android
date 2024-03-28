@@ -36,4 +36,11 @@ internal class WakeupSongService @Inject constructor(
                 .body<Response<List<WakeupSongResponse>>>()
         }.toImmutableList()
     }
+
+    override suspend fun getPendingWakeupSongs(): ImmutableList<WakeupSongResponse> {
+        return safeRequest {
+            client.get(DodamUrl.WakeupSong.PENDING)
+                .body<Response<List<WakeupSongResponse>>>()
+        }.toImmutableList()
+    }
 }
