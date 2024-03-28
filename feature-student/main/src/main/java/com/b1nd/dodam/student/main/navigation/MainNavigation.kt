@@ -29,7 +29,7 @@ fun NavGraphBuilder.mainScreen(
             navigateToAddBus = navigateToAddBus,
             navigateToSchedule = navigateToSchedule,
             navigateToWakeUpSong = navigateToWakeUpSong,
-            navigateToAddWakeUpSong = navigateToAddWakeUpSong
+            navigateToAddWakeUpSong = navigateToAddWakeUpSong,
         )
     }
 }

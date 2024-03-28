@@ -20,8 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.b1nd.dodam.member.navigation.ALL_ROUTE
-import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.designsystem.component.BottomNavigationItem
 import com.b1nd.dodam.designsystem.component.DodamBottomNavigation
 import com.b1nd.dodam.designsystem.icons.Door
@@ -31,6 +29,8 @@ import com.b1nd.dodam.designsystem.icons.MoonPlus
 import com.b1nd.dodam.designsystem.icons.More
 import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
+import com.b1nd.dodam.member.navigation.ALL_ROUTE
+import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.outing.nanigation.OUTING_ROUTE
@@ -79,7 +79,7 @@ internal fun MainScreen(
                 navigateToAddOuting,
                 navigateToSchedule,
                 navigateToWakeUpSong,
-                navigateToAddWakeUpSong
+                navigateToAddWakeUpSong,
             )
         }
 

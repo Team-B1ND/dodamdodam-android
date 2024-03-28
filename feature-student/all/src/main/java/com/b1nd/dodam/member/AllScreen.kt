@@ -38,6 +38,7 @@ import com.b1nd.dodam.dds.foundation.DodamIcons
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.theme.DodamTheme
+import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.Setting
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,51 +79,77 @@ fun AllScreen(
                     scrolledContainerColor = MaterialTheme.colorScheme.background,
                     navigationIconContentColor = MaterialTheme.colorScheme.background,
                     titleContentColor = MaterialTheme.colorScheme.onBackground,
-                    actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                    actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                ),
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                uiState.myInfo?.let { myInfo ->
+                uiState.myInfo.let { myInfo ->
                     Box(
-                        modifier = Modifier
-                            .size(70.dp),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.then(
+                            if (uiState.isSimmer) {
+                                Modifier.background(
+                                    brush = shimmerEffect(),
+                                    RoundedCornerShape(12.dp),
+                                )
+                            } else {
+                                Modifier
+                            },
+                        ),
+                        contentAlignment = Alignment.Center,
                     ) {
                         AsyncImage(
-                            model = myInfo.profileImage,
+                            model = myInfo?.profileImage,
                             contentDescription = "profile",
-                            modifier = Modifier.clip(shape = RoundedCornerShape(8.dp))
+                            modifier = Modifier
+                                .clip(shape = RoundedCornerShape(12.dp))
+                                .size(70.dp),
                         )
                     }
                     Spacer(modifier = Modifier.width(16.dp))
-                    val classInfo = myInfo.student
+                    val classInfo = myInfo?.student
                     Column(horizontalAlignment = Alignment.Start) {
-                        BodyLarge(
-                            text = "환영합니다, " + myInfo.name + "님",
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                        LabelLarge(
-                            text = "${classInfo?.grade ?: 0}학년 ${classInfo?.room ?: 0}반 ${classInfo?.number ?: 0}번",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        if (!uiState.isSimmer) {
+                            BodyLarge(
+                                text = "환영합니다, " + myInfo?.name + "님",
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                            LabelLarge(
+                                text = "${classInfo?.grade ?: 0}학년 ${classInfo?.room ?: 0}반 ${classInfo?.number ?: 0}번",
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .height(26.dp)
+                                    .width(150.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(100)),
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Box(
+                                modifier = Modifier
+                                    .height(20.dp)
+                                    .width(80.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(100)),
+                            )
+                        }
                     }
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
             AllCardView(
                 imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_bar_chart),
-                text = "내 상벌점 보기"
+                text = "내 상벌점 보기",
             ) {
                 navigateToMyPoint()
             }
@@ -130,38 +157,38 @@ fun AllScreen(
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
             AllCardView(
-                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_bus),
-                text = "복귀 버스 신청하기"
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_bus),
+                text = "복귀 버스 신청하기",
             ) {
                 navigateToAddBus()
             }
             AllCardView(
-                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_pencil),
-                text = "심야 자습 신청하기"
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_pencil),
+                text = "심야 자습 신청하기",
             ) {
                 navigateToAddNightStudy()
             }
             AllCardView(
-                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_tent),
-                text = "외출/외박 신청하기"
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_tent),
+                text = "외출/외박 신청하기",
             ) {
                 navigateToAddOutingStudy()
             }
             AllCardView(
-                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_calendar),
-                text = "일정 보기"
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_calendar),
+                text = "일정 보기",
             ) {
                 navigateToSchedule()
             }
             AllCardView(
-                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_megaphone),
-                text = "기상송 보기"
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_megaphone),
+                text = "기상송 보기",
             ) {
                 navigateToWakeUpSong()
             }
             AllCardView(
-                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_musical_note),
-                text = "기상송 신청하기"
+                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_musical_note),
+                text = "기상송 신청하기",
             ) {
                 navigateToAddWakeUpSong()
             }
@@ -177,38 +204,38 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(40.dp)
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background),
 
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 4.dp)
+            modifier = Modifier.padding(horizontal = 4.dp),
         ) {
             Spacer(modifier = Modifier.width(4.dp))
             Box(
                 modifier = Modifier
                     .size(32.dp)
                     .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(8.dp))
-                    .padding(6.dp)
+                    .padding(6.dp),
             ) {
                 Image(
                     imageVector = imageVector,
                     contentDescription = "image",
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(20.dp),
                 )
             }
             Spacer(modifier = Modifier.width(16.dp))
             BodyLarge(
                 text = text,
                 fontStyle = MaterialTheme.typography.bodySmall.fontStyle,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 imageVector = DodamIcons.ChevronRight,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(14.dp)
+                modifier = Modifier.size(14.dp),
             )
         }
     }
@@ -221,7 +248,7 @@ fun AllCardViewPreview() {
         AllCardView(
             imageVector = ImageVector.vectorResource(id = com.b1nd.dodam.ui.R.drawable.ic_bar_chart),
             onClick = {},
-            text = "test"
+            text = "test",
         )
     }
 }

@@ -8,11 +8,11 @@ import com.b1nd.dodam.member.MemberRepository
 import com.b1nd.dodam.member.datasource.MemberDataSource
 import com.b1nd.dodam.member.model.MyInfo
 import com.b1nd.dodam.member.model.toModel
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import javax.inject.Inject
 
 internal class MemberRepositoryImpl @Inject constructor(
     private val network: MemberDataSource,
