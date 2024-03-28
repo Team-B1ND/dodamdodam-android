@@ -8,8 +8,7 @@ import com.b1nd.dodam.member.AllScreen
 
 const val ALL_ROUTE = "all"
 
-fun NavController.navigateToAllScreen(navOptions: NavOptions? = null) =
-    navigate(ALL_ROUTE, navOptions)
+fun NavController.navigateToAllScreen(navOptions: NavOptions? = null) = navigate(ALL_ROUTE, navOptions)
 
 fun NavGraphBuilder.allScreen(
     navigateToSetting: () -> Unit,
@@ -19,7 +18,7 @@ fun NavGraphBuilder.allScreen(
     navigateToAddOutingStudy: () -> Unit,
     navigateToSchedule: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
-    navigateToAddWakeUpSong: () -> Unit
+    navigateToAddWakeUpSong: () -> Unit,
 ) {
     composable(
         route = ALL_ROUTE,
@@ -32,7 +31,7 @@ fun NavGraphBuilder.allScreen(
             navigateToAddOutingStudy = navigateToAddOutingStudy,
             navigateToSchedule = navigateToSchedule,
             navigateToWakeUpSong = navigateToWakeUpSong,
-            navigateToAddWakeUpSong = navigateToAddWakeUpSong
+            navigateToAddWakeUpSong = navigateToAddWakeUpSong,
         )
     }
 }

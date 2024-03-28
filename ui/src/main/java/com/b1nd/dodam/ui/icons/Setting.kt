@@ -15,14 +15,20 @@ import androidx.compose.ui.unit.dp
 
 public val Setting: ImageVector
     get() {
-        if (_vector != null) {
-            return _vector!!
+        if (vector != null) {
+            return vector!!
         }
-        _vector = Builder(name = "Trailing icon", defaultWidth = 48.0.dp, defaultHeight =
-                48.0.dp, viewportWidth = 48.0f, viewportHeight = 48.0f).apply {
-            path(fill = SolidColor(Color(0xFFB7B7B7)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+        vector = Builder(
+            name = "Trailing icon", defaultWidth = 48.0.dp,
+            defaultHeight =
+            48.0.dp,
+            viewportWidth = 48.0f, viewportHeight = 48.0f,
+        ).apply {
+            path(
+                fill = SolidColor(Color(0xFFB7B7B7)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
+            ) {
                 moveTo(22.9961f, 35.6663f)
                 horizontalLineTo(25.0072f)
                 curveTo(25.6574f, 35.6663f, 26.144f, 35.2744f, 26.2826f, 34.6412f)
@@ -81,14 +87,14 @@ public val Setting: ImageVector
                 close()
             }
         }
-        .build()
-        return _vector!!
+            .build()
+        return vector!!
     }
 
-private var _vector: ImageVector? = null
+private var vector: ImageVector? = null
 
 @Preview
 @Composable
-fun SettingPreview(){
+fun SettingPreview() {
     Icon(imageVector = Setting, contentDescription = null)
 }

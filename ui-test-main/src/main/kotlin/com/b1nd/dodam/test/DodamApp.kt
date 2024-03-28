@@ -23,22 +23,16 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
                     TODO("navigate to add outing screen")
                 },
                 navigateToSetting = {
-
                 },
                 navigateToMyPoint = {
-
                 },
                 navigateToAddBus = {
-
                 },
                 navigateToSchedule = {
-
                 },
                 navigateToWakeUpSong = {
-
                 },
                 navigateToAddWakeUpSong = {
-
                 },
             )
         }
