@@ -44,4 +44,5 @@ dependencies {
     implementation(projects.featureStudent.nightstudy)
     implementation(projects.featureStudent.outing)
     implementation(projects.datastore)
+    implementation(projects.featureStudent.wakeupSong)
 }

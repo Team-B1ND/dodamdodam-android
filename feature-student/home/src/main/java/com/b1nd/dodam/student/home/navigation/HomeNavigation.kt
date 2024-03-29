@@ -16,10 +16,14 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) = navigate(HOME
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.homeScreen() {
+fun NavGraphBuilder.homeScreen(
+    navigateToWakeupSongScreen: () -> Unit,
+) {
     composable(
         route = HOME_ROUTE,
     ) {
-        HomeScreen()
+        HomeScreen(
+            navigateToWakeupSongScreen = navigateToWakeupSongScreen,
+        )
     }
 }

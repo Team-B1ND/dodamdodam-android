@@ -66,13 +66,15 @@ import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.ui.icons.DodamLogo
-import kotlinx.datetime.plus
 
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+internal fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    navigateToWakeupSongScreen: () -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
@@ -82,6 +84,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         outUiState = uiState.outUiState,
         nightStudyUiState = uiState.nightStudyUiState,
         scheduleUiState = uiState.scheduleUiState,
+        navigateToWakeupSongScreen = navigateToWakeupSongScreen,
         showShimmer = uiState.showShimmer,
         fetchMeal = viewModel::fetchMeal,
         fetchWakeupSong = viewModel::fetchWakeupSong,
@@ -111,6 +114,7 @@ private fun HomeScreen(
     outUiState: OutUiState,
     nightStudyUiState: NightStudyUiState,
     scheduleUiState: ScheduleUiState,
+    navigateToWakeupSongScreen: () -> Unit,
     showShimmer: Boolean,
     fetchMeal: () -> Unit,
     fetchWakeupSong: () -> Unit,
@@ -200,8 +204,8 @@ private fun HomeScreen(
                 item {
                     WakeupSongCard(
                         uiState = wakeupSongUiState,
-                        onNextClick = { /* TODO : Navigate to Wakeup screen */ },
-                        navigateToWakeupSongApply = { /* TODO : Navigate to Wakeup apply screen */ },
+                        onNextClick = { navigateToWakeupSongScreen() },
+                        navigateToWakeupSongApply = { /* TODO : Navigate to Add Wakeup screen */ },
                         showShimmer = showShimmer,
                         fetchWakeupSong = fetchWakeupSong,
                         context = context,
@@ -214,7 +218,7 @@ private fun HomeScreen(
                             modifier = Modifier.weight(1f),
                             uiState = outUiState,
                             showShimmer = showShimmer,
-                            navigateToOut = { /*TODO : Navigate to Out screen*/ },
+                            navigateToOut = { /* TODO : Navigate to outing screen */ },
                             navigateToOutApply = { /*TODO : Navigate to Ask Out screen*/ },
                         ) {
                         }
@@ -226,7 +230,7 @@ private fun HomeScreen(
                             uiState = nightStudyUiState,
                             showShimmer = showShimmer,
                             navigateToAskNightStudy = { /*TODO : Navigate to Ask NightStudy screen*/ },
-                            navigateToNightStudy = { /*TODO : Navigate to NightStudy screen*/ },
+                            navigateToNightStudy = { /* TODO : Navigate to NightStudy screen */ },
                             fetchNightStudy = fetchNightStudy,
                         )
                     }
@@ -316,18 +320,27 @@ internal fun DodamContainer(
                 shape = DodamShape.Large,
             ),
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .then(
+                    if (showNextButton) {
+                        Modifier.bounceClick(
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = onNextClick!!,
+                        )
+                    } else {
+                        Modifier
+                    }
+                )
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier = Modifier
                     .background(
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.65f),
-                        shape = RoundedCornerShape(100),
+                        shape = RoundedCornerShape(100)
                     )
                     .padding(7.dp),
                 contentAlignment = Alignment.Center,
@@ -353,19 +366,13 @@ internal fun DodamContainer(
             if (showNextButton) {
                 Icon(
                     modifier = Modifier
-                        .size(16.dp)
-                        .bounceClick(
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = onNextClick!!,
-                        ),
+                        .size(16.dp),
                     imageVector = DodamIcons.ChevronRight,
                     contentDescription = "next",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         content()
 
