@@ -67,7 +67,9 @@ internal fun MainScreen(
             navController = navController,
             startDestination = HOME_ROUTE,
         ) {
-            homeScreen()
+            homeScreen(
+                navigateToWakeUpSong,
+            )
             mealScreen()
             nightStudyScreen(navigateToAskNightStudy)
             outingScreen(
