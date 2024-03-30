@@ -57,11 +57,6 @@ internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick
                         val meals = remember { uiState.data.values.toImmutableList() }
                         val mealPagerState = rememberPagerState { meals.size }
 
-                        mealTitle = when {
-                            currentTime > LocalTime.of(19, 10) -> "내일의 "
-                            else -> "오늘의 "
-                        } + uiState.data.keys.toImmutableList()[mealPagerState.currentPage]
-
                         LaunchedEffect(Unit) {
                             if (isRefreshing || playOnlyOnce) {
                                 when {
@@ -101,6 +96,11 @@ internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick
                         }
 
                         if (meals.isNotEmpty()) {
+                            mealTitle = when {
+                                currentTime > LocalTime.of(19, 10) -> "내일의 "
+                                else -> "오늘의 "
+                            } + uiState.data.keys.toImmutableList()[mealPagerState.currentPage]
+
                             Column {
                                 HorizontalPager(
                                     modifier = Modifier
