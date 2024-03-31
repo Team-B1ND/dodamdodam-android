@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.b1nd.dodam.asknightstudy.navigation.askNightStudyScreen
+import com.b1nd.dodam.asknightstudy.navigation.navigateToAskNightStudy
 import com.b1nd.dodam.askout.navigation.askOutScreen
 import com.b1nd.dodam.askout.navigation.navigateToAskOut
 import com.b1nd.dodam.login.navigation.loginScreen
@@ -39,9 +41,7 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
             onLoginClick = navController::navigationToLogin,
         )
         mainScreen(
-            navigateToAskNightStudy = {
-                TODO("navigate to add nightStudy screen")
-            },
+            navigateToAskNightStudy = navController::navigateToAskNightStudy,
             navigateToAddOuting = navController::navigateToAskOut,
             navigateToSetting = {
                 TODO("navigate to setting screen")
@@ -98,6 +98,9 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
             onAddOutingClick = { TODO("navigate to add outing screen") },
         )
         askOutScreen(
+            popBackStack = navController::popBackStack,
+        )
+        askNightStudyScreen(
             popBackStack = navController::popBackStack,
         )
     }
