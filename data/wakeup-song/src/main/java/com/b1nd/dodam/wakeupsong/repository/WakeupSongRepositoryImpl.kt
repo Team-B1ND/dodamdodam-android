@@ -37,7 +37,7 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
             emit(
                 network.getMyWakeupSongs()
                     .map { it.toModel() }
-                    .toImmutableList()
+                    .toImmutableList(),
             )
         }
             .asResult()
@@ -49,7 +49,7 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
             emit(
                 network.getPendingWakeupSongs()
                     .map { it.toModel() }
-                    .toImmutableList()
+                    .toImmutableList(),
             )
         }
             .asResult()

@@ -40,7 +40,6 @@ import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import com.b1nd.dodam.ui.icons.Setting
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -209,7 +208,7 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
             .height(40.dp)
             .background(MaterialTheme.colorScheme.background),
 
-        ) {
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 4.dp),

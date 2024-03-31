@@ -12,7 +12,7 @@ data class WakeupSong(
     val videoUrl: String,
     val channelTitle: String,
     val status: Status,
-    val createdAt: LocalDate
+    val createdAt: LocalDate,
 )
 
 internal fun WakeupSongResponse.toModel(): WakeupSong = WakeupSong(

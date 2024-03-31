@@ -16,11 +16,7 @@ import kotlinx.collections.immutable.toImmutableList
 internal class WakeupSongService @Inject constructor(
     private val client: HttpClient,
 ) : WakeupSongDataSource {
-    override suspend fun getAllowedWakeupSongs(
-        year: Int,
-        month: Int,
-        day: Int
-    ): ImmutableList<WakeupSongResponse> {
+    override suspend fun getAllowedWakeupSongs(year: Int, month: Int, day: Int): ImmutableList<WakeupSongResponse> {
         return safeRequest {
             client.get(DodamUrl.WakeupSong.ALLOWED) {
                 parameter("year", year)
