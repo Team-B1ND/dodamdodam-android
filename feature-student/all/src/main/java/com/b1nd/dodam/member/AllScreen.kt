@@ -62,17 +62,18 @@ fun AllScreen(
             DodamTopAppBar(
                 title = { Text(text = "전체") },
                 actions = {
-                    DodamIconButton(
-                        onClick = {
-                            navigateToSetting()
-                        },
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(48.dp),
-                            imageVector = Setting,
-                            contentDescription = null,
-                        )
-                    }
+//                    TODO: Navigation to setting screen
+//                    DodamIconButton(
+//                        onClick = {
+//                            navigateToSetting()
+//                        },
+//                    ) {
+//                        Icon(
+//                            modifier = Modifier.size(48.dp),
+//                            imageVector = Setting,
+//                            contentDescription = null,
+//                        )
+//                    }
                 },
                 colors = TopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
@@ -94,7 +95,7 @@ fun AllScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                uiState.myInfo.let { myInfo ->
+                uiState.myInfo?.let { myInfo ->
                     Box(
                         modifier = Modifier.then(
                             if (uiState.isSimmer) {
@@ -109,7 +110,7 @@ fun AllScreen(
                         contentAlignment = Alignment.Center,
                     ) {
                         AsyncImage(
-                            model = myInfo?.profileImage,
+                            model = myInfo.profileImage ?: R.drawable.ic_default_profile,
                             contentDescription = "profile",
                             modifier = Modifier
                                 .clip(shape = RoundedCornerShape(12.dp))
@@ -117,11 +118,11 @@ fun AllScreen(
                         )
                     }
                     Spacer(modifier = Modifier.width(16.dp))
-                    val classInfo = myInfo?.student
+                    val classInfo = myInfo.student
                     Column(horizontalAlignment = Alignment.Start) {
                         if (!uiState.isSimmer) {
                             BodyLarge(
-                                text = "환영합니다, " + myInfo?.name + "님",
+                                text = "환영합니다, " + myInfo.name + "님",
                                 color = MaterialTheme.colorScheme.onBackground,
                             )
                             LabelLarge(
@@ -206,7 +207,7 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
             .height(40.dp)
             .background(MaterialTheme.colorScheme.background),
 
-    ) {
+        ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 4.dp),
