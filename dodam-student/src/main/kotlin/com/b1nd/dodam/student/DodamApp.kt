@@ -10,12 +10,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
-import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
-import com.b1nd.dodam.outing.nanigation.navigateToOuting
 import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
@@ -24,8 +22,8 @@ import com.b1nd.dodam.register.navigation.navigateToInfo
 import com.b1nd.dodam.student.main.navigation.MAIN_ROUTE
 import com.b1nd.dodam.student.main.navigation.mainScreen
 import com.b1nd.dodam.student.main.navigation.navigateToMain
-import com.b1nd.dodam.wakeup_song.navigation.navigateToWakeupSong
-import com.b1nd.dodam.wakeup_song.navigation.wakeupSongScreen
+import com.b1nd.dodam.wakeupsong.navigation.navigateToWakeupSong
+import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -103,7 +101,7 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
         )
         wakeupSongScreen(
             onAddWakeupSongClick = { TODO("navigate to add wakeup song screen") },
-            popBackStack = { navController.popBackStack() }
+            popBackStack = { navController.popBackStack() },
         )
     }
 }

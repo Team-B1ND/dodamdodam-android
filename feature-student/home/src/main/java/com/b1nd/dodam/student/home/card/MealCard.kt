@@ -39,12 +39,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 @ExperimentalFoundationApi
 @Composable
-internal fun MealCard(
-    uiState: MealUiState,
-    showShimmer: Boolean,
-    onContentClick: () -> Unit,
-    fetchMeal: () -> Unit
-) {
+internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick: () -> Unit, fetchMeal: () -> Unit) {
     val currentTime = LocalTime.now()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }

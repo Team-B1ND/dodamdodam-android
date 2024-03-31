@@ -1,4 +1,4 @@
-package com.b1nd.dodam.wakeup_song
+package com.b1nd.dodam.wakeupsong
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,16 +49,12 @@ import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.style.LabelSmall
 import com.b1nd.dodam.dds.style.TitleMedium
 import com.b1nd.dodam.ui.util.NoInteractionSource
-import com.b1nd.dodam.wakeup_song.viewmodel.WakeupSongViewModel
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
+import com.b1nd.dodam.wakeupsong.viewmodel.WakeupSongViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun WakeupSongScreen(
-    onClickAddWakeupSong: () -> Unit,
-    popBackStack: () -> Unit,
-    viewModel: WakeupSongViewModel = hiltViewModel(),
-) {
+fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit, viewModel: WakeupSongViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     Scaffold(
@@ -72,13 +67,13 @@ fun WakeupSongScreen(
                 },
                 onNavigationIconClick = popBackStack,
             )
-        }
+        },
     ) { paddingValues ->
         Box(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
+                .background(MaterialTheme.colorScheme.surface),
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -90,7 +85,7 @@ fun WakeupSongScreen(
                         text = "내일의 기상송",
                         modifier = Modifier
                             .padding(top = 10.dp, start = 16.dp)
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
                     )
                 }
                 if (!uiState.allowedWakeupSongs.isNullOrEmpty()) {
@@ -136,7 +131,7 @@ fun WakeupSongScreen(
                             },
                             selectedContentColor = MaterialTheme.colorScheme.onSurface,
                             unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            interactionSource = remember { NoInteractionSource() }
+                            interactionSource = remember { NoInteractionSource() },
                         ) {
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(text = "대기중")
@@ -150,7 +145,7 @@ fun WakeupSongScreen(
                             },
                             selectedContentColor = MaterialTheme.colorScheme.onSurface,
                             unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            interactionSource = remember { NoInteractionSource() }
+                            interactionSource = remember { NoInteractionSource() },
                         ) {
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(text = "MY")
@@ -158,11 +153,14 @@ fun WakeupSongScreen(
                         }
                     }
                     val currentWakeupSong =
-                        if (selectedTabIndex == 0) uiState.pendingWakeupSongs
-                        else uiState.myWakeupSongs
+                        if (selectedTabIndex == 0) {
+                            uiState.pendingWakeupSongs
+                        } else {
+                            uiState.myWakeupSongs
+                        }
                     if (!currentWakeupSong.isNullOrEmpty()) {
                         this@LazyColumn.items(
-                            currentWakeupSong.size
+                            currentWakeupSong.size,
                         ) { index ->
                             val wakeupSong =
                                 currentWakeupSong[index]
@@ -178,14 +176,14 @@ fun WakeupSongScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Spacer(modifier = Modifier.weight(1.0f))
             DodamLargeFilledButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding(),
-                onClick = { onClickAddWakeupSong() }
+                onClick = { onClickAddWakeupSong() },
             ) {
                 BodyLarge(text = "기상송 신청하기")
             }
@@ -195,10 +193,7 @@ fun WakeupSongScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WakeupSongCard(
-    wakeupSong: WakeupSong,
-    index: Int? = null,
-) {
+fun WakeupSongCard(wakeupSong: WakeupSong, index: Int? = null) {
     val uriHandler = LocalUriHandler.current
     Row(
         modifier = Modifier
@@ -206,7 +201,7 @@ fun WakeupSongCard(
             .clickable {
                 uriHandler.openUri(wakeupSong.videoUrl)
             },
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Spacer(modifier = Modifier.width(16.dp))
         Column {
@@ -240,7 +235,7 @@ fun WakeupSongCard(
                     BodyMedium(
                         text = wakeupSong.videoTitle,
                         modifier = Modifier.basicMarquee(),
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.onBackground,
                     )
                     Text(
                         text = wakeupSong.channelTitle,

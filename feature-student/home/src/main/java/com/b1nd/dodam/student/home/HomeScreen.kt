@@ -71,10 +71,7 @@ import com.b1nd.dodam.ui.icons.DodamLogo
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-internal fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
-    navigateToWakeupSongScreen: () -> Unit,
-) {
+internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateToWakeupSongScreen: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
@@ -331,7 +328,7 @@ internal fun DodamContainer(
                         )
                     } else {
                         Modifier
-                    }
+                    },
                 )
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -340,7 +337,7 @@ internal fun DodamContainer(
                 modifier = Modifier
                     .background(
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.65f),
-                        shape = RoundedCornerShape(100)
+                        shape = RoundedCornerShape(100),
                     )
                     .padding(7.dp),
                 contentAlignment = Alignment.Center,

@@ -1,18 +1,18 @@
-package com.b1nd.dodam.wakeup_song.viewmodel
+package com.b1nd.dodam.wakeupsong.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
-import com.b1nd.dodam.wakeup_song.WakeupSongUiState
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
+import com.b1nd.dodam.wakeupsong.WakeupSongUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDateTime
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import javax.inject.Inject
 
 @HiltViewModel
 class WakeupSongViewModel @Inject constructor(
@@ -42,14 +42,14 @@ class WakeupSongViewModel @Inject constructor(
 
                         is Result.Loading -> {
                             uiState.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
 
                         is Result.Error -> {
                             Log.e("WakeupSongViewModel", result.error.stackTraceToString())
                             uiState.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -70,20 +70,20 @@ class WakeupSongViewModel @Inject constructor(
                         is Result.Success -> {
                             uiState.copy(
                                 isLoading = false,
-                                allowedWakeupSongs = result.data
+                                allowedWakeupSongs = result.data,
                             )
                         }
 
                         is Result.Loading -> {
                             uiState.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
 
                         is Result.Error -> {
                             Log.e("WakeupSongViewModel", result.error.stackTraceToString())
                             uiState.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -100,19 +100,19 @@ class WakeupSongViewModel @Inject constructor(
                         is Result.Success -> {
                             uiState.copy(
                                 isLoading = false,
-                                pendingWakeupSongs = result.data
+                                pendingWakeupSongs = result.data,
                             )
                         }
 
                         is Result.Loading -> {
                             uiState.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
 
                         is Result.Error -> {
                             uiState.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
