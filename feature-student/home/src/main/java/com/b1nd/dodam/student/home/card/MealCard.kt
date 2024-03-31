@@ -39,7 +39,12 @@ import kotlinx.collections.immutable.toImmutableList
 
 @ExperimentalFoundationApi
 @Composable
-internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick: () -> Unit, fetchMeal: () -> Unit) {
+internal fun MealCard(
+    uiState: MealUiState,
+    showShimmer: Boolean,
+    onContentClick: () -> Unit,
+    fetchMeal: () -> Unit
+) {
     val currentTime = LocalTime.now()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
@@ -56,12 +61,12 @@ internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick
                     is MealUiState.Success -> {
                         val meals = remember { uiState.data.values.toImmutableList() }
                         val mealPagerState = rememberPagerState { meals.size }
-
-                        mealTitle = when {
-                            currentTime > LocalTime.of(19, 10) -> "내일의 "
-                            else -> "오늘의 "
-                        } + uiState.data.keys.toImmutableList()[mealPagerState.currentPage]
-
+                        if (uiState.data.keys.size != 0) {
+                            mealTitle = when {
+                                currentTime > LocalTime.of(19, 10) -> "내일의 "
+                                else -> "오늘의 "
+                            } + uiState.data.keys.toImmutableList()[mealPagerState.currentPage]
+                        }
                         LaunchedEffect(Unit) {
                             if (isRefreshing || playOnlyOnce) {
                                 when {
