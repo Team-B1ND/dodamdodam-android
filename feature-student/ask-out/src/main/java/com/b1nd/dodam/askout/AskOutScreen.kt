@@ -18,11 +18,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,15 +34,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
 import com.b1nd.dodam.dds.component.DodamTextField
 import com.b1nd.dodam.dds.component.button.DodamCTAButton
 import com.b1nd.dodam.dds.component.button.DodamSegment
 import com.b1nd.dodam.dds.component.button.DodamSegmentedButtonRow
+import com.b1nd.dodam.dds.component.button.DodamTextButton
 import com.b1nd.dodam.dds.foundation.DodamShape
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.ChevronRightIcon
+import com.b1nd.dodam.dds.style.TitleLarge
 import com.b1nd.dodam.ui.component.InputField
 import com.commandiron.wheel_picker_compose.WheelDatePicker
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
@@ -54,6 +60,8 @@ import kotlinx.datetime.toKotlinLocalDateTime
 @ExperimentalMaterial3Api
 @Composable
 internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackStack: () -> Unit) {
+    val uiState by viewModel.uiState.collectAsState()
+
     val scrollState = rememberScrollState()
     var selectedIndex by remember { mutableIntStateOf(0) }
 
@@ -69,51 +77,63 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
     var showDateTimePicker by remember { mutableStateOf(false to "외출") }
     var showDatePicker by remember { mutableStateOf(false to "외박") }
 
+    var showDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect {
             when (it) {
                 Event.Success -> {
                     popBackStack()
                 }
+                Event.ShowDialog -> {
+                    showDialog = true
+                }
             }
         }
     }
 
+    if (showDialog) {
+        DodamDialog(
+            onDismissRequest = { showDialog = false },
+            confirmText = {
+                DodamTextButton(onClick = { showDialog = false }) {
+                    Text(text = "확인")
+                }
+            },
+            title = { Text(text = "${if (selectedIndex == 0) "외출" else "외박"}을 신청할 수 없어요") },
+            text = { Text(text = uiState.message) }
+        )
+    }
+
     if (showDateTimePicker.first) {
-        BottomSheetDialog(
+        ModalBottomSheet(
             onDismissRequest = { showDateTimePicker = Pair(false, "") },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
         ) {
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .background(
-                        MaterialTheme.colorScheme.surfaceContainerHigh,
-                        DodamShape.ExtraLarge,
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             ) {
-                Spacer(modifier = Modifier.height(12.dp))
-                Box(
-                    modifier = Modifier
-                        .width(40.dp)
-                        .height(4.dp)
-                        .background(
-                            MaterialTheme.colorScheme.onSurfaceVariant,
-                            CircleShape,
-                        ),
+                TitleLarge(
+                    modifier = Modifier.padding(8.dp),
+                    text = if (showDateTimePicker.second == "외출") {
+                        "외출일자"
+                    } else {
+                        "복귀일자"
+                    },
+                    fontSize = 20.sp
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
                 WheelDateTimePicker(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     startDateTime = if (showDateTimePicker.second == "외출") {
                         outingStartDateTime
                     } else {
                         outingEndDateTime
                     },
+                    minDateTime = LocalDateTime.now(),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
                     textColor = MaterialTheme.colorScheme.onSurface,
-                    minDateTime = LocalDateTime.now(),
                     onSnappedDateTime = {
                         if (showDateTimePicker.second == "외출") {
                             outingStartDateTime = it
@@ -127,30 +147,26 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
     }
 
     if (showDatePicker.first) {
-        BottomSheetDialog(onDismissRequest = { showDatePicker = Pair(false, "") }) {
+        ModalBottomSheet(
+            onDismissRequest = { showDateTimePicker = Pair(false, "") },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+        ) {
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .background(
-                        MaterialTheme.colorScheme.surfaceContainerHigh,
-                        DodamShape.ExtraLarge,
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             ) {
-                Spacer(modifier = Modifier.height(12.dp))
-                Box(
-                    modifier = Modifier
-                        .width(40.dp)
-                        .height(4.dp)
-                        .background(
-                            MaterialTheme.colorScheme.onSurfaceVariant,
-                            CircleShape,
-                        ),
+                TitleLarge(
+                    modifier = Modifier.padding(8.dp),
+                    text = if (showDatePicker.second == "외박") {
+                        "외박일자"
+                    } else {
+                        "복귀일자"
+                    },
+                    fontSize = 20.sp
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
                 WheelDatePicker(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     startDate = if (showDatePicker.second == "외박") {
                         sleepoverStartDate
                     } else {
