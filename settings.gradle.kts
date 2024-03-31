@@ -58,4 +58,5 @@ include(
     ":data:member",
     ":network:member",
     ":feature-student:ask-out",
+    ":feature-student:ask-nightstudy",
 )
