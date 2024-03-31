@@ -35,14 +35,19 @@ internal class NightStudyService @Inject constructor(
         doNeedPhone: Boolean,
         reasonForPhone: String?,
         startAt: LocalDate,
-        endAt: LocalDate
+        endAt: LocalDate,
     ) {
         return defaultSafeRequest {
             network.post(DodamUrl.NIGHT_STUDY) {
                 setBody(
                     NightStudyRequest(
-                        place, content, doNeedPhone, reasonForPhone, startAt, endAt
-                    )
+                        place,
+                        content,
+                        doNeedPhone,
+                        reasonForPhone,
+                        startAt,
+                        endAt,
+                    ),
                 )
             }.body<DefaultResponse>()
         }

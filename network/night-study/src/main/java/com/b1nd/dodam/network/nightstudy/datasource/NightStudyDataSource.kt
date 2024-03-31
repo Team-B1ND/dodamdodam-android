@@ -8,12 +8,5 @@ import kotlinx.datetime.LocalDate
 interface NightStudyDataSource {
     suspend fun getMyNightStudy(): ImmutableList<NightStudyResponse>
 
-    suspend fun askNightStudy(
-        place: NetworkPlace,
-        content: String,
-        doNeedPhone: Boolean,
-        reasonForPhone: String?,
-        startAt: LocalDate,
-        endAt: LocalDate,
-    )
+    suspend fun askNightStudy(place: NetworkPlace, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate)
 }

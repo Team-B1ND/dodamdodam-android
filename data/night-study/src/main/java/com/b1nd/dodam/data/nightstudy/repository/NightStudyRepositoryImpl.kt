@@ -9,7 +9,6 @@ import com.b1nd.dodam.data.core.model.toRequest
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.nightstudy.model.toModel
-import com.b1nd.dodam.network.core.model.NetworkPlace
 import com.b1nd.dodam.network.nightstudy.datasource.NightStudyDataSource
 import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
@@ -36,7 +35,7 @@ internal class NightStudyRepositoryImpl @Inject constructor(
         doNeedPhone: Boolean,
         reasonForPhone: String?,
         startAt: LocalDate,
-        endAt: LocalDate
+        endAt: LocalDate,
     ): Flow<Result<Unit>> {
         return flow {
             emit(
@@ -46,8 +45,8 @@ internal class NightStudyRepositoryImpl @Inject constructor(
                     doNeedPhone,
                     reasonForPhone,
                     startAt,
-                    endAt
-                )
+                    endAt,
+                ),
             )
         }.asResult().flowOn(dispatcher)
     }
