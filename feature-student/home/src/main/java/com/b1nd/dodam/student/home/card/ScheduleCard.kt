@@ -1,6 +1,5 @@
 package com.b1nd.dodam.student.home.card
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -87,8 +86,6 @@ internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchS
                                     }
                                 }
                             }
-
-                            Log.d("TAG", current.toString() + latestSchedule.toString())
 
                             ScheduleComponent(
                                 modifier = Modifier.weight(1f),
