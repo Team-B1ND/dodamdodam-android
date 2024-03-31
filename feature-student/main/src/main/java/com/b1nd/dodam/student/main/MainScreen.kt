@@ -68,7 +68,8 @@ internal fun MainScreen(
             startDestination = HOME_ROUTE,
         ) {
             homeScreen(
-                navigateToWakeUpSong,
+              navigateToAddOuting,
+              navigateToWakeUpSong,
             )
             mealScreen()
             nightStudyScreen(navigateToAskNightStudy)
