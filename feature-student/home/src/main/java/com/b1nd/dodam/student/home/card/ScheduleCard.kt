@@ -98,8 +98,8 @@ internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchS
                                 },
                                 label = String.format(
                                     "%d월 %d일 (%s)",
-                                    current.monthNumber,
-                                    current.dayOfMonth,
+                                    if (current == latestSchedule) current.monthNumber else latestSchedule.monthNumber,
+                                    if (current == latestSchedule) current.dayOfMonth else latestSchedule.dayOfMonth,
                                     listOf(
                                         "월",
                                         "화",
@@ -108,7 +108,7 @@ internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchS
                                         "금",
                                         "토",
                                         "일",
-                                    )[current.dayOfWeek.value - 1],
+                                    )[if (current == latestSchedule) current.dayOfWeek.value - 1 else latestSchedule.dayOfWeek.value - 1],
                                 ),
                                 body = remember {
                                     schedules.filter {
@@ -118,7 +118,7 @@ internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchS
                             )
 
                             val nextSchedule = remember {
-                                if (schedules.first().date.size > 1) {
+                                if (schedules.first().date.size > 1 && schedules[0].date[0] != schedules[0].date[1]) {
                                     if (tomorrow in schedules.first().date) {
                                         tomorrow
                                     } else {

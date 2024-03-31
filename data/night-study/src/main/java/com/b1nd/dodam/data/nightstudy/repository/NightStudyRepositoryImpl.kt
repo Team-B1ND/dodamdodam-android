@@ -4,6 +4,8 @@ import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
+import com.b1nd.dodam.data.core.model.Place
+import com.b1nd.dodam.data.core.model.toRequest
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.nightstudy.model.toModel
@@ -15,6 +17,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.datetime.LocalDate
 
 internal class NightStudyRepositoryImpl @Inject constructor(
     private val remote: NightStudyDataSource,
@@ -23,6 +26,28 @@ internal class NightStudyRepositoryImpl @Inject constructor(
     override fun getMyNightStudy(): Flow<Result<ImmutableList<NightStudy>>> {
         return flow {
             emit(remote.getMyNightStudy().map { it.toModel() }.toImmutableList())
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun askNightStudy(
+        place: Place,
+        content: String,
+        doNeedPhone: Boolean,
+        reasonForPhone: String?,
+        startAt: LocalDate,
+        endAt: LocalDate,
+    ): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                remote.askNightStudy(
+                    place.toRequest(),
+                    content,
+                    doNeedPhone,
+                    reasonForPhone,
+                    startAt,
+                    endAt,
+                ),
+            )
         }.asResult().flowOn(dispatcher)
     }
 }
