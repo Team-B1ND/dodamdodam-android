@@ -50,7 +50,7 @@ class AskOutViewModel @Inject constructor(
                     is Result.Error -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true,
+                                isLoading = false,
                                 message = result.error.message.toString(),
                             )
                         }
