@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -43,14 +41,12 @@ import com.b1nd.dodam.dds.component.button.DodamCTAButton
 import com.b1nd.dodam.dds.component.button.DodamSegment
 import com.b1nd.dodam.dds.component.button.DodamSegmentedButtonRow
 import com.b1nd.dodam.dds.component.button.DodamTextButton
-import com.b1nd.dodam.dds.foundation.DodamShape
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.ChevronRightIcon
 import com.b1nd.dodam.dds.style.TitleLarge
 import com.b1nd.dodam.ui.component.InputField
 import com.commandiron.wheel_picker_compose.WheelDatePicker
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
-import com.holix.android.bottomsheetdialog.compose.BottomSheetDialog
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -101,14 +97,14 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                 }
             },
             title = { Text(text = "${if (selectedIndex == 0) "외출" else "외박"}을 신청할 수 없어요") },
-            text = { Text(text = uiState.message) }
+            text = { Text(text = uiState.message) },
         )
     }
 
     if (showDateTimePicker.first) {
         ModalBottomSheet(
             onDismissRequest = { showDateTimePicker = Pair(false, "") },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         ) {
             Column(
                 modifier = Modifier
@@ -122,7 +118,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                     } else {
                         "복귀일자"
                     },
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
                 )
                 WheelDateTimePicker(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -149,7 +145,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
     if (showDatePicker.first) {
         ModalBottomSheet(
             onDismissRequest = { showDateTimePicker = Pair(false, "") },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         ) {
             Column(
                 modifier = Modifier
@@ -163,7 +159,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                     } else {
                         "복귀일자"
                     },
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
                 )
                 WheelDatePicker(
                     modifier = Modifier.align(Alignment.CenterHorizontally),

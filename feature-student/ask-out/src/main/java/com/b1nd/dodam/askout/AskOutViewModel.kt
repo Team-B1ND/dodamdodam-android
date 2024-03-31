@@ -34,7 +34,7 @@ class AskOutViewModel @Inject constructor(
                         _event.emit(Event.Success)
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -42,7 +42,7 @@ class AskOutViewModel @Inject constructor(
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }
@@ -51,7 +51,7 @@ class AskOutViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 isLoading = true,
-                                message = result.error.message.toString()
+                                message = result.error.message.toString(),
                             )
                         }
                     }
@@ -67,7 +67,7 @@ class AskOutViewModel @Inject constructor(
                         _event.emit(Event.Success)
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -75,7 +75,7 @@ class AskOutViewModel @Inject constructor(
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }
@@ -84,7 +84,7 @@ class AskOutViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 isLoading = true,
-                                message = result.error.message.toString()
+                                message = result.error.message.toString(),
                             )
                         }
                     }
