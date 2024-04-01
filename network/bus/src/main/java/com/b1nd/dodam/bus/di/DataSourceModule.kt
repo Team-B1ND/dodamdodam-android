@@ -7,11 +7,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface DataSourceModule {
     @Binds
-    @Provides
+    @Singleton
     fun provideBusDataSource(busService: BusService): BusDataSource
 }
