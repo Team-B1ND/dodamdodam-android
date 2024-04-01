@@ -6,7 +6,7 @@ import kotlinx.datetime.LocalDate
 
 data class WakeupSong(
     val id: Long,
-    val thumbnailUrl: String,
+    val thumbnail: String,
     val videoTitle: String,
     val videoId: String,
     val videoUrl: String,
@@ -17,7 +17,7 @@ data class WakeupSong(
 
 internal fun WakeupSongResponse.toModel(): WakeupSong = WakeupSong(
     id = id,
-    thumbnailUrl = thumbnailUrl,
+    thumbnail = thumbnail,
     videoTitle = videoTitle,
     videoId = videoId,
     videoUrl = videoUrl,
