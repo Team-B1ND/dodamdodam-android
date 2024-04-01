@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                             lifecycleScope.launch {
                                 datastoreRepository.deleteUser()
                             }
-                        }
+                        },
                     )
                 } ?: run {
                     Box(

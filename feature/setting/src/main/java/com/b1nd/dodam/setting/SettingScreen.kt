@@ -45,11 +45,7 @@ import com.b1nd.dodam.ui.component.InputField
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingScreen(
-    viewModel: SettingViewModel = hiltViewModel(),
-    popBackStack: () -> Unit,
-    logout: () -> Unit,
-) {
+internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBackStack: () -> Unit, logout: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }
@@ -114,10 +110,10 @@ internal fun SettingScreen(
                 onNavigationIconClick = popBackStack,
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onBackground
-                )
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                ),
             )
-        }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -125,14 +121,14 @@ internal fun SettingScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .padding(paddingValues)
                 .padding(top = 16.dp, end = 16.dp, start = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             InputField(
                 onClick = { showDialog = true },
                 text = {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         AsyncImage(
                             modifier = Modifier
@@ -141,17 +137,17 @@ internal fun SettingScreen(
                             model = uiState.profile
                                 ?: com.b1nd.dodam.ui.R.drawable.ic_default_profile,
                             contentDescription = null,
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
                         )
 
                         Column {
                             BodyLarge(
                                 text = uiState.name,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = MaterialTheme.colorScheme.onBackground,
                             )
                             LabelLarge(
                                 text = "내 정보 수정하기",
-                                color = MaterialTheme.colorScheme.tertiary
+                                color = MaterialTheme.colorScheme.tertiary,
                             )
                         }
                     }
@@ -159,16 +155,16 @@ internal fun SettingScreen(
                 content = {
                     ChevronRightIcon(
                         modifier = Modifier.size(14.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                }
+                },
             )
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant)
+                    .background(MaterialTheme.colorScheme.outlineVariant),
             )
 
             InputField(
@@ -176,23 +172,23 @@ internal fun SettingScreen(
                     context.startActivity(
                         Intent(
                             Intent.ACTION_VIEW,
-                            Uri.parse("http://dodam.b1nd.com/detailed-information/service-policy")
-                        )
+                            Uri.parse("http://dodam.b1nd.com/detailed-information/service-policy"),
+                        ),
                     )
                 },
                 text = {
                     BodyLarge(
                         text = "서비스 운영 정책",
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
                     )
                 },
                 content = {
                     ChevronRightIcon(
                         modifier = Modifier.size(14.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                }
+                },
             )
 
             InputField(
@@ -200,23 +196,23 @@ internal fun SettingScreen(
                     context.startActivity(
                         Intent(
                             Intent.ACTION_VIEW,
-                            Uri.parse("http://dodam.b1nd.com/detailed-information/personal-information")
-                        )
+                            Uri.parse("http://dodam.b1nd.com/detailed-information/personal-information"),
+                        ),
                     )
                 },
                 text = {
                     BodyLarge(
                         text = "개인정보 처리방침",
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
                     )
                 },
                 content = {
                     ChevronRightIcon(
                         modifier = Modifier.size(14.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                }
+                },
             )
 
             InputField(
@@ -225,23 +221,23 @@ internal fun SettingScreen(
                     BodyLarge(
                         text = "버전 정보",
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
                     )
                 },
                 content = {
                     BodyLarge(
                         text = "3.0.0",
                         color = MaterialTheme.colorScheme.tertiary,
-                        fontWeight = FontWeight.Normal
+                        fontWeight = FontWeight.Normal,
                     )
-                }
+                },
             )
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant)
+                    .background(MaterialTheme.colorScheme.outlineVariant),
             )
 
             InputField(
@@ -250,15 +246,15 @@ internal fun SettingScreen(
                     BodyLarge(
                         text = "로그아웃",
                         color = MaterialTheme.colorScheme.error,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
                     )
                 },
                 content = {
                     ChevronRightIcon(
                         modifier = Modifier.size(14.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                }
+                },
             )
         }
     }
