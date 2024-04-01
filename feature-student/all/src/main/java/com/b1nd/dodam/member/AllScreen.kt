@@ -40,6 +40,7 @@ import com.b1nd.dodam.dds.component.DodamTopAppBar
 import com.b1nd.dodam.dds.component.button.DodamIconButton
 import com.b1nd.dodam.dds.foundation.DodamIcons
 import com.b1nd.dodam.dds.style.BodyLarge
+import com.b1nd.dodam.dds.style.GearIcon
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.effect.shimmerEffect
@@ -65,18 +66,13 @@ fun AllScreen(
             DodamTopAppBar(
                 title = { Text(text = "전체") },
                 actions = {
-//                    TODO: Navigation to setting screen
-//                    DodamIconButton(
-//                        onClick = {
-//                            navigateToSetting()
-//                        },
-//                    ) {
-//                        Icon(
-//                            modifier = Modifier.size(48.dp),
-//                            imageVector = Setting,
-//                            contentDescription = null,
-//                        )
-//                    }
+                    DodamIconButton(
+                        onClick = {
+                            navigateToSetting()
+                        },
+                    ) {
+                        GearIcon()
+                    }
                 },
                 colors = TopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,

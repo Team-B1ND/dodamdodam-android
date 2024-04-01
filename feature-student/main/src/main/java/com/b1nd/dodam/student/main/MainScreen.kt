@@ -1,7 +1,5 @@
 package com.b1nd.dodam.student.main
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -76,8 +74,7 @@ internal fun MainScreen(
                 navigateToNightStudy = { /*navController::navigateToNightStudy*/ },
                 navigateToOut = { /*navController::navigateToOuting*/ },
                 navigateToAskOut = navigateToAddOuting,
-                navigateToAddOuting,
-                navigateToWakeUpSong,
+                navigateToWakeupSongScreen = navigateToWakeUpSong,
             )
             mealScreen()
             nightStudyScreen(navigateToAskNightStudy)
