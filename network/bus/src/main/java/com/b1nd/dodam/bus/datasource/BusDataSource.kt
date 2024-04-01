@@ -5,5 +5,8 @@ import kotlinx.collections.immutable.ImmutableList
 
 interface BusDataSource {
     suspend fun getBusList(): ImmutableList<BusResponse>
-    suspend fun applyBus()
+    suspend fun applyBus(id: Int)
+    suspend fun deleteBus(id: Int)
+    suspend fun updateBus(id: Int)
+    suspend fun getMyBus(): BusResponse
 }

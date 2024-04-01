@@ -7,5 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface BusRepository {
     fun getBusList(): Flow<Result<List<Bus>>>
-    fun applyBus(): Flow<Result<Unit>>
+    fun applyBus(id: Int): Flow<Result<Unit>>
+    fun deleteBus(id: Int): Flow<Result<Unit>>
+    fun updateBus(id: Int): Flow<Result<Unit>>
+    fun getMyBus(): Flow<Result<Bus>>
 }

@@ -23,6 +23,10 @@ object DodamUrl {
         const val LOGIN = "$AUTH/login"
     }
 
+    object Bus {
+        const val APPLY = "$BUS/apply"
+    }
+
     object Member {
         const val REGISTER = "$MEMBER/join-student"
         const val MY = "$MEMBER/my"

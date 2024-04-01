@@ -29,10 +29,34 @@ class BusRepositoryImpl @Inject constructor(
         }.asResult().flowOn(dispatcher)
     }
 
-    override fun applyBus(): Flow<Result<Unit>> {
+    override fun applyBus(id: Int): Flow<Result<Unit>> {
         return flow {
             emit(
-                busDataSource.applyBus()
+                busDataSource.applyBus(id)
+            )
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun deleteBus(id: Int): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                busDataSource.deleteBus(id)
+            )
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun updateBus(id: Int): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                busDataSource.updateBus(id)
+            )
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun getMyBus(): Flow<Result<Bus>> {
+        return flow {
+            emit(
+                busDataSource.getMyBus().toModel()
             )
         }.asResult().flowOn(dispatcher)
     }
