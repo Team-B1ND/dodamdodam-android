@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.toJavaLocalDate
+import java.time.LocalDate
 
 @HiltViewModel
 class MealViewModel @Inject constructor(
@@ -37,10 +39,9 @@ class MealViewModel @Inject constructor(
                                 showShimmer = false,
                                 meal = it.meal.toPersistentList()
                                     .addAll(
-//                                        result.data.filter { meal ->
-//                                            meal.date.toJavaLocalDate() >= LocalDate.now()
-//                                        },
-                                        result.data,
+                                        result.data.filter { meal ->
+                                            meal.date.toJavaLocalDate() >= LocalDate.now()
+                                        }
                                     ).toImmutableList(),
                             )
                         }

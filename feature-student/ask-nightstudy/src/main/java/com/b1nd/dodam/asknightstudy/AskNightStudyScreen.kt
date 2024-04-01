@@ -130,7 +130,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                         nightStudyEndDate
                     },
                     minDate = LocalDate.now(),
-                    maxDate = LocalDate.now().plusDays(13),
+                    maxDate = LocalDate.now().plusMonths(1),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
                     textColor = MaterialTheme.colorScheme.onSurface,
                     onSnappedDate = {

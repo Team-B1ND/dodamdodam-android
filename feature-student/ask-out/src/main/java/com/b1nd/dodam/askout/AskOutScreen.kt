@@ -127,7 +127,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                         outingEndDateTime
                     },
                     minDateTime = LocalDateTime.now(),
-                    maxDateTime = LocalDateTime.now().plusHours(24),
+                    maxDateTime = LocalDateTime.now().plusMonths(1),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
                     textColor = MaterialTheme.colorScheme.onSurface,
                     onSnappedDateTime = {
