@@ -14,9 +14,9 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
+import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
 
 internal class BusService @Inject constructor(
     private val client: HttpClient,

@@ -1,9 +1,6 @@
 package com.b1nd.dodam.bus
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.bus.model.BusUiState
@@ -11,17 +8,17 @@ import com.b1nd.dodam.bus.repository.BusRepository
 import com.b1nd.dodam.common.exception.DataNotFoundException
 import com.b1nd.dodam.common.result.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class BusViewModel @Inject constructor(
-    private val busRepository: BusRepository
+    private val busRepository: BusRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(BusUiState())
     val uiState = _uiState.asStateFlow()
@@ -58,7 +55,7 @@ class BusViewModel @Inject constructor(
                             _event.emit(Event.ShowToast("버스 신청에 실패했어요"))
                             Log.e(
                                 "BusViewModel",
-                                result.error.stackTraceToString()
+                                result.error.stackTraceToString(),
                             )
                             uiState.copy(
                                 isLoading = false,
@@ -94,7 +91,7 @@ class BusViewModel @Inject constructor(
                         is Result.Error -> {
                             Log.e(
                                 "BusViewModel",
-                                result.error.stackTraceToString()
+                                result.error.stackTraceToString(),
                             )
                             when (result.error) {
                                 is DataNotFoundException -> {
@@ -152,7 +149,7 @@ class BusViewModel @Inject constructor(
                         is Result.Error -> {
                             Log.e(
                                 "BusViewModel",
-                                result.error.stackTraceToString()
+                                result.error.stackTraceToString(),
                             )
                             _event.emit(Event.ShowToast("버스 수정에 실패했어요"))
                             uiState.copy(
@@ -176,21 +173,21 @@ class BusViewModel @Inject constructor(
                             _event.emit(Event.ShowToast("버스 삭제에 실패했어요"))
                             uiState.copy(
                                 isError = false,
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
 
                         is Result.Loading -> {
                             uiState.copy(
                                 isError = false,
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
 
                         is Result.Error -> {
                             Log.e(
                                 "BusViewModel",
-                                result.error.stackTraceToString()
+                                result.error.stackTraceToString(),
                             )
                             _event.emit(Event.ShowToast("버스 삭제에 실패했어요"))
                             uiState.copy(
@@ -210,6 +207,9 @@ class BusViewModel @Inject constructor(
                 _uiState.update { uiState ->
                     when (result) {
                         is Result.Success -> {
+                            if (result.data.isEmpty()) {
+                                _event.emit(Event.ShowDialog)
+                            }
                             getMyBus()
                             uiState.copy(
                                 isError = false,
@@ -228,7 +228,7 @@ class BusViewModel @Inject constructor(
                         is Result.Error -> {
                             Log.e(
                                 "BusViewModel",
-                                result.error.stackTraceToString()
+                                result.error.stackTraceToString(),
                             )
                             uiState.copy(
                                 isLoading = false,
@@ -244,4 +244,5 @@ class BusViewModel @Inject constructor(
 
 sealed interface Event {
     data class ShowToast(val message: String) : Event
+    data object ShowDialog : Event
 }
