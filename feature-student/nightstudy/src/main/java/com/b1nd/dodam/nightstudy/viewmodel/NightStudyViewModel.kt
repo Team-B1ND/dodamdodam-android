@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -24,10 +25,6 @@ class NightStudyViewModel @Inject constructor(
 
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
-
-    init {
-        getMyNightStudy()
-    }
 
     fun getMyNightStudy() {
         viewModelScope.launch {
@@ -59,8 +56,42 @@ class NightStudyViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteNightStudy(id: Long) = viewModelScope.launch {
+        nightStudyRepository.deleteNightStudy(id).collect { result ->
+            when(result) {
+                is Result.Success -> {
+                    getMyNightStudy()
+                    _event.emit(Event.ShowToast)
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
+                }
+
+                is Result.Loading -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = true
+                        )
+                    }
+                }
+
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
+                    _event.emit(Event.Error(result.error.message.toString()))
+                }
+            }
+        }
+    }
 }
 
 sealed interface Event {
     data class Error(val message: String) : Event
+    data object ShowToast : Event
 }

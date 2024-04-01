@@ -10,7 +10,6 @@ import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.nightstudy.model.toModel
 import com.b1nd.dodam.network.nightstudy.datasource.NightStudyDataSource
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.datetime.LocalDate
+import javax.inject.Inject
 
 internal class NightStudyRepositoryImpl @Inject constructor(
     private val remote: NightStudyDataSource,
@@ -48,6 +48,12 @@ internal class NightStudyRepositoryImpl @Inject constructor(
                     endAt,
                 ),
             )
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun deleteNightStudy(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(remote.deleteNightStudy(id))
         }.asResult().flowOn(dispatcher)
     }
 }
