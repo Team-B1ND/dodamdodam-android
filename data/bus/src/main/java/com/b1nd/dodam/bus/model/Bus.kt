@@ -7,7 +7,7 @@ data class Bus(
     val id: Int,
     val leaveTime: String,
     val peopleLimit: Int,
-    val timeRequired: String
+    val timeRequired: String,
 )
 
 fun BusResponse.toModel() = Bus(
