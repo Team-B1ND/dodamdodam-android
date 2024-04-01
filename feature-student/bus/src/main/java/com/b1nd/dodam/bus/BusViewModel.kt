@@ -1,10 +1,14 @@
 package com.b1nd.dodam.bus
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.bus.model.BusUiState
 import com.b1nd.dodam.bus.repository.BusRepository
+import com.b1nd.dodam.common.exception.DataNotFoundException
 import com.b1nd.dodam.common.result.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -35,7 +39,8 @@ class BusViewModel @Inject constructor(
                 _uiState.update { uiState ->
                     when (result) {
                         is Result.Success -> {
-                            _event.emit(Event.APPLY_SUCCESS)
+                            _event.emit(Event.ShowToast("버스 신청에 성공했어요"))
+                            getActiveBuses()
                             uiState.copy(
                                 isLoading = false,
                             )
@@ -48,13 +53,14 @@ class BusViewModel @Inject constructor(
                         }
 
                         is Result.Error -> {
-                            _event.emit(Event.APPLY_ERROR)
+                            _event.emit(Event.ShowToast("버스 신청에 실패했어요"))
                             Log.e(
                                 "BusViewModel",
                                 result.error.stackTraceToString()
                             )
                             uiState.copy(
                                 isLoading = false,
+                                isError = true,
                             )
                         }
                     }
@@ -86,9 +92,21 @@ class BusViewModel @Inject constructor(
                                 "BusViewModel",
                                 result.error.stackTraceToString()
                             )
-                            uiState.copy(
-                                isLoading = false,
-                            )
+                            when (result.error) {
+                                is DataNotFoundException -> {
+                                    uiState.copy(
+                                        selectedBus = null,
+                                        isLoading = false,
+                                    )
+                                }
+
+                                else -> {
+                                    uiState.copy(
+                                        isLoading = false,
+                                        isError = true,
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -96,26 +114,44 @@ class BusViewModel @Inject constructor(
         }
     }
 
-    fun updateBus(id: Int) {
+    fun updateBus(id: Int, selectedIndex: Int) {
         viewModelScope.launch {
+            val selectedBus = uiState.value.buses[selectedIndex]
+            if (selectedBus.applyCount >= selectedBus.peopleLimit) {
+                _uiState.update { uiState ->
+                    _event.emit(Event.ShowToast("버스가 만석이에요"))
+                    uiState.copy(
+                        isError = true,
+                    )
+                }
+                return@launch
+            }
             busRepository.updateBus(id).collect { result ->
                 _uiState.update { uiState ->
                     when (result) {
                         is Result.Success -> {
+                            getActiveBuses()
+                            _event.emit(Event.ShowToast("버스 수정에 성공했어요"))
                             uiState.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
 
                         is Result.Loading -> {
                             uiState.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
 
                         is Result.Error -> {
+                            Log.e(
+                                "BusViewModel",
+                                result.error.stackTraceToString()
+                            )
+                            _event.emit(Event.ShowToast("버스 수정에 실패했어요"))
                             uiState.copy(
-                                isLoading = false
+                                isLoading = false,
+                                isError = true,
                             )
                         }
                     }
@@ -130,6 +166,8 @@ class BusViewModel @Inject constructor(
                 _uiState.update { uiState ->
                     when (result) {
                         is Result.Success -> {
+                            getMyBus()
+                            _event.emit(Event.ShowToast("버스 삭제에 실패했어요"))
                             uiState.copy(
                                 isLoading = false
                             )
@@ -146,8 +184,10 @@ class BusViewModel @Inject constructor(
                                 "BusViewModel",
                                 result.error.stackTraceToString()
                             )
+                            _event.emit(Event.ShowToast("버스 삭제에 실패했어요"))
                             uiState.copy(
-                                isLoading = false
+                                isLoading = false,
+                                isError = true,
                             )
                         }
                     }
@@ -162,6 +202,7 @@ class BusViewModel @Inject constructor(
                 _uiState.update { uiState ->
                     when (result) {
                         is Result.Success -> {
+                            getMyBus()
                             uiState.copy(
                                 isLoading = false,
                                 buses = result.data,
@@ -181,6 +222,7 @@ class BusViewModel @Inject constructor(
                             )
                             uiState.copy(
                                 isLoading = false,
+                                isError = true,
                             )
                         }
                     }
@@ -191,6 +233,5 @@ class BusViewModel @Inject constructor(
 }
 
 sealed interface Event {
-    data object APPLY_SUCCESS : Event
-    data object APPLY_ERROR : Event
+    data class ShowToast(val message: String) : Event
 }
