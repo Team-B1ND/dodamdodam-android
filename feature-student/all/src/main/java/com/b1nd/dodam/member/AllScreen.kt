@@ -162,9 +162,8 @@ fun AllScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-
             Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 AllCardView(
                     imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_bus),

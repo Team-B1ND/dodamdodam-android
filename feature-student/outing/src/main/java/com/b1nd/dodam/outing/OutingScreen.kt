@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -58,7 +57,6 @@ import com.b1nd.dodam.dds.component.button.DodamLargeFilledButton
 import com.b1nd.dodam.dds.component.button.DodamSegment
 import com.b1nd.dodam.dds.component.button.DodamSegmentedButtonRow
 import com.b1nd.dodam.dds.foundation.DodamColor
-import com.b1nd.dodam.dds.style.BellIcon
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.BodyMedium
 import com.b1nd.dodam.dds.style.CheckmarkCircleFilledIcon
@@ -69,9 +67,9 @@ import com.b1nd.dodam.outing.viewmodel.OutingViewModel
 import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.icons.ConvenienceStore
 import com.b1nd.dodam.ui.icons.Tent
-import kotlinx.datetime.toJavaLocalDateTime
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import kotlinx.datetime.toJavaLocalDateTime
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
@@ -97,18 +95,16 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
         viewModel.getMyOuting()
     }
 
-
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect {
             when (it) {
                 is Event.Error -> {
-
                 }
 
                 is Event.ShowToast -> {
                     showDialog = false
                     snackbarHostState.showSnackbar(
-                        message = if (selectedIndex == 0) "외출을 삭제했어요" else "외박을 삭제했어요"
+                        message = if (selectedIndex == 0) "외출을 삭제했어요" else "외박을 삭제했어요",
                     )
                 }
             }
@@ -122,14 +118,17 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                 DodamLargeFilledButton(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        if (selectedIndex == 0) viewModel.deleteOuting(id)
-                        else viewModel.deleteSleepover(id)
+                        if (selectedIndex == 0) {
+                            viewModel.deleteOuting(id)
+                        } else {
+                            viewModel.deleteSleepover(id)
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = MaterialTheme.colorScheme.onError
+                        contentColor = MaterialTheme.colorScheme.onError,
                     ),
-                    isLoading = uiState.isLoading
+                    isLoading = uiState.isLoading,
                 ) {
                     Text(text = "삭제")
                 }
@@ -140,9 +139,9 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                     onClick = { showDialog = false },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                     ),
-                    enabled = !uiState.isLoading
+                    enabled = !uiState.isLoading,
                 ) {
                     Text(text = "취소")
                 }
@@ -152,7 +151,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
             },
             text = {
                 Text(text = reason)
-            }
+            },
         )
     }
 
@@ -196,17 +195,17 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                             drawRoundRect(
                                                 color = DodamColor.White,
                                                 topLeft = Offset(12f, 12f),
-                                                size = Size(30f, 30f)
+                                                size = Size(30f, 30f),
                                             )
-                                        }
+                                        },
                                 )
-                            }
+                            },
                         )
                         Spacer(modifier = Modifier.height(100.dp))
                     }
                 }
             }
-        }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -232,7 +231,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
             if (selectedIndex == 0) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    state = scrollState
+                    state = scrollState,
                 ) {
                     if (uiState.outings.isEmpty()) {
                         item {
@@ -241,10 +240,10 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                     .fillMaxWidth()
                                     .background(
                                         MaterialTheme.colorScheme.surfaceContainer,
-                                        MaterialTheme.shapes.large
+                                        MaterialTheme.shapes.large,
                                     )
                                     .padding(16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
                                 Image(
                                     modifier = Modifier.size(36.dp),
@@ -256,7 +255,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
 
                                 LabelLarge(
                                     text = "아직 신청한 외출이 없어요.",
-                                    color = MaterialTheme.colorScheme.tertiary
+                                    color = MaterialTheme.colorScheme.tertiary,
                                 )
 
                                 Spacer(modifier = Modifier.height(24.dp))
@@ -266,8 +265,8 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                     onClick = onAddOutingClick,
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                                    )
+                                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    ),
                                 ) {
                                     Text(text = "외출 신청하기")
                                 }
@@ -309,7 +308,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                             reason = out.reason
                                             showDialog = true
                                         },
-                                        interactionColor = Color.Transparent
+                                        interactionColor = Color.Transparent,
                                     ),
                                 statusText = when (out.status) {
                                     Status.ALLOWED -> "승인됨"
@@ -334,27 +333,27 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                         "토",
                                         "일",
                                     )[out.modifiedAt.dayOfWeek.value - 1],
-                                )
+                                ),
                             ) {
                                 BodyMedium(
                                     text = out.reason,
-                                    fontWeight = FontWeight.Medium
+                                    fontWeight = FontWeight.Medium,
                                 )
 
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(1.dp)
-                                        .background(MaterialTheme.colorScheme.outlineVariant)
+                                        .background(MaterialTheme.colorScheme.outlineVariant),
                                 )
 
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth(),
-                                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                                    verticalArrangement = Arrangement.spacedBy(6.dp),
                                 ) {
                                     Row(
-                                        verticalAlignment = Alignment.Bottom
+                                        verticalAlignment = Alignment.Bottom,
                                     ) {
                                         BodyLarge(
                                             modifier = Modifier.padding(end = 4.dp),
@@ -363,11 +362,11 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                                 out.startAt.hour,
                                                 out.startAt.minute,
                                             ),
-                                            color = MaterialTheme.colorScheme.onSurface
+                                            color = MaterialTheme.colorScheme.onSurface,
                                         )
                                         LabelLarge(
                                             text = "외출",
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
 
                                         Spacer(modifier = Modifier.weight(1f))
@@ -383,7 +382,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                         )
                                         LabelLarge(
                                             text = "복귀",
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
 
@@ -391,11 +390,14 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                         DodamLinearProgressIndicator(
                                             modifier = Modifier.fillMaxWidth(),
                                             progress = progress,
-                                            color = if (out.status == Status.ALLOWED)
+                                            color = if (out.status == Status.ALLOWED) {
                                                 MaterialTheme.colorScheme.primary
-                                            else MaterialTheme.colorScheme.onSurfaceVariant
+                                            } else {
+                                                MaterialTheme.colorScheme.onSurfaceVariant
+                                            },
                                         )
-                                    } /* TODO : 거절 사유 만들어지면 주석 해제
+                                    }
+                                    /* TODO : 거절 사유 만들어지면 주석 해제
                                     else {
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically,
@@ -412,7 +414,8 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                                 fontWeight = FontWeight.Medium
                                             )
                                         }
-                                    }*/
+                                    }
+                                     */
                                 }
                             }
                         }
@@ -421,7 +424,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
             } else {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    state = scrollState
+                    state = scrollState,
                 ) {
                     if (uiState.sleepovers.isEmpty()) {
                         item {
@@ -430,10 +433,10 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                     .fillMaxWidth()
                                     .background(
                                         MaterialTheme.colorScheme.surfaceContainer,
-                                        MaterialTheme.shapes.large
+                                        MaterialTheme.shapes.large,
                                     )
                                     .padding(16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
                                 Image(
                                     modifier = Modifier.size(36.dp),
@@ -445,7 +448,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
 
                                 LabelLarge(
                                     text = "아직 신청한 외박이 없어요.",
-                                    color = MaterialTheme.colorScheme.tertiary
+                                    color = MaterialTheme.colorScheme.tertiary,
                                 )
 
                                 Spacer(modifier = Modifier.height(24.dp))
@@ -455,8 +458,8 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                     onClick = onAddOutingClick,
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                                    )
+                                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    ),
                                 ) {
                                     Text(text = "외박 신청하기")
                                 }
@@ -498,7 +501,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                             reason = out.reason
                                             showDialog = true
                                         },
-                                        interactionColor = Color.Transparent
+                                        interactionColor = Color.Transparent,
                                     ),
                                 statusText = when (out.status) {
                                     Status.ALLOWED -> "승인됨"
@@ -523,27 +526,27 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                         "토",
                                         "일",
                                     )[out.modifiedAt.dayOfWeek.value - 1],
-                                )
+                                ),
                             ) {
                                 BodyMedium(
                                     text = out.reason,
-                                    fontWeight = FontWeight.Medium
+                                    fontWeight = FontWeight.Medium,
                                 )
 
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(1.dp)
-                                        .background(MaterialTheme.colorScheme.outlineVariant)
+                                        .background(MaterialTheme.colorScheme.outlineVariant),
                                 )
 
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth(),
-                                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                                    verticalArrangement = Arrangement.spacedBy(6.dp),
                                 ) {
                                     Row(
-                                        verticalAlignment = Alignment.Bottom
+                                        verticalAlignment = Alignment.Bottom,
                                     ) {
                                         BodyLarge(
                                             modifier = Modifier.padding(end = 4.dp),
@@ -552,11 +555,11 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                                 out.startAt.monthNumber,
                                                 out.startAt.dayOfMonth,
                                             ),
-                                            color = MaterialTheme.colorScheme.onSurface
+                                            color = MaterialTheme.colorScheme.onSurface,
                                         )
                                         LabelLarge(
                                             text = "외박",
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
 
                                         Spacer(modifier = Modifier.weight(1f))
@@ -572,7 +575,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                         )
                                         LabelLarge(
                                             text = "복귀",
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
 
@@ -580,11 +583,15 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                         DodamLinearProgressIndicator(
                                             modifier = Modifier.fillMaxWidth(),
                                             progress = progress,
-                                            color = if (out.status == Status.ALLOWED)
+                                            color = if (out.status == Status.ALLOWED) {
                                                 MaterialTheme.colorScheme.primary
-                                            else MaterialTheme.colorScheme.onSurfaceVariant
+                                            } else {
+                                                MaterialTheme.colorScheme.onSurfaceVariant
+                                            },
                                         )
-                                    } /* TODO : 거절 사유 만들어지면 주석 해제
+                                    }
+
+                                    /* TODO : 거절 사유 만들어지면 주석 해제
                                     else {
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically,
@@ -601,7 +608,8 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                                 fontWeight = FontWeight.Medium
                                             )
                                         }
-                                    }*/
+                                    }
+                                     */
                                 }
                             }
                         }

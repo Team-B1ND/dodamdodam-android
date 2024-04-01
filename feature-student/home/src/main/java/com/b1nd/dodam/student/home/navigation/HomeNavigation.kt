@@ -1,12 +1,7 @@
 package com.b1nd.dodam.student.home.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,7 +23,7 @@ fun NavGraphBuilder.homeScreen(
     navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
     navigateToNightStudy: () -> Unit,
-    navigateToOut: () -> Unit
+    navigateToOut: () -> Unit,
 ) {
     composable(
         route = HOME_ROUTE,
@@ -42,7 +37,7 @@ fun NavGraphBuilder.homeScreen(
             navigateToOut = navigateToOut,
             navigateToNightStudy = navigateToNightStudy,
             navigateToMeal = navigateToMeal,
-            navigateToAskNightStudy = navigateToAskNightStudy
+            navigateToAskNightStudy = navigateToAskNightStudy,
         )
     }
 }

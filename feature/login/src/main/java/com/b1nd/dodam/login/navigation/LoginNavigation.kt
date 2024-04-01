@@ -19,7 +19,7 @@ fun NavGraphBuilder.loginScreen(onBackClick: () -> Unit, navigateToMain: () -> U
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
-        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) }
+        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         LoginScreen(
             onBackClick = onBackClick,

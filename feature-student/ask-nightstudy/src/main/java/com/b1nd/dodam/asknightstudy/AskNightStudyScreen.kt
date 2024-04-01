@@ -50,7 +50,6 @@ import com.b1nd.dodam.dds.style.ChevronRightIcon
 import com.b1nd.dodam.dds.style.TitleLarge
 import com.b1nd.dodam.ui.component.InputField
 import com.commandiron.wheel_picker_compose.WheelDatePicker
-import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlinx.datetime.toKotlinLocalDate
@@ -218,7 +217,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp),
             ) {
                 Column(
                     modifier = Modifier
@@ -389,7 +388,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                         endAt = nightStudyEndDate.toKotlinLocalDate(),
                     )
                 },
-                enabled = nightStudyReason.isNotBlank()  && nightStudyStartDate < nightStudyEndDate,
+                enabled = nightStudyReason.isNotBlank() && nightStudyStartDate < nightStudyEndDate,
                 isLoading = uiState.isLoading,
             ) {
                 Text(text = "확인")

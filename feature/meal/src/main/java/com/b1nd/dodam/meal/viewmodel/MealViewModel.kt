@@ -1,25 +1,20 @@
 package com.b1nd.dodam.meal.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.meal.MealRepository
 import com.b1nd.dodam.meal.MealUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.toJavaLocalDate
 
 @HiltViewModel
 class MealViewModel @Inject constructor(
@@ -45,7 +40,7 @@ class MealViewModel @Inject constructor(
 //                                        result.data.filter { meal ->
 //                                            meal.date.toJavaLocalDate() >= LocalDate.now()
 //                                        },
-                                        result.data
+                                        result.data,
                                     ).toImmutableList(),
                             )
                         }

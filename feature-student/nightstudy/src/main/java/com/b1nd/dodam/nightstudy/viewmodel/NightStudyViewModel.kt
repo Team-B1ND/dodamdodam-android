@@ -59,13 +59,13 @@ class NightStudyViewModel @Inject constructor(
 
     fun deleteNightStudy(id: Long) = viewModelScope.launch {
         nightStudyRepository.deleteNightStudy(id).collect { result ->
-            when(result) {
+            when (result) {
                 is Result.Success -> {
                     getMyNightStudy()
                     _event.emit(Event.ShowToast)
                     _uiState.update {
                         it.copy(
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -73,7 +73,7 @@ class NightStudyViewModel @Inject constructor(
                 is Result.Loading -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = true
+                            isLoading = true,
                         )
                     }
                 }
@@ -81,7 +81,7 @@ class NightStudyViewModel @Inject constructor(
                 is Result.Error -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                     _event.emit(Event.Error(result.error.message.toString()))

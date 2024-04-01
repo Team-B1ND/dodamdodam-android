@@ -1,6 +1,5 @@
 package com.b1nd.dodam.outing.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
@@ -8,8 +7,8 @@ import com.b1nd.dodam.data.outing.OutingRepository
 import com.b1nd.dodam.data.outing.model.OutType
 import com.b1nd.dodam.outing.OutingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -70,7 +69,7 @@ class OutingViewModel @Inject constructor(
                     _event.emit(Event.ShowToast)
                     _uiState.update {
                         it.copy(
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -78,7 +77,7 @@ class OutingViewModel @Inject constructor(
                 is Result.Loading -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = true
+                            isLoading = true,
                         )
                     }
                 }
@@ -86,7 +85,7 @@ class OutingViewModel @Inject constructor(
                 is Result.Error -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                     _event.emit(Event.Error(result.error.message.toString()))
@@ -103,7 +102,7 @@ class OutingViewModel @Inject constructor(
                     _event.emit(Event.ShowToast)
                     _uiState.update {
                         it.copy(
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -111,7 +110,7 @@ class OutingViewModel @Inject constructor(
                 is Result.Loading -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = true
+                            isLoading = true,
                         )
                     }
                 }
@@ -119,7 +118,7 @@ class OutingViewModel @Inject constructor(
                 is Result.Error -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                     _event.emit(Event.Error(result.error.message.toString()))

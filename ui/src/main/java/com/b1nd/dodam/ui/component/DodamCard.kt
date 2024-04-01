@@ -34,10 +34,10 @@ fun DodamCard(
             .fillMaxWidth()
             .background(
                 MaterialTheme.colorScheme.surfaceContainer,
-                MaterialTheme.shapes.large
+                MaterialTheme.shapes.large,
             )
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
@@ -51,7 +51,7 @@ fun DodamCard(
             ) {
                 BodyMedium(
                     text = statusText,
-                    color = statusTextColor
+                    color = statusTextColor,
                 )
             }
 
@@ -59,7 +59,7 @@ fun DodamCard(
 
             LabelLarge(
                 text = labelText,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
 
