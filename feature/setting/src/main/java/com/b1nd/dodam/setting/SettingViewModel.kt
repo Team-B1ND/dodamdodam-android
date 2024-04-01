@@ -6,15 +6,15 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.member.MemberRepository
 import com.b1nd.dodam.setting.model.SettingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SettingUiState())
     val uiState = _uiState.asStateFlow()
@@ -28,7 +28,7 @@ class SettingViewModel @Inject constructor(
                             it.copy(
                                 isLoading = false,
                                 name = result.data.name,
-                                profile = result.data.profileImage
+                                profile = result.data.profileImage,
                             )
                         }
                     }
@@ -36,7 +36,7 @@ class SettingViewModel @Inject constructor(
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }
@@ -44,7 +44,7 @@ class SettingViewModel @Inject constructor(
                     is Result.Error -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }

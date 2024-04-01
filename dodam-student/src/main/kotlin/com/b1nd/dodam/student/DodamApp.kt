@@ -37,11 +37,7 @@ import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable
-fun DodamApp(
-    isLogin: Boolean,
-    deleteToken: () -> Unit,
-    navController: NavHostController = rememberNavController()
-) {
+fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
         startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
@@ -126,9 +122,9 @@ fun DodamApp(
                         popUpTo(navController.graph.id) {
                             inclusive = true
                         }
-                    }
+                    },
                 )
-            }
+            },
         )
     }
 }
