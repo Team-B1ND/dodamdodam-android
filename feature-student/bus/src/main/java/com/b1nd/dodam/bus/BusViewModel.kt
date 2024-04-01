@@ -42,12 +42,14 @@ class BusViewModel @Inject constructor(
                             _event.emit(Event.ShowToast("버스 신청에 성공했어요"))
                             getActiveBuses()
                             uiState.copy(
+                                isError = false,
                                 isLoading = false,
                             )
                         }
 
                         is Result.Loading -> {
                             uiState.copy(
+                                isError = false,
                                 isLoading = true,
                             )
                         }
@@ -76,6 +78,7 @@ class BusViewModel @Inject constructor(
                     when (result) {
                         is Result.Success -> {
                             uiState.copy(
+                                isError = false,
                                 isLoading = false,
                                 selectedBus = result.data,
                             )
@@ -83,6 +86,7 @@ class BusViewModel @Inject constructor(
 
                         is Result.Loading -> {
                             uiState.copy(
+                                isError = false,
                                 isLoading = true,
                             )
                         }
@@ -133,12 +137,14 @@ class BusViewModel @Inject constructor(
                             getActiveBuses()
                             _event.emit(Event.ShowToast("버스 수정에 성공했어요"))
                             uiState.copy(
+                                isError = false,
                                 isLoading = false,
                             )
                         }
 
                         is Result.Loading -> {
                             uiState.copy(
+                                isError = false,
                                 isLoading = true,
                             )
                         }
@@ -169,12 +175,14 @@ class BusViewModel @Inject constructor(
                             getMyBus()
                             _event.emit(Event.ShowToast("버스 삭제에 실패했어요"))
                             uiState.copy(
+                                isError = false,
                                 isLoading = false
                             )
                         }
 
                         is Result.Loading -> {
                             uiState.copy(
+                                isError = false,
                                 isLoading = true
                             )
                         }
@@ -204,6 +212,7 @@ class BusViewModel @Inject constructor(
                         is Result.Success -> {
                             getMyBus()
                             uiState.copy(
+                                isError = false,
                                 isLoading = false,
                                 buses = result.data,
                             )
@@ -211,6 +220,7 @@ class BusViewModel @Inject constructor(
 
                         is Result.Loading -> {
                             uiState.copy(
+                                isError = false,
                                 isLoading = true,
                             )
                         }
