@@ -12,6 +12,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -30,40 +31,39 @@ class MealViewModel @Inject constructor(
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
 
-    private val current = LocalDate.now()
-    val isFirst = MutableLiveData<Boolean>(true)
-
-    init {
+    fun getMealOfMonth(year: Int, month: Int) {
         viewModelScope.launch {
-            mealRepository.getMealOfMonth(current.year, current.monthValue).collect { result ->
-                _uiState.update {
-                    when (result) {
-                        is Result.Success -> {
+            mealRepository.getMealOfMonth(year, month).collect { result ->
+
+                when (result) {
+                    is Result.Success -> {
+                        _uiState.update {
                             it.copy(
-                                isLoading = false,
-                                meal = (
-                                    it.meal.toPersistentList()
-                                        .addAll(
-                                            result.data.filter { meal ->
-                                                val date = meal.date.toJavaLocalDate()
-                                                date.isAfter(LocalDate.now().minusDays(1))
-                                            },
-                                        )
+                                showShimmer = false,
+                                meal = it.meal.toPersistentList()
+                                    .addAll(
+//                                        result.data.filter { meal ->
+//                                            meal.date.toJavaLocalDate() >= LocalDate.now()
+//                                        },
+                                        result.data
                                     ).toImmutableList(),
                             )
                         }
+                    }
 
-                        is Result.Error -> {
-                            _event.emit(Event.Error(result.error.message.toString()))
-                            Log.e("ERROR", result.error.message.toString())
+                    is Result.Error -> {
+                        _event.emit(Event.Error(result.error.message.toString()))
+                        _uiState.update {
                             it.copy(
-                                isLoading = false,
+                                showShimmer = false,
                             )
                         }
+                    }
 
-                        is Result.Loading -> {
+                    is Result.Loading -> {
+                        _uiState.update {
                             it.copy(
-                                isLoading = true,
+                                showShimmer = true,
                             )
                         }
                     }
@@ -73,32 +73,28 @@ class MealViewModel @Inject constructor(
     }
 
     fun fetchMealOfMonth(year: Int, month: Int) {
-        if (isFirst.value == true) {
-            isFirst.value = false
-            viewModelScope.launch {
-                mealRepository.getMealOfMonth(year, month).collect { result ->
-                    _uiState.update {
-                        when (result) {
-                            is Result.Success -> {
-                                it.copy(
-                                    meal = (it.meal + result.data).toImmutableList(),
-                                    endReached = true,
-                                )
-                            }
+        viewModelScope.launch {
+            mealRepository.getMealOfMonth(year, month).collect { result ->
+                _uiState.update {
+                    when (result) {
+                        is Result.Success -> {
+                            it.copy(
+                                meal = (it.meal + result.data).toImmutableList(),
+                                isLoading = false,
+                            )
+                        }
 
-                            is Result.Error -> {
-                                _event.emit(Event.Error(result.error.message.toString()))
-                                Log.e("ERROR", result.error.message.toString())
-                                it.copy(
-                                    endReached = true,
-                                )
-                            }
+                        is Result.Error -> {
+                            _event.emit(Event.Error(result.error.message.toString()))
+                            it.copy(
+                                isLoading = false,
+                            )
+                        }
 
-                            is Result.Loading -> {
-                                it.copy(
-                                    endReached = true,
-                                )
-                            }
+                        is Result.Loading -> {
+                            it.copy(
+                                isLoading = true,
+                            )
                         }
                     }
                 }

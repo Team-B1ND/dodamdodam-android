@@ -1,5 +1,6 @@
 package com.b1nd.dodam.meal.navigation
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -10,6 +11,7 @@ const val MEAL_ROUTE = "meal"
 
 fun NavController.navigationToMeal(navOptions: NavOptions? = null) = navigate(MEAL_ROUTE, navOptions)
 
+@ExperimentalMaterial3Api
 fun NavGraphBuilder.mealScreen() {
     composable(
         route = MEAL_ROUTE,
