@@ -109,7 +109,7 @@ fun AllScreen(
                         contentAlignment = Alignment.Center,
                     ) {
                         AsyncImage(
-                            model = myInfo.profileImage ?: R.drawable.ic_default_profile,
+                            model = myInfo.profileImage ?: com.b1nd.dodam.ui.R.drawable.ic_default_profile,
                             contentDescription = "profile",
                             modifier = Modifier
                                 .clip(shape = RoundedCornerShape(12.dp))
