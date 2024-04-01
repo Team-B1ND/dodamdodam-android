@@ -46,10 +46,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.DodamTopAppBar
-import com.b1nd.dodam.dds.component.button.DodamIconButton
 import com.b1nd.dodam.dds.foundation.DodamIcons
 import com.b1nd.dodam.dds.foundation.DodamShape
-import com.b1nd.dodam.dds.style.BellIcon
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.style.TitleLarge
@@ -71,7 +69,7 @@ import com.b1nd.dodam.ui.icons.DodamLogo
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateToAskOut: () -> Unit) {
+internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateToAskOut: () -> Unit, navigateToWakeupSongScreen: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
@@ -81,6 +79,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateToAs
         outUiState = uiState.outUiState,
         nightStudyUiState = uiState.nightStudyUiState,
         scheduleUiState = uiState.scheduleUiState,
+        navigateToWakeupSongScreen = navigateToWakeupSongScreen,
         showShimmer = uiState.showShimmer,
         fetchMeal = viewModel::fetchMeal,
         fetchWakeupSong = viewModel::fetchWakeupSong,
@@ -111,6 +110,7 @@ private fun HomeScreen(
     outUiState: OutUiState,
     nightStudyUiState: NightStudyUiState,
     scheduleUiState: ScheduleUiState,
+    navigateToWakeupSongScreen: () -> Unit,
     showShimmer: Boolean,
     fetchMeal: () -> Unit,
     fetchWakeupSong: () -> Unit,
@@ -151,11 +151,12 @@ private fun HomeScreen(
                             tint = MaterialTheme.colorScheme.primary,
                         )
                     },
-                    actions = {
-                        DodamIconButton(onClick = { /*TODO*/ }) {
-                            BellIcon(modifier = Modifier.size(28.dp))
-                        }
-                    },
+//                    TODO Alarm feature
+//                    actions = {
+//                        DodamIconButton(onClick = { /*TODO*/ }) {
+//                            BellIcon(modifier = Modifier.size(28.dp))
+//                        }
+//                    },
                 )
                 AnimatedVisibility(scrollState.canScrollBackward) {
                     Box(
@@ -201,8 +202,8 @@ private fun HomeScreen(
                 item {
                     WakeupSongCard(
                         uiState = wakeupSongUiState,
-                        onNextClick = { /* TODO : Navigate to Wakeup screen */ },
-                        navigateToWakeupSongApply = { /* TODO : Navigate to Wakeup apply screen */ },
+                        onNextClick = navigateToWakeupSongScreen,
+                        navigateToWakeupSongApply = { /* TODO : Navigate to Add Wakeup screen */ },
                         showShimmer = showShimmer,
                         fetchWakeupSong = fetchWakeupSong,
                         context = context,
@@ -227,7 +228,7 @@ private fun HomeScreen(
                             uiState = nightStudyUiState,
                             showShimmer = showShimmer,
                             navigateToAskNightStudy = { /*TODO : Navigate to Ask NightStudy screen*/ },
-                            navigateToNightStudy = { /*TODO : Navigate to NightStudy screen*/ },
+                            navigateToNightStudy = { /* TODO : Navigate to NightStudy screen */ },
                             fetchNightStudy = fetchNightStudy,
                         )
                     }
@@ -317,11 +318,20 @@ internal fun DodamContainer(
                 shape = DodamShape.Large,
             ),
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .then(
+                    if (showNextButton) {
+                        Modifier.bounceClick(
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = onNextClick!!,
+                        )
+                    } else {
+                        Modifier
+                    },
+                )
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
@@ -354,19 +364,13 @@ internal fun DodamContainer(
             if (showNextButton) {
                 Icon(
                     modifier = Modifier
-                        .size(16.dp)
-                        .bounceClick(
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = onNextClick!!,
-                        ),
+                        .size(16.dp),
                     imageVector = DodamIcons.ChevronRight,
                     contentDescription = "next",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         content()
 

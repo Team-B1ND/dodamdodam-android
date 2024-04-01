@@ -1,12 +1,15 @@
 package com.b1nd.dodam.wakeupsong.api
 
 import com.b1nd.dodam.network.core.DodamUrl
+import com.b1nd.dodam.network.core.model.DefaultResponse
 import com.b1nd.dodam.network.core.model.Response
+import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.network.core.util.safeRequest
 import com.b1nd.dodam.wakeupsong.datasource.WakeupSongDataSource
 import com.b1nd.dodam.wakeupsong.model.WakeupSongResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import javax.inject.Inject
@@ -24,5 +27,26 @@ internal class WakeupSongService @Inject constructor(
                 parameter("day", day)
             }.body<Response<List<WakeupSongResponse>>>()
         }.toImmutableList()
+    }
+
+    override suspend fun getMyWakeupSongs(): ImmutableList<WakeupSongResponse> {
+        return safeRequest {
+            client.get(DodamUrl.WakeupSong.MY)
+                .body<Response<List<WakeupSongResponse>>>()
+        }.toImmutableList()
+    }
+
+    override suspend fun getPendingWakeupSongs(): ImmutableList<WakeupSongResponse> {
+        return safeRequest {
+            client.get(DodamUrl.WakeupSong.PENDING)
+                .body<Response<List<WakeupSongResponse>>>()
+        }.toImmutableList()
+    }
+
+    override suspend fun deleteWakeupSong(id: Long) {
+        return defaultSafeRequest {
+            client.delete(DodamUrl.WakeupSong.MY + "/$id")
+                .body<DefaultResponse>()
+        }
     }
 }
