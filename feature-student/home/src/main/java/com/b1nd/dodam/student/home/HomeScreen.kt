@@ -46,10 +46,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.DodamTopAppBar
-import com.b1nd.dodam.dds.component.button.DodamIconButton
 import com.b1nd.dodam.dds.foundation.DodamIcons
 import com.b1nd.dodam.dds.foundation.DodamShape
-import com.b1nd.dodam.dds.style.BellIcon
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.style.TitleLarge
@@ -71,7 +69,7 @@ import com.b1nd.dodam.ui.icons.DodamLogo
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateToWakeupSongScreen: () -> Unit) {
+internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateToAskOut: () -> Unit, navigateToWakeupSongScreen: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
@@ -97,6 +95,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateToWa
                 fetchBanner()
             }
         },
+        navigateToAskOut = navigateToAskOut,
     )
 }
 
@@ -118,6 +117,7 @@ private fun HomeScreen(
     fetchNightStudy: () -> Unit,
     fetchSchedule: () -> Unit,
     onRefresh: () -> Unit,
+    navigateToAskOut: () -> Unit,
 ) {
     val scrollState = rememberLazyListState()
 
@@ -151,11 +151,12 @@ private fun HomeScreen(
                             tint = MaterialTheme.colorScheme.primary,
                         )
                     },
-                    actions = {
-                        DodamIconButton(onClick = { /*TODO*/ }) {
-                            BellIcon(modifier = Modifier.size(28.dp))
-                        }
-                    },
+//                    TODO Alarm feature
+//                    actions = {
+//                        DodamIconButton(onClick = { /*TODO*/ }) {
+//                            BellIcon(modifier = Modifier.size(28.dp))
+//                        }
+//                    },
                 )
                 AnimatedVisibility(scrollState.canScrollBackward) {
                     Box(
@@ -201,7 +202,7 @@ private fun HomeScreen(
                 item {
                     WakeupSongCard(
                         uiState = wakeupSongUiState,
-                        onNextClick = { navigateToWakeupSongScreen() },
+                        onNextClick = navigateToWakeupSongScreen,
                         navigateToWakeupSongApply = { /* TODO : Navigate to Add Wakeup screen */ },
                         showShimmer = showShimmer,
                         fetchWakeupSong = fetchWakeupSong,
@@ -215,8 +216,8 @@ private fun HomeScreen(
                             modifier = Modifier.weight(1f),
                             uiState = outUiState,
                             showShimmer = showShimmer,
-                            navigateToOut = { /* TODO : Navigate to outing screen */ },
-                            navigateToOutApply = { /*TODO : Navigate to Ask Out screen*/ },
+                            navigateToOut = { /*TODO : Navigate to Out screen*/ },
+                            navigateToOutApply = navigateToAskOut,
                         ) {
                         }
 
@@ -336,7 +337,7 @@ internal fun DodamContainer(
             Box(
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.65f),
+                        color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(100),
                     )
                     .padding(7.dp),

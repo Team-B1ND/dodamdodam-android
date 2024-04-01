@@ -36,7 +36,8 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterial3Api
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject lateinit var datastoreRepository: DatastoreRepository
+    @Inject
+    lateinit var datastoreRepository: DatastoreRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

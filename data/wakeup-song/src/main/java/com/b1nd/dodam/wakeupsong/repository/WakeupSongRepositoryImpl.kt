@@ -55,4 +55,14 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
             .asResult()
             .flowOn(dispatcher)
     }
+
+    override fun deleteWakeupSong(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                network.deleteWakeupSongs(id),
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
 }

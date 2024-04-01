@@ -1,12 +1,15 @@
 package com.b1nd.dodam.wakeupsong.api
 
 import com.b1nd.dodam.network.core.DodamUrl
+import com.b1nd.dodam.network.core.model.DefaultResponse
 import com.b1nd.dodam.network.core.model.Response
+import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.network.core.util.safeRequest
 import com.b1nd.dodam.wakeupsong.datasource.WakeupSongDataSource
 import com.b1nd.dodam.wakeupsong.model.WakeupSongResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import javax.inject.Inject
@@ -38,5 +41,12 @@ internal class WakeupSongService @Inject constructor(
             client.get(DodamUrl.WakeupSong.PENDING)
                 .body<Response<List<WakeupSongResponse>>>()
         }.toImmutableList()
+    }
+
+    override suspend fun deleteWakeupSongs(id: Long) {
+        return defaultSafeRequest {
+            client.delete(DodamUrl.WakeupSong.DELETE + id.toString())
+                .body<DefaultResponse>()
+        }
     }
 }

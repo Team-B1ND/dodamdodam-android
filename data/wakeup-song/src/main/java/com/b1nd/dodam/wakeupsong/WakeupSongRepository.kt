@@ -9,4 +9,5 @@ interface WakeupSongRepository {
     fun getAllowedWakeupSongs(year: Int, month: Int, day: Int): Flow<Result<ImmutableList<WakeupSong>>>
     fun getMyWakeupSongs(): Flow<Result<ImmutableList<WakeupSong>>>
     fun getPendingWakeupSongs(): Flow<Result<ImmutableList<WakeupSong>>>
+    fun deleteWakeupSong(id: Long): Flow<Result<Unit>>
 }

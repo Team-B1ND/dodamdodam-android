@@ -101,6 +101,11 @@ internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick
                         }
 
                         if (meals.isNotEmpty()) {
+                            mealTitle = when {
+                                currentTime > LocalTime.of(19, 10) -> "내일의 "
+                                else -> "오늘의 "
+                            } + uiState.data.keys.toImmutableList()[mealPagerState.currentPage]
+
                             Column {
                                 HorizontalPager(
                                     modifier = Modifier

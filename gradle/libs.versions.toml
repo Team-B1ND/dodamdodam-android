@@ -30,8 +30,9 @@ material = "1.11.0"
 bottomsheetdialog = "1.3.1"
 ktor = "2.3.8"
 coil = "2.6.0"
-dds = "0.1.10"
+dds = "0.1.13"
 composeinvestigator = "1.5.10-0.2.1"
+wheel-picker = "1.1.11"
 
 # test
 junit = "4.13.2"
@@ -91,6 +92,7 @@ ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version
 ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 dodam-design-system = { group = "com.github.Team-B1ND", name = "dds-android", version.ref = "dds" }
+wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "wheel-picker" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
