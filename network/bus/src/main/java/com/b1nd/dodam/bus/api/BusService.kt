@@ -53,7 +53,7 @@ internal class BusService @Inject constructor(
 
     override suspend fun getMyBus(): BusResponse {
         return safeRequest {
-            client.post(DodamUrl.Bus.APPLY).body<Response<BusResponse>>()
+            client.get(DodamUrl.Bus.APPLY).body<Response<BusResponse>>()
         }
     }
 }
