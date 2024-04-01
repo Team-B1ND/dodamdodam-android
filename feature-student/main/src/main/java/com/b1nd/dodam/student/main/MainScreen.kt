@@ -76,6 +76,8 @@ internal fun MainScreen(
                 navigateToNightStudy = { /*navController::navigateToNightStudy*/ },
                 navigateToOut = { /*navController::navigateToOuting*/ },
                 navigateToAskOut = navigateToAddOuting,
+                navigateToAddOuting,
+                navigateToWakeUpSong,
             )
             mealScreen()
             nightStudyScreen(navigateToAskNightStudy)
