@@ -50,6 +50,7 @@ import com.b1nd.dodam.dds.style.ChevronRightIcon
 import com.b1nd.dodam.dds.style.TitleLarge
 import com.b1nd.dodam.ui.component.InputField
 import com.commandiron.wheel_picker_compose.WheelDatePicker
+import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlinx.datetime.toKotlinLocalDate
@@ -64,7 +65,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
     var nightStudyReason by remember { mutableStateOf("") }
 
     var nightStudyStartDate by remember { mutableStateOf(LocalDate.now()) }
-    var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(14)) }
+    var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(13)) }
 
     var nightStudyPlace by remember { mutableStateOf(Place.PROGRAMMING_1) }
 
@@ -105,7 +106,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
 
     if (showDatePicker.first) {
         ModalBottomSheet(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             onDismissRequest = { showDatePicker = Pair(false, "") },
         ) {
             Column(
@@ -130,6 +131,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                         nightStudyEndDate
                     },
                     minDate = LocalDate.now(),
+                    maxDate = LocalDate.now().plusDays(13),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
                     textColor = MaterialTheme.colorScheme.onSurface,
                     onSnappedDate = {
@@ -186,6 +188,9 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                             },
                         )
                     }
+                    item {
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
                 }
             }
         }
@@ -193,7 +198,8 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .imePadding(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             DodamSmallTopAppBar(
@@ -213,7 +219,6 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                     .fillMaxSize()
                     .verticalScroll(scrollState)
                     .padding(horizontal = 16.dp)
-                    .imePadding(),
             ) {
                 Column(
                     modifier = Modifier
@@ -222,7 +227,8 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                     Spacer(modifier = Modifier.height(16.dp))
 
                     DodamTextField(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth(),
                         value = nightStudyReason,
                         onValueChange = { nightStudyReason = it },
                         textStyle = MaterialTheme.typography.bodyLarge,
@@ -383,7 +389,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                         endAt = nightStudyEndDate.toKotlinLocalDate(),
                     )
                 },
-                enabled = nightStudyReason.isNotBlank(),
+                enabled = nightStudyReason.isNotBlank()  && nightStudyStartDate < nightStudyEndDate,
                 isLoading = uiState.isLoading,
             ) {
                 Text(text = "확인")

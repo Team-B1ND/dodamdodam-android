@@ -3,6 +3,7 @@ package com.b1nd.dodam.asknightstudy
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.asknightstudy.model.AskNightStudyUiState
+import com.b1nd.dodam.common.exception.BadRequestException
 import com.b1nd.dodam.common.exception.ForbiddenException
 import com.b1nd.dodam.common.exception.NotFoundException
 import com.b1nd.dodam.common.result.Result
@@ -29,7 +30,14 @@ class AskNightStudyViewModel @Inject constructor(
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
 
-    fun askNightStudy(place: Place, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) =
+    fun askNightStudy(
+        place: Place,
+        content: String,
+        doNeedPhone: Boolean,
+        reasonForPhone: String?,
+        startAt: LocalDate,
+        endAt: LocalDate
+    ) =
         viewModelScope.launch {
             nightStudyRepository.askNightStudy(
                 place,
@@ -65,7 +73,7 @@ class AskNightStudyViewModel @Inject constructor(
                             )
                         }
                         when (result.error) {
-                            is ForbiddenException, is NotFoundException -> {
+                            is ForbiddenException, is NotFoundException, is BadRequestException -> {
                                 _event.emit(Event.ShowDialog)
                             }
                         }

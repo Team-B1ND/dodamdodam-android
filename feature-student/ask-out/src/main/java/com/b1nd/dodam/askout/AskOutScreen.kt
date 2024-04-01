@@ -1,6 +1,5 @@
 package com.b1nd.dodam.askout
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,11 +46,11 @@ import com.b1nd.dodam.dds.style.TitleLarge
 import com.b1nd.dodam.ui.component.InputField
 import com.commandiron.wheel_picker_compose.WheelDatePicker
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
+import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.datetime.toKotlinLocalDateTime
 
 @ExperimentalMaterial3Api
 @Composable
@@ -128,6 +127,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                         outingEndDateTime
                     },
                     minDateTime = LocalDateTime.now(),
+                    maxDateTime = LocalDateTime.now().plusHours(24),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
                     textColor = MaterialTheme.colorScheme.onSurface,
                     onSnappedDateTime = {
@@ -169,6 +169,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                         sleepoverEndDate
                     },
                     minDate = LocalDate.now(),
+                    maxDate = LocalDate.now().plusMonths(1),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
                     textColor = MaterialTheme.colorScheme.onSurface,
                     onSnappedDate = {
@@ -341,10 +342,11 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                     }
                 },
                 enabled = if (selectedIndex == 0) {
-                    outingReason.isNotBlank()
+                    outingReason.isNotBlank() && outingStartDateTime < outingEndDateTime
                 } else {
-                    sleepoverReason.isNotBlank()
+                    sleepoverReason.isNotBlank() && sleepoverStartDate < sleepoverEndDate
                 },
+                isLoading = uiState.isLoading
             ) {
                 Text(text = "확인")
             }
