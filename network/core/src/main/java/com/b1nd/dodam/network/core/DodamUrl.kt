@@ -6,6 +6,7 @@ object DodamUrl {
 
     const val MEAL = "$TEST_URL/meal"
     const val AUTH = "$TEST_URL/auth"
+    const val BUS = "$TEST_URL/bus"
     const val WAKEUP_SONG = "$TEST_URL/wakeup-song"
     const val SLEEPOVER = "$TEST_URL/out-sleeping"
     const val OUTING = "$TEST_URL/out-going"
