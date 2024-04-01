@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,7 +21,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -42,6 +42,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
@@ -55,9 +58,10 @@ import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
 import com.b1nd.dodam.dds.component.DodamToast
 import com.b1nd.dodam.dds.component.button.DodamCTAButton
 import com.b1nd.dodam.dds.component.button.DodamLargeFilledButton
-import com.b1nd.dodam.dds.foundation.DodamIcons
+import com.b1nd.dodam.dds.foundation.DodamColor
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.BodyMedium
+import com.b1nd.dodam.dds.style.CheckmarkCircleFilledIcon
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.style.TitleLarge
 import com.b1nd.dodam.dds.style.TitleMedium
@@ -77,7 +81,7 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
         viewModel.event.collect { event ->
             when (event) {
                 is Event.DeleteWakeupSong -> {
-                    snackbarHostState.showSnackbar("기상송을 삭제했어요.")
+                    snackbarHostState.showSnackbar("기상송을 삭제했어요")
                     viewModel.getMyWakeupSong()
                 }
             }
@@ -102,7 +106,17 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
             SnackbarHost(hostState = snackbarHostState) {
                 Column {
                     DodamToast(text = it.visuals.message, trailingIcon = {
-                        Icon(imageVector = DodamIcons.Checkmark, contentDescription = "check")
+                        CheckmarkCircleFilledIcon(
+                            modifier = Modifier
+                                .size(20.dp)
+                                .drawBehind {
+                                    drawRoundRect(
+                                        color = DodamColor.White,
+                                        topLeft = Offset(12f, 12f),
+                                        size = Size(30f, 30f),
+                                    )
+                                },
+                        )
                     })
                     Spacer(modifier = Modifier.height(90.dp))
                 }

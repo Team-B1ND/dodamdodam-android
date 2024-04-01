@@ -59,7 +59,7 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
     override fun deleteWakeupSong(id: Long): Flow<Result<Unit>> {
         return flow {
             emit(
-                network.deleteWakeupSongs(id),
+                network.deleteWakeupSong(id),
             )
         }
             .asResult()

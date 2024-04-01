@@ -7,5 +7,5 @@ interface WakeupSongDataSource {
     suspend fun getAllowedWakeupSongs(year: Int, month: Int, day: Int): ImmutableList<WakeupSongResponse>
     suspend fun getMyWakeupSongs(): ImmutableList<WakeupSongResponse>
     suspend fun getPendingWakeupSongs(): ImmutableList<WakeupSongResponse>
-    suspend fun deleteWakeupSongs(id: Long): Unit
+    suspend fun deleteWakeupSong(id: Long)
 }
