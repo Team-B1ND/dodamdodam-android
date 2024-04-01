@@ -61,4 +61,6 @@ include(
     ":feature-student:ask-out",
     ":feature-student:ask-nightstudy",
     ":feature:setting",
+    ":network:point",
+    ":data:point"
 )
