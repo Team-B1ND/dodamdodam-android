@@ -1,0 +1,17 @@
+package com.b1nd.dodam.bus.di
+
+import com.b1nd.dodam.bus.api.BusService
+import com.b1nd.dodam.bus.datasource.BusDataSource
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal interface DataSourceModule {
+    @Binds
+    @Provides
+    fun provideBusDataSource(busService: BusService): BusDataSource
+}
