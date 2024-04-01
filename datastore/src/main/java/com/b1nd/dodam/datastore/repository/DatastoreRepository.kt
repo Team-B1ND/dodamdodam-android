@@ -41,4 +41,14 @@ class DatastoreRepository @Inject constructor(
             )
         }
     }
+
+    suspend fun deleteUser() {
+        dataStore.updateData { user ->
+            user.copy(
+                id = "",
+                pw = "",
+                token = "",
+            )
+        }
+    }
 }
