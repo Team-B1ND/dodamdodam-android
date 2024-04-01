@@ -101,7 +101,7 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
         )
         wakeupSongScreen(
             onAddWakeupSongClick = { TODO("navigate to add wakeup song screen") },
-            popBackStack = { navController.popBackStack() },
+            popBackStack = navController::popBackStack,
         )
         askOutScreen(
             popBackStack = navController::popBackStack,

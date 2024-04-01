@@ -31,7 +31,6 @@ object DodamUrl {
         const val ALLOWED = "$WAKEUP_SONG/allowed"
         const val MY = "$WAKEUP_SONG/my"
         const val PENDING = "$WAKEUP_SONG/pending"
-        const val DELETE = "$WAKEUP_SONG/my/"
     }
 
     object Sleepover {

@@ -6,7 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.b1nd.dodam.wakeupsong.WakeupSongScreen
 
-const val WAKEUP_SONG_ROUTE = "wakeup-song"
+const val WAKEUP_SONG_ROUTE = "wakeup_song"
 
 fun NavController.navigateToWakeupSong(navOptions: NavOptions? = null) = navigate(WAKEUP_SONG_ROUTE, navOptions)
 

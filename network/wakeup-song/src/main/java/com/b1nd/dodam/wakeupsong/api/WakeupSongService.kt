@@ -43,9 +43,9 @@ internal class WakeupSongService @Inject constructor(
         }.toImmutableList()
     }
 
-    override suspend fun deleteWakeupSongs(id: Long) {
+    override suspend fun deleteWakeupSong(id: Long) {
         return defaultSafeRequest {
-            client.delete(DodamUrl.WakeupSong.DELETE + id.toString())
+            client.delete(DodamUrl.WakeupSong.MY + "/$id")
                 .body<DefaultResponse>()
         }
     }
