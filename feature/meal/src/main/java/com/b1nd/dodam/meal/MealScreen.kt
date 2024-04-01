@@ -168,7 +168,7 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                                 meal.dinner?.let { dinner ->
                                     MealCard(
                                         mealType = "저녁",
-                                        statusColor = if (meal.date == current && currentMealType == 2)
+                                        statusColor = if (meal.date == current && currentMealType == 3)
                                             MaterialTheme.colorScheme.primary
                                         else MaterialTheme.colorScheme.onSurfaceVariant,
                                         calorie = dinner.calorie,

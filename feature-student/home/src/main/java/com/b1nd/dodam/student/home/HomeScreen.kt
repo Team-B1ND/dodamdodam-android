@@ -71,7 +71,14 @@ import com.b1nd.dodam.ui.icons.DodamLogo
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateToAskOut: () -> Unit) {
+internal fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    navigateToAskOut: () -> Unit,
+    navigateToMeal: () -> Unit,
+    navigateToAskNightStudy: () -> Unit,
+    navigateToNightStudy: () -> Unit,
+    navigateToOut: () -> Unit
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
@@ -97,6 +104,10 @@ internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateToAs
             }
         },
         navigateToAskOut = navigateToAskOut,
+        navigateToAskNightStudy = navigateToAskNightStudy,
+        navigateToMeal = navigateToMeal,
+        navigateToNightStudy = navigateToNightStudy,
+        navigateToOut = navigateToOut,
     )
 }
 
@@ -118,6 +129,10 @@ private fun HomeScreen(
     fetchSchedule: () -> Unit,
     onRefresh: () -> Unit,
     navigateToAskOut: () -> Unit,
+    navigateToMeal: () -> Unit,
+    navigateToAskNightStudy: () -> Unit,
+    navigateToNightStudy: () -> Unit,
+    navigateToOut: () -> Unit
 ) {
     val scrollState = rememberLazyListState()
 
@@ -193,7 +208,7 @@ private fun HomeScreen(
                     MealCard(
                         uiState = mealUiState,
                         showShimmer = showShimmer,
-                        onContentClick = { /* TODO : Navigate to Meal screen */ },
+                        onContentClick = navigateToMeal,
                         fetchMeal = fetchMeal,
                     )
                 }
@@ -215,7 +230,7 @@ private fun HomeScreen(
                             modifier = Modifier.weight(1f),
                             uiState = outUiState,
                             showShimmer = showShimmer,
-                            navigateToOut = { /*TODO : Navigate to Out screen*/ },
+                            navigateToOut = navigateToOut,
                             navigateToOutApply = navigateToAskOut,
                         ) {
                         }
@@ -226,8 +241,8 @@ private fun HomeScreen(
                             modifier = Modifier.weight(1f),
                             uiState = nightStudyUiState,
                             showShimmer = showShimmer,
-                            navigateToAskNightStudy = { /*TODO : Navigate to Ask NightStudy screen*/ },
-                            navigateToNightStudy = { /*TODO : Navigate to NightStudy screen*/ },
+                            navigateToAskNightStudy = navigateToAskNightStudy,
+                            navigateToNightStudy = navigateToNightStudy,
                             fetchNightStudy = fetchNightStudy,
                         )
                     }
