@@ -1,27 +1,32 @@
-package com.b1nd.dodam.wakeupsong.navigation
+package com.b1nd.dodam.setting.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.b1nd.dodam.wakeupsong.WakeupSongScreen
+import com.b1nd.dodam.setting.SettingScreen
 
-const val WAKEUP_SONG_ROUTE = "wakeup_song"
+const val SETTING_ROUTE = "setting"
 
-fun NavController.navigateToWakeupSong(navOptions: NavOptions? = null) = navigate(WAKEUP_SONG_ROUTE, navOptions)
+fun NavController.navigateToSetting(navOptions: NavOptions? = null) = navigate(SETTING_ROUTE, navOptions)
 
-fun NavGraphBuilder.wakeupSongScreen(onAddWakeupSongClick: () -> Unit, popBackStack: () -> Unit) {
+@ExperimentalMaterial3Api
+fun NavGraphBuilder.settingScreen(
+    popBackStack: () -> Unit,
+    logout: () -> Unit,
+) {
     composable(
-        route = WAKEUP_SONG_ROUTE,
+        route = SETTING_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
-        WakeupSongScreen(
-            onAddWakeupSongClick,
-            popBackStack,
+        SettingScreen(
+            popBackStack = popBackStack,
+            logout = logout,
         )
     }
 }
