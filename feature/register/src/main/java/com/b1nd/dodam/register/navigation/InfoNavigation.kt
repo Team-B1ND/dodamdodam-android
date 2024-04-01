@@ -1,5 +1,6 @@
 package com.b1nd.dodam.register.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -13,7 +14,13 @@ fun NavController.navigateToInfo(navOptions: NavOptions? = null) = navigate(INFO
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, String, String) -> Unit, onBackClick: () -> Unit) {
-    composable(route = INFO_ROUTE) {
+    composable(
+        route = INFO_ROUTE,
+        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
+        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left) },
+        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right) },
+        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
+    ) {
         InfoScreen(
             onNextClick = onNextClick,
             onBackClick = onBackClick,
