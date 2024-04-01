@@ -46,11 +46,11 @@ import com.b1nd.dodam.dds.style.TitleLarge
 import com.b1nd.dodam.ui.component.InputField
 import com.commandiron.wheel_picker_compose.WheelDatePicker
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
-import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
 
 @ExperimentalMaterial3Api
 @Composable
@@ -346,7 +346,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                 } else {
                     sleepoverReason.isNotBlank() && sleepoverStartDate < sleepoverEndDate
                 },
-                isLoading = uiState.isLoading
+                isLoading = uiState.isLoading,
             ) {
                 Text(text = "확인")
             }

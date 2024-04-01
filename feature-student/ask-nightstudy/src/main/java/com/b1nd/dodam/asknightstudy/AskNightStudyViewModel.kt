@@ -30,14 +30,7 @@ class AskNightStudyViewModel @Inject constructor(
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
 
-    fun askNightStudy(
-        place: Place,
-        content: String,
-        doNeedPhone: Boolean,
-        reasonForPhone: String?,
-        startAt: LocalDate,
-        endAt: LocalDate
-    ) =
+    fun askNightStudy(place: Place, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) =
         viewModelScope.launch {
             nightStudyRepository.askNightStudy(
                 place,

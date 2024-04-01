@@ -77,7 +77,7 @@ internal fun HomeScreen(
     navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
     navigateToNightStudy: () -> Unit,
-    navigateToOut: () -> Unit
+    navigateToOut: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -132,7 +132,7 @@ private fun HomeScreen(
     navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
     navigateToNightStudy: () -> Unit,
-    navigateToOut: () -> Unit
+    navigateToOut: () -> Unit,
 ) {
     val scrollState = rememberLazyListState()
 

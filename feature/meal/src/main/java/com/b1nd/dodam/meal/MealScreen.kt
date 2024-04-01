@@ -1,6 +1,5 @@
 package com.b1nd.dodam.meal
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,15 +25,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,11 +41,11 @@ import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.meal.viewmodel.MealViewModel
 import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import kotlinx.datetime.toKotlinLocalDate
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import kotlin.math.roundToInt
+import kotlinx.datetime.toKotlinLocalDate
 
 @ExperimentalMaterial3Api
 @Composable
@@ -71,8 +66,11 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
     LaunchedEffect(lazyListState.canScrollForward) {
         if (!lazyListState.canScrollForward) {
             val date = LocalDate.now().plusMonths(plus)
-            if (plus == 0L) viewModel.getMealOfMonth(date.year, date.monthValue)
-            else viewModel.fetchMealOfMonth(date.year, date.monthValue)
+            if (plus == 0L) {
+                viewModel.getMealOfMonth(date.year, date.monthValue)
+            } else {
+                viewModel.fetchMealOfMonth(date.year, date.monthValue)
+            }
             plus++
         }
     }
@@ -81,7 +79,7 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
         topBar = {
             Column {
                 DodamTopAppBar(
-                    title = { Text(text = "급식") }
+                    title = { Text(text = "급식") },
                 )
                 AnimatedVisibility(lazyListState.canScrollBackward) {
                     Box(
@@ -101,27 +99,30 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            state = lazyListState
+            state = lazyListState,
         ) {
             if (!uiState.showShimmer) {
                 if (uiState.meal.isNotEmpty()) {
                     items(
                         items = uiState.meal,
-                        key = { it.date.toString() }
+                        key = { it.date.toString() },
                     ) { meal ->
                         Column(
                             verticalArrangement = Arrangement.spacedBy(12.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             if (meal.exists) {
                                 Box(
                                     modifier = Modifier
                                         .background(
-                                            if (current == meal.date) MaterialTheme.colorScheme.primary
-                                            else MaterialTheme.colorScheme.secondaryContainer,
-                                            CircleShape
+                                            if (current == meal.date) {
+                                                MaterialTheme.colorScheme.primary
+                                            } else {
+                                                MaterialTheme.colorScheme.secondaryContainer
+                                            },
+                                            CircleShape,
                                         )
-                                        .padding(horizontal = 60.dp, vertical = 4.dp)
+                                        .padding(horizontal = 60.dp, vertical = 4.dp),
                                 ) {
                                     BodyMedium(
                                         text = String.format(
@@ -138,41 +139,50 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                                                 "일",
                                             )[meal.date.dayOfWeek.value - 1],
                                         ),
-                                        color = if (current == meal.date) MaterialTheme.colorScheme.onPrimary
-                                        else MaterialTheme.colorScheme.onSecondaryContainer
+                                        color = if (current == meal.date) {
+                                            MaterialTheme.colorScheme.onPrimary
+                                        } else {
+                                            MaterialTheme.colorScheme.onSecondaryContainer
+                                        },
                                     )
                                 }
 
                                 meal.breakfast?.let { breakfast ->
                                     MealCard(
                                         mealType = "아침",
-                                        statusColor = if (meal.date == current && currentMealType == 1)
+                                        statusColor = if (meal.date == current && currentMealType == 1) {
                                             MaterialTheme.colorScheme.primary
-                                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurfaceVariant
+                                        },
                                         calorie = breakfast.calorie,
-                                        menus = breakfast.details
+                                        menus = breakfast.details,
                                     )
                                 }
 
                                 meal.lunch?.let { lunch ->
                                     MealCard(
                                         mealType = "점심",
-                                        statusColor = if (meal.date == current && currentMealType == 2)
+                                        statusColor = if (meal.date == current && currentMealType == 2) {
                                             MaterialTheme.colorScheme.primary
-                                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurfaceVariant
+                                        },
                                         calorie = lunch.calorie,
-                                        menus = lunch.details
+                                        menus = lunch.details,
                                     )
                                 }
 
                                 meal.dinner?.let { dinner ->
                                     MealCard(
                                         mealType = "저녁",
-                                        statusColor = if (meal.date == current && currentMealType == 3)
+                                        statusColor = if (meal.date == current && currentMealType == 3) {
                                             MaterialTheme.colorScheme.primary
-                                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurfaceVariant
+                                        },
                                         calorie = dinner.calorie,
-                                        menus = dinner.details
+                                        menus = dinner.details,
                                     )
                                 }
                             }
@@ -182,11 +192,11 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                     item {
                         Box(
                             modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             LabelLarge(
                                 text = "이번 달 급식이 없어요.",
-                                color = MaterialTheme.colorScheme.tertiary
+                                color = MaterialTheme.colorScheme.tertiary,
                             )
                         }
                     }
@@ -198,16 +208,16 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                             .fillMaxWidth()
                             .background(
                                 MaterialTheme.colorScheme.surfaceContainer,
-                                MaterialTheme.shapes.large
+                                MaterialTheme.shapes.large,
                             )
                             .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
                                 modifier = Modifier
                                     .size(52.dp, 27.dp)
-                                    .background(shimmerEffect(), CircleShape)
+                                    .background(shimmerEffect(), CircleShape),
                             )
 
                             Spacer(modifier = Modifier.weight(1f))
@@ -215,41 +225,41 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                             Box(
                                 modifier = Modifier
                                     .size(52.dp, 20.dp)
-                                    .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
                             )
                         }
 
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
                         ) {
                             Box(
                                 modifier = Modifier
                                     .size(140.dp, 18.dp)
-                                    .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
                             )
 
                             Box(
                                 modifier = Modifier
                                     .size(110.dp, 18.dp)
-                                    .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
                             )
 
                             Box(
                                 modifier = Modifier
                                     .size(60.dp, 18.dp)
-                                    .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
                             )
 
                             Box(
                                 modifier = Modifier
                                     .size(120.dp, 18.dp)
-                                    .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
                             )
 
                             Box(
                                 modifier = Modifier
                                     .size(110.dp, 18.dp)
-                                    .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
                             )
                         }
                     }
@@ -263,16 +273,11 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun MealCard(
-    mealType: String,
-    statusColor: Color,
-    calorie: Float,
-    menus: List<Menu>
-) {
+private fun MealCard(mealType: String, statusColor: Color, calorie: Float, menus: List<Menu>) {
     DodamCard(
         statusText = mealType,
         statusColor = statusColor,
-        labelText = "${calorie.roundToInt()} Kcal"
+        labelText = "${calorie.roundToInt()} Kcal",
     ) {
         BodyLarge(text = menus.joinToString("\n") { it.name })
     }

@@ -27,14 +27,12 @@ import com.b1nd.dodam.dds.component.rememberDodamNavigationItem
 import com.b1nd.dodam.dds.foundation.DodamIcons
 import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
-import com.b1nd.dodam.meal.navigation.navigationToMeal
 import com.b1nd.dodam.member.navigation.ALL_ROUTE
 import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.outing.nanigation.OUTING_ROUTE
-import com.b1nd.dodam.outing.nanigation.navigateToOuting
 import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.student.home.navigation.homeScreen
@@ -72,10 +70,10 @@ internal fun MainScreen(
         ) {
             homeScreen(
                 navigateToAskNightStudy = navigateToAskNightStudy,
-                navigateToMeal = {/*navController::navigationToMeal*/},
-                navigateToNightStudy = {/*navController::navigateToNightStudy*/},
-                navigateToOut = {/*navController::navigateToOuting*/},
-                navigateToAskOut = navigateToAddOuting
+                navigateToMeal = { /*navController::navigationToMeal*/ },
+                navigateToNightStudy = { /*navController::navigateToNightStudy*/ },
+                navigateToOut = { /*navController::navigateToOuting*/ },
+                navigateToAskOut = navigateToAddOuting,
             )
             mealScreen()
             nightStudyScreen(navigateToAskNightStudy)

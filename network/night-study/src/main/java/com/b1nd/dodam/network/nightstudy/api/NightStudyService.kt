@@ -29,14 +29,7 @@ internal class NightStudyService @Inject constructor(
         }.toImmutableList()
     }
 
-    override suspend fun askNightStudy(
-        place: String,
-        content: String,
-        doNeedPhone: Boolean,
-        reasonForPhone: String?,
-        startAt: LocalDate,
-        endAt: LocalDate,
-    ) {
+    override suspend fun askNightStudy(place: String, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) {
         return defaultSafeRequest {
             network.post(DodamUrl.NIGHT_STUDY) {
                 setBody(

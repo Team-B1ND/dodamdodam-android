@@ -63,9 +63,9 @@ import com.b1nd.dodam.nightstudy.viewmodel.Event
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.icons.SmileMoon
-import kotlinx.datetime.toJavaLocalDateTime
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import kotlinx.datetime.toJavaLocalDateTime
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
@@ -91,13 +91,12 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
         viewModel.event.collect {
             when (it) {
                 is Event.Error -> {
-
                 }
 
                 is Event.ShowToast -> {
                     showDialog = false
                     snackbarHostState.showSnackbar(
-                        message = "심야 자습을 삭제했어요"
+                        message = "심야 자습을 삭제했어요",
                     )
                 }
             }
@@ -113,9 +112,9 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                     onClick = { viewModel.deleteNightStudy(id) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = MaterialTheme.colorScheme.onError
+                        contentColor = MaterialTheme.colorScheme.onError,
                     ),
-                    isLoading = uiState.isLoading
+                    isLoading = uiState.isLoading,
                 ) {
                     Text(text = "삭제")
                 }
@@ -126,9 +125,9 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                     onClick = { showDialog = false },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                     ),
-                    enabled = !uiState.isLoading
+                    enabled = !uiState.isLoading,
                 ) {
                     Text(text = "취소")
                 }
@@ -138,7 +137,7 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
             },
             text = {
                 Text(text = reason)
-            }
+            },
         )
     }
 
@@ -182,17 +181,17 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                             drawRoundRect(
                                                 color = DodamColor.White,
                                                 topLeft = Offset(12f, 12f),
-                                                size = Size(30f, 30f)
+                                                size = Size(30f, 30f),
                                             )
-                                        }
+                                        },
                                 )
-                            }
+                            },
                         )
                         Spacer(modifier = Modifier.height(100.dp))
                     }
                 }
             }
-        }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -204,7 +203,7 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
             Spacer(modifier = Modifier.height(16.dp))
 
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 if (uiState.nightStudy.isNotEmpty()) {
                     items(
@@ -242,7 +241,7 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                         reason = nightStudy.content
                                         showDialog = true
                                     },
-                                    interactionColor = Color.Transparent
+                                    interactionColor = Color.Transparent,
                                 ),
                             statusText = when (nightStudy.status) {
                                 Status.ALLOWED -> "승인됨"
@@ -267,27 +266,27 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                     "토",
                                     "일",
                                 )[nightStudy.modifiedAt.dayOfWeek.value - 1],
-                            )
+                            ),
                         ) {
                             BodyMedium(
                                 text = nightStudy.content,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
                             )
 
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(1.dp)
-                                    .background(MaterialTheme.colorScheme.outlineVariant)
+                                    .background(MaterialTheme.colorScheme.outlineVariant),
                             )
 
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth(),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
                             ) {
                                 Row(
-                                    verticalAlignment = Alignment.Bottom
+                                    verticalAlignment = Alignment.Bottom,
                                 ) {
                                     BodyLarge(
                                         modifier = Modifier.padding(end = 4.dp),
@@ -296,11 +295,11 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                             nightStudy.startAt.monthNumber,
                                             nightStudy.startAt.dayOfMonth,
                                         ),
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = MaterialTheme.colorScheme.onSurface,
                                     )
                                     LabelLarge(
                                         text = "시작",
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
 
                                     Spacer(modifier = Modifier.weight(1f))
@@ -312,11 +311,11 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                             nightStudy.endAt.monthNumber,
                                             nightStudy.endAt.dayOfMonth,
                                         ),
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = MaterialTheme.colorScheme.onSurface,
                                     )
                                     LabelLarge(
                                         text = "복귀",
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
 
@@ -324,11 +323,15 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                     DodamLinearProgressIndicator(
                                         modifier = Modifier.fillMaxWidth(),
                                         progress = progress,
-                                        color = if (nightStudy.status == Status.ALLOWED)
+                                        color = if (nightStudy.status == Status.ALLOWED) {
                                             MaterialTheme.colorScheme.primary
-                                        else MaterialTheme.colorScheme.onSurfaceVariant
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurfaceVariant
+                                        },
                                     )
-                                } /* TODO : 거절 사유 만들어지면 주석 해제
+                                }
+
+                                /* TODO : 거절 사유 만들어지면 주석 해제
                                     else {
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically,
@@ -345,23 +348,24 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                                 fontWeight = FontWeight.Medium
                                             )
                                         }
-                                    }*/
+                                    }
+                                 */
 
                                 if (nightStudy.doNeedPhone) {
                                     Row(
                                         modifier = Modifier.padding(top = 4.dp),
                                         verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                                     ) {
                                         LabelLarge(
                                             text = "휴대폰 사유",
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
 
                                         BodyMedium(
                                             text = nightStudy.reasonForPhone!!,
                                             color = MaterialTheme.colorScheme.onSurface,
-                                            fontWeight = FontWeight.Medium
+                                            fontWeight = FontWeight.Medium,
                                         )
                                     }
                                 }
@@ -375,10 +379,10 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                 .fillMaxWidth()
                                 .background(
                                     MaterialTheme.colorScheme.surfaceContainer,
-                                    MaterialTheme.shapes.large
+                                    MaterialTheme.shapes.large,
                                 )
                                 .padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Image(
                                 modifier = Modifier.size(36.dp),
@@ -397,8 +401,8 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                 onClick = onAddClick,
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                                )
+                                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                ),
                             ) {
                                 Text(text = "심야 자습 신청하기")
                             }
