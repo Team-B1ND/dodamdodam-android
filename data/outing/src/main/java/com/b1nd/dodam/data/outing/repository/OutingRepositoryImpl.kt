@@ -47,4 +47,16 @@ internal class OutingRepositoryImpl @Inject constructor(
             emit(network.askSleepover(reason, startAt, endAt))
         }.asResult().flowOn(dispatcher)
     }
+
+    override fun deleteOuting(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(network.deleteOuting(id))
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun deleteSleepover(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(network.deleteSleepover(id))
+        }.asResult().flowOn(dispatcher)
+    }
 }

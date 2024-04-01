@@ -1,5 +1,6 @@
 package com.b1nd.dodam.askout.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -15,6 +16,8 @@ fun NavController.navigateToAskOut(navOptions: NavOptions? = null) = navigate(AS
 fun NavGraphBuilder.askOutScreen(popBackStack: () -> Unit) {
     composable(
         route = ASK_OUT_ROUTE,
+        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
+        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         AskOutScreen(popBackStack = popBackStack)
     }

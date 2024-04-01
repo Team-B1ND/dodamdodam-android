@@ -1,5 +1,6 @@
 package com.b1nd.dodam.login.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -15,6 +16,10 @@ fun NavController.navigationToLogin(navOptions: NavOptions? = null) = navigate(L
 fun NavGraphBuilder.loginScreen(onBackClick: () -> Unit, navigateToMain: () -> Unit) {
     composable(
         route = LOGIN_ROUTE,
+        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
+        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
+        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
+        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         LoginScreen(
             onBackClick = onBackClick,

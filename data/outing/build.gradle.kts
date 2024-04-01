@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.data.core)
+    api(projects.data.core)
     implementation(projects.network.outing)
     implementation(projects.common)
 
