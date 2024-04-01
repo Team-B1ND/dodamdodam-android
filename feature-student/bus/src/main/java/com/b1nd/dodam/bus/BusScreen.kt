@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -98,34 +99,37 @@ fun BusScreen(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState) {
                 Column {
-                    DodamToast(text = it.visuals.message, trailingIcon = {
-                        if (!uiState.isError) {
-                            CheckmarkCircleFilledIcon(
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .drawBehind {
-                                        drawRoundRect(
-                                            color = DodamColor.White,
-                                            topLeft = Offset(20f, 20f),
-                                            size = Size(45f, 45f),
-                                        )
-                                    },
-                            )
-                        } else {
-                            XMarkCircleIcon(
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .drawBehind {
-                                        drawRoundRect(
-                                            color = DodamColor.White,
-                                            topLeft = Offset(20f, 20f),
-                                            size = Size(45f, 45f),
-                                        )
-                                    },
-                                tint = MaterialTheme.colorScheme.error
-                            )
-                        }
-                    })
+                    DodamToast(
+                        text = it.visuals.message, trailingIcon = {
+                            if (!uiState.isError) {
+                                CheckmarkCircleFilledIcon(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .drawBehind {
+                                            drawRoundRect(
+                                                color = DodamColor.White,
+                                                topLeft = Offset(20f, 20f),
+                                                size = Size(45f, 45f),
+                                            )
+                                        },
+                                )
+                            } else {
+                                XMarkCircleIcon(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .drawBehind {
+                                            drawRoundRect(
+                                                color = DodamColor.White,
+                                                topLeft = Offset(20f, 20f),
+                                                size = Size(45f, 45f),
+                                            )
+                                        },
+                                    tint = MaterialTheme.colorScheme.error
+                                )
+                            }
+                        },
+                        iconColor = if (uiState.isError) MaterialTheme.colorScheme.error else DodamColor.Green
+                    )
                     Spacer(modifier = Modifier.height(90.dp))
                 }
             }

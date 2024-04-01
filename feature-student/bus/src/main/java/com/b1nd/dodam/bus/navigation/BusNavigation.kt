@@ -1,5 +1,6 @@
 package com.b1nd.dodam.bus.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -15,6 +16,10 @@ fun NavController.navigateToBus(navOptions: NavOptions? = null) = navigate(BUS_R
 fun NavGraphBuilder.busScreen(popBackStack: () -> Unit) {
     composable(
         route = BUS_ROUTE,
+        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
+        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
+        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
+        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         BusScreen(popBackStack = popBackStack)
     }
