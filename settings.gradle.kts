@@ -57,6 +57,7 @@ include(
     ":feature-student:all",
     ":data:member",
     ":network:member",
+    ":feature-student:wakeup-song",
     ":feature-student:ask-out",
     ":feature-student:ask-nightstudy",
 )
