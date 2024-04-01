@@ -31,6 +31,8 @@ import com.b1nd.dodam.register.navigation.navigateToInfo
 import com.b1nd.dodam.student.main.navigation.MAIN_ROUTE
 import com.b1nd.dodam.student.main.navigation.mainScreen
 import com.b1nd.dodam.student.main.navigation.navigateToMain
+import com.b1nd.dodam.wakeupsong.navigation.navigateToWakeupSong
+import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -63,7 +65,7 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
                 TODO("navigate to schedule screen")
             },
             navigateToWakeUpSong = {
-                TODO("navigate to wake up song screen")
+                navController.navigateToWakeupSong()
             },
             navigateToAddWakeUpSong = {
                 TODO("navigate to add wake up song screen")
@@ -103,6 +105,10 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
         )
         outingScreen(
             onAddOutingClick = { TODO("navigate to add outing screen") },
+        )
+        wakeupSongScreen(
+            onAddWakeupSongClick = { TODO("navigate to add wakeup song screen") },
+            popBackStack = navController::popBackStack,
         )
         askOutScreen(
             popBackStack = navController::popBackStack,
