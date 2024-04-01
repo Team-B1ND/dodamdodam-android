@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -229,8 +230,8 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
             Spacer(modifier = Modifier.width(16.dp))
             BodyLarge(
                 text = text,
-                fontStyle = MaterialTheme.typography.bodySmall.fontStyle,
                 color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Medium,
             )
             Spacer(modifier = Modifier.weight(1f))
             Icon(
