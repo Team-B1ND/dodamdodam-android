@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +41,6 @@ import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import com.b1nd.dodam.ui.icons.Setting
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,17 +63,18 @@ fun AllScreen(
             DodamTopAppBar(
                 title = { Text(text = "전체") },
                 actions = {
-                    DodamIconButton(
-                        onClick = {
-                            navigateToSetting()
-                        },
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(48.dp),
-                            imageVector = Setting,
-                            contentDescription = null,
-                        )
-                    }
+//                    TODO: Navigation to setting screen
+//                    DodamIconButton(
+//                        onClick = {
+//                            navigateToSetting()
+//                        },
+//                    ) {
+//                        Icon(
+//                            modifier = Modifier.size(48.dp),
+//                            imageVector = Setting,
+//                            contentDescription = null,
+//                        )
+//                    }
                 },
                 colors = TopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
@@ -95,7 +96,7 @@ fun AllScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                uiState.myInfo.let { myInfo ->
+                uiState.myInfo?.let { myInfo ->
                     Box(
                         modifier = Modifier.then(
                             if (uiState.isSimmer) {
@@ -110,19 +111,20 @@ fun AllScreen(
                         contentAlignment = Alignment.Center,
                     ) {
                         AsyncImage(
-                            model = myInfo?.profileImage,
+                            model = myInfo.profileImage ?: R.drawable.ic_default_profile,
                             contentDescription = "profile",
                             modifier = Modifier
                                 .clip(shape = RoundedCornerShape(12.dp))
                                 .size(70.dp),
+                            contentScale = ContentScale.Crop,
                         )
                     }
                     Spacer(modifier = Modifier.width(16.dp))
-                    val classInfo = myInfo?.student
+                    val classInfo = myInfo.student
                     Column(horizontalAlignment = Alignment.Start) {
                         if (!uiState.isSimmer) {
                             BodyLarge(
-                                text = "환영합니다, " + myInfo?.name + "님",
+                                text = "환영합니다, " + myInfo.name + "님",
                                 color = MaterialTheme.colorScheme.onBackground,
                             )
                             LabelLarge(
