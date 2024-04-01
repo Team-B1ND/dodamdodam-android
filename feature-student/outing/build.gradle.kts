@@ -12,7 +12,8 @@ android {
 
 dependencies {
     implementation(projects.common)
-    implementation(projects.designsystem)
+    implementation(projects.ui)
+    implementation(libs.dodam.design.system)
     implementation(projects.data.outing)
     implementation(libs.kotlinx.datetime)
 }
