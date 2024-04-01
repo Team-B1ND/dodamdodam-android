@@ -13,4 +13,8 @@ interface OutingRepository {
     fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime): Flow<Result<Unit>>
 
     fun askSleepover(reason: String, startAt: LocalDate, endAt: LocalDate): Flow<Result<Unit>>
+
+    fun deleteOuting(id: Long): Flow<Result<Unit>>
+
+    fun deleteSleepover(id: Long): Flow<Result<Unit>>
 }

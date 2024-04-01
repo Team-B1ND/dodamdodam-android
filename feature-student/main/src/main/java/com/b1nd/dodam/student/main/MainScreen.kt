@@ -30,6 +30,7 @@ import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.member.navigation.ALL_ROUTE
 import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
+import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.outing.nanigation.OUTING_ROUTE
 import com.b1nd.dodam.outing.nanigation.outingScreen
@@ -68,8 +69,12 @@ internal fun MainScreen(
             startDestination = HOME_ROUTE,
         ) {
             homeScreen(
-                navigateToAddOuting,
-                navigateToWakeUpSong,
+                navigateToAskNightStudy = navigateToAskNightStudy,
+                navigateToMeal = { /*navController::navigationToMeal*/ },
+                navigateToNightStudy = { /*navController::navigateToNightStudy*/ },
+                navigateToOut = { /*navController::navigateToOuting*/ },
+                navigateToAskOut = navigateToAddOuting,
+                navigateToWakeupSongScreen = navigateToWakeUpSong,
             )
             mealScreen()
             nightStudyScreen(navigateToAskNightStudy)
