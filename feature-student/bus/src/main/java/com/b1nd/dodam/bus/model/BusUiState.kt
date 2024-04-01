@@ -5,4 +5,5 @@ import kotlinx.collections.immutable.persistentListOf
 data class BusUiState(
     val isLoading: Boolean = false,
     val buses: List<Bus> = persistentListOf(),
+    val selectedBus: Bus? = null,
 )

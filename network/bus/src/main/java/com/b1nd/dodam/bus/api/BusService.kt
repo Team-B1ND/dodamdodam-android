@@ -9,9 +9,13 @@ import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.network.core.util.safeRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 internal class BusService @Inject constructor(
@@ -19,13 +23,37 @@ internal class BusService @Inject constructor(
 ) : BusDataSource {
     override suspend fun getBusList(): ImmutableList<BusResponse> {
         return safeRequest {
-            client.get(DodamUrl.BUS).body<Response<ImmutableList<BusResponse>>>()
+            client.get(DodamUrl.BUS).body<Response<List<BusResponse>>>()
+        }.toImmutableList()
+    }
+
+    override suspend fun applyBus(id: Int) {
+        defaultSafeRequest {
+            client.post(DodamUrl.Bus.APPLY + "/$id") {
+                parameter("id", id)
+            }.body<DefaultResponse>()
         }
     }
 
-    override suspend fun applyBus() {
+    override suspend fun deleteBus(id: Int) {
         defaultSafeRequest {
-            client.post(DodamUrl.BUS).body<DefaultResponse>()
+            client.delete(DodamUrl.Bus.APPLY + "/$id") {
+                parameter("id", id)
+            }.body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun updateBus(id: Int) {
+        defaultSafeRequest {
+            client.patch(DodamUrl.Bus.APPLY + "/$id") {
+                parameter("id", id)
+            }.body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun getMyBus(): BusResponse {
+        return safeRequest {
+            client.post(DodamUrl.Bus.APPLY).body<Response<BusResponse>>()
         }
     }
 }
