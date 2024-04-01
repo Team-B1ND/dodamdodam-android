@@ -96,7 +96,7 @@ internal fun WakeupSongCard(
                                             modifier = Modifier
                                                 .size(width = 120.dp, height = 67.dp)
                                                 .clip(DodamShape.Small),
-                                            model = wakeupSongs[page].thumbnailUrl,
+                                            model = wakeupSongs[page].thumbnail,
                                             contentDescription = null,
                                             contentScale = ContentScale.Crop,
                                         )

@@ -137,7 +137,7 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
             ) {
                 item {
                     TitleMedium(
-                        text = "내일의 기상송",
+                        text = "오늘의 기상송",
                         modifier = Modifier
                             .padding(top = 10.dp, start = 16.dp)
                             .fillMaxWidth(),
@@ -355,7 +355,7 @@ fun WakeupSongCard(viewModel: WakeupSongViewModel = hiltViewModel(), wakeupSong:
                         .height(70.dp)
                         .width(120.dp)
                         .clip(RoundedCornerShape(8.dp)),
-                    model = wakeupSong.thumbnailUrl,
+                    model = wakeupSong.thumbnail,
                     contentDescription = "profile_image",
                     contentScale = ContentScale.Crop,
                 )
