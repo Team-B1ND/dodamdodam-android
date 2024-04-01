@@ -1,5 +1,12 @@
 package com.b1nd.dodam.student.home.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,10 +23,26 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) = navigate(HOME
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.homeScreen(navigateToAskOut: () -> Unit) {
+fun NavGraphBuilder.homeScreen(
+    navigateToAskOut: () -> Unit,
+    navigateToMeal: () -> Unit,
+    navigateToAskNightStudy: () -> Unit,
+    navigateToNightStudy: () -> Unit,
+    navigateToOut: () -> Unit
+) {
     composable(
         route = HOME_ROUTE,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None },
     ) {
-        HomeScreen(navigateToAskOut = navigateToAskOut)
+        HomeScreen(
+            navigateToAskOut = navigateToAskOut,
+            navigateToOut = navigateToOut,
+            navigateToNightStudy = navigateToNightStudy,
+            navigateToMeal = navigateToMeal,
+            navigateToAskNightStudy = navigateToAskNightStudy
+        )
     }
 }

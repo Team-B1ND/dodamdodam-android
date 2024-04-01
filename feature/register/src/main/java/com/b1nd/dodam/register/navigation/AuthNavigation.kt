@@ -1,5 +1,8 @@
 package com.b1nd.dodam.register.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -33,6 +36,10 @@ fun NavGraphBuilder.authScreen(onRegisterClick: () -> Unit, onBackClick: () -> U
             navArgument("email") { NavType.StringType },
             navArgument("phoneNumber") { NavType.StringType },
         ),
+        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left) + fadeIn() },
+        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) + fadeOut() },
+        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) + fadeIn() },
+        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right) + fadeOut() }
     ) {
         AuthScreen(
             name = it.arguments?.getString("name") ?: "",

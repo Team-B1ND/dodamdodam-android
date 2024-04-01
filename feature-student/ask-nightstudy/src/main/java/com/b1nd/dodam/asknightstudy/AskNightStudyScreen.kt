@@ -148,7 +148,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
 
     if (showPlacePicker) {
         ModalBottomSheet(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             onDismissRequest = { showPlacePicker = false },
         ) {
             Column(
