@@ -61,3 +61,6 @@ include(
     ":feature-student:ask-out",
     ":feature-student:ask-nightstudy",
 )
+include(":feature-student:bus")
+include(":data:bus")
+include(":network:bus")
