@@ -170,7 +170,7 @@ class BusViewModel @Inject constructor(
                     when (result) {
                         is Result.Success -> {
                             getMyBus()
-                            _event.emit(Event.ShowToast("버스 삭제에 실패했어요"))
+                            _event.emit(Event.ShowToast("버스 삭제에 성공했어요"))
                             uiState.copy(
                                 isError = false,
                                 isLoading = false,
