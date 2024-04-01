@@ -1,5 +1,10 @@
 package com.b1nd.dodam.student
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +40,8 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
     NavHost(
         navController = navController,
         startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
+        enterTransition = { fadeIn(initialAlpha = 100f) },
+        exitTransition = { fadeOut(targetAlpha = 100f) },
     ) {
         onboardingScreen(
             onRegisterClick = navController::navigateToInfo,

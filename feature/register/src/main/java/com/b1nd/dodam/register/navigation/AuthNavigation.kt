@@ -36,10 +36,10 @@ fun NavGraphBuilder.authScreen(onRegisterClick: () -> Unit, onBackClick: () -> U
             navArgument("email") { NavType.StringType },
             navArgument("phoneNumber") { NavType.StringType },
         ),
-        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left) + fadeIn() },
-        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) + fadeOut() },
-        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) + fadeIn() },
-        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right) + fadeOut() },
+        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left) },
+        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
+        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
+        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right) },
     ) {
         AuthScreen(
             name = it.arguments?.getString("name") ?: "",
