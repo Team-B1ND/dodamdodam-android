@@ -1,7 +1,5 @@
 package com.b1nd.dodam.data.schedule.model
 
-import com.b1nd.dodam.data.core.model.Place
-import com.b1nd.dodam.data.core.model.toModel
 import com.b1nd.dodam.network.schedule.model.ScheduleResponse
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -10,7 +8,7 @@ import kotlinx.datetime.LocalDate
 data class Schedule(
     val id: Long,
     val name: String,
-    val place: Place?,
+    val place: String?,
     val type: ScheduleType,
     val date: ImmutableList<LocalDate>,
     val targetGrades: ImmutableList<Grade>,
@@ -18,7 +16,7 @@ data class Schedule(
 internal fun ScheduleResponse.toModel(): Schedule = Schedule(
     id = id,
     name = name,
-    place = place?.toModel(),
+    place = place,
     type = type.toModel(),
     date = date.toImmutableList(),
     targetGrades = targetGrades.map { it.toModel() }.toImmutableList(),

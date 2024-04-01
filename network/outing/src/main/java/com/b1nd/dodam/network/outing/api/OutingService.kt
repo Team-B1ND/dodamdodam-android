@@ -12,6 +12,7 @@ import com.b1nd.dodam.network.outing.model.SleepoverRequest
 import com.b1nd.dodam.network.outing.model.SleepoverResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -51,6 +52,20 @@ internal class OutingService @Inject constructor(
             client.post(DodamUrl.SLEEPOVER) {
                 setBody(SleepoverRequest(reason, startAt, endAt))
             }.body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun deleteOuting(id: Long) {
+        return defaultSafeRequest {
+            client.delete(DodamUrl.OUTING + "/$id")
+                .body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun deleteSleepover(id: Long) {
+        return defaultSafeRequest {
+            client.delete(DodamUrl.SLEEPOVER + "/$id")
+                .body<DefaultResponse>()
         }
     }
 }

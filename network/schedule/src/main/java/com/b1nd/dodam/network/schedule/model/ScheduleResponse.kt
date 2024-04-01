@@ -1,6 +1,5 @@
 package com.b1nd.dodam.network.schedule.model
 
-import com.b1nd.dodam.network.core.model.NetworkPlace
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
@@ -8,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class ScheduleResponse(
     val id: Long,
     val name: String,
-    val place: NetworkPlace?,
+    val place: String?,
     val type: NetworkScheduleType,
     val date: List<LocalDate>,
     val targetGrades: List<NetworkGrade>,
