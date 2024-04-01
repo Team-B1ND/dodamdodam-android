@@ -14,5 +14,6 @@ dependencies {
     implementation(projects.common)
     implementation(libs.dodam.design.system)
     implementation(projects.ui)
+    implementation(projects.data.bus)
     implementation(libs.kotlinx.datetime)
 }
