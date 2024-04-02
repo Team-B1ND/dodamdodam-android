@@ -3,6 +3,7 @@ package com.b1nd.dodam.ask_wakeup_song
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.ask_wakeup_song.model.AskWakeupSongUiState
+import com.b1nd.dodam.common.exception.IMUsedException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +36,7 @@ class AskWakeupSongViewModel @Inject constructor(
                     when (result) {
                         is Result.Success -> {
                             uiState.copy(
+                                isError = false,
                                 isLoading = false,
                                 melonChartSongs = result.data,
                             )
@@ -42,12 +44,14 @@ class AskWakeupSongViewModel @Inject constructor(
 
                         is Result.Loading -> {
                             uiState.copy(
+                                isError = false,
                                 isLoading = true,
                             )
                         }
 
                         is Result.Error -> {
                             uiState.copy(
+                                isError = true,
                                 isLoading = false,
                             )
                         }
@@ -64,20 +68,24 @@ class AskWakeupSongViewModel @Inject constructor(
                     when (result) {
                         is Result.Success -> {
                             uiState.copy(
-                                isLoading = false,
+                                isError = false,
+                                isSearchLoading = false,
                                 searchWakeupSongs = result.data,
                             )
                         }
 
                         is Result.Loading -> {
                             uiState.copy(
-                                isLoading = true,
+                                isError = false,
+                                isSearchLoading = true,
                             )
                         }
 
                         is Result.Error -> {
+                            _event.emit(Event.ShowToast("기상송 검색에 실패했습니다."))
                             uiState.copy(
-                                isLoading = false,
+                                isError = true,
+                                isSearchLoading = false,
                             )
                         }
                     }
@@ -99,20 +107,32 @@ class AskWakeupSongViewModel @Inject constructor(
                     when (result) {
                         is Result.Success -> {
                             _event.emit(Event.ShowToast("기상송 신청에 성공했습니다."))
+                            _event.emit(Event.PopBackStack)
                             uiState.copy(
+                                isError = false,
                                 isLoading = false,
                             )
                         }
 
                         is Result.Loading -> {
                             uiState.copy(
+                                isError = false,
                                 isLoading = true,
                             )
                         }
 
                         is Result.Error -> {
-                            _event.emit(Event.ShowToast("기상송 신청에 실패했습니다."))
+                            when (result.error) {
+                                is IMUsedException -> {
+                                    _event.emit(Event.ShowToast("이미 기상송을 신청했습니다."))
+                                }
+
+                                else -> {
+                                    _event.emit(Event.ShowToast("기상송 신청에 실패했습니다."))
+                                }
+                            }
                             uiState.copy(
+                                isError = true,
                                 isLoading = false,
                             )
                         }
@@ -125,4 +145,5 @@ class AskWakeupSongViewModel @Inject constructor(
 
 sealed interface Event {
     data class ShowToast(val message: String) : Event
+    data object PopBackStack : Event
 }

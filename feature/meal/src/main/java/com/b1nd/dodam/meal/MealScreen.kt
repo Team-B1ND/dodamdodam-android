@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,7 +54,7 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
     val current = LocalDate.now().toKotlinLocalDate()
     val uiState by viewModel.uiState.collectAsState()
 
-    var plus by remember { mutableLongStateOf(0) }
+    var plus by rememberSaveable { mutableLongStateOf(0) }
 
     val currentMealType = when {
         isBetween(8, 40, 13, 0) -> 2
@@ -68,7 +69,7 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
             val date = LocalDate.now().plusMonths(plus)
             if (plus == 0L) {
                 viewModel.getMealOfMonth(date.year, date.monthValue)
-            } else {
+            } else if (plus == 1L) {
                 viewModel.fetchMealOfMonth(date.year, date.monthValue)
             }
             plus++

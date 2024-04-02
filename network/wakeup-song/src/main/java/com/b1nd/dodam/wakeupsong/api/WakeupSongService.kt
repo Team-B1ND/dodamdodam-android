@@ -1,5 +1,6 @@
 package com.b1nd.dodam.wakeupsong.api
 
+import android.util.Log
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.DefaultResponse
 import com.b1nd.dodam.network.core.model.Response
@@ -7,6 +8,7 @@ import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.network.core.util.safeRequest
 import com.b1nd.dodam.wakeupsong.datasource.WakeupSongDataSource
 import com.b1nd.dodam.wakeupsong.model.MelonChartSongResponse
+import com.b1nd.dodam.wakeupsong.model.SearchWakeupSongRequest
 import com.b1nd.dodam.wakeupsong.model.SearchWakeupSongResponse
 import com.b1nd.dodam.wakeupsong.model.WakeupSongResponse
 import io.ktor.client.HttpClient
@@ -15,6 +17,7 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -59,14 +62,22 @@ internal class WakeupSongService @Inject constructor(
 
     override suspend fun postWakeupSong(artist: String, title: String) {
         return defaultSafeRequest {
-            client.post(DodamUrl.WakeupSong.KEY_WORD)
-                .body<DefaultResponse>()
+            client.post(DodamUrl.WakeupSong.KEY_WORD) {
+                setBody(
+                    SearchWakeupSongRequest(
+                        artist = artist,
+                        title = title,
+                    )
+                )
+            }.body<DefaultResponse>()
         }
     }
 
     override suspend fun searchWakeupSong(keyWord: String): ImmutableList<SearchWakeupSongResponse> {
         return safeRequest {
-            client.get(DodamUrl.WakeupSong.SEARCH + "/$keyWord")
+            client.get(DodamUrl.WakeupSong.SEARCH) {
+                parameter("keyword", keyWord)
+            }
                 .body<Response<List<SearchWakeupSongResponse>>>()
         }.toImmutableList()
     }
