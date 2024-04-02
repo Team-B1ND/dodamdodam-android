@@ -14,10 +14,13 @@ import com.b1nd.dodam.asknightstudy.navigation.askNightStudyScreen
 import com.b1nd.dodam.asknightstudy.navigation.navigateToAskNightStudy
 import com.b1nd.dodam.askout.navigation.askOutScreen
 import com.b1nd.dodam.askout.navigation.navigateToAskOut
+import com.b1nd.dodam.askwakeupsong.navigation.askWakeupSongScreen
+import com.b1nd.dodam.askwakeupsong.navigation.navigateToAskWakeupSong
 import com.b1nd.dodam.bus.navigation.busScreen
 import com.b1nd.dodam.bus.navigation.navigateToBus
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
+import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
@@ -67,7 +70,7 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
                 navController.navigateToWakeupSong()
             },
             navigateToAddWakeUpSong = {
-                TODO("navigate to add wake up song screen")
+                navController.navigateToAskWakeupSong()
             },
         )
         infoScreen(
@@ -100,13 +103,19 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
             },
         )
         nightStudyScreen(
-            onAddClick = { TODO("navigate to add nightStudy screen") },
+            onAddClick = {
+                navController.navigateToNightStudy()
+            },
         )
         outingScreen(
-            onAddOutingClick = { TODO("navigate to add outing screen") },
+            onAddOutingClick = {
+                navController.navigateToAskOut()
+            },
         )
         wakeupSongScreen(
-            onAddWakeupSongClick = { TODO("navigate to add wakeup song screen") },
+            onAddWakeupSongClick = {
+                navController.navigateToAskWakeupSong()
+            },
             popBackStack = navController::popBackStack,
         )
         askOutScreen(
@@ -130,6 +139,9 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
                     },
                 )
             },
+        )
+        askWakeupSongScreen(
+            popBackStack = navController::popBackStack,
         )
         pointScreen(
             popBackStack = navController::popBackStack,

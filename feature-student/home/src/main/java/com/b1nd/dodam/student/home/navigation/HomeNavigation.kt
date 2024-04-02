@@ -25,6 +25,7 @@ fun NavGraphBuilder.homeScreen(
     navigateToNightStudy: () -> Unit,
     navigateToOut: () -> Unit,
     navigateToWakeupSongScreen: () -> Unit,
+    navigateToAskWakeupSongScreen: () -> Unit,
 ) {
     composable(
         route = HOME_ROUTE,
@@ -40,6 +41,7 @@ fun NavGraphBuilder.homeScreen(
             navigateToMeal = navigateToMeal,
             navigateToAskNightStudy = navigateToAskNightStudy,
             navigateToWakeupSongScreen = navigateToWakeupSongScreen,
+            navigateToAskWakeupSong = navigateToAskWakeupSongScreen,
         )
     }
 }

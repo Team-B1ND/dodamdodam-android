@@ -37,6 +37,9 @@ object DodamUrl {
         const val ALLOWED = "$WAKEUP_SONG/allowed"
         const val MY = "$WAKEUP_SONG/my"
         const val PENDING = "$WAKEUP_SONG/pending"
+        const val KEY_WORD = "$WAKEUP_SONG/keyword"
+        const val SEARCH = "$WAKEUP_SONG/search"
+        const val CHART = "$WAKEUP_SONG/chart"
     }
 
     object Sleepover {

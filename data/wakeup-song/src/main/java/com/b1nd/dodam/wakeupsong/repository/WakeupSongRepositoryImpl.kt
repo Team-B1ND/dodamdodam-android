@@ -6,6 +6,8 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import com.b1nd.dodam.wakeupsong.datasource.WakeupSongDataSource
+import com.b1nd.dodam.wakeupsong.model.MelonChartSong
+import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import com.b1nd.dodam.wakeupsong.model.toModel
 import javax.inject.Inject
@@ -60,6 +62,39 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
         return flow {
             emit(
                 network.deleteWakeupSong(id),
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override fun postWakeupSong(artist: String, title: String): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                network.postWakeupSong(
+                    artist = artist,
+                    title = title,
+                ),
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override fun searchWakeupSong(keyWord: String): Flow<Result<ImmutableList<SearchWakeupSong>>> {
+        return flow {
+            emit(
+                network.searchWakeupSong(keyWord).map { it.toModel() }.toImmutableList(),
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override fun getMelonChart(): Flow<Result<ImmutableList<MelonChartSong>>> {
+        return flow {
+            emit(
+                network.getMelonChart().map { it.toModel() }.toImmutableList(),
             )
         }
             .asResult()
