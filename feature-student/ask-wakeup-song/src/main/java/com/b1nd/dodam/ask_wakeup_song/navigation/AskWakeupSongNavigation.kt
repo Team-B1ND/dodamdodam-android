@@ -15,7 +15,9 @@ fun NavGraphBuilder.askWakeupSongScreen(popBackStack: () -> Unit) {
     composable(
         route = ASK_WAKEUP_SONG_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
-        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
+        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
+        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
+        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         AskWakeupSongScreen(popBackStack = popBackStack)
     }

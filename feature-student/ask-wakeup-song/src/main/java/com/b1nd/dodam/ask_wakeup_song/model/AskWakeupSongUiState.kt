@@ -7,6 +7,8 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class AskWakeupSongUiState(
     val isLoading: Boolean = false,
+    val isSearchLoading: Boolean = false,
+    val isError: Boolean = false,
     val melonChartSongs: ImmutableList<MelonChartSong> = persistentListOf(),
     val searchWakeupSongs: ImmutableList<SearchWakeupSong> = persistentListOf(),
 )

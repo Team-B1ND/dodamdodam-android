@@ -144,7 +144,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
 
     if (showDatePicker.first) {
         ModalBottomSheet(
-            onDismissRequest = { showDateTimePicker = Pair(false, "") },
+            onDismissRequest = { showDatePicker = Pair(false, "") },
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         ) {
             Column(
