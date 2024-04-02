@@ -65,6 +65,7 @@ import com.b1nd.dodam.dds.style.CheckmarkCircleFilledIcon
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.style.TitleLarge
 import com.b1nd.dodam.dds.style.TitleMedium
+import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.NoInteractionSource
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import com.b1nd.dodam.wakeupsong.viewmodel.Event
@@ -109,19 +110,20 @@ fun WakeupSongScreen(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState) {
                 Column {
-                    DodamToast(text = it.visuals.message, trailingIcon = {
-                        CheckmarkCircleFilledIcon(
-                            modifier = Modifier
-                                .size(20.dp)
-                                .drawBehind {
-                                    drawRoundRect(
-                                        color = DodamColor.White,
-                                        topLeft = Offset(12f, 12f),
-                                        size = Size(30f, 30f),
-                                    )
-                                },
-                        )
-                    })
+                    DodamToast(
+                        text = it.visuals.message, trailingIcon = {
+                            CheckmarkCircleFilledIcon(
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .drawBehind {
+                                        drawRoundRect(
+                                            color = DodamColor.White,
+                                            topLeft = Offset(12f, 12f),
+                                            size = Size(30f, 30f),
+                                        )
+                                    },
+                            )
+                        })
                     Spacer(modifier = Modifier.height(90.dp))
                 }
             }
@@ -226,24 +228,32 @@ fun WakeupSongScreen(
                 } else {
                     uiState.myWakeupSongs
                 }
-
-                if (currentWakeupSong.isNotEmpty()) {
-                    items(
-                        items = currentWakeupSong,
-                        key = { it.id },
-                    ) { wakeupSong ->
-                        WakeupSongCard(
-                            wakeupSong = wakeupSong,
-                            selectedTabIndex = selectedTabIndex,
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
+                if (!uiState.isLoading) {
+                    if (currentWakeupSong.isNotEmpty()) {
+                        items(
+                            items = currentWakeupSong,
+                            key = { it.id },
+                        ) { wakeupSong ->
+                            WakeupSongCard(
+                                wakeupSong = wakeupSong,
+                                selectedTabIndex = selectedTabIndex,
+                                isShimmer = uiState.isLoading
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+                    } else {
+                        item {
+                            Spacer(modifier = Modifier.height(24.dp))
+                            LabelLarge(
+                                text = if (selectedTabIndex == 0) "대기중인 기상송이 없어요" else "신청한 기상송이 없어요",
+                                color = MaterialTheme.colorScheme.tertiary,
+                            )
+                        }
                     }
                 } else {
-                    item {
-                        Spacer(modifier = Modifier.height(24.dp))
-                        LabelLarge(
-                            text = if (selectedTabIndex == 0) "대기중인 기상송이 없어요" else "신청한 기상송이 없어요",
-                            color = MaterialTheme.colorScheme.tertiary,
+                    items(5) {
+                        WakeupSongCard(
+                            isShimmer = true
                         )
                     }
                 }
@@ -268,16 +278,17 @@ fun WakeupSongScreen(
 @Composable
 fun WakeupSongCard(
     viewModel: WakeupSongViewModel = hiltViewModel(),
-    wakeupSong: WakeupSong,
+    wakeupSong: WakeupSong? = null,
     index: Int? = null,
-    selectedTabIndex: Int
+    selectedTabIndex: Int? = null,
+    isShimmer: Boolean = false,
 ) {
     var showDialog by remember {
         mutableStateOf(false)
     }
     val uriHandler = LocalUriHandler.current
 
-    if (showDialog) {
+    if (showDialog && !isShimmer && selectedTabIndex != null && wakeupSong != null) {
         DodamDialog(
             onDismissRequest = {
                 showDialog = false
@@ -324,72 +335,118 @@ fun WakeupSongCard(
             title = { TitleLarge(text = "기상송을 삭제하시겠어요?") },
         )
     }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .then(
-                if (selectedTabIndex == 1) {
-                    Modifier.combinedClickable(
-                        onClick = {
+    if (wakeupSong != null && selectedTabIndex != null && !isShimmer) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(
+                    if (selectedTabIndex == 1) {
+                        Modifier.combinedClickable(
+                            onClick = {
+                                uriHandler.openUri(wakeupSong.videoUrl)
+                            },
+                            onLongClick = {
+                                showDialog = true
+                            },
+                        )
+                    } else {
+                        Modifier.clickable {
                             uriHandler.openUri(wakeupSong.videoUrl)
-                        },
-                        onLongClick = {
-                            showDialog = true
-                        },
-                    )
-                } else {
-                    Modifier.clickable {
-                        uriHandler.openUri(wakeupSong.videoUrl)
+                        }
+                    },
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Spacer(modifier = Modifier.height(8.dp))
+                Row {
+                    index?.let {
+                        Text(
+                            text = index.toString(),
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontSize = 14.sp,
+                            ),
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically),
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
                     }
-                },
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Spacer(modifier = Modifier.width(16.dp))
-        Column {
-            Spacer(modifier = Modifier.height(8.dp))
-            Row {
-                index?.let {
-                    Text(
-                        text = index.toString(),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontSize = 14.sp,
-                        ),
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.align(Alignment.CenterVertically),
+
+                    AsyncImage(
+                        modifier = Modifier
+                            .height(70.dp)
+                            .width(120.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        model = wakeupSong.thumbnail,
+                        contentDescription = "profile_image",
+                        contentScale = ContentScale.Crop,
                     )
+
                     Spacer(modifier = Modifier.width(16.dp))
+
+                    Column {
+                        BodyMedium(
+                            text = wakeupSong.videoTitle,
+                            modifier = Modifier
+                                .basicMarquee(),
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                        Text(
+                            text = wakeupSong.channelTitle,
+                            modifier = Modifier
+                                .basicMarquee(),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                        )
+                    }
                 }
-
-                AsyncImage(
-                    modifier = Modifier
-                        .height(70.dp)
-                        .width(120.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    model = wakeupSong.thumbnail,
-                    contentDescription = "profile_image",
-                    contentScale = ContentScale.Crop,
-                )
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Column {
-                    BodyMedium(
-                        text = wakeupSong.videoTitle,
-                        modifier = Modifier.basicMarquee(),
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                    Text(
-                        text = wakeupSong.channelTitle,
-                        modifier = Modifier.basicMarquee(),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
-                    )
-                }
+                Spacer(modifier = Modifier.height(8.dp))
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.width(16.dp))
         }
-        Spacer(modifier = Modifier.width(16.dp))
+    } else {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Spacer(modifier = Modifier.height(8.dp))
+                Row {
+                    Box(
+                        modifier = Modifier
+                            .height(70.dp)
+                            .width(120.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(shimmerEffect())
+                    )
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Column {
+                        Box(
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(19.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(shimmerEffect())
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Box(
+                            modifier = Modifier
+                                .width(80.dp)
+                                .height(15.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(shimmerEffect())
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+        }
     }
 }
