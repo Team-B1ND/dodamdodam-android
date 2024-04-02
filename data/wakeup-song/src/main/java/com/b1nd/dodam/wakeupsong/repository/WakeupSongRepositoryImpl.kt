@@ -6,6 +6,8 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import com.b1nd.dodam.wakeupsong.datasource.WakeupSongDataSource
+import com.b1nd.dodam.wakeupsong.model.MelonChartSong
+import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import com.b1nd.dodam.wakeupsong.model.toModel
 import javax.inject.Inject
@@ -20,7 +22,11 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
     private val network: WakeupSongDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : WakeupSongRepository {
-    override fun getAllowedWakeupSongs(year: Int, month: Int, day: Int): Flow<Result<ImmutableList<WakeupSong>>> {
+    override fun getAllowedWakeupSongs(
+        year: Int,
+        month: Int,
+        day: Int
+    ): Flow<Result<ImmutableList<WakeupSong>>> {
         return flow {
             emit(
                 network.getAllowedWakeupSongs(year, month, day)
@@ -60,6 +66,49 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
         return flow {
             emit(
                 network.deleteWakeupSong(id),
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override fun postWakeupSongByVideoUrl(videoUrl: String): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                network.postWakeupSongByVideoUrl(videoUrl),
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override fun postWakeupSongByKeyWord(artist: String, title: String): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                network.postWakeupSongByKeyWord(
+                    artist = artist,
+                    title = title,
+                )
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override fun searchWakeupSong(keyWord: String): Flow<Result<ImmutableList<SearchWakeupSong>>> {
+        return flow {
+            emit(
+                network.searchWakeupSong(keyWord).map { it.toModel() }.toImmutableList()
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override fun getMelonChart(): Flow<Result<ImmutableList<MelonChartSong>>> {
+        return flow {
+            emit(
+                network.getMelonChart().map { it.toModel() }.toImmutableList()
             )
         }
             .asResult()
