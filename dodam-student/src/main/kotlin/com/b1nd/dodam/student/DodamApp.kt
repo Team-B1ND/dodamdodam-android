@@ -30,6 +30,8 @@ import com.b1nd.dodam.setting.navigation.settingScreen
 import com.b1nd.dodam.student.main.navigation.MAIN_ROUTE
 import com.b1nd.dodam.student.main.navigation.mainScreen
 import com.b1nd.dodam.student.main.navigation.navigateToMain
+import com.b1nd.dodam.student.point.navigation.navigateToPoint
+import com.b1nd.dodam.student.point.navigation.pointScreen
 import com.b1nd.dodam.wakeupsong.navigation.navigateToWakeupSong
 import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 
@@ -52,9 +54,7 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
             navigateToAskNightStudy = navController::navigateToAskNightStudy,
             navigateToAddOuting = navController::navigateToAskOut,
             navigateToSetting = navController::navigateToSetting,
-            navigateToMyPoint = {
-                TODO("navigate to add my point screen")
-            },
+            navigateToMyPoint = navController::navigateToPoint,
             navigateToAddBus = {
                 TODO("navigate to add add bus screen")
             },
@@ -125,6 +125,9 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
                     },
                 )
             },
+        )
+        pointScreen(
+            popBackStack = navController::popBackStack
         )
     }
 }
