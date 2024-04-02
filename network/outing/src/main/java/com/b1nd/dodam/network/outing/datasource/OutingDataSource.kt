@@ -13,4 +13,8 @@ interface OutingDataSource {
     suspend fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime)
 
     suspend fun askSleepover(reason: String, startAt: LocalDate, endAt: LocalDate)
+
+    suspend fun deleteOuting(id: Long)
+
+    suspend fun deleteSleepover(id: Long)
 }

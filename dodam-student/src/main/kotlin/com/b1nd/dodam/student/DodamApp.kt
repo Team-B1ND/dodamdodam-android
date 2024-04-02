@@ -1,5 +1,7 @@
 package com.b1nd.dodam.student
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +27,8 @@ import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
 import com.b1nd.dodam.register.navigation.navigateToInfo
+import com.b1nd.dodam.setting.navigation.navigateToSetting
+import com.b1nd.dodam.setting.navigation.settingScreen
 import com.b1nd.dodam.student.main.navigation.MAIN_ROUTE
 import com.b1nd.dodam.student.main.navigation.mainScreen
 import com.b1nd.dodam.student.main.navigation.navigateToMain
@@ -35,10 +39,12 @@ import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable
-fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavController()) {
+fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
         startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
+        enterTransition = { fadeIn(initialAlpha = 100f) },
+        exitTransition = { fadeOut(targetAlpha = 100f) },
     ) {
         onboardingScreen(
             onRegisterClick = navController::navigateToInfo,
@@ -47,9 +53,7 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
         mainScreen(
             navigateToAskNightStudy = navController::navigateToAskNightStudy,
             navigateToAddOuting = navController::navigateToAskOut,
-            navigateToSetting = {
-                TODO("navigate to setting screen")
-            },
+            navigateToSetting = navController::navigateToSetting,
             navigateToMyPoint = {
                 TODO("navigate to add my point screen")
             },
@@ -113,6 +117,19 @@ fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavCon
         )
         busScreen(
             popBackStack = navController::popBackStack,
+        )
+        settingScreen(
+            popBackStack = navController::popBackStack,
+            logout = {
+                deleteToken()
+                navController.navigateToOnboarding(
+                    navOptions {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
         )
     }
 }

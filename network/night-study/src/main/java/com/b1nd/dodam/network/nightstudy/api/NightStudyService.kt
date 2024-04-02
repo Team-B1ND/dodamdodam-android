@@ -2,7 +2,6 @@ package com.b1nd.dodam.network.nightstudy.api
 
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.DefaultResponse
-import com.b1nd.dodam.network.core.model.NetworkPlace
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.network.core.util.safeRequest
@@ -11,6 +10,7 @@ import com.b1nd.dodam.network.nightstudy.model.NightStudyRequest
 import com.b1nd.dodam.network.nightstudy.model.NightStudyResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -29,14 +29,7 @@ internal class NightStudyService @Inject constructor(
         }.toImmutableList()
     }
 
-    override suspend fun askNightStudy(
-        place: NetworkPlace,
-        content: String,
-        doNeedPhone: Boolean,
-        reasonForPhone: String?,
-        startAt: LocalDate,
-        endAt: LocalDate,
-    ) {
+    override suspend fun askNightStudy(place: String, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) {
         return defaultSafeRequest {
             network.post(DodamUrl.NIGHT_STUDY) {
                 setBody(
@@ -50,6 +43,13 @@ internal class NightStudyService @Inject constructor(
                     ),
                 )
             }.body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun deleteNightStudy(id: Long) {
+        return defaultSafeRequest {
+            network.delete(DodamUrl.NIGHT_STUDY + "/$id")
+                .body<DefaultResponse>()
         }
     }
 }
