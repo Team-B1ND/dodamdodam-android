@@ -176,7 +176,7 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                             trailingIcon = {
                                 CheckmarkCircleFilledIcon(
                                     modifier = Modifier
-                                        .size(24.dp)
+                                        .size(20.dp)
                                         .drawBehind {
                                             drawRoundRect(
                                                 color = DodamColor.White,
