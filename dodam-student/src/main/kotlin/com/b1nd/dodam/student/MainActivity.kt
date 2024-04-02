@@ -27,6 +27,7 @@ import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.icons.B1NDLogo
 import com.b1nd.dodam.ui.icons.DodamLogo
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
@@ -42,6 +43,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+
         setContent {
             var isLogin: Boolean? by remember { mutableStateOf(null) }
 
