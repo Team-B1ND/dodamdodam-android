@@ -182,12 +182,6 @@ fun AllScreen(
                     navigateToAddOutingStudy()
                 }
                 AllCardView(
-                    imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_calendar),
-                    text = "일정 보기",
-                ) {
-                    navigateToSchedule()
-                }
-                AllCardView(
                     imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_megaphone),
                     text = "기상송 보기",
                 ) {
