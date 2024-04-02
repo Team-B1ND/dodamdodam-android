@@ -15,8 +15,7 @@ interface WakeupSongDataSource {
     suspend fun getMyWakeupSongs(): ImmutableList<WakeupSongResponse>
     suspend fun getPendingWakeupSongs(): ImmutableList<WakeupSongResponse>
     suspend fun deleteWakeupSong(id: Long)
-    suspend fun postWakeupSongByVideoUrl(videoUrl: String)
-    suspend fun postWakeupSongByKeyWord(
+    suspend fun postWakeupSong(
         artist: String,
         title: String
     )

@@ -72,20 +72,10 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
             .flowOn(dispatcher)
     }
 
-    override fun postWakeupSongByVideoUrl(videoUrl: String): Flow<Result<Unit>> {
+    override fun postWakeupSong(artist: String, title: String): Flow<Result<Unit>> {
         return flow {
             emit(
-                network.postWakeupSongByVideoUrl(videoUrl),
-            )
-        }
-            .asResult()
-            .flowOn(dispatcher)
-    }
-
-    override fun postWakeupSongByKeyWord(artist: String, title: String): Flow<Result<Unit>> {
-        return flow {
-            emit(
-                network.postWakeupSongByKeyWord(
+                network.postWakeupSong(
                     artist = artist,
                     title = title,
                 )

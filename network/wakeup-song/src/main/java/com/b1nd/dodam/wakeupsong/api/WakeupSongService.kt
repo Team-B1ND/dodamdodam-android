@@ -57,14 +57,7 @@ internal class WakeupSongService @Inject constructor(
         }
     }
 
-    override suspend fun postWakeupSongByVideoUrl(videoUrl: String) {
-        return defaultSafeRequest {
-            client.post(DodamUrl.WAKEUP_SONG)
-                .body<DefaultResponse>()
-        }
-    }
-
-    override suspend fun postWakeupSongByKeyWord(artist: String, title: String) {
+    override suspend fun postWakeupSong(artist: String, title: String) {
         return defaultSafeRequest {
             client.post(DodamUrl.WakeupSong.KEY_WORD)
                 .body<DefaultResponse>()
