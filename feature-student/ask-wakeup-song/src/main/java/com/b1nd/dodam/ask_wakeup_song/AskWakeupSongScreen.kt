@@ -118,7 +118,7 @@ fun AskWakeupSongScreen(
                                             drawRoundRect(
                                                 color = DodamColor.White,
                                                 topLeft = Offset(20f, 20f),
-                                                size = Size(45f, 45f),
+                                                size = Size(30f, 30f),
                                             )
                                         },
                                 )
@@ -130,7 +130,7 @@ fun AskWakeupSongScreen(
                                             drawRoundRect(
                                                 color = DodamColor.White,
                                                 topLeft = Offset(20f, 20f),
-                                                size = Size(45f, 45f),
+                                                size = Size(30f, 30f),
                                             )
                                         },
                                     tint = MaterialTheme.colorScheme.error,

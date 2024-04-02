@@ -131,24 +131,24 @@ fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Uni
                             if (!uiState.isError) {
                                 CheckmarkCircleFilledIcon(
                                     modifier = Modifier
-                                        .size(32.dp)
+                                        .size(24.dp)
                                         .drawBehind {
                                             drawRoundRect(
                                                 color = DodamColor.White,
                                                 topLeft = Offset(20f, 20f),
-                                                size = Size(45f, 45f),
+                                                size = Size(30f, 30f),
                                             )
                                         },
                                 )
                             } else {
                                 XMarkCircleIcon(
                                     modifier = Modifier
-                                        .size(32.dp)
+                                        .size(24.dp)
                                         .drawBehind {
                                             drawRoundRect(
                                                 color = DodamColor.White,
                                                 topLeft = Offset(20f, 20f),
-                                                size = Size(45f, 45f),
+                                                size = Size(30f, 30f),
                                             )
                                         },
                                     tint = MaterialTheme.colorScheme.error,
