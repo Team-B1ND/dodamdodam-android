@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import androidx.navigation.navigation
 import com.b1nd.dodam.ask_wakeup_song.navigation.askWakeupSongScreen
 import com.b1nd.dodam.ask_wakeup_song.navigation.navigateToAskWakeupSong
 import com.b1nd.dodam.asknightstudy.navigation.askNightStudyScreen
@@ -20,6 +21,7 @@ import com.b1nd.dodam.bus.navigation.busScreen
 import com.b1nd.dodam.bus.navigation.navigateToBus
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
+import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
@@ -41,7 +43,11 @@ import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable
-fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostController = rememberNavController()) {
+fun DodamApp(
+    isLogin: Boolean,
+    deleteToken: () -> Unit,
+    navController: NavHostController = rememberNavController()
+) {
     NavHost(
         navController = navController,
         startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
@@ -102,13 +108,19 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
             },
         )
         nightStudyScreen(
-            onAddClick = { TODO("navigate to add nightStudy screen") },
+            onAddClick = {
+                navController.navigateToNightStudy()
+            },
         )
         outingScreen(
-            onAddOutingClick = { TODO("navigate to add outing screen") },
+            onAddOutingClick = {
+                navController.navigateToAskOut()
+            },
         )
         wakeupSongScreen(
-            onAddWakeupSongClick = { TODO("navigate to add wakeup song screen") },
+            onAddWakeupSongClick = {
+                navController.navigateToAskWakeupSong()
+            },
             popBackStack = navController::popBackStack,
         )
         askOutScreen(

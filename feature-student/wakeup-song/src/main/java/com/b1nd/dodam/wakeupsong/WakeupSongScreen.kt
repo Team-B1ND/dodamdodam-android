@@ -236,6 +236,7 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
                     }
                 } else {
                     item {
+                        Spacer(modifier = Modifier.height(24.dp))
                         LabelLarge(
                             text = if (selectedTabIndex == 0) "대기중인 기상송이 없어요" else "신청한 기상송이 없어요",
                             color = MaterialTheme.colorScheme.tertiary,
