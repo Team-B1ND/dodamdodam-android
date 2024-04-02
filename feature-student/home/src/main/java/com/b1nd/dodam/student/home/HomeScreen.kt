@@ -74,6 +74,7 @@ internal fun HomeScreen(
     navigateToAskOut: () -> Unit,
     navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
+    navigateToAskWakeupSong: () -> Unit,
     navigateToNightStudy: () -> Unit,
     navigateToOut: () -> Unit,
     navigateToWakeupSongScreen: () -> Unit,
@@ -105,6 +106,7 @@ internal fun HomeScreen(
         },
         navigateToAskOut = navigateToAskOut,
         navigateToAskNightStudy = navigateToAskNightStudy,
+        navigateToAskWakeupSong = navigateToAskWakeupSong,
         navigateToMeal = navigateToMeal,
         navigateToNightStudy = navigateToNightStudy,
         navigateToOut = navigateToOut,
@@ -132,6 +134,7 @@ private fun HomeScreen(
     navigateToAskOut: () -> Unit,
     navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
+    navigateToAskWakeupSong: () -> Unit,
     navigateToNightStudy: () -> Unit,
     navigateToOut: () -> Unit,
 ) {
@@ -219,7 +222,7 @@ private fun HomeScreen(
                     WakeupSongCard(
                         uiState = wakeupSongUiState,
                         onNextClick = navigateToWakeupSongScreen,
-                        navigateToWakeupSongApply = { /* TODO : Navigate to Add Wakeup screen */ },
+                        navigateToWakeupSongApply = navigateToAskWakeupSong,
                         showShimmer = showShimmer,
                         fetchWakeupSong = fetchWakeupSong,
                         context = context,

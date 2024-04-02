@@ -10,6 +10,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.b1nd.dodam.ask_wakeup_song.navigation.askWakeupSongScreen
+import com.b1nd.dodam.ask_wakeup_song.navigation.navigateToAskWakeupSong
 import com.b1nd.dodam.asknightstudy.navigation.askNightStudyScreen
 import com.b1nd.dodam.asknightstudy.navigation.navigateToAskNightStudy
 import com.b1nd.dodam.askout.navigation.askOutScreen
@@ -39,7 +41,7 @@ import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable
-fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostController = rememberNavController()) {
+fun DodamApp(isLogin: Boolean, navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
         startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
@@ -67,7 +69,7 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
                 navController.navigateToWakeupSong()
             },
             navigateToAddWakeUpSong = {
-                TODO("navigate to add wake up song screen")
+                navController.navigateToAskWakeupSong()
             },
         )
         infoScreen(
@@ -121,7 +123,6 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
         settingScreen(
             popBackStack = navController::popBackStack,
             logout = {
-                deleteToken()
                 navController.navigateToOnboarding(
                     navOptions {
                         popUpTo(navController.graph.id) {
@@ -130,6 +131,9 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
                     },
                 )
             },
+        )
+        askWakeupSongScreen(
+            popBackStack = navController::popBackStack
         )
     }
 }
