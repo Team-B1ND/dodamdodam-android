@@ -14,6 +14,8 @@ import com.b1nd.dodam.asknightstudy.navigation.askNightStudyScreen
 import com.b1nd.dodam.asknightstudy.navigation.navigateToAskNightStudy
 import com.b1nd.dodam.askout.navigation.askOutScreen
 import com.b1nd.dodam.askout.navigation.navigateToAskOut
+import com.b1nd.dodam.bus.navigation.busScreen
+import com.b1nd.dodam.bus.navigation.navigateToBus
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
@@ -56,7 +58,7 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
                 TODO("navigate to add my point screen")
             },
             navigateToAddBus = {
-                TODO("navigate to add add bus screen")
+                navController.navigateToBus()
             },
             navigateToSchedule = {
                 TODO("navigate to schedule screen")
@@ -111,6 +113,9 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
             popBackStack = navController::popBackStack,
         )
         askNightStudyScreen(
+            popBackStack = navController::popBackStack,
+        )
+        busScreen(
             popBackStack = navController::popBackStack,
         )
         settingScreen(

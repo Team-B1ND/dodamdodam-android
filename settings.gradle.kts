@@ -60,5 +60,8 @@ include(
     ":feature-student:wakeup-song",
     ":feature-student:ask-out",
     ":feature-student:ask-nightstudy",
+    ":feature-student:bus",
+    ":data:bus",
+    ":network:bus",
     ":feature:setting",
 )
