@@ -1,4 +1,4 @@
-package com.b1nd.dodam.data.outing.model
+package com.b1nd.dodam.data.point.model
 
 import com.b1nd.dodam.data.core.model.Student
 import com.b1nd.dodam.data.core.model.Teacher
@@ -15,12 +15,14 @@ data class Point(
     val teacher: Teacher,
     val reason: PointReason,
     val issueAt: LocalDate,
+    val pointType: PointType,
 )
 
-internal fun PointResponse.toModel() = Point(
+internal fun PointResponse.toModel(pointType: PointType) = Point(
     id = id,
     student = student.toModel(),
     teacher = teacher.toModel(),
     reason = reason.toModel(),
-    issueAt = issueAt
+    issueAt = issueAt,
+    pointType = pointType,
 )
