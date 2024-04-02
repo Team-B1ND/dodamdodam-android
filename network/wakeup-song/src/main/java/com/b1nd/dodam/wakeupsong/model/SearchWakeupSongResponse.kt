@@ -8,5 +8,5 @@ data class SearchWakeupSongResponse(
     val thumbnail: String,
     val videoId: String,
     val videoTitle: String,
-    val videoUrl: String
+    val videoUrl: String,
 )

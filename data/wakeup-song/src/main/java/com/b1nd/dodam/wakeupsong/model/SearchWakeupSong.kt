@@ -5,10 +5,10 @@ data class SearchWakeupSong(
     val thumbnail: String,
     val videoId: String,
     val videoTitle: String,
-    val videoUrl: String
+    val videoUrl: String,
 )
 
-fun SearchWakeupSongResponse.toModel():SearchWakeupSong = SearchWakeupSong(
+fun SearchWakeupSongResponse.toModel(): SearchWakeupSong = SearchWakeupSong(
     channelTitle = channelTitle,
     thumbnail = thumbnail,
     videoId = videoId,

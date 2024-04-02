@@ -7,7 +7,6 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import com.b1nd.dodam.wakeupsong.WakeupSongUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow

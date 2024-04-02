@@ -8,5 +8,5 @@ data class MelonChartSongResponse(
     val artist: String,
     val name: String,
     val rank: Int,
-    val thumbnail: String
+    val thumbnail: String,
 )

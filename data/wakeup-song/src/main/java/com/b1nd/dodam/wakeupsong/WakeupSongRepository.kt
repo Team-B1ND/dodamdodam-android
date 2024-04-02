@@ -12,10 +12,7 @@ interface WakeupSongRepository {
     fun getMyWakeupSongs(): Flow<Result<ImmutableList<WakeupSong>>>
     fun getPendingWakeupSongs(): Flow<Result<ImmutableList<WakeupSong>>>
     fun deleteWakeupSong(id: Long): Flow<Result<Unit>>
-    fun postWakeupSong(
-        artist: String,
-        title: String
-    ): Flow<Result<Unit>>
+    fun postWakeupSong(artist: String, title: String): Flow<Result<Unit>>
 
     fun searchWakeupSong(keyWord: String): Flow<Result<ImmutableList<SearchWakeupSong>>>
     fun getMelonChart(): Flow<Result<ImmutableList<MelonChartSong>>>

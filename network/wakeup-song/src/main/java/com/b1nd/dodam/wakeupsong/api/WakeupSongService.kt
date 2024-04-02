@@ -1,6 +1,5 @@
 package com.b1nd.dodam.wakeupsong.api
 
-import android.util.Log
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.DefaultResponse
 import com.b1nd.dodam.network.core.model.Response
@@ -25,11 +24,7 @@ import kotlinx.collections.immutable.toImmutableList
 internal class WakeupSongService @Inject constructor(
     private val client: HttpClient,
 ) : WakeupSongDataSource {
-    override suspend fun getAllowedWakeupSongs(
-        year: Int,
-        month: Int,
-        day: Int
-    ): ImmutableList<WakeupSongResponse> {
+    override suspend fun getAllowedWakeupSongs(year: Int, month: Int, day: Int): ImmutableList<WakeupSongResponse> {
         return safeRequest {
             client.get(DodamUrl.WakeupSong.ALLOWED) {
                 parameter("year", year)
@@ -67,7 +62,7 @@ internal class WakeupSongService @Inject constructor(
                     SearchWakeupSongRequest(
                         artist = artist,
                         title = title,
-                    )
+                    ),
                 )
             }.body<DefaultResponse>()
         }

@@ -1,23 +1,23 @@
-package com.b1nd.dodam.ask_wakeup_song
+package com.b1nd.dodam.askwakeupsong
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.b1nd.dodam.ask_wakeup_song.model.AskWakeupSongUiState
+import com.b1nd.dodam.askwakeupsong.model.AskWakeupSongUiState
 import com.b1nd.dodam.common.exception.IMUsedException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class AskWakeupSongViewModel @Inject constructor(
-    private val wakeupSongRepository: WakeupSongRepository
+    private val wakeupSongRepository: WakeupSongRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(AskWakeupSongUiState())
     val uiState = _uiState.asStateFlow()
@@ -94,14 +94,11 @@ class AskWakeupSongViewModel @Inject constructor(
         }
     }
 
-    fun postWakeupSong(
-        artist: String,
-        title: String,
-    ) {
+    fun postWakeupSong(artist: String, title: String) {
         viewModelScope.launch {
             wakeupSongRepository.postWakeupSong(
                 artist = artist,
-                title = title
+                title = title,
             ).collect { result ->
                 _uiState.update { uiState ->
                     when (result) {

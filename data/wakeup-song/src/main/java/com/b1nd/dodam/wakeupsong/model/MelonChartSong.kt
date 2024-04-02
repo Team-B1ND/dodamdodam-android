@@ -5,7 +5,7 @@ data class MelonChartSong(
     val artist: String,
     val name: String,
     val rank: Int,
-    val thumbnail: String
+    val thumbnail: String,
 )
 
 fun MelonChartSongResponse.toModel(): MelonChartSong = MelonChartSong(

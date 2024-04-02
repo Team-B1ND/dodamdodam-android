@@ -1,6 +1,5 @@
 package com.b1nd.dodam.network.core.util
 
-import android.util.Log
 import com.b1nd.dodam.common.exception.BadRequestException
 import com.b1nd.dodam.common.exception.ConflictException
 import com.b1nd.dodam.common.exception.DataNotFoundException

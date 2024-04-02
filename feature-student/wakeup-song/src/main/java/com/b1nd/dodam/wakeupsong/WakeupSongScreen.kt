@@ -73,11 +73,7 @@ import com.b1nd.dodam.wakeupsong.viewmodel.WakeupSongViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun WakeupSongScreen(
-    onClickAddWakeupSong: () -> Unit,
-    popBackStack: () -> Unit,
-    viewModel: WakeupSongViewModel = hiltViewModel()
-) {
+fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit, viewModel: WakeupSongViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -111,7 +107,8 @@ fun WakeupSongScreen(
             SnackbarHost(hostState = snackbarHostState) {
                 Column {
                     DodamToast(
-                        text = it.visuals.message, trailingIcon = {
+                        text = it.visuals.message,
+                        trailingIcon = {
                             CheckmarkCircleFilledIcon(
                                 modifier = Modifier
                                     .size(20.dp)
@@ -123,13 +120,14 @@ fun WakeupSongScreen(
                                         )
                                     },
                             )
-                        })
+                        },
+                    )
                     Spacer(modifier = Modifier.height(90.dp))
                 }
             }
         },
 
-        ) { paddingValues ->
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -237,7 +235,7 @@ fun WakeupSongScreen(
                             WakeupSongCard(
                                 wakeupSong = wakeupSong,
                                 selectedTabIndex = selectedTabIndex,
-                                isShimmer = uiState.isLoading
+                                isShimmer = uiState.isLoading,
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                         }
@@ -253,7 +251,7 @@ fun WakeupSongScreen(
                 } else {
                     items(5) {
                         WakeupSongCard(
-                            isShimmer = true
+                            isShimmer = true,
                         )
                     }
                 }
@@ -421,7 +419,7 @@ fun WakeupSongCard(
                             .height(70.dp)
                             .width(120.dp)
                             .clip(RoundedCornerShape(8.dp))
-                            .background(shimmerEffect())
+                            .background(shimmerEffect()),
                     )
 
                     Spacer(modifier = Modifier.width(16.dp))
@@ -432,7 +430,7 @@ fun WakeupSongCard(
                                 .width(100.dp)
                                 .height(19.dp)
                                 .clip(RoundedCornerShape(4.dp))
-                                .background(shimmerEffect())
+                                .background(shimmerEffect()),
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         Box(
@@ -440,7 +438,7 @@ fun WakeupSongCard(
                                 .width(80.dp)
                                 .height(15.dp)
                                 .clip(RoundedCornerShape(4.dp))
-                                .background(shimmerEffect())
+                                .background(shimmerEffect()),
                         )
                     }
                 }

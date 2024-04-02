@@ -10,13 +10,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import androidx.navigation.navigation
-import com.b1nd.dodam.ask_wakeup_song.navigation.askWakeupSongScreen
-import com.b1nd.dodam.ask_wakeup_song.navigation.navigateToAskWakeupSong
 import com.b1nd.dodam.asknightstudy.navigation.askNightStudyScreen
 import com.b1nd.dodam.asknightstudy.navigation.navigateToAskNightStudy
 import com.b1nd.dodam.askout.navigation.askOutScreen
 import com.b1nd.dodam.askout.navigation.navigateToAskOut
+import com.b1nd.dodam.askwakeupsong.navigation.askWakeupSongScreen
+import com.b1nd.dodam.askwakeupsong.navigation.navigateToAskWakeupSong
 import com.b1nd.dodam.bus.navigation.busScreen
 import com.b1nd.dodam.bus.navigation.navigateToBus
 import com.b1nd.dodam.login.navigation.loginScreen
@@ -43,11 +42,7 @@ import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable
-fun DodamApp(
-    isLogin: Boolean,
-    deleteToken: () -> Unit,
-    navController: NavHostController = rememberNavController()
-) {
+fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
         startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
@@ -146,7 +141,7 @@ fun DodamApp(
             },
         )
         askWakeupSongScreen(
-            popBackStack = navController::popBackStack
+            popBackStack = navController::popBackStack,
         )
     }
 }

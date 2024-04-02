@@ -22,11 +22,7 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
     private val network: WakeupSongDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : WakeupSongRepository {
-    override fun getAllowedWakeupSongs(
-        year: Int,
-        month: Int,
-        day: Int
-    ): Flow<Result<ImmutableList<WakeupSong>>> {
+    override fun getAllowedWakeupSongs(year: Int, month: Int, day: Int): Flow<Result<ImmutableList<WakeupSong>>> {
         return flow {
             emit(
                 network.getAllowedWakeupSongs(year, month, day)
@@ -78,7 +74,7 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
                 network.postWakeupSong(
                     artist = artist,
                     title = title,
-                )
+                ),
             )
         }
             .asResult()
@@ -88,7 +84,7 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
     override fun searchWakeupSong(keyWord: String): Flow<Result<ImmutableList<SearchWakeupSong>>> {
         return flow {
             emit(
-                network.searchWakeupSong(keyWord).map { it.toModel() }.toImmutableList()
+                network.searchWakeupSong(keyWord).map { it.toModel() }.toImmutableList(),
             )
         }
             .asResult()
@@ -98,7 +94,7 @@ internal class WakeupSongRepositoryImpl @Inject constructor(
     override fun getMelonChart(): Flow<Result<ImmutableList<MelonChartSong>>> {
         return flow {
             emit(
-                network.getMelonChart().map { it.toModel() }.toImmutableList()
+                network.getMelonChart().map { it.toModel() }.toImmutableList(),
             )
         }
             .asResult()
