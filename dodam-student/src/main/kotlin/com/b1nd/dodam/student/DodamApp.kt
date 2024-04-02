@@ -127,7 +127,7 @@ fun DodamApp(isLogin: Boolean, deleteToken: () -> Unit, navController: NavHostCo
             },
         )
         pointScreen(
-            popBackStack = navController::popBackStack
+            popBackStack = navController::popBackStack,
         )
     }
 }
