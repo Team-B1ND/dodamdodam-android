@@ -60,11 +60,8 @@ include(
     ":feature-student:wakeup-song",
     ":feature-student:ask-out",
     ":feature-student:ask-nightstudy",
-<<<<<<< HEAD
     ":feature-student:bus",
     ":data:bus",
     ":network:bus",
-=======
     ":feature:setting",
->>>>>>> e7a0ae5c2d09e0ff3c726c4f2231c022948cdff9
 )
