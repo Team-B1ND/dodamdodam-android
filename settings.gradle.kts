@@ -64,4 +64,7 @@ include(
     ":data:bus",
     ":network:bus",
     ":feature:setting",
+    ":network:point",
+    ":data:point",
+    ":feature-student:point",
 )
