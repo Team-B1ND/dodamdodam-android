@@ -51,4 +51,7 @@ dependencies {
     implementation(projects.featureStudent.wakeupSong)
     implementation(projects.feature.setting)
     implementation(projects.featureStudent.point)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 }
