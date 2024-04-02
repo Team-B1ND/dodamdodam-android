@@ -190,7 +190,7 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                             trailingIcon = {
                                 CheckmarkCircleFilledIcon(
                                     modifier = Modifier
-                                        .size(20.dp)
+                                        .size(24.dp)
                                         .drawBehind {
                                             drawRoundRect(
                                                 color = DodamColor.White,
