@@ -1,5 +1,6 @@
 package com.b1nd.dodam.bus
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -94,7 +95,10 @@ fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Uni
 
     if (showDialog) {
         DodamDialog(
-            onDismissRequest = { showDialog = false },
+            onDismissRequest = {
+                showDialog = false
+                popBackStack()
+            },
             confirmText = {
                 DodamTextButton(onClick = popBackStack) {
                     BodyLarge(text = "확인")
