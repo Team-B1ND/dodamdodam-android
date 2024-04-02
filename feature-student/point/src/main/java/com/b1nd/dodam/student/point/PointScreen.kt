@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -30,9 +31,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.data.point.model.ScoreType
+import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
 import com.b1nd.dodam.dds.component.button.DodamSegment
 import com.b1nd.dodam.dds.component.button.DodamSegmentedButtonRow
+import com.b1nd.dodam.dds.component.button.DodamTextButton
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.BodyMedium
 import com.b1nd.dodam.dds.style.HeadlineLarge
@@ -41,12 +44,39 @@ import com.b1nd.dodam.dds.style.TitleMedium
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun PointScreen(
-    viewModel: PointViewModel = hiltViewModel(),
-    popBackStack: () -> Unit
-) {
+internal fun PointScreen(viewModel: PointViewModel = hiltViewModel(), popBackStack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedIndex by remember { mutableIntStateOf(0) }
+
+    var showDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(viewModel.event) {
+        viewModel.event.collect {
+            when (it) {
+                is Event.ShowDialog -> {
+                    showDialog = true
+                }
+            }
+        }
+    }
+
+    if (showDialog) {
+        DodamDialog(
+            onDismissRequest = {
+                showDialog = false
+                popBackStack()
+            },
+            confirmText = {
+                DodamTextButton(onClick = {
+                    showDialog = false
+                    popBackStack()
+                }) {
+                    Text(text = "확인")
+                }
+            },
+            title = { Text(text = "상벌점을 불러오지 못했어요") },
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -54,18 +84,18 @@ internal fun PointScreen(
                 title = { Text(text = "내 상벌점") },
                 onNavigationIconClick = popBackStack,
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                    containerColor = MaterialTheme.colorScheme.background,
+                ),
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(end = 24.dp, start = 24.dp, top = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             DodamSegmentedButtonRow(selectedIndex = selectedIndex) {
                 DodamSegment(selected = selectedIndex == 0, onClick = { selectedIndex = 0 }) {
@@ -79,27 +109,27 @@ internal fun PointScreen(
 
             Row(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                horizontalArrangement = Arrangement.spacedBy(32.dp)
+                horizontalArrangement = Arrangement.spacedBy(32.dp),
             ) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     BodyMedium(text = "벌점", color = MaterialTheme.colorScheme.tertiary)
                     HeadlineLarge(
                         text = if (selectedIndex == 0) "${uiState.dormitoryPoint.first}점" else "${uiState.schoolPoint.first}점",
                         color = MaterialTheme.colorScheme.error,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
 
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     BodyMedium(text = "상점", color = MaterialTheme.colorScheme.tertiary)
                     HeadlineLarge(
                         text = if (selectedIndex == 0) "${uiState.dormitoryPoint.second}점" else "${uiState.schoolPoint.second}점",
                         color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
@@ -108,35 +138,38 @@ internal fun PointScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant)
+                    .background(MaterialTheme.colorScheme.outlineVariant),
             )
 
             TitleMedium(text = "상벌점 발급 내역")
 
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 items(
-                    items = if (selectedIndex == 0) uiState.dormitoryPointReasons
-                    else uiState.schoolPointReasons,
-                    key = { it.id }
+                    items = if (selectedIndex == 0) {
+                        uiState.dormitoryPointReasons
+                    } else {
+                        uiState.schoolPointReasons
+                    },
+                    key = { it.id },
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(2.dp)
+                            verticalArrangement = Arrangement.spacedBy(2.dp),
                         ) {
                             BodyLarge(
                                 text = it.reason.reason,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = MaterialTheme.colorScheme.onBackground,
                             )
                             LabelLarge(
                                 text = "${it.teacher.name} · ${it.issueAt}",
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
 
@@ -144,12 +177,14 @@ internal fun PointScreen(
 
                         BodyLarge(
                             text = "${it.reason.score}점",
-                            color = if (it.reason.scoreType == ScoreType.MINUS) MaterialTheme.colorScheme.error
-                            else MaterialTheme.colorScheme.primary
+                            color = if (it.reason.scoreType == ScoreType.MINUS) {
+                                MaterialTheme.colorScheme.error
+                            } else {
+                                MaterialTheme.colorScheme.primary
+                            },
                         )
                     }
                 }
-
             }
         }
     }
