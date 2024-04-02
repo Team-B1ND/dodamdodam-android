@@ -1,6 +1,5 @@
 package com.b1nd.dodam.data.point.model
 
-import com.b1nd.dodam.network.point.model.NetworkPointType
 import com.b1nd.dodam.network.point.model.NetworkScoreType
 
 enum class ScoreType {

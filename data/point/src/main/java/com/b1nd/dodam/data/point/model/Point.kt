@@ -3,11 +3,8 @@ package com.b1nd.dodam.data.point.model
 import com.b1nd.dodam.data.core.model.Student
 import com.b1nd.dodam.data.core.model.Teacher
 import com.b1nd.dodam.data.core.model.toModel
-import com.b1nd.dodam.network.core.model.StudentResponse
-import com.b1nd.dodam.network.core.model.TeacherResponse
 import com.b1nd.dodam.network.point.model.PointResponse
 import kotlinx.datetime.LocalDate
-import kotlinx.serialization.Serializable
 
 data class Point(
     val id: Int,
