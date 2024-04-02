@@ -1,4 +1,4 @@
-package com.b1nd.dodam.data.outing.model
+package com.b1nd.dodam.data.point.model
 
 import com.b1nd.dodam.network.point.model.PointReasonResponse
 
