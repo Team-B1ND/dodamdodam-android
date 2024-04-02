@@ -65,3 +65,4 @@ include(
     ":network:bus",
     ":feature:setting",
 )
+include(":feature-student:ask-wakeup-song")
