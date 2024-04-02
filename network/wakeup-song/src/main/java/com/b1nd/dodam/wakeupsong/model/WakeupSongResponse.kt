@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WakeupSongResponse(
     val id: Long,
-    val thumbnailUrl: String,
+    val thumbnail: String,
     val videoTitle: String,
     val videoId: String,
     val videoUrl: String,
