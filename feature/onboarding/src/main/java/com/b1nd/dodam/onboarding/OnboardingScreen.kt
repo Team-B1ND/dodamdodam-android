@@ -190,12 +190,12 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     CheckmarkIcon(
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(16.dp)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
@@ -204,7 +204,7 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                         tint = if (isTermsChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                     )
 
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
 
                     Row(
                         modifier = Modifier
@@ -236,12 +236,12 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     CheckmarkIcon(
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(16.dp)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
@@ -250,7 +250,7 @@ internal fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> U
                         tint = if (isPrivacyChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                     )
 
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
 
                     Row(
                         modifier = Modifier

@@ -50,4 +50,5 @@ dependencies {
     implementation(projects.datastore)
     implementation(projects.featureStudent.wakeupSong)
     implementation(projects.feature.setting)
+    implementation(projects.featureStudent.point)
 }
