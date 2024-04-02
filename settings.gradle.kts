@@ -64,5 +64,5 @@ include(
     ":data:bus",
     ":network:bus",
     ":feature:setting",
+    ":feature-student:ask-wakeup-song",
 )
-include(":feature-student:ask-wakeup-song")
