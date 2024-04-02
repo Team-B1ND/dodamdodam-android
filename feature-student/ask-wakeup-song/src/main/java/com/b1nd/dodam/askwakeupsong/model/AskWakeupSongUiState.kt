@@ -1,4 +1,4 @@
-package com.b1nd.dodam.ask_wakeup_song.model
+package com.b1nd.dodam.askwakeupsong.model
 
 import com.b1nd.dodam.wakeupsong.model.MelonChartSong
 import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong

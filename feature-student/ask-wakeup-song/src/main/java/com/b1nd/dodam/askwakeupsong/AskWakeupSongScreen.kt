@@ -1,6 +1,5 @@
-package com.b1nd.dodam.ask_wakeup_song
+package com.b1nd.dodam.askwakeupsong
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -47,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.b1nd.dodam.dds.animation.LoadingDotsIndicator
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
@@ -69,10 +67,7 @@ import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AskWakeupSongScreen(
-    viewModel: AskWakeupSongViewModel = hiltViewModel(),
-    popBackStack: () -> Unit,
-) {
+fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), popBackStack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
@@ -98,10 +93,11 @@ fun AskWakeupSongScreen(
             DodamLargeTopAppBar(
                 title = {
                     HeadlineSmall(text = "기상송을\n검색해주세요")
-                }, onNavigationIconClick = popBackStack,
+                },
+                onNavigationIconClick = popBackStack,
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
-                )
+                ),
             )
         },
         snackbarHost = {
@@ -142,11 +138,11 @@ fun AskWakeupSongScreen(
                     Spacer(modifier = Modifier.height(50.dp))
                 }
             }
-        }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
-                .padding(paddingValues)
+                .padding(paddingValues),
         ) {
             Box(modifier = Modifier.padding(horizontal = 16.dp)) {
                 DodamTextField(
@@ -161,7 +157,7 @@ fun AskWakeupSongScreen(
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.clickable {
                                     keyWord = ""
-                                }
+                                },
                             )
                         }
                     },
@@ -173,14 +169,13 @@ fun AskWakeupSongScreen(
                 )
             }
 
-
             if (!uiState.isLoading) {
                 LazyColumn {
                     item {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             if (uiState.isSearchLoading && uiState.searchWakeupSongs.isEmpty()) {
                                 Spacer(modifier = Modifier.height(40.dp))
@@ -199,7 +194,7 @@ fun AskWakeupSongScreen(
                                     Spacer(modifier = Modifier.height(2.dp))
                                     BodySmall(
                                         text = "요즘 인기있는 노래를 바로 신청해보세요",
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = MaterialTheme.colorScheme.onSurface,
                                     )
                                 }
                             }
@@ -209,14 +204,14 @@ fun AskWakeupSongScreen(
                         items(uiState.melonChartSongs.size) { index ->
                             WakeupSongCard(
                                 melonChartSong = uiState.melonChartSongs[index],
-                                index = index + 1
+                                index = index + 1,
                             )
                         }
                     } else {
                         item { Spacer(modifier = Modifier.height(20.dp)) }
                         items(uiState.searchWakeupSongs.size) { index ->
                             WakeupSongCard(
-                                melonChartSong = uiState.searchWakeupSongs[index]
+                                melonChartSong = uiState.searchWakeupSongs[index],
                             )
                         }
                     }
@@ -252,7 +247,7 @@ fun WakeupSongShimmer() {
                                     .height(24.dp)
                                     .width(80.dp)
                                     .clip(RoundedCornerShape(4.dp))
-                                    .background(shimmerEffect())
+                                    .background(shimmerEffect()),
                             )
                             Spacer(modifier = Modifier.height(5.dp))
                             Box(
@@ -260,7 +255,7 @@ fun WakeupSongShimmer() {
                                     .height(16.dp)
                                     .width(25.dp)
                                     .clip(RoundedCornerShape(4.dp))
-                                    .background(shimmerEffect())
+                                    .background(shimmerEffect()),
                             )
                         }
                         Spacer(modifier = Modifier.width(16.dp))
@@ -274,11 +269,7 @@ fun WakeupSongShimmer() {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun WakeupSongCard(
-    viewModel: AskWakeupSongViewModel = hiltViewModel(),
-    melonChartSong: MelonChartSong,
-    index: Int? = null,
-) {
+fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonChartSong: MelonChartSong, index: Int? = null) {
     var showDialog by remember {
         mutableStateOf(false)
     }
@@ -389,10 +380,7 @@ fun WakeupSongCard(
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun WakeupSongCard(
-    viewModel: AskWakeupSongViewModel = hiltViewModel(),
-    melonChartSong: SearchWakeupSong,
-) {
+fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonChartSong: SearchWakeupSong) {
     var showDialog by remember {
         mutableStateOf(false)
     }
