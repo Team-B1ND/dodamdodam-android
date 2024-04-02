@@ -72,7 +72,11 @@ import com.b1nd.dodam.wakeupsong.viewmodel.WakeupSongViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit, viewModel: WakeupSongViewModel = hiltViewModel()) {
+fun WakeupSongScreen(
+    onClickAddWakeupSong: () -> Unit,
+    popBackStack: () -> Unit,
+    viewModel: WakeupSongViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -123,7 +127,7 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
             }
         },
 
-    ) { paddingValues ->
+        ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -262,11 +266,65 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun WakeupSongCard(viewModel: WakeupSongViewModel = hiltViewModel(), wakeupSong: WakeupSong, index: Int? = null, selectedTabIndex: Int) {
+fun WakeupSongCard(
+    viewModel: WakeupSongViewModel = hiltViewModel(),
+    wakeupSong: WakeupSong,
+    index: Int? = null,
+    selectedTabIndex: Int
+) {
     var showDialog by remember {
         mutableStateOf(false)
     }
     val uriHandler = LocalUriHandler.current
+
+    if (showDialog) {
+        DodamDialog(
+            onDismissRequest = {
+                showDialog = false
+            },
+            confirmText = {
+                Row {
+                    DodamLargeFilledButton(
+                        onClick = {
+                            showDialog = false
+                        },
+                        modifier = Modifier.weight(1.0f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        ),
+                    ) {
+                        Text(text = "취소")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    DodamLargeFilledButton(
+                        onClick = {
+                            viewModel.deleteWakeupSong(wakeupSong.id)
+                            showDialog = false
+                        },
+                        modifier = Modifier.weight(1.0f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError,
+                        ),
+                    ) {
+                        Text(text = "삭제")
+                    }
+                }
+            },
+            text = {
+                Text(
+                    text = wakeupSong.videoTitle,
+                    maxLines = 3,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Medium,
+                    ),
+                )
+            },
+            title = { TitleLarge(text = "기상송을 삭제하시겠어요?") },
+        )
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -288,53 +346,6 @@ fun WakeupSongCard(viewModel: WakeupSongViewModel = hiltViewModel(), wakeupSong:
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (showDialog) {
-            DodamDialog(
-                onDismissRequest = {
-                    showDialog = false
-                },
-                confirmText = {
-                    Row {
-                        DodamLargeFilledButton(
-                            onClick = {
-                                showDialog = false
-                            },
-                            modifier = Modifier.weight(1.0f),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                            ),
-                        ) {
-                            Text(text = "취소")
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        DodamLargeFilledButton(
-                            onClick = {
-                                viewModel.deleteWakeupSong(wakeupSong.id)
-                                showDialog = false
-                            },
-                            modifier = Modifier.weight(1.0f),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error,
-                                contentColor = MaterialTheme.colorScheme.onError,
-                            ),
-                        ) {
-                            Text(text = "삭제")
-                        }
-                    }
-                },
-                text = {
-                    Text(
-                        text = wakeupSong.videoTitle,
-                        maxLines = 3,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.Medium,
-                        ),
-                    )
-                },
-                title = { TitleLarge(text = "기상송을 삭제하시겠어요?") },
-            )
-        }
         Spacer(modifier = Modifier.width(16.dp))
         Column {
             Spacer(modifier = Modifier.height(8.dp))
