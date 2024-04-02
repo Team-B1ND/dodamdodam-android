@@ -1,94 +1,59 @@
 package com.b1nd.dodam.meal
 
-import android.content.res.Configuration
-import androidx.compose.foundation.Image
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.b1nd.dodam.data.meal.model.MealDetail
-import com.b1nd.dodam.designsystem.component.DodamTopAppBar
-import com.b1nd.dodam.designsystem.component.shimmerEffect
-import com.b1nd.dodam.designsystem.theme.DodamTheme
+import com.b1nd.dodam.data.meal.model.Menu
+import com.b1nd.dodam.dds.component.DodamTopAppBar
+import com.b1nd.dodam.dds.style.BodyLarge
+import com.b1nd.dodam.dds.style.BodyMedium
+import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.meal.viewmodel.MealViewModel
+import com.b1nd.dodam.ui.component.DodamCard
+import com.b1nd.dodam.ui.effect.shimmerEffect
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import kotlin.math.roundToInt
+import kotlinx.datetime.toKotlinLocalDate
 
-@Composable
-fun MealColumn(date: LocalDate, isActive: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-    ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    if (isActive) MaterialTheme.colorScheme.primary.copy(alpha = 0.65f) else MaterialTheme.colorScheme.secondary,
-                    RoundedCornerShape(100),
-                )
-                .padding(horizontal = 60.dp, vertical = 6.dp),
-        ) {
-            Text(
-                text = String.format(
-                    "%d월 %d일 %s요일",
-                    date.monthValue,
-                    date.dayOfMonth,
-                    arrayOf(
-                        "월",
-                        "화",
-                        "수",
-                        "목",
-                        "금",
-                        "토",
-                        "일",
-                    )[date.dayOfWeek.value - 1],
-                ),
-                style = MaterialTheme.typography.bodyMedium,
-                color = if (isActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.tertiary,
-            )
-        }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            content()
-        }
-    }
-}
-
+@ExperimentalMaterial3Api
 @Composable
 fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
-    val current = LocalDateTime.now()
+    val current = LocalDate.now().toKotlinLocalDate()
     val uiState by viewModel.uiState.collectAsState()
+
+    var plus by remember { mutableLongStateOf(0) }
 
     val currentMealType = when {
         isBetween(8, 40, 13, 0) -> 2
@@ -97,107 +62,224 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
         else -> 1
     }
     val lazyListState = rememberLazyListState()
-    val isCanScroll = lazyListState.canScrollForward
-    Box(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .fillMaxSize(),
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            DodamTopAppBar(
-                title = "급식",
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            )
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(20.dp),
-                state = lazyListState,
-            ) {
-                if (!uiState.isLoading) {
-                    items(uiState.meal.size) { index ->
-                        val isToday = index == 0
-                        if (!isCanScroll) {
-                            val nextMonth = current.plusMonths(1)
-                            viewModel.fetchMealOfMonth(nextMonth.year, nextMonth.monthValue)
-                        }
 
-                        val meal = uiState.meal[index]
-                        val date = meal.date
-                        MealColumn(
-                            isActive = isToday,
-                            date = LocalDate.of(date.year, date.monthNumber, date.dayOfMonth),
-                        ) {
-                            meal.breakfast?.let { meal ->
-                                MealCard(
-                                    title = "아침",
-                                    meal = meal,
-                                    isActive = isToday && currentMealType == 1,
-                                )
-                            }
+    LaunchedEffect(lazyListState.canScrollForward) {
+        if (!lazyListState.canScrollForward) {
+            val date = LocalDate.now().plusMonths(plus)
+            if (plus == 0L) {
+                viewModel.getMealOfMonth(date.year, date.monthValue)
+            } else {
+                viewModel.fetchMealOfMonth(date.year, date.monthValue)
+            }
+            plus++
+        }
+    }
 
-                            meal.lunch?.let { meal ->
-                                MealCard(
-                                    title = "점심",
-                                    meal = meal,
-                                    isActive = isToday && currentMealType == 2,
-                                )
-                            }
-
-                            meal.dinner?.let { meal ->
-                                MealCard(
-                                    title = "저녁",
-                                    meal = meal,
-                                    isActive = isToday && currentMealType == 3,
-                                )
-                            }
-                        }
-                    }
-                } else if (viewModel.isFirst.value == true) {
-                    items(3) { index ->
-                        val isToday = index == 0
-                        MealColumn(
-                            isActive = isToday,
-                            date = LocalDate.now(),
-                        ) {
-                            MealCard(isLoading = true)
-                            MealCard(isLoading = true)
-                            MealCard(isLoading = true)
-                        }
-                    }
-                }
-                item {
-                    if (!uiState.endReached) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(64.dp),
-                            color = MaterialTheme.colorScheme.secondary,
-                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                        )
-                    }
-                    Spacer(
+    Scaffold(
+        topBar = {
+            Column {
+                DodamTopAppBar(
+                    title = { Text(text = "급식") },
+                )
+                AnimatedVisibility(lazyListState.canScrollBackward) {
+                    Box(
                         modifier = Modifier
-                            .navigationBarsPadding()
-                            .padding(bottom = 100.dp),
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .background(MaterialTheme.colorScheme.outlineVariant),
                     )
                 }
             }
+        },
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            state = lazyListState,
+        ) {
+            if (!uiState.showShimmer) {
+                if (uiState.meal.isNotEmpty()) {
+                    items(
+                        items = uiState.meal,
+                        key = { it.date.toString() },
+                    ) { meal ->
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            if (meal.exists) {
+                                Box(
+                                    modifier = Modifier
+                                        .background(
+                                            if (current == meal.date) {
+                                                MaterialTheme.colorScheme.primary
+                                            } else {
+                                                MaterialTheme.colorScheme.secondaryContainer
+                                            },
+                                            CircleShape,
+                                        )
+                                        .padding(horizontal = 60.dp, vertical = 4.dp),
+                                ) {
+                                    BodyMedium(
+                                        text = String.format(
+                                            "%d월 %d일 (%s)",
+                                            meal.date.monthNumber,
+                                            meal.date.dayOfMonth,
+                                            listOf(
+                                                "월",
+                                                "화",
+                                                "수",
+                                                "목",
+                                                "금",
+                                                "토",
+                                                "일",
+                                            )[meal.date.dayOfWeek.value - 1],
+                                        ),
+                                        color = if (current == meal.date) {
+                                            MaterialTheme.colorScheme.onPrimary
+                                        } else {
+                                            MaterialTheme.colorScheme.onSecondaryContainer
+                                        },
+                                    )
+                                }
+
+                                meal.breakfast?.let { breakfast ->
+                                    MealCard(
+                                        mealType = "아침",
+                                        statusColor = if (meal.date == current && currentMealType == 1) {
+                                            MaterialTheme.colorScheme.primary
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurfaceVariant
+                                        },
+                                        calorie = breakfast.calorie,
+                                        menus = breakfast.details,
+                                    )
+                                }
+
+                                meal.lunch?.let { lunch ->
+                                    MealCard(
+                                        mealType = "점심",
+                                        statusColor = if (meal.date == current && currentMealType == 2) {
+                                            MaterialTheme.colorScheme.primary
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurfaceVariant
+                                        },
+                                        calorie = lunch.calorie,
+                                        menus = lunch.details,
+                                    )
+                                }
+
+                                meal.dinner?.let { dinner ->
+                                    MealCard(
+                                        mealType = "저녁",
+                                        statusColor = if (meal.date == current && currentMealType == 3) {
+                                            MaterialTheme.colorScheme.primary
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurfaceVariant
+                                        },
+                                        calorie = dinner.calorie,
+                                        menus = dinner.details,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    item {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            LabelLarge(
+                                text = "이번 달 급식이 없어요.",
+                                color = MaterialTheme.colorScheme.tertiary,
+                            )
+                        }
+                    }
+                }
+            } else {
+                items(30) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                MaterialTheme.colorScheme.surfaceContainer,
+                                MaterialTheme.shapes.large,
+                            )
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .size(52.dp, 27.dp)
+                                    .background(shimmerEffect(), CircleShape),
+                            )
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            Box(
+                                modifier = Modifier
+                                    .size(52.dp, 20.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
+                            )
+                        }
+
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(140.dp, 18.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .size(110.dp, 18.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .size(60.dp, 18.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .size(120.dp, 18.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .size(110.dp, 18.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
+                            )
+                        }
+                    }
+                }
+            }
+            item {
+                Spacer(modifier = Modifier.height(80.dp))
+            }
         }
-        if (!uiState.isLoading && uiState.meal.isEmpty()) {
-            EmptyMeal(text = "이번 달 급식이 없어요", modifier = Modifier.align(Alignment.Center))
-        }
-//        TODO : composable for allergy sign
-//        DodamTopAppBar(
-//            title = "",
-//            contentColor = MaterialTheme.colorScheme.onSurface,
-//            containerColor = Color.Transparent,
-//            modifier = Modifier.background(
-//                MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
-//            )
-//        )
+    }
+}
+
+@Composable
+private fun MealCard(mealType: String, statusColor: Color, calorie: Float, menus: List<Menu>) {
+    DodamCard(
+        statusText = mealType,
+        statusColor = statusColor,
+        labelText = "${calorie.roundToInt()} Kcal",
+    ) {
+        BodyLarge(text = menus.joinToString("\n") { it.name })
     }
 }
 
@@ -212,132 +294,4 @@ private fun isBetween(startHour: Int, startMinute: Int, endHour: Int, endMinute:
         LocalTime.of(endHour, endMinute),
     )
     return current.isAfter(startDate) && current.isBefore(endDate)
-}
-
-@Composable
-fun MealCard(modifier: Modifier = Modifier, isLoading: Boolean = false, isActive: Boolean = false, title: String = "", meal: MealDetail? = null) {
-    Column(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(18.dp))
-            .padding(16.dp),
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (!isLoading) {
-                Box(
-                    modifier = Modifier
-                        .background(
-                            if (isActive) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.65f)
-                            } else {
-                                MaterialTheme.colorScheme.tertiary
-                            },
-                            shape = RoundedCornerShape(100),
-                        )
-                        .padding(horizontal = 12.dp, vertical = 4.dp),
-                ) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .background(
-                            brush = shimmerEffect(),
-                            shape = RoundedCornerShape(100),
-                        )
-                        .width(50.dp)
-                        .height(25.dp)
-                        .padding(horizontal = 12.dp, vertical = 4.dp),
-                )
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            if (!isLoading) {
-                Text(
-                    text = meal?.calorie?.roundToInt().toString() + "Kcal",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.tertiary,
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .background(
-                            brush = shimmerEffect(),
-                            shape = RoundedCornerShape(100),
-                        )
-                        .width(60.dp)
-                        .height(20.dp),
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        if (!isLoading) {
-            Column {
-                meal?.details?.forEach {
-                    Row {
-                        Text(
-                            text = it.name,
-                            modifier = Modifier,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-//                        TODO : composable for allergy sign
-//                        Spacer(modifier = Modifier.weight(1f))
-//                        Text(
-//                            text = it.allergies.joinToString("."),
-//                            modifier = Modifier,
-//                            style = MaterialTheme.typography.bodyMedium,
-//                            color = MaterialTheme.colorScheme.tertiary,
-//                        )
-                    }
-                }
-            }
-        } else {
-            Column {
-                val widths = listOf(150, 100, 75, 120, 60, 80)
-                widths.forEach { size ->
-                    Box(
-                        modifier = Modifier
-                            .heightIn(19.dp)
-                            .widthIn(size.dp)
-                            .background(
-                                brush = shimmerEffect(),
-                                RoundedCornerShape(8.dp),
-                            ),
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun EmptyMeal(text: String, modifier: Modifier = Modifier) {
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = painterResource(id = com.b1nd.dodam.designsystem.R.drawable.ic_empty),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-        )
-    }
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun PreviewMealCard() {
-    DodamTheme {
-        EmptyMeal("이번 달 급식이 없어요")
-    }
 }

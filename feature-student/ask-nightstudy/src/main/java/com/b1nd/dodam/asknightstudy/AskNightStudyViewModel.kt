@@ -3,6 +3,7 @@ package com.b1nd.dodam.asknightstudy
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.asknightstudy.model.AskNightStudyUiState
+import com.b1nd.dodam.common.exception.BadRequestException
 import com.b1nd.dodam.common.exception.ForbiddenException
 import com.b1nd.dodam.common.exception.NotFoundException
 import com.b1nd.dodam.common.result.Result
@@ -65,7 +66,7 @@ class AskNightStudyViewModel @Inject constructor(
                             )
                         }
                         when (result.error) {
-                            is ForbiddenException, is NotFoundException -> {
+                            is ForbiddenException, is NotFoundException, is BadRequestException -> {
                                 _event.emit(Event.ShowDialog)
                             }
                         }

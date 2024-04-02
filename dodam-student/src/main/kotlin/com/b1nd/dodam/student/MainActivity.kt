@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.icons.B1NDLogo
@@ -64,7 +65,14 @@ class MainActivity : ComponentActivity() {
 
             DodamTheme {
                 isLogin?.let {
-                    DodamApp(it)
+                    DodamApp(
+                        isLogin = it,
+                        deleteToken = {
+                            lifecycleScope.launch {
+                                datastoreRepository.deleteUser()
+                            }
+                        },
+                    )
                 } ?: run {
                     Box(
                         modifier = Modifier

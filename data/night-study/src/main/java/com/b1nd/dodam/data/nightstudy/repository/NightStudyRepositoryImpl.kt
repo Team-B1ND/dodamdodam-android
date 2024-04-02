@@ -50,4 +50,10 @@ internal class NightStudyRepositoryImpl @Inject constructor(
             )
         }.asResult().flowOn(dispatcher)
     }
+
+    override fun deleteNightStudy(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(remote.deleteNightStudy(id))
+        }.asResult().flowOn(dispatcher)
+    }
 }

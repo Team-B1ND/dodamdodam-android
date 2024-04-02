@@ -1,13 +1,14 @@
 package com.b1nd.dodam.outing.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.outing.OutingRepository
+import com.b1nd.dodam.data.outing.model.OutType
 import com.b1nd.dodam.outing.OutingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -25,10 +26,6 @@ class OutingViewModel @Inject constructor(
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
 
-    init {
-        getMyOuting()
-    }
-
     fun getMyOuting() {
         viewModelScope.launch {
             outingRepository.getMyOut().collect { result ->
@@ -36,23 +33,95 @@ class OutingViewModel @Inject constructor(
                     when (result) {
                         is Result.Error -> {
                             _event.emit(Event.Error(result.error.message.toString()))
-                            Log.e("ERROR", result.error.message.toString())
                             it.copy(
                                 isLoading = false,
                             )
                         }
+
                         Result.Loading -> {
                             it.copy(
                                 isLoading = true,
                             )
                         }
+
                         is Result.Success -> {
                             it.copy(
                                 isLoading = false,
-                                outings = result.data,
+                                outings = result.data.filter { outs ->
+                                    outs.outType == OutType.OUTING
+                                }.toImmutableList(),
+                                sleepovers = result.data.filter { outs ->
+                                    outs.outType == OutType.SLEEPOVER
+                                }.toImmutableList(),
                             )
                         }
                     }
+                }
+            }
+        }
+    }
+
+    fun deleteOuting(id: Long) = viewModelScope.launch {
+        outingRepository.deleteOuting(id).collect { result ->
+            when (result) {
+                is Result.Success -> {
+                    getMyOuting()
+                    _event.emit(Event.ShowToast)
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                        )
+                    }
+                }
+
+                is Result.Loading -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = true,
+                        )
+                    }
+                }
+
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                        )
+                    }
+                    _event.emit(Event.Error(result.error.message.toString()))
+                }
+            }
+        }
+    }
+
+    fun deleteSleepover(id: Long) = viewModelScope.launch {
+        outingRepository.deleteSleepover(id).collect { result ->
+            when (result) {
+                is Result.Success -> {
+                    getMyOuting()
+                    _event.emit(Event.ShowToast)
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                        )
+                    }
+                }
+
+                is Result.Loading -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = true,
+                        )
+                    }
+                }
+
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                        )
+                    }
+                    _event.emit(Event.Error(result.error.message.toString()))
                 }
             }
         }
@@ -61,4 +130,5 @@ class OutingViewModel @Inject constructor(
 
 sealed interface Event {
     data class Error(val message: String) : Event
+    data object ShowToast : Event
 }
