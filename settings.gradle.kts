@@ -62,5 +62,6 @@ include(
     ":feature-student:ask-nightstudy",
     ":feature:setting",
     ":network:point",
-    ":data:point"
+    ":data:point",
+    ":feature-student:point",
 )
