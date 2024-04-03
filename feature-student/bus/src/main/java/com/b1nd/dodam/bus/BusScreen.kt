@@ -100,11 +100,11 @@ fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Uni
             },
             confirmText = {
                 DodamTextButton(onClick = popBackStack) {
-                    BodyLarge(text = "확인")
+                    Text(text = "확인")
                 }
             },
             title = {
-                TitleLarge(text = "버스 운헹 날짜가 아닙니다")
+                Text(text = "버스 운헹 날짜가 아닙니다")
             },
         )
     }
