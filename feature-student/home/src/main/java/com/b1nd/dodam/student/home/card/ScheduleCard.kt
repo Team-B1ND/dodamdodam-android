@@ -126,7 +126,7 @@ internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchS
                                     }
                                 } else {
                                     if (schedules.size > 1) {
-                                        schedules[2].date.first()
+                                        schedules[1].date.first()
                                     } else {
                                         null
                                     }
