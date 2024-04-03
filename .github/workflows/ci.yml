@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "develop", "main" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop", "main" ]
 
 jobs:
   build:
@@ -23,8 +23,8 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build with Gradle
-      run: ./gradlew build
-      
     - name: Run spotless
-      run: ./gradlew spotlessCheck
+      run: ./gradlew dodam-student:spotlessCheck
+
+    - name: Build with Gradle
+      run: ./gradlew dodam-student:clean build --parallel
