@@ -105,7 +105,7 @@ internal fun HomeScreen(
             },
             text = {
                 Text(text = "전체 일정을 조회하시려면 도담도담 웹사이트를 이용해 주세요.")
-            }
+            },
         )
     }
 
