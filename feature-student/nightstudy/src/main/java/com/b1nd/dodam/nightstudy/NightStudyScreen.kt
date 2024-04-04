@@ -333,17 +333,17 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                     if (nightStudy.rejectReason != null) {
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp),
                                         ) {
                                             LabelLarge(
                                                 text = "거절 사유",
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             )
 
                                             BodyMedium(
                                                 text = nightStudy.rejectReason!!,
                                                 color = MaterialTheme.colorScheme.onSurface,
-                                                fontWeight = FontWeight.Medium
+                                                fontWeight = FontWeight.Medium,
                                             )
                                         }
                                     }
@@ -392,7 +392,7 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
 
                             LabelLarge(
                                 text = "아직 신청한 심야 자습이 없어요.",
-                                color = MaterialTheme.colorScheme.tertiary
+                                color = MaterialTheme.colorScheme.tertiary,
                             )
 
                             Spacer(modifier = Modifier.height(24.dp))

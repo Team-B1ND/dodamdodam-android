@@ -16,5 +16,5 @@ data class SleepoverResponse(
     val endAt: LocalDate,
     val createdAt: LocalDateTime,
     val modifiedAt: LocalDateTime,
-    val rejectReason: String?
+    val rejectReason: String?,
 )

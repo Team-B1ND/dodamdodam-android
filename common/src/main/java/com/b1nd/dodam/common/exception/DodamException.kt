@@ -4,7 +4,7 @@ class BadRequestException(
     override val message: String?,
 ) : RuntimeException()
 
-class IMUsedException(
+class LockedException(
     override val message: String?,
 ) : RuntimeException()
 

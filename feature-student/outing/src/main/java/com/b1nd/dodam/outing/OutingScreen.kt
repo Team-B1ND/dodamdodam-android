@@ -396,22 +396,21 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                                 MaterialTheme.colorScheme.onSurfaceVariant
                                             },
                                         )
-                                    }
-                                    else {
+                                    } else {
                                         if (out.rejectReason != null) {
                                             Row(
                                                 verticalAlignment = Alignment.CenterVertically,
-                                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                                horizontalArrangement = Arrangement.spacedBy(8.dp),
                                             ) {
                                                 LabelLarge(
                                                     text = "거절 사유",
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                                 )
 
                                                 BodyMedium(
                                                     text = out.rejectReason!!,
                                                     color = MaterialTheme.colorScheme.onSurface,
-                                                    fontWeight = FontWeight.Medium
+                                                    fontWeight = FontWeight.Medium,
                                                 )
                                             }
                                         }
@@ -592,22 +591,21 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                                 MaterialTheme.colorScheme.onSurfaceVariant
                                             },
                                         )
-                                    }
-                                    else {
+                                    } else {
                                         if (out.rejectReason != null) {
                                             Row(
                                                 verticalAlignment = Alignment.CenterVertically,
-                                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                                horizontalArrangement = Arrangement.spacedBy(8.dp),
                                             ) {
                                                 LabelLarge(
                                                     text = "거절 사유",
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                                 )
 
                                                 BodyMedium(
                                                     text = out.rejectReason!!,
                                                     color = MaterialTheme.colorScheme.onSurface,
-                                                    fontWeight = FontWeight.Medium
+                                                    fontWeight = FontWeight.Medium,
                                                 )
                                             }
                                         }
