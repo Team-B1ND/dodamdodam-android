@@ -19,6 +19,7 @@ data class NightStudy(
     val endAt: LocalDateTime,
     val createdAt: LocalDateTime,
     val modifiedAt: LocalDateTime,
+    val rejectReason: String?,
 )
 
 internal fun NightStudyResponse.toModel(): NightStudy = NightStudy(
@@ -33,4 +34,5 @@ internal fun NightStudyResponse.toModel(): NightStudy = NightStudy(
     endAt = endAt.atTime(hour = 23, minute = 0, second = 0),
     createdAt = createdAt,
     modifiedAt = modifiedAt,
+    rejectReason = rejectReason,
 )
