@@ -409,6 +409,9 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                         }
                     }
                 }
+                item { 
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
             }
         }
     }

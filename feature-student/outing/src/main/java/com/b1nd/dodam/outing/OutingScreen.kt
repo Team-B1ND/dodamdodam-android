@@ -397,28 +397,31 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                             },
                                         )
                                     }
-                                    /* TODO : 거절 사유 만들어지면 주석 해제
                                     else {
-                                        Row(
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                        ) {
-                                            LabelLarge(
-                                                text = "거절 사유",
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                                            )
+                                        if (out.rejectReason != null) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                            ) {
+                                                LabelLarge(
+                                                    text = "거절 사유",
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
 
-                                            BodyMedium(
-                                                text = outing.,
-                                                color = MaterialTheme.colorScheme.onSurface,
-                                                fontWeight = FontWeight.Medium
-                                            )
+                                                BodyMedium(
+                                                    text = out.rejectReason!!,
+                                                    color = MaterialTheme.colorScheme.onSurface,
+                                                    fontWeight = FontWeight.Medium
+                                                )
+                                            }
                                         }
                                     }
-                                     */
                                 }
                             }
                         }
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(80.dp))
                     }
                 }
             } else {
@@ -590,29 +593,31 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                             },
                                         )
                                     }
-
-                                    /* TODO : 거절 사유 만들어지면 주석 해제
                                     else {
-                                        Row(
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                        ) {
-                                            LabelLarge(
-                                                text = "거절 사유",
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                                            )
+                                        if (out.rejectReason != null) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                            ) {
+                                                LabelLarge(
+                                                    text = "거절 사유",
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
 
-                                            BodyMedium(
-                                                text = outing.,
-                                                color = MaterialTheme.colorScheme.onSurface,
-                                                fontWeight = FontWeight.Medium
-                                            )
+                                                BodyMedium(
+                                                    text = out.rejectReason!!,
+                                                    color = MaterialTheme.colorScheme.onSurface,
+                                                    fontWeight = FontWeight.Medium
+                                                )
+                                            }
                                         }
                                     }
-                                     */
                                 }
                             }
                         }
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(80.dp))
                     }
                 }
             }
