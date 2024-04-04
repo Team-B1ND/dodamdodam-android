@@ -18,6 +18,7 @@ data class Outing(
     val endAt: LocalDateTime,
     val createdAt: LocalDateTime,
     val modifiedAt: LocalDateTime,
+    val rejectReason: String?,
 )
 
 enum class OutType {
@@ -35,6 +36,7 @@ internal fun OutingResponse.toModel(): Outing = Outing(
     endAt = endAt,
     createdAt = createdAt,
     modifiedAt = modifiedAt,
+    rejectReason = rejectReason
 )
 
 internal fun SleepoverResponse.toModel(): Outing = Outing(
@@ -47,4 +49,5 @@ internal fun SleepoverResponse.toModel(): Outing = Outing(
     endAt = endAt.atTime(21, 0, 0),
     createdAt = createdAt,
     modifiedAt = modifiedAt,
+    rejectReason = rejectReason
 )
