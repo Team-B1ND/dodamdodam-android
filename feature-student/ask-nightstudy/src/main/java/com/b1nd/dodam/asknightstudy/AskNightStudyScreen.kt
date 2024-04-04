@@ -198,8 +198,8 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .imePadding(),
-        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             DodamSmallTopAppBar(
                 title = { Text(text = "심야 자습 신청하기") },

@@ -3,7 +3,7 @@ package com.b1nd.dodam.askwakeupsong
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.askwakeupsong.model.AskWakeupSongUiState
-import com.b1nd.dodam.common.exception.IMUsedException
+import com.b1nd.dodam.common.exception.LockedException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -120,8 +120,8 @@ class AskWakeupSongViewModel @Inject constructor(
 
                         is Result.Error -> {
                             when (result.error) {
-                                is IMUsedException -> {
-                                    _event.emit(Event.ShowToast("이미 기상송을 신청했습니다."))
+                                is LockedException -> {
+                                    _event.emit(Event.ShowToast("이번주에 이미 기상송을 신청했습니다."))
                                 }
 
                                 else -> {
