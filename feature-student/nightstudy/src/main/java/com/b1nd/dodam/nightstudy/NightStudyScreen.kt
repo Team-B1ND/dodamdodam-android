@@ -314,7 +314,7 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                         color = MaterialTheme.colorScheme.onSurface,
                                     )
                                     LabelLarge(
-                                        text = "복귀",
+                                        text = "까지",
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
@@ -329,10 +329,8 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                             MaterialTheme.colorScheme.onSurfaceVariant
                                         },
                                     )
-                                }
-
-                                /* TODO : 거절 사유 만들어지면 주석 해제
-                                    else {
+                                } else {
+                                    if (nightStudy.rejectReason != null) {
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -343,13 +341,13 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                                             )
 
                                             BodyMedium(
-                                                text = outing.,
+                                                text = nightStudy.rejectReason!!,
                                                 color = MaterialTheme.colorScheme.onSurface,
                                                 fontWeight = FontWeight.Medium
                                             )
                                         }
                                     }
-                                 */
+                                }
 
                                 if (nightStudy.doNeedPhone) {
                                     Row(
@@ -392,7 +390,10 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
 
                             Spacer(modifier = Modifier.height(12.dp))
 
-                            LabelLarge(text = "아직 신청한 심야 자습이 없어요.", color = MaterialTheme.colorScheme.tertiary)
+                            LabelLarge(
+                                text = "아직 신청한 심야 자습이 없어요.",
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
 
                             Spacer(modifier = Modifier.height(24.dp))
 
@@ -409,7 +410,7 @@ fun NightStudyScreen(onAddClick: () -> Unit, viewModel: NightStudyViewModel = hi
                         }
                     }
                 }
-                item { 
+                item {
                     Spacer(modifier = Modifier.height(80.dp))
                 }
             }
