@@ -117,8 +117,8 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), pop
                                         .drawBehind {
                                             drawRoundRect(
                                                 color = DodamColor.White,
-                                                topLeft = Offset(20f, 20f),
-                                                size = Size(30f, 30f),
+                                                topLeft = Offset(15f, 15f),
+                                                size = Size(25f, 25f),
                                             )
                                         },
                                 )
@@ -129,8 +129,8 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), pop
                                         .drawBehind {
                                             drawRoundRect(
                                                 color = DodamColor.White,
-                                                topLeft = Offset(20f, 20f),
-                                                size = Size(30f, 30f),
+                                                topLeft = Offset(15f, 15f),
+                                                size = Size(25f, 25f),
                                             )
                                         },
                                     tint = MaterialTheme.colorScheme.error,

@@ -15,4 +15,5 @@ data class OutingResponse(
     val endAt: LocalDateTime,
     val createdAt: LocalDateTime,
     val modifiedAt: LocalDateTime,
+    val rejectReason: String?,
 )
