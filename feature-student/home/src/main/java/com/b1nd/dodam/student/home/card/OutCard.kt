@@ -247,6 +247,7 @@ internal fun OutCard(
                     }
 
                     is OutUiState.Loading -> {
+                        isRefreshing = true
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()

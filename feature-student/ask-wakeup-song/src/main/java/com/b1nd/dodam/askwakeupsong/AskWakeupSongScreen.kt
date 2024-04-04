@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.ContentScale
@@ -73,6 +74,9 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), pop
     val focusManager = LocalFocusManager.current
     var keyWord by remember {
         mutableStateOf("")
+    }
+    var isFocus by remember {
+        mutableStateOf(false)
     }
 
     LaunchedEffect(key1 = viewModel.event) {
@@ -146,13 +150,16 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), pop
         ) {
             Box(modifier = Modifier.padding(horizontal = 16.dp)) {
                 DodamTextField(
+                    modifier = Modifier.onFocusChanged {
+                        isFocus = it.isFocused
+                    },
                     value = keyWord,
                     onValueChange = { keyWord = it },
                     label = {
                         Text(text = "제목, 아티스트 혹은 링크")
                     },
                     trailingIcon = {
-                        if (keyWord.isNotEmpty()) {
+                        if (keyWord.isNotEmpty() && isFocus) {
                             XMarkCircleIcon(
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.clickable {
