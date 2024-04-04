@@ -40,7 +40,6 @@ import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.CheckmarkCircleFilledIcon
 import com.b1nd.dodam.dds.style.CheckmarkIcon
 import com.b1nd.dodam.dds.style.HeadlineSmall
-import com.b1nd.dodam.dds.style.TitleLarge
 import com.b1nd.dodam.dds.style.XMarkCircleIcon
 import com.b1nd.dodam.ui.component.InputField
 
@@ -100,11 +99,11 @@ fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Uni
             },
             confirmText = {
                 DodamTextButton(onClick = popBackStack) {
-                    BodyLarge(text = "확인")
+                    Text(text = "확인")
                 }
             },
             title = {
-                TitleLarge(text = "버스 운헹 날짜가 아닙니다")
+                Text(text = "버스 운헹 날짜가 아닙니다")
             },
         )
     }

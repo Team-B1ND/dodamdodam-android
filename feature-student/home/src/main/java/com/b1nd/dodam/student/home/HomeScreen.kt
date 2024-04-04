@@ -29,6 +29,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,7 +46,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.b1nd.dodam.dds.animation.bounceClick
+import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamTopAppBar
+import com.b1nd.dodam.dds.component.button.DodamTextButton
 import com.b1nd.dodam.dds.foundation.DodamIcons
 import com.b1nd.dodam.dds.foundation.DodamShape
 import com.b1nd.dodam.dds.style.BodyLarge
@@ -80,6 +83,31 @@ internal fun HomeScreen(
     navigateToWakeupSongScreen: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+
+    if (showDialog) {
+        DodamDialog(
+            onDismissRequest = {
+                showDialog = false
+            },
+            confirmText = {
+                DodamTextButton(onClick = {
+                    showDialog = false
+                }) {
+                    BodyLarge(text = "확인")
+                }
+            },
+            title = {
+                Text(text = "아직 준비 중인 기능이에요!")
+            },
+            text = {
+                Text(text = "전체 일정을 조회하시려면 도담도담 웹사이트를 이용해 주세요.")
+            },
+        )
+    }
 
     HomeScreen(
         bannerUiState = uiState.bannerUiState,
