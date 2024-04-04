@@ -194,8 +194,8 @@ fun OutingScreen(onAddOutingClick: () -> Unit, viewModel: OutingViewModel = hilt
                                         .drawBehind {
                                             drawRoundRect(
                                                 color = DodamColor.White,
-                                                topLeft = Offset(12f, 12f),
-                                                size = Size(30f, 30f),
+                                                topLeft = Offset(15f, 15f),
+                                                size = Size(25f, 25f),
                                             )
                                         },
                                 )
