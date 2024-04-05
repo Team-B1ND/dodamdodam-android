@@ -1,5 +1,6 @@
 package com.b1nd.dodam.register
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -388,6 +389,12 @@ fun InfoScreen(
                                     )
                                     classInfoState = checkClassInfoStateValid(classInfoState)
                                 }
+
+                                11 -> {
+                                    if (classInfoState.isValid) {
+                                        focusManager.moveFocus(FocusDirection.Up)
+                                    }
+                                }
                             }
                         },
                         trailingIcon = {
@@ -608,7 +615,10 @@ private fun checkClassInfoStateValid(classInfoState: TextFieldState): TextFieldS
 }
 
 private fun checkEmailStateValid(emailState: TextFieldState): TextFieldState {
-    return if (emailState.value.isNotBlank()) {
+    return if (
+        emailState.value.isNotBlank() && "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$".toRegex()
+            .matches(emailState.value)
+    ) {
         TextFieldState(
             value = emailState.value,
             isValid = true,
