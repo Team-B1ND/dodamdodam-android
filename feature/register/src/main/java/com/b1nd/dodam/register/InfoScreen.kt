@@ -498,9 +498,9 @@ fun InfoScreen(
                     )
                 },
                 enabled = nameState.value.length in 2..4 &&
-                        classInfoState.value.length == 4 &&
-                        emailState.value.isNotBlank() &&
-                        phoneNumberState.value.length == 11,
+                    classInfoState.value.length == 4 &&
+                    emailState.value.isNotBlank() &&
+                    phoneNumberState.value.length == 11,
             ) {
                 Text(text = "다음")
             }
@@ -566,9 +566,9 @@ private fun checkClassInfoStateValid(classInfoState: TextFieldState): TextFieldS
                 }
             } else { // 학번을 4글자로 입력했다면
                 if ((
-                            classInfoState.value[2].toString() +
-                                    classInfoState.value[3].toString()
-                            )
+                        classInfoState.value[2].toString() +
+                            classInfoState.value[3].toString()
+                        )
                         .toInt() in 1..25
                 ) { // 학번이 1~25 사이인가
                     TextFieldState(
