@@ -22,6 +22,10 @@ class OutingViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<OutUiState> = MutableStateFlow(OutUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
+    init {
+        getMyOuting()
+    }
+
     fun getMyOuting() {
         viewModelScope.launch {
             outingRepository.getMyOut().collect { result ->
