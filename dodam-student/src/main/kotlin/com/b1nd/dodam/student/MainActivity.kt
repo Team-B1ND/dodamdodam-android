@@ -47,9 +47,6 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(Unit) {
                 launch {
-                    isLogin = datastoreRepository.token.first().isNotEmpty()
-                }
-                launch {
                     enableEdgeToEdge(
                         statusBarStyle = SystemBarStyle.auto(
                             android.graphics.Color.TRANSPARENT,
@@ -60,6 +57,9 @@ class MainActivity : ComponentActivity() {
                             android.graphics.Color.TRANSPARENT,
                         ),
                     )
+                }
+                launch {
+                    isLogin = datastoreRepository.token.first().isNotEmpty()
                 }
             }
 
