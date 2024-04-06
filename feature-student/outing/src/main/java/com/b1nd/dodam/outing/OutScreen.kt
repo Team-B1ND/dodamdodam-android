@@ -40,14 +40,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.dds.animation.bounceCombinedClick
 import com.b1nd.dodam.dds.component.DodamDialog
@@ -66,9 +61,6 @@ import com.b1nd.dodam.outing.viewmodel.OutingViewModel
 import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ConvenienceStore
-import kotlinx.datetime.toJavaLocalDateTime
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
@@ -78,7 +70,7 @@ fun OutingScreen(
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,
-    viewModel: OutingViewModel = hiltViewModel()
+    viewModel: OutingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val outScreenState = rememberOutScreenState()
@@ -438,14 +430,14 @@ fun OutingScreen(
 
                     is OutUiState.Error -> showToast(
                         "ERROR",
-                        (if (selectedIndex == 0) "외출" else "외박") + "을 불러올 수 없어요"
+                        (if (selectedIndex == 0) "외출" else "외박") + "을 불러올 수 없어요",
                     )
 
                     is OutUiState.SuccessDelete -> {
                         showDialog = false
                         showToast(
                             "SUCCESS",
-                            (if (selectedIndex == 0) "외출" else "외박") + "을 삭제했어요"
+                            (if (selectedIndex == 0) "외출" else "외박") + "을 삭제했어요",
                         )
                     }
 
@@ -453,7 +445,7 @@ fun OutingScreen(
                         showDialog = false
                         showToast(
                             "ERROR",
-                            (if (selectedIndex == 0) "외출" else "외박") + "삭제를 실패했어요"
+                            (if (selectedIndex == 0) "외출" else "외박") + "삭제를 실패했어요",
                         )
                     }
                 }
