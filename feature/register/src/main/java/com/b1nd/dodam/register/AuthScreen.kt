@@ -267,7 +267,9 @@ fun AuthScreen(
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = {
                             passwordState = isPasswordValid(passwordState)
-                            focusManager.clearFocus()
+                            if (passwordState.isValid) {
+                                focusManager.moveFocus(FocusDirection.Up)
+                            }
                         }),
                         visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                         singleLine = true,
