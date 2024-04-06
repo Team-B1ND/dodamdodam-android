@@ -10,6 +10,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.b1nd.dodam.student.main.MainScreen
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 const val MAIN_ROUTE = "main"
 
@@ -32,6 +34,8 @@ fun NavGraphBuilder.mainScreen(
     navigateToSchedule: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
+    firebaseAnalytics: FirebaseAnalytics,
+    firebaseCrashlytics: FirebaseCrashlytics,
     showToast: (String, String) -> Unit,
 ) {
     composable(route = MAIN_ROUTE) {
@@ -48,6 +52,8 @@ fun NavGraphBuilder.mainScreen(
             showToast = showToast,
             refresh = { it.savedStateHandle["refresh"] ?: false },
             dispose = { it.savedStateHandle["refresh"] = false },
+            firebaseAnalytics = firebaseAnalytics,
+            firebaseCrashlytics = firebaseCrashlytics,
         )
     }
 }
