@@ -1,6 +1,9 @@
 package com.b1nd.dodam.student
 
 import android.annotation.SuppressLint
+import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.coroutines.CoroutineScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -20,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -55,7 +59,7 @@ import com.b1nd.dodam.student.point.navigation.navigateToPoint
 import com.b1nd.dodam.student.point.navigation.pointScreen
 import com.b1nd.dodam.wakeupsong.navigation.navigateToWakeupSong
 import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
-import kotlinx.coroutines.CoroutineScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -67,9 +71,30 @@ fun DodamApp(
     isLogin: Boolean,
     deleteToken: () -> Unit,
     navController: NavHostController = rememberNavController(),
+    mainNavController: NavHostController = rememberNavController(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    firebaseAnalytics: FirebaseAnalytics,
+    firebaseCrashlytics: FirebaseCrashlytics,
     scope: CoroutineScope = rememberCoroutineScope(),
 ) {
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+        val params = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, destination.route)
+            putString(FirebaseAnalytics.Param.SCREEN_CLASS, destination.route)
+        }
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, params)
+        firebaseCrashlytics.sendUnsentReports()
+    }
+
+    mainNavController.addOnDestinationChangedListener { _, destination, _ ->
+        val params = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, destination.route)
+            putString(FirebaseAnalytics.Param.SCREEN_CLASS, destination.route)
+        }
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, params)
+        firebaseCrashlytics.sendUnsentReports()
+    }
+
     var state by remember { mutableStateOf("") }
 
     Scaffold(
@@ -108,6 +133,7 @@ fun DodamApp(
                 onLoginClick = navController::navigationToLogin,
             )
             mainScreen(
+                navController = mainNavController,
                 navigateToAskNightStudy = navController::navigateToAskNightStudy,
                 navigateToAddOuting = navController::navigateToAskOut,
                 navigateToSetting = navController::navigateToSetting,

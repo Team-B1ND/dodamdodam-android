@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.dodam.android.kotlin)
     alias(libs.plugins.dodam.android.compose)
     alias(libs.plugins.dodam.android.hilt)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firbase.crashlytics)
 }
 
 android {

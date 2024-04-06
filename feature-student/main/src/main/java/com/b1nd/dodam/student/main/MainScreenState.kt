@@ -16,7 +16,7 @@ import com.b1nd.dodam.student.home.navigation.navigateToHome
 import com.b1nd.dodam.student.main.navigation.MainDestination
 
 @Composable
-internal fun rememberMainScreenState(navController: NavHostController = rememberNavController()) = remember(
+internal fun rememberMainScreenState(navController: NavHostController) = remember(
     navController,
 ) {
     MainScreenState(navController)
