@@ -474,11 +474,10 @@ fun InfoScreen(
                     },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     keyboardActions = KeyboardActions(onNext = {
+                        nameState = checkNameStateValid(nameState)
                         if (nameState.isValid) {
-                            nameState = checkNameStateValid(nameState)
                             focusManager.moveFocus(FocusDirection.Up)
                         } else {
-                            nameState = checkNameStateValid(nameState)
                             focusManager.clearFocus()
                         }
                     }),
