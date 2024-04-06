@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
 import com.b1nd.dodam.dds.component.DodamNavigationBar
 import com.b1nd.dodam.dds.component.DodamNavigationBarItem
@@ -47,6 +48,9 @@ internal fun MainScreen(
     navigateToSchedule: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
+    showToast: (String, String) -> Unit,
+    refresh: () -> Boolean,
+    dispose: () -> Unit,
 ) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
     val mainScreenState = rememberMainScreenState()
@@ -80,6 +84,9 @@ internal fun MainScreen(
             nightStudyScreen(navigateToAskNightStudy)
             outingScreen(
                 navigateToAddOuting,
+                showToast = showToast,
+                refresh = refresh,
+                dispose = dispose
             )
             allScreen(
                 navigateToSetting,
