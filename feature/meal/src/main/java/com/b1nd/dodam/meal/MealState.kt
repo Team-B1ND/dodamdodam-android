@@ -5,15 +5,13 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toKotlinLocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toKotlinLocalDate
 
 @Composable
-internal fun rememberMealScreenState(
-    lazyListState: LazyListState = rememberLazyListState()
-): MealScreenState = remember(lazyListState) {
+internal fun rememberMealScreenState(lazyListState: LazyListState = rememberLazyListState()): MealScreenState = remember(lazyListState) {
     MealScreenState(lazyListState)
 }
 

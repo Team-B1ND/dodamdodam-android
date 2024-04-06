@@ -6,19 +6,17 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.meal.MealRepository
 import com.b1nd.dodam.data.meal.model.Meal
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDateTime
+import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.toKotlinLocalDateTime
-import java.time.LocalDateTime
-import javax.inject.Inject
 
 @HiltViewModel
 class MealViewModel @Inject constructor(
@@ -48,11 +46,11 @@ class MealViewModel @Inject constructor(
                                 meals.addAll(
                                     result.data.filter {
                                         it.date >= current.date
-                                    }
+                                    },
                                 ).also {
                                     meals = it
-                                }
-                            )
+                                },
+                            ),
                         )
 
                         is Result.Loading -> _mealUiState.emit(MealUiState.Loading)
