@@ -65,11 +65,6 @@ fun InfoScreen(
             focusManager.moveFocus(FocusDirection.Up)
         }
     }
-    LaunchedEffect(nameState.isValid) {
-        if (nameState.isValid) {
-            focusManager.moveFocus(FocusDirection.Down)
-        }
-    }
     LaunchedEffect(emailState.isValid) {
         if (emailState.isValid) {
             focusManager.moveFocus(FocusDirection.Down)
@@ -82,6 +77,24 @@ fun InfoScreen(
             .statusBarsPadding(),
         topBar = {
             DodamLargeTopAppBar(
+                modifier = Modifier.addFocusCleaner(
+                    focusManager = focusManager,
+                    doOnClear = {
+                        if (nameState.value.isNotEmpty()) {
+                            nameState = checkNameStateValid(nameState)
+                        }
+                        if (classInfoState.value.isNotEmpty()) {
+                            focusManager.moveFocus(FocusDirection.Down)
+                            classInfoState = checkClassInfoStateValid(classInfoState)
+                        }
+                        if (emailState.value.isNotEmpty()) {
+                            emailState = checkEmailStateValid(emailState)
+                        }
+                        if (phoneNumberState.value.isNotEmpty()) {
+                            phoneNumberState = checkPhoneNumberStateValid(phoneNumberState)
+                        }
+                    },
+                ),
                 title = {
                     Text(
                         text = when {
@@ -111,16 +124,17 @@ fun InfoScreen(
                     focusManager = focusManager,
                     doOnClear = {
                         if (nameState.value.isNotEmpty()) {
-                            nameState = isNameValid(nameState)
+                            nameState = checkNameStateValid(nameState)
                         }
                         if (classInfoState.value.isNotEmpty()) {
-                            classInfoState = isClassInfoValid(classInfoState)
+                            focusManager.moveFocus(FocusDirection.Down)
+                            classInfoState = checkClassInfoStateValid(classInfoState)
                         }
                         if (emailState.value.isNotEmpty()) {
-                            emailState = isEmailValid(emailState)
+                            emailState = checkEmailStateValid(emailState)
                         }
                         if (phoneNumberState.value.isNotEmpty()) {
-                            phoneNumberState = isPhoneNumberValid(phoneNumberState)
+                            phoneNumberState = checkPhoneNumberStateValid(phoneNumberState)
                         }
                     },
                 ),
@@ -155,7 +169,7 @@ fun InfoScreen(
                                     )
                             }
                             if (it.length == 11) {
-                                phoneNumberState = isPhoneNumberValid(phoneNumberState)
+                                phoneNumberState = checkPhoneNumberStateValid(phoneNumberState)
                                 focusManager.clearFocus()
                             }
                         },
@@ -185,7 +199,7 @@ fun InfoScreen(
                             keyboardType = KeyboardType.Number,
                         ),
                         keyboardActions = KeyboardActions(onDone = {
-                            phoneNumberState = isPhoneNumberValid(phoneNumberState)
+                            phoneNumberState = checkPhoneNumberStateValid(phoneNumberState)
                             focusManager.clearFocus()
                         }),
                         singleLine = true,
@@ -207,6 +221,12 @@ fun InfoScreen(
                                 errorMessage = "",
                             )
                         },
+                        isError = emailState.isError,
+                        supportingText = if (emailState.isError) {
+                            { Text(text = emailState.errorMessage) }
+                        } else {
+                            null
+                        },
                         trailingIcon = {
                             if (emailState.focused) {
                                 XMarkCircleIcon(
@@ -223,8 +243,12 @@ fun InfoScreen(
                             keyboardType = KeyboardType.Email,
                         ),
                         keyboardActions = KeyboardActions(onNext = {
-                            focusManager.clearFocus()
-                            emailState = isEmailValid(emailState)
+                            emailState = checkEmailStateValid(emailState)
+                            if (emailState.isValid) {
+                                focusManager.moveFocus(FocusDirection.Up)
+                            } else {
+                                focusManager.clearFocus()
+                            }
                         }),
                         singleLine = true,
                     )
@@ -238,11 +262,13 @@ fun InfoScreen(
                             },
                         value = classInfoText,
                         onValueChange = {
-                            classInfoState = classInfoState.copy(
-                                value = it.text.replace("[^0-9]".toRegex(), ""),
-                                isValid = classInfoState.isValid,
-                                isError = classInfoState.isError,
-                            )
+                            if (it.text.length <= 10) {
+                                classInfoState = classInfoState.copy(
+                                    value = it.text.replace("[^0-9]".toRegex(), ""),
+                                    isValid = classInfoState.isValid,
+                                    isError = classInfoState.isError,
+                                )
+                            }
                             when (it.text.length) {
                                 1 -> { // 학년을 입력한 경우: "" (0글자)
                                     classInfoText = TextFieldValue(
@@ -364,7 +390,13 @@ fun InfoScreen(
                                         ),
                                         selection = TextRange(10),
                                     )
-                                    classInfoState = isClassInfoValid(classInfoState)
+                                    classInfoState = checkClassInfoStateValid(classInfoState)
+                                }
+
+                                11 -> {
+                                    if (classInfoState.isValid) {
+                                        focusManager.moveFocus(FocusDirection.Up)
+                                    }
                                 }
                             }
                         },
@@ -378,7 +410,7 @@ fun InfoScreen(
                                         )
                                         classInfoState = classInfoState.copy(
                                             value = "",
-                                            isValid = false,
+                                            isValid = classInfoState.isValid,
                                             isError = false,
                                             errorMessage = "",
                                         )
@@ -400,8 +432,10 @@ fun InfoScreen(
                             keyboardType = KeyboardType.Number,
                         ),
                         keyboardActions = KeyboardActions(onNext = {
-                            focusManager.clearFocus()
-                            classInfoState = isClassInfoValid(classInfoState)
+                            classInfoState = checkClassInfoStateValid(classInfoState)
+                            if (classInfoState.isValid) {
+                                focusManager.moveFocus(FocusDirection.Up)
+                            }
                         }),
                         singleLine = true,
                     )
@@ -416,7 +450,7 @@ fun InfoScreen(
                     onValueChange = { text ->
                         nameState = nameState.copy(
                             value = text,
-                            isValid = false,
+                            isValid = nameState.isValid,
                             isError = false,
                             errorMessage = "",
                         )
@@ -440,8 +474,12 @@ fun InfoScreen(
                     },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     keyboardActions = KeyboardActions(onNext = {
-                        focusManager.clearFocus()
-                        nameState = isNameValid(nameState)
+                        nameState = checkNameStateValid(nameState)
+                        if (nameState.isValid) {
+                            focusManager.moveFocus(FocusDirection.Up)
+                        } else {
+                            focusManager.clearFocus()
+                        }
                     }),
                     singleLine = true,
                 )
@@ -469,7 +507,7 @@ fun InfoScreen(
     }
 }
 
-private fun isNameValid(nameState: TextFieldState): TextFieldState {
+private fun checkNameStateValid(nameState: TextFieldState): TextFieldState {
     return if (nameState.value.length in 2..4) {
         TextFieldState(
             value = nameState.value,
@@ -487,7 +525,7 @@ private fun isNameValid(nameState: TextFieldState): TextFieldState {
     }
 }
 
-private fun isClassInfoValid(classInfoState: TextFieldState): TextFieldState {
+private fun checkClassInfoStateValid(classInfoState: TextFieldState): TextFieldState {
     return when (classInfoState.value.length) {
         in 3..4 -> { // 학 반 번호가 모두 입력되었다면
             if (classInfoState.value[0].toString().toInt() !in 1..3) { // 학년이 1~3학년이 아니라면
@@ -578,25 +616,35 @@ private fun isClassInfoValid(classInfoState: TextFieldState): TextFieldState {
     }
 }
 
-private fun isEmailValid(emailState: TextFieldState): TextFieldState {
-    return if (emailState.value.isNotBlank()) {
+private fun checkEmailStateValid(emailState: TextFieldState): TextFieldState {
+    return if (emailState.value.isEmpty()) {
+        TextFieldState(
+            value = emailState.value,
+            isValid = false,
+            isError = true,
+            errorMessage = "이메일을 입력해 주세요",
+        )
+    } else if (!"^(?:[^@]*@[^@]*)\$"
+            .toRegex()
+            .matches(emailState.value)
+    ) {
+        TextFieldState(
+            value = emailState.value,
+            isValid = false,
+            isError = true,
+            errorMessage = "이메일을 다시 확인해 주세요.",
+        )
+    } else {
         TextFieldState(
             value = emailState.value,
             isValid = true,
             isError = false,
             errorMessage = "",
         )
-    } else {
-        TextFieldState(
-            value = emailState.value,
-            isValid = false,
-            isError = true,
-            errorMessage = "이메일을 입력해주세요",
-        )
     }
 }
 
-private fun isPhoneNumberValid(phoneNumber: TextFieldState): TextFieldState {
+private fun checkPhoneNumberStateValid(phoneNumber: TextFieldState): TextFieldState {
     return if (phoneNumber.value.length == 11) {
         TextFieldState(
             value = phoneNumber.value,
