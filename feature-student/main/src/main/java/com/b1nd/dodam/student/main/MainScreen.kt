@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
 import com.b1nd.dodam.dds.component.DodamNavigationBar
 import com.b1nd.dodam.dds.component.DodamNavigationBarItem
@@ -86,7 +85,7 @@ internal fun MainScreen(
                 navigateToAddOuting,
                 showToast = showToast,
                 refresh = refresh,
-                dispose = dispose
+                dispose = dispose,
             )
             allScreen(
                 navigateToSetting,

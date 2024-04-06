@@ -7,13 +7,13 @@ import com.b1nd.dodam.data.outing.OutingRepository
 import com.b1nd.dodam.data.outing.model.OutType
 import com.b1nd.dodam.data.outing.model.Outing
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class OutingViewModel @Inject constructor(
@@ -31,8 +31,8 @@ class OutingViewModel @Inject constructor(
                             outings = result.data.filter { it.outType == OutType.OUTING }
                                 .toImmutableList(),
                             sleepovers = result.data.filter { it.outType == OutType.SLEEPOVER }
-                                .toImmutableList()
-                        )
+                                .toImmutableList(),
+                        ),
                     )
 
                     is Result.Error -> _uiState.emit(OutUiState.Error)

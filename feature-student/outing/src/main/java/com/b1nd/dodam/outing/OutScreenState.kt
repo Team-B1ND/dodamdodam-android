@@ -5,15 +5,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
-import kotlinx.datetime.toJavaLocalDateTime
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
-
+import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
-internal fun rememberOutScreenState(
-    lazyListState: LazyListState = rememberLazyListState(),
-): OutScreenState = remember(lazyListState) {
+internal fun rememberOutScreenState(lazyListState: LazyListState = rememberLazyListState()): OutScreenState = remember(lazyListState) {
     OutScreenState(lazyListState)
 }
 
@@ -26,10 +23,7 @@ internal class OutScreenState(
     val canScrollBackward: Boolean
         get() = lazyListState.canScrollBackward
 
-    fun getProgress(
-        startAt: kotlinx.datetime.LocalDateTime,
-        endAt: kotlinx.datetime.LocalDateTime
-    ): Float {
+    fun getProgress(startAt: kotlinx.datetime.LocalDateTime, endAt: kotlinx.datetime.LocalDateTime): Float {
         return ChronoUnit.SECONDS.between(
             startAt.toJavaLocalDateTime(),
             current,
