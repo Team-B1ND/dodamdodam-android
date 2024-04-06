@@ -16,7 +16,12 @@ fun NavController.navigateToOuting(navOptions: NavOptions? = null) = navigate(OU
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.outingScreen(onAddOutingClick: () -> Unit) {
+fun NavGraphBuilder.outingScreen(
+    onAddOutingClick: () -> Unit,
+    showToast: (String, String) -> Unit,
+    refresh: () -> Boolean,
+    dispose: () -> Unit
+) {
     composable(
         route = OUTING_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -24,6 +29,6 @@ fun NavGraphBuilder.outingScreen(onAddOutingClick: () -> Unit) {
         popEnterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None },
     ) {
-        OutingScreen(onAddOutingClick)
+        OutingScreen(onAddOutingClick, showToast, refresh, dispose)
     }
 }

@@ -40,6 +40,9 @@ fun DodamApp(navController: NavHostController = rememberNavController()) {
                 },
                 navigateToAddWakeUpSong = {
                 },
+                showToast = { _, _ ->
+
+                }
             )
         }
     }
