@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.kotlinx.serialization).apply(false)
     alias(libs.plugins.spotless).apply(false)
     alias(libs.plugins.composeinvestigator).apply(false)
+    alias(libs.plugins.google.services).apply(false)
+    alias(libs.plugins.firbase.crashlytics).apply(false)
 }
 
 subprojects {

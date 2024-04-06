@@ -22,12 +22,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.b1nd.dodam.dds.component.DodamNavigationBar
 import com.b1nd.dodam.dds.component.DodamNavigationBarItem
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.member.navigation.allScreen
-import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
@@ -39,6 +39,7 @@ import com.b1nd.dodam.student.main.navigation.MainDestination
 @ExperimentalMaterialApi
 @Composable
 internal fun MainScreen(
+    navController: NavHostController,
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
     navigateToSetting: () -> Unit,
@@ -52,7 +53,7 @@ internal fun MainScreen(
     dispose: () -> Unit,
 ) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
-    val mainScreenState = rememberMainScreenState()
+    val mainScreenState = rememberMainScreenState(navController)
 
     Box(
         modifier = Modifier.fillMaxSize(),

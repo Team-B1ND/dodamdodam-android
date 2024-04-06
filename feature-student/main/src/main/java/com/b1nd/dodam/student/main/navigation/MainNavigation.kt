@@ -5,6 +5,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
@@ -22,6 +23,7 @@ fun NavController.navigateToMain(
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.mainScreen(
+    navController: NavHostController,
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
     navigateToSetting: () -> Unit,
@@ -34,6 +36,7 @@ fun NavGraphBuilder.mainScreen(
 ) {
     composable(route = MAIN_ROUTE) {
         MainScreen(
+            navController = navController,
             navigateToAskNightStudy = navigateToAskNightStudy,
             navigateToAddOuting = navigateToAddOuting,
             navigateToSetting = navigateToSetting,

@@ -28,6 +28,7 @@ import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.icons.B1NDLogo
 import com.b1nd.dodam.ui.icons.DodamLogo
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
@@ -45,6 +46,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        val firebaseCrashlytics = FirebaseCrashlytics.getInstance()
 
         setContent {
             var isLogin: Boolean? by remember { mutableStateOf(null) }
@@ -76,6 +78,8 @@ class MainActivity : ComponentActivity() {
                                 datastoreRepository.deleteUser()
                             }
                         },
+                        firebaseAnalytics = firebaseAnalytics,
+                        firebaseCrashlytics = firebaseCrashlytics
                     )
                 } ?: run {
                     Box(
