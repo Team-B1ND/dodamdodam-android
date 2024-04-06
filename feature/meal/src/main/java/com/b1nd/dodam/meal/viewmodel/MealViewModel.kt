@@ -4,101 +4,65 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.meal.MealRepository
-import com.b1nd.dodam.meal.MealUiState
+import com.b1nd.dodam.data.meal.model.Meal
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import kotlinx.datetime.toJavaLocalDate
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.datetime.toKotlinLocalDateTime
 
 @HiltViewModel
 class MealViewModel @Inject constructor(
     private val mealRepository: MealRepository,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(MealUiState())
-    val uiState = _uiState.asStateFlow()
+    private val current = LocalDateTime.now().toKotlinLocalDateTime()
+    private var getOnlyOnce = true
 
-    private val _event = MutableSharedFlow<Event>()
-    val event = _event.asSharedFlow()
+    private var meals: PersistentList<Meal> = persistentListOf()
 
-    fun getMealOfMonth(year: Int, month: Int) {
-        viewModelScope.launch {
-            mealRepository.getMealOfMonth(year, month).collect { result ->
-
-                when (result) {
-                    is Result.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                showShimmer = false,
-                                meal = it.meal.toPersistentList()
-                                    .addAll(
-                                        result.data.filter { meal ->
-                                            meal.date.toJavaLocalDate() >= LocalDate.now()
-                                        },
-                                    ).toImmutableList(),
-                            )
-                        }
-                    }
-
-                    is Result.Error -> {
-                        _event.emit(Event.Error(result.error.message.toString()))
-                        _uiState.update {
-                            it.copy(
-                                showShimmer = false,
-                            )
-                        }
-                    }
-
-                    is Result.Loading -> {
-                        _uiState.update {
-                            it.copy(
-                                showShimmer = true,
-                            )
-                        }
-                    }
-                }
-            }
-        }
+    init {
+        getMealOfMonth(current.year, current.monthNumber)
+        getOnlyOnce = true
     }
 
-    fun fetchMealOfMonth(year: Int, month: Int) {
-        viewModelScope.launch {
-            mealRepository.getMealOfMonth(year, month).collect { result ->
-                _uiState.update {
+    private val _mealUiState: MutableStateFlow<MealUiState> = MutableStateFlow(MealUiState.Loading)
+    val mealUiState: StateFlow<MealUiState> = _mealUiState.asStateFlow()
+
+    fun getMealOfMonth(year: Int, month: Int) {
+        if (getOnlyOnce) {
+            getOnlyOnce = false
+            mealRepository.getMealOfMonth(year, month)
+                .onEach { result ->
                     when (result) {
-                        is Result.Success -> {
-                            it.copy(
-                                meal = (it.meal + result.data).toImmutableList(),
-                                isLoading = false,
-                            )
-                        }
+                        is Result.Success -> _mealUiState.emit(
+                            MealUiState.Success(
+                                meals.addAll(
+                                    result.data.filter {
+                                        it.date >= current.date
+                                    },
+                                ).also {
+                                    meals = it
+                                },
+                            ),
+                        )
 
-                        is Result.Error -> {
-                            _event.emit(Event.Error(result.error.message.toString()))
-                            it.copy(
-                                isLoading = false,
-                            )
-                        }
-
-                        is Result.Loading -> {
-                            it.copy(
-                                isLoading = true,
-                            )
-                        }
+                        is Result.Loading -> _mealUiState.emit(MealUiState.Loading)
+                        is Result.Error -> _mealUiState.emit(MealUiState.Error)
                     }
-                }
-            }
+                }.launchIn(viewModelScope)
         }
     }
 }
 
-sealed interface Event {
-    data class Error(val message: String) : Event
+sealed interface MealUiState {
+    data class Success(val meals: ImmutableList<Meal>) : MealUiState
+    data object Error : MealUiState
+    data object Loading : MealUiState
 }

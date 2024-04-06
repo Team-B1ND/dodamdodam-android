@@ -6,6 +6,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
 interface MealRepository {
-    suspend fun getMeal(year: Int, month: Int, day: Int): Flow<Result<Meal>>
-    suspend fun getMealOfMonth(year: Int, month: Int): Flow<Result<ImmutableList<Meal>>>
+    fun getMeal(year: Int, month: Int, day: Int): Flow<Result<Meal>>
+    fun getMealOfMonth(year: Int, month: Int): Flow<Result<ImmutableList<Meal>>>
 }
