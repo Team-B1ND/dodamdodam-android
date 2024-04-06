@@ -16,17 +16,15 @@ import com.b1nd.dodam.student.home.navigation.navigateToHome
 import com.b1nd.dodam.student.main.navigation.MainDestination
 
 @Composable
-internal fun rememberMainScreenState(
-    navController: NavHostController = rememberNavController(),
-) = remember(
-    navController
+internal fun rememberMainScreenState(navController: NavHostController = rememberNavController()) = remember(
+    navController,
 ) {
     MainScreenState(navController)
 }
 
 @Stable
 internal class MainScreenState(
-    val navController: NavHostController
+    val navController: NavHostController,
 ) {
     val mainDestinations = MainDestination.entries
 

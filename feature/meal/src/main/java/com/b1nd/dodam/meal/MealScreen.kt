@@ -96,8 +96,11 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                                     Box(
                                         modifier = Modifier
                                             .background(
-                                                if (mealScreenState.isDateInToday(meal.date)) color.primary
-                                                else color.secondaryContainer,
+                                                if (mealScreenState.isDateInToday(meal.date)) {
+                                                    color.primary
+                                                } else {
+                                                    color.secondaryContainer
+                                                },
                                                 CircleShape,
                                             )
                                             .padding(horizontal = 60.dp, vertical = 4.dp),
@@ -117,16 +120,22 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                                                     "일",
                                                 )[meal.date.dayOfWeek.value - 1],
                                             ),
-                                            color = if (mealScreenState.isDateInToday(meal.date))
-                                                color.onPrimary else color.onSecondaryContainer,
+                                            color = if (mealScreenState.isDateInToday(meal.date)) {
+                                                color.onPrimary
+                                            } else {
+                                                color.onSecondaryContainer
+                                            },
                                         )
                                     }
 
                                     meal.breakfast?.let { breakfast ->
                                         MealCard(
                                             mealType = "아침",
-                                            statusColor = if (mealScreenState.isDateInToday(meal.date) && mealScreenState.mealTime == MealTime.BREAKFAST)
-                                                color.primary else color.onSurfaceVariant,
+                                            statusColor = if (mealScreenState.isDateInToday(meal.date) && mealScreenState.mealTime == MealTime.BREAKFAST) {
+                                                color.primary
+                                            } else {
+                                                color.onSurfaceVariant
+                                            },
                                             calorie = breakfast.calorie,
                                             menus = breakfast.details,
                                         )
@@ -135,8 +144,11 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                                     meal.lunch?.let { lunch ->
                                         MealCard(
                                             mealType = "점심",
-                                            statusColor =if (mealScreenState.isDateInToday(meal.date) && mealScreenState.mealTime == MealTime.LUNCH)
-                                                color.primary else color.onSurfaceVariant,
+                                            statusColor = if (mealScreenState.isDateInToday(meal.date) && mealScreenState.mealTime == MealTime.LUNCH) {
+                                                color.primary
+                                            } else {
+                                                color.onSurfaceVariant
+                                            },
                                             calorie = lunch.calorie,
                                             menus = lunch.details,
                                         )
@@ -145,8 +157,11 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                                     meal.dinner?.let { dinner ->
                                         MealCard(
                                             mealType = "저녁",
-                                            statusColor = if (mealScreenState.isDateInToday(meal.date) && mealScreenState.mealTime == MealTime.DINNER)
-                                                color.primary else color.onSurfaceVariant,
+                                            statusColor = if (mealScreenState.isDateInToday(meal.date) && mealScreenState.mealTime == MealTime.DINNER) {
+                                                color.primary
+                                            } else {
+                                                color.onSurfaceVariant
+                                            },
                                             calorie = dinner.calorie,
                                             menus = dinner.details,
                                         )
@@ -235,7 +250,6 @@ fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
                 }
 
                 is MealUiState.Error -> {
-
                 }
             }
             item {
