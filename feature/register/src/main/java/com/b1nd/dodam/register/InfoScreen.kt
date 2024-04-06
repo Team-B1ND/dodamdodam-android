@@ -1,6 +1,5 @@
 package com.b1nd.dodam.register
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,14 +19,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
@@ -96,7 +93,7 @@ fun InfoScreen(
                         if (phoneNumberState.value.isNotEmpty()) {
                             phoneNumberState = checkPhoneNumberStateValid(phoneNumberState)
                         }
-                    }
+                    },
                 ),
                 title = {
                     Text(
@@ -223,6 +220,12 @@ fun InfoScreen(
                                 isError = false,
                                 errorMessage = "",
                             )
+                        },
+                        isError = emailState.isError,
+                        supportingText = if (emailState.isError) {
+                            { Text(text = emailState.errorMessage) }
+                        } else {
+                            null
                         },
                         trailingIcon = {
                             if (emailState.focused) {
@@ -615,22 +618,29 @@ private fun checkClassInfoStateValid(classInfoState: TextFieldState): TextFieldS
 }
 
 private fun checkEmailStateValid(emailState: TextFieldState): TextFieldState {
-    return if (
-        emailState.value.isNotBlank() && "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$".toRegex()
+    return if (emailState.value.isEmpty()) {
+        TextFieldState(
+            value = emailState.value,
+            isValid = false,
+            isError = true,
+            errorMessage = "이메일을 입력해 주세요",
+        )
+    } else if (!"^(?:[^@]*@[^@]*)\$"
+            .toRegex()
             .matches(emailState.value)
     ) {
+        TextFieldState(
+            value = emailState.value,
+            isValid = false,
+            isError = true,
+            errorMessage = "이메일을 다시 확인해 주세요.",
+        )
+    } else {
         TextFieldState(
             value = emailState.value,
             isValid = true,
             isError = false,
             errorMessage = "",
-        )
-    } else {
-        TextFieldState(
-            value = emailState.value,
-            isValid = false,
-            isError = true,
-            errorMessage = "이메일을 입력해주세요",
         )
     }
 }
