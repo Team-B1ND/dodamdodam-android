@@ -13,7 +13,7 @@ import com.b1nd.dodam.student.home.HomeScreen
 
 const val HOME_ROUTE = "home"
 
-fun NavController.navigateToHome(navOptions: NavOptions? = null) = navigate(HOME_ROUTE, navOptions)
+fun NavController.navigateToHome(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(HOME_ROUTE, navOptions)
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi

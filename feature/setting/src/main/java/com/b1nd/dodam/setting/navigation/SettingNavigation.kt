@@ -10,7 +10,7 @@ import com.b1nd.dodam.setting.SettingScreen
 
 const val SETTING_ROUTE = "setting"
 
-fun NavController.navigateToSetting(navOptions: NavOptions? = null) = navigate(SETTING_ROUTE, navOptions)
+fun NavController.navigateToSetting(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(SETTING_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.settingScreen(popBackStack: () -> Unit, logout: () -> Unit) {

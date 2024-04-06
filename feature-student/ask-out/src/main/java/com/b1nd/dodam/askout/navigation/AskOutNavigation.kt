@@ -10,7 +10,7 @@ import com.b1nd.dodam.askout.AskOutScreen
 
 const val ASK_OUT_ROUTE = "ask_out"
 
-fun NavController.navigateToAskOut(navOptions: NavOptions? = null) = navigate(ASK_OUT_ROUTE, navOptions)
+fun NavController.navigateToAskOut(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(ASK_OUT_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.askOutScreen(popBackStack: () -> Unit) {

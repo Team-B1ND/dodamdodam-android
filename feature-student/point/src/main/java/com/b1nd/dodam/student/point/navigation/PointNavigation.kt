@@ -11,7 +11,7 @@ import com.b1nd.dodam.student.point.PointScreen
 
 const val POINT_ROUTE = "point"
 
-fun NavController.navigateToPoint(navOptions: NavOptions? = null) = navigate(POINT_ROUTE, navOptions)
+fun NavController.navigateToPoint(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(POINT_ROUTE, navOptions)
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
