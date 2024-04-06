@@ -1,6 +1,5 @@
 package com.b1nd.dodam.student.main.navigation
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,7 +39,7 @@ fun NavGraphBuilder.mainScreen(
             navigateToAddWakeUpSong = navigateToAddWakeUpSong,
             showToast = showToast,
             refresh = { it.savedStateHandle["refresh"] ?: false },
-            dispose = { it.savedStateHandle["refresh"] = false }
+            dispose = { it.savedStateHandle["refresh"] = false },
         )
     }
 }
