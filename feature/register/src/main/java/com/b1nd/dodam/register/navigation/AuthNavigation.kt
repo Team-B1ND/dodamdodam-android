@@ -13,7 +13,7 @@ import com.b1nd.dodam.register.AuthScreen
 const val AUTH_ROUTE = "auth"
 
 fun NavController.navigateToAuth(
-    navOptions: NavOptions? = null,
+    navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build(),
     name: String,
     grade: String,
     room: String,

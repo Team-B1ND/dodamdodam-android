@@ -12,7 +12,7 @@ import com.b1nd.dodam.outing.OutingScreen
 
 const val OUTING_ROUTE = "outing"
 
-fun NavController.navigateToOuting(navOptions: NavOptions? = null) = navigate(OUTING_ROUTE, navOptions)
+fun NavController.navigateToOuting(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(OUTING_ROUTE, navOptions)
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api

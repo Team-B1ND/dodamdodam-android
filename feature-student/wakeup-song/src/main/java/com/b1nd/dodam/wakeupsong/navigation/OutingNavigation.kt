@@ -9,7 +9,7 @@ import com.b1nd.dodam.wakeupsong.WakeupSongScreen
 
 const val WAKEUP_SONG_ROUTE = "wakeup_song"
 
-fun NavController.navigateToWakeupSong(navOptions: NavOptions? = null) = navigate(WAKEUP_SONG_ROUTE, navOptions)
+fun NavController.navigateToWakeupSong(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(WAKEUP_SONG_ROUTE, navOptions)
 
 fun NavGraphBuilder.wakeupSongScreen(onAddWakeupSongClick: () -> Unit, popBackStack: () -> Unit) {
     composable(

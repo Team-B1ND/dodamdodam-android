@@ -9,7 +9,7 @@ import com.b1nd.dodam.askwakeupsong.AskWakeupSongScreen
 
 const val ASK_WAKEUP_SONG_ROUTE = "ask_wakeup_song"
 
-fun NavController.navigateToAskWakeupSong(navOptions: NavOptions? = null) = navigate(
+fun NavController.navigateToAskWakeupSong(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(
     ASK_WAKEUP_SONG_ROUTE,
     navOptions,
 )

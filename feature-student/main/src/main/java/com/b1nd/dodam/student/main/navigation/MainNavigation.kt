@@ -11,7 +11,7 @@ import com.b1nd.dodam.student.main.MainScreen
 
 const val MAIN_ROUTE = "main"
 
-fun NavController.navigateToMain(navOptions: NavOptions? = null) = navigate(MAIN_ROUTE, navOptions)
+fun NavController.navigateToMain(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(MAIN_ROUTE, navOptions)
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi

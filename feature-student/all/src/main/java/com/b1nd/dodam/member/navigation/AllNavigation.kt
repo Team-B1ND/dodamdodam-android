@@ -10,7 +10,7 @@ import com.b1nd.dodam.member.AllScreen
 
 const val ALL_ROUTE = "all"
 
-fun NavController.navigateToAllScreen(navOptions: NavOptions? = null) = navigate(ALL_ROUTE, navOptions)
+fun NavController.navigateToAllScreen(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(ALL_ROUTE, navOptions)
 
 fun NavGraphBuilder.allScreen(
     navigateToSetting: () -> Unit,

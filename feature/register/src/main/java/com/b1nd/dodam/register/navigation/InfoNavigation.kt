@@ -10,7 +10,7 @@ import com.b1nd.dodam.register.InfoScreen
 
 const val INFO_ROUTE = "info"
 
-fun NavController.navigateToInfo(navOptions: NavOptions? = null) = navigate(INFO_ROUTE, navOptions)
+fun NavController.navigateToInfo(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(INFO_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, String, String) -> Unit, onBackClick: () -> Unit) {

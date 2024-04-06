@@ -10,7 +10,7 @@ import com.b1nd.dodam.bus.BusScreen
 
 const val BUS_ROUTE = "bus"
 
-fun NavController.navigateToBus(navOptions: NavOptions? = null) = navigate(BUS_ROUTE, navOptions)
+fun NavController.navigateToBus(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(BUS_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.busScreen(popBackStack: () -> Unit) {
