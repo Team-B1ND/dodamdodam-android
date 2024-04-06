@@ -20,7 +20,7 @@ internal class MealRepositoryImpl @Inject constructor(
     private val network: MealDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : MealRepository {
-    override suspend fun getMeal(year: Int, month: Int, day: Int): Flow<Result<Meal>> {
+    override fun getMeal(year: Int, month: Int, day: Int): Flow<Result<Meal>> {
         return flow {
             emit(network.getMeal(year, month, day).toModel())
         }
@@ -28,7 +28,7 @@ internal class MealRepositoryImpl @Inject constructor(
             .flowOn(dispatcher)
     }
 
-    override suspend fun getMealOfMonth(year: Int, month: Int): Flow<Result<ImmutableList<Meal>>> {
+    override fun getMealOfMonth(year: Int, month: Int): Flow<Result<ImmutableList<Meal>>> {
         return flow {
             emit(network.getMealOfMonth(year, month).map { it.toModel() }.toImmutableList())
         }
