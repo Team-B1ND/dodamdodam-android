@@ -12,7 +12,11 @@ import com.b1nd.dodam.nightstudy.NightStudyScreen
 
 const val NIGHT_STUDY_ROUTE = "nightstudy"
 
-fun NavController.navigateToNightStudy(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(NIGHT_STUDY_ROUTE, navOptions)
+fun NavController.navigateToNightStudy(
+    navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(
+        true,
+    ).build(),
+) = navigate(NIGHT_STUDY_ROUTE, navOptions)
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
