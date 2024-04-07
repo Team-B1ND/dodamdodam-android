@@ -50,7 +50,6 @@ include(
     ":common",
     ":keystore",
     ":datastore",
-    ":ui-test-main",
     ":feature-student:nightstudy",
     ":feature-student:outing",
     ":ui",

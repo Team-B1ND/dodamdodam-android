@@ -6,7 +6,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.util.trace
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.b1nd.dodam.meal.navigation.navigationToMeal
 import com.b1nd.dodam.member.navigation.navigateToAllScreen
@@ -16,7 +15,7 @@ import com.b1nd.dodam.student.home.navigation.navigateToHome
 import com.b1nd.dodam.student.main.navigation.MainDestination
 
 @Composable
-internal fun rememberMainScreenState(navController: NavHostController = rememberNavController()) = remember(
+internal fun rememberMainScreenState(navController: NavHostController) = remember(
     navController,
 ) {
     MainScreenState(navController)
