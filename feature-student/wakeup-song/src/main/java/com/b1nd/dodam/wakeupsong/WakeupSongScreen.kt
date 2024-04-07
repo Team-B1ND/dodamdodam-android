@@ -86,6 +86,14 @@ fun WakeupSongScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.run {
+            getPendingWakeupSongs()
+            getMyWakeupSongs()
+            getAllowedWakeupSongs()
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),

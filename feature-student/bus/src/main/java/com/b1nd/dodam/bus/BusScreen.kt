@@ -92,7 +92,7 @@ fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Uni
                 }
             },
             title = {
-                Text(text = "버스 운헹 날짜가 아닙니다")
+                Text(text = "버스 운행 날짜가 아니에요")
             },
         )
     }

@@ -22,8 +22,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,14 +50,72 @@ import com.b1nd.dodam.ui.effect.shimmerEffect
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBackStack: () -> Unit, logout: () -> Unit) {
+internal fun SettingScreen(
+    viewModel: SettingViewModel = hiltViewModel(),
+    popBackStack: () -> Unit,
+    logout: () -> Unit
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+    var showEasterEggDialog by remember { mutableStateOf(false) }
     var showDeactivationDialog by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+
+    var count by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(count) {
+        if (count == 10) {
+            showEasterEggDialog = true
+        }
+    }
+
+    if (showEasterEggDialog) {
+        DodamDialog(
+            onDismissRequest = { showEasterEggDialog = false },
+            confirmButton = {
+                DodamLargeFilledButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://bit.ly/b1ndquiz")
+                            )
+                        )
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
+                    isLoading = uiState.isLoading,
+                ) {
+                    Text(text = "확인")
+                }
+            },
+            dismissButton = {
+                DodamLargeFilledButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = { showEasterEggDialog = false },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    ),
+                    enabled = !uiState.isLoading,
+                ) {
+                    Text(text = "취소")
+                }
+            },
+            title = {
+                Text(text = "이스터에그를 찾았어요!")
+            },
+            text = {
+                Text(text = "아래 링크로 이동하시겠어요?")
+            }
+        )
+    }
 
     if (showLogoutDialog) {
         DodamDialog(
@@ -87,7 +147,7 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
                 }
             },
             title = {
-                Text(text = "정말 로그아웃 하시겠어요?")
+                Text(text = "정말 로그아웃하시겠어요?")
             },
         )
     }
@@ -101,7 +161,7 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
                 }
             },
             title = { Text(text = "아직 준비 중인 기능이에요!") },
-            text = { Text(text = "정보를 수정하시려면 도담도담 웹사이트를 이용해주세요.") },
+            text = { Text(text = "정보를 수정하시려면 도담도담 웹사이트를 이용해 주세요.") },
         )
     }
 
@@ -138,7 +198,7 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
                 }
             },
             title = {
-                Text(text = "정말 회원탈퇴 하시겠어요?")
+                Text(text = "정말 탈퇴하시겠어요?")
             },
         )
     }
@@ -280,7 +340,7 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
                 },
                 text = {
                     BodyLarge(
-                        text = "개인정보 처리방침",
+                        text = "개인정보 처리 방침",
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Medium,
                     )
@@ -294,7 +354,9 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
             )
 
             InputField(
-                onClick = {},
+                onClick = {
+                    count++
+                },
                 text = {
                     BodyLarge(
                         text = "버전 정보",
