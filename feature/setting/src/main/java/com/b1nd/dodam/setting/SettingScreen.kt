@@ -178,8 +178,8 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
                                     .size(48.dp)
                                     .background(
                                         shimmerEffect(),
-                                        CircleShape
-                                    )
+                                        CircleShape,
+                                    ),
                             )
 
                             Column {
@@ -188,8 +188,8 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
                                         .size(50.dp, 20.dp)
                                         .background(
                                             shimmerEffect(),
-                                            RoundedCornerShape(4.dp)
-                                        )
+                                            RoundedCornerShape(4.dp),
+                                        ),
                                 )
                                 Spacer(modifier = Modifier.height(2.dp))
                                 Box(
@@ -197,8 +197,8 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
                                         .size(100.dp, 14.dp)
                                         .background(
                                             shimmerEffect(),
-                                            RoundedCornerShape(4.dp)
-                                        )
+                                            RoundedCornerShape(4.dp),
+                                        ),
                                 )
                             }
                         }
