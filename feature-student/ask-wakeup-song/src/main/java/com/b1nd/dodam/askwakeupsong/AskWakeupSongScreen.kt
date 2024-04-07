@@ -68,7 +68,10 @@ import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), popBackStack: () -> Unit) {
+fun AskWakeupSongScreen(
+    viewModel: AskWakeupSongViewModel = hiltViewModel(),
+    popBackStack: () -> Unit
+) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
@@ -175,54 +178,32 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), pop
                     }),
                 )
             }
-
+            Spacer(modifier = Modifier.height(40.dp))
+            Row {
+                Spacer(modifier = Modifier.width(16.dp))
+                Column {
+                    TitleMedium(text = "이런 노래는 어떤가요?")
+                    Spacer(modifier = Modifier.height(2.dp))
+                    BodySmall(
+                        text = "요즘 인기있는 노래를 바로 신청해보세요",
+                        color = MaterialTheme.colorScheme.tertiary,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
             if (!uiState.isLoading) {
                 LazyColumn {
-                    item {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            if (uiState.isSearchLoading && uiState.searchWakeupSongs.isEmpty()) {
-                                Spacer(modifier = Modifier.height(40.dp))
-                                WakeupSongShimmer()
-                                Spacer(modifier = Modifier.height(40.dp))
-                            }
-                        }
-                    }
-                    if (!uiState.isSearchLoading && uiState.searchWakeupSongs.isEmpty()) {
-                        item {
-                            Row {
-                                Spacer(modifier = Modifier.width(16.dp))
-                                Column {
-                                    Spacer(modifier = Modifier.height(40.dp))
-                                    TitleMedium(text = "이런 노래는 어떤가요?")
-                                    Spacer(modifier = Modifier.height(2.dp))
-                                    BodySmall(
-                                        text = "요즘 인기있는 노래를 바로 신청해보세요",
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
-
+                    if (!uiState.isSearchLoading) {
                         items(uiState.melonChartSongs.size) { index ->
                             WakeupSongCard(
                                 melonChartSong = uiState.melonChartSongs[index],
                                 index = index + 1,
                             )
                         }
-                    } else {
-                        item { Spacer(modifier = Modifier.height(20.dp)) }
-                        items(uiState.searchWakeupSongs.size) { index ->
-                            WakeupSongCard(
-                                melonChartSong = uiState.searchWakeupSongs[index],
-                            )
-                        }
                     }
                 }
+            } else {
+                WakeupSongShimmer()
             }
         }
     }
@@ -276,13 +257,18 @@ fun WakeupSongShimmer() {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonChartSong: MelonChartSong, index: Int? = null) {
+fun WakeupSongCard(
+    viewModel: AskWakeupSongViewModel = hiltViewModel(),
+    melonChartSong: MelonChartSong,
+    index: Int? = null
+) {
     var showDialog by remember {
         mutableStateOf(false)
     }
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 8.dp)
             .bounceClick(onClick = {
                 showDialog = true
             }),
@@ -339,7 +325,7 @@ fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonCha
         Column {
             Spacer(modifier = Modifier.height(8.dp))
             Row {
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(8.dp))
                 index?.let {
                     Text(
                         text = index.toString(),
@@ -386,7 +372,10 @@ fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonCha
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonChartSong: SearchWakeupSong) {
+fun WakeupSongCard(
+    viewModel: AskWakeupSongViewModel = hiltViewModel(),
+    melonChartSong: SearchWakeupSong
+) {
     var showDialog by remember {
         mutableStateOf(false)
     }
@@ -450,7 +439,7 @@ fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonCha
         Column {
             Spacer(modifier = Modifier.height(8.dp))
             Row {
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(8.dp))
                 AsyncImage(
                     modifier = Modifier
                         .height(67.dp)

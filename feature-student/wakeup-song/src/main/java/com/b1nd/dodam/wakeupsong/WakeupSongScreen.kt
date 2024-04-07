@@ -286,6 +286,7 @@ fun WakeupSongScreen(
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun WakeupSongCard(
+    modifier: Modifier = Modifier,
     viewModel: WakeupSongViewModel = hiltViewModel(),
     wakeupSong: WakeupSong? = null,
     index: Int? = null,
@@ -298,7 +299,7 @@ fun WakeupSongCard(
     }
     val uriHandler = LocalUriHandler.current
 
-    if (showDialog && !isShimmer && selectedTabIndex != null && wakeupSong != null) {
+    if (showDialog && !isShimmer && selectedTabIndex != null && wakeupSong != null && isMine) {
         DodamDialog(
             onDismissRequest = {
                 showDialog = false
@@ -346,10 +347,11 @@ fun WakeupSongCard(
     }
     if (wakeupSong != null && selectedTabIndex != null && !isShimmer) {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
+                .padding(horizontal = 8.dp)
                 .then(
-                    if (selectedTabIndex == 1) {
+                    if (isMine) {
                         Modifier.bounceCombinedClick(
                             onClick = {
                                 uriHandler.openUri(wakeupSong.videoUrl)
