@@ -81,7 +81,12 @@ internal fun MainScreen(
                 navigateToAskWakeupSongScreen = navigateToAddWakeUpSong,
             )
             mealScreen()
-            nightStudyScreen(navigateToAskNightStudy)
+            nightStudyScreen(
+                navigateToAskNightStudy,
+                showToast,
+                refresh,
+                dispose,
+            )
             outingScreen(
                 navigateToAddOuting,
                 showToast = showToast,

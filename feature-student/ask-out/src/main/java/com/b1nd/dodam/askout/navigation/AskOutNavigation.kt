@@ -18,12 +18,12 @@ fun NavController.navigateToAskOut(
 ) = navigate(ASK_OUT_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.askOutScreen(popBackStack: () -> Unit) {
+fun NavGraphBuilder.askOutScreen(popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     composable(
         route = ASK_OUT_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
-        AskOutScreen(popBackStack = popBackStack)
+        AskOutScreen(popBackStack = popBackStack, showToast = showToast)
     }
 }
