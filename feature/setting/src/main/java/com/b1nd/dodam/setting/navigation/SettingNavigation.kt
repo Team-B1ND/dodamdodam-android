@@ -6,11 +6,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import com.b1nd.dodam.setting.SettingScreen
 
 const val SETTING_ROUTE = "setting"
 
-fun NavController.navigateToSetting(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(SETTING_ROUTE, navOptions)
+fun NavController.navigateToSetting(
+    navOptions: NavOptions? = navOptions {
+        launchSingleTop = true
+    }
+) = navigate(SETTING_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.settingScreen(popBackStack: () -> Unit, logout: () -> Unit) {
