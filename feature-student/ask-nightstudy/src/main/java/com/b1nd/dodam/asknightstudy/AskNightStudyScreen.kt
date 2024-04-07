@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -148,6 +149,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
 
     if (showPlacePicker) {
         ModalBottomSheet(
+            modifier = Modifier.navigationBarsPadding(),
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             onDismissRequest = { showPlacePicker = false },
         ) {
@@ -234,11 +236,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                         textStyle = MaterialTheme.typography.bodyLarge,
                         label = { Text(text = "심야 자습 사유") },
                         isError = nightStudyReason.length !in 10..250 && uiState.message.isNotBlank(),
-                        supportingText = if (nightStudyReason.length !in 10..250 && uiState.message.isNotBlank()) {
-                            { Text(text = "사유를 10자 이상 입력해주세요.") }
-                        } else {
-                            null
-                        },
+                        supportingText = { Text(text = "사유를 10자 이상 입력해주세요.") }
                     )
                 }
 
@@ -283,7 +281,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                     },
                     text = {
                         BodyLarge(
-                            text = "시작일자",
+                            text = "시작 일자",
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.tertiary,
                         )
@@ -314,7 +312,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                     },
                     text = {
                         BodyLarge(
-                            text = "복귀일자",
+                            text = "복귀 일자",
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.tertiary,
                         )
@@ -389,7 +387,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                         endAt = nightStudyEndDate.toKotlinLocalDate(),
                     )
                 },
-                enabled = nightStudyReason.isNotBlank() && nightStudyStartDate < nightStudyEndDate,
+                enabled = nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate,
                 isLoading = uiState.isLoading,
             ) {
                 Text(text = "확인")
