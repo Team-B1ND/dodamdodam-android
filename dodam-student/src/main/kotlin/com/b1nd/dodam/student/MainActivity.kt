@@ -73,9 +73,10 @@ class MainActivity : ComponentActivity() {
                 isLogin?.let {
                     DodamApp(
                         isLogin = it,
-                        deleteToken = {
+                        logout = {
                             lifecycleScope.launch {
                                 datastoreRepository.deleteUser()
+                                finish()
                             }
                         },
                         firebaseAnalytics = firebaseAnalytics,

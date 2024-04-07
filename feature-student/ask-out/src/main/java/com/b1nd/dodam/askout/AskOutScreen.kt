@@ -187,7 +187,8 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .imePadding(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             DodamSmallTopAppBar(
@@ -258,7 +259,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                     },
                     text = {
                         BodyLarge(
-                            text = if (selectedIndex == 0) "외출일시" else "외박일자",
+                            text = if (selectedIndex == 0) "외출일시" else "외박 일자",
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.tertiary,
                         )
@@ -297,7 +298,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                     },
                     text = {
                         BodyLarge(
-                            text = if (selectedIndex == 0) "복귀일시" else "복귀일자",
+                            text = if (selectedIndex == 0) "복귀일시" else "복귀 일자",
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.tertiary,
                         )

@@ -79,10 +79,18 @@ fun WakeupSongScreen(
             when (event) {
                 is Event.DeleteWakeupSong -> {
                     showToast("SUCCESS", "기상송을 삭제했어요")
-                    viewModel.getMyWakeupSong()
+                    viewModel.getMyWakeupSongs()
                     viewModel.getPendingWakeupSongs()
                 }
             }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.run {
+            getPendingWakeupSongs()
+            getMyWakeupSongs()
+            getAllowedWakeupSongs()
         }
     }
 

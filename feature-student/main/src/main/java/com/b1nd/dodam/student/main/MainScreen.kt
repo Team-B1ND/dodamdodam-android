@@ -108,7 +108,7 @@ internal fun MainScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
+                .height(200.dp)
                 .align(Alignment.BottomCenter)
                 .background(
                     Brush.verticalGradient(
