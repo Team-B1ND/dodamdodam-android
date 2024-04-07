@@ -189,7 +189,7 @@ class BusViewModel @Inject constructor(
                                 "BusViewModel",
                                 result.error.stackTraceToString(),
                             )
-                            _event.emit(Event.ShowToast("버스 삭제에 실패했어요"))
+                            _event.emit(Event.ShowToast("버스 신청을 취소했어요"))
                             uiState.copy(
                                 isLoading = false,
                                 isError = true,

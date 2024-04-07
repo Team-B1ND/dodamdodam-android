@@ -19,7 +19,7 @@ fun NavController.navigateToAskWakeupSong(
     navOptions,
 )
 
-fun NavGraphBuilder.askWakeupSongScreen(popBackStack: () -> Unit) {
+fun NavGraphBuilder.askWakeupSongScreen(popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     composable(
         route = ASK_WAKEUP_SONG_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -27,6 +27,6 @@ fun NavGraphBuilder.askWakeupSongScreen(popBackStack: () -> Unit) {
         popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
-        AskWakeupSongScreen(popBackStack = popBackStack)
+        AskWakeupSongScreen(popBackStack = popBackStack, showToast = showToast)
     }
 }

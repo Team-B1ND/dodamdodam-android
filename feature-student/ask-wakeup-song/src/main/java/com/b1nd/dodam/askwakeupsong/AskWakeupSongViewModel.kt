@@ -100,38 +100,43 @@ class AskWakeupSongViewModel @Inject constructor(
                 artist = artist,
                 title = title,
             ).collect { result ->
-                _uiState.update { uiState ->
-                    when (result) {
-                        is Result.Success -> {
-                            _event.emit(Event.ShowToast("기상송 신청에 성공했습니다."))
-                            _event.emit(Event.PopBackStack)
+
+                when (result) {
+                    is Result.Success -> {
+                        _uiState.update { uiState ->
                             uiState.copy(
                                 isError = false,
                                 isLoading = false,
                             )
                         }
+                        _event.emit(Event.ShowToast("기상송 신청에 성공했습니다."))
+                        _event.emit(Event.PopBackStack)
+                    }
 
-                        is Result.Loading -> {
+                    is Result.Loading -> {
+                        _uiState.update { uiState ->
                             uiState.copy(
                                 isError = false,
                                 isLoading = true,
                             )
                         }
+                    }
 
-                        is Result.Error -> {
-                            when (result.error) {
-                                is LockedException -> {
-                                    _event.emit(Event.ShowToast("이번주에 이미 기상송을 신청했습니다."))
-                                }
-
-                                else -> {
-                                    _event.emit(Event.ShowToast("기상송 신청에 실패했습니다."))
-                                }
-                            }
+                    is Result.Error -> {
+                        _uiState.update { uiState ->
                             uiState.copy(
                                 isError = true,
                                 isLoading = false,
                             )
+                        }
+                        when (result.error) {
+                            is LockedException -> {
+                                _event.emit(Event.ShowToast("이번주에 이미 기상송을 신청했습니다."))
+                            }
+
+                            else -> {
+                                _event.emit(Event.ShowToast("기상송 신청에 실패했습니다."))
+                            }
                         }
                     }
                 }
