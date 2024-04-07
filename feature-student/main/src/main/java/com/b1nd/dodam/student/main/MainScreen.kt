@@ -47,6 +47,9 @@ internal fun MainScreen(
     navigateToSchedule: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
+    showToast: (String, String) -> Unit,
+    refresh: () -> Boolean,
+    dispose: () -> Unit,
 ) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
     val mainScreenState = rememberMainScreenState()
@@ -80,6 +83,9 @@ internal fun MainScreen(
             nightStudyScreen(navigateToAskNightStudy)
             outingScreen(
                 navigateToAddOuting,
+                showToast = showToast,
+                refresh = refresh,
+                dispose = dispose,
             )
             allScreen(
                 navigateToSetting,
