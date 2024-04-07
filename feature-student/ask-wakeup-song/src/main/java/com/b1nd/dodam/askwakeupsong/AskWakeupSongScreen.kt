@@ -293,37 +293,36 @@ fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonCha
                 onDismissRequest = {
                     showDialog = false
                 },
-                confirmText = {
-                    Row {
-                        DodamLargeFilledButton(
-                            onClick = {
-                                showDialog = false
-                            },
-                            modifier = Modifier.weight(1.0f),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                            ),
-                        ) {
-                            Text(text = "취소")
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        DodamLargeFilledButton(
-                            onClick = {
-                                viewModel.postWakeupSong(
-                                    melonChartSong.artist,
-                                    melonChartSong.name,
-                                )
-                                showDialog = false
-                            },
-                            modifier = Modifier.weight(1.0f),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = MaterialTheme.colorScheme.onPrimary,
-                            ),
-                        ) {
-                            Text(text = "신청")
-                        }
+                dismissButton = {
+                    DodamLargeFilledButton(
+                        onClick = {
+                            showDialog = false
+                        },
+                        modifier = Modifier.weight(1.0f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        ),
+                    ) {
+                        Text(text = "취소")
+                    }
+                },
+                confirmButton = {
+                    DodamLargeFilledButton(
+                        onClick = {
+                            viewModel.postWakeupSong(
+                                melonChartSong.artist,
+                                melonChartSong.name,
+                            )
+                            showDialog = false
+                        },
+                        modifier = Modifier.weight(1.0f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                        ),
+                    ) {
+                        Text(text = "신청")
                     }
                 },
                 text = {

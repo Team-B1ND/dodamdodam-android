@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
 import com.b1nd.dodam.dds.component.DodamToast
@@ -236,6 +237,7 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
                                 wakeupSong = wakeupSong,
                                 selectedTabIndex = selectedTabIndex,
                                 isShimmer = uiState.isLoading,
+                                isMine = selectedTabIndex == 1,
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                         }
@@ -280,6 +282,7 @@ fun WakeupSongCard(
     index: Int? = null,
     selectedTabIndex: Int? = null,
     isShimmer: Boolean = false,
+    isMine: Boolean = false,
 ) {
     var showDialog by remember {
         mutableStateOf(false)
@@ -291,34 +294,33 @@ fun WakeupSongCard(
             onDismissRequest = {
                 showDialog = false
             },
-            confirmText = {
-                Row {
-                    DodamLargeFilledButton(
-                        onClick = {
-                            showDialog = false
-                        },
-                        modifier = Modifier.weight(1.0f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        ),
-                    ) {
-                        Text(text = "취소")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    DodamLargeFilledButton(
-                        onClick = {
-                            viewModel.deleteWakeupSong(wakeupSong.id)
-                            showDialog = false
-                        },
-                        modifier = Modifier.weight(1.0f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = MaterialTheme.colorScheme.onError,
-                        ),
-                    ) {
-                        Text(text = "삭제")
-                    }
+            dismissButton = {
+                DodamLargeFilledButton(
+                    onClick = {
+                        showDialog = false
+                    },
+                    modifier = Modifier.weight(1.0f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    ),
+                ) {
+                    Text(text = "취소")
+                }
+            },
+            confirmButton = {
+                DodamLargeFilledButton(
+                    onClick = {
+                        viewModel.deleteWakeupSong(wakeupSong.id)
+                        showDialog = false
+                    },
+                    modifier = Modifier.weight(1.0f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError,
+                    ),
+                ) {
+                    Text(text = "삭제")
                 }
             },
             text = {
@@ -385,12 +387,34 @@ fun WakeupSongCard(
                     Spacer(modifier = Modifier.width(16.dp))
 
                     Column {
-                        BodyMedium(
-                            text = wakeupSong.videoTitle,
-                            modifier = Modifier
-                                .basicMarquee(),
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
+                        Row {
+                            if (isMine) {
+                                when (wakeupSong.status) {
+                                    Status.PENDING -> {}
+                                    Status.ALLOWED -> {
+                                        BodyMedium(
+                                            text = "(승인됨)",
+                                            color = MaterialTheme.colorScheme.primary,
+                                        )
+                                        Spacer(modifier = Modifier.width(3.dp))
+                                    }
+
+                                    Status.REJECTED -> {
+                                        BodyMedium(
+                                            text = "(거절됨)",
+                                            color = MaterialTheme.colorScheme.error,
+                                        )
+                                        Spacer(modifier = Modifier.width(3.dp))
+                                    }
+                                }
+                            }
+                            BodyMedium(
+                                text = wakeupSong.videoTitle,
+                                modifier = Modifier
+                                    .basicMarquee(),
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
                         Text(
                             text = wakeupSong.channelTitle,
                             modifier = Modifier

@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface MemberRepository {
     suspend fun getMyInfo(): Flow<Result<MyInfo>>
+    suspend fun deactivation(): Flow<Result<Unit>>
 }
