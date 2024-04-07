@@ -68,9 +68,12 @@ import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), popBackStack: () -> Unit) {
+fun AskWakeupSongScreen(
+    viewModel: AskWakeupSongViewModel = hiltViewModel(),
+    popBackStack: () -> Unit,
+    showToast: (String, String) -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
     var keyWord by remember {
         mutableStateOf("")
@@ -83,7 +86,8 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), pop
         viewModel.event.collect { event ->
             when (event) {
                 is Event.ShowToast -> {
-                    snackbarHostState.showSnackbar(event.message)
+                    if (uiState.isError) showToast("ERROR", event.message)
+                    else showToast("SUCCESS", event.message)
                 }
 
                 is Event.PopBackStack -> {
@@ -103,45 +107,6 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), pop
                     containerColor = MaterialTheme.colorScheme.background,
                 ),
             )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) {
-                Column {
-                    DodamToast(
-                        text = it.visuals.message,
-                        trailingIcon = {
-                            if (!uiState.isError) {
-                                CheckmarkCircleFilledIcon(
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .drawBehind {
-                                            drawRoundRect(
-                                                color = DodamColor.White,
-                                                topLeft = Offset(15f, 15f),
-                                                size = Size(25f, 25f),
-                                            )
-                                        },
-                                )
-                            } else {
-                                XMarkCircleIcon(
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .drawBehind {
-                                            drawRoundRect(
-                                                color = DodamColor.White,
-                                                topLeft = Offset(15f, 15f),
-                                                size = Size(25f, 25f),
-                                            )
-                                        },
-                                    tint = MaterialTheme.colorScheme.error,
-                                )
-                            }
-                        },
-                        iconColor = if (uiState.isError) MaterialTheme.colorScheme.error else DodamColor.Green,
-                    )
-                    Spacer(modifier = Modifier.height(50.dp))
-                }
-            }
         },
     ) { paddingValues ->
         Column(

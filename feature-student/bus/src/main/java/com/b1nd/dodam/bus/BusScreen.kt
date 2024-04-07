@@ -45,9 +45,8 @@ import com.b1nd.dodam.ui.component.InputField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Unit) {
+fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
     var selectedIndex: Int? by remember {
         mutableStateOf(null)
     }
@@ -70,9 +69,9 @@ fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Uni
     LaunchedEffect(key1 = toastMessage) {
         if (toastMessage.isNotEmpty()) {
             if (uiState.isError) {
-                snackbarHostState.showSnackbar(toastMessage)
+                showToast("ERROR", toastMessage)
             } else {
-                snackbarHostState.showSnackbar(toastMessage)
+               showToast("SUCCESS", toastMessage)
                 popBackStack()
             }
         }
@@ -119,45 +118,6 @@ fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Uni
                     containerColor = MaterialTheme.colorScheme.background,
                 ),
             )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) {
-                Column {
-                    DodamToast(
-                        text = it.visuals.message,
-                        trailingIcon = {
-                            if (!uiState.isError) {
-                                CheckmarkCircleFilledIcon(
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .drawBehind {
-                                            drawRoundRect(
-                                                color = DodamColor.White,
-                                                topLeft = Offset(15f, 15f),
-                                                size = Size(25f, 25f),
-                                            )
-                                        },
-                                )
-                            } else {
-                                XMarkCircleIcon(
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .drawBehind {
-                                            drawRoundRect(
-                                                color = DodamColor.White,
-                                                topLeft = Offset(15f, 15f),
-                                                size = Size(25f, 25f),
-                                            )
-                                        },
-                                    tint = MaterialTheme.colorScheme.error,
-                                )
-                            }
-                        },
-                        iconColor = if (uiState.isError) MaterialTheme.colorScheme.error else DodamColor.Green,
-                    )
-                    Spacer(modifier = Modifier.height(90.dp))
-                }
-            }
         },
     ) { paddingValues ->
         Column(
