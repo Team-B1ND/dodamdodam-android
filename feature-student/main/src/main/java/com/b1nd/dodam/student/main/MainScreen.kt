@@ -59,7 +59,7 @@ internal fun MainScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         NavHost(
-            navController = mainScreenState.navController,
+            navController = navController,
             startDestination = HOME_ROUTE,
         ) {
             homeScreen(
