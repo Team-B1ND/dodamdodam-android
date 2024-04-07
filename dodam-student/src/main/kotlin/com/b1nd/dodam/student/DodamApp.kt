@@ -66,7 +66,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun DodamApp(
     isLogin: Boolean,
-    deleteToken: () -> Unit,
+    logout: () -> Unit,
     navController: NavHostController = rememberNavController(),
     mainNavController: NavHostController = rememberNavController(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
@@ -233,16 +233,7 @@ fun DodamApp(
             )
             settingScreen(
                 popBackStack = navController::popBackStack,
-                logout = {
-                    deleteToken()
-                    navController.navigateToOnboarding(
-                        navOptions {
-                            popUpTo(navController.graph.id) {
-                                inclusive = true
-                            }
-                        },
-                    )
-                },
+                logout = logout,
             )
             askWakeupSongScreen(
                 popBackStack = navController::popBackStack,
