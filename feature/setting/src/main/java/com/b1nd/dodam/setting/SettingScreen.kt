@@ -112,7 +112,10 @@ internal fun SettingScreen(
             confirmButton = {
                 DodamLargeFilledButton(
                     modifier = Modifier.weight(1f),
-                    onClick = logout,
+                    onClick = {
+                        viewModel.deactivate()
+                        logout()
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error,
                         contentColor = MaterialTheme.colorScheme.onError,

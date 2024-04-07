@@ -52,4 +52,30 @@ class SettingViewModel @Inject constructor(
             }
         }
     }
+
+    fun deactivate() {
+        viewModelScope.launch {
+            memberRepository.deactivation().collect { result ->
+                _uiState.update { uiState ->
+                    when (result) {
+                        is Result.Error -> {
+                            uiState.copy(
+                                isLoading = false
+                            )
+                        }
+                        Result.Loading -> {
+                            uiState.copy(
+                                isLoading = true
+                            )
+                        }
+                        is Result.Success -> {
+                            uiState.copy(
+                                isLoading = false
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
