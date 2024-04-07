@@ -3,8 +3,6 @@ package com.b1nd.dodam.wakeupsong
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +46,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.b1nd.dodam.data.core.model.Status
+import com.b1nd.dodam.dds.animation.bounceClick
+import com.b1nd.dodam.dds.animation.bounceCombinedClick
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
 import com.b1nd.dodam.dds.component.button.DodamCTAButton
@@ -80,6 +80,7 @@ fun WakeupSongScreen(
                 is Event.DeleteWakeupSong -> {
                     showToast("SUCCESS", "기상송을 삭제했어요")
                     viewModel.getMyWakeupSong()
+                    viewModel.getPendingWakeupSongs()
                 }
             }
         }
@@ -105,7 +106,7 @@ fun WakeupSongScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background),
+                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(16.dp)),
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -116,9 +117,10 @@ fun WakeupSongScreen(
                     TitleMedium(
                         text = "오늘의 기상송",
                         modifier = Modifier
-                            .padding(top = 10.dp, start = 16.dp)
+                            .padding(start = 16.dp, end = 16.dp, top = 10.dp)
                             .fillMaxWidth(),
                     )
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
                 if (!uiState.allowedWakeupSongs.isEmpty()) {
                     items(uiState.allowedWakeupSongs.size) { index ->
@@ -127,6 +129,7 @@ fun WakeupSongScreen(
                         WakeupSongCard(
                             wakeupSong = allowedSong,
                             index = index + 1,
+                            isMine = false,
                             selectedTabIndex = selectedTabIndex,
                         )
                     }
@@ -154,7 +157,7 @@ fun WakeupSongScreen(
                                     TabRowDefaults.SecondaryIndicator(
                                         Modifier
                                             .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                                            .padding(horizontal = 24.dp)
+                                            .padding(horizontal = 8.dp)
                                             .clip(CircleShape),
                                         color = MaterialTheme.colorScheme.onSurface,
                                     )
@@ -249,6 +252,7 @@ fun WakeupSongScreen(
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun WakeupSongCard(
+    modifier: Modifier = Modifier,
     viewModel: WakeupSongViewModel = hiltViewModel(),
     wakeupSong: WakeupSong? = null,
     index: Int? = null,
@@ -261,7 +265,7 @@ fun WakeupSongCard(
     }
     val uriHandler = LocalUriHandler.current
 
-    if (showDialog && !isShimmer && selectedTabIndex != null && wakeupSong != null) {
+    if (showDialog && !isShimmer && selectedTabIndex != null && wakeupSong != null && isMine) {
         DodamDialog(
             onDismissRequest = {
                 showDialog = false
@@ -309,11 +313,12 @@ fun WakeupSongCard(
     }
     if (wakeupSong != null && selectedTabIndex != null && !isShimmer) {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
+                .padding(horizontal = 8.dp)
                 .then(
-                    if (selectedTabIndex == 1) {
-                        Modifier.combinedClickable(
+                    if (isMine) {
+                        Modifier.bounceCombinedClick(
                             onClick = {
                                 uriHandler.openUri(wakeupSong.videoUrl)
                             },
@@ -322,14 +327,14 @@ fun WakeupSongCard(
                             },
                         )
                     } else {
-                        Modifier.clickable {
+                        Modifier.bounceClick(onClick = {
                             uriHandler.openUri(wakeupSong.videoUrl)
-                        }
+                        })
                     },
                 ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row {
