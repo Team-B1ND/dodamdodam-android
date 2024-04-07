@@ -6,11 +6,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import com.b1nd.dodam.bus.BusScreen
 
 const val BUS_ROUTE = "bus"
 
-fun NavController.navigateToBus(navOptions: NavOptions? = null) = navigate(BUS_ROUTE, navOptions)
+fun NavController.navigateToBus(
+    navOptions: NavOptions? = navOptions {
+        launchSingleTop = true
+    },
+) = navigate(BUS_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.busScreen(popBackStack: () -> Unit) {

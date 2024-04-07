@@ -8,11 +8,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import com.b1nd.dodam.outing.OutingScreen
 
 const val OUTING_ROUTE = "outing"
 
-fun NavController.navigateToOuting(navOptions: NavOptions? = null) = navigate(OUTING_ROUTE, navOptions)
+fun NavController.navigateToOuting(
+    navOptions: NavOptions? = navOptions {
+        launchSingleTop = true
+    },
+) = navigate(OUTING_ROUTE, navOptions)
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
