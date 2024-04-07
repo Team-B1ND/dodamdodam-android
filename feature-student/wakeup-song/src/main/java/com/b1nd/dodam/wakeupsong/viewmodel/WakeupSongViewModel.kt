@@ -27,12 +27,6 @@ class WakeupSongViewModel @Inject constructor(
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
 
-    init {
-        getPendingWakeupSongs()
-        getMyWakeupSongs()
-        getAllowedWakeupSongs()
-    }
-
     fun getMyWakeupSongs() {
         viewModelScope.launch {
             wakeupSongRepository.getMyWakeupSongs().collect { result ->

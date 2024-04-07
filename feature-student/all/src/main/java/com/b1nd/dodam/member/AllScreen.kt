@@ -30,7 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -90,37 +89,56 @@ fun AllScreen(
                 .padding(paddingValues)
                 .padding(16.dp),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                uiState.myInfo?.let { myInfo ->
+            if (uiState.isSimmer) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Box(
-                        modifier = Modifier.then(
-                            if (uiState.isSimmer) {
-                                Modifier.background(
-                                    brush = shimmerEffect(),
-                                    RoundedCornerShape(12.dp),
-                                )
-                            } else {
-                                Modifier
-                            },
-                        ),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        AsyncImage(
-                            model = myInfo.profileImage ?: com.b1nd.dodam.ui.R.drawable.ic_default_profile,
-                            contentDescription = "profile",
+                        modifier = Modifier
+                            .size(70.dp)
+                            .background(
+                                shimmerEffect(),
+                                RoundedCornerShape(12.dp),
+                            ),
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column(horizontalAlignment = Alignment.Start) {
+                        Box(
                             modifier = Modifier
-                                .clip(shape = RoundedCornerShape(12.dp))
-                                .size(70.dp),
-                            contentScale = ContentScale.Crop,
+                                .height(26.dp)
+                                .width(150.dp)
+                                .background(shimmerEffect(), RoundedCornerShape(100)),
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Box(
+                            modifier = Modifier
+                                .height(20.dp)
+                                .width(80.dp)
+                                .background(shimmerEffect(), RoundedCornerShape(100)),
                         )
                     }
-                    Spacer(modifier = Modifier.width(16.dp))
-                    val classInfo = myInfo.student
-                    Column(horizontalAlignment = Alignment.Start) {
-                        if (!uiState.isSimmer) {
+                }
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    uiState.myInfo?.let { myInfo ->
+                        Box {
+                            AsyncImage(
+                                model = myInfo.profileImage
+                                    ?: com.b1nd.dodam.ui.R.drawable.ic_default_profile,
+                                contentDescription = "profile",
+                                modifier = Modifier
+                                    .clip(shape = RoundedCornerShape(12.dp))
+                                    .size(70.dp),
+                                contentScale = ContentScale.Crop,
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        val classInfo = myInfo.student
+                        Column(horizontalAlignment = Alignment.Start) {
                             BodyLarge(
                                 text = "환영합니다, " + myInfo.name + "님",
                                 color = MaterialTheme.colorScheme.onBackground,
@@ -128,20 +146,6 @@ fun AllScreen(
                             LabelLarge(
                                 text = "${classInfo?.grade ?: 0}학년 ${classInfo?.room ?: 0}반 ${classInfo?.number ?: 0}번",
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .height(26.dp)
-                                    .width(150.dp)
-                                    .background(shimmerEffect(), RoundedCornerShape(100)),
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Box(
-                                modifier = Modifier
-                                    .height(20.dp)
-                                    .width(80.dp)
-                                    .background(shimmerEffect(), RoundedCornerShape(100)),
                             )
                         }
                     }
@@ -223,7 +227,6 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
         BodyLarge(
             text = text,
             color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = FontWeight.Medium,
         )
         Spacer(modifier = Modifier.weight(1f))
         Icon(
