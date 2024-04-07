@@ -45,11 +45,7 @@ import com.b1nd.dodam.ui.component.InputField
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingScreen(
-    viewModel: SettingViewModel = hiltViewModel(),
-    popBackStack: () -> Unit,
-    logout: () -> Unit,
-) {
+internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBackStack: () -> Unit, logout: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }
