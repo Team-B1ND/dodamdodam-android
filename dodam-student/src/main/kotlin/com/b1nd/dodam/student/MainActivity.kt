@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         firebaseAnalytics = firebaseAnalytics,
-                        firebaseCrashlytics = firebaseCrashlytics
+                        firebaseCrashlytics = firebaseCrashlytics,
                     )
                 } ?: run {
                     Box(
