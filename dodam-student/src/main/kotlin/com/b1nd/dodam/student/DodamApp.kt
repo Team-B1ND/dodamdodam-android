@@ -202,6 +202,10 @@ fun DodamApp(
                     navController.navigateToAskWakeupSong()
                 },
                 popBackStack = navController::popBackStack,
+                showToast = { status, text ->
+                    state = status
+                    scope.launch { snackbarHostState.showSnackbar(text) }
+                }
             )
             askOutScreen(
                 popBackStack = {
@@ -216,6 +220,10 @@ fun DodamApp(
             )
             busScreen(
                 popBackStack = navController::popBackStack,
+                showToast = { status, text ->
+                    state = status
+                    scope.launch { snackbarHostState.showSnackbar(text) }
+                }
             )
             settingScreen(
                 popBackStack = navController::popBackStack,
@@ -232,6 +240,10 @@ fun DodamApp(
             )
             askWakeupSongScreen(
                 popBackStack = navController::popBackStack,
+                showToast = { status, text ->
+                    state = status
+                    scope.launch { snackbarHostState.showSnackbar(text) }
+                }
             )
             pointScreen(
                 popBackStack = navController::popBackStack,

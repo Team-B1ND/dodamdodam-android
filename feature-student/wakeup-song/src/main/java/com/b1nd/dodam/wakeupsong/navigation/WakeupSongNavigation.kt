@@ -1,6 +1,8 @@
 package com.b1nd.dodam.wakeupsong.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -16,17 +18,22 @@ fun NavController.navigateToWakeupSong(
     },
 ) = navigate(WAKEUP_SONG_ROUTE, navOptions)
 
-fun NavGraphBuilder.wakeupSongScreen(onAddWakeupSongClick: () -> Unit, popBackStack: () -> Unit) {
+fun NavGraphBuilder.wakeupSongScreen(
+    onAddWakeupSongClick: () -> Unit,
+    popBackStack: () -> Unit,
+    showToast: (String, String) -> Unit,
+) {
     composable(
         route = WAKEUP_SONG_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
-        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
-        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         WakeupSongScreen(
             onAddWakeupSongClick,
             popBackStack,
+            showToast = showToast
         )
     }
 }
