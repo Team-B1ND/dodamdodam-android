@@ -21,12 +21,7 @@ fun NavController.navigateToNightStudy(
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.nightStudyScreen(
-    onAddClick: () -> Unit,
-    showToast: (String, String) -> Unit,
-    refresh: () -> Boolean,
-    dispose: () -> Unit,
-) {
+fun NavGraphBuilder.nightStudyScreen(onAddClick: () -> Unit, showToast: (String, String) -> Unit, refresh: () -> Boolean, dispose: () -> Unit) {
     composable(
         route = NIGHT_STUDY_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -38,7 +33,7 @@ fun NavGraphBuilder.nightStudyScreen(
             onAddClick,
             showToast,
             refresh,
-            dispose
+            dispose,
         )
     }
 }

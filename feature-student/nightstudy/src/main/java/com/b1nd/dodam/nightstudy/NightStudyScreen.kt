@@ -67,7 +67,7 @@ fun NightStudyScreen(
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,
-    viewModel: NightStudyViewModel = hiltViewModel()
+    viewModel: NightStudyViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val nightStudyScreenState = rememberNightStudyScreenState()
@@ -77,7 +77,7 @@ fun NightStudyScreen(
     var showDialog by remember { mutableStateOf(false) }
     var reason by remember { mutableStateOf("") }
     var id by remember { mutableLongStateOf(0) }
-    
+
     val color = MaterialTheme.colorScheme
 
     DisposableEffect(Unit) {
@@ -160,7 +160,7 @@ fun NightStudyScreen(
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                state = nightStudyScreenState.lazyListState
+                state = nightStudyScreenState.lazyListState,
             ) {
                 when (val nightStudyUiState = uiState) {
                     is NightStudyUiState.Success -> {
@@ -432,12 +432,12 @@ fun NightStudyScreen(
 
                     is NightStudyUiState.SuccessDelete -> {
                         showDialog = false
-                        showToast("SUCCESS", "심야 자습을 삭제했어요",)
+                        showToast("SUCCESS", "심야 자습을 삭제했어요")
                     }
 
                     is NightStudyUiState.FailDelete -> {
                         showDialog = false
-                        showToast("ERROR", "심야 자습 삭제를 실패했어요",)
+                        showToast("ERROR", "심야 자습 삭제를 실패했어요")
                     }
                 }
                 item {

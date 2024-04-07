@@ -297,7 +297,7 @@ fun OutingScreen(
                                                     )
                                                 } else {
                                                     String.format(
-                                                        "%월 %d일",
+                                                        "%d월 %d일",
                                                         out.startAt.monthNumber,
                                                         out.startAt.dayOfMonth,
                                                     )

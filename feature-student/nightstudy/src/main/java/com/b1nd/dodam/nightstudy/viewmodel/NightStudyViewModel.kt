@@ -6,10 +6,9 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -31,7 +30,7 @@ class NightStudyViewModel @Inject constructor(
                 when (result) {
                     is Result.Success -> _uiState.emit(
                         NightStudyUiState.Success(
-                           result.data
+                            result.data,
                         ),
                     )
 
