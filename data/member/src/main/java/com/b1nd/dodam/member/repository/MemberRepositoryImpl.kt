@@ -25,4 +25,12 @@ internal class MemberRepositoryImpl @Inject constructor(
             .asResult()
             .flowOn(dispatcher)
     }
+
+    override suspend fun deactivation(): Flow<Result<Unit>> {
+        return flow {
+            emit(network.deactivation())
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
 }
