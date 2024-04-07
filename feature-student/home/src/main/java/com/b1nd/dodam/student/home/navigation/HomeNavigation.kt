@@ -17,7 +17,7 @@ const val HOME_ROUTE = "home"
 fun NavController.navigateToHome(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(HOME_ROUTE, navOptions)
 
 @ExperimentalMaterialApi

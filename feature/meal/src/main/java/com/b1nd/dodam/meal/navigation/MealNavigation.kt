@@ -15,7 +15,7 @@ const val MEAL_ROUTE = "meal"
 fun NavController.navigationToMeal(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(MEAL_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api

@@ -14,7 +14,7 @@ const val BUS_ROUTE = "bus"
 fun NavController.navigateToBus(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(BUS_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api

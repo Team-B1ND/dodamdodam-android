@@ -14,14 +14,11 @@ const val INFO_ROUTE = "info"
 fun NavController.navigateToInfo(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(INFO_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.infoScreen(
-    onNextClick: (String, String, String, String, String, String) -> Unit,
-    onBackClick: () -> Unit
-) {
+fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, String, String) -> Unit, onBackClick: () -> Unit) {
     composable(
         route = INFO_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },

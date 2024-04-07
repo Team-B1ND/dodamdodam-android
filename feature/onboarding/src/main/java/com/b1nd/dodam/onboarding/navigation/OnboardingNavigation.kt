@@ -12,7 +12,7 @@ const val ONBOARDING_ROUTE = "onboarding"
 fun NavController.navigateToOnboarding(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(ONBOARDING_ROUTE, navOptions)
 
 fun NavGraphBuilder.onboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
