@@ -8,12 +8,15 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navOptions
 import com.b1nd.dodam.register.AuthScreen
 
 const val AUTH_ROUTE = "auth"
 
 fun NavController.navigateToAuth(
-    navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build(),
+    navOptions: NavOptions? = navOptions {
+        launchSingleTop = true
+    },
     name: String,
     grade: String,
     room: String,

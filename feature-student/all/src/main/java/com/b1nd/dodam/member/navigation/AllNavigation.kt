@@ -6,11 +6,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import com.b1nd.dodam.member.AllScreen
 
 const val ALL_ROUTE = "all"
 
-fun NavController.navigateToAllScreen(navOptions: NavOptions? = NavOptions.Builder().setLaunchSingleTop(true).build()) = navigate(ALL_ROUTE, navOptions)
+fun NavController.navigateToAllScreen(
+    navOptions: NavOptions? = navOptions {
+        launchSingleTop = true
+    }
+) = navigate(ALL_ROUTE, navOptions)
 
 fun NavGraphBuilder.allScreen(
     navigateToSetting: () -> Unit,
