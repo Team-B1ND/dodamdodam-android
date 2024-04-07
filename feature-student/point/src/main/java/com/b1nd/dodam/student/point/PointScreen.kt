@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -41,6 +43,7 @@ import com.b1nd.dodam.dds.style.BodyMedium
 import com.b1nd.dodam.dds.style.HeadlineLarge
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.style.TitleMedium
+import com.b1nd.dodam.ui.effect.shimmerEffect
 
 @ExperimentalMaterial3Api
 @Composable
@@ -146,43 +149,77 @@ internal fun PointScreen(viewModel: PointViewModel = hiltViewModel(), popBackSta
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                items(
-                    items = if (selectedIndex == 0) {
-                        uiState.dormitoryPointReasons
-                    } else {
-                        uiState.schoolPointReasons
-                    },
-                    key = { it.id },
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(2.dp),
+                if (uiState.isLoading) {
+                    items(5) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            BodyLarge(
-                                text = it.reason.reason,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                            LabelLarge(
-                                text = "${it.teacher.name} · ${it.issueAt}",
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(2.dp),
+                            ) {
+                                Box(modifier = Modifier
+                                    .width(100.dp)
+                                    .height(20.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                                )
+                                Box(modifier = Modifier
+                                    .width(80.dp)
+                                    .height(14.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            Box(modifier = Modifier
+                                .width(40.dp)
+                                .height(20.dp)
+                                .background(shimmerEffect(), RoundedCornerShape(4.dp))
                             )
                         }
+                    }
+                } else {
+                    items(
+                        items = if (selectedIndex == 0) {
+                            uiState.dormitoryPointReasons
+                        } else {
+                            uiState.schoolPointReasons
+                        },
+                        key = { it.id },
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(2.dp),
+                            ) {
+                                BodyLarge(
+                                    text = it.reason.reason,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
+                                LabelLarge(
+                                    text = "${it.teacher.name} · ${it.issueAt}",
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
 
-                        Spacer(modifier = Modifier.weight(1f))
+                            Spacer(modifier = Modifier.weight(1f))
 
-                        BodyLarge(
-                            text = "${it.reason.score}점",
-                            color = if (it.reason.scoreType == ScoreType.MINUS) {
-                                MaterialTheme.colorScheme.error
-                            } else {
-                                MaterialTheme.colorScheme.primary
-                            },
-                        )
+                            BodyLarge(
+                                text = "${it.reason.score}점",
+                                color = if (it.reason.scoreType == ScoreType.MINUS) {
+                                    MaterialTheme.colorScheme.error
+                                } else {
+                                    MaterialTheme.colorScheme.primary
+                                },
+                            )
+                        }
                     }
                 }
             }
