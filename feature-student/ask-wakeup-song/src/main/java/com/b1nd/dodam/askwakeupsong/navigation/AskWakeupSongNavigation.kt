@@ -13,7 +13,7 @@ const val ASK_WAKEUP_SONG_ROUTE = "ask_wakeup_song"
 fun NavController.navigateToAskWakeupSong(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(
     ASK_WAKEUP_SONG_ROUTE,
     navOptions,

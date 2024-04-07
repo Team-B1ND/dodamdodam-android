@@ -14,7 +14,7 @@ const val LOGIN_ROUTE = "login"
 fun NavController.navigationToLogin(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(LOGIN_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api

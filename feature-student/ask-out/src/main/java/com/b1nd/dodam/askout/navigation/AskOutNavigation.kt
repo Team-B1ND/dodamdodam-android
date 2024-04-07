@@ -14,7 +14,7 @@ const val ASK_OUT_ROUTE = "ask_out"
 fun NavController.navigateToAskOut(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(ASK_OUT_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api

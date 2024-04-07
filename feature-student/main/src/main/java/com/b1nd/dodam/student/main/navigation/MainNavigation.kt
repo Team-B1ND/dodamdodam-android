@@ -15,7 +15,7 @@ const val MAIN_ROUTE = "main"
 fun NavController.navigateToMain(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(MAIN_ROUTE, navOptions)
 
 @ExperimentalMaterialApi

@@ -14,7 +14,7 @@ const val SETTING_ROUTE = "setting"
 fun NavController.navigateToSetting(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(SETTING_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api

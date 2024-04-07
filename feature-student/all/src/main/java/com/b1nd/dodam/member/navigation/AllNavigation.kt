@@ -14,7 +14,7 @@ const val ALL_ROUTE = "all"
 fun NavController.navigateToAllScreen(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(ALL_ROUTE, navOptions)
 
 fun NavGraphBuilder.allScreen(

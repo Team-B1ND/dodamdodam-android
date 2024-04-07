@@ -15,7 +15,7 @@ const val POINT_ROUTE = "point"
 fun NavController.navigateToPoint(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(POINT_ROUTE, navOptions)
 
 @ExperimentalFoundationApi

@@ -16,7 +16,7 @@ const val OUTING_ROUTE = "outing"
 fun NavController.navigateToOuting(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
-    }
+    },
 ) = navigate(OUTING_ROUTE, navOptions)
 
 @ExperimentalFoundationApi
