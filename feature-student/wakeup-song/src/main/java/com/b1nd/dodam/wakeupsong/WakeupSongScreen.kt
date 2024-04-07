@@ -84,7 +84,8 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
             when (event) {
                 is Event.DeleteWakeupSong -> {
                     snackbarHostState.showSnackbar("기상송을 삭제했어요")
-                    viewModel.getMyWakeupSong()
+                    viewModel.getMyWakeupSongs()
+                    viewModel.getPendingWakeupSongs()
                 }
             }
         }
@@ -147,6 +148,7 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
                             .padding(top = 10.dp, start = 16.dp)
                             .fillMaxWidth(),
                     )
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
                 if (!uiState.allowedWakeupSongs.isEmpty()) {
                     items(uiState.allowedWakeupSongs.size) { index ->
