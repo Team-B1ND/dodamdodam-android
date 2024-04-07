@@ -50,6 +50,7 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
 
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+    var showDeactivationDialog by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -83,7 +84,7 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
                 }
             },
             title = {
-                Text(text = "정말 로그아웃하시겠어요?")
+                Text(text = "정말 로그아웃 하시겠어요?")
             },
         )
     }
@@ -98,6 +99,44 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
             },
             title = { Text(text = "아직 준비 중인 기능이에요!") },
             text = { Text(text = "정보를 수정하시려면 도담도담 웹사이트를 이용해주세요.") },
+        )
+    }
+
+    if (showDeactivationDialog) {
+        DodamDialog(
+            onDismissRequest = { showDeactivationDialog = false },
+            confirmButton = {
+                DodamLargeFilledButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        viewModel.deactivate()
+                        logout()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError,
+                    ),
+                    isLoading = uiState.isLoading,
+                ) {
+                    Text(text = "회원탈퇴")
+                }
+            },
+            dismissButton = {
+                DodamLargeFilledButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = { showDeactivationDialog = false },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    ),
+                    enabled = !uiState.isLoading,
+                ) {
+                    Text(text = "취소")
+                }
+            },
+            title = {
+                Text(text = "정말 회원탈퇴 하시겠어요?")
+            },
         )
     }
 
@@ -245,6 +284,23 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
                 text = {
                     BodyLarge(
                         text = "로그아웃",
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Medium,
+                    )
+                },
+                content = {
+                    ChevronRightIcon(
+                        modifier = Modifier.size(14.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                },
+            )
+
+            InputField(
+                onClick = { showDeactivationDialog = true },
+                text = {
+                    BodyLarge(
+                        text = "회원탈퇴",
                         color = MaterialTheme.colorScheme.error,
                         fontWeight = FontWeight.Medium,
                     )

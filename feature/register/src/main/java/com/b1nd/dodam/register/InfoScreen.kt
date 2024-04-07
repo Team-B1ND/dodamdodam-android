@@ -67,7 +67,12 @@ fun InfoScreen(
     }
     LaunchedEffect(emailState.isValid) {
         if (emailState.isValid) {
-            focusManager.moveFocus(FocusDirection.Down)
+            focusManager.moveFocus(FocusDirection.Up)
+        }
+    }
+    LaunchedEffect(nameState.isValid) {
+        if (nameState.isValid) {
+            focusManager.moveFocus(FocusDirection.Up)
         }
     }
 
