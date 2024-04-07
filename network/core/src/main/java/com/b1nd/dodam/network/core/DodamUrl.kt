@@ -1,20 +1,19 @@
 package com.b1nd.dodam.network.core
 
 object DodamUrl {
-    private const val BASE_URL = "https://dodam.b1nd.com/api"
-    private const val TEST_URL = "http://101.101.209.184:33333"
+    private const val BASE_URL = "https://dodamapi.b1nd.com"
 
-    const val MEAL = "$TEST_URL/meal"
-    const val AUTH = "$TEST_URL/auth"
-    const val BUS = "$TEST_URL/bus"
-    const val WAKEUP_SONG = "$TEST_URL/wakeup-song"
-    const val SLEEPOVER = "$TEST_URL/out-sleeping"
-    const val OUTING = "$TEST_URL/out-going"
-    const val MEMBER = "$TEST_URL/member"
-    const val NIGHT_STUDY = "$TEST_URL/night-study"
-    const val SCHEDULE = "$TEST_URL/schedule"
-    const val BANNER = "$TEST_URL/banner"
-    const val POINT = "$TEST_URL/point"
+    const val MEAL = "$BASE_URL/meal"
+    const val AUTH = "$BASE_URL/auth"
+    const val BUS = "$BASE_URL/bus"
+    const val WAKEUP_SONG = "$BASE_URL/wakeup-song"
+    const val SLEEPOVER = "$BASE_URL/out-sleeping"
+    const val OUTING = "$BASE_URL/out-going"
+    const val MEMBER = "$BASE_URL/member"
+    const val NIGHT_STUDY = "$BASE_URL/night-study"
+    const val SCHEDULE = "$BASE_URL/schedule"
+    const val BANNER = "$BASE_URL/banner"
+    const val POINT = "$BASE_URL/point"
 
     object Meal {
         const val MONTH = "$MEAL/month"
