@@ -68,10 +68,7 @@ import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AskWakeupSongScreen(
-    viewModel: AskWakeupSongViewModel = hiltViewModel(),
-    popBackStack: () -> Unit
-) {
+fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), popBackStack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
@@ -257,11 +254,7 @@ fun WakeupSongShimmer() {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun WakeupSongCard(
-    viewModel: AskWakeupSongViewModel = hiltViewModel(),
-    melonChartSong: MelonChartSong,
-    index: Int? = null
-) {
+fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonChartSong: MelonChartSong, index: Int? = null) {
     var showDialog by remember {
         mutableStateOf(false)
     }
@@ -372,10 +365,7 @@ fun WakeupSongCard(
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun WakeupSongCard(
-    viewModel: AskWakeupSongViewModel = hiltViewModel(),
-    melonChartSong: SearchWakeupSong
-) {
+fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonChartSong: SearchWakeupSong) {
     var showDialog by remember {
         mutableStateOf(false)
     }
