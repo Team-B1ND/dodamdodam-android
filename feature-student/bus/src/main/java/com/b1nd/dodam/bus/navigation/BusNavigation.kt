@@ -18,7 +18,7 @@ fun NavController.navigateToBus(
 ) = navigate(BUS_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.busScreen(popBackStack: () -> Unit) {
+fun NavGraphBuilder.busScreen(popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     composable(
         route = BUS_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -26,6 +26,6 @@ fun NavGraphBuilder.busScreen(popBackStack: () -> Unit) {
         popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
-        BusScreen(popBackStack = popBackStack)
+        BusScreen(popBackStack = popBackStack, showToast = showToast)
     }
 }

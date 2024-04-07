@@ -21,8 +21,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -35,10 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -51,13 +46,10 @@ import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
 import com.b1nd.dodam.dds.component.DodamTextField
-import com.b1nd.dodam.dds.component.DodamToast
 import com.b1nd.dodam.dds.component.button.DodamLargeFilledButton
-import com.b1nd.dodam.dds.foundation.DodamColor
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.BodyMedium
 import com.b1nd.dodam.dds.style.BodySmall
-import com.b1nd.dodam.dds.style.CheckmarkCircleFilledIcon
 import com.b1nd.dodam.dds.style.HeadlineSmall
 import com.b1nd.dodam.dds.style.TitleLarge
 import com.b1nd.dodam.dds.style.TitleMedium
@@ -68,9 +60,8 @@ import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), popBackStack: () -> Unit) {
+fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
     var keyWord by remember {
         mutableStateOf("")
@@ -83,7 +74,11 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), pop
         viewModel.event.collect { event ->
             when (event) {
                 is Event.ShowToast -> {
-                    snackbarHostState.showSnackbar(event.message)
+                    if (uiState.isError) {
+                        showToast("ERROR", event.message)
+                    } else {
+                        showToast("SUCCESS", event.message)
+                    }
                 }
 
                 is Event.PopBackStack -> {
@@ -103,45 +98,6 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), pop
                     containerColor = MaterialTheme.colorScheme.background,
                 ),
             )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) {
-                Column {
-                    DodamToast(
-                        text = it.visuals.message,
-                        trailingIcon = {
-                            if (!uiState.isError) {
-                                CheckmarkCircleFilledIcon(
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .drawBehind {
-                                            drawRoundRect(
-                                                color = DodamColor.White,
-                                                topLeft = Offset(15f, 15f),
-                                                size = Size(25f, 25f),
-                                            )
-                                        },
-                                )
-                            } else {
-                                XMarkCircleIcon(
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .drawBehind {
-                                            drawRoundRect(
-                                                color = DodamColor.White,
-                                                topLeft = Offset(15f, 15f),
-                                                size = Size(25f, 25f),
-                                            )
-                                        },
-                                    tint = MaterialTheme.colorScheme.error,
-                                )
-                            }
-                        },
-                        iconColor = if (uiState.isError) MaterialTheme.colorScheme.error else DodamColor.Green,
-                    )
-                    Spacer(modifier = Modifier.height(50.dp))
-                }
-            }
         },
     ) { paddingValues ->
         Column(

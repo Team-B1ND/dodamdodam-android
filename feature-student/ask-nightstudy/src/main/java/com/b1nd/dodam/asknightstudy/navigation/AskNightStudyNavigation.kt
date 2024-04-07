@@ -18,7 +18,7 @@ fun NavController.navigateToAskNightStudy(
 ) = navigate(ASK_NIGHT_STUDY_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.askNightStudyScreen(popBackStack: () -> Unit) {
+fun NavGraphBuilder.askNightStudyScreen(popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     composable(
         route = ASK_NIGHT_STUDY_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -26,6 +26,6 @@ fun NavGraphBuilder.askNightStudyScreen(popBackStack: () -> Unit) {
         popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
-        AskNightStudyScreen(popBackStack = popBackStack)
+        AskNightStudyScreen(popBackStack = popBackStack, showToast = showToast)
     }
 }
