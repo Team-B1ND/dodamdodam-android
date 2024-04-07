@@ -50,11 +50,7 @@ import com.b1nd.dodam.ui.effect.shimmerEffect
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingScreen(
-    viewModel: SettingViewModel = hiltViewModel(),
-    popBackStack: () -> Unit,
-    logout: () -> Unit
-) {
+internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBackStack: () -> Unit, logout: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }
@@ -82,8 +78,8 @@ internal fun SettingScreen(
                         context.startActivity(
                             Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://bit.ly/b1ndquiz")
-                            )
+                                Uri.parse("https://bit.ly/b1ndquiz"),
+                            ),
                         )
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -113,7 +109,7 @@ internal fun SettingScreen(
             },
             text = {
                 Text(text = "아래 링크로 이동하시겠어요?")
-            }
+            },
         )
     }
 

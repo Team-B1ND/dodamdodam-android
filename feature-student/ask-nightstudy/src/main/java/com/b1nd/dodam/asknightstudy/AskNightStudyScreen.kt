@@ -236,7 +236,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                         textStyle = MaterialTheme.typography.bodyLarge,
                         label = { Text(text = "심야 자습 사유") },
                         isError = nightStudyReason.length !in 10..250 && uiState.message.isNotBlank(),
-                        supportingText = { Text(text = "사유를 10자 이상 입력해주세요.") }
+                        supportingText = { Text(text = "사유를 10자 이상 입력해주세요.") },
                     )
                 }
 
