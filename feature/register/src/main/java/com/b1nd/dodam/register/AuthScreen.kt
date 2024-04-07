@@ -79,7 +79,7 @@ fun AuthScreen(
     }
     LaunchedEffect(passwordState.isValid) {
         if (passwordState.isValid) {
-            focusManager.moveFocus(FocusDirection.Down)
+            focusManager.moveFocus(FocusDirection.Up)
         }
     }
     LaunchedEffect(viewModel.event) {
