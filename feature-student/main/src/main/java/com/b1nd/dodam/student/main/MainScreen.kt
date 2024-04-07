@@ -27,7 +27,6 @@ import com.b1nd.dodam.dds.component.DodamNavigationBar
 import com.b1nd.dodam.dds.component.DodamNavigationBarItem
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.member.navigation.allScreen
-import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
@@ -84,7 +83,7 @@ internal fun MainScreen(
                 navigateToAskNightStudy,
                 showToast,
                 refresh,
-                dispose
+                dispose,
             )
             outingScreen(
                 navigateToAddOuting,
