@@ -49,15 +49,18 @@ import com.b1nd.dodam.dds.component.DodamLinearProgressIndicator
 import com.b1nd.dodam.dds.component.DodamTopAppBar
 import com.b1nd.dodam.dds.component.button.DodamIconButton
 import com.b1nd.dodam.dds.component.button.DodamLargeFilledButton
+import com.b1nd.dodam.dds.foundation.DodamIcons
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.BodyMedium
 import com.b1nd.dodam.dds.style.LabelLarge
+import com.b1nd.dodam.dds.style.MoonPlusIcon
 import com.b1nd.dodam.dds.style.PlusIcon
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ConvenienceStore
+import com.b1nd.dodam.ui.icons.SmileMoon
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
@@ -336,7 +339,7 @@ fun NightStudyScreen(
                                 ) {
                                     Image(
                                         modifier = Modifier.size(36.dp),
-                                        imageVector = ConvenienceStore,
+                                        imageVector = SmileMoon,
                                         contentDescription = null,
                                     )
 

@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +44,7 @@ import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.ChevronRightIcon
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.ui.component.InputField
+import com.b1nd.dodam.ui.effect.shimmerEffect
 
 @ExperimentalMaterial3Api
 @Composable
@@ -165,29 +168,65 @@ internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBac
             InputField(
                 onClick = { showDialog = true },
                 text = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        AsyncImage(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .size(48.dp),
-                            model = uiState.profile
-                                ?: com.b1nd.dodam.ui.R.drawable.ic_default_profile,
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                        )
+                    if (uiState.isLoading) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        shimmerEffect(),
+                                        CircleShape
+                                    )
+                            )
 
-                        Column {
-                            BodyLarge(
-                                text = uiState.name,
-                                color = MaterialTheme.colorScheme.onBackground,
+                            Column {
+                                Box(
+                                    modifier = Modifier
+                                        .size(50.dp, 20.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(4.dp)
+                                        )
+                                )
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .size(100.dp, 14.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(4.dp)
+                                        )
+                                )
+                            }
+                        }
+                    } else {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            AsyncImage(
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .size(48.dp),
+                                model = uiState.profile
+                                    ?: com.b1nd.dodam.ui.R.drawable.ic_default_profile,
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
                             )
-                            LabelLarge(
-                                text = "내 정보 수정하기",
-                                color = MaterialTheme.colorScheme.tertiary,
-                            )
+
+                            Column {
+                                BodyLarge(
+                                    text = uiState.name,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
+                                LabelLarge(
+                                    text = "내 정보 수정하기",
+                                    color = MaterialTheme.colorScheme.tertiary,
+                                )
+                            }
                         }
                     }
                 },
