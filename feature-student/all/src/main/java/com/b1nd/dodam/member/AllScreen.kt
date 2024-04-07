@@ -30,7 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -100,8 +99,8 @@ fun AllScreen(
                             .size(70.dp)
                             .background(
                                 shimmerEffect(),
-                                RoundedCornerShape(12.dp)
-                            )
+                                RoundedCornerShape(12.dp),
+                            ),
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Column(horizontalAlignment = Alignment.Start) {

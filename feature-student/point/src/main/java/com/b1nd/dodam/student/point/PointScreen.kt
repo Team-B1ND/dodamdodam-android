@@ -160,24 +160,27 @@ internal fun PointScreen(viewModel: PointViewModel = hiltViewModel(), popBackSta
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(2.dp),
                             ) {
-                                Box(modifier = Modifier
-                                    .width(100.dp)
-                                    .height(20.dp)
-                                    .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                        .height(20.dp)
+                                        .background(shimmerEffect(), RoundedCornerShape(4.dp)),
                                 )
-                                Box(modifier = Modifier
-                                    .width(80.dp)
-                                    .height(14.dp)
-                                    .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .width(80.dp)
+                                        .height(14.dp)
+                                        .background(shimmerEffect(), RoundedCornerShape(4.dp)),
                                 )
                             }
 
                             Spacer(modifier = Modifier.weight(1f))
 
-                            Box(modifier = Modifier
-                                .width(40.dp)
-                                .height(20.dp)
-                                .background(shimmerEffect(), RoundedCornerShape(4.dp))
+                            Box(
+                                modifier = Modifier
+                                    .width(40.dp)
+                                    .height(20.dp)
+                                    .background(shimmerEffect(), RoundedCornerShape(4.dp)),
                             )
                         }
                     }

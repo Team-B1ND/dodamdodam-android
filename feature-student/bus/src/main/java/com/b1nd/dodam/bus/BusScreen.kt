@@ -148,7 +148,7 @@ fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Uni
                     }
                 },
                 enabled = !(uiState.selectedBus == null && selectedIndex == null),
-                isLoading = uiState.isLoading
+                isLoading = uiState.isLoading,
             ) {
                 BodyLarge(text = "확인")
             }
