@@ -74,11 +74,7 @@ import com.b1nd.dodam.wakeupsong.viewmodel.WakeupSongViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun WakeupSongScreen(
-    onClickAddWakeupSong: () -> Unit,
-    popBackStack: () -> Unit,
-    viewModel: WakeupSongViewModel = hiltViewModel()
-) {
+fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit, viewModel: WakeupSongViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -132,7 +128,7 @@ fun WakeupSongScreen(
             }
         },
 
-        ) { paddingValues ->
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -398,7 +394,7 @@ fun WakeupSongCard(
                                     Status.ALLOWED -> {
                                         BodyMedium(
                                             text = "(승인됨)",
-                                            color = MaterialTheme.colorScheme.primary
+                                            color = MaterialTheme.colorScheme.primary,
                                         )
                                         Spacer(modifier = Modifier.width(3.dp))
                                     }
@@ -406,7 +402,7 @@ fun WakeupSongCard(
                                     Status.REJECTED -> {
                                         BodyMedium(
                                             text = "(거절됨)",
-                                            color = MaterialTheme.colorScheme.error
+                                            color = MaterialTheme.colorScheme.error,
                                         )
                                         Spacer(modifier = Modifier.width(3.dp))
                                     }

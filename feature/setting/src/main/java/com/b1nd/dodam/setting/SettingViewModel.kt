@@ -60,17 +60,17 @@ class SettingViewModel @Inject constructor(
                     when (result) {
                         is Result.Error -> {
                             uiState.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                         Result.Loading -> {
                             uiState.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                         is Result.Success -> {
                             uiState.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
