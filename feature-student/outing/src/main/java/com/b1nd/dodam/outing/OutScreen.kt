@@ -190,7 +190,8 @@ fun OutingScreen(
                                 items = if (selectedIndex == 0) outUiState.outings else outUiState.sleepovers,
                                 key = { it.id },
                             ) { out ->
-                                val outingProgress = outScreenState.getProgress(out.startAt, out.endAt)
+                                val outingProgress =
+                                    outScreenState.getProgress(out.startAt, out.endAt)
 
                                 val progress by animateFloatAsState(
                                     targetValue = if (playOnlyOnce) 0f else outingProgress,
@@ -264,11 +265,19 @@ fun OutingScreen(
                                         ) {
                                             BodyLarge(
                                                 modifier = Modifier.padding(end = 4.dp),
-                                                text = String.format(
-                                                    "%d시 %d분",
-                                                    out.startAt.hour,
-                                                    out.startAt.minute,
-                                                ),
+                                                text = if (selectedIndex == 0) {
+                                                    String.format(
+                                                        "%d시 %d분",
+                                                        out.startAt.hour,
+                                                        out.startAt.minute,
+                                                    )
+                                                } else {
+                                                    String.format(
+                                                        "%d월 %d일",
+                                                        out.startAt.monthNumber,
+                                                        out.startAt.dayOfMonth,
+                                                    )
+                                                },
                                                 color = color.onSurface,
                                             )
                                             LabelLarge(
@@ -280,11 +289,19 @@ fun OutingScreen(
 
                                             BodyLarge(
                                                 modifier = Modifier.padding(end = 4.dp),
-                                                text = String.format(
-                                                    "%d시 %d분",
-                                                    out.endAt.hour,
-                                                    out.endAt.minute,
-                                                ),
+                                                text = if (selectedIndex == 0) {
+                                                    String.format(
+                                                        "%d시 %d분",
+                                                        out.endAt.hour,
+                                                        out.endAt.minute,
+                                                    )
+                                                } else {
+                                                    String.format(
+                                                        "%d월 %d일",
+                                                        out.startAt.monthNumber,
+                                                        out.startAt.dayOfMonth,
+                                                    )
+                                                },
                                                 color = color.onSurface,
                                             )
                                             LabelLarge(

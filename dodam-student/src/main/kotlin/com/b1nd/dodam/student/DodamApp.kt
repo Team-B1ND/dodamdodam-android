@@ -38,8 +38,6 @@ import com.b1nd.dodam.dds.component.DodamSuccessToast
 import com.b1nd.dodam.dds.component.DodamWarningToast
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
-import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
-import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -192,11 +190,6 @@ fun DodamApp(
                     )
                 },
             )
-            nightStudyScreen(
-                onAddClick = {
-                    navController.navigateToNightStudy()
-                },
-            )
             wakeupSongScreen(
                 onAddWakeupSongClick = {
                     navController.navigateToAskWakeupSong()
@@ -220,10 +213,15 @@ fun DodamApp(
                 },
             )
             askNightStudyScreen(
-                popBackStack = navController::popBackStack,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
+                },
+                popBackStack = {
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("refresh", true)
+                    navController.popBackStack()
                 },
             )
             busScreen(
