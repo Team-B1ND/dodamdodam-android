@@ -56,11 +56,7 @@ import kotlinx.datetime.toKotlinLocalDate
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun AskNightStudyScreen(
-    viewModel: AskNightStudyViewModel = hiltViewModel(),
-    popBackStack: () -> Unit,
-    showToast: (String, String) -> Unit
-) {
+internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()

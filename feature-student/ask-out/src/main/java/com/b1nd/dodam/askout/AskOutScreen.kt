@@ -54,7 +54,7 @@ import kotlinx.datetime.toKotlinLocalDateTime
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit,) {
+internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     val scrollState = rememberScrollState()

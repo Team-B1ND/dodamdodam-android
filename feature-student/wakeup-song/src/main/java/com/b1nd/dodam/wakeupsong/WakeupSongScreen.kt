@@ -69,7 +69,8 @@ fun WakeupSongScreen(
     onClickAddWakeupSong: () -> Unit,
     popBackStack: () -> Unit,
     showToast: (String, String) -> Unit,
-    viewModel: WakeupSongViewModel = hiltViewModel()) {
+    viewModel: WakeupSongViewModel = hiltViewModel(),
+) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
