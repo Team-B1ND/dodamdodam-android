@@ -158,11 +158,6 @@ fun DodamApp(
                     )
                 },
             )
-            nightStudyScreen(
-                onAddClick = {
-                    navController.navigateToNightStudy()
-                },
-            )
             wakeupSongScreen(
                 onAddWakeupSongClick = {
                     navController.navigateToAskWakeupSong()
