@@ -18,11 +18,7 @@ fun NavController.navigateToWakeupSong(
     },
 ) = navigate(WAKEUP_SONG_ROUTE, navOptions)
 
-fun NavGraphBuilder.wakeupSongScreen(
-    onAddWakeupSongClick: () -> Unit,
-    popBackStack: () -> Unit,
-    showToast: (String, String) -> Unit,
-) {
+fun NavGraphBuilder.wakeupSongScreen(onAddWakeupSongClick: () -> Unit, popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     composable(
         route = WAKEUP_SONG_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -33,7 +29,7 @@ fun NavGraphBuilder.wakeupSongScreen(
         WakeupSongScreen(
             onAddWakeupSongClick,
             popBackStack,
-            showToast = showToast
+            showToast = showToast,
         )
     }
 }

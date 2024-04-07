@@ -3,7 +3,6 @@ package com.b1nd.dodam.bus
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -12,8 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,24 +20,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.bus.model.Bus
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
-import com.b1nd.dodam.dds.component.DodamToast
 import com.b1nd.dodam.dds.component.button.DodamCTAButton
 import com.b1nd.dodam.dds.component.button.DodamTextButton
-import com.b1nd.dodam.dds.foundation.DodamColor
 import com.b1nd.dodam.dds.style.BodyLarge
-import com.b1nd.dodam.dds.style.CheckmarkCircleFilledIcon
 import com.b1nd.dodam.dds.style.CheckmarkIcon
 import com.b1nd.dodam.dds.style.HeadlineSmall
-import com.b1nd.dodam.dds.style.XMarkCircleIcon
 import com.b1nd.dodam.ui.component.InputField
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +61,7 @@ fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Uni
             if (uiState.isError) {
                 showToast("ERROR", toastMessage)
             } else {
-               showToast("SUCCESS", toastMessage)
+                showToast("SUCCESS", toastMessage)
                 popBackStack()
             }
         }

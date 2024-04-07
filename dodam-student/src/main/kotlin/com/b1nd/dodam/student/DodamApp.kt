@@ -205,7 +205,7 @@ fun DodamApp(
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
-                }
+                },
             )
             askOutScreen(
                 popBackStack = {
@@ -217,21 +217,21 @@ fun DodamApp(
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
-                }
+                },
             )
             askNightStudyScreen(
                 popBackStack = navController::popBackStack,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
-                }
+                },
             )
             busScreen(
                 popBackStack = navController::popBackStack,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
-                }
+                },
             )
             settingScreen(
                 popBackStack = navController::popBackStack,
@@ -251,7 +251,7 @@ fun DodamApp(
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
-                }
+                },
             )
             pointScreen(
                 popBackStack = navController::popBackStack,
