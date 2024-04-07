@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.dodam.android.kotlin)
     alias(libs.plugins.dodam.android.compose)
     alias(libs.plugins.dodam.android.hilt)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firbase.crashlytics)
 }
 
 android {
@@ -51,4 +53,7 @@ dependencies {
     implementation(projects.featureStudent.wakeupSong)
     implementation(projects.feature.setting)
     implementation(projects.featureStudent.point)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 }

@@ -23,6 +23,12 @@ androidx-hilt-navigation-compose = "1.1.0"
 androidx-material = "1.5.4"
 datastore = "1.0.0"
 
+# google
+firebase-bom = "32.8.0"
+firebase-crashlytics = "2.9.9"
+google-services = "4.4.0"
+
+
 # third party
 dagger-hilt = "2.50"
 spotless = "6.23.3"
@@ -76,6 +82,11 @@ androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmode
 androidx-navigation = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
 androidx-datastore-preference = { group = "androidx.datastore",name = "datastore-preferences", version.ref = "datastore" }
 
+# google
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+
 # third party
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt" }
 hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "dagger-hilt" }
@@ -112,6 +123,8 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 composeinvestigator = { id = "land.sungbin.composeinvestigator", version.ref = "composeinvestigator" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
+firbase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
 
 # custom plugin
 dodam-android-feature = { id = "b1nd.dodam.convention.android.feature", version = "unspecified" }
