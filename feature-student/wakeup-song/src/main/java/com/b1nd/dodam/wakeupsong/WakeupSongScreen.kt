@@ -54,6 +54,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.b1nd.dodam.data.core.model.Status
+import com.b1nd.dodam.dds.animation.bounceClick
+import com.b1nd.dodam.dds.animation.bounceCombinedClick
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
 import com.b1nd.dodam.dds.component.DodamToast
@@ -74,7 +76,11 @@ import com.b1nd.dodam.wakeupsong.viewmodel.WakeupSongViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit, viewModel: WakeupSongViewModel = hiltViewModel()) {
+fun WakeupSongScreen(
+    onClickAddWakeupSong: () -> Unit,
+    popBackStack: () -> Unit,
+    viewModel: WakeupSongViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -129,12 +135,12 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
             }
         },
 
-    ) { paddingValues ->
+        ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background),
+                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(16.dp)),
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -145,7 +151,7 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
                     TitleMedium(
                         text = "오늘의 기상송",
                         modifier = Modifier
-                            .padding(top = 10.dp, start = 16.dp)
+                            .padding(start = 16.dp, end = 16.dp, top = 10.dp)
                             .fillMaxWidth(),
                     )
                     Spacer(modifier = Modifier.height(12.dp))
@@ -157,6 +163,7 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
                         WakeupSongCard(
                             wakeupSong = allowedSong,
                             index = index + 1,
+                            isMine = false,
                             selectedTabIndex = selectedTabIndex,
                         )
                     }
@@ -184,7 +191,7 @@ fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit,
                                     TabRowDefaults.SecondaryIndicator(
                                         Modifier
                                             .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                                            .padding(horizontal = 24.dp)
+                                            .padding(horizontal = 8.dp)
                                             .clip(CircleShape),
                                         color = MaterialTheme.colorScheme.onSurface,
                                     )
@@ -343,7 +350,7 @@ fun WakeupSongCard(
                 .fillMaxWidth()
                 .then(
                     if (selectedTabIndex == 1) {
-                        Modifier.combinedClickable(
+                        Modifier.bounceCombinedClick(
                             onClick = {
                                 uriHandler.openUri(wakeupSong.videoUrl)
                             },
@@ -352,14 +359,14 @@ fun WakeupSongCard(
                             },
                         )
                     } else {
-                        Modifier.clickable {
+                        Modifier.bounceClick(onClick = {
                             uriHandler.openUri(wakeupSong.videoUrl)
-                        }
+                        })
                     },
                 ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row {
