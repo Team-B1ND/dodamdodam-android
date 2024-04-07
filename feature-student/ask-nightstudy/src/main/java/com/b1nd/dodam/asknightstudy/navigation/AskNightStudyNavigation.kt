@@ -6,11 +6,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import com.b1nd.dodam.asknightstudy.AskNightStudyScreen
 
 const val ASK_NIGHT_STUDY_ROUTE = "ask_night_study"
 
-fun NavController.navigateToAskNightStudy(navOptions: NavOptions? = null) = navigate(ASK_NIGHT_STUDY_ROUTE, navOptions)
+fun NavController.navigateToAskNightStudy(
+    navOptions: NavOptions? = navOptions {
+        launchSingleTop = true
+    },
+) = navigate(ASK_NIGHT_STUDY_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.askNightStudyScreen(popBackStack: () -> Unit) {

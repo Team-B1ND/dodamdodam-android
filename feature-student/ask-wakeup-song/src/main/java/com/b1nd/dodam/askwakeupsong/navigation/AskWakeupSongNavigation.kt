@@ -5,11 +5,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import com.b1nd.dodam.askwakeupsong.AskWakeupSongScreen
 
 const val ASK_WAKEUP_SONG_ROUTE = "ask_wakeup_song"
 
-fun NavController.navigateToAskWakeupSong(navOptions: NavOptions? = null) = navigate(
+fun NavController.navigateToAskWakeupSong(
+    navOptions: NavOptions? = navOptions {
+        launchSingleTop = true
+    },
+) = navigate(
     ASK_WAKEUP_SONG_ROUTE,
     navOptions,
 )

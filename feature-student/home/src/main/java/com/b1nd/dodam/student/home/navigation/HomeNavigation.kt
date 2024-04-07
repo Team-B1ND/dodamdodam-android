@@ -9,11 +9,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import com.b1nd.dodam.student.home.HomeScreen
 
 const val HOME_ROUTE = "home"
 
-fun NavController.navigateToHome(navOptions: NavOptions? = null) = navigate(HOME_ROUTE, navOptions)
+fun NavController.navigateToHome(
+    navOptions: NavOptions? = navOptions {
+        launchSingleTop = true
+    },
+) = navigate(HOME_ROUTE, navOptions)
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi

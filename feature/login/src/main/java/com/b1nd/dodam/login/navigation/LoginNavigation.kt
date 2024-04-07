@@ -6,11 +6,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import com.b1nd.dodam.login.LoginScreen
 
 const val LOGIN_ROUTE = "login"
 
-fun NavController.navigationToLogin(navOptions: NavOptions? = null) = navigate(LOGIN_ROUTE, navOptions)
+fun NavController.navigationToLogin(
+    navOptions: NavOptions? = navOptions {
+        launchSingleTop = true
+    },
+) = navigate(LOGIN_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.loginScreen(onBackClick: () -> Unit, navigateToMain: () -> Unit) {

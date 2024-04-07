@@ -6,11 +6,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import com.b1nd.dodam.askout.AskOutScreen
 
 const val ASK_OUT_ROUTE = "ask_out"
 
-fun NavController.navigateToAskOut(navOptions: NavOptions? = null) = navigate(ASK_OUT_ROUTE, navOptions)
+fun NavController.navigateToAskOut(
+    navOptions: NavOptions? = navOptions {
+        launchSingleTop = true
+    },
+) = navigate(ASK_OUT_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.askOutScreen(popBackStack: () -> Unit) {
