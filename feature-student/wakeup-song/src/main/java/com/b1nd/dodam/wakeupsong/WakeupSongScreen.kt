@@ -3,8 +3,6 @@ package com.b1nd.dodam.wakeupsong
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -76,11 +74,7 @@ import com.b1nd.dodam.wakeupsong.viewmodel.WakeupSongViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun WakeupSongScreen(
-    onClickAddWakeupSong: () -> Unit,
-    popBackStack: () -> Unit,
-    viewModel: WakeupSongViewModel = hiltViewModel()
-) {
+fun WakeupSongScreen(onClickAddWakeupSong: () -> Unit, popBackStack: () -> Unit, viewModel: WakeupSongViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -135,7 +129,7 @@ fun WakeupSongScreen(
             }
         },
 
-        ) { paddingValues ->
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
