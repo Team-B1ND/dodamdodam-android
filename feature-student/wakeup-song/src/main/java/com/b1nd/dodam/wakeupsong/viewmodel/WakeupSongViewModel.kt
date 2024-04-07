@@ -29,11 +29,11 @@ class WakeupSongViewModel @Inject constructor(
 
     init {
         getPendingWakeupSongs()
-        getMyWakeupSong()
+        getMyWakeupSongs()
         getAllowedWakeupSongs()
     }
 
-    fun getMyWakeupSong() {
+    fun getMyWakeupSongs() {
         viewModelScope.launch {
             wakeupSongRepository.getMyWakeupSongs().collect { result ->
                 _uiState.update { uiState ->
