@@ -62,7 +62,7 @@ internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchS
                         )
                     } else {
                         Row(
-                               modifier = Modifier
+                            modifier = Modifier
                                 .fillMaxWidth()
                                 .animateContentSize()
                                 .padding(horizontal = 10.dp)
