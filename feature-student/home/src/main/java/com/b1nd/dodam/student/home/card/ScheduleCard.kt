@@ -49,8 +49,6 @@ internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchS
     DodamContainer(
         icon = DodamIcons.Calendar,
         title = "가까운 일정",
-        showNextButton = true,
-        onNextClick = onNextClick,
     ) {
         if (!showShimmer) {
             when (uiState) {
@@ -59,8 +57,8 @@ internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchS
                     if (schedules.isEmpty()) {
                         DefaultText(
                             onClick = onContentClick,
-                            label = "한 달간 일정이 없어요",
-                            body = "전체 일정 확인하기",
+                            label = "다음 달 일정을 기다려주세요",
+                            body = "한 달간 일정이 없어요",
                         )
                     } else {
                         Row(
