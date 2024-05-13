@@ -298,8 +298,8 @@ fun OutingScreen(
                                                 } else {
                                                     String.format(
                                                         "%d월 %d일",
-                                                        out.startAt.monthNumber,
-                                                        out.startAt.dayOfMonth,
+                                                        out.endAt.monthNumber,
+                                                        out.endAt.dayOfMonth,
                                                     )
                                                 },
                                                 color = color.onSurface,
