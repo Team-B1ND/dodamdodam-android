@@ -61,6 +61,7 @@ import com.b1nd.dodam.outing.viewmodel.OutingViewModel
 import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ConvenienceStore
+import com.b1nd.dodam.ui.icons.Tent
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
@@ -298,8 +299,8 @@ fun OutingScreen(
                                                 } else {
                                                     String.format(
                                                         "%d월 %d일",
-                                                        out.startAt.monthNumber,
-                                                        out.startAt.dayOfMonth,
+                                                        out.endAt.monthNumber,
+                                                        out.endAt.dayOfMonth,
                                                     )
                                                 },
                                                 color = color.onSurface,
@@ -356,7 +357,7 @@ fun OutingScreen(
                                 ) {
                                     Image(
                                         modifier = Modifier.size(36.dp),
-                                        imageVector = ConvenienceStore,
+                                        imageVector = if (selectedIndex == 0) ConvenienceStore else Tent,
                                         contentDescription = null,
                                     )
 
