@@ -120,7 +120,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
                     text = if (showDatePicker.second == "시작") {
                         "시작일자"
                     } else {
-                        "복귀일자"
+                        "종료일자"
                     },
                     fontSize = 20.sp,
                 )
@@ -308,11 +308,11 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewMod
 
                 InputField(
                     onClick = {
-                        showDatePicker = Pair(true, "복귀")
+                        showDatePicker = Pair(true, "종료")
                     },
                     text = {
                         BodyLarge(
-                            text = "복귀 일자",
+                            text = "종료 일자",
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.tertiary,
                         )
