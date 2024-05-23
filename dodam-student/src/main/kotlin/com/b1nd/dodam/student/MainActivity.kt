@@ -1,15 +1,10 @@
 package com.b1nd.dodam.student
 
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -34,9 +29,7 @@ import com.b1nd.dodam.ui.icons.B1NDLogo
 import com.b1nd.dodam.ui.icons.DodamLogo
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
-import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -137,7 +130,7 @@ class MainActivity : ComponentActivity() {
                     appUpdateManager.startUpdateFlow(
                         appUpdateInfo,
                         this,
-                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
                     )
                 }
             }
@@ -147,13 +140,13 @@ class MainActivity : ComponentActivity() {
         appUpdateManager
             .appUpdateInfo
             .addOnSuccessListener { appUpdateInfo ->
-                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                    appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
                 ) {
                     appUpdateManager.startUpdateFlow(
                         appUpdateInfo,
                         this,
-                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
                     )
                 }
             }
