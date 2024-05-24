@@ -27,6 +27,10 @@ import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.icons.B1NDLogo
 import com.b1nd.dodam.ui.icons.DodamLogo
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,11 +46,14 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var datastoreRepository: DatastoreRepository
 
+    private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         val firebaseCrashlytics = FirebaseCrashlytics.getInstance()
+        checkAppUpdate()
 
         setContent {
             var isLogin: Boolean? by remember { mutableStateOf(null) }
@@ -109,5 +116,39 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appUpdateManager
+            .appUpdateInfo
+            .addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability()
+                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
+                ) {
+                    // 인앱 업데이트가 이미 실행 중인 경우 재개 업데이트.
+                    appUpdateManager.startUpdateFlow(
+                        appUpdateInfo,
+                        this,
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+                    )
+                }
+            }
+    }
+
+    private fun checkAppUpdate() {
+        appUpdateManager
+            .appUpdateInfo
+            .addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                    appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                ) {
+                    appUpdateManager.startUpdateFlow(
+                        appUpdateInfo,
+                        this,
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+                    )
+                }
+            }
     }
 }
