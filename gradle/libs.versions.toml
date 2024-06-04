@@ -108,6 +108,7 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 dodam-design-system = { group = "com.github.Team-B1ND", name = "dds-android", version.ref = "dds" }
 wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "wheel-picker" }
 sqldelight-driver = { group = "app.cash.sqldelight", name = "android-driver" , version.ref = "sqldelight" }
+sqldelight-coroutines = { group = "app.cash.sqldelight", name = "coroutines-extensions" , version.ref = "sqldelight" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }

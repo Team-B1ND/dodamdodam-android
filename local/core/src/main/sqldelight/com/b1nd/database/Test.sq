@@ -1,0 +1,11 @@
+CREATE TABLE Test (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+insert:
+INSERT OR IGNORE INTO Test (name)
+VALUES (?);
+
+selectAll:
+SELECT * FROM Test;
