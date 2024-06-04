@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.composeinvestigator).apply(false)
     alias(libs.plugins.google.services).apply(false)
     alias(libs.plugins.firbase.crashlytics).apply(false)
+    alias(libs.plugins.sqldelight).apply(false)
 }
 
 subprojects {

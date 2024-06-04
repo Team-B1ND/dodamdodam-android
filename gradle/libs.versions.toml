@@ -40,6 +40,7 @@ coil = "2.6.0"
 dds = "0.1.18"
 composeinvestigator = "1.5.10-0.2.1"
 wheel-picker = "1.1.11"
+sqldelight = "2.0.1"
 
 # test
 junit = "4.13.2"
@@ -106,6 +107,7 @@ ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref =
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 dodam-design-system = { group = "com.github.Team-B1ND", name = "dds-android", version.ref = "dds" }
 wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "wheel-picker" }
+sqldelight-driver = { group = "app.cash.sqldelight", name = "android-driver" , version.ref = "sqldelight" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -127,6 +129,7 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 composeinvestigator = { id = "land.sungbin.composeinvestigator", version.ref = "composeinvestigator" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 firbase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 
 # custom plugin
 dodam-android-feature = { id = "b1nd.dodam.convention.android.feature", version = "unspecified" }
