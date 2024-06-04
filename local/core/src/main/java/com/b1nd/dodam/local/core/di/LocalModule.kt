@@ -12,20 +12,15 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object LocalModule {
 
     @Provides
     @Singleton
-    fun providesDatabase(@ApplicationContext context: Context): SqlDriver =
-        AndroidSqliteDriver(TestDatabase.Schema, context)
+    fun providesDatabase(@ApplicationContext context: Context): SqlDriver = AndroidSqliteDriver(TestDatabase.Schema, context)
 
     @Provides
     @Singleton
-    fun providesTestDatabase(driver: SqlDriver): TestQueries =
-        TestDatabase(driver).testQueries
-
-
+    fun providesTestDatabase(driver: SqlDriver): TestQueries = TestDatabase(driver).testQueries
 }
