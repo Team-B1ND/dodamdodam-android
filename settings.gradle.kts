@@ -67,4 +67,5 @@ include(
     ":data:point",
     ":feature-student:point",
     ":feature-student:ask-wakeup-song",
+    ":local:core",
 )
