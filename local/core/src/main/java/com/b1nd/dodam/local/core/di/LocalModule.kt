@@ -14,7 +14,7 @@ object LocalModule {
 
     @Provides
     @Singleton
-    fun provideRealm() = Realm.open(
+    fun provideRealm(): Realm = Realm.open(
         RealmConfiguration.create(
             schema = setOf()
         )
