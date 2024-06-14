@@ -11,11 +11,9 @@ class KoinPlugin: Plugin<Project> {
 
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                dependencies {
-                    implementation(libs.library("koin-android"))
-                    implementation(libs.library("koin-core"))
-                }
+            dependencies {
+                implementation(libs.library("koin-android"))
+                implementation(libs.library("koin-core"))
             }
         }
     }
