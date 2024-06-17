@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.dodam.android.hilt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firbase.crashlytics)
+    alias(libs.plugins.dodam.koin)
 }
 
 android {

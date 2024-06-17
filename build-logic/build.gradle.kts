@@ -44,6 +44,10 @@ gradlePlugin {
             id = "b1nd.dodam.primitive.hilt"
             implementationClass = "com.b1nd.dodam.primitive.HiltPlugin"
         }
+        register("koin") {
+            id = "b1nd.dodam.primitive.koin"
+            implementationClass = "com.b1nd.dodam.primitive.KoinPlugin"
+        }
         register("androidKotlin") {
             id = "b1nd.dodam.primitive.android.kotlin"
             implementationClass = "com.b1nd.dodam.primitive.AndroidKotlinPlugin"

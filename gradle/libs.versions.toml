@@ -40,6 +40,7 @@ coil = "2.6.0"
 dds = "0.1.18"
 composeinvestigator = "1.5.10-0.2.1"
 wheel-picker = "1.1.11"
+koin = "3.5.6"
 
 # test
 junit = "4.13.2"
@@ -106,6 +107,9 @@ ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref =
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 dodam-design-system = { group = "com.github.Team-B1ND", name = "dds-android", version.ref = "dds" }
 wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "wheel-picker" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -135,6 +139,7 @@ dodam-android-kotlin = { id = "b1nd.dodam.primitive.android.kotlin", version = "
 dodam-android-compose = { id = "b1nd.dodam.primitive.android.compose", version = "unspecified" }
 dodam-android-hilt = { id = "b1nd.dodam.primitive.android.hilt", version = "unspecified" }
 dodam-hilt = { id = "b1nd.dodam.primitive.hilt", version = "unspecified" }
+dodam-koin = { id = "b1nd.dodam.primitive.koin", version = "unspecified" }
 dodam-android-application = { id = "b1nd.dodam.primitive.android.application", version = "unspecified" }
 dodam-kotlin = { id = "b1nd.dodam.convention.kotlin", version = "unspecified" }
 dodam-kotlin-serialization = { id = "b1nd.dodam.primitive.kotlin.serialization", version = "unspecified" }
