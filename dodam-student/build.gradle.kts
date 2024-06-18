@@ -58,4 +58,9 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.google.app.update)
+
+
+    implementation(projects.datastore)
+    implementation(projects.network.core)
+    implementation(projects.common)
 }

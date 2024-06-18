@@ -17,6 +17,9 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import org.koin.core.qualifier.named
+import org.koin.core.scope.get
+import org.koin.dsl.module
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -33,5 +36,24 @@ object DataStoreModule {
         scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
     ) {
         context.dataStoreFile("preferences.pb")
+    }
+}
+
+val DATA_STORE_MODULE = module {
+    factory<UserSerializer> {
+        UserSerializer()
+    }
+
+    single<DataStore<User>> {
+        val context: Context = get()
+        val ioDispatcher: CoroutineDispatcher = get(named(DispatcherType.IO))
+        val scope: CoroutineScope = get()
+        val serializer: UserSerializer = get()
+        DataStoreFactory.create(
+            serializer = serializer,
+            scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
+        ) {
+            context.dataStoreFile("preferences.pb")
+        }
     }
 }

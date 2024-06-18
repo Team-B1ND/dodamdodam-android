@@ -11,6 +11,8 @@ import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
@@ -24,4 +26,12 @@ object CoroutineScopesModule {
     @ApplicationScope
     fun providesCoroutineScope(@Dispatcher(DispatcherType.Default) dispatcher: CoroutineDispatcher): CoroutineScope =
         CoroutineScope(SupervisorJob() + dispatcher)
+}
+
+
+val COROUTINE_SCOPE_MODULE = module {
+    single<CoroutineScope> {
+        val dispatcher: CoroutineDispatcher = get(named(DispatcherType.Default))
+        CoroutineScope(SupervisorJob() + dispatcher)
+    }
 }
