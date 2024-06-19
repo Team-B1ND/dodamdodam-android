@@ -4,13 +4,13 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import com.b1nd.dodam.keystore.util.decode
 import com.b1nd.dodam.keystore.util.encode
-import org.koin.dsl.module
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.spec.IvParameterSpec
 import javax.inject.Inject
 import javax.inject.Singleton
+import org.koin.dsl.module
 
 @Singleton
 class KeyStoreManager @Inject constructor() {
