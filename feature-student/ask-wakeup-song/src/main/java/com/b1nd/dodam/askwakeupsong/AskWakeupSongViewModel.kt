@@ -14,11 +14,13 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @HiltViewModel
-class AskWakeupSongViewModel @Inject constructor(
-    private val wakeupSongRepository: WakeupSongRepository,
-) : ViewModel() {
+class AskWakeupSongViewModel @Inject constructor() : ViewModel(), KoinComponent {
+    private val wakeupSongRepository: WakeupSongRepository by inject()
+
     private val _uiState = MutableStateFlow(AskWakeupSongUiState())
     val uiState = _uiState.asStateFlow()
 
