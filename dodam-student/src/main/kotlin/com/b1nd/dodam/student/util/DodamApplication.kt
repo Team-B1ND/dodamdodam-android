@@ -8,6 +8,8 @@ import com.b1nd.dodam.datastore.di.dataStoreModule
 import com.b1nd.dodam.keystore.keystoreManagerModule
 import com.b1nd.dodam.network.core.di.networkCoreModule
 import com.b1nd.dodam.network.meal.di.mealDataSourceModule
+import com.b1nd.dodam.wakeupsong.di.wakeupSongDataSourceModule
+import com.b1nd.dodam.wakeupsong.di.wakeupSongRepositoryModule
 import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -30,6 +32,8 @@ class DodamApplication : Application() {
                 coroutineScopeModule,
                 mealRepositoryModule,
                 mealDataSourceModule,
+                wakeupSongRepositoryModule,
+                wakeupSongDataSourceModule,
             )
         }
     }
