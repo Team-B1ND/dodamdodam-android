@@ -1,6 +1,5 @@
 package com.b1nd.dodam.data.meal.respository
 
-import android.util.Log
 import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
@@ -23,7 +22,6 @@ internal class MealRepositoryImpl @Inject constructor(
 ) : MealRepository {
     override fun getMeal(year: Int, month: Int, day: Int): Flow<Result<Meal>> {
         return flow {
-            Log.d("TAG", "getMeal: repo called")
             emit(network.getMeal(year, month, day).toModel())
         }
             .asResult()
