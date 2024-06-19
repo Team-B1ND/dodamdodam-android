@@ -17,14 +17,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.toKotlinLocalDateTime
-import org.koin.core.KoinApplication.Companion.init
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @HiltViewModel
-class MealViewModel @Inject constructor(
-
-) : ViewModel(), KoinComponent {
+class MealViewModel @Inject constructor() : ViewModel(), KoinComponent {
     private val current = LocalDateTime.now().toKotlinLocalDateTime()
     private var getOnlyOnce = true
 

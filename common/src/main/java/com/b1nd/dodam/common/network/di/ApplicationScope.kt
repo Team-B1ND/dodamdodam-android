@@ -28,7 +28,6 @@ object CoroutineScopesModule {
         CoroutineScope(SupervisorJob() + dispatcher)
 }
 
-
 val COROUTINE_SCOPE_MODULE = module {
     single<CoroutineScope> {
         val dispatcher: CoroutineDispatcher = get(named(DispatcherType.Default))
