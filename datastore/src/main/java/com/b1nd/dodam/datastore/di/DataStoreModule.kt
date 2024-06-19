@@ -19,7 +19,6 @@ import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.qualifier.named
-import org.koin.core.scope.get
 import org.koin.dsl.module
 
 @Module
@@ -40,7 +39,7 @@ object DataStoreModule {
     }
 }
 
-val DATA_STORE_MODULE = module {
+val dataStoreModule = module {
     factory<UserSerializer> {
         UserSerializer()
     }

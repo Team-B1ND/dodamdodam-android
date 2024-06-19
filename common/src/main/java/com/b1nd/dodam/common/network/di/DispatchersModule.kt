@@ -23,7 +23,7 @@ object DispatchersModule {
     fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 }
 
-val DISPATCHERS_MODULE = module {
+val dispatchersModule = module {
     factory<CoroutineDispatcher>(named(DispatcherType.IO)) { Dispatchers.IO }
     factory<CoroutineDispatcher>(named(DispatcherType.Default)) { Dispatchers.Default }
 }

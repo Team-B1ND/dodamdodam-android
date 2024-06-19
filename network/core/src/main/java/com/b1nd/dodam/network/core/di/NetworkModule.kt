@@ -24,7 +24,6 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.accept
-import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -105,7 +104,7 @@ object NetworkModule {
 
 private const val TIME_OUT = 60_000L
 
-val NETWORK_CORE_MODULE = module {
+val networkCoreModule = module {
     single<HttpClient> {
         val datastore: DatastoreRepository = get()
         HttpClient(CIO) {
