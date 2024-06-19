@@ -10,6 +10,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.spec.IvParameterSpec
 import javax.inject.Inject
 import javax.inject.Singleton
+import org.koin.dsl.module
 
 @Singleton
 class KeyStoreManager @Inject constructor() {
@@ -67,5 +68,11 @@ class KeyStoreManager @Inject constructor() {
         private const val KEY_ALIAS = "DODAMDODAM_KEY"
 
         private const val CIPHER_OPTION = "AES/CBC/PKCS7Padding"
+    }
+}
+
+val keystoreManagerModule = module {
+    single<KeyStoreManager> {
+        KeyStoreManager()
     }
 }

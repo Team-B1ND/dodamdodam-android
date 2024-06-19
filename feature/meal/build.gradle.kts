@@ -2,6 +2,7 @@ import org.gradle.kotlin.dsl.projects
 
 plugins {
     alias(libs.plugins.dodam.android.feature)
+    alias(libs.plugins.dodam.koin)
 }
 
 android {
