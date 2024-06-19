@@ -71,7 +71,7 @@ class KeyStoreManager @Inject constructor() {
     }
 }
 
-val KEYSTORE_MANAGER_MODULE = module {
+val keystoreManagerModule = module {
     single<KeyStoreManager> {
         KeyStoreManager()
     }

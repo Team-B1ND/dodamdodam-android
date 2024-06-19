@@ -6,7 +6,7 @@ import com.b1nd.dodam.data.meal.respository.MealRepositoryImpl
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val MEAL_REPOSITORY_MODULE = module {
+val mealRepositoryModule = module {
     single<MealRepository> {
         MealRepositoryImpl(get(), get(named(DispatcherType.IO)))
     }
