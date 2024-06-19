@@ -4,6 +4,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import com.b1nd.dodam.keystore.util.decode
 import com.b1nd.dodam.keystore.util.encode
+import org.koin.dsl.module
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -67,5 +68,11 @@ class KeyStoreManager @Inject constructor() {
         private const val KEY_ALIAS = "DODAMDODAM_KEY"
 
         private const val CIPHER_OPTION = "AES/CBC/PKCS7Padding"
+    }
+}
+
+val KEYSTORE_MANAGER_MODULE = module {
+    single<KeyStoreManager> {
+        KeyStoreManager()
     }
 }

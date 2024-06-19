@@ -9,6 +9,7 @@ import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.network.di.ApplicationScope
 import com.b1nd.dodam.datastore.model.User
 import com.b1nd.dodam.datastore.model.UserSerializer
+import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +36,7 @@ object DataStoreModule {
         serializer = serializer,
         scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
     ) {
-        context.dataStoreFile("preferences.pb")
+        context.dataStoreFile("preferences1.pb") // TODO("hilt 의존성 완전 제거시 삭제 필요")
     }
 }
 
@@ -55,5 +56,9 @@ val DATA_STORE_MODULE = module {
         ) {
             context.dataStoreFile("preferences.pb")
         }
+    }
+
+    single<DatastoreRepository> {
+        DatastoreRepository(get(), get())
     }
 }
