@@ -19,8 +19,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @HiltViewModel
-class WakeupSongViewModel @Inject constructor(
-) : ViewModel(), KoinComponent {
+class WakeupSongViewModel @Inject constructor() : ViewModel(), KoinComponent {
     private val wakeupSongRepository: WakeupSongRepository by inject()
 
     private val _uiState = MutableStateFlow(WakeupSongUiState())
