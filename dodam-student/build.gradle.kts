@@ -65,4 +65,6 @@ dependencies {
     implementation(projects.common)
     implementation(projects.data.meal)
     implementation(projects.network.meal)
+    implementation(projects.data.wakeupSong)
+    implementation(projects.network.wakeupSong)
 }
