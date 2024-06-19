@@ -1,5 +1,6 @@
 package com.b1nd.dodam.network.meal.api
 
+import android.util.Log
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.safeRequest
@@ -18,6 +19,7 @@ internal class MealService @Inject constructor(
 ) : MealDataSource {
     override suspend fun getMeal(year: Int, month: Int, day: Int): MealResponse {
         return safeRequest {
+            Log.d("TAG", "getMeal: called service")
             client.get(DodamUrl.MEAL) {
                 parameter("year", year)
                 parameter("month", month)

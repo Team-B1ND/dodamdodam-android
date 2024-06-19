@@ -33,16 +33,19 @@ import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.plus
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val mealRepository: MealRepository,
     private val wakeupSongRepository: WakeupSongRepository,
     private val outingRepository: OutingRepository,
     private val nightStudyRepository: NightStudyRepository,
     private val scheduleRepository: ScheduleRepository,
     private val bannerRepository: BannerRepository,
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
+    private val mealRepository: MealRepository by inject()
+
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
 
