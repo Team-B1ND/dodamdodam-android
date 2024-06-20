@@ -18,8 +18,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @HiltViewModel
-class OutingViewModel @Inject constructor(
-) : ViewModel(), KoinComponent {
+class OutingViewModel @Inject constructor() : ViewModel(), KoinComponent {
 
     private val outingRepository: OutingRepository by inject()
 
