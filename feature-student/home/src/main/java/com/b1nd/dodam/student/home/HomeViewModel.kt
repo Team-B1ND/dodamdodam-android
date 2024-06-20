@@ -38,11 +38,11 @@ import org.koin.core.component.inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val outingRepository: OutingRepository,
     private val nightStudyRepository: NightStudyRepository,
     private val scheduleRepository: ScheduleRepository,
     private val bannerRepository: BannerRepository,
 ) : ViewModel(), KoinComponent {
+    private val outingRepository: OutingRepository by inject()
     private val mealRepository: MealRepository by inject()
     private val wakeupSongRepository: WakeupSongRepository by inject()
 
