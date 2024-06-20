@@ -37,7 +37,7 @@ class DodamApplication : Application() {
                 wakeupSongRepositoryModule,
                 wakeupSongDataSourceModule,
                 outingRepositoryModule,
-                outingDataSourceModule
+                outingDataSourceModule,
             )
         }
     }
