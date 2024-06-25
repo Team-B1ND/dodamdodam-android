@@ -19,8 +19,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @HiltViewModel
-class BusViewModel @Inject constructor(
-) : ViewModel(), KoinComponent {
+class BusViewModel @Inject constructor() : ViewModel(), KoinComponent {
 
     private val busRepository: BusRepository by inject()
 
