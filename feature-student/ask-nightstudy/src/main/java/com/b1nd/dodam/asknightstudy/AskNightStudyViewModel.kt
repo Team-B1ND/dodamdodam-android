@@ -18,11 +18,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @HiltViewModel
 class AskNightStudyViewModel @Inject constructor(
-    private val nightStudyRepository: NightStudyRepository,
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
+
+    private val nightStudyRepository: NightStudyRepository by inject()
 
     private val _uiState = MutableStateFlow(AskNightStudyUiState())
     val uiState = _uiState.asStateFlow()
