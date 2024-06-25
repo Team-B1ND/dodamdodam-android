@@ -6,12 +6,11 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.module
 import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal interface DataSourceModule {
-    @Binds
-    @Singleton
-    fun provideBusDataSource(busService: BusService): BusDataSource
+val busDataSourceModule = module {
+    single<BusDataSource> {
+        BusService(get())
+    }
 }
