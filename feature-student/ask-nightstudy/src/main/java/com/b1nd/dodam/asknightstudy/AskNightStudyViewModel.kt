@@ -22,8 +22,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @HiltViewModel
-class AskNightStudyViewModel @Inject constructor(
-) : ViewModel(), KoinComponent {
+class AskNightStudyViewModel @Inject constructor() : ViewModel(), KoinComponent {
 
     private val nightStudyRepository: NightStudyRepository by inject()
 

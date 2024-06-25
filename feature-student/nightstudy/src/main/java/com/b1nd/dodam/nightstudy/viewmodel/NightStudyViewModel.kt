@@ -16,8 +16,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @HiltViewModel
-class NightStudyViewModel @Inject constructor(
-) : ViewModel(), KoinComponent {
+class NightStudyViewModel @Inject constructor() : ViewModel(), KoinComponent {
     private val nightStudyRepository: NightStudyRepository by inject()
 
     private val _uiState: MutableStateFlow<NightStudyUiState> = MutableStateFlow(NightStudyUiState.Loading)
