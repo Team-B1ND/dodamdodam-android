@@ -15,11 +15,15 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @HiltViewModel
 class BusViewModel @Inject constructor(
-    private val busRepository: BusRepository,
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
+
+    private val busRepository: BusRepository by inject()
+
     private val _uiState = MutableStateFlow(BusUiState())
     val uiState = _uiState.asStateFlow()
 
