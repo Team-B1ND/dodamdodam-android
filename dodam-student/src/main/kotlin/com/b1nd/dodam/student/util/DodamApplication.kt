@@ -3,10 +3,12 @@ package com.b1nd.dodam.student.util
 import android.app.Application
 import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
+import com.b1nd.dodam.data.banner.di.bannerRepositoryModule
 import com.b1nd.dodam.data.meal.di.mealRepositoryModule
 import com.b1nd.dodam.data.outing.di.outingRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
 import com.b1nd.dodam.keystore.keystoreManagerModule
+import com.b1nd.dodam.network.banner.di.bannerDataSourceModule
 import com.b1nd.dodam.network.core.di.networkCoreModule
 import com.b1nd.dodam.network.meal.di.mealDataSourceModule
 import com.b1nd.dodam.network.outing.di.outingDataSourceModule
@@ -38,6 +40,8 @@ class DodamApplication : Application() {
                 wakeupSongDataSourceModule,
                 outingRepositoryModule,
                 outingDataSourceModule,
+                bannerRepositoryModule,
+                bannerDataSourceModule,
             )
         }
     }
