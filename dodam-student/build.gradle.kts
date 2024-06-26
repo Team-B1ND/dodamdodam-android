@@ -69,4 +69,6 @@ dependencies {
     implementation(projects.network.wakeupSong)
     implementation(projects.data.outing)
     implementation(projects.network.outing)
+    implementation(projects.data.schedule)
+    implementation(projects.network.schedule)
 }
