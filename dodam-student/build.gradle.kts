@@ -71,4 +71,6 @@ dependencies {
     implementation(projects.network.outing)
     implementation(projects.data.bus)
     implementation(projects.network.bus)
+    implementation(projects.data.nightStudy)
+    implementation(projects.network.nightStudy)
 }
