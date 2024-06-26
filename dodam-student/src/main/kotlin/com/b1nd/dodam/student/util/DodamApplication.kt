@@ -5,11 +5,13 @@ import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
 import com.b1nd.dodam.data.meal.di.mealRepositoryModule
 import com.b1nd.dodam.data.outing.di.outingRepositoryModule
+import com.b1nd.dodam.data.schedule.di.scheduleRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
 import com.b1nd.dodam.keystore.keystoreManagerModule
 import com.b1nd.dodam.network.core.di.networkCoreModule
 import com.b1nd.dodam.network.meal.di.mealDataSourceModule
 import com.b1nd.dodam.network.outing.di.outingDataSourceModule
+import com.b1nd.dodam.network.schedule.di.scheduleDatasourceModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongDataSourceModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongRepositoryModule
 import dagger.hilt.android.HiltAndroidApp
@@ -38,6 +40,8 @@ class DodamApplication : Application() {
                 wakeupSongDataSourceModule,
                 outingRepositoryModule,
                 outingDataSourceModule,
+                scheduleRepositoryModule,
+                scheduleDatasourceModule,
             )
         }
     }
