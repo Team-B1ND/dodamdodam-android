@@ -12,11 +12,13 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @HiltViewModel
-class NightStudyViewModel @Inject constructor(
-    private val nightStudyRepository: NightStudyRepository,
-) : ViewModel() {
+class NightStudyViewModel @Inject constructor() : ViewModel(), KoinComponent {
+    private val nightStudyRepository: NightStudyRepository by inject()
+
     private val _uiState: MutableStateFlow<NightStudyUiState> = MutableStateFlow(NightStudyUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
