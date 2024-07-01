@@ -181,7 +181,7 @@ fun OutingScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
                 .pullRefresh(pullRefreshState),
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.TopCenter,
         ) {
             PullRefreshIndicator(
                 modifier = Modifier
@@ -348,7 +348,7 @@ fun OutingScreen(
                                                     Row(
                                                         verticalAlignment = Alignment.CenterVertically,
                                                         horizontalArrangement = Arrangement.spacedBy(
-                                                            8.dp
+                                                            8.dp,
                                                         ),
                                                     ) {
                                                         LabelLarge(
@@ -435,7 +435,7 @@ fun OutingScreen(
                                                 .size(52.dp, 20.dp)
                                                 .background(
                                                     shimmerEffect(),
-                                                    RoundedCornerShape(4.dp)
+                                                    RoundedCornerShape(4.dp),
                                                 ),
                                         )
                                     }
@@ -461,7 +461,7 @@ fun OutingScreen(
                                                 .size(52.dp, 20.dp)
                                                 .background(
                                                     shimmerEffect(),
-                                                    RoundedCornerShape(4.dp)
+                                                    RoundedCornerShape(4.dp),
                                                 ),
                                         )
                                     }
@@ -500,9 +500,7 @@ fun OutingScreen(
                     item {
                         Spacer(modifier = Modifier.height(80.dp))
                     }
-
                 }
-
             }
         }
     }
