@@ -171,7 +171,7 @@ fun NightStudyScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
                 .pullRefresh(pullRefreshState),
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.TopCenter,
         ) {
             PullRefreshIndicator(
                 modifier = Modifier
@@ -180,7 +180,6 @@ fun NightStudyScreen(
                 state = pullRefreshState,
             )
             Column {
-
                 Spacer(modifier = Modifier.height(16.dp))
 
                 LazyColumn(
@@ -196,7 +195,7 @@ fun NightStudyScreen(
                                 ) { nightStudy ->
                                     val outingProgress = nightStudyScreenState.getProgress(
                                         nightStudy.startAt,
-                                        nightStudy.endAt
+                                        nightStudy.endAt,
                                     )
 
                                     val progress by animateFloatAsState(
@@ -315,7 +314,7 @@ fun NightStudyScreen(
                                                     Row(
                                                         verticalAlignment = Alignment.CenterVertically,
                                                         horizontalArrangement = Arrangement.spacedBy(
-                                                            8.dp
+                                                            8.dp,
                                                         ),
                                                     ) {
                                                         LabelLarge(
@@ -335,7 +334,7 @@ fun NightStudyScreen(
                                                     Row(
                                                         verticalAlignment = Alignment.CenterVertically,
                                                         horizontalArrangement = Arrangement.spacedBy(
-                                                            8.dp
+                                                            8.dp,
                                                         ),
                                                     ) {
                                                         LabelLarge(
@@ -422,7 +421,7 @@ fun NightStudyScreen(
                                                 .size(52.dp, 20.dp)
                                                 .background(
                                                     shimmerEffect(),
-                                                    RoundedCornerShape(4.dp)
+                                                    RoundedCornerShape(4.dp),
                                                 ),
                                         )
                                     }
@@ -448,7 +447,7 @@ fun NightStudyScreen(
                                                 .size(52.dp, 20.dp)
                                                 .background(
                                                     shimmerEffect(),
-                                                    RoundedCornerShape(4.dp)
+                                                    RoundedCornerShape(4.dp),
                                                 ),
                                         )
                                     }
@@ -485,5 +484,4 @@ fun NightStudyScreen(
             }
         }
     }
-
 }
