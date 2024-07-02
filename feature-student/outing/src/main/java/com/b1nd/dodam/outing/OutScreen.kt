@@ -21,6 +21,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.dds.animation.bounceCombinedClick
@@ -63,6 +68,7 @@ import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ConvenienceStore
 import com.b1nd.dodam.ui.icons.Tent
 
+@OptIn(ExperimentalMaterialApi::class)
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @Composable
@@ -81,6 +87,15 @@ fun OutingScreen(
     var reason by remember { mutableStateOf("") }
     var id by remember { mutableLongStateOf(0) }
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
+
+    var isRefreshing by remember { mutableStateOf(false) }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            isRefreshing = false
+            viewModel.getMyOuting()
+        },
+    )
 
     val color = MaterialTheme.colorScheme
 
@@ -159,316 +174,332 @@ fun OutingScreen(
             }
         },
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color.surface)
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .pullRefresh(pullRefreshState),
+            contentAlignment = Alignment.TopCenter,
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            PullRefreshIndicator(
+                modifier = Modifier
+                    .zIndex(1f),
+                refreshing = isRefreshing,
+                state = pullRefreshState,
+            )
+            Column {
+                DodamSegmentedButtonRow(selectedIndex = selectedIndex) {
+                    DodamSegment(selected = selectedIndex == 0, onClick = { selectedIndex = 0 }) {
+                        Text(text = "외출")
+                    }
 
-            DodamSegmentedButtonRow(selectedIndex = selectedIndex) {
-                DodamSegment(selected = selectedIndex == 0, onClick = { selectedIndex = 0 }) {
-                    Text(text = "외출")
+                    DodamSegment(selected = selectedIndex == 1, onClick = { selectedIndex = 1 }) {
+                        Text(text = "외박")
+                    }
                 }
 
-                DodamSegment(selected = selectedIndex == 1, onClick = { selectedIndex = 1 }) {
-                    Text(text = "외박")
-                }
-            }
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    state = outScreenState.lazyListState,
+                ) {
+                    when (val outUiState = uiState) {
+                        is OutUiState.Success -> {
+                            if (if (selectedIndex == 0) outUiState.outings.isNotEmpty() else outUiState.sleepovers.isNotEmpty()) {
+                                items(
+                                    items = if (selectedIndex == 0) outUiState.outings else outUiState.sleepovers,
+                                    key = { it.id },
+                                ) { out ->
+                                    val outingProgress =
+                                        outScreenState.getProgress(out.startAt, out.endAt)
 
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                state = outScreenState.lazyListState,
-            ) {
-                when (val outUiState = uiState) {
-                    is OutUiState.Success -> {
-                        if (if (selectedIndex == 0) outUiState.outings.isNotEmpty() else outUiState.sleepovers.isNotEmpty()) {
-                            items(
-                                items = if (selectedIndex == 0) outUiState.outings else outUiState.sleepovers,
-                                key = { it.id },
-                            ) { out ->
-                                val outingProgress =
-                                    outScreenState.getProgress(out.startAt, out.endAt)
-
-                                val progress by animateFloatAsState(
-                                    targetValue = if (playOnlyOnce) 0f else outingProgress,
-                                    animationSpec = tween(
-                                        durationMillis = 500,
-                                        delayMillis = 0,
-                                        easing = FastOutLinearInEasing,
-                                    ),
-                                    label = "",
-                                )
-
-                                LaunchedEffect(Unit) {
-                                    playOnlyOnce = false
-                                }
-
-                                DodamCard(
-                                    modifier = Modifier
-                                        .bounceCombinedClick(
-                                            onClick = {},
-                                            onLongClick = {
-                                                id = out.id
-                                                reason = out.reason
-                                                showDialog = true
-                                            },
-                                            interactionColor = Color.Transparent,
+                                    val progress by animateFloatAsState(
+                                        targetValue = if (playOnlyOnce) 0f else outingProgress,
+                                        animationSpec = tween(
+                                            durationMillis = 500,
+                                            delayMillis = 0,
+                                            easing = FastOutLinearInEasing,
                                         ),
-                                    statusText = when (out.status) {
-                                        Status.ALLOWED -> "승인됨"
-                                        Status.REJECTED -> "거절됨"
-                                        Status.PENDING -> "대기중"
-                                    },
-                                    statusColor = when (out.status) {
-                                        Status.ALLOWED -> MaterialTheme.colorScheme.primary
-                                        Status.REJECTED -> MaterialTheme.colorScheme.error
-                                        Status.PENDING -> MaterialTheme.colorScheme.onSurfaceVariant
-                                    },
-                                    labelText = String.format(
-                                        "%d월 %d일 (%s)",
-                                        out.startAt.monthNumber,
-                                        out.startAt.dayOfMonth,
-                                        listOf(
-                                            "월",
-                                            "화",
-                                            "수",
-                                            "목",
-                                            "금",
-                                            "토",
-                                            "일",
-                                        )[out.startAt.dayOfWeek.value - 1],
-                                    ),
-                                ) {
-                                    BodyMedium(
-                                        text = out.reason,
-                                        fontWeight = FontWeight.Medium,
+                                        label = "",
                                     )
 
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(1.dp)
-                                            .background(color.outlineVariant),
-                                    )
+                                    LaunchedEffect(Unit) {
+                                        playOnlyOnce = false
+                                    }
 
-                                    Column(
+                                    DodamCard(
                                         modifier = Modifier
-                                            .fillMaxWidth(),
-                                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                                            .bounceCombinedClick(
+                                                onClick = {},
+                                                onLongClick = {
+                                                    id = out.id
+                                                    reason = out.reason
+                                                    showDialog = true
+                                                },
+                                                interactionColor = Color.Transparent,
+                                            ),
+                                        statusText = when (out.status) {
+                                            Status.ALLOWED -> "승인됨"
+                                            Status.REJECTED -> "거절됨"
+                                            Status.PENDING -> "대기중"
+                                        },
+                                        statusColor = when (out.status) {
+                                            Status.ALLOWED -> MaterialTheme.colorScheme.primary
+                                            Status.REJECTED -> MaterialTheme.colorScheme.error
+                                            Status.PENDING -> MaterialTheme.colorScheme.onSurfaceVariant
+                                        },
+                                        labelText = String.format(
+                                            "%d월 %d일 (%s)",
+                                            out.startAt.monthNumber,
+                                            out.startAt.dayOfMonth,
+                                            listOf(
+                                                "월",
+                                                "화",
+                                                "수",
+                                                "목",
+                                                "금",
+                                                "토",
+                                                "일",
+                                            )[out.startAt.dayOfWeek.value - 1],
+                                        ),
                                     ) {
-                                        Row(
-                                            verticalAlignment = Alignment.Bottom,
+                                        BodyMedium(
+                                            text = out.reason,
+                                            fontWeight = FontWeight.Medium,
+                                        )
+
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(1.dp)
+                                                .background(color.outlineVariant),
+                                        )
+
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxWidth(),
+                                            verticalArrangement = Arrangement.spacedBy(6.dp),
                                         ) {
-                                            BodyLarge(
-                                                modifier = Modifier.padding(end = 4.dp),
-                                                text = if (selectedIndex == 0) {
-                                                    String.format(
-                                                        "%d시 %d분",
-                                                        out.startAt.hour,
-                                                        out.startAt.minute,
-                                                    )
-                                                } else {
-                                                    String.format(
-                                                        "%d월 %d일",
-                                                        out.startAt.monthNumber,
-                                                        out.startAt.dayOfMonth,
-                                                    )
-                                                },
-                                                color = color.onSurface,
-                                            )
-                                            LabelLarge(
-                                                text = if (selectedIndex == 0) "외출" else "외박",
-                                                color = color.onSurfaceVariant,
-                                            )
+                                            Row(
+                                                verticalAlignment = Alignment.Bottom,
+                                            ) {
+                                                BodyLarge(
+                                                    modifier = Modifier.padding(end = 4.dp),
+                                                    text = if (selectedIndex == 0) {
+                                                        String.format(
+                                                            "%d시 %d분",
+                                                            out.startAt.hour,
+                                                            out.startAt.minute,
+                                                        )
+                                                    } else {
+                                                        String.format(
+                                                            "%d월 %d일",
+                                                            out.startAt.monthNumber,
+                                                            out.startAt.dayOfMonth,
+                                                        )
+                                                    },
+                                                    color = color.onSurface,
+                                                )
+                                                LabelLarge(
+                                                    text = if (selectedIndex == 0) "외출" else "외박",
+                                                    color = color.onSurfaceVariant,
+                                                )
 
-                                            Spacer(modifier = Modifier.weight(1f))
+                                                Spacer(modifier = Modifier.weight(1f))
 
-                                            BodyLarge(
-                                                modifier = Modifier.padding(end = 4.dp),
-                                                text = if (selectedIndex == 0) {
-                                                    String.format(
-                                                        "%d시 %d분",
-                                                        out.endAt.hour,
-                                                        out.endAt.minute,
-                                                    )
-                                                } else {
-                                                    String.format(
-                                                        "%d월 %d일",
-                                                        out.endAt.monthNumber,
-                                                        out.endAt.dayOfMonth,
-                                                    )
-                                                },
-                                                color = color.onSurface,
-                                            )
-                                            LabelLarge(
-                                                text = "복귀",
-                                                color = color.onSurfaceVariant,
-                                            )
-                                        }
+                                                BodyLarge(
+                                                    modifier = Modifier.padding(end = 4.dp),
+                                                    text = if (selectedIndex == 0) {
+                                                        String.format(
+                                                            "%d시 %d분",
+                                                            out.endAt.hour,
+                                                            out.endAt.minute,
+                                                        )
+                                                    } else {
+                                                        String.format(
+                                                            "%d월 %d일",
+                                                            out.endAt.monthNumber,
+                                                            out.endAt.dayOfMonth,
+                                                        )
+                                                    },
+                                                    color = color.onSurface,
+                                                )
+                                                LabelLarge(
+                                                    text = "복귀",
+                                                    color = color.onSurfaceVariant,
+                                                )
+                                            }
 
-                                        if (out.status != Status.REJECTED) {
-                                            DodamLinearProgressIndicator(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                progress = progress,
-                                                color = if (out.status == Status.ALLOWED) {
-                                                    color.primary
-                                                } else {
-                                                    color.onSurfaceVariant
-                                                },
-                                            )
-                                        } else {
-                                            if (out.rejectReason != null) {
-                                                Row(
-                                                    verticalAlignment = Alignment.CenterVertically,
-                                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                                ) {
-                                                    LabelLarge(
-                                                        text = "거절 사유",
-                                                        color = color.onSurfaceVariant,
-                                                    )
+                                            if (out.status != Status.REJECTED) {
+                                                DodamLinearProgressIndicator(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    progress = progress,
+                                                    color = if (out.status == Status.ALLOWED) {
+                                                        color.primary
+                                                    } else {
+                                                        color.onSurfaceVariant
+                                                    },
+                                                )
+                                            } else {
+                                                if (out.rejectReason != null) {
+                                                    Row(
+                                                        verticalAlignment = Alignment.CenterVertically,
+                                                        horizontalArrangement = Arrangement.spacedBy(
+                                                            8.dp,
+                                                        ),
+                                                    ) {
+                                                        LabelLarge(
+                                                            text = "거절 사유",
+                                                            color = color.onSurfaceVariant,
+                                                        )
 
-                                                    BodyMedium(
-                                                        text = out.rejectReason!!,
-                                                        color = color.onSurface,
-                                                        fontWeight = FontWeight.Medium,
-                                                    )
+                                                        BodyMedium(
+                                                            text = out.rejectReason!!,
+                                                            color = color.onSurface,
+                                                            fontWeight = FontWeight.Medium,
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
+                            } else {
+                                item {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(
+                                                color.surfaceContainer,
+                                                MaterialTheme.shapes.large,
+                                            )
+                                            .padding(16.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                    ) {
+                                        Image(
+                                            modifier = Modifier.size(36.dp),
+                                            imageVector = if (selectedIndex == 0) ConvenienceStore else Tent,
+                                            contentDescription = null,
+                                        )
+
+                                        Spacer(modifier = Modifier.height(12.dp))
+
+                                        LabelLarge(
+                                            text = if (selectedIndex == 0) "아직 신청한 외출이 없어요." else "아직 신청한 외박이 없어요.",
+                                            color = color.tertiary,
+                                        )
+
+                                        Spacer(modifier = Modifier.height(24.dp))
+
+                                        DodamLargeFilledButton(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            onClick = onAddOutingClick,
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = color.secondaryContainer,
+                                                contentColor = color.onSecondaryContainer,
+                                            ),
+                                        ) {
+                                            Text(text = if (selectedIndex == 0) "외출 신청하기" else "외박 신청하기")
+                                        }
+                                    }
+                                }
                             }
-                        } else {
+                        }
+
+                        is OutUiState.Loading -> {
                             item {
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .background(
-                                            color.surfaceContainer,
+                                            MaterialTheme.colorScheme.surfaceContainer,
                                             MaterialTheme.shapes.large,
                                         )
                                         .padding(16.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(12.dp),
                                 ) {
-                                    Image(
-                                        modifier = Modifier.size(36.dp),
-                                        imageVector = if (selectedIndex == 0) ConvenienceStore else Tent,
-                                        contentDescription = null,
-                                    )
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(52.dp, 27.dp)
+                                                .background(shimmerEffect(), CircleShape),
+                                        )
 
-                                    Spacer(modifier = Modifier.height(12.dp))
+                                        Spacer(modifier = Modifier.weight(1f))
 
-                                    LabelLarge(
-                                        text = if (selectedIndex == 0) "아직 신청한 외출이 없어요." else "아직 신청한 외박이 없어요.",
-                                        color = color.tertiary,
-                                    )
-
-                                    Spacer(modifier = Modifier.height(24.dp))
-
-                                    DodamLargeFilledButton(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        onClick = onAddOutingClick,
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = color.secondaryContainer,
-                                            contentColor = color.onSecondaryContainer,
-                                        ),
-                                    ) {
-                                        Text(text = if (selectedIndex == 0) "외출 신청하기" else "외박 신청하기")
+                                        Box(
+                                            modifier = Modifier
+                                                .size(52.dp, 20.dp)
+                                                .background(
+                                                    shimmerEffect(),
+                                                    RoundedCornerShape(4.dp),
+                                                ),
+                                        )
                                     }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .height(20.dp)
+                                            .fillMaxWidth()
+                                            .background(shimmerEffect(), RoundedCornerShape(4.dp)),
+                                    )
+
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(52.dp, 27.dp)
+                                                .background(shimmerEffect(), CircleShape),
+                                        )
+
+                                        Spacer(modifier = Modifier.weight(1f))
+
+                                        Box(
+                                            modifier = Modifier
+                                                .size(52.dp, 20.dp)
+                                                .background(
+                                                    shimmerEffect(),
+                                                    RoundedCornerShape(4.dp),
+                                                ),
+                                        )
+                                    }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .height(20.dp)
+                                            .fillMaxWidth()
+                                            .background(shimmerEffect(), CircleShape),
+                                    )
                                 }
                             }
                         }
-                    }
 
-                    is OutUiState.Loading -> {
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(
-                                        MaterialTheme.colorScheme.surfaceContainer,
-                                        MaterialTheme.shapes.large,
-                                    )
-                                    .padding(16.dp),
-                                verticalArrangement = Arrangement.spacedBy(12.dp),
-                            ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(52.dp, 27.dp)
-                                            .background(shimmerEffect(), CircleShape),
-                                    )
-
-                                    Spacer(modifier = Modifier.weight(1f))
-
-                                    Box(
-                                        modifier = Modifier
-                                            .size(52.dp, 20.dp)
-                                            .background(shimmerEffect(), RoundedCornerShape(4.dp)),
-                                    )
-                                }
-
-                                Box(
-                                    modifier = Modifier
-                                        .height(20.dp)
-                                        .fillMaxWidth()
-                                        .background(shimmerEffect(), RoundedCornerShape(4.dp)),
-                                )
-
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(52.dp, 27.dp)
-                                            .background(shimmerEffect(), CircleShape),
-                                    )
-
-                                    Spacer(modifier = Modifier.weight(1f))
-
-                                    Box(
-                                        modifier = Modifier
-                                            .size(52.dp, 20.dp)
-                                            .background(shimmerEffect(), RoundedCornerShape(4.dp)),
-                                    )
-                                }
-
-                                Box(
-                                    modifier = Modifier
-                                        .height(20.dp)
-                                        .fillMaxWidth()
-                                        .background(shimmerEffect(), CircleShape),
-                                )
-                            }
-                        }
-                    }
-
-                    is OutUiState.Error -> showToast(
-                        "ERROR",
-                        (if (selectedIndex == 0) "외출" else "외박") + "을 불러올 수 없어요",
-                    )
-
-                    is OutUiState.SuccessDelete -> {
-                        showDialog = false
-                        showToast(
-                            "SUCCESS",
-                            (if (selectedIndex == 0) "외출" else "외박") + "을 삭제했어요",
-                        )
-                    }
-
-                    is OutUiState.FailDelete -> {
-                        showDialog = false
-                        showToast(
+                        is OutUiState.Error -> showToast(
                             "ERROR",
-                            (if (selectedIndex == 0) "외출" else "외박") + "삭제를 실패했어요",
+                            (if (selectedIndex == 0) "외출" else "외박") + "을 불러올 수 없어요",
                         )
+
+                        is OutUiState.SuccessDelete -> {
+                            showDialog = false
+                            showToast(
+                                "SUCCESS",
+                                (if (selectedIndex == 0) "외출" else "외박") + "을 삭제했어요",
+                            )
+                        }
+
+                        is OutUiState.FailDelete -> {
+                            showDialog = false
+                            showToast(
+                                "ERROR",
+                                (if (selectedIndex == 0) "외출" else "외박") + "삭제를 실패했어요",
+                            )
+                        }
                     }
-                }
-                item {
-                    Spacer(modifier = Modifier.height(80.dp))
+                    item {
+                        Spacer(modifier = Modifier.height(80.dp))
+                    }
                 }
             }
         }
