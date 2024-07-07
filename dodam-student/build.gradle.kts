@@ -71,4 +71,10 @@ dependencies {
     implementation(projects.network.outing)
     implementation(projects.data.schedule)
     implementation(projects.network.schedule)
+    implementation(projects.data.banner)
+    implementation(projects.network.banner)
+    implementation(projects.data.nightStudy)
+    implementation(projects.network.nightStudy)
+    implementation(projects.data.bus)
+    implementation(projects.network.bus)
 }
