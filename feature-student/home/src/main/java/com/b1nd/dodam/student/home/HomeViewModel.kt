@@ -39,11 +39,11 @@ import org.koin.core.component.inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val scheduleRepository: ScheduleRepository,
-    private val bannerRepository: BannerRepository,
 ) : ViewModel(), KoinComponent {
     private val outingRepository: OutingRepository by inject()
     private val mealRepository: MealRepository by inject()
     private val wakeupSongRepository: WakeupSongRepository by inject()
+    private val bannerRepository: BannerRepository by inject()
     private val nightStudyRepository: NightStudyRepository by inject()
 
     private val _uiState = MutableStateFlow(HomeUiState())
