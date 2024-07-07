@@ -128,7 +128,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                         outingEndDateTime
                     },
                     minDateTime = LocalDateTime.now(),
-                    maxDateTime = LocalDateTime.now().plusMonths(1),
+                    maxDateTime = LocalDateTime.now().plusMonths(2),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
                     textColor = MaterialTheme.colorScheme.onSurface,
                     onSnappedDateTime = {
@@ -170,7 +170,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackS
                         sleepoverEndDate
                     },
                     minDate = LocalDate.now(),
-                    maxDate = LocalDate.now().plusMonths(1),
+                    maxDate = LocalDate.now().plusMonths(2),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
                     textColor = MaterialTheme.colorScheme.onSurface,
                     onSnappedDate = {
