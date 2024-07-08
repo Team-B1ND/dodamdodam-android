@@ -2,16 +2,10 @@ package com.b1nd.dodam.register.di
 
 import com.b1nd.dodam.register.api.RegisterService
 import com.b1nd.dodam.register.datasource.RegisterDataSource
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal interface DataSourceModule {
-    @Binds
-    @Singleton
-    fun bindsRegisterDataSource(registerService: RegisterService): RegisterDataSource
+val registerDataSourceModule = module {
+    single<RegisterDataSource> {
+        RegisterService(get())
+    }
 }
