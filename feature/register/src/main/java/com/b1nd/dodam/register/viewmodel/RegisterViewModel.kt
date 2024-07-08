@@ -13,11 +13,14 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(
-    private val registerRepository: RegisterRepository,
-) : ViewModel() {
+class RegisterViewModel @Inject constructor() : ViewModel(), KoinComponent {
+
+    private val registerRepository: RegisterRepository by inject()
+
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState = _uiState.asStateFlow()
 
