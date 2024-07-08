@@ -79,4 +79,6 @@ dependencies {
     implementation(projects.network.bus)
     implementation(projects.data.point)
     implementation(projects.network.point)
+    implementation(projects.data.register)
+    implementation(projects.network.register)
 }
