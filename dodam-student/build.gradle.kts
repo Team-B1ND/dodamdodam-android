@@ -77,4 +77,6 @@ dependencies {
     implementation(projects.network.nightStudy)
     implementation(projects.data.bus)
     implementation(projects.network.bus)
+    implementation(projects.data.point)
+    implementation(projects.network.point)
 }

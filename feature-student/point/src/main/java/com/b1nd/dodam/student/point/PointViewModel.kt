@@ -18,11 +18,14 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @HiltViewModel
-class PointViewModel @Inject constructor(
-    private val pointRepository: PointRepository,
-) : ViewModel() {
+class PointViewModel @Inject constructor() : ViewModel(), KoinComponent {
+
+    private val pointRepository: PointRepository by inject()
+
     private val _uiState = MutableStateFlow(PointUiState())
     val uiState = _uiState.asStateFlow()
 
