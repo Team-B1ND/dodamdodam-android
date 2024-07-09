@@ -10,11 +10,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @HiltViewModel
-class AllViewModel @Inject constructor(
-    private val memberRepository: MemberRepository,
-) : ViewModel() {
+class AllViewModel @Inject constructor() : ViewModel(), KoinComponent {
+
+    private val memberRepository: MemberRepository by inject()
+
     private val _uiState = MutableStateFlow(AllUiState())
     val uiState = _uiState.asStateFlow()
 

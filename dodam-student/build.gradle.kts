@@ -81,4 +81,6 @@ dependencies {
     implementation(projects.network.point)
     implementation(projects.data.register)
     implementation(projects.network.register)
+    implementation(projects.data.member)
+    implementation(projects.network.member)
 }
