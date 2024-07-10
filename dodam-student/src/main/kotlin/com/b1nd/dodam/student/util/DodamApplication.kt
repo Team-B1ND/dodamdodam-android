@@ -13,6 +13,8 @@ import com.b1nd.dodam.data.point.di.pointRepositoryModule
 import com.b1nd.dodam.data.schedule.di.scheduleRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
 import com.b1nd.dodam.keystore.keystoreManagerModule
+import com.b1nd.dodam.member.di.memberDataSourceModule
+import com.b1nd.dodam.member.di.memberRepositoryModule
 import com.b1nd.dodam.network.banner.di.bannerDataSourceModule
 import com.b1nd.dodam.network.core.di.networkCoreModule
 import com.b1nd.dodam.network.meal.di.mealDataSourceModule
@@ -62,6 +64,8 @@ class DodamApplication : Application() {
                 pointDataSourceModule,
                 registerRepositoryModule,
                 registerDataSourceModule,
+                memberRepositoryModule,
+                memberDataSourceModule,
             )
         }
     }
