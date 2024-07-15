@@ -6,8 +6,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.koin.dsl.module
 import javax.inject.Singleton
+import org.koin.dsl.module
 
 @Module
 @InstallIn(SingletonComponent::class)
