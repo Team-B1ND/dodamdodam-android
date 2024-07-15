@@ -6,6 +6,7 @@ import com.b1nd.dodam.bus.di.busRepositoryModule
 import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
 import com.b1nd.dodam.data.banner.di.bannerRepositoryModule
+import com.b1nd.dodam.data.login.di.loginRepositoryModule
 import com.b1nd.dodam.data.meal.di.mealRepositoryModule
 import com.b1nd.dodam.data.nightstudy.di.nightStudyRepositoryModule
 import com.b1nd.dodam.data.outing.di.outingRepositoryModule
@@ -17,6 +18,7 @@ import com.b1nd.dodam.member.di.memberDataSourceModule
 import com.b1nd.dodam.member.di.memberRepositoryModule
 import com.b1nd.dodam.network.banner.di.bannerDataSourceModule
 import com.b1nd.dodam.network.core.di.networkCoreModule
+import com.b1nd.dodam.network.login.di.loginDataSourceModule
 import com.b1nd.dodam.network.meal.di.mealDataSourceModule
 import com.b1nd.dodam.network.nightstudy.di.nightStudyDataSourceModule
 import com.b1nd.dodam.network.outing.di.outingDataSourceModule
@@ -66,6 +68,8 @@ class DodamApplication : Application() {
                 registerDataSourceModule,
                 memberRepositoryModule,
                 memberDataSourceModule,
+                loginRepositoryModule,
+                loginDataSourceModule,
             )
         }
     }
