@@ -83,4 +83,6 @@ dependencies {
     implementation(projects.network.register)
     implementation(projects.data.member)
     implementation(projects.network.member)
+    implementation(projects.data.login)
+    implementation(projects.network.login)
 }

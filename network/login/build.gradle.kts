@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.dodam.android.kotlin)
     alias(libs.plugins.dodam.kotlin.serialization)
     alias(libs.plugins.dodam.hilt)
+    alias(libs.plugins.dodam.koin)
 }
 
 android {
