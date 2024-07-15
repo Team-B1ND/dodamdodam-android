@@ -6,6 +6,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.module
 import javax.inject.Singleton
 
 @Module
@@ -14,4 +15,11 @@ internal interface DataSourceModule {
     @Binds
     @Singleton
     fun bindsLoginDataSource(loginService: LoginService): LoginDataSource
+}
+
+val loginDataSourceModule = module {
+
+    single<LoginDataSource> {
+        LoginService(get())
+    }
 }
