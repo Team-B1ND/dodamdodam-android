@@ -14,11 +14,10 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
-internal class BusService @Inject constructor(
+internal class BusService(
     private val client: HttpClient,
 ) : BusDataSource {
     override suspend fun getBusList(): ImmutableList<BusResponse> {

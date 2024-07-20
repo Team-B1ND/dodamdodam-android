@@ -8,7 +8,6 @@ import com.b1nd.dodam.data.meal.MealRepository
 import com.b1nd.dodam.data.meal.model.Meal
 import com.b1nd.dodam.data.meal.model.toModel
 import com.b1nd.dodam.network.meal.datasource.MealDataSource
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-internal class MealRepositoryImpl @Inject constructor(
+internal class MealRepositoryImpl(
     private val network: MealDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : MealRepository {

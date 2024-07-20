@@ -9,11 +9,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
-internal class PointService @Inject constructor(
+internal class PointService(
     private val client: HttpClient,
 ) : PointDataSource {
     override suspend fun getMyPoint(type: String): ImmutableList<PointResponse> {

@@ -3,12 +3,9 @@ package com.b1nd.dodam.datastore.repository
 import androidx.datastore.core.DataStore
 import com.b1nd.dodam.datastore.model.User
 import com.b1nd.dodam.keystore.KeyStoreManager
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.flow.map
 
-@Singleton
-class DatastoreRepository @Inject constructor(
+class DatastoreRepository constructor(
     private val dataStore: DataStore<User>,
     private val keyStoreManager: KeyStoreManager,
 ) {

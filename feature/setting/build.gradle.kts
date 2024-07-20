@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.dodam.android.feature)
-    alias(libs.plugins.dodam.hilt)
     alias(libs.plugins.dodam.koin)
 }
 
