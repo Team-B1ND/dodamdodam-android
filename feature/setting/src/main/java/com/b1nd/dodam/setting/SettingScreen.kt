@@ -47,10 +47,11 @@ import com.b1nd.dodam.dds.style.ChevronRightIcon
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.ui.component.InputField
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBackStack: () -> Unit, logout: () -> Unit) {
+internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), popBackStack: () -> Unit, logout: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }

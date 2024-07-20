@@ -138,6 +138,7 @@ dodam-android = { id = "b1nd.dodam.primitive.android", version = "unspecified" }
 dodam-android-kotlin = { id = "b1nd.dodam.primitive.android.kotlin", version = "unspecified" }
 dodam-android-compose = { id = "b1nd.dodam.primitive.android.compose", version = "unspecified" }
 dodam-android-hilt = { id = "b1nd.dodam.primitive.android.hilt", version = "unspecified" }
+dodam-android-koin = { id = "b1nd.dodam.primitive.android.koin", version = "unspecified" }
 dodam-hilt = { id = "b1nd.dodam.primitive.hilt", version = "unspecified" }
 dodam-koin = { id = "b1nd.dodam.primitive.koin", version = "unspecified" }
 dodam-android-application = { id = "b1nd.dodam.primitive.android.application", version = "unspecified" }

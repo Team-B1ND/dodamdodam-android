@@ -18,8 +18,7 @@ import kotlinx.datetime.LocalDateTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class AskOutViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class AskOutViewModel: ViewModel(), KoinComponent {
 
     private val outingRepository: OutingRepository by inject()
 

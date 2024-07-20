@@ -57,10 +57,11 @@ import com.b1nd.dodam.dds.style.XMarkCircleIcon
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.wakeupsong.model.MelonChartSong
 import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
+fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = koinViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
     var keyWord by remember {

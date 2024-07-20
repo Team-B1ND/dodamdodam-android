@@ -67,6 +67,7 @@ import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ConvenienceStore
 import com.b1nd.dodam.ui.icons.Tent
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalFoundationApi
@@ -77,7 +78,7 @@ fun OutingScreen(
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,
-    viewModel: OutingViewModel = hiltViewModel(),
+    viewModel: OutingViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val outScreenState = rememberOutScreenState()

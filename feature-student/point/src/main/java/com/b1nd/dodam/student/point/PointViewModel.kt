@@ -21,8 +21,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class PointViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class PointViewModel : ViewModel(), KoinComponent {
 
     private val pointRepository: PointRepository by inject()
 

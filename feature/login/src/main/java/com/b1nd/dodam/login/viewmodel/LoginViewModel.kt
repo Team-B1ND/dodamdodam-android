@@ -20,8 +20,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class LoginViewModel : ViewModel(), KoinComponent {
 
     private val loginRepository: LoginRepository by inject()
     private val datastoreRepository: DatastoreRepository by inject()

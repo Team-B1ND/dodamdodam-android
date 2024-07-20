@@ -43,11 +43,12 @@ import com.b1nd.dodam.dds.style.GearIcon
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllScreen(
-    viewModel: AllViewModel = hiltViewModel(),
+    viewModel: AllViewModel = koinViewModel(),
     navigateToSetting: () -> Unit,
     navigateToMyPoint: () -> Unit,
     navigateToAddBus: () -> Unit,

@@ -62,6 +62,7 @@ import com.b1nd.dodam.ui.util.NoInteractionSource
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import com.b1nd.dodam.wakeupsong.viewmodel.Event
 import com.b1nd.dodam.wakeupsong.viewmodel.WakeupSongViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -69,7 +70,7 @@ fun WakeupSongScreen(
     onClickAddWakeupSong: () -> Unit,
     popBackStack: () -> Unit,
     showToast: (String, String) -> Unit,
-    viewModel: WakeupSongViewModel = hiltViewModel(),
+    viewModel: WakeupSongViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }

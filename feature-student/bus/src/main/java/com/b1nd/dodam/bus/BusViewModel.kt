@@ -17,9 +17,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 
-@HiltViewModel
-class BusViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class BusViewModel: ViewModel(), KoinComponent {
 
     private val busRepository: BusRepository by inject()
 
