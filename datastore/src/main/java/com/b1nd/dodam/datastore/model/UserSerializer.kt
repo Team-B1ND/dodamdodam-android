@@ -4,11 +4,10 @@ import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import java.io.InputStream
 import java.io.OutputStream
-import javax.inject.Inject
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
-class UserSerializer @Inject constructor() : Serializer<User> {
+class UserSerializer: Serializer<User> {
     override val defaultValue: User
         get() = User()
 

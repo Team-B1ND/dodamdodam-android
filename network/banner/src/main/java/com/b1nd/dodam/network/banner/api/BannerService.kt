@@ -8,11 +8,10 @@ import com.b1nd.dodam.network.core.util.safeRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
-internal class BannerService @Inject constructor(
+internal class BannerService(
     private val client: HttpClient,
 ) : BannerDataSource {
     override suspend fun getActiveBanner(): ImmutableList<BannerResponse> {

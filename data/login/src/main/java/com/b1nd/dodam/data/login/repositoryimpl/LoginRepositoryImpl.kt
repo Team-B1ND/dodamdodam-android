@@ -8,13 +8,12 @@ import com.b1nd.dodam.data.login.model.Token
 import com.b1nd.dodam.data.login.model.toModel
 import com.b1nd.dodam.data.login.repository.LoginRepository
 import com.b1nd.dodam.network.login.datasource.LoginDataSource
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-internal class LoginRepositoryImpl @Inject constructor(
+internal class LoginRepositoryImpl(
     private val loginDataSource: LoginDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : LoginRepository {

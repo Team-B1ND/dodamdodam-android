@@ -9,7 +9,6 @@ import com.b1nd.dodam.data.point.model.Point
 import com.b1nd.dodam.data.point.model.PointType
 import com.b1nd.dodam.data.point.model.toModel
 import com.b1nd.dodam.network.point.datasource.PointDataSource
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-internal class PointRepositoryImpl @Inject constructor(
+internal class PointRepositoryImpl(
     private val network: PointDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : PointRepository {
