@@ -14,8 +14,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class SettingViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class SettingViewModel: ViewModel(), KoinComponent {
 
     private val memberRepository: MemberRepository by inject()
 

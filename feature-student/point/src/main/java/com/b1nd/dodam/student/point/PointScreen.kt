@@ -44,10 +44,11 @@ import com.b1nd.dodam.dds.style.HeadlineLarge
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.style.TitleMedium
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun PointScreen(viewModel: PointViewModel = hiltViewModel(), popBackStack: () -> Unit) {
+internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackStack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedIndex by remember { mutableIntStateOf(0) }
 

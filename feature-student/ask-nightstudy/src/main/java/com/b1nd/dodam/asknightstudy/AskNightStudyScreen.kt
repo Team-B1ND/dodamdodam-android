@@ -54,10 +54,11 @@ import com.commandiron.wheel_picker_compose.WheelDatePicker
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlinx.datetime.toKotlinLocalDate
+import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = hiltViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
+internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()

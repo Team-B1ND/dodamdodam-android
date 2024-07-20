@@ -16,8 +16,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class RegisterViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class RegisterViewModel: ViewModel(), KoinComponent {
 
     private val registerRepository: RegisterRepository by inject()
 

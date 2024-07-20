@@ -20,8 +20,7 @@ import kotlinx.datetime.toKotlinLocalDateTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class MealViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class MealViewModel: ViewModel(), KoinComponent {
     private val current = LocalDateTime.now().toKotlinLocalDateTime()
     private var getOnlyOnce = true
 

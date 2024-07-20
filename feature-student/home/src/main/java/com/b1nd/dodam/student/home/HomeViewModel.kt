@@ -36,8 +36,7 @@ import kotlinx.datetime.toKotlinLocalDateTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class HomeViewModel: ViewModel(), KoinComponent {
     private val outingRepository: OutingRepository by inject()
     private val mealRepository: MealRepository by inject()
     private val wakeupSongRepository: WakeupSongRepository by inject()
