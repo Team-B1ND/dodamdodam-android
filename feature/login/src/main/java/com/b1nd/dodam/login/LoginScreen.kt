@@ -30,7 +30,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
 import com.b1nd.dodam.dds.component.DodamTextField
@@ -42,10 +41,11 @@ import com.b1nd.dodam.dds.style.XMarkCircleIcon
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.login.viewmodel.Event
 import com.b1nd.dodam.login.viewmodel.LoginViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit) {
+internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     var idError by remember { mutableStateOf("") }

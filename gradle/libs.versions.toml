@@ -19,7 +19,6 @@ androidx-compose-bom = "2024.02.00"
 androidx-core = "1.12.0"
 androidx-lifecycle = "2.6.2"
 androidx-navigation = "2.7.6"
-androidx-hilt-navigation-compose = "1.1.0"
 androidx-material = "1.5.4"
 datastore = "1.0.0"
 
@@ -31,7 +30,6 @@ app-update = "2.1.0"
 
 
 # third party
-dagger-hilt = "2.50"
 spotless = "6.23.3"
 material = "1.11.0"
 bottomsheetdialog = "1.3.1"
@@ -66,7 +64,6 @@ kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime",
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 androidx-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
-androidx-compose-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidx-hilt-navigation-compose" }
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-foundation = { group = "androidx.compose.foundation", name = "foundation" }
@@ -91,10 +88,6 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 google-app-update = { group = "com.google.android.play", name = "app-update-ktx", version.ref = "app-update"}
 
 # third party
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt" }
-hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "dagger-hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "dagger-hilt" }
-hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 bottomsheetdialog-compose = { group = "com.holix.android", name = "bottomsheetdialog-compose", version.ref = "bottomsheetdialog" }
 ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
@@ -124,7 +117,6 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
@@ -137,9 +129,7 @@ dodam-android-feature = { id = "b1nd.dodam.convention.android.feature", version 
 dodam-android = { id = "b1nd.dodam.primitive.android", version = "unspecified" }
 dodam-android-kotlin = { id = "b1nd.dodam.primitive.android.kotlin", version = "unspecified" }
 dodam-android-compose = { id = "b1nd.dodam.primitive.android.compose", version = "unspecified" }
-dodam-android-hilt = { id = "b1nd.dodam.primitive.android.hilt", version = "unspecified" }
 dodam-android-koin = { id = "b1nd.dodam.primitive.android.koin", version = "unspecified" }
-dodam-hilt = { id = "b1nd.dodam.primitive.hilt", version = "unspecified" }
 dodam-koin = { id = "b1nd.dodam.primitive.koin", version = "unspecified" }
 dodam-android-application = { id = "b1nd.dodam.primitive.android.application", version = "unspecified" }
 dodam-kotlin = { id = "b1nd.dodam.convention.kotlin", version = "unspecified" }

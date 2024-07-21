@@ -6,9 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import com.b1nd.dodam.wakeupsong.WakeupSongUiState
-import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

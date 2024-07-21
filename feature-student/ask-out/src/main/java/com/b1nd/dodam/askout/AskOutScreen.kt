@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
 import com.b1nd.dodam.dds.component.DodamTextField

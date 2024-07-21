@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
-import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.datastore.model.User
 import com.b1nd.dodam.datastore.model.UserSerializer

@@ -38,13 +38,11 @@ import com.b1nd.dodam.student.point.di.pointViewModelModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongDataSourceModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongRepositoryModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongViewModelModule
-import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 
-@HiltAndroidApp
 class DodamApplication : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -90,7 +88,7 @@ class DodamApplication : Application() {
                     loginViewModelModule,
                     registerViewModelModule,
                     settingViewModelModule,
-                ) + mainViewModelModules
+                ) + mainViewModelModules,
             )
         }
     }
