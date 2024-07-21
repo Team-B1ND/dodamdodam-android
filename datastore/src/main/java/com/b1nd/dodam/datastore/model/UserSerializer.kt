@@ -7,7 +7,7 @@ import java.io.OutputStream
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
-class UserSerializer: Serializer<User> {
+class UserSerializer : Serializer<User> {
     override val defaultValue: User
         get() = User()
 

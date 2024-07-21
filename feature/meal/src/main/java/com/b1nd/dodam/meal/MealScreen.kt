@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.b1nd.dodam.data.meal.model.Menu
 import com.b1nd.dodam.dds.component.DodamTopAppBar
@@ -39,10 +38,11 @@ import com.b1nd.dodam.meal.viewmodel.MealViewModel
 import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlin.math.roundToInt
+import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-fun MealScreen(viewModel: MealViewModel = hiltViewModel()) {
+fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
     val uiState by viewModel.mealUiState.collectAsStateWithLifecycle()
     val mealScreenState = rememberMealScreenState()
 

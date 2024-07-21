@@ -47,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.dds.animation.bounceCombinedClick
 import com.b1nd.dodam.dds.component.DodamDialog

@@ -8,8 +8,6 @@ import com.b1nd.dodam.data.point.model.Point
 import com.b1nd.dodam.data.point.model.PointType
 import com.b1nd.dodam.data.point.model.ScoreType
 import com.b1nd.dodam.student.point.model.PointUiState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow

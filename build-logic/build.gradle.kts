@@ -36,14 +36,6 @@ gradlePlugin {
             id = "b1nd.dodam.primitive.android.compose"
             implementationClass = "com.b1nd.dodam.primitive.AndroidComposePlugin"
         }
-        register("androidHilt") {
-            id = "b1nd.dodam.primitive.android.hilt"
-            implementationClass = "com.b1nd.dodam.primitive.AndroidHiltPlugin"
-        }
-        register("hilt") {
-            id = "b1nd.dodam.primitive.hilt"
-            implementationClass = "com.b1nd.dodam.primitive.HiltPlugin"
-        }
         register("koin") {
             id = "b1nd.dodam.primitive.koin"
             implementationClass = "com.b1nd.dodam.primitive.KoinPlugin"

@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.askout.model.AskOutUiState
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.outing.OutingRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -18,7 +16,7 @@ import kotlinx.datetime.LocalDateTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class AskOutViewModel: ViewModel(), KoinComponent {
+class AskOutViewModel : ViewModel(), KoinComponent {
 
     private val outingRepository: OutingRepository by inject()
 

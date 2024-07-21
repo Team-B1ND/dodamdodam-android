@@ -43,7 +43,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.dds.animation.bounceClick
@@ -262,7 +261,7 @@ fun WakeupSongScreen(
 @Composable
 fun WakeupSongCard(
     modifier: Modifier = Modifier,
-    viewModel: WakeupSongViewModel = hiltViewModel(),
+    viewModel: WakeupSongViewModel = koinViewModel(),
     wakeupSong: WakeupSong? = null,
     index: Int? = null,
     selectedTabIndex: Int? = null,
