@@ -6,13 +6,12 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.register.datasource.RegisterDataSource
 import com.b1nd.dodam.register.repository.RegisterRepository
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-internal class RegisterRepositoryImpl @Inject constructor(
+internal class RegisterRepositoryImpl constructor(
     private val registerDataSource: RegisterDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : RegisterRepository {

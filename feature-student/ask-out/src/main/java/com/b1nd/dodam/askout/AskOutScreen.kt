@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
 import com.b1nd.dodam.dds.component.DodamTextField
@@ -51,10 +50,11 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
+import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun AskOutScreen(viewModel: AskOutViewModel = hiltViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
+internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     val scrollState = rememberScrollState()

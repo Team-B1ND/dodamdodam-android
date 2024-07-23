@@ -9,8 +9,6 @@ import com.b1nd.dodam.common.exception.NotFoundException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.core.model.Place
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,8 +19,7 @@ import kotlinx.datetime.LocalDate
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class AskNightStudyViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class AskNightStudyViewModel : ViewModel(), KoinComponent {
 
     private val nightStudyRepository: NightStudyRepository by inject()
 

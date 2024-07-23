@@ -46,7 +46,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.dds.animation.bounceCombinedClick
 import com.b1nd.dodam.dds.component.DodamDialog
@@ -63,6 +62,7 @@ import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.SmileMoon
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalFoundationApi
@@ -73,7 +73,7 @@ fun NightStudyScreen(
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,
-    viewModel: NightStudyViewModel = hiltViewModel(),
+    viewModel: NightStudyViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val nightStudyScreenState = rememberNightStudyScreenState()

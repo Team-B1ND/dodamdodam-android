@@ -6,8 +6,6 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.outing.OutingRepository
 import com.b1nd.dodam.data.outing.model.OutType
 import com.b1nd.dodam.data.outing.model.Outing
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -17,8 +15,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class OutingViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class OutingViewModel : ViewModel(), KoinComponent {
 
     private val outingRepository: OutingRepository by inject()
 

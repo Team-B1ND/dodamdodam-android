@@ -10,7 +10,6 @@ import com.b1nd.dodam.wakeupsong.model.MelonChartSong
 import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import com.b1nd.dodam.wakeupsong.model.toModel
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-internal class WakeupSongRepositoryImpl @Inject constructor(
+internal class WakeupSongRepositoryImpl constructor(
     private val network: WakeupSongDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : WakeupSongRepository {

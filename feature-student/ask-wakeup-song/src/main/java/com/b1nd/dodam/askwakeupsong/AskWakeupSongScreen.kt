@@ -40,7 +40,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.DodamDialog
@@ -57,10 +56,11 @@ import com.b1nd.dodam.dds.style.XMarkCircleIcon
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.wakeupsong.model.MelonChartSong
 import com.b1nd.dodam.wakeupsong.model.SearchWakeupSong
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = hiltViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
+fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = koinViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
     var keyWord by remember {
@@ -210,7 +210,7 @@ fun WakeupSongShimmer() {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonChartSong: MelonChartSong, index: Int? = null) {
+fun WakeupSongCard(viewModel: AskWakeupSongViewModel = koinViewModel(), melonChartSong: MelonChartSong, index: Int? = null) {
     var showDialog by remember {
         mutableStateOf(false)
     }
@@ -321,7 +321,7 @@ fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonCha
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun WakeupSongCard(viewModel: AskWakeupSongViewModel = hiltViewModel(), melonChartSong: SearchWakeupSong) {
+fun WakeupSongCard(viewModel: AskWakeupSongViewModel = koinViewModel(), melonChartSong: SearchWakeupSong) {
     var showDialog by remember {
         mutableStateOf(false)
     }

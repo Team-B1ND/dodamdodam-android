@@ -8,8 +8,6 @@ import com.b1nd.dodam.data.point.model.Point
 import com.b1nd.dodam.data.point.model.PointType
 import com.b1nd.dodam.data.point.model.ScoreType
 import com.b1nd.dodam.student.point.model.PointUiState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,8 +19,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class PointViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class PointViewModel : ViewModel(), KoinComponent {
 
     private val pointRepository: PointRepository by inject()
 

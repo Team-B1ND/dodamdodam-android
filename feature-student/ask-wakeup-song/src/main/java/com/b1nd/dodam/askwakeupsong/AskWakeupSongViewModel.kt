@@ -6,8 +6,6 @@ import com.b1nd.dodam.askwakeupsong.model.AskWakeupSongUiState
 import com.b1nd.dodam.common.exception.LockedException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -17,8 +15,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class AskWakeupSongViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class AskWakeupSongViewModel : ViewModel(), KoinComponent {
     private val wakeupSongRepository: WakeupSongRepository by inject()
 
     private val _uiState = MutableStateFlow(AskWakeupSongUiState())

@@ -9,9 +9,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import javax.inject.Inject
 
-internal class RegisterService @Inject constructor(
+internal class RegisterService(
     private val client: HttpClient,
 ) : RegisterDataSource {
 

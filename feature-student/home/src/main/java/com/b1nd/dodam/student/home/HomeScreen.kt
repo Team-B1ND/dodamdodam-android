@@ -43,7 +43,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.DodamDialog
@@ -67,13 +66,14 @@ import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.ui.icons.DodamLogo
+import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
 internal fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: HomeViewModel = koinViewModel(),
     navigateToAskOut: () -> Unit,
     navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
