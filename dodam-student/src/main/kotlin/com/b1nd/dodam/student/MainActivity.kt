@@ -33,18 +33,16 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var datastoreRepository: DatastoreRepository
+
+    private val datastoreRepository: DatastoreRepository by inject()
 
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
 

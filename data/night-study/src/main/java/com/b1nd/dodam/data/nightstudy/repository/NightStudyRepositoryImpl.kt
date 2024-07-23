@@ -10,7 +10,6 @@ import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.nightstudy.model.toModel
 import com.b1nd.dodam.network.nightstudy.datasource.NightStudyDataSource
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -19,7 +18,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.datetime.LocalDate
 
-internal class NightStudyRepositoryImpl @Inject constructor(
+internal class NightStudyRepositoryImpl(
     private val remote: NightStudyDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : NightStudyRepository {

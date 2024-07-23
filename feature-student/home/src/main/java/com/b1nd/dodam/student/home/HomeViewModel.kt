@@ -17,11 +17,9 @@ import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import javax.inject.Inject
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.delay
@@ -36,8 +34,7 @@ import kotlinx.datetime.toKotlinLocalDateTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class HomeViewModel : ViewModel(), KoinComponent {
     private val outingRepository: OutingRepository by inject()
     private val mealRepository: MealRepository by inject()
     private val wakeupSongRepository: WakeupSongRepository by inject()

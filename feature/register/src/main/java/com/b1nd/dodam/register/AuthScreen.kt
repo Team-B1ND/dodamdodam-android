@@ -33,7 +33,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
 import com.b1nd.dodam.dds.component.DodamTextField
@@ -46,6 +45,7 @@ import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.register.viewmodel.Event
 import com.b1nd.dodam.register.viewmodel.RegisterViewModel
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
@@ -56,7 +56,7 @@ fun AuthScreen(
     number: String,
     email: String,
     phoneNumber: String,
-    viewModel: RegisterViewModel = hiltViewModel(),
+    viewModel: RegisterViewModel = koinViewModel(),
     navigateToMain: () -> Unit,
     onBackClick: () -> Unit,
 ) {

@@ -36,7 +36,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
@@ -47,10 +46,11 @@ import com.b1nd.dodam.dds.style.ChevronRightIcon
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.ui.component.InputField
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingScreen(viewModel: SettingViewModel = hiltViewModel(), popBackStack: () -> Unit, logout: () -> Unit) {
+internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), popBackStack: () -> Unit, logout: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }

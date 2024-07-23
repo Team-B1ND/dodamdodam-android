@@ -13,9 +13,8 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import javax.inject.Inject
 
-internal class LoginService @Inject constructor(
+internal class LoginService(
     private val client: HttpClient,
 ) : LoginDataSource {
     override suspend fun login(id: String, pw: String): LoginResponse {

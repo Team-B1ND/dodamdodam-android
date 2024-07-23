@@ -8,12 +8,9 @@ import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.spec.IvParameterSpec
-import javax.inject.Inject
-import javax.inject.Singleton
 import org.koin.dsl.module
 
-@Singleton
-class KeyStoreManager @Inject constructor() {
+class KeyStoreManager {
 
     private val keyStore = KeyStore.getInstance(KEY_PROVIDER).apply {
         load(null)

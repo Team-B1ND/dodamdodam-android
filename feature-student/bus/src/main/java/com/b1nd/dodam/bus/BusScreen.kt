@@ -22,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.b1nd.dodam.bus.model.Bus
 import com.b1nd.dodam.dds.component.DodamDialog
 import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
@@ -32,10 +31,11 @@ import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.CheckmarkIcon
 import com.b1nd.dodam.dds.style.HeadlineSmall
 import com.b1nd.dodam.ui.component.InputField
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BusScreen(viewModel: BusViewModel = hiltViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
+fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedIndex: Int? by remember {
         mutableStateOf(null)

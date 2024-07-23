@@ -32,7 +32,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.DodamTopAppBar
@@ -43,11 +42,12 @@ import com.b1nd.dodam.dds.style.GearIcon
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllScreen(
-    viewModel: AllViewModel = hiltViewModel(),
+    viewModel: AllViewModel = koinViewModel(),
     navigateToSetting: () -> Unit,
     navigateToMyPoint: () -> Unit,
     navigateToAddBus: () -> Unit,

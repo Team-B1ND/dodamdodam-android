@@ -14,12 +14,11 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate
 
-internal class NightStudyService @Inject constructor(
+internal class NightStudyService(
     private val network: HttpClient,
 ) : NightStudyDataSource {
     override suspend fun getMyNightStudy(): ImmutableList<NightStudyResponse> {

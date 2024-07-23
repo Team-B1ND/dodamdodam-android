@@ -9,8 +9,6 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.login.repository.LoginRepository
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.login.model.LoginUiState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -20,8 +18,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel(), KoinComponent {
+class LoginViewModel : ViewModel(), KoinComponent {
 
     private val loginRepository: LoginRepository by inject()
     private val datastoreRepository: DatastoreRepository by inject()

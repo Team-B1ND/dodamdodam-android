@@ -8,7 +8,6 @@ import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class BusRepositoryImpl @Inject constructor(
+class BusRepositoryImpl(
     private val busDataSource: BusDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : BusRepository {
