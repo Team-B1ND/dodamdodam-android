@@ -3,6 +3,7 @@ package com.b1nd.dodam.common.network.di
 import com.b1nd.dodam.common.DispatcherType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
