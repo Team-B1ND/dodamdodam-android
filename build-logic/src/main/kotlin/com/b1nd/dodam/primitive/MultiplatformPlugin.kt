@@ -1,5 +1,8 @@
 package com.b1nd.dodam.primitive
 
+import com.b1nd.dodam.dsl.kotlin
+import com.b1nd.dodam.dsl.library
+import com.b1nd.dodam.dsl.libs
 import com.b1nd.dodam.dsl.setupMultiplatform
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -11,8 +14,13 @@ class MultiplatformPlugin: Plugin<Project> {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.multiplatform")
             }
-
             setupMultiplatform()
+
+            kotlin {
+                sourceSets.commonMain.dependencies {
+                    implementation(libs.library("lighthousegames-logging"))
+                }
+            }
         }
     }
 }
