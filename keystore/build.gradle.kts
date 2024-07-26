@@ -1,7 +1,22 @@
+import com.b1nd.dodam.dsl.setIOS
+
 plugins {
     alias(libs.plugins.dodam.android)
-    alias(libs.plugins.dodam.android.kotlin)
     alias(libs.plugins.dodam.koin)
+    alias(libs.plugins.dodam.multiplatform)
+}
+
+kotlin {
+    setIOS("keystore")
+
+    sourceSets {
+        androidMain.dependencies {
+
+        }
+        commonMain.dependencies {
+            implementation(projects.common)
+        }
+    }
 }
 
 android {
@@ -9,8 +24,4 @@ android {
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
     }
-}
-
-dependencies {
-    implementation(projects.common)
 }
