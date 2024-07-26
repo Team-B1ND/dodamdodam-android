@@ -21,5 +21,4 @@ dependencies {
     implementation(projects.data.meal)
     implementation(libs.material)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.androidx.datastore.preference)
 }
