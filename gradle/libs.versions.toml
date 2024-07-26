@@ -20,7 +20,7 @@ androidx-core = "1.12.0"
 androidx-lifecycle = "2.6.2"
 androidx-navigation = "2.7.6"
 androidx-material = "1.5.4"
-datastore = "1.0.0"
+datastore = "1.1.1"
 
 # google
 firebase-bom = "32.8.0"
@@ -80,7 +80,8 @@ androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "and
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-navigation = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
-androidx-datastore-preference = { group = "androidx.datastore",name = "datastore-preferences", version.ref = "datastore" }
+androidx-datastore-core-okio = { group = "androidx.datastore", name = "datastore-core-okio", version.ref = "datastore" }
+androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
 
 # google
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
