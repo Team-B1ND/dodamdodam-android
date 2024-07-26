@@ -139,6 +139,7 @@ dodam-android-application = { id = "b1nd.dodam.primitive.android.application", v
 dodam-kotlin = { id = "b1nd.dodam.convention.kotlin", version = "unspecified" }
 dodam-kotlin-serialization = { id = "b1nd.dodam.primitive.kotlin.serialization", version = "unspecified" }
 dodam-multiplatform = { id = "b1nd.dodam.primitive.multiplatform", version = "unspecified"}
+dodam-multiplatform-kotlin-serialization = { id = "b1nd.dodam.primitive.multiplatform.kotlin.serialization", version = "unspecified"}
 
 [bundles]
 compose-implementation = ["androidx-compose-ui", "androidx-compose-ui-foundation", "androidx-compose-ui-graphics", "androidx-compose-lifecycle", "androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview", "androidx-compose-material3"]

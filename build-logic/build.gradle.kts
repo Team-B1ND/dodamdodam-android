@@ -60,6 +60,10 @@ gradlePlugin {
             id = "b1nd.dodam.primitive.multiplatform"
             implementationClass = "com.b1nd.dodam.primitive.MultiplatformPlugin"
         }
+        register("multiplatformKotlinSerialization") {
+            id = "b1nd.dodam.primitive.multiplatform.kotlin.serialization"
+            implementationClass = "com.b1nd.dodam.primitive.MultiplatformKotlinSerializationPlugin"
+        }
         // convention
         register("androidFeature") {
             id = "b1nd.dodam.convention.android.feature"
