@@ -3,12 +3,14 @@ package com.b1nd.dodam.dsl
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 fun Project.kotlin(block: KotlinMultiplatformExtension.() -> Unit) {
     extensions.configure<KotlinMultiplatformExtension>(block)
 }
 
+@OptIn(ExperimentalKotlinGradlePluginApi::class)
 fun Project.setupMultiplatform() {
     kotlin {
         androidTarget {
@@ -16,6 +18,12 @@ fun Project.setupMultiplatform() {
                 kotlinOptions {
                     jvmTarget = JavaVersion.VERSION_17.toString()
                 }
+            }
+        }
+        // remove compiler warring
+        sourceSets.commonMain {
+            compilerOptions {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
             }
         }
     }
