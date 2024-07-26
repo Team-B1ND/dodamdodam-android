@@ -1,15 +1,11 @@
+import com.b1nd.dodam.dsl.setIOS
 
 plugins {
-    id("java-library")
-    alias(libs.plugins.kotlin.multiplatform)
-//    alias(libs.plugins.dodam.kotlin)
+    alias(libs.plugins.dodam.multiplatform)
 }
 
 kotlin {
-    jvm()
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    setIOS("common")
 
     sourceSets {
         commonMain.dependencies {
@@ -17,4 +13,9 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
         }
     }
+}
+
+
+android {
+    namespace = "com.b1nd.dodam.common"
 }
