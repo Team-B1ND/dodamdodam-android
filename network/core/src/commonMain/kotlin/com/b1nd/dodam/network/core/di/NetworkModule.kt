@@ -1,6 +1,5 @@
 package com.b1nd.dodam.network.core.di
 
-import android.util.Log
 import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
 import com.b1nd.dodam.network.core.DodamUrl
@@ -28,8 +27,11 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
+import org.lighthousegames.logging.logging
 
 private const val TIME_OUT = 60_000L
+
+val log = logging()
 
 val networkCoreModule = module {
     single<HttpClient> {
@@ -47,7 +49,7 @@ val networkCoreModule = module {
             install(Logging) {
                 logger = object : Logger {
                     override fun log(message: String) {
-                        Log.i("HttpClient", message)
+                        log.i("HttpClient") { message }
                     }
                 }
                 level = LogLevel.ALL
