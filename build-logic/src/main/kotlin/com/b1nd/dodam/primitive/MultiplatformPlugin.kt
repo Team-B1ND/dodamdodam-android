@@ -15,12 +15,6 @@ class MultiplatformPlugin: Plugin<Project> {
                 apply("org.jetbrains.kotlin.multiplatform")
             }
             setupMultiplatform()
-
-            kotlin {
-                sourceSets.commonMain.dependencies {
-                    implementation(libs.library("lighthousegames-logging"))
-                }
-            }
         }
     }
 }
