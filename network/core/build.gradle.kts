@@ -24,6 +24,11 @@ kotlin {
             api(libs.ktor.serialization.kotlinx.json)
             api(libs.kotlinx.datetime)
         }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+        }
     }
     setIOS("network.core")
 }
