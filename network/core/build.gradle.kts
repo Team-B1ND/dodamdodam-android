@@ -23,6 +23,7 @@ kotlin {
             api(libs.ktor.client.content.negotiation)
             api(libs.ktor.serialization.kotlinx.json)
             api(libs.kotlinx.datetime)
+            implementation(projects.logging)
         }
 
         commonTest.dependencies {

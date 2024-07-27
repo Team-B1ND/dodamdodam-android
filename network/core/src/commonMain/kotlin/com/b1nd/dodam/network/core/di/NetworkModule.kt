@@ -2,6 +2,7 @@ package com.b1nd.dodam.network.core.di
 
 import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.datastore.repository.DatastoreRepository
+import com.b1nd.dodam.logging.logging
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.model.TokenRequest
@@ -27,7 +28,6 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
-import org.lighthousegames.logging.logging
 
 private const val TIME_OUT = 60_000L
 

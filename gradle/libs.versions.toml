@@ -39,7 +39,7 @@ dds = "0.1.18"
 composeinvestigator = "1.5.10-0.2.1"
 wheel-picker = "1.1.11"
 koin = "3.5.6"
-logging = "1.5.0"
+stately = "2.0.6"
 
 # test
 junit = "4.13.2"
@@ -106,7 +106,7 @@ wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCo
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
-lighthousegames-logging = { group = "org.lighthousegames", name = "logging", version.ref = "logging" }
+stately-concurrency = { group = "co.touchlab", name = "stately-concurrency", version.ref = "stately"}
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
