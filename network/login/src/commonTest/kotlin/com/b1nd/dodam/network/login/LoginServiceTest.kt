@@ -12,15 +12,15 @@ import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class LoginServiceTest {
     private lateinit var loginService: LoginService
     private val testDispatcher = StandardTestDispatcher()
 
-    @Before
+    @BeforeTest
     fun setUp() {
         val client = HttpClient(
             MockEngine {
