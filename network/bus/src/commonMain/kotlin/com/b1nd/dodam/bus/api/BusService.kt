@@ -28,25 +28,19 @@ internal class BusService(
 
     override suspend fun applyBus(id: Int) {
         defaultSafeRequest {
-            client.post(DodamUrl.Bus.APPLY + "/$id") {
-                parameter("id", id)
-            }.body<DefaultResponse>()
+            client.post(DodamUrl.Bus.APPLY + "/$id").body<DefaultResponse>()
         }
     }
 
     override suspend fun deleteBus(id: Int) {
         defaultSafeRequest {
-            client.delete(DodamUrl.Bus.APPLY + "/$id") {
-                parameter("id", id)
-            }.body<DefaultResponse>()
+            client.delete(DodamUrl.Bus.APPLY + "/$id").body<DefaultResponse>()
         }
     }
 
     override suspend fun updateBus(id: Int) {
         defaultSafeRequest {
-            client.patch(DodamUrl.Bus.APPLY + "/$id") {
-                parameter("id", id)
-            }.body<DefaultResponse>()
+            client.patch(DodamUrl.Bus.APPLY + "/$id").body<DefaultResponse>()
         }
     }
 
