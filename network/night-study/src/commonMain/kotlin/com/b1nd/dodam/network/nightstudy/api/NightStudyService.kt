@@ -14,6 +14,8 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate
@@ -31,6 +33,7 @@ internal class NightStudyService(
     override suspend fun askNightStudy(place: String, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) {
         return defaultSafeRequest {
             network.post(DodamUrl.NIGHT_STUDY) {
+                contentType(ContentType.Application.Json)
                 setBody(
                     NightStudyRequest(
                         place,
