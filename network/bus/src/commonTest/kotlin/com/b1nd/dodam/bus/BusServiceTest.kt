@@ -37,16 +37,7 @@ class BusServiceTest {
                 addHandler { request ->
                     val path = "https://" + request.url.host + request.url.fullPath
                     val method = request.method.value
-                    val baseHeader = headersOf(HttpHeaders.ContentType, "application/json")
-                    """
-                        val applyCount: Int,
-    val busName: String,
-    val description: String,
-    val id: Int,
-    val leaveTime: String,
-    val peopleLimit: Int,
-    val timeRequired: String,
-                    """.trimIndent()
+
                     fun MockRequestHandleScope.makeOkRespond(
                         content: String
                     ): HttpResponseData =
