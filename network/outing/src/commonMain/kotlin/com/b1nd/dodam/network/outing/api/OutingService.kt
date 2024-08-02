@@ -16,6 +16,8 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate
@@ -41,6 +43,7 @@ internal class OutingService(
     override suspend fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime) {
         return defaultSafeRequest {
             client.post(DodamUrl.OUTING) {
+                contentType(ContentType.Application.Json)
                 setBody(OutingRequest(reason, startAt, endAt))
             }.body<DefaultResponse>()
         }
@@ -49,6 +52,7 @@ internal class OutingService(
     override suspend fun askSleepover(reason: String, startAt: LocalDate, endAt: LocalDate) {
         return defaultSafeRequest {
             client.post(DodamUrl.SLEEPOVER) {
+                contentType(ContentType.Application.Json)
                 setBody(SleepoverRequest(reason, startAt, endAt))
             }.body<DefaultResponse>()
         }
