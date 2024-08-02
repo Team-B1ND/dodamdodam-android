@@ -9,7 +9,7 @@ plugins {
 }
 
 kotlin {
-    setIOS("network.point")
+    setIOS("network.schedule")
 
     sourceSets.commonMain.dependencies {
         api(projects.network.core)
