@@ -9,17 +9,14 @@ import com.b1nd.dodam.common.exception.NotFoundException
 import com.b1nd.dodam.common.exception.TooManyRequestsException
 import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.network.core.model.DefaultResponse
-import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.defaultSafeRequest
-import com.b1nd.dodam.network.core.util.safeRequest
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 
 class DefaultSafeRequestTest {
-
 
     private val testDispatcher = StandardTestDispatcher()
 
@@ -27,7 +24,7 @@ class DefaultSafeRequestTest {
     fun 성공적인_요청_테스트() = runTest(testDispatcher) {
         val mockResponse = DefaultResponse(
             status = 200,
-            message = "OK"
+            message = "OK",
         )
 
         val result = defaultSafeRequest { mockResponse }
@@ -38,7 +35,7 @@ class DefaultSafeRequestTest {
     fun 베드리퀘스트_에러_테스트() = runTest(testDispatcher) {
         val mockResponse = DefaultResponse(
             status = 400,
-            message = "Bad Request"
+            message = "Bad Request",
         )
         assertFailsWith<BadRequestException> {
             defaultSafeRequest { mockResponse }
@@ -49,7 +46,7 @@ class DefaultSafeRequestTest {
     fun 인증_에러_테스트() = runTest(testDispatcher) {
         val mockResponse = DefaultResponse(
             status = 401,
-            message = "Unauthorized"
+            message = "Unauthorized",
         )
         assertFailsWith<UnauthorizedException> {
             defaultSafeRequest { mockResponse }
@@ -60,7 +57,7 @@ class DefaultSafeRequestTest {
     fun 금지된_요청_테스트() = runTest(testDispatcher) {
         val mockResponse = DefaultResponse(
             status = 403,
-            message = "Forbidden"
+            message = "Forbidden",
         )
         assertFailsWith<ForbiddenException> {
             defaultSafeRequest { mockResponse }
@@ -71,7 +68,7 @@ class DefaultSafeRequestTest {
     fun 찾을_수_없음_테스트() = runTest(testDispatcher) {
         val mockResponse = DefaultResponse(
             status = 404,
-            message = "Not Found"
+            message = "Not Found",
         )
         assertFailsWith<NotFoundException> {
             defaultSafeRequest { mockResponse }
@@ -82,7 +79,7 @@ class DefaultSafeRequestTest {
     fun 충돌_에러_테스트() = runTest(testDispatcher) {
         val mockResponse = DefaultResponse(
             status = 409,
-            message = "Conflict"
+            message = "Conflict",
         )
         assertFailsWith<ConflictException> {
             defaultSafeRequest { mockResponse }
@@ -93,7 +90,7 @@ class DefaultSafeRequestTest {
     fun 잠금_에러_테스트() = runTest(testDispatcher) {
         val mockResponse = DefaultResponse(
             status = 423,
-            message = "Locked"
+            message = "Locked",
         )
         assertFailsWith<LockedException> {
             defaultSafeRequest { mockResponse }
@@ -104,7 +101,7 @@ class DefaultSafeRequestTest {
     fun 너무_많은_요청_테스트() = runTest(testDispatcher) {
         val mockResponse = DefaultResponse(
             status = 429,
-            message = "Too Many Requests"
+            message = "Too Many Requests",
         )
         assertFailsWith<TooManyRequestsException> {
             defaultSafeRequest { mockResponse }
@@ -115,14 +112,10 @@ class DefaultSafeRequestTest {
     fun 내부_서버_에러_테스트() = runTest(testDispatcher) {
         val mockResponse = DefaultResponse(
             status = 500,
-            message = "Internal Server Error"
+            message = "Internal Server Error",
         )
         assertFailsWith<InternalServerException> {
             defaultSafeRequest { mockResponse }
         }
     }
-
-
-
-
 }

@@ -1,6 +1,5 @@
 package com.b1nd.dodam.logging
 
-
 expect class PlatformLogger(logLevel: LogLevelController) : Logger, TagProvider {
     override fun verbose(tag: String, msg: String)
     override fun debug(tag: String, msg: String)

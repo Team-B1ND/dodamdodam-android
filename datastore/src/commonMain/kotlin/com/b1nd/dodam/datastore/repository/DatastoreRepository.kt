@@ -18,14 +18,14 @@ class DatastoreRepository constructor(
 
     val user = dataStore.data.map {
         User(
-            id = keyStoreManager.decrypt(it[idKey]?: ""),
-            pw = keyStoreManager.decrypt(it[pwKey]?: ""),
-            token = it[tokenKey]?: "",
+            id = keyStoreManager.decrypt(it[idKey] ?: ""),
+            pw = keyStoreManager.decrypt(it[pwKey] ?: ""),
+            token = it[tokenKey] ?: "",
         )
     }
 
     val token = dataStore.data.map {
-        it[tokenKey]?: ""
+        it[tokenKey] ?: ""
     }
 
     suspend fun saveUser(id: String, pw: String, token: String) {

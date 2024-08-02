@@ -6,7 +6,7 @@ enum class LogLevel(val level: Int) {
     Info(ERROR_MASK or WARN_MASK or INFO_MASK),
     Warn(ERROR_MASK or WARN_MASK),
     Error(ERROR_MASK),
-    Off(0)
+    Off(0),
 }
 
 const val ERROR_MASK = 0x1

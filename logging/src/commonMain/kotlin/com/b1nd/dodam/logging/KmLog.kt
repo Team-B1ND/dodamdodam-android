@@ -6,78 +6,93 @@ open class KmLog(tag: String) {
     constructor() : this(KmLogging.createTag("KmLog").first)
 
     inline fun verbose(msg: () -> Any?) {
-        if (KmLogging.isLoggingVerbose)
+        if (KmLogging.isLoggingVerbose) {
             verboseApi(tagName, msg().toString())
+        }
     }
 
     inline fun verbose(tag: String, msg: () -> Any?) {
-        if (KmLogging.isLoggingVerbose)
+        if (KmLogging.isLoggingVerbose) {
             verboseApi(tag, msg().toString())
+        }
     }
 
     inline fun v(tag: String? = null, msg: () -> Any?) {
-        if (KmLogging.isLoggingVerbose)
+        if (KmLogging.isLoggingVerbose) {
             verboseApi(tag ?: tagName, msg().toString())
+        }
     }
 
     inline fun debug(msg: () -> Any?) {
-        if (KmLogging.isLoggingDebug)
+        if (KmLogging.isLoggingDebug) {
             debugApi(tagName, msg().toString())
+        }
     }
 
     inline fun debug(tag: String, msg: () -> Any?) {
-        if (KmLogging.isLoggingDebug)
+        if (KmLogging.isLoggingDebug) {
             debugApi(tag, msg().toString())
+        }
     }
 
     inline fun d(tag: String? = null, msg: () -> Any?) {
-        if (KmLogging.isLoggingDebug)
+        if (KmLogging.isLoggingDebug) {
             debugApi(tag ?: tagName, msg().toString())
+        }
     }
 
     inline fun info(msg: () -> Any?) {
-        if (KmLogging.isLoggingInfo)
+        if (KmLogging.isLoggingInfo) {
             infoApi(tagName, msg().toString())
+        }
     }
 
     inline fun info(tag: String, msg: () -> Any?) {
-        if (KmLogging.isLoggingInfo)
+        if (KmLogging.isLoggingInfo) {
             infoApi(tag, msg().toString())
+        }
     }
 
     inline fun i(tag: String? = null, msg: () -> Any?) {
-        if (KmLogging.isLoggingInfo)
+        if (KmLogging.isLoggingInfo) {
             infoApi(tag ?: tagName, msg().toString())
+        }
     }
 
     inline fun warn(msg: () -> Any?) {
-        if (KmLogging.isLoggingWarning)
+        if (KmLogging.isLoggingWarning) {
             warnApi(tagName, msg().toString(), null)
+        }
     }
 
     inline fun warn(err: Throwable?, tag: String? = null, msg: () -> Any?) {
-        if (KmLogging.isLoggingWarning)
+        if (KmLogging.isLoggingWarning) {
             warnApi(tag ?: tagName, msg().toString(), err)
+        }
     }
 
     inline fun w(err: Throwable? = null, tag: String? = null, msg: () -> Any?) {
-        if (KmLogging.isLoggingWarning)
+        if (KmLogging.isLoggingWarning) {
             warnApi(tag ?: tagName, msg().toString(), err)
+        }
     }
 
     inline fun error(msg: () -> Any?) {
-        if (KmLogging.isLoggingError)
+        if (KmLogging.isLoggingError) {
             errorApi(tagName, msg().toString(), null)
+        }
     }
 
     inline fun error(err: Throwable?, tag: String? = null, msg: () -> Any?) {
-        if (KmLogging.isLoggingError)
+        if (KmLogging.isLoggingError) {
             errorApi(tag ?: tagName, msg().toString(), err)
+        }
     }
 
     inline fun e(err: Throwable? = null, tag: String? = null, msg: () -> Any?) {
-        if (KmLogging.isLoggingError)
+        if (KmLogging.isLoggingError) {
             errorApi(tag ?: tagName, msg().toString(), err)
+        }
     }
 
     @PublishedApi
@@ -126,8 +141,9 @@ open class KmLog(tag: String) {
  * @param tag string to be used instead of the calculated tag based on the class name or file name.
  */
 fun logging(tag: String? = null): KmLog {
-    if (tag != null)
+    if (tag != null) {
         return logFactory.get()?.createKmLog(tag, tag) ?: KmLog(tag)
+    }
     val (tagCalculated, className) = KmLogging.createTag("KmLog")
     return logFactory.get()?.createKmLog(tagCalculated, className) ?: KmLog(tagCalculated)
 }

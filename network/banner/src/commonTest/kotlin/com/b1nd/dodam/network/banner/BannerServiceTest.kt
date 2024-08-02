@@ -11,12 +11,12 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDateTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalDateTime
 
 class BannerServiceTest {
 
@@ -45,7 +45,7 @@ class BannerServiceTest {
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
-            }
+            },
         ) {
             install(ContentNegotiation) {
                 json()
@@ -67,7 +67,7 @@ class BannerServiceTest {
                 status = NetworkBannerStatus.ACTIVE,
                 expireAt = LocalDateTime.parse("2024-05-31T23:59:59"),
             ),
-            response.first()
+            response.first(),
         )
     }
 }

@@ -5,12 +5,10 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import okio.Path.Companion.toPath
 
-fun createCoreDataStore(
-    producePath: () -> String,
-): DataStore<Preferences> = PreferenceDataStoreFactory.createWithPath(
+fun createCoreDataStore(producePath: () -> String): DataStore<Preferences> = PreferenceDataStoreFactory.createWithPath(
     corruptionHandler = null,
     migrations = emptyList(),
     produceFile = { producePath().toPath() },
 )
 
-internal const val dataStoreFileName = "dodam_preferences.preferences_pb"
+internal const val DATA_STORE_FILE_NAME = "dodam_preferences.preferences_pb"

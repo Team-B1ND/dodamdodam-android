@@ -16,13 +16,13 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class NightStudyServiceTest {
 
@@ -32,20 +32,16 @@ class NightStudyServiceTest {
     @BeforeTest
     fun setup() {
         val httpClient = HttpClient(MockEngine) {
-
             engine {
                 addHandler { request ->
                     val path = "https://" + request.url.host + request.url.fullPath
                     val method = request.method.value
 
-                    fun MockRequestHandleScope.makeOkRespond(
-                        content: String
-                    ): HttpResponseData =
-                        respond(
-                            content = content,
-                            status = HttpStatusCode.OK,
-                            headers = headersOf(HttpHeaders.ContentType, "application/json")
-                        )
+                    fun MockRequestHandleScope.makeOkRespond(content: String): HttpResponseData = respond(
+                        content = content,
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
                     when {
                         DodamUrl.NightStudy.MY == path && method == "GET" -> {
                             makeOkRespond(
@@ -76,7 +72,7 @@ class NightStudyServiceTest {
                                         }
                                     ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.NIGHT_STUDY == path -> {
@@ -86,7 +82,7 @@ class NightStudyServiceTest {
                                     "status": 200,
                                     "message": "심자 신청 성공"
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                             respond(
                                 content = """
@@ -96,7 +92,7 @@ class NightStudyServiceTest {
                                     }
                                 """.trimIndent(),
                                 status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                headers = headersOf(HttpHeaders.ContentType, "application/json"),
                             )
                         }
                         "${DodamUrl.NIGHT_STUDY}/1" == path && method == "DELETE" -> {
@@ -106,7 +102,7 @@ class NightStudyServiceTest {
                                     "status": 200,
                                     "message": "심자 신청 취소 성공"
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         else -> error("not found $path")
@@ -145,10 +141,10 @@ class NightStudyServiceTest {
                     endAt = LocalDate.parse("2023-08-31"),
                     createdAt = LocalDateTime.parse("2023-07-01T12:00:00"),
                     modifiedAt = LocalDateTime.parse("2023-07-15T15:30:00"),
-                    rejectReason = null
-                )
+                    rejectReason = null,
+                ),
             ),
-            response
+            response,
         )
     }
 
@@ -165,19 +161,19 @@ class NightStudyServiceTest {
 
         assertEquals(
             Unit,
-            response
+            response,
         )
     }
 
     @Test
     fun 심자_신청_취소() = runTest(testDispatcher) {
         val response = nightStudyService.deleteNightStudy(
-            id = 1
+            id = 1,
         )
 
         assertEquals(
             Unit,
-            response
+            response,
         )
     }
 }

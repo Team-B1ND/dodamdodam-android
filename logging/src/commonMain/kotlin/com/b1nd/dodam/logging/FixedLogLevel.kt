@@ -1,6 +1,5 @@
 package com.b1nd.dodam.logging
 
-
 class FixedLogLevel(private val isLogging: Boolean) : LogLevelController {
     override fun isLoggingVerbose() = isLogging
     override fun isLoggingDebug() = isLogging

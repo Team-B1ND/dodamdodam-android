@@ -15,12 +15,12 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDate
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalDate
 
 class PointServiceTest {
 
@@ -69,7 +69,7 @@ class PointServiceTest {
                             }
                         """.trimIndent(),
                         status = HttpStatusCode.OK,
-                        headers = headersOf(HttpHeaders.ContentType, "application/json")
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
                     )
                 }
             }
@@ -91,24 +91,24 @@ class PointServiceTest {
                         grade = 1,
                         number = 1,
                         room = 1,
-                        name = "박박박"
+                        name = "박박박",
                     ),
                     teacher = TeacherResponse(
                         name = "교교교",
                         position = "교무부장",
-                        tel = "0311234567"
+                        tel = "0311234567",
                     ),
                     reason = PointReasonResponse(
                         id = 1,
                         reason = "청소 미흡",
                         score = 3,
                         scoreType = NetworkScoreType.MINUS,
-                        pointType = NetworkPointType.DORMITORY
+                        pointType = NetworkPointType.DORMITORY,
                     ),
-                    issueAt = LocalDate.parse("2024-08-02")
-                )
+                    issueAt = LocalDate.parse("2024-08-02"),
+                ),
             ),
-            response
+            response,
         )
     }
 }

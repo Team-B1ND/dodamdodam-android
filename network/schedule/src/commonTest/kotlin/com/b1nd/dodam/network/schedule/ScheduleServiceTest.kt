@@ -12,12 +12,12 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDate
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalDate
 
 class ScheduleServiceTest {
 
@@ -51,7 +51,7 @@ class ScheduleServiceTest {
                             }
                         """.trimIndent(),
                         status = HttpStatusCode.OK,
-                        headers = headersOf(HttpHeaders.ContentType, "application/json")
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
                     )
                 }
             }
@@ -64,7 +64,7 @@ class ScheduleServiceTest {
     fun 일정_조회() = runTest(testDispatcher) {
         val response = scheduleService.getScheduleBetweenPeriods(
             startDate = "2024-08-03",
-            endDate = "2024-08-04"
+            endDate = "2024-08-04",
         )
 
         assertEquals(
@@ -75,11 +75,10 @@ class ScheduleServiceTest {
                     place = "강당",
                     type = NetworkScheduleType.ACADEMIC,
                     date = listOf(LocalDate(2024, 8, 3), LocalDate(2024, 8, 4)),
-                    targetGrades = listOf(NetworkGrade.GRADE_1, NetworkGrade.GRADE_2)
-                )
+                    targetGrades = listOf(NetworkGrade.GRADE_1, NetworkGrade.GRADE_2),
+                ),
             ),
-            response
+            response,
         )
     }
-
 }
