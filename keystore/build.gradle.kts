@@ -1,9 +1,8 @@
 import com.b1nd.dodam.dsl.setIOS
 
 plugins {
-    alias(libs.plugins.dodam.android)
-    alias(libs.plugins.dodam.koin)
     alias(libs.plugins.dodam.multiplatform)
+    alias(libs.plugins.dodam.multiplatform.koin)
 }
 
 kotlin {
