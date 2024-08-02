@@ -16,11 +16,11 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 
 class MemberServiceTest {
 
@@ -37,16 +37,13 @@ class MemberServiceTest {
                 addHandler { request ->
                     val path = "https://" + request.url.host + request.url.fullPath
 
-                    fun MockRequestHandleScope.makeOkRespond(
-                        content: String
-                    ): HttpResponseData =
-                        respond(
-                            content = content,
-                            status = HttpStatusCode.OK,
-                            headers = headersOf(HttpHeaders.ContentType, "application/json")
-                        )
+                    fun MockRequestHandleScope.makeOkRespond(content: String): HttpResponseData = respond(
+                        content = content,
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
 
-                    when(path) {
+                    when (path) {
                         DodamUrl.Member.MY -> {
                             makeOkRespond(
                                 content = """
@@ -54,7 +51,7 @@ class MemberServiceTest {
                                     "status": 200,
                                     "message": "멤버 정보 불러오기 성공",
                                     "data": {
-                                        
+
                                       "createdAt": "2023-08-01T12:00:00Z",
                                       "email": "example@example.com",
                                       "id": "12345",
@@ -78,7 +75,7 @@ class MemberServiceTest {
                                       }
                                     }
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.Member.DEACTIVATION -> {
@@ -88,7 +85,7 @@ class MemberServiceTest {
                                     "status": 200,
                                     "message": "회원 탈퇴 성공"
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         else -> error("not valid $path")
@@ -120,15 +117,15 @@ class MemberServiceTest {
                     id = 1001,
                     name = "박박박",
                     number = 5,
-                    room = 12
+                    room = 12,
                 ),
                 teacher = TeacherResponse(
                     id = 2001,
                     position = "교무부장",
-                    tel = "0311234567"
-                )
+                    tel = "0311234567",
+                ),
             ),
-            response
+            response,
         )
     }
 
@@ -138,7 +135,7 @@ class MemberServiceTest {
 
         assertEquals(
             Unit,
-            response
+            response,
         )
     }
 }

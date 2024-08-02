@@ -17,14 +17,14 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.json.JsonNull.content
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class OutingServiceTest {
 
@@ -34,7 +34,6 @@ class OutingServiceTest {
     @BeforeTest
     fun setup() {
         val httpClient = HttpClient(MockEngine) {
-
             install(ContentNegotiation) {
                 json()
             }
@@ -44,14 +43,11 @@ class OutingServiceTest {
                     val path = "https://" + request.url.host + request.url.fullPath
                     val method = request.method.value
 
-                    fun MockRequestHandleScope.makeOkRespond(
-                        content: String
-                    ): HttpResponseData =
-                        respond(
-                            content = content,
-                            status = HttpStatusCode.OK,
-                            headers = headersOf(HttpHeaders.ContentType, "application/json")
-                        )
+                    fun MockRequestHandleScope.makeOkRespond(content: String): HttpResponseData = respond(
+                        content = content,
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
 
                     when {
                         DodamUrl.Outing.MY == path && method == "GET" -> {
@@ -80,7 +76,7 @@ class OutingServiceTest {
                                         }
                                     ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.Sleepover.MY == path && method == "GET" -> {
@@ -109,7 +105,7 @@ class OutingServiceTest {
                                         }
                                     ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.OUTING == path && method == "POST" -> {
@@ -119,7 +115,7 @@ class OutingServiceTest {
                                     "status": 200,
                                     "message": "외출 등록 성공"
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.SLEEPOVER == path && method == "POST" -> {
@@ -129,7 +125,7 @@ class OutingServiceTest {
                                     "status": 200,
                                     "message": "외박 등록 성공"
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         "${DodamUrl.OUTING}/1" == path && method == "DELETE" -> {
@@ -139,7 +135,7 @@ class OutingServiceTest {
                                     "status": 200,
                                     "message": "외출 삭제 성공"
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
 
@@ -150,7 +146,7 @@ class OutingServiceTest {
                                     "status": 200,
                                     "message": "외박 삭제 성공"
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         else -> error("not found $path")
@@ -177,16 +173,16 @@ class OutingServiceTest {
                         name = "박박박",
                         grade = 1,
                         room = 1,
-                        number = 1
+                        number = 1,
                     ),
                     startAt = LocalDateTime.parse("2024-08-01T09:00:00"),
                     endAt = LocalDateTime.parse("2024-08-01T11:00:00"),
                     createdAt = LocalDateTime.parse("2024-07-31T14:30:00"),
                     modifiedAt = LocalDateTime.parse("2024-08-01T08:00:00"),
-                    rejectReason = null
-                )
+                    rejectReason = null,
+                ),
             ),
-            response
+            response,
         )
     }
 
@@ -205,16 +201,16 @@ class OutingServiceTest {
                         name = "박박박",
                         grade = 1,
                         room = 1,
-                        number = 1
+                        number = 1,
                     ),
                     startAt = LocalDate.parse("2024-08-01"),
                     endAt = LocalDate.parse("2024-08-01"),
                     createdAt = LocalDateTime.parse("2024-07-31T14:30:00"),
                     modifiedAt = LocalDateTime.parse("2024-08-01T08:00:00"),
-                    rejectReason = null
-                )
+                    rejectReason = null,
+                ),
             ),
-            response
+            response,
         )
     }
 
@@ -223,12 +219,12 @@ class OutingServiceTest {
         val response = outingService.askOuting(
             reason = "test",
             startAt = LocalDateTime.parse("2024-07-31T14:30:00"),
-            endAt = LocalDateTime.parse("2024-07-31T17:30:00")
+            endAt = LocalDateTime.parse("2024-07-31T17:30:00"),
         )
 
         assertEquals(
             Unit,
-            response
+            response,
         )
     }
 
@@ -237,12 +233,12 @@ class OutingServiceTest {
         val response = outingService.askSleepover(
             reason = "test",
             startAt = LocalDate.parse("2024-07-31"),
-            endAt = LocalDate.parse("2024-08-01")
+            endAt = LocalDate.parse("2024-08-01"),
         )
 
         assertEquals(
             Unit,
-            response
+            response,
         )
     }
 
@@ -252,7 +248,7 @@ class OutingServiceTest {
 
         assertEquals(
             Unit,
-            response
+            response,
         )
     }
 
@@ -262,7 +258,7 @@ class OutingServiceTest {
 
         assertEquals(
             Unit,
-            response
+            response,
         )
     }
 }

@@ -11,14 +11,13 @@ import com.b1nd.dodam.common.exception.TooManyRequestsException
 import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.safeRequest
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 
 class SafeRequestTest {
-
 
     private val testDispatcher = StandardTestDispatcher()
 
@@ -27,7 +26,7 @@ class SafeRequestTest {
         val mockResponse = Response(
             status = 200,
             data = "Success",
-            message = "OK"
+            message = "OK",
         )
 
         val result = safeRequest { mockResponse }
@@ -39,7 +38,7 @@ class SafeRequestTest {
         val mockResponse = Response<Unit>(
             status = 200,
             data = null,
-            message = "No data"
+            message = "No data",
         )
         assertFailsWith<DataNotFoundException> {
             safeRequest { mockResponse }
@@ -51,7 +50,7 @@ class SafeRequestTest {
         val mockResponse = Response<Unit>(
             status = 400,
             data = null,
-            message = "Bad Request"
+            message = "Bad Request",
         )
         assertFailsWith<BadRequestException> {
             safeRequest { mockResponse }
@@ -63,7 +62,7 @@ class SafeRequestTest {
         val mockResponse = Response<Unit>(
             status = 401,
             data = null,
-            message = "Unauthorized"
+            message = "Unauthorized",
         )
         assertFailsWith<UnauthorizedException> {
             safeRequest { mockResponse }
@@ -75,7 +74,7 @@ class SafeRequestTest {
         val mockResponse = Response<Unit>(
             status = 403,
             data = null,
-            message = "Forbidden"
+            message = "Forbidden",
         )
         assertFailsWith<ForbiddenException> {
             safeRequest { mockResponse }
@@ -87,7 +86,7 @@ class SafeRequestTest {
         val mockResponse = Response<Unit>(
             status = 404,
             data = null,
-            message = "Not Found"
+            message = "Not Found",
         )
         assertFailsWith<NotFoundException> {
             safeRequest { mockResponse }
@@ -99,7 +98,7 @@ class SafeRequestTest {
         val mockResponse = Response<Unit>(
             status = 409,
             data = null,
-            message = "Conflict"
+            message = "Conflict",
         )
         assertFailsWith<ConflictException> {
             safeRequest { mockResponse }
@@ -111,7 +110,7 @@ class SafeRequestTest {
         val mockResponse = Response<Unit>(
             status = 423,
             data = null,
-            message = "Locked"
+            message = "Locked",
         )
         assertFailsWith<LockedException> {
             safeRequest { mockResponse }
@@ -123,7 +122,7 @@ class SafeRequestTest {
         val mockResponse = Response<Unit>(
             status = 429,
             data = null,
-            message = "Too Many Requests"
+            message = "Too Many Requests",
         )
         assertFailsWith<TooManyRequestsException> {
             safeRequest { mockResponse }
@@ -135,14 +134,10 @@ class SafeRequestTest {
         val mockResponse = Response<Unit>(
             status = 500,
             data = null,
-            message = "Internal Server Error"
+            message = "Internal Server Error",
         )
         assertFailsWith<InternalServerException> {
             safeRequest { mockResponse }
         }
     }
-
-
-
-
 }

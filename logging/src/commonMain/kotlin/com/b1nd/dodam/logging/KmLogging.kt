@@ -90,58 +90,69 @@ object KmLogging {
         isLoggingWarning = false
         isLoggingError = false
         for (logger in loggers.get()) {
-            if (logger.isLoggingVerbose())
+            if (logger.isLoggingVerbose()) {
                 isLoggingVerbose = true
-            if (logger.isLoggingDebug())
+            }
+            if (logger.isLoggingDebug()) {
                 isLoggingDebug = true
-            if (logger.isLoggingInfo())
+            }
+            if (logger.isLoggingInfo()) {
                 isLoggingInfo = true
-            if (logger.isLoggingWarning())
+            }
+            if (logger.isLoggingWarning()) {
                 isLoggingWarning = true
-            if (logger.isLoggingError())
+            }
+            if (logger.isLoggingError()) {
                 isLoggingError = true
+            }
         }
     }
 
     fun verbose(tag: String, msg: String) {
         for (logger in loggers.get()) {
-            if (logger.isLoggingVerbose())
+            if (logger.isLoggingVerbose()) {
                 logger.verbose(tag, msg)
+            }
         }
     }
 
     fun debug(tag: String, msg: String) {
         for (logger in loggers.get()) {
-            if (logger.isLoggingDebug())
+            if (logger.isLoggingDebug()) {
                 logger.debug(tag, msg)
+            }
         }
     }
 
     fun info(tag: String, msg: String) {
         for (logger in loggers.get()) {
-            if (logger.isLoggingInfo())
+            if (logger.isLoggingInfo()) {
                 logger.info(tag, msg)
+            }
         }
     }
 
     fun warn(tag: String, msg: String, t: Throwable? = null) {
         for (logger in loggers.get()) {
-            if (logger.isLoggingWarning())
+            if (logger.isLoggingWarning()) {
                 logger.warn(tag, msg, t)
+            }
         }
     }
 
     fun error(tag: String, msg: String, t: Throwable? = null) {
         for (logger in loggers.get()) {
-            if (logger.isLoggingError())
+            if (logger.isLoggingError()) {
                 logger.error(tag, msg, t)
+            }
         }
     }
 
     fun createTag(fromClass: String? = null): Pair<String, String> {
         for (logger in loggers.get()) {
-            if (logger is TagProvider)
+            if (logger is TagProvider) {
                 return logger.createTag(fromClass)
+            }
         }
         return Pair("", "")
     }

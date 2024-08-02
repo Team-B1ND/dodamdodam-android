@@ -20,7 +20,7 @@ actual class PlatformLogger actual constructor(actual val logLevel: LogLevelCont
             __dso_handle.ptr,
             OS_LOG_DEFAULT,
             OS_LOG_TYPE_DEBUG,
-            message("V", tag, msg)
+            message("V", tag, msg),
         )
     }
 
@@ -33,7 +33,7 @@ actual class PlatformLogger actual constructor(actual val logLevel: LogLevelCont
             __dso_handle.ptr,
             OS_LOG_DEFAULT,
             OS_LOG_TYPE_DEFAULT,
-            message("I", tag, msg)
+            message("I", tag, msg),
         )
     }
 
@@ -42,7 +42,7 @@ actual class PlatformLogger actual constructor(actual val logLevel: LogLevelCont
             __dso_handle.ptr,
             OS_LOG_DEFAULT,
             OS_LOG_TYPE_ERROR,
-            message("W", tag, msg, t)
+            message("W", tag, msg, t),
         )
     }
 
@@ -51,7 +51,7 @@ actual class PlatformLogger actual constructor(actual val logLevel: LogLevelCont
             __dso_handle.ptr,
             OS_LOG_DEFAULT,
             OS_LOG_TYPE_FAULT,
-            message("E", tag, msg, t)
+            message("E", tag, msg, t),
         )
     }
 
@@ -69,8 +69,9 @@ actual class PlatformLogger actual constructor(actual val logLevel: LogLevelCont
 
             if (stackEntry.contains("KmLog") && stack.size > index) {
                 val nextEntry = stack[index + 1].toString()
-                if (!nextEntry.contains("KmLog"))
+                if (!nextEntry.contains("KmLog")) {
                     clsName = nextEntry
+                }
             }
             if (fromClass != null && stackEntry.contains(fromClass) && stack.size > index) {
                 clsName = stack[index + 1].toString()

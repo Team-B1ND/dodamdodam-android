@@ -17,15 +17,13 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.JsonNull.content
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-
-private const val s = """videoUrl"""
 
 class WakeupSongServiceTest {
     private lateinit var wakeupSongService: WakeupSongService
@@ -43,14 +41,11 @@ class WakeupSongServiceTest {
                     val path = "https://" + request.url.host + request.url.fullPath
                     val method = request.method.value
 
-                    fun MockRequestHandleScope.makeOkRespond(
-                        content: String
-                    ): HttpResponseData =
-                        respond(
-                            content = content,
-                            status = HttpStatusCode.OK,
-                            headers = headersOf(HttpHeaders.ContentType, "application/json")
-                        )
+                    fun MockRequestHandleScope.makeOkRespond(content: String): HttpResponseData = respond(
+                        content = content,
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
 
                     when {
                         "${DodamUrl.WakeupSong.ALLOWED}?year=2024&month=7&day=29" == path && method == "GET" -> {
@@ -72,7 +67,7 @@ class WakeupSongServiceTest {
                                         }
                                     ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.WakeupSong.MY == path && method == "GET" -> {
@@ -94,7 +89,7 @@ class WakeupSongServiceTest {
                                         }
                                     ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.WakeupSong.PENDING == path && method == "GET" -> {
@@ -116,7 +111,7 @@ class WakeupSongServiceTest {
                                         }
                                     ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         "${DodamUrl.WakeupSong.MY}/1" == path && method == "DELETE" -> {
@@ -126,7 +121,7 @@ class WakeupSongServiceTest {
                                     "status": 200,
                                     "message": "대기중인 기상곡 불러오기 성공"
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.WakeupSong.KEY_WORD == path && method == "POST" -> {
@@ -136,7 +131,7 @@ class WakeupSongServiceTest {
                                     "status": 200,
                                     "message": "기상송 신청 성공"
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         "${DodamUrl.WakeupSong.SEARCH}?keyword=test" == path && method == "GET" -> {
@@ -155,7 +150,7 @@ class WakeupSongServiceTest {
                                         }
                                     ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.WakeupSong.CHART == path && method == "GET" -> {
@@ -174,7 +169,7 @@ class WakeupSongServiceTest {
                                         }
                                     ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         else -> error("not found $path")
@@ -198,10 +193,10 @@ class WakeupSongServiceTest {
                     videoUrl = "https://youtube.com/watch?v=q3R5W6",
                     channelTitle = "test",
                     status = NetworkStatus.ALLOWED,
-                    createdAt = LocalDate(2024, 7, 29)
-                )
+                    createdAt = LocalDate(2024, 7, 29),
+                ),
             ),
-            response
+            response,
         )
     }
 
@@ -218,10 +213,10 @@ class WakeupSongServiceTest {
                     videoUrl = "https://youtube.com/watch?v=q3R5W6",
                     channelTitle = "test",
                     status = NetworkStatus.PENDING,
-                    createdAt = LocalDate(2024, 7, 29)
-                )
+                    createdAt = LocalDate(2024, 7, 29),
+                ),
             ),
-            response
+            response,
         )
     }
 
@@ -239,10 +234,10 @@ class WakeupSongServiceTest {
                     videoUrl = "https://youtube.com/watch?v=q3R5W6",
                     channelTitle = "test",
                     status = NetworkStatus.PENDING,
-                    createdAt = LocalDate(2024, 7, 29)
-                )
+                    createdAt = LocalDate(2024, 7, 29),
+                ),
             ),
-            response
+            response,
         )
     }
 
@@ -265,9 +260,9 @@ class WakeupSongServiceTest {
                     videoId = "q3R5W6",
                     videoUrl = "https://youtube.com/watch?v=q3R5W6",
                     channelTitle = "test",
-                )
+                ),
             ),
-            response
+            response,
         )
     }
 
@@ -282,10 +277,10 @@ class WakeupSongServiceTest {
                     artist = "test",
                     name = "test",
                     rank = 1,
-                    album = "test"
-                )
+                    album = "test",
+                ),
             ),
-            response
+            response,
         )
     }
 }

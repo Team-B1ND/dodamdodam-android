@@ -15,6 +15,9 @@ class VariableLogLevel(private val level: Int) : LogLevelController {
     override fun isLoggingError() = level and ERROR_MASK > 0
 
     override fun toString(): String {
-        return "VariableLogLevel(level=$level verbose:${isLoggingVerbose()} debug:${isLoggingDebug()} info:${isLoggingInfo()} warn:${isLoggingWarning()} error:${isLoggingError()})"
+        return "VariableLogLevel(level=$level" +
+            " verbose:${isLoggingVerbose()} debug:${isLoggingDebug()}" +
+            " info:${isLoggingInfo()} warn:${isLoggingWarning()}" +
+            " error:${isLoggingError()})"
     }
 }

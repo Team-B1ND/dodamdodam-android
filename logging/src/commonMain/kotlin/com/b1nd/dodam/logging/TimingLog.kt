@@ -51,8 +51,9 @@ class TimingLog(private val label: String, tag: String? = null) {
                 val timeStr = if (t.isVerbose) msDiff(now, prev) else msDiff(now, prevDebug)
                 KmLogging.debug(tagName, "$label:$indent$timeStr $msg")
                 prev = now
-                if (!t.isVerbose)
+                if (!t.isVerbose) {
                     prevDebug = now
+                }
             }
             KmLogging.debug(tagName, "$label: end ${msDiff(now, first)}")
         }
@@ -73,10 +74,11 @@ class TimingLog(private val label: String, tag: String? = null) {
         fun truncateDecimal(num: Float, decPlaces: Int): String {
             val str = num.toString()
             val dotPos = str.indexOf('.')
-            return if (dotPos >= 0 && dotPos < str.length - decPlaces)
+            return if (dotPos >= 0 && dotPos < str.length - decPlaces) {
                 str.substring(0..(dotPos + decPlaces))
-            else
+            } else {
                 str
+            }
         }
     }
 }

@@ -9,11 +9,11 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 
 class RegisterServiceTest {
 
@@ -37,7 +37,7 @@ class RegisterServiceTest {
                             }
                         """.trimIndent(),
                         status = HttpStatusCode.OK,
-                        headers = headersOf(HttpHeaders.ContentType, "application/json")
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
                     )
                 }
             }
@@ -56,10 +56,9 @@ class RegisterServiceTest {
             number = 1,
             phone = "01011112222",
             pw = "test",
-            room = 1
+            room = 1,
         )
 
         assertEquals(Unit, response)
     }
-
 }
