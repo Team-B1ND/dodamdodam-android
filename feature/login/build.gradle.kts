@@ -17,5 +17,4 @@ dependencies {
     implementation(projects.data.login)
     implementation(projects.ui)
     implementation(libs.dodam.design.system)
-    implementation(libs.androidx.datastore.preference)
 }

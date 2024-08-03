@@ -9,7 +9,7 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
@@ -67,4 +67,5 @@ include(
     ":data:point",
     ":feature-student:point",
     ":feature-student:ask-wakeup-song",
+    ":logging",
 )
