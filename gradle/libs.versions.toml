@@ -20,7 +20,7 @@ androidx-core = "1.12.0"
 androidx-lifecycle = "2.6.2"
 androidx-navigation = "2.7.6"
 androidx-material = "1.5.4"
-datastore = "1.0.0"
+datastore = "1.1.1"
 
 # google
 firebase-bom = "32.8.0"
@@ -39,6 +39,7 @@ dds = "0.1.18"
 composeinvestigator = "1.5.10-0.2.1"
 wheel-picker = "1.1.11"
 koin = "3.5.6"
+stately = "2.0.6"
 
 # test
 junit = "4.13.2"
@@ -53,6 +54,7 @@ appcompat = "1.6.1"
 [libraries]
 # kotlin
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
@@ -79,7 +81,8 @@ androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "and
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-navigation = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
-androidx-datastore-preference = { group = "androidx.datastore",name = "datastore-preferences", version.ref = "datastore" }
+androidx-datastore-core-okio = { group = "androidx.datastore", name = "datastore-core-okio", version.ref = "datastore" }
+androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
 
 # google
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
@@ -103,6 +106,7 @@ wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCo
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+stately-concurrency = { group = "co.touchlab", name = "stately-concurrency", version.ref = "stately"}
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -124,6 +128,9 @@ composeinvestigator = { id = "land.sungbin.composeinvestigator", version.ref = "
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 firbase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
 
+#kmp
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+
 # custom plugin
 dodam-android-feature = { id = "b1nd.dodam.convention.android.feature", version = "unspecified" }
 dodam-android = { id = "b1nd.dodam.primitive.android", version = "unspecified" }
@@ -134,6 +141,9 @@ dodam-koin = { id = "b1nd.dodam.primitive.koin", version = "unspecified" }
 dodam-android-application = { id = "b1nd.dodam.primitive.android.application", version = "unspecified" }
 dodam-kotlin = { id = "b1nd.dodam.convention.kotlin", version = "unspecified" }
 dodam-kotlin-serialization = { id = "b1nd.dodam.primitive.kotlin.serialization", version = "unspecified" }
+dodam-multiplatform = { id = "b1nd.dodam.primitive.multiplatform", version = "unspecified"}
+dodam-multiplatform-kotlin-serialization = { id = "b1nd.dodam.primitive.multiplatform.kotlin.serialization", version = "unspecified"}
+dodam-multiplatform-koin = { id = "b1nd.dodam.primitive.multiplatform.koin", version = "unspecified"}
 
 [bundles]
 compose-implementation = ["androidx-compose-ui", "androidx-compose-ui-foundation", "androidx-compose-ui-graphics", "androidx-compose-lifecycle", "androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview", "androidx-compose-material3"]

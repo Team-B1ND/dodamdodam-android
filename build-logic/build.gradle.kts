@@ -56,6 +56,18 @@ gradlePlugin {
             id = "b1nd.dodam.primitive.kotlin.serialization"
             implementationClass = "com.b1nd.dodam.primitive.KotlinSerializationPlugin"
         }
+        register("multiplatform") {
+            id = "b1nd.dodam.primitive.multiplatform"
+            implementationClass = "com.b1nd.dodam.primitive.MultiplatformPlugin"
+        }
+        register("multiplatformKotlinSerialization") {
+            id = "b1nd.dodam.primitive.multiplatform.kotlin.serialization"
+            implementationClass = "com.b1nd.dodam.primitive.MultiplatformKotlinSerializationPlugin"
+        }
+        register("multiplatformKoinPlugin") {
+            id = "b1nd.dodam.primitive.multiplatform.koin"
+            implementationClass = "com.b1nd.dodam.primitive.MultiplatformKoinPlugin"
+        }
         // convention
         register("androidFeature") {
             id = "b1nd.dodam.convention.android.feature"
