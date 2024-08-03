@@ -11,7 +11,6 @@ import org.gradle.api.Project
 class MultiplatformKoinPlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-
             kotlin {
                 sourceSets.commonMain.dependencies {
                     implementation(libs.library("koin-core"))
