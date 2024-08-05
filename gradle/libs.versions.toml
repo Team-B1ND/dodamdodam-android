@@ -142,6 +142,7 @@ dodam-android-application = { id = "b1nd.dodam.primitive.android.application", v
 dodam-kotlin = { id = "b1nd.dodam.convention.kotlin", version = "unspecified" }
 dodam-kotlin-serialization = { id = "b1nd.dodam.primitive.kotlin.serialization", version = "unspecified" }
 dodam-multiplatform = { id = "b1nd.dodam.primitive.multiplatform", version = "unspecified"}
+dodam-multiplatform-kotlin = { id = "b1nd.dodam.primitive.multiplatform.kotlin", version = "unspecified"}
 dodam-multiplatform-kotlin-serialization = { id = "b1nd.dodam.primitive.multiplatform.kotlin.serialization", version = "unspecified"}
 dodam-multiplatform-koin = { id = "b1nd.dodam.primitive.multiplatform.koin", version = "unspecified"}
 
