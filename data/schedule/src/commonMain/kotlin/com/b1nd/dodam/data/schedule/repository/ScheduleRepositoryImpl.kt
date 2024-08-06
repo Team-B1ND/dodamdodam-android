@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.datetime.LocalDate
+import com.b1nd.dodam.common.utiles.javaFormat
 
 internal class ScheduleRepositoryImpl constructor(
     private val network: ScheduleDataSource,
@@ -24,8 +25,8 @@ internal class ScheduleRepositoryImpl constructor(
         return flow {
             emit(
                 network.getScheduleBetweenPeriods(
-                    String.format("%02d-%02d-%02d", startDate.year, startDate.monthNumber, startDate.dayOfMonth),
-                    String.format("%02d-%02d-%02d", endDate.year, endDate.monthNumber, endDate.dayOfMonth),
+                    String.javaFormat("%02d-%02d-%02d", startDate.year, startDate.monthNumber, startDate.dayOfMonth),
+                    String.javaFormat("%02d-%02d-%02d", endDate.year, endDate.monthNumber, endDate.dayOfMonth),
                 ).map {
                     it.toModel()
                 }.toImmutableList(),
