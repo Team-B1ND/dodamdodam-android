@@ -1,9 +1,21 @@
 import com.b1nd.dodam.dsl.android
+import com.b1nd.dodam.dsl.kotlin
+import com.b1nd.dodam.dsl.setIOS
 
 plugins {
-    alias(libs.plugins.dodam.android)
-    alias(libs.plugins.dodam.android.kotlin)
-    alias(libs.plugins.dodam.koin)
+    alias(libs.plugins.dodam.multiplatform)
+    alias(libs.plugins.dodam.multiplatform.kotlin)
+    alias(libs.plugins.dodam.multiplatform.koin)
+}
+
+kotlin {
+    setIOS("data.login")
+
+    sourceSets.commonMain.dependencies {
+        implementation(projects.common)
+        implementation(projects.network.login)
+
+    }
 }
 
 android {
@@ -12,9 +24,4 @@ android {
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
     }
-}
-
-dependencies {
-    implementation(projects.common)
-    implementation(projects.network.login)
 }

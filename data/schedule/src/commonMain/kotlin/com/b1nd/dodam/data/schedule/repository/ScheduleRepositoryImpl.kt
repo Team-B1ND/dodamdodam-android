@@ -4,6 +4,7 @@ import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
+import com.b1nd.dodam.common.utiles.javaFormat
 import com.b1nd.dodam.data.schedule.ScheduleRepository
 import com.b1nd.dodam.data.schedule.model.Schedule
 import com.b1nd.dodam.data.schedule.model.toModel
@@ -24,8 +25,8 @@ internal class ScheduleRepositoryImpl constructor(
         return flow {
             emit(
                 network.getScheduleBetweenPeriods(
-                    String.format("%02d-%02d-%02d", startDate.year, startDate.monthNumber, startDate.dayOfMonth),
-                    String.format("%02d-%02d-%02d", endDate.year, endDate.monthNumber, endDate.dayOfMonth),
+                    String.javaFormat("%02d-%02d-%02d", startDate.year, startDate.monthNumber, startDate.dayOfMonth),
+                    String.javaFormat("%02d-%02d-%02d", endDate.year, endDate.monthNumber, endDate.dayOfMonth),
                 ).map {
                     it.toModel()
                 }.toImmutableList(),
