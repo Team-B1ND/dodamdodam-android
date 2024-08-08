@@ -13,6 +13,8 @@ fun Project.kotlin(block: KotlinMultiplatformExtension.() -> Unit) {
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
 fun Project.setupMultiplatform() {
     kotlin {
+        // Task testClasses not found problem solve
+        task("testClasses")
         androidTarget {
             compilations.all {
                 kotlinOptions {
