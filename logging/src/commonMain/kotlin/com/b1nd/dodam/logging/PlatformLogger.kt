@@ -8,4 +8,10 @@ expect class PlatformLogger(logLevel: LogLevelController) : Logger, TagProvider 
     override fun error(tag: String, msg: String, t: Throwable?)
     override fun createTag(fromClass: String?): Pair<String, String>
     val logLevel: LogLevelController
+
+    override fun isLoggingVerbose(): Boolean
+    override fun isLoggingDebug(): Boolean
+    override fun isLoggingError(): Boolean
+    override fun isLoggingInfo(): Boolean
+    override fun isLoggingWarning(): Boolean
 }
