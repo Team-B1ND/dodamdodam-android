@@ -19,14 +19,15 @@ class AndroidComposePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("land.sungbin.composeinvestigator")
+                // not supported Compose Compiler gradle plugin version
+//                apply("land.sungbin.composeinvestigator")
+                apply("org.jetbrains.compose")
+                apply("org.jetbrains.kotlin.plugin.compose")
             }
             val projectPath = rootProject.file(".").absolutePath
             android {
                 buildFeatures.compose = true
-                composeOptions {
-                    kotlinCompilerExtensionVersion = libs.version("androidx-compose-compiler")
-                }
+
                 kotlinOptions {
                     freeCompilerArgs = freeCompilerArgs + listOf(
                         "-P",
