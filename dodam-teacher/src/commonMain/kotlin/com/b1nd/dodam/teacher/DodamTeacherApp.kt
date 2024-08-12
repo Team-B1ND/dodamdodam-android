@@ -5,9 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun DodamTeacherApp(
-
-) {
+fun DodamTeacherApp() {
     MaterialTheme {
         Text("Hello New World")
     }
