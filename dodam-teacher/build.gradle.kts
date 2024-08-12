@@ -8,27 +8,10 @@ import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.compose)
-    id("org.jetbrains.kotlin.multiplatform")
-//    alias(libs.plugins.dodam.multiplatform)
-    alias(libs.plugins.dodam.multiplatform.kotlin)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.dodam.multiplatform.feature)
 }
-
-setupMultiplatform()
 kotlin {
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "DodamTeacher"
-            isStatic = true
-            binaryOptions["bundleId"] = "com.b1nd.dodam.teacher"
-        }
-    }
+    setIOS("DodamTeacher", "com.b1nd.dodam.teacher")
 
     sourceSets {
         androidMain.dependencies {
@@ -48,7 +31,6 @@ kotlin {
 
 android {
     namespace = "com.b1nd.dodam.teacher"
-//    compileSdk = 34
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")

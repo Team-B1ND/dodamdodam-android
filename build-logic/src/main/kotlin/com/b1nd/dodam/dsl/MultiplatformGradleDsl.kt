@@ -48,15 +48,18 @@ fun Project.setupMultiplatform() {
     }
 }
 
-fun KotlinMultiplatformExtension.setIOS(name: String) {
+fun KotlinMultiplatformExtension.setIOS(name: String, bundleId: String? = null) {
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
             baseName = name
             isStatic = true
+            if (bundleId != null) {
+                binaryOptions["bundleId"] = bundleId
+            }
         }
     }
 }
