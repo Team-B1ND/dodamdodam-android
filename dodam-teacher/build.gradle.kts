@@ -18,7 +18,6 @@ plugins {
 
 setupMultiplatform()
 kotlin {
-    val xcf = XCFramework()
     listOf(
         iosX64(),
         iosArm64(),
@@ -28,7 +27,6 @@ kotlin {
             baseName = "DodamTeacher"
             isStatic = true
             binaryOptions["bundleId"] = "com.b1nd.dodam.teacher"
-            xcf.add(this)
         }
     }
 
