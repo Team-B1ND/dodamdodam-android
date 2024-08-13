@@ -3,7 +3,6 @@ package com.b1nd.dodam.primitive
 import com.b1nd.dodam.dsl.android
 import com.b1nd.dodam.dsl.androidTestImplementation
 import com.b1nd.dodam.dsl.debugImplementation
-import com.b1nd.dodam.dsl.kotlinOptions
 import com.b1nd.dodam.dsl.library
 import com.b1nd.dodam.dsl.libs
 import com.b1nd.dodam.dsl.version

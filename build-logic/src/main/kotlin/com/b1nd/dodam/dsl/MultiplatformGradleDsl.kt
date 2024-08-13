@@ -4,6 +4,7 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 fun Project.kotlin(block: KotlinMultiplatformExtension.() -> Unit) {
@@ -16,10 +17,9 @@ fun Project.setupMultiplatform() {
         // Task testClasses not found problem solve
         task("testClasses")
         androidTarget {
-            compilations.all {
-                kotlinOptions {
-                    jvmTarget = JavaVersion.VERSION_17.toString()
-                }
+            @OptIn(ExperimentalKotlinGradlePluginApi::class)
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_17)
             }
         }
         // remove compiler warring
@@ -48,15 +48,18 @@ fun Project.setupMultiplatform() {
     }
 }
 
-fun KotlinMultiplatformExtension.setIOS(name: String) {
+fun KotlinMultiplatformExtension.setIOS(name: String, bundleId: String? = null) {
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
             baseName = name
             isStatic = true
+            if (bundleId != null) {
+                binaryOptions["bundleId"] = bundleId
+            }
         }
     }
 }
