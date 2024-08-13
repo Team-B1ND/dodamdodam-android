@@ -72,6 +72,10 @@ gradlePlugin {
             id = "b1nd.dodam.primitive.multiplatform.koin"
             implementationClass = "com.b1nd.dodam.primitive.MultiplatformKoinPlugin"
         }
+        register("multiplatformComposePlugin") {
+            id = "b1nd.dodam.primitive.multiplatform.compose"
+            implementationClass = "com.b1nd.dodam.primitive.MultiplatformComposePlugin"
+        }
         // convention
         register("androidFeature") {
             id = "b1nd.dodam.convention.android.feature"
@@ -80,6 +84,10 @@ gradlePlugin {
         register("pureKotlin") {
             id = "b1nd.dodam.convention.kotlin"
             implementationClass = "com.b1nd.dodam.convention.PureKotlinPlugin"
+        }
+        register("multiplatformFeature") {
+            id = "b1nd.dodam.convention.multiplatform.feature"
+            implementationClass = "com.b1nd.dodam.convention.MultiplatformFeaturePlugin"
         }
     }
 }
