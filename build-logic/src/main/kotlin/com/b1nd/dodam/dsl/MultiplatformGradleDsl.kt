@@ -6,6 +6,7 @@ import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 fun Project.kotlin(block: KotlinMultiplatformExtension.() -> Unit) {
     extensions.configure<KotlinMultiplatformExtension>(block)
@@ -48,7 +49,11 @@ fun Project.setupMultiplatform() {
     }
 }
 
-fun KotlinMultiplatformExtension.setIOS(name: String, bundleId: String? = null) {
+fun KotlinMultiplatformExtension.setIOS(
+    name: String,
+    bundleId: String? = null,
+    block: KotlinNativeTarget.() -> Unit = {}
+) {
     listOf(
         iosX64(),
         iosArm64(),
@@ -61,5 +66,6 @@ fun KotlinMultiplatformExtension.setIOS(name: String, bundleId: String? = null) 
                 binaryOptions["bundleId"] = bundleId
             }
         }
+        iosTarget.run(block)
     }
 }

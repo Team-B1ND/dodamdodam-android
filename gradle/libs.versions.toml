@@ -11,6 +11,7 @@ kotlinx-coroutines = "1.7.3"
 kotlinx-collections-immutable = "0.3.7"
 kotlinx-serialization-json = "1.6.2"
 kotlinx-datetime = "0.5.0"
+swift-klib = "0.6.3"
 
 # android
 androidx-activity-compose = "1.9.1"
@@ -134,6 +135,7 @@ jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugi
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 #kmp
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+swift-klib = { id = "io.github.ttypic.swiftklib", version.ref = "swift-klib"}
 
 # custom plugin
 dodam-android-feature = { id = "b1nd.dodam.convention.android.feature", version = "unspecified" }
