@@ -5,23 +5,16 @@ import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.ObjCObjectVar
-import kotlinx.cinterop.addressOf
-import kotlinx.cinterop.allocArrayOf
+import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.pointed
-import kotlinx.cinterop.alloc
 import kotlinx.cinterop.ptr
-import platform.Foundation.*
-import kotlinx.cinterop.usePinned
 import kotlinx.cinterop.value
 import platform.Foundation.NSData
-import platform.Foundation.NSDataBase64DecodingIgnoreUnknownCharacters
 import platform.Foundation.NSError
 import platform.Foundation.NSString
 import platform.Foundation.NSUTF8StringEncoding
-import platform.Foundation.create
 import platform.Foundation.dataUsingEncoding
-import platform.posix.memcpy
 
 actual class KeyStoreManager actual constructor() {
     @OptIn(ExperimentalForeignApi::class)
@@ -29,11 +22,11 @@ actual class KeyStoreManager actual constructor() {
         val text = throwError {
             Keystore.encryptDataWithData(
                 data = plainText.toNSData(),
-                error = it
+                error = it,
             )
         }
 
-        return text?: ""
+        return text ?: ""
     }
 
     @OptIn(ExperimentalForeignApi::class)
@@ -41,14 +34,13 @@ actual class KeyStoreManager actual constructor() {
         val text = throwError {
             Keystore.decryptDataWithData(
                 data = encryptedText,
-                error = it
+                error = it,
             )
         }
 
-        return text?: ""
+        return text ?: ""
     }
 }
-
 
 @Suppress("CAST_NEVER_SUCCEEDS")
 fun String.toNSData(): NSData {
@@ -69,4 +61,4 @@ fun <T> throwError(block: (errorPointer: CPointer<ObjCObjectVar<NSError?>>) -> T
     }
 }
 
-class NSErrorException(nsError: NSError): Exception(nsError.toString())
+class NSErrorException(nsError: NSError) : Exception(nsError.toString())
