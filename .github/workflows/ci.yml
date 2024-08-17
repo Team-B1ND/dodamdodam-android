@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -26,5 +26,5 @@ jobs:
     - name: Run spotless
       run: ./gradlew dodam-student:spotlessCheck
 
-    - name: Build with Gradle
-      run: ./gradlew dodam-student:clean build --parallel
+    - name: Android Build with Gradle
+      run: ./gradlew dodam-student:clean assembleRelease --parallel
