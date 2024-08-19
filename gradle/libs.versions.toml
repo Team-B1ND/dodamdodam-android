@@ -23,6 +23,8 @@ androidx-navigation = "2.7.6"
 androidx-material = "1.6.8"
 datastore = "1.1.1"
 
+androidx-lifecycle-viewmodel-compose = "2.8.0"
+
 # compose
 compose-plugin = "1.6.11"
 
@@ -43,6 +45,8 @@ dds = "0.1.18"
 composeinvestigator = "1.5.10-0.2.1"
 wheel-picker = "1.1.11"
 koin = "3.5.6"
+koin-compose = "1.1.5"
+koin-compose-viewModel = "1.2.0-Beta5"
 stately = "2.0.6"
 
 # test
@@ -84,6 +88,7 @@ androidx-compose-material = { group = "androidx.compose.material", name = "mater
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle-viewmodel-compose" }
 androidx-navigation = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
 androidx-datastore-core-okio = { group = "androidx.datastore", name = "datastore-core-okio", version.ref = "datastore" }
 androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
@@ -110,6 +115,8 @@ wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCo
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+koin-compose-multiplatform = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin-compose" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin-compose-viewModel" }
 stately-concurrency = { group = "co.touchlab", name = "stately-concurrency", version.ref = "stately"}
 
 # test
