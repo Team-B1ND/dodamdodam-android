@@ -19,6 +19,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.compose.activity)
             implementation(libs.koin.android)
+            implementation(projects.keystore)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -28,7 +29,6 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(projects.datastore)
-            implementation(projects.keystore)
             implementation(projects.logging)
         }
     }

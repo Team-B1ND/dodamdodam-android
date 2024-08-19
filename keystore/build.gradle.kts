@@ -1,30 +1,8 @@
-import com.b1nd.dodam.dsl.setIOS
 
 plugins {
-    alias(libs.plugins.dodam.multiplatform)
-    alias(libs.plugins.dodam.multiplatform.koin)
-    alias(libs.plugins.swift.klib)
-}
-
-kotlin {
-    setIOS("keystore") {
-        compilations.getByName("main") {
-            cinterops.create("Keystore")
-        }
-    }
-
-    sourceSets {
-        androidMain.dependencies {
-
-        }
-        commonMain.dependencies {
-            implementation(projects.common)
-        }
-
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-    }
+    alias(libs.plugins.dodam.android)
+    alias(libs.plugins.dodam.koin)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -32,11 +10,12 @@ android {
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
     }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
-swiftklib {
-    create("Keystore") {
-        path = file("native/Keystore")
-        packageName("com.b1nd.dodam.ios.keystore")
-    }
+dependencies {
+    implementation(projects.common)
+    implementation(libs.androidx.core.ktx)
 }
