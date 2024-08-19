@@ -11,9 +11,11 @@ plugins {
 kotlin {
     setIOS("datastore")
     sourceSets {
+        androidMain.dependencies {
+            implementation(projects.keystore)
+        }
         commonMain.dependencies {
             implementation(projects.common)
-            implementation(projects.keystore)
             implementation(libs.androidx.datastore.preferences.core)
         }
     }
