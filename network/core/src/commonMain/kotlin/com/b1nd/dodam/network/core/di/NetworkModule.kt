@@ -1,7 +1,7 @@
 package com.b1nd.dodam.network.core.di
 
 import com.b1nd.dodam.common.exception.UnauthorizedException
-import com.b1nd.dodam.datastore.repository.DatastoreRepository
+import com.b1nd.dodam.datastore.repository.DataStoreRepository
 import com.b1nd.dodam.logging.logging
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
@@ -35,7 +35,7 @@ val log = logging()
 
 val networkCoreModule = module {
     single<HttpClient> {
-        val datastore: DatastoreRepository = get()
+        val datastore: DataStoreRepository = get()
         HttpClient(CIO) {
             install(ContentNegotiation) {
                 json(

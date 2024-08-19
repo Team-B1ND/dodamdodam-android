@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.b1nd.dodam.datastore.repository.DatastoreRepository
+import com.b1nd.dodam.datastore.repository.DataStoreRepository
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.icons.B1NDLogo
 import com.b1nd.dodam.ui.icons.DodamLogo
@@ -42,7 +42,7 @@ import org.koin.android.ext.android.inject
 @ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
 
-    private val datastoreRepository: DatastoreRepository by inject()
+    private val datastoreRepository: DataStoreRepository by inject()
 
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
 
