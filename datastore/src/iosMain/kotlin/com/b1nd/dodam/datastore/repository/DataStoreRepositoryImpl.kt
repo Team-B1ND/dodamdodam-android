@@ -1,17 +1,15 @@
 package com.b1nd.dodam.datastore.repository
 
 import com.b1nd.dodam.datastore.model.User
-import kotlinx.cinterop.alloc
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.alloc
 import kotlinx.cinterop.convert
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.value
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import platform.CoreFoundation.CFAutorelease
 import platform.CoreFoundation.CFDictionaryAddValue
@@ -44,10 +42,9 @@ import platform.Security.kSecMatchLimitOne
 import platform.Security.kSecReturnData
 import platform.Security.kSecValueData
 import platform.darwin.OSStatus
-import platform.darwin._os_log_debug_impl
 
 @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
-class DataStoreRepositoryImpl: DataStoreRepository {
+class DataStoreRepositoryImpl : DataStoreRepository {
 
     // use only dodam teacher ios logic
     private val serviceName: String = "com.b1nd.dodam.teacher"
@@ -56,15 +53,15 @@ class DataStoreRepositoryImpl: DataStoreRepository {
 
     private val _user = MutableStateFlow(
         User(
-            id = value("id")?: "",
-            pw = value("pw")?: "",
-            token = value("token")?: ""
-        )
+            id = value("id") ?: "",
+            pw = value("pw") ?: "",
+            token = value("token") ?: "",
+        ),
     )
     override val user: Flow<User>
         get() = _user
 
-    private val _token = MutableStateFlow(value("token")?: "")
+    private val _token = MutableStateFlow(value("token") ?: "")
     override val token: Flow<String>
         get() = _token
 
@@ -76,7 +73,7 @@ class DataStoreRepositoryImpl: DataStoreRepository {
             User(
                 id = id,
                 pw = pw,
-                token = token
+                token = token,
             )
         _token.emit(token)
     }
@@ -94,37 +91,34 @@ class DataStoreRepositoryImpl: DataStoreRepository {
         _token.emit("")
     }
 
-    private fun add(key: String, value: String): Boolean =
-        context(key, value.toNSData()) { (account, data) ->
-            val query = query(
-                kSecClass to kSecClassGenericPassword,
-                kSecAttrAccount to account,
-                kSecValueData to data,
-                kSecAttrAccessible to accessibility
-            )
+    private fun add(key: String, value: String): Boolean = context(key, value.toNSData()) { (account, data) ->
+        val query = query(
+            kSecClass to kSecClassGenericPassword,
+            kSecAttrAccount to account,
+            kSecValueData to data,
+            kSecAttrAccessible to accessibility,
+        )
 
-            SecItemAdd(query, null).validate()
-        }
+        SecItemAdd(query, null).validate()
+    }
 
-    private fun update(key: String, value: String): Boolean =
-        context(key, value.toNSData()) { (account, data) ->
-            val query = query(
-                kSecClass to kSecClassGenericPassword,
-                kSecAttrAccount to account,
-                kSecValueData to data,
-            )
+    private fun update(key: String, value: String): Boolean = context(key, value.toNSData()) { (account, data) ->
+        val query = query(
+            kSecClass to kSecClassGenericPassword,
+            kSecAttrAccount to account,
+            kSecValueData to data,
+        )
 
-            SecItemUpdate(query, null).validate()
-        }
+        SecItemUpdate(query, null).validate()
+    }
 
-    private fun delete(key: String): Boolean =
-        context(key) { (account) ->
-            val query = query(
-                kSecClass to kSecClassGenericPassword,
-                kSecAttrAccount to account
-            )
-            SecItemDelete(query).validate()
-        }
+    private fun delete(key: String): Boolean = context(key) { (account) ->
+        val query = query(
+            kSecClass to kSecClassGenericPassword,
+            kSecAttrAccount to account,
+        )
+        SecItemDelete(query).validate()
+    }
 
     private fun value(forKey: String): String? = context(forKey) { (account) ->
         val query = query(
@@ -143,11 +137,10 @@ class DataStoreRepositoryImpl: DataStoreRepository {
         it?.stringValue
     }
 
-
     private fun <T> context(vararg values: Any?, block: Context.(List<CFTypeRef?>) -> T): T {
         val standard = mapOf(
             kSecAttrService to CFBridgingRetain(serviceName),
-            kSecAttrAccessGroup to CFBridgingRetain(null)
+            kSecAttrAccessGroup to CFBridgingRetain(null),
         )
         val custom = arrayOf(*values).map { CFBridgingRetain(it) }
         return block.invoke(Context(standard), custom).apply {
@@ -155,8 +148,7 @@ class DataStoreRepositoryImpl: DataStoreRepository {
         }
     }
 
-    private fun String.toNSData(): NSData? =
-        NSString.create(string = this).dataUsingEncoding(NSUTF8StringEncoding)
+    private fun String.toNSData(): NSData? = NSString.create(string = this).dataUsingEncoding(NSUTF8StringEncoding)
 
     private val NSData.stringValue: String
         get() = NSString.create(this, NSUTF8StringEncoding) as String
@@ -169,7 +161,10 @@ class DataStoreRepositoryImpl: DataStoreRepository {
         fun query(vararg pairs: Pair<CFStringRef?, CFTypeRef?>): CFDictionaryRef? {
             val map = mapOf(*pairs).plus(refs.filter { it.value != null })
             return CFDictionaryCreateMutable(
-                null, map.size.convert(), null, null
+                null,
+                map.size.convert(),
+                null,
+                null,
             ).apply {
                 map.entries.forEach { CFDictionaryAddValue(this, it.key, it.value) }
             }.apply {
@@ -177,5 +172,4 @@ class DataStoreRepositoryImpl: DataStoreRepository {
             }
         }
     }
-
 }

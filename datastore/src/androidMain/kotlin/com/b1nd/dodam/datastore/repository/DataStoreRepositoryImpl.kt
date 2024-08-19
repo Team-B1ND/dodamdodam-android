@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 class DataStoreRepositoryImpl constructor(
     private val dataStore: DataStore<Preferences>,
     private val keyStoreManager: KeyStoreManager,
-): DataStoreRepository {
+) : DataStoreRepository {
     private val tokenKey = stringPreferencesKey("token")
     private val idKey = stringPreferencesKey("id")
     private val pwKey = stringPreferencesKey("pw")
