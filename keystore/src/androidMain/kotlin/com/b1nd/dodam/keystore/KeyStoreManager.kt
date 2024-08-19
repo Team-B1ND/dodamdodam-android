@@ -2,6 +2,7 @@ package com.b1nd.dodam.keystore
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import android.util.Log
 import com.b1nd.dodam.keystore.util.decode
 import com.b1nd.dodam.keystore.util.encode
 import java.security.KeyStore
@@ -47,7 +48,9 @@ actual class KeyStoreManager {
     @Synchronized
     actual fun decrypt(encryptedText: String): String {
         val splitEncryptedText = encryptedText.split(".")
-
+        if (splitEncryptedText.size < 2) {
+            return ""
+        }
         val encryptTarget = splitEncryptedText[0].decode()
         val iv = splitEncryptedText[1].decode()
 
