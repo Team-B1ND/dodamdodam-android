@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
     alias(libs.plugins.dodam.multiplatform.feature)
+    alias(libs.plugins.dodam.multiplatform.koin)
 }
 kotlin {
     setIOS("DodamTeacher", "com.b1nd.dodam.teacher")
@@ -17,6 +18,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.compose.activity)
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -25,7 +27,9 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(projects.datastore)
             implementation(projects.keystore)
+            implementation(projects.logging)
         }
     }
 }
