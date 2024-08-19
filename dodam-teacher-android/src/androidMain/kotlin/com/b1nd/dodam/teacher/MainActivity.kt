@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
             androidContext(this@MainActivity)
             androidFileProperties()
             modules(
-                keystoreManagerModule
+                keystoreManagerModule,
             )
         }
         setContent {
