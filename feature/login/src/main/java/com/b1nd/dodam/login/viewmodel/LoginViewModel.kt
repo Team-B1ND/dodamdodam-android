@@ -7,7 +7,7 @@ import com.b1nd.dodam.common.exception.NotFoundException
 import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.login.repository.LoginRepository
-import com.b1nd.dodam.datastore.repository.DatastoreRepository
+import com.b1nd.dodam.datastore.repository.DataStoreRepository
 import com.b1nd.dodam.login.model.LoginUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,7 @@ import org.koin.core.component.inject
 class LoginViewModel : ViewModel(), KoinComponent {
 
     private val loginRepository: LoginRepository by inject()
-    private val datastoreRepository: DatastoreRepository by inject()
+    private val datastoreRepository: DataStoreRepository by inject()
 
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState = _uiState.asStateFlow()

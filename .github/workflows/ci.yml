@@ -26,5 +26,5 @@ jobs:
     - name: Run spotless
       run: ./gradlew dodam-student:spotlessCheck
 
-    - name: Build with Gradle
-      run: ./gradlew dodam-student:clean build --parallel
+    - name: Android Build with Gradle
+      run: ./gradlew dodam-student:clean assembleRelease --parallel
