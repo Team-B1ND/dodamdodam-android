@@ -8,8 +8,9 @@ import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.spec.IvParameterSpec
+import org.koin.dsl.module
 
-actual class KeyStoreManager {
+class KeyStoreManager {
 
     private val keyStore = KeyStore.getInstance(KEY_PROVIDER).apply {
         load(null)
@@ -35,7 +36,7 @@ actual class KeyStoreManager {
     }
 
     @Synchronized
-    actual fun encrypt(plainText: String): String {
+    fun encrypt(plainText: String): String {
         val cipher = Cipher.getInstance(CIPHER_OPTION).apply {
             init(Cipher.ENCRYPT_MODE, secretKey)
         }
@@ -45,9 +46,11 @@ actual class KeyStoreManager {
     }
 
     @Synchronized
-    actual fun decrypt(encryptedText: String): String {
+    fun decrypt(encryptedText: String): String {
         val splitEncryptedText = encryptedText.split(".")
-
+        if (splitEncryptedText.size < 2) {
+            return ""
+        }
         val encryptTarget = splitEncryptedText[0].decode()
         val iv = splitEncryptedText[1].decode()
 
@@ -65,4 +68,8 @@ actual class KeyStoreManager {
 
         private const val CIPHER_OPTION = "AES/CBC/PKCS7Padding"
     }
+}
+
+val keystoreManagerModule = module {
+    single<KeyStoreManager> { KeyStoreManager() }
 }
