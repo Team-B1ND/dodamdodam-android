@@ -17,10 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,13 +38,7 @@ import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
-import com.b1nd.dodam.designsystem.component.DodamIconButton
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
-import com.b1nd.dodam.designsystem.component.DodamTextButton
-import com.b1nd.dodam.designsystem.component.IconButtonSize
-import com.b1nd.dodam.designsystem.component.IconButtonType
-import com.b1nd.dodam.designsystem.component.TextButtonSize
-import com.b1nd.dodam.designsystem.component.TextButtonType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import dodamdodam_android.feature.onboarding.generated.resources.Res
 import dodamdodam_android.feature.onboarding.generated.resources.onboarding_background
@@ -137,7 +129,7 @@ fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
                     color = DodamTheme.colors.staticWhite,
                     style = DodamTheme.typography.labelMedium().copy(
                         fontWeight = FontWeight.SemiBold,
-                        textDecoration = TextDecoration.Underline
+                        textDecoration = TextDecoration.Underline,
                     ),
                 )
             }
@@ -194,7 +186,7 @@ fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
                             )
                             .background(
                                 color = DodamTheme.colors.fillNormal,
-                                shape = DodamTheme.shapes.medium
+                                shape = DodamTheme.shapes.medium,
                             ),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -232,7 +224,7 @@ fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
                         },
                         onClickLink = {
                             uriHandler.openUri("https://dodam.b1nd.com/detailed-information/service-policy")
-                        }
+                        },
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -245,7 +237,7 @@ fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
                         },
                         onClickLink = {
                             uriHandler.openUri("https://dodam.b1nd.com/detailed-information/personal-information")
-                        }
+                        },
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -264,19 +256,12 @@ fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
     }
 }
 
-
 @Composable
-private fun TermsButton(
-    modifier: Modifier = Modifier,
-    text: String,
-    checked: Boolean,
-    onClick: () -> Unit,
-    onClickLink: () -> Unit
-) {
+private fun TermsButton(modifier: Modifier = Modifier, text: String, checked: Boolean, onClick: () -> Unit, onClickLink: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
             modifier = Modifier
@@ -284,7 +269,7 @@ private fun TermsButton(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberBounceIndication(),
-                    onClick = onClick
+                    onClick = onClick,
                 ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -293,14 +278,14 @@ private fun TermsButton(
                 modifier = Modifier.size(16.dp),
                 imageVector = DodamIcons.Checkmark.value,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(if (checked) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive.copy(0.5f))
+                colorFilter = ColorFilter.tint(if (checked) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive.copy(0.5f)),
             )
 
             Spacer(modifier = Modifier.width(12.dp))
 
             Text(
                 modifier = Modifier.padding(
-                    vertical = 8.dp
+                    vertical = 8.dp,
                 ),
                 text = text,
                 style = DodamTheme.typography.labelRegular(),
@@ -319,7 +304,7 @@ private fun TermsButton(
             text = "보기",
             style = DodamTheme.typography.labelBold().copy(
                 fontWeight = FontWeight.SemiBold,
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
             ),
             color = DodamTheme.colors.labelAssistive,
         )
