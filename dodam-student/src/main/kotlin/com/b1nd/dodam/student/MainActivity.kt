@@ -73,43 +73,44 @@ class MainActivity : ComponentActivity() {
                     isLogin = datastoreRepository.token.first().isNotEmpty()
                 }
             }
-
-            DodamTheme {
-                isLogin?.let {
-                    DodamApp(
-                        isLogin = it,
-                        logout = {
-                            lifecycleScope.launch {
-                                datastoreRepository.deleteUser()
-                                finish()
-                            }
-                        },
-                        firebaseAnalytics = firebaseAnalytics,
-                        firebaseCrashlytics = firebaseCrashlytics,
-                    )
-                } ?: run {
-                    Box(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
-                            .fillMaxSize(),
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .size(180.dp)
-                                .align(Alignment.Center),
-                            imageVector = DodamLogo,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
+            com.b1nd.dodam.designsystem.DodamTheme {
+                DodamTheme {
+                    isLogin?.let {
+                        DodamApp(
+                            isLogin = it,
+                            logout = {
+                                lifecycleScope.launch {
+                                    datastoreRepository.deleteUser()
+                                    finish()
+                                }
+                            },
+                            firebaseAnalytics = firebaseAnalytics,
+                            firebaseCrashlytics = firebaseCrashlytics,
                         )
-
-                        Icon(
+                    } ?: run {
+                        Box(
                             modifier = Modifier
-                                .size(60.dp)
-                                .align(Alignment.BottomCenter),
-                            imageVector = B1NDLogo,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
+                                .background(MaterialTheme.colorScheme.background)
+                                .fillMaxSize(),
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .size(180.dp)
+                                    .align(Alignment.Center),
+                                imageVector = DodamLogo,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+
+                            Icon(
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .align(Alignment.BottomCenter),
+                                imageVector = B1NDLogo,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
                     }
                 }
             }
