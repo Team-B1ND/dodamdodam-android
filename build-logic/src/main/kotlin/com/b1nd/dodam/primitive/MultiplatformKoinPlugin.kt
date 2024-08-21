@@ -14,6 +14,8 @@ class MultiplatformKoinPlugin: Plugin<Project> {
             kotlin {
                 sourceSets.commonMain.dependencies {
                     implementation(libs.library("koin-core"))
+                    implementation(libs.library("koin-compose-multiplatform"))
+                    implementation(libs.library("koin-compose-viewmodel"))
                 }
             }
         }
