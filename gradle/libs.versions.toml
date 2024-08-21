@@ -98,6 +98,7 @@ androidx-datastore-preferences-core = { group = "androidx.datastore", name = "da
 multiplatform-compose-material3 = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "compose-plugin"}
 multiplatform-compose-ui-tooling-preview = { group = "org.jetbrains.compose.ui", name = "ui-tooling-preview", version.ref = "compose-plugin"}
 multiplatform-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
+multiplatform-compose-components-resources = { group = "org.jetbrains.compose.components", name = "components-resources", version.ref = "compose-plugin"}
 
 # google
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }

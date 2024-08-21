@@ -35,6 +35,7 @@ android {
 
 dependencies {
     implementation(libs.dodam.design.system)
+    implementation(libs.dodam.design.system.cmm)
     implementation(projects.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)

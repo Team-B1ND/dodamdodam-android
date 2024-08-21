@@ -22,6 +22,13 @@ class MultiplatformComposePlugin: Plugin<Project> {
                 sourceSets.commonMain.dependencies {
                     implementation(libs.library("androidx-lifecycle-viewmodel-compose"))
                     implementation(libs.library("multiplatform-compose-material3"))
+                    implementation(libs.library("multiplatform-compose-navigation"))
+                    implementation(libs.library("multiplatform-compose-components-resources"))
+                }
+
+                sourceSets.androidMain.dependencies {
+                    implementation(libs.library("androidx-compose-ui-tooling-preview"))
+                    implementation(libs.library("androidx-compose-ui-tooling"))
                 }
             }
         }
