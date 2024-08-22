@@ -10,14 +10,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
     startKoin {
         modules(
             dataStoreModule,
-            testViewModelModule,
         )
         block()
-    }
-}
-
-val testViewModelModule = module {
-    viewModel {
-        TestViewModel()
     }
 }

@@ -1,4 +1,5 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
+import org.jetbrains.kotlin.fir.declarations.builder.buildScript
 
 plugins {
     alias(libs.plugins.android.application).apply(false)
@@ -29,5 +30,11 @@ subprojects {
             trimTrailingWhitespace()
             endWithNewline()
         }
+    }
+}
+
+buildscript {
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
     }
 }
