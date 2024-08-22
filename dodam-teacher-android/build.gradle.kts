@@ -19,15 +19,11 @@ kotlin {
             implementation(projects.keystore)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.dodam.design.system.cmm)
+
+            implementation(projects.feature.onboarding)
             implementation(projects.datastore)
             implementation(projects.logging)
-            implementation(libs.multiplatform.compose.navigation)
         }
     }
 }

@@ -1,78 +1,31 @@
 package com.b1nd.dodam.teacher
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewmodel.compose.viewModel
-import org.koin.compose.viewmodel.koinViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.onboarding.OnboardingScreen
+import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
+import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(KoinExperimentalAPI::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DodamTeacherApp(viewModel: TestViewModel = koinViewModel()) {
-    val state by viewModel.state.collectAsState()
+fun DodamTeacherApp() {
+    val navHostController = rememberNavController()
+    DodamTheme {
 
-    var idText by remember { mutableStateOf("") }
-    var pwText by remember { mutableStateOf("") }
-    var tokenText by remember { mutableStateOf("") }
-
-    MaterialTheme {
-        Column {
-            Text(state.toString())
-
-            TextField(
-                value = idText,
-                onValueChange = {
-                    idText = it
-                },
-            )
-            TextField(
-                value = pwText,
-                onValueChange = {
-                    pwText = it
-                },
-            )
-            TextField(
-                value = tokenText,
-                onValueChange = {
-                    tokenText = it
-                },
-            )
-            DodamTestButton(
-                text = "삭제",
-                onClick = {
-                    viewModel.deleteUser()
-                },
-            )
-
-            DodamTestButton(
-                text = "저장",
-                onClick = {
-                    viewModel.saveUser(
-                        id = idText,
-                        pw = pwText,
-                        token = tokenText,
-                    )
-                },
+        NavHost(
+            navController = navHostController,
+            startDestination = ONBOARDING_ROUTE
+        ) {
+            onboardingScreen(
+                onRegisterClick = {},
+                onLoginClick = {}
             )
         }
     }
-}
 
-@Composable
-private fun DodamTestButton(text: String, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        content = {
-            Text(text)
-        },
-    )
 }
