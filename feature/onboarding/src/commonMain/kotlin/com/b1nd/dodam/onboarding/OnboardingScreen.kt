@@ -189,7 +189,7 @@ fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
                                 shape = DodamTheme.shapes.medium,
                             ),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.Start,
                     ) {
                         Spacer(Modifier.width(28.dp))
                         Image(
