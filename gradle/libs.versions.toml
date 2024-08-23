@@ -18,7 +18,7 @@ androidx-activity-compose = "1.9.1"
 androidx-compose-compiler = "1.5.8"
 androidx-compose-bom = "2024.06.00"
 androidx-core = "1.12.0"
-androidx-lifecycle = "2.6.2"
+androidx-lifecycle = "2.8.4"
 androidx-navigation = "2.7.6"
 androidx-material = "1.6.8"
 datastore = "1.1.1"
@@ -27,6 +27,7 @@ androidx-lifecycle-viewmodel-compose = "2.8.0"
 
 # compose
 compose-plugin = "1.6.11"
+compose-navigation = "2.7.0-alpha07"
 
 # google
 firebase-bom = "32.8.0"
@@ -42,6 +43,7 @@ bottomsheetdialog = "1.3.1"
 ktor = "2.3.8"
 coil = "2.6.0"
 dds = "0.1.18"
+dds-cmm = "1.0.0"
 composeinvestigator = "1.5.10-0.2.1"
 wheel-picker = "1.1.11"
 koin = "3.5.6"
@@ -93,6 +95,10 @@ androidx-lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecyc
 androidx-navigation = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
 androidx-datastore-core-okio = { group = "androidx.datastore", name = "datastore-core-okio", version.ref = "datastore" }
 androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
+multiplatform-compose-material3 = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "compose-plugin"}
+multiplatform-compose-ui-tooling-preview = { group = "org.jetbrains.compose.ui", name = "ui-tooling-preview", version.ref = "compose-plugin"}
+multiplatform-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
+multiplatform-compose-components-resources = { group = "org.jetbrains.compose.components", name = "components-resources", version.ref = "compose-plugin"}
 
 # google
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
@@ -119,6 +125,7 @@ koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", versi
 koin-compose-multiplatform = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin-compose" }
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin-compose-viewModel" }
 stately-concurrency = { group = "co.touchlab", name = "stately-concurrency", version.ref = "stately"}
+dodam-design-system-cmm = { group = "com.b1nd.dodam", name = "dodam-design-system", version.ref = "dds-cmm" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -162,6 +169,7 @@ dodam-multiplatform-compose = { id = "b1nd.dodam.primitive.multiplatform.compose
 dodam-multiplatform-kotlin = { id = "b1nd.dodam.primitive.multiplatform.kotlin", version = "unspecified"}
 dodam-multiplatform-kotlin-serialization = { id = "b1nd.dodam.primitive.multiplatform.kotlin.serialization", version = "unspecified"}
 dodam-multiplatform-koin = { id = "b1nd.dodam.primitive.multiplatform.koin", version = "unspecified"}
+dodam-multiplatform-application = { id = "b1nd.dodam.primitive.multiplatform.application", version = "unspecified"}
 
 [bundles]
 compose-implementation = ["androidx-compose-ui", "androidx-compose-ui-foundation", "androidx-compose-ui-graphics", "androidx-compose-lifecycle", "androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview", "androidx-compose-material3"]
