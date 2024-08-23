@@ -76,6 +76,10 @@ gradlePlugin {
             id = "b1nd.dodam.primitive.multiplatform.compose"
             implementationClass = "com.b1nd.dodam.primitive.MultiplatformComposePlugin"
         }
+        register("multiplatformApplicationPlugin") {
+            id = "b1nd.dodam.primitive.multiplatform.application"
+            implementationClass = "com.b1nd.dodam.primitive.MultiplatformApplicationPlugin"
+        }
         // convention
         register("androidFeature") {
             id = "b1nd.dodam.convention.android.feature"

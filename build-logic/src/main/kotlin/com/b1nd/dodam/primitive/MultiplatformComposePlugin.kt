@@ -13,18 +13,22 @@ class MultiplatformComposePlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.application")
+                apply("org.jetbrains.kotlin.multiplatform")
                 apply("org.jetbrains.compose")
                 apply("org.jetbrains.kotlin.plugin.compose")
-                apply("org.jetbrains.kotlin.multiplatform")
             }
-            setupMultiplatform()
 
             kotlin {
                 sourceSets.commonMain.dependencies {
                     implementation(libs.library("androidx-lifecycle-viewmodel-compose"))
-                    implementation(libs.library("koin-compose-multiplatform"))
-                    implementation(libs.library("koin-compose-viewmodel"))
+                    implementation(libs.library("multiplatform-compose-material3"))
+                    implementation(libs.library("multiplatform-compose-navigation"))
+                    implementation(libs.library("multiplatform-compose-components-resources"))
+                }
+
+                sourceSets.androidMain.dependencies {
+                    implementation(libs.library("androidx-compose-ui-tooling-preview"))
+                    implementation(libs.library("androidx-compose-ui-tooling"))
                 }
             }
         }

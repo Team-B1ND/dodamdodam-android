@@ -1,14 +1,11 @@
 import com.b1nd.dodam.dsl.android
 import com.b1nd.dodam.dsl.kotlin
 import com.b1nd.dodam.dsl.setIOS
-import com.b1nd.dodam.dsl.setupMultiplatform
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
-import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    alias(libs.plugins.dodam.multiplatform.feature)
+    alias(libs.plugins.dodam.multiplatform.application)
+    alias(libs.plugins.dodam.multiplatform.compose)
+    alias(libs.plugins.dodam.multiplatform.kotlin)
     alias(libs.plugins.dodam.multiplatform.koin)
 }
 kotlin {
@@ -22,12 +19,9 @@ kotlin {
             implementation(projects.keystore)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.dodam.design.system.cmm)
+
+            implementation(projects.feature.onboarding)
             implementation(projects.datastore)
             implementation(projects.logging)
         }
