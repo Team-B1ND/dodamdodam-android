@@ -50,9 +50,11 @@ internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClic
     var pwError by remember { mutableStateOf("") }
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var body by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
 
     var showDialog by remember { mutableStateOf(false) }
+    var showBodyDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect { event ->
@@ -60,6 +62,10 @@ internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClic
                 is Event.NavigateToMain -> navigateToMain()
                 is Event.ShowDialog -> coroutineScope.launch {
                     showDialog = true
+                }
+                is Event.ShowBodyDialog -> coroutineScope.launch {
+                    showBodyDialog = true
+                    body = event.message
                 }
 
                 is Event.CheckId -> idError = event.message
@@ -94,8 +100,10 @@ internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClic
         pwError = pwError,
         isLoading = uiState.isLoading,
         showDialog = showDialog,
+        showBodyDialog = showBodyDialog,
         dismissDialog = { showDialog = false },
         errorMessage = uiState.error,
+        body = body,
     )
 }
 
@@ -114,22 +122,23 @@ private fun LoginScreen(
     onPwCancel: () -> Unit,
     isLoading: Boolean,
     showDialog: Boolean,
+    showBodyDialog: Boolean,
     dismissDialog: () -> Unit,
     errorMessage: String,
+    body: String,
 ) {
     var idFocused by remember { mutableStateOf(false) }
     var pwFocused by remember { mutableStateOf(false) }
 
     var showPassword by remember { mutableStateOf(false) }
 
-    if (showDialog) {
+    if (showBodyDialog) {
         Dialog(
             onDismissRequest = dismissDialog,
         ) {
             DodamDialog(
                 title = errorMessage,
-                body = "아직 계정이 승인되지 않았어요.\n" +
-                    "승인을 기다려주세요.",
+                body = body,
                 confirmButton = dismissDialog,
             )
         }

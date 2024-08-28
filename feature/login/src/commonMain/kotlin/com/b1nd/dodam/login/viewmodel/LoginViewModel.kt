@@ -62,7 +62,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                     _uiState.update { it.copy(isLoading = false) }
                     when (result.error) {
                         is ForbiddenException -> {
-                            _event.emit(Event.ShowDialog)
+                            _event.emit(Event.ShowBodyDialog(message = "아직 계정이 승인되지 않았어요.\n승인을 기다려주세요."))
                             _uiState.update { it.copy(error = "아직 계정이 승인되지 않았어요") }
                         }
 
@@ -94,6 +94,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
 sealed interface Event {
     data object NavigateToMain : Event
     data object ShowDialog : Event
+    data class ShowBodyDialog(val message: String) : Event
     data class CheckId(val message: String) : Event
     data class CheckPw(val message: String) : Event
 }
