@@ -20,6 +20,8 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(libs.dodam.design.system.cmm)
+            implementation(projects.common)
+            implementation(projects.network.login)
 
             implementation(projects.feature.onboarding)
             api(projects.feature.login)
