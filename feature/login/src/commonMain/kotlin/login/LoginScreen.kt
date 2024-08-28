@@ -3,6 +3,7 @@ package login
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -18,16 +21,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDialog
+import com.b1nd.dodam.designsystem.component.DodamTextButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
+import com.b1nd.dodam.designsystem.component.DodamTextFieldDefaults.TextStyle
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.component.TopAppBarType
 import login.viewmodel.Event
 import login.viewmodel.LoginViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -111,10 +124,11 @@ private fun LoginScreen(
 
     if (showDialog) {
         DodamDialog(
-            title = "d",
-            body = "dd",
+            title = "승인되지 않은 계정이에요",
+            body = "아직 계정이 승인되지 않았어요.\n" +
+                    "승인을 기다려주세요.",
             confirmButton = {
-
+                dismissDialog
             }
         )
     }
@@ -126,8 +140,10 @@ private fun LoginScreen(
             .systemBarsPadding(),
         topBar = {
             DodamTopAppBar(
-                title = "",
-                onBackClick ={}
+                title = "아이디와 비밀번호를\n" +
+                        "입력해주세요",
+                onBackClick = onBackClick,
+                type = TopAppBarType.Medium
             )
         },
     ) { paddingValues ->
@@ -148,21 +164,7 @@ private fun LoginScreen(
                 onValueChange = onIdChange,
                 label = "아이디",
                 isError = idError.isNotBlank(),
-//                supportingText = if (idError.isNotBlank()) {
-//                    { Text(text = idError) }
-//                } else {
-//                    null
-//                },
-//                trailingIcon = {
-//                    if (idFocused) {
-//                        XMarkCircleIcon(
-//                            modifier = Modifier.clickable {
-//                                onIdCancel()
-//                            },
-//                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-//                        )
-//                    }
-//                },
+                onClickRemoveRequest = onIdCancel,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 singleLine = true,
             )
@@ -178,47 +180,35 @@ private fun LoginScreen(
                 label = "비밀번호",
                 isError = pwError.isNotBlank(),
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-//                supportingText = if (pwError.isNotBlank()) {
-//                    { Text(text = pwError) }
-//                } else {
-//                    null
-//                },
-//                trailingIcon = {
-//                    if (pwFocused) {
-//                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-//                            if (showPassword) {
-//                                EyeIcon(
-//                                    modifier = Modifier.clickable {
-//                                        showPassword = false
-//                                    },
-//                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-//                                )
-//                            } else {
-//                                EyeSlashIcon(
-//                                    modifier = Modifier.clickable {
-//                                        showPassword = true
-//                                    },
-//                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-//                                )
-//                            }
-//
-//                            XMarkCircleIcon(
-//                                modifier = Modifier.clickable {
-//                                    onPwCancel()
-//                                },
-//                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-//                            )
-//                        }
-//                    }
-//                },
+                onClickRemoveRequest = onPwCancel,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 singleLine = true,
             )
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Center,
+            ){
+                Text(
+                    text = "비밀번호를 잊으셨나요? ",
+                    color = DodamTheme.colors.labelAlternative
+                )
+                Text(
+                    text = "비밀번호 재설정",
+                    color = DodamTheme.colors.labelNormal,
+                    style = DodamTheme.typography.labelMedium().copy(
+                        fontWeight = FontWeight.SemiBold,
+                        textDecoration = TextDecoration.Underline,
+                    )
+                )
+            }
             DodamButton(
-                onClick = onLoginClick,
-                text = "",
+                onClick = {  },
+                text = "로그인",
                 enabled = id.isNotBlank() && pw.isNotBlank(),
-                loading = isLoading
+                loading = isLoading,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
