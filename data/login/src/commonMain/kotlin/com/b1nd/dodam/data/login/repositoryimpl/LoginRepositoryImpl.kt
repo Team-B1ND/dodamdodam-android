@@ -4,7 +4,7 @@ import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
-import com.b1nd.dodam.data.login.model.Token
+import com.b1nd.dodam.data.login.model.Member
 import com.b1nd.dodam.data.login.model.toModel
 import com.b1nd.dodam.data.login.repository.LoginRepository
 import com.b1nd.dodam.network.login.datasource.LoginDataSource
@@ -18,7 +18,7 @@ internal class LoginRepositoryImpl(
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : LoginRepository {
 
-    override fun login(id: String, pw: String): Flow<Result<Token>> {
+    override fun login(id: String, pw: String): Flow<Result<Member>> {
         return flow {
             emit(
                 loginDataSource.login(id, pw).toModel(),

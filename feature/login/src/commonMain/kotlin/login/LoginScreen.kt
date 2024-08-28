@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -28,25 +29,33 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
+import kotlinx.coroutines.launch
 import login.viewmodel.Event
 import login.viewmodel.LoginViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit) {
+internal fun LoginScreen(
+    viewModel: LoginViewModel = koinViewModel(),
+    onBackClick: () -> Unit,
+    navigateToMain: () -> Unit,
+    role: String
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     var idError by remember { mutableStateOf("") }
     var pwError by remember { mutableStateOf("") }
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
 
     var showDialog by remember { mutableStateOf(false) }
 
@@ -54,7 +63,10 @@ internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClic
         viewModel.event.collect { event ->
             when (event) {
                 is Event.NavigateToMain -> navigateToMain()
-                is Event.ShowDialog -> showDialog = true
+                is Event.ShowDialog -> coroutineScope.launch {
+                    showDialog = true
+                }
+
                 is Event.CheckId -> idError = event.message
                 is Event.CheckPw -> pwError = event.message
             }
@@ -63,7 +75,7 @@ internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClic
     LoginScreen(
         onBackClick = onBackClick,
         onLoginClick = {
-            viewModel.login(id, password)
+            viewModel.login(id, password, role)
         },
         onIdCancel = {
             id = ""
@@ -115,16 +127,31 @@ private fun LoginScreen(
 
     var showPassword by remember { mutableStateOf(false) }
 
+
     if (showDialog) {
-        DodamDialog(
-            title = "승인되지 않은 계정이에요",
-            body = "아직 계정이 승인되지 않았어요.\n" +
-                "승인을 기다려주세요.",
-            confirmButton = {
-                dismissDialog
-            },
-        )
+        Dialog(
+            onDismissRequest = dismissDialog
+        ) {
+            DodamDialog(
+                title = errorMessage,
+                body = "아직 계정이 승인되지 않았어요.\n" +
+                        "승인을 기다려주세요.",
+                confirmButton = dismissDialog
+            )
+        }
     }
+
+    if (showDialog) {
+        Dialog(
+            onDismissRequest = dismissDialog
+        ) {
+            DodamDialog(
+                title = errorMessage,
+                confirmButton = dismissDialog
+            )
+        }
+    }
+
 
     Scaffold(
         modifier = Modifier
@@ -134,7 +161,7 @@ private fun LoginScreen(
         topBar = {
             DodamTopAppBar(
                 title = "아이디와 비밀번호를\n" +
-                    "입력해주세요",
+                        "입력해주세요",
                 onBackClick = onBackClick,
                 type = TopAppBarType.Medium,
             )
