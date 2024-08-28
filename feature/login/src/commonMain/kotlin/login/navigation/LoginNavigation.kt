@@ -29,7 +29,7 @@ fun NavGraphBuilder.loginScreen(onBackClick: () -> Unit, navigateToMain: () -> U
         LoginScreen(
             onBackClick = onBackClick,
             navigateToMain = navigateToMain,
-            role = role
+            role = role,
         )
     }
 }

@@ -189,7 +189,7 @@ fun DodamApp(
                         },
                     )
                 },
-                role = "STUDENT"
+                role = "STUDENT",
             )
             wakeupSongScreen(
                 onAddWakeupSongClick = {
