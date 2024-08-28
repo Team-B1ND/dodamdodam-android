@@ -1,8 +1,6 @@
 package com.b1nd.dodam.login
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,51 +13,62 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.dds.component.DodamDialog
-import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
-import com.b1nd.dodam.dds.component.DodamTextField
-import com.b1nd.dodam.dds.component.button.DodamCTAButton
-import com.b1nd.dodam.dds.component.button.DodamTextButton
-import com.b1nd.dodam.dds.style.EyeIcon
-import com.b1nd.dodam.dds.style.EyeSlashIcon
-import com.b1nd.dodam.dds.style.XMarkCircleIcon
-import com.b1nd.dodam.dds.theme.DodamTheme
+import androidx.compose.ui.window.Dialog
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamDialog
+import com.b1nd.dodam.designsystem.component.DodamTextField
+import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.login.viewmodel.Event
 import com.b1nd.dodam.login.viewmodel.LoginViewModel
-import org.koin.androidx.compose.koinViewModel
+import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit) {
+internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit, role: String) {
     val uiState by viewModel.uiState.collectAsState()
 
     var idError by remember { mutableStateOf("") }
     var pwError by remember { mutableStateOf("") }
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var body by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
 
     var showDialog by remember { mutableStateOf(false) }
+    var showBodyDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect { event ->
             when (event) {
                 is Event.NavigateToMain -> navigateToMain()
-                is Event.ShowDialog -> showDialog = true
+                is Event.ShowDialog -> coroutineScope.launch {
+                    showDialog = true
+                }
+
+                is Event.ShowBodyDialog -> coroutineScope.launch {
+                    showBodyDialog = true
+                    body = event.message
+                }
+
                 is Event.CheckId -> idError = event.message
                 is Event.CheckPw -> pwError = event.message
             }
@@ -68,7 +77,7 @@ internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClic
     LoginScreen(
         onBackClick = onBackClick,
         onLoginClick = {
-            viewModel.login(id, password)
+            viewModel.login(id, password, role)
         },
         onIdCancel = {
             id = ""
@@ -92,8 +101,10 @@ internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClic
         pwError = pwError,
         isLoading = uiState.isLoading,
         showDialog = showDialog,
+        showBodyDialog = showBodyDialog,
         dismissDialog = { showDialog = false },
         errorMessage = uiState.error,
+        body = body,
     )
 }
 
@@ -112,24 +123,37 @@ private fun LoginScreen(
     onPwCancel: () -> Unit,
     isLoading: Boolean,
     showDialog: Boolean,
+    showBodyDialog: Boolean,
     dismissDialog: () -> Unit,
     errorMessage: String,
+    body: String,
 ) {
     var idFocused by remember { mutableStateOf(false) }
     var pwFocused by remember { mutableStateOf(false) }
 
     var showPassword by remember { mutableStateOf(false) }
 
-    if (showDialog) {
-        DodamDialog(
+    if (showBodyDialog) {
+        Dialog(
             onDismissRequest = dismissDialog,
-            confirmText = {
-                DodamTextButton(onClick = dismissDialog) {
-                    Text(text = "확인")
-                }
-            },
-            title = { Text(text = errorMessage) },
-        )
+        ) {
+            DodamDialog(
+                title = errorMessage,
+                body = body,
+                confirmButton = dismissDialog,
+            )
+        }
+    }
+
+    if (showDialog) {
+        Dialog(
+            onDismissRequest = dismissDialog,
+        ) {
+            DodamDialog(
+                title = errorMessage,
+                confirmButton = dismissDialog,
+            )
+        }
     }
 
     Scaffold(
@@ -138,12 +162,11 @@ private fun LoginScreen(
             .background(MaterialTheme.colorScheme.background)
             .systemBarsPadding(),
         topBar = {
-            DodamLargeTopAppBar(
-                title = { Text(text = "아이디와 비밀번호를\n입력해주세요") },
-                onNavigationIconClick = onBackClick,
-                colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                ),
+            DodamTopAppBar(
+                title = "아이디와 비밀번호를\n" +
+                    "입력해주세요",
+                onBackClick = onBackClick,
+                type = TopAppBarType.Medium,
             )
         },
     ) { paddingValues ->
@@ -162,25 +185,13 @@ private fun LoginScreen(
                     },
                 value = id,
                 onValueChange = onIdChange,
-                label = { Text(text = "아이디") },
+                label = "아이디",
                 isError = idError.isNotBlank(),
-                supportingText = if (idError.isNotBlank()) {
-                    { Text(text = idError) }
-                } else {
-                    null
-                },
-                trailingIcon = {
-                    if (idFocused) {
-                        XMarkCircleIcon(
-                            modifier = Modifier.clickable {
-                                onIdCancel()
-                            },
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                },
+                onClickRemoveRequest = onIdCancel,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 singleLine = true,
+                supportText = if (idError.isNotBlank()) idError else "",
+
             )
 
             DodamTextField(
@@ -191,77 +202,40 @@ private fun LoginScreen(
                     },
                 value = pw,
                 onValueChange = onPwChange,
-                label = { Text(text = "비밀번호") },
+                label = "비밀번호",
                 isError = pwError.isNotBlank(),
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                supportingText = if (pwError.isNotBlank()) {
-                    { Text(text = pwError) }
-                } else {
-                    null
-                },
-                trailingIcon = {
-                    if (pwFocused) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                            if (showPassword) {
-                                EyeIcon(
-                                    modifier = Modifier.clickable {
-                                        showPassword = false
-                                    },
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            } else {
-                                EyeSlashIcon(
-                                    modifier = Modifier.clickable {
-                                        showPassword = true
-                                    },
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            }
-
-                            XMarkCircleIcon(
-                                modifier = Modifier.clickable {
-                                    onPwCancel()
-                                },
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    }
-                },
+                onClickRemoveRequest = onPwCancel,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 singleLine = true,
+                supportText = if (pwError.isNotBlank()) pwError else "",
             )
-            DodamCTAButton(
-                onClick = onLoginClick,
-                isLoading = isLoading,
-                enabled = id.isNotBlank() && pw.isNotBlank(),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Center,
             ) {
-                Text(text = "로그인")
+                Text(
+                    text = "비밀번호를 잊으셨나요? ",
+                    color = DodamTheme.colors.labelAlternative,
+                )
+                Text(
+                    text = "비밀번호 재설정",
+                    color = DodamTheme.colors.labelNormal,
+                    style = DodamTheme.typography.labelMedium().copy(
+                        fontWeight = FontWeight.SemiBold,
+                        textDecoration = TextDecoration.Underline,
+                    ),
+                )
             }
+            DodamButton(
+                onClick = onLoginClick,
+                text = "로그인",
+                enabled = id.isNotBlank() && pw.isNotBlank(),
+                loading = isLoading,
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
-    }
-}
-
-@ExperimentalMaterial3Api
-@Preview
-@Preview(uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun LoginScreenPreview() {
-    DodamTheme {
-        LoginScreen(
-            onBackClick = { },
-            onLoginClick = { },
-            id = "아이디",
-            idError = "",
-            pw = "비밀번호",
-            pwError = "",
-            onIdChange = { },
-            onPwChange = { },
-            onIdCancel = { },
-            onPwCancel = { },
-            isLoading = false,
-            showDialog = false,
-            dismissDialog = { },
-            errorMessage = "",
-        )
     }
 }
