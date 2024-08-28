@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.b1nd.dodam.login.LoginScreen
 
-const val LOGIN_ROUTE = "com/b1nd/dodam/login"
+const val LOGIN_ROUTE = "login"
 
 fun NavController.navigationToLogin(
     navOptions: NavOptions? = navOptions {
