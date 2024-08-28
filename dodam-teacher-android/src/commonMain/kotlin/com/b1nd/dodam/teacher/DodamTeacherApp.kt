@@ -5,10 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.DodamTheme
-import login.navigation.loginScreen
-import login.navigation.navigationToLogin
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
+import login.navigation.loginScreen
+import login.navigation.navigationToLogin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,7 +25,7 @@ fun DodamTeacherApp() {
             )
             loginScreen(
                 onBackClick = navHostController::popBackStack,
-                navigateToMain = {}
+                navigateToMain = {},
             )
         }
     }

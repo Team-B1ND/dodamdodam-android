@@ -17,7 +17,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             loginRepositoryModule,
             loginDataSourceModule,
             networkCoreModule,
-            dispatchersModule
+            dispatchersModule,
         )
         block()
     }
