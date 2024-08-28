@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,10 +18,8 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -48,7 +45,6 @@ import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDialog
-import com.b1nd.dodam.designsystem.component.DodamTextButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.register.state.TextFieldState
@@ -106,7 +102,7 @@ fun AuthScreen(
         Dialog(
             onDismissRequest = {
                 showDialog = false
-            }
+            },
         ) {
             DodamDialog(
                 confirmButton = {
@@ -131,19 +127,19 @@ fun AuthScreen(
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = rememberBounceIndication(),
-                                    onClick = onBackClick
+                                    onClick = onBackClick,
                                 ),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             Image(
                                 modifier = Modifier
                                     .size(24.dp),
                                 imageVector = DodamIcons.ArrowLeft.value,
                                 contentDescription = "뒤로가기",
-                                colorFilter = ColorFilter.tint(DodamTheme.colors.labelNormal)
+                                colorFilter = ColorFilter.tint(DodamTheme.colors.labelNormal),
                             )
                         }
-                    }
+                    },
                 )
                 Text(
                     modifier = Modifier.padding(start = 16.dp),
@@ -157,7 +153,7 @@ fun AuthScreen(
                 )
             }
         },
-        containerColor = DodamTheme.colors.backgroundNeutral
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -283,12 +279,12 @@ fun AuthScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = 16.dp
+                        horizontal = 16.dp,
                     )
                     .align(Alignment.BottomCenter),
                 enabled = idState.value.isNotBlank() &&
-                        passwordState.value.isNotBlank() &&
-                        confirmPasswordState.value.isNotBlank(),
+                    passwordState.value.isNotBlank() &&
+                    confirmPasswordState.value.isNotBlank(),
                 onClick = {
                     viewModel.register(
                         email = email,
@@ -297,13 +293,13 @@ fun AuthScreen(
                         phone = phoneNumber,
                         pw = passwordState.value,
                         tel = extensionNumber,
-                        position = teacherRole
+                        position = teacherRole,
                     )
                 },
                 loading = uiState.isLoading,
                 buttonSize = ButtonSize.Large,
                 buttonRole = ButtonRole.Primary,
-                text = "가입하기"
+                text = "가입하기",
             )
         }
     }

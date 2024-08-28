@@ -50,8 +50,8 @@ internal class RegisterRepositoryImpl constructor(
                 phone = phone,
                 pw = pw,
                 position = position,
-                tel = tel
-            )
+                tel = tel,
+            ),
         )
     }
         .asResult()

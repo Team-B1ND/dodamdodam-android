@@ -58,7 +58,7 @@ fun InfoScreen(
         email: String,
         phoneNumber: String,
         extensionNumber: String,
-    ) -> Unit
+    ) -> Unit,
 ) {
     var nameState by remember { mutableStateOf(TextFieldState()) }
     var teacherRoleState by remember { mutableStateOf(TextFieldState()) }
@@ -119,7 +119,7 @@ fun InfoScreen(
                                 extensionNumberState = checkExtensionNumberStateValid(extensionNumberState)
                             }
                         },
-                    )
+                    ),
             ) {
                 DodamContentTopAppBar(
                     content = {
@@ -129,19 +129,19 @@ fun InfoScreen(
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = rememberBounceIndication(),
-                                    onClick = onBackClick
+                                    onClick = onBackClick,
                                 ),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             Image(
                                 modifier = Modifier
                                     .size(24.dp),
                                 imageVector = DodamIcons.ArrowLeft.value,
                                 contentDescription = "뒤로가기",
-                                colorFilter = ColorFilter.tint(DodamTheme.colors.labelNormal)
+                                colorFilter = ColorFilter.tint(DodamTheme.colors.labelNormal),
                             )
                         }
-                    }
+                    },
                 )
                 Text(
                     modifier = Modifier.padding(start = 16.dp),
@@ -150,7 +150,7 @@ fun InfoScreen(
                             nameState,
                             emailState,
                             teacherRoleState,
-                            phoneNumberState
+                            phoneNumberState,
                         ).all { it.isValid } -> "내선 번호를\n입력해주세요"
 
                         setOf(
@@ -164,7 +164,7 @@ fun InfoScreen(
                         else -> "이름을\n입력해주세요"
                     },
                     style = DodamTheme.typography.title3Bold(),
-                    color = DodamTheme.colors.labelNormal
+                    color = DodamTheme.colors.labelNormal,
                 )
             }
         },
@@ -207,7 +207,7 @@ fun InfoScreen(
                         nameState,
                         emailState,
                         teacherRoleState,
-                        phoneNumberState
+                        phoneNumberState,
                     ).all { it.isValid },
                 ) {
                     DodamTextField(
@@ -398,7 +398,7 @@ fun InfoScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = 16.dp
+                        horizontal = 16.dp,
                     )
                     .align(Alignment.BottomCenter),
                 onClick = {
@@ -407,7 +407,7 @@ fun InfoScreen(
                         teacherRoleState.value,
                         emailState.value,
                         phoneNumberState.value,
-                        extensionNumberState.value
+                        extensionNumberState.value,
                     )
                 },
                 enabled = nameState.value.length in 2..4 &&

@@ -37,28 +37,21 @@ internal class RegisterService(
         }
     }
 
-    override suspend fun registerTeacher(
-        id: String,
-        email: String,
-        name: String,
-        phone: String,
-        pw: String,
-        position: String,
-        tel: String,
-    ) = defaultSafeRequest {
-        client.post(DodamUrl.Member.REGISTER_TEACHER) {
-            contentType(ContentType.Application.Json)
-            setBody(
-                RegisterTeacherRequest(
-                    id = id,
-                    email = email,
-                    name = name,
-                    phone = phone,
-                    pw = pw,
-                    position = position,
-                    tel = tel,
+    override suspend fun registerTeacher(id: String, email: String, name: String, phone: String, pw: String, position: String, tel: String) =
+        defaultSafeRequest {
+            client.post(DodamUrl.Member.REGISTER_TEACHER) {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    RegisterTeacherRequest(
+                        id = id,
+                        email = email,
+                        name = name,
+                        phone = phone,
+                        pw = pw,
+                        position = position,
+                        tel = tel,
+                    ),
                 )
-            )
-        }.body<DefaultResponse>()
-    }
+            }.body<DefaultResponse>()
+        }
 }
