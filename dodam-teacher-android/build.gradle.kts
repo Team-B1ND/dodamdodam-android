@@ -22,6 +22,7 @@ kotlin {
             implementation(libs.dodam.design.system.cmm)
 
             implementation(projects.feature.onboarding)
+            api(projects.feature.login)
             implementation(projects.datastore)
             implementation(projects.logging)
         }

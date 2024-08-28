@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.dodam.multiplatform.feature)
     alias(libs.plugins.dodam.multiplatform.koin)
+    alias(libs.plugins.dodam.multiplatform.kotlin.serialization)
 }
 
 
@@ -25,10 +26,11 @@ kotlin{
         commonMain.dependencies {
             implementation(projects.common)
             implementation(projects.datastore)
-            implementation(projects.data.login)
+            api(projects.data.login)
+            implementation(libs.dodam.design.system.cmm)
         }
         androidMain.dependencies {
-            implementation(libs.dodam.design.system)
+            implementation(libs.koin.android)
         }
     }
 }
@@ -58,8 +60,3 @@ androidLibrary {
 }
 
 
-
-dependencies {
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation(libs.dodam.design.system)
-}

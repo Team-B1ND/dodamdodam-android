@@ -1,4 +1,4 @@
-package com.b1nd.dodam.login.model
+package login.model
 
 data class LoginUiState(
     val isLoading: Boolean = false,
