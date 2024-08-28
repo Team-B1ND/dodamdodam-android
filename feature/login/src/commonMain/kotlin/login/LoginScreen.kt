@@ -204,7 +204,7 @@ private fun LoginScreen(
                 )
             }
             DodamButton(
-                onClick = {  },
+                onClick = onLoginClick ,
                 text = "로그인",
                 enabled = id.isNotBlank() && pw.isNotBlank(),
                 loading = isLoading,
