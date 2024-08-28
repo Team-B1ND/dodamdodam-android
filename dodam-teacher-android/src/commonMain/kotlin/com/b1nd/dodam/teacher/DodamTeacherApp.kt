@@ -26,6 +26,7 @@ fun DodamTeacherApp() {
             loginScreen(
                 onBackClick = navHostController::popBackStack,
                 navigateToMain = {},
+                role = "TEACHER"
             )
         }
     }
