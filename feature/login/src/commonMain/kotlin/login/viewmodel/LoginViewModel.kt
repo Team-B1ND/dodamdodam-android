@@ -1,4 +1,4 @@
-package com.b1nd.dodam.login.viewmodel
+package login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,7 @@ import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.login.repository.LoginRepository
 import com.b1nd.dodam.datastore.repository.DataStoreRepository
-import com.b1nd.dodam.login.model.LoginUiState
+import login.model.LoginUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
