@@ -43,7 +43,12 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit, role: String) {
+internal fun LoginScreen(
+    viewModel: LoginViewModel = koinViewModel(),
+    onBackClick: () -> Unit,
+    navigateToMain: () -> Unit,
+    role: String
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     var idError by remember { mutableStateOf("") }
@@ -63,6 +68,7 @@ internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClic
                 is Event.ShowDialog -> coroutineScope.launch {
                     showDialog = true
                 }
+
                 is Event.ShowBodyDialog -> coroutineScope.launch {
                     showBodyDialog = true
                     body = event.message
@@ -163,7 +169,7 @@ private fun LoginScreen(
         topBar = {
             DodamTopAppBar(
                 title = "아이디와 비밀번호를\n" +
-                    "입력해주세요",
+                        "입력해주세요",
                 onBackClick = onBackClick,
                 type = TopAppBarType.Medium,
             )
@@ -189,6 +195,8 @@ private fun LoginScreen(
                 onClickRemoveRequest = onIdCancel,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 singleLine = true,
+                supportText = if (idError.isNotBlank()) idError else  "" ,
+
             )
 
             DodamTextField(
@@ -205,6 +213,7 @@ private fun LoginScreen(
                 onClickRemoveRequest = onPwCancel,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 singleLine = true,
+                supportText = if (pwError.isNotBlank()) pwError else ""
             )
             Row(
                 modifier = Modifier
