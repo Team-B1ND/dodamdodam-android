@@ -1,7 +1,14 @@
+import com.b1nd.dodam.dsl.setIOS
+
 plugins {
-    alias(libs.plugins.dodam.android)
-    alias(libs.plugins.dodam.android.kotlin)
-    alias(libs.plugins.dodam.android.compose)
+    alias(libs.plugins.dodam.multiplatform.feature)
+}
+
+kotlin {
+    setIOS(
+        name = "ui",
+        bundleId = "com.b1nd.dodam.ui"
+    )
 }
 
 android {
