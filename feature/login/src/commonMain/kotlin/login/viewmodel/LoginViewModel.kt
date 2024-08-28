@@ -45,18 +45,17 @@ class LoginViewModel : ViewModel(), KoinComponent {
                             pw = pw,
                             token = result.data.accessToken,
 
-                            )
+                        )
                         _event.emit(Event.NavigateToMain)
                     } else {
                         _event.emit(Event.ShowDialog)
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                error = "선생님만 사용 가능합니다."
+                                error = "선생님만 사용 가능합니다.",
                             )
                         }
                     }
-
                 }
 
                 is Result.Error -> {

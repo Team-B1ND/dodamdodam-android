@@ -12,5 +12,5 @@ data class MemberResponse(
     val role: String,
     val status: String,
     val profileImage: String?,
-    val phone: String
+    val phone: String,
 )

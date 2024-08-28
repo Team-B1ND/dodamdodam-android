@@ -43,12 +43,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun LoginScreen(
-    viewModel: LoginViewModel = koinViewModel(),
-    onBackClick: () -> Unit,
-    navigateToMain: () -> Unit,
-    role: String
-) {
+internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit, role: String) {
     val uiState by viewModel.uiState.collectAsState()
 
     var idError by remember { mutableStateOf("") }
@@ -127,31 +122,29 @@ private fun LoginScreen(
 
     var showPassword by remember { mutableStateOf(false) }
 
-
     if (showDialog) {
         Dialog(
-            onDismissRequest = dismissDialog
+            onDismissRequest = dismissDialog,
         ) {
             DodamDialog(
                 title = errorMessage,
                 body = "아직 계정이 승인되지 않았어요.\n" +
-                        "승인을 기다려주세요.",
-                confirmButton = dismissDialog
+                    "승인을 기다려주세요.",
+                confirmButton = dismissDialog,
             )
         }
     }
 
     if (showDialog) {
         Dialog(
-            onDismissRequest = dismissDialog
+            onDismissRequest = dismissDialog,
         ) {
             DodamDialog(
                 title = errorMessage,
-                confirmButton = dismissDialog
+                confirmButton = dismissDialog,
             )
         }
     }
-
 
     Scaffold(
         modifier = Modifier
@@ -161,7 +154,7 @@ private fun LoginScreen(
         topBar = {
             DodamTopAppBar(
                 title = "아이디와 비밀번호를\n" +
-                        "입력해주세요",
+                    "입력해주세요",
                 onBackClick = onBackClick,
                 type = TopAppBarType.Medium,
             )
