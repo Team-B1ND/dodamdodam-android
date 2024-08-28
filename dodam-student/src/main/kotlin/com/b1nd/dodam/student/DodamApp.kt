@@ -36,8 +36,6 @@ import com.b1nd.dodam.bus.navigation.navigateToBus
 import com.b1nd.dodam.dds.component.DodamErrorToast
 import com.b1nd.dodam.dds.component.DodamSuccessToast
 import com.b1nd.dodam.dds.component.DodamWarningToast
-import login.navigation.loginScreen
-import login.navigation.navigationToLogin
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -58,6 +56,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import login.navigation.loginScreen
+import login.navigation.navigationToLogin
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalFoundationApi

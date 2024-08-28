@@ -8,13 +8,13 @@ import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.login.repository.LoginRepository
 import com.b1nd.dodam.datastore.repository.DataStoreRepository
-import login.model.LoginUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import login.model.LoginUiState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

@@ -13,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -21,11 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -33,12 +29,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
-import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDialog
-import com.b1nd.dodam.designsystem.component.DodamTextButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.designsystem.component.DodamTextFieldDefaults.TextStyle
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import login.viewmodel.Event
@@ -126,10 +119,10 @@ private fun LoginScreen(
         DodamDialog(
             title = "승인되지 않은 계정이에요",
             body = "아직 계정이 승인되지 않았어요.\n" +
-                    "승인을 기다려주세요.",
+                "승인을 기다려주세요.",
             confirmButton = {
                 dismissDialog
-            }
+            },
         )
     }
 
@@ -141,9 +134,9 @@ private fun LoginScreen(
         topBar = {
             DodamTopAppBar(
                 title = "아이디와 비밀번호를\n" +
-                        "입력해주세요",
+                    "입력해주세요",
                 onBackClick = onBackClick,
-                type = TopAppBarType.Medium
+                type = TopAppBarType.Medium,
             )
         },
     ) { paddingValues ->
@@ -184,15 +177,15 @@ private fun LoginScreen(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 singleLine = true,
             )
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.Center,
-            ){
+            ) {
                 Text(
                     text = "비밀번호를 잊으셨나요? ",
-                    color = DodamTheme.colors.labelAlternative
+                    color = DodamTheme.colors.labelAlternative,
                 )
                 Text(
                     text = "비밀번호 재설정",
@@ -200,15 +193,15 @@ private fun LoginScreen(
                     style = DodamTheme.typography.labelMedium().copy(
                         fontWeight = FontWeight.SemiBold,
                         textDecoration = TextDecoration.Underline,
-                    )
+                    ),
                 )
             }
             DodamButton(
-                onClick = onLoginClick ,
+                onClick = onLoginClick,
                 text = "로그인",
                 enabled = id.isNotBlank() && pw.isNotBlank(),
                 loading = isLoading,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
