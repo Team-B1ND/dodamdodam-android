@@ -1,4 +1,4 @@
-package login.navigation
+package com.b1nd.dodam.login.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -7,9 +7,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
-import login.LoginScreen
+import com.b1nd.dodam.login.LoginScreen
 
-const val LOGIN_ROUTE = "login"
+const val LOGIN_ROUTE = "com/b1nd/dodam/login"
 
 fun NavController.navigationToLogin(
     navOptions: NavOptions? = navOptions {

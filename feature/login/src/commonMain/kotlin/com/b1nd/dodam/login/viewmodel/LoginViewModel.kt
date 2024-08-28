@@ -1,4 +1,4 @@
-package login.viewmodel
+package com.b1nd.dodam.login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import login.model.LoginUiState
+import com.b1nd.dodam.login.model.LoginUiState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
