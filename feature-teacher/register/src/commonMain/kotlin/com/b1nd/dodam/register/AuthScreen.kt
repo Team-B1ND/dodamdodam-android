@@ -292,13 +292,12 @@ fun AuthScreen(
                 onClick = {
                     viewModel.register(
                         email = email,
-                        grade = 0,
                         id = idState.value,
                         name = name,
-                        number = 0,
                         phone = phoneNumber,
                         pw = passwordState.value,
-                        room = 0,
+                        tel = extensionNumber,
+                        position = teacherRole
                     )
                 },
                 loading = uiState.isLoading,
