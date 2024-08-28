@@ -36,19 +36,14 @@ import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
-import kotlinx.coroutines.launch
 import com.b1nd.dodam.login.viewmodel.Event
 import com.b1nd.dodam.login.viewmodel.LoginViewModel
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun LoginScreen(
-    viewModel: LoginViewModel = koinViewModel(),
-    onBackClick: () -> Unit,
-    navigateToMain: () -> Unit,
-    role: String
-) {
+internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit, role: String) {
     val uiState by viewModel.uiState.collectAsState()
 
     var idError by remember { mutableStateOf("") }
@@ -169,7 +164,7 @@ private fun LoginScreen(
         topBar = {
             DodamTopAppBar(
                 title = "아이디와 비밀번호를\n" +
-                        "입력해주세요",
+                    "입력해주세요",
                 onBackClick = onBackClick,
                 type = TopAppBarType.Medium,
             )
@@ -195,7 +190,7 @@ private fun LoginScreen(
                 onClickRemoveRequest = onIdCancel,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 singleLine = true,
-                supportText = if (idError.isNotBlank()) idError else  "" ,
+                supportText = if (idError.isNotBlank()) idError else "",
 
             )
 
@@ -213,7 +208,7 @@ private fun LoginScreen(
                 onClickRemoveRequest = onPwCancel,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 singleLine = true,
-                supportText = if (pwError.isNotBlank()) pwError else ""
+                supportText = if (pwError.isNotBlank()) pwError else "",
             )
             Row(
                 modifier = Modifier

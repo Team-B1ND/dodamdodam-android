@@ -18,6 +18,7 @@ import com.b1nd.dodam.data.point.di.pointRepositoryModule
 import com.b1nd.dodam.data.schedule.di.scheduleRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
 import com.b1nd.dodam.keystore.keystoreManagerModule
+import com.b1nd.dodam.login.di.loginViewModelModule
 import com.b1nd.dodam.member.di.memberDataSourceModule
 import com.b1nd.dodam.member.di.memberRepositoryModule
 import com.b1nd.dodam.network.banner.di.bannerDataSourceModule
@@ -37,7 +38,6 @@ import com.b1nd.dodam.student.point.di.pointViewModelModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongDataSourceModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongRepositoryModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongViewModelModule
-import com.b1nd.dodam.login.di.loginViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
