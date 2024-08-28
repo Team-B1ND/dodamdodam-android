@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.login.navigation.loginScreen
+import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -24,7 +26,7 @@ fun DodamTeacherApp() {
         ) {
             onboardingScreen(
                 onRegisterClick = navHostController::navigateToInfo,
-                onLoginClick = {},
+                onLoginClick = navHostController::navigationToLogin,
             )
 
             infoScreen(
@@ -43,6 +45,11 @@ fun DodamTeacherApp() {
             authScreen(
                 onRegisterClick = navHostController::navigateToOnboarding,
                 onBackClick = navHostController::popBackStack,
+            )
+            loginScreen(
+                onBackClick = navHostController::popBackStack,
+                navigateToMain = {},
+                role = "TEACHER",
             )
         }
     }
