@@ -65,7 +65,6 @@ fun InfoScreen(
     var emailState by remember { mutableStateOf(TextFieldState()) }
     var phoneNumberState by remember { mutableStateOf(TextFieldState()) }
     var extensionNumberState by remember { mutableStateOf(TextFieldState()) }
-    var classInfoState by remember { mutableStateOf(TextFieldState()) }
 
     val focusManager = LocalFocusManager.current
 
@@ -93,7 +92,7 @@ fun InfoScreen(
 
     Scaffold(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
+            .background(DodamTheme.colors.backgroundNeutral)
             .statusBarsPadding(),
         topBar = {
             Column(
@@ -412,7 +411,7 @@ fun InfoScreen(
                     )
                 },
                 enabled = nameState.value.length in 2..4 &&
-                    teacherRoleState.value.length == 4 &&
+                    teacherRoleState.value.isNotEmpty() &&
                     emailState.value.isNotBlank() &&
                     phoneNumberState.value.length == 11 &&
                     extensionNumberState.value.length == 10,

@@ -16,7 +16,7 @@ internal class RegisterRepositoryImpl constructor(
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : RegisterRepository {
 
-    override fun register(email: String, grade: Int, id: String, name: String, number: Int, phone: String, pw: String, room: Int): Flow<Result<Unit>> {
+    override suspend fun register(email: String, grade: Int, id: String, name: String, number: Int, phone: String, pw: String, room: Int): Flow<Result<Unit>> {
         return flow {
             emit(
                 registerDataSource.register(
@@ -32,4 +32,28 @@ internal class RegisterRepositoryImpl constructor(
             )
         }.asResult().flowOn(dispatcher)
     }
+
+    override suspend fun registerTeacher(
+        id: String,
+        email: String,
+        name: String,
+        phone: String,
+        pw: String,
+        position: String,
+        tel: String,
+    ): Flow<Result<Unit>> = flow {
+        emit(
+            registerDataSource.registerTeacher(
+                id = id,
+                email = email,
+                name = name,
+                phone = phone,
+                pw = pw,
+                position = position,
+                tel = tel
+            )
+        )
+    }
+        .asResult()
+        .flowOn(dispatcher)
 }
