@@ -24,15 +24,7 @@ class RegisterViewModel : ViewModel(), KoinComponent {
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
 
-    fun register(
-        id: String,
-        email: String,
-        name: String,
-        phone: String,
-        pw: String,
-        position: String,
-        tel: String
-    ) = viewModelScope.launch {
+    fun register(id: String, email: String, name: String, phone: String, pw: String, position: String, tel: String) = viewModelScope.launch {
         registerRepository.registerTeacher(
             id = id,
             email = email,
@@ -40,7 +32,7 @@ class RegisterViewModel : ViewModel(), KoinComponent {
             phone = phone,
             pw = pw,
             position = position,
-            tel = tel
+            tel = tel,
         ).collect { result ->
             when (result) {
                 is Result.Success -> {

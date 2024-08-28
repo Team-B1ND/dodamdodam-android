@@ -20,7 +20,7 @@ fun NavController.navigateToInfo(
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.infoScreen(
     onNextClick: (name: String, teacherRole: String, email: String, phoneNumber: String, extensionNumber: String) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     composable(
         route = INFO_ROUTE,

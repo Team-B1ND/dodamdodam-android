@@ -19,7 +19,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             networkCoreModule,
             registerViewModelModule,
             registerRepositoryModule,
-            registerDataSourceModule
+            registerDataSourceModule,
         )
         block()
     }

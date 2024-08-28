@@ -34,15 +34,15 @@ fun DodamTeacherApp() {
                         teacherRole = teacherRole,
                         email = email,
                         phoneNumber = phoneNumber,
-                        extensionNumber = extensionNumber
+                        extensionNumber = extensionNumber,
                     )
                 },
-                onBackClick = navHostController::popBackStack
+                onBackClick = navHostController::popBackStack,
             )
 
             authScreen(
                 onRegisterClick = navHostController::navigateToOnboarding,
-                onBackClick = navHostController::popBackStack
+                onBackClick = navHostController::popBackStack,
             )
         }
     }
