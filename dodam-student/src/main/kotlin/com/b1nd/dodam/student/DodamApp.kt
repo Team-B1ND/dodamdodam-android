@@ -56,8 +56,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import login.navigation.loginScreen
-import login.navigation.navigationToLogin
+import com.b1nd.dodam.login.navigation.loginScreen
+import com.b1nd.dodam.login.navigation.navigationToLogin
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalFoundationApi

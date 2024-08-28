@@ -1,4 +1,4 @@
-package login
+package com.b1nd.dodam.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,8 +37,8 @@ import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import kotlinx.coroutines.launch
-import login.viewmodel.Event
-import login.viewmodel.LoginViewModel
+import com.b1nd.dodam.login.viewmodel.Event
+import com.b1nd.dodam.login.viewmodel.LoginViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @ExperimentalMaterial3Api

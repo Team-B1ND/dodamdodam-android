@@ -7,8 +7,8 @@ import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
-import login.navigation.loginScreen
-import login.navigation.navigationToLogin
+import com.b1nd.dodam.login.navigation.loginScreen
+import com.b1nd.dodam.login.navigation.navigationToLogin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
