@@ -51,6 +51,7 @@ import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.register.viewmodel.Event
 import com.b1nd.dodam.register.viewmodel.RegisterViewModel
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import com.b1nd.dodam.ui.util.moveFocus
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -81,12 +82,12 @@ fun AuthScreen(
 
     LaunchedEffect(idState.isValid) {
         if (idState.isValid) {
-            focusManager.moveFocus(FocusDirection.Down)
+            focusManager.moveFocus(FocusDirection.Up, 2)
         }
     }
     LaunchedEffect(passwordState.isValid) {
         if (passwordState.isValid) {
-            focusManager.moveFocus(FocusDirection.Up)
+            focusManager.moveFocus(FocusDirection.Up, 3)
         }
     }
     LaunchedEffect(viewModel.event) {

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,15 +22,21 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
@@ -47,7 +54,11 @@ import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.ui.util.PhoneVisualTransformation
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import com.b1nd.dodam.ui.util.moveFocus
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun InfoScreen(
@@ -68,25 +79,26 @@ fun InfoScreen(
 
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(phoneNumberState.isValid) {
-        if (phoneNumberState.isValid) {
-            focusManager.moveFocus(FocusDirection.Up)
-        }
-    }
+    val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(teacherRoleState.isValid) {
-        if (teacherRoleState.isValid) {
-            focusManager.moveFocus(FocusDirection.Up)
+    LaunchedEffect(phoneNumberState.isValid) {
+        if (phoneNumberState.isValid && !phoneNumberState.focused) {
+            focusManager.moveFocus(FocusDirection.Up, 5)
         }
     }
     LaunchedEffect(emailState.isValid) {
-        if (emailState.isValid) {
-            focusManager.moveFocus(FocusDirection.Up)
+        if (emailState.isValid && !emailState.focused) {
+            focusManager.moveFocus(FocusDirection.Up, 4)
+        }
+    }
+    LaunchedEffect(teacherRoleState.isValid) {
+        if (teacherRoleState.isValid && !teacherRoleState.focused) {
+            focusManager.moveFocus(FocusDirection.Up, 3)
         }
     }
     LaunchedEffect(nameState.isValid) {
-        if (nameState.isValid) {
-            focusManager.moveFocus(FocusDirection.Up)
+        if (nameState.isValid && !nameState.focused) {
+            focusManager.moveFocus(FocusDirection.Up, 2)
         }
     }
 
@@ -168,7 +180,7 @@ fun InfoScreen(
                 )
             }
         },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -292,7 +304,14 @@ fun InfoScreen(
                         ),
                         keyboardActions = KeyboardActions(onDone = {
                             phoneNumberState = checkPhoneNumberStateValid(phoneNumberState)
-                            focusManager.clearFocus()
+                            if (phoneNumberState.isValid) {
+                                coroutineScope.launch {
+                                    delay(100)
+                                    focusManager.moveFocus(FocusDirection.Up)
+                                }
+                            } else {
+                                focusManager.clearFocus()
+                            }
                         }),
                         singleLine = true,
                     )
@@ -323,7 +342,10 @@ fun InfoScreen(
                         keyboardActions = KeyboardActions(onNext = {
                             emailState = checkEmailStateValid(emailState)
                             if (emailState.isValid) {
-                                focusManager.moveFocus(FocusDirection.Up)
+                                coroutineScope.launch {
+                                    delay(100)
+                                    focusManager.moveFocus(FocusDirection.Up)
+                                }
                             } else {
                                 focusManager.clearFocus()
                             }
@@ -354,7 +376,10 @@ fun InfoScreen(
                         keyboardActions = KeyboardActions(onNext = {
                             teacherRoleState = checkTeacherRoleStateValid(teacherRoleState)
                             if (teacherRoleState.isValid) {
-                                focusManager.moveFocus(FocusDirection.Up)
+                                coroutineScope.launch {
+                                    delay(100)
+                                    focusManager.moveFocus(FocusDirection.Up)
+                                }
                             } else {
                                 focusManager.clearFocus()
                             }
@@ -385,11 +410,22 @@ fun InfoScreen(
                     keyboardActions = KeyboardActions(onNext = {
                         nameState = checkNameStateValid(nameState)
                         if (nameState.isValid) {
-                            focusManager.moveFocus(FocusDirection.Up)
+                            coroutineScope.launch {
+                                delay(100)
+                                focusManager.moveFocus(FocusDirection.Up)
+                            }
                         } else {
                             focusManager.clearFocus()
                         }
                     }),
+                    onClickRemoveRequest = {
+                        nameState = nameState.copy(
+                            value = "",
+                            isValid = false,
+                            isError = false,
+                            errorMessage = "",
+                        )
+                    },
                     singleLine = true,
                 )
             }
@@ -414,7 +450,7 @@ fun InfoScreen(
                     teacherRoleState.value.isNotEmpty() &&
                     emailState.value.isNotBlank() &&
                     phoneNumberState.value.length == 11 &&
-                    extensionNumberState.value.length == 10,
+                    extensionNumberState.isValid,
                 text = "다음",
                 buttonSize = ButtonSize.Large,
                 buttonRole = ButtonRole.Primary,
