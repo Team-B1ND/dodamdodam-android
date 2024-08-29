@@ -46,6 +46,7 @@ import com.b1nd.dodam.dds.style.ChevronRightIcon
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.ui.component.InputField
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import com.b1nd.dodam.ui.icons.DefaultProfile
 import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
@@ -268,7 +269,7 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), popBac
                                     .clip(CircleShape)
                                     .size(48.dp),
                                 model = uiState.profile
-                                    ?: com.b1nd.dodam.ui.R.drawable.ic_default_profile,
+                                    ?: DefaultProfile,
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                             )
