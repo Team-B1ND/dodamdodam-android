@@ -46,6 +46,7 @@ fun DodamTeacherApp() {
                 onRegisterClick = navHostController::navigateToOnboarding,
                 onBackClick = navHostController::popBackStack,
             )
+
             loginScreen(
                 onBackClick = navHostController::popBackStack,
                 navigateToMain = {},
