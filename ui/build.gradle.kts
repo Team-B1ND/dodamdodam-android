@@ -6,20 +6,23 @@ plugins {
     alias(libs.plugins.dodam.multiplatform.feature)
 }
 
-kotlin{
-    androidTarget{
+kotlin {
+    androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
-
-}
-
     setIOS(
         name = "ui",
         bundleId = "com.b1nd.dodam.ui"
     )
+
+    sourceSets.commonMain.dependencies {
+        implementation(libs.dodam.design.system.cmm)
+    }
+}
+
 android {
     namespace = "com.b1nd.dodam.ui"
     defaultConfig {
