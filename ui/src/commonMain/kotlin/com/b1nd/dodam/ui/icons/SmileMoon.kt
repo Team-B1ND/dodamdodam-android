@@ -1,7 +1,5 @@
 package com.b1nd.dodam.ui.icons
 
-import androidx.compose.foundation.Image
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType.Companion.NonZero
 import androidx.compose.ui.graphics.SolidColor
