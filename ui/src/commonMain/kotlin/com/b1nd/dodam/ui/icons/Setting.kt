@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.StrokeJoin.Companion.Miter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.ImageVector.Builder
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 public val Setting: ImageVector
@@ -92,9 +91,3 @@ public val Setting: ImageVector
     }
 
 private var vector: ImageVector? = null
-
-@Preview
-@Composable
-fun SettingPreview() {
-    Icon(imageVector = Setting, contentDescription = null)
-}

@@ -1,14 +1,15 @@
 package com.b1nd.dodam.ui.icons
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
-import com.b1nd.dodam.ui.R
+import dodamdodam_android.ui.generated.resources.Res
+import dodamdodam_android.ui.generated.resources.ic_b1ndlogo
+import dodamdodam_android.ui.generated.resources.ic_dodamlogo
+import org.jetbrains.compose.resources.vectorResource
 
 val B1NDLogo
     @Composable
-    get() = ImageVector.vectorResource(R.drawable.ic_b1ndlogo)
+    get() = vectorResource(Res.drawable.ic_b1ndlogo)
 
 val DodamLogo
     @Composable
-    get() = ImageVector.vectorResource(R.drawable.ic_dodamlogo)
+    get() = vectorResource(Res.drawable.ic_dodamlogo)
