@@ -132,15 +132,25 @@ fun AllScreen(
                 ) {
                     uiState.myInfo?.let { myInfo ->
                         Box {
-                            AsyncImage(
-                                model = myInfo.profileImage
-                                    ?: DefaultProfile,
-                                contentDescription = "profile",
-                                modifier = Modifier
-                                    .clip(shape = RoundedCornerShape(12.dp))
-                                    .size(70.dp),
-                                contentScale = ContentScale.Crop,
-                            )
+                            if (myInfo.profileImage != null) {
+                                AsyncImage(
+                                    model = myInfo.profileImage,
+                                    contentDescription = "profile",
+                                    modifier = Modifier
+                                        .clip(shape = RoundedCornerShape(12.dp))
+                                        .size(70.dp),
+                                    contentScale = ContentScale.Crop,
+                                )
+                            } else {
+                                Image(
+                                    bitmap = DefaultProfile,
+                                    contentDescription = "profile",
+                                    modifier = Modifier
+                                        .clip(shape = RoundedCornerShape(12.dp))
+                                        .size(70.dp),
+                                    contentScale = ContentScale.Crop,
+                                )
+                            }
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         val classInfo = myInfo.student
