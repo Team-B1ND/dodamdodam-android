@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -42,6 +41,13 @@ import com.b1nd.dodam.dds.style.GearIcon
 import com.b1nd.dodam.dds.style.LabelLarge
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import com.b1nd.dodam.ui.icons.BarChart
+import com.b1nd.dodam.ui.icons.ColoredBus
+import com.b1nd.dodam.ui.icons.ColoredMegaphone
+import com.b1nd.dodam.ui.icons.ColoredMusicalNote
+import com.b1nd.dodam.ui.icons.ColoredPencil
+import com.b1nd.dodam.ui.icons.ColoredTent
+import com.b1nd.dodam.ui.icons.DefaultProfile
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -126,15 +132,25 @@ fun AllScreen(
                 ) {
                     uiState.myInfo?.let { myInfo ->
                         Box {
-                            AsyncImage(
-                                model = myInfo.profileImage
-                                    ?: com.b1nd.dodam.ui.R.drawable.ic_default_profile,
-                                contentDescription = "profile",
-                                modifier = Modifier
-                                    .clip(shape = RoundedCornerShape(12.dp))
-                                    .size(70.dp),
-                                contentScale = ContentScale.Crop,
-                            )
+                            if (myInfo.profileImage != null) {
+                                AsyncImage(
+                                    model = myInfo.profileImage,
+                                    contentDescription = "profile",
+                                    modifier = Modifier
+                                        .clip(shape = RoundedCornerShape(12.dp))
+                                        .size(70.dp),
+                                    contentScale = ContentScale.Crop,
+                                )
+                            } else {
+                                Image(
+                                    bitmap = DefaultProfile,
+                                    contentDescription = "profile",
+                                    modifier = Modifier
+                                        .clip(shape = RoundedCornerShape(12.dp))
+                                        .size(70.dp),
+                                    contentScale = ContentScale.Crop,
+                                )
+                            }
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         val classInfo = myInfo.student
@@ -153,7 +169,7 @@ fun AllScreen(
             }
             Spacer(modifier = Modifier.height(24.dp))
             AllCardView(
-                imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_bar_chart),
+                imageVector = BarChart,
                 text = "내 상벌점 보기",
             ) {
                 navigateToMyPoint()
@@ -168,31 +184,31 @@ fun AllScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 AllCardView(
-                    imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_bus),
+                    imageVector = ColoredBus,
                     text = "복귀 버스 신청하기",
                 ) {
                     navigateToAddBus()
                 }
                 AllCardView(
-                    imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_pencil),
+                    imageVector = ColoredPencil,
                     text = "심야 자습 신청하기",
                 ) {
                     navigateToAddNightStudy()
                 }
                 AllCardView(
-                    imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_tent),
+                    imageVector = ColoredTent,
                     text = "외출/외박 신청하기",
                 ) {
                     navigateToAddOutingStudy()
                 }
                 AllCardView(
-                    imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_megaphone),
+                    imageVector = ColoredMegaphone,
                     text = "기상송 보기",
                 ) {
                     navigateToWakeUpSong()
                 }
                 AllCardView(
-                    imageVector = ImageVector.vectorResource(com.b1nd.dodam.ui.R.drawable.ic_colored_musical_note),
+                    imageVector = ColoredMusicalNote,
                     text = "기상송 신청하기",
                 ) {
                     navigateToAddWakeUpSong()
@@ -243,7 +259,7 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
 fun AllCardViewPreview() {
     DodamTheme {
         AllCardView(
-            imageVector = ImageVector.vectorResource(id = com.b1nd.dodam.ui.R.drawable.ic_bar_chart),
+            imageVector = BarChart,
             onClick = {},
             text = "test",
         )
