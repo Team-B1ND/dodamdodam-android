@@ -1,14 +1,13 @@
 name: Android CI
 
 on:
-  push:
-    branches: [ "develop", "main" ]
   pull_request:
     branches: [ "develop", "main" ]
 
 jobs:
   build:
-
+    env:
+      TITLE: ${{ github.event.pull_request.title }}
     runs-on: ubuntu-latest
 
     steps:
@@ -23,8 +22,21 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Run spotless
+    - name: Run Student spotless
+      if: startsWith($TITLE}, '[Student]')
       run: ./gradlew dodam-student:spotlessCheck
 
-    - name: Android Build with Gradle
+    - name: Android Student Build with Gradle
+      if: startsWith($TITLE}, '[Student]')
       run: ./gradlew dodam-student:clean assembleRelease --parallel
+
+    - name: Run Teacher spotless
+      if: startsWith($TITLE}, '[Teacher]')
+      run: ./gradlew dodam-teacher-android:spotlessCheck
+    
+    - name: Android Teacher Build with Gradle
+      if: startsWith($TITLE}, '[Teacher]')
+      run: ./gradlew dodam-teacher-android:clean assembleRelease --parallel
+
+
+    
