@@ -38,7 +38,15 @@ jobs:
       if: startsWith(env.TITLE, '[Teacher]')
       run: ./gradlew dodam-teacher-android:clean assembleRelease --parallel
 
-  
+    - name: Android Core Build with Gradle
+      if: startsWith(env.TITLE, '[Core]')
+      run: ./gradlew spotlessCheck
+    
+    - name: Android Core Build with Gradle
+      if: startsWith(env.TITLE, '[Core]')
+      run: |
+        ./gradlew dodam-teacher-android:clean assembleRelease --parallel
+        ./gradlew dodam-student:assembleRelease --parallel
 
 
     
