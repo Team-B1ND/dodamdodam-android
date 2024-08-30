@@ -430,6 +430,8 @@ fun InfoScreen(
                     .padding(
                         horizontal = 16.dp,
                     )
+
+                    .padding(bottom = 24.dp)
                     .align(Alignment.BottomCenter),
                 onClick = {
                     onNextClick(
