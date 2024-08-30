@@ -282,6 +282,7 @@ fun AuthScreen(
                     .padding(
                         horizontal = 16.dp,
                     )
+                    .padding(bottom = 24.dp)
                     .align(Alignment.BottomCenter),
                 enabled = idState.value.isNotBlank() &&
                     passwordState.value.isNotBlank() &&
