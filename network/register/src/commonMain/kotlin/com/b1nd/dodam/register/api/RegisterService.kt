@@ -5,6 +5,7 @@ import com.b1nd.dodam.network.core.model.DefaultResponse
 import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.register.datasource.RegisterDataSource
 import com.b1nd.dodam.register.model.RegisterRequest
+import com.b1nd.dodam.register.model.RegisterTeacherRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -35,4 +36,22 @@ internal class RegisterService(
             }.body<DefaultResponse>()
         }
     }
+
+    override suspend fun registerTeacher(id: String, email: String, name: String, phone: String, pw: String, position: String, tel: String) =
+        defaultSafeRequest {
+            client.post(DodamUrl.Member.REGISTER_TEACHER) {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    RegisterTeacherRequest(
+                        id = id,
+                        email = email,
+                        name = name,
+                        phone = phone,
+                        pw = pw,
+                        position = position,
+                        tel = tel,
+                    ),
+                )
+            }.body<DefaultResponse>()
+        }
 }

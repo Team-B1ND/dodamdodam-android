@@ -27,6 +27,11 @@ kotlin {
             api(projects.feature.login)
             implementation(projects.datastore)
             implementation(projects.logging)
+            implementation(projects.featureTeacher.register)
+            implementation(projects.data.register)
+            implementation(projects.network.register)
+            implementation(projects.common)
+            implementation(projects.network.core)
         }
     }
 }
