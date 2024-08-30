@@ -2,6 +2,7 @@ package com.b1nd.dodam.setting
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -264,15 +265,25 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), popBac
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
-                            AsyncImage(
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(48.dp),
-                                model = uiState.profile
-                                    ?: DefaultProfile,
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                            )
+                            if (uiState.profile != null) {
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .size(48.dp),
+                                    model = uiState.profile,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                )
+                            } else {
+                                Image(
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .size(48.dp),
+                                    bitmap = DefaultProfile,
+                                    contentDescription = "프로필 이미지",
+                                    contentScale = ContentScale.Crop,
+                                )
+                            }
 
                             Column {
                                 BodyLarge(
