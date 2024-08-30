@@ -23,19 +23,19 @@ jobs:
       run: chmod +x gradlew
 
     - name: Run Student spotless
-      if: startsWith($TITLE}, '[Student]')
+      if: startsWith(env.TITLE, '[Student]')
       run: ./gradlew dodam-student:spotlessCheck
 
     - name: Android Student Build with Gradle
-      if: startsWith($TITLE}, '[Student]')
+      if: startsWith(env.TITLE, '[Student]')
       run: ./gradlew dodam-student:clean assembleRelease --parallel
 
     - name: Run Teacher spotless
-      if: startsWith($TITLE}, '[Teacher]')
+      if: startsWith(env.TITLE, '[Teacher]')
       run: ./gradlew dodam-teacher-android:spotlessCheck
     
     - name: Android Teacher Build with Gradle
-      if: startsWith($TITLE}, '[Teacher]')
+      if: startsWith(env.TITLE, '[Teacher]')
       run: ./gradlew dodam-teacher-android:clean assembleRelease --parallel
 
 
