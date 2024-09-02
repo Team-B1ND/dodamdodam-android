@@ -71,3 +71,4 @@ include(
     ":dodam-teacher-android",
     ":feature-teacher:register"
 )
+include(":feature-teacher:nightstudy")
