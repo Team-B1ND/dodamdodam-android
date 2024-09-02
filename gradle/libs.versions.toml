@@ -40,8 +40,8 @@ app-update = "2.1.0"
 spotless = "6.23.3"
 material = "1.11.0"
 bottomsheetdialog = "1.3.1"
-ktor = "2.3.8"
-coil = "2.6.0"
+ktor = "3.0.0-wasm2"
+coil = "3.0.0-alpha10"
 dds = "0.1.18"
 dds-cmm = "1.0.3"
 composeinvestigator = "1.5.10-0.2.1"
@@ -116,7 +116,7 @@ ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-conte
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor" }
-coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 dodam-design-system = { group = "com.github.Team-B1ND", name = "dds-android", version.ref = "dds" }
 wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "wheel-picker" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
