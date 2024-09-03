@@ -1,4 +1,5 @@
 [versions]
+coilVersion = "2.7.0"
 compileSdk = "34"
 minSdk = "28"
 targetSdk = "34"
@@ -50,6 +51,7 @@ koin = "3.5.6"
 koin-compose = "1.1.5"
 koin-compose-viewModel = "1.2.0-Beta5"
 stately = "2.0.6"
+coilcomopse = "3.0.0-alpha06"
 
 # test
 junit = "4.13.2"
@@ -64,6 +66,7 @@ coreKtx = "1.13.1"
 
 [libraries]
 # kotlin
+coil = { module = "io.coil-kt:coil", version.ref = "coilVersion" }
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -126,6 +129,8 @@ koin-compose-multiplatform = { group = "io.insert-koin", name = "koin-compose", 
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin-compose-viewModel" }
 stately-concurrency = { group = "co.touchlab", name = "stately-concurrency", version.ref = "stately"}
 dodam-design-system-cmm = { group = "com.b1nd.dodam", name = "dodam-design-system", version.ref = "dds-cmm" }
+coil3 = { group= "io.coil-kt.coil3", name= "coil-compose", version.ref= "coilcomopse" }
+
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
