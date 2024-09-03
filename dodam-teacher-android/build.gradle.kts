@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.dodam.multiplatform.application)
     alias(libs.plugins.dodam.multiplatform.compose)
     alias(libs.plugins.dodam.multiplatform.kotlin)
-    alias(libs.plugins.dodam.multiplatform.kotlin.serialization)
+    alias(libs.plugins.dodam.multiplatform.coil)
     alias(libs.plugins.dodam.multiplatform.koin)
 }
 kotlin {
@@ -29,21 +29,13 @@ kotlin {
             implementation(projects.common)
             implementation(projects.network.core)
             implementation(projects.featureTeacher.home)
-
-            implementation(libs.coil)
-            implementation(libs.coil.compose)
-            implementation(libs.coil.network.ktor)
-            implementation(libs.ktor.client.core)
         }
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.compose.activity)
             implementation(libs.koin.android)
             implementation(projects.keystore)
-            implementation(libs.coil.network.okhttp)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
         }
     }
 }
