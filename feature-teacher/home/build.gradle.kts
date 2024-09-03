@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.dodam.multiplatform.feature)
     alias(libs.plugins.dodam.multiplatform.koin)
-    alias(libs.plugins.dodam.multiplatform.kotlin.serialization)
+    alias(libs.plugins.dodam.multiplatform.coil)
 }
 
 kotlin {
@@ -43,18 +43,6 @@ kotlin {
             implementation(projects.data.outing)
             implementation(projects.data.nightStudy)
             implementation(projects.data.schedule)
-            implementation(libs.kotlinx.io.bytestring)
-            implementation(libs.coil)
-            implementation(libs.coil.compose)
-            implementation(libs.coil.network.ktor)
-            implementation(libs.ktor.client.core)
-        }
-
-        androidMain.dependencies {
-            implementation(libs.coil.network.okhttp)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
         }
 //        iosMain.dependencies {
 //            implementation("io.ktor:ktor-client-ios:3.0.0-wasm2")

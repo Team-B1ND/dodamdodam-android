@@ -180,8 +180,6 @@ dodam-multiplatform-kotlin = { id = "b1nd.dodam.primitive.multiplatform.kotlin",
 dodam-multiplatform-kotlin-serialization = { id = "b1nd.dodam.primitive.multiplatform.kotlin.serialization", version = "unspecified"}
 dodam-multiplatform-koin = { id = "b1nd.dodam.primitive.multiplatform.koin", version = "unspecified"}
 dodam-multiplatform-application = { id = "b1nd.dodam.primitive.multiplatform.application", version = "unspecified"}
+dodam-multiplatform-coil = { id = "b1nd.dodam.primitive.multiplatform.coil", version = "unspecified"}
 
 [bundles]
-compose-implementation = ["androidx-compose-ui", "androidx-compose-ui-foundation", "androidx-compose-ui-graphics", "androidx-compose-lifecycle", "androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview", "androidx-compose-material3"]
-ktor-implementation = ["ktor-client-json", "ktor-client-logging", "ktor-client-core", "ktor-serialization-kotlinx-json", "ktor-client-content-negotiation"]
-coil-implementaion = ["coil", "coil-compose", "coil-compose-core", "coil-network-ktor"]
