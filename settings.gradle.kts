@@ -70,5 +70,6 @@ include(
     ":feature-student:ask-wakeup-song",
     ":logging",
     ":dodam-teacher-android",
-    ":feature-teacher:register"
+    ":feature-teacher:register",
+    ":feature-teacher:home",
 )
