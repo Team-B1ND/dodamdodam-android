@@ -11,6 +11,7 @@ kotlinx-coroutines = "1.7.3"
 kotlinx-collections-immutable = "0.3.7"
 kotlinx-serialization-json = "1.6.2"
 kotlinx-datetime = "0.5.0"
+kotlinx-io = "0.5.3"
 swift-klib = "0.6.3"
 
 # android
@@ -41,7 +42,7 @@ spotless = "6.23.3"
 material = "1.11.0"
 bottomsheetdialog = "1.3.1"
 ktor = "3.0.0-wasm2"
-coil = "3.0.0-alpha10"
+coil = "3.0.0-alpha06"
 dds = "0.1.18"
 dds-cmm = "1.0.3"
 composeinvestigator = "1.5.10-0.2.1"
@@ -72,7 +73,8 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
-
+kotlinx-io-bytestring = {group = "org.jetbrains.kotlinx", name = "kotlinx-io-bytestring", version.ref = "kotlinx-io" }
+kotlinx-io-core = {group = "org.jetbrains.kotlinx", name = "kotlinx-io-core", version.ref = "kotlinx-io" }
 # android
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 androidx-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
@@ -116,7 +118,15 @@ ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-conte
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor" }
+ktor-client-json = { group = "io.ktor", name = "ktor-client-json", version.ref = "ktor" }
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+coil-compose-core = { group = "io.coil-kt.coil3", name = "coil-compose-core" , version.ref = "coil"}
+coil-network-ktor = { group = "io.coil-kt.coil3", name = "coil-network-ktor" , version.ref = "coil"}
+coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp" , version.ref = "coil"}
+coil = { group = "io.coil-kt.coil3", name = "coil" , version.ref = "coil"}
+
 dodam-design-system = { group = "com.github.Team-B1ND", name = "dds-android", version.ref = "dds" }
 wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "wheel-picker" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
@@ -173,3 +183,5 @@ dodam-multiplatform-application = { id = "b1nd.dodam.primitive.multiplatform.app
 
 [bundles]
 compose-implementation = ["androidx-compose-ui", "androidx-compose-ui-foundation", "androidx-compose-ui-graphics", "androidx-compose-lifecycle", "androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview", "androidx-compose-material3"]
+ktor-implementation = ["ktor-client-json", "ktor-client-logging", "ktor-client-core", "ktor-serialization-kotlinx-json", "ktor-client-content-negotiation"]
+coil-implementaion = ["coil", "coil-compose", "coil-compose-core", "coil-network-ktor"]

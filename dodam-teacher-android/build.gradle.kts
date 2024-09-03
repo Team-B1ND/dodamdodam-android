@@ -6,21 +6,17 @@ plugins {
     alias(libs.plugins.dodam.multiplatform.application)
     alias(libs.plugins.dodam.multiplatform.compose)
     alias(libs.plugins.dodam.multiplatform.kotlin)
+    alias(libs.plugins.dodam.multiplatform.kotlin.serialization)
     alias(libs.plugins.dodam.multiplatform.koin)
 }
 kotlin {
     setIOS("DodamTeacher", "com.b1nd.dodam.teacher")
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.compose.activity)
-            implementation(libs.koin.android)
-            implementation(projects.keystore)
-        }
         commonMain.dependencies {
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.common)
+            implementation(projects.ui)
             implementation(projects.network.login)
 
             implementation(projects.feature.onboarding)
@@ -32,6 +28,22 @@ kotlin {
             implementation(projects.network.register)
             implementation(projects.common)
             implementation(projects.network.core)
+            implementation(projects.featureTeacher.home)
+
+            implementation(libs.coil)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
+            implementation(libs.ktor.client.core)
+        }
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(libs.androidx.compose.activity)
+            implementation(libs.koin.android)
+            implementation(projects.keystore)
+            implementation(libs.coil.network.okhttp)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
     }
 }
