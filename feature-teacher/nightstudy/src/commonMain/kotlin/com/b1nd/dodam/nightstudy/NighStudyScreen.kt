@@ -97,7 +97,6 @@ fun NightStudyScreen() {
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
                             .padding(bottom = 10.dp)
-                            .scrollEnabled(true),
                     ) {
                         items(3) {
                             UserItem(
@@ -133,7 +132,6 @@ fun NightStudyScreen() {
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
                             .padding(bottom = 10.dp)
-                            .scrollEnabled(true),
                     ) {
                         items(3) {
                             UserItem(
@@ -153,8 +151,3 @@ fun NightStudyScreen() {
         }
     }
 }
-private fun Modifier.scrollEnabled(enabled: Boolean) = nestedScroll(
-    connection = object : NestedScrollConnection {
-        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset = if (enabled) Offset.Zero else available
-    },
-)
