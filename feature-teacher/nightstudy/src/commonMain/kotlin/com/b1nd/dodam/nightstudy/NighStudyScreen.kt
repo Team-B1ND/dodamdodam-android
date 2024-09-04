@@ -24,9 +24,13 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.ButtonRole
+import com.b1nd.dodam.designsystem.component.ButtonSize
+import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
+import com.b1nd.dodam.designsystem.component.DodamTextButton
 import com.b1nd.dodam.ui.component.UserItem
 import kotlinx.collections.immutable.toImmutableList
 
@@ -99,7 +103,7 @@ fun NightStudyScreen(
                             .padding(bottom = 10.dp)
                             .scrollEnabled(true)
                     ) {
-                        items(30) {
+                        items(3) {
                             UserItem(
                                 userName = "병준"
                             ) {
@@ -107,6 +111,43 @@ fun NightStudyScreen(
                                     text = "14일 남음",
                                     style = DodamTheme.typography.headlineMedium(),
                                     color = DodamTheme.colors.labelAssistive
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp)
+                        .clip(shape = RoundedCornerShape(18.dp))
+                        .background(DodamTheme.colors.staticWhite)
+                ) {
+                    Text(
+                        text = "승인 대기중인 학생",
+                        color = DodamTheme.colors.labelStrong,
+                        style = DodamTheme.typography.headlineBold(),
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .padding(start = 10.dp)
+                            .padding(bottom = 6.dp)
+                    )
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                            .padding(bottom = 10.dp)
+                            .scrollEnabled(true)
+                    ) {
+                        items(3) {
+                            UserItem(
+                                userName = "병준"
+                            ) {
+                                DodamButton(
+                                    text = "승인하기",
+                                    onClick = {},
+                                    buttonSize = ButtonSize.Small,
+                                    buttonRole = ButtonRole.Assistive
                                 )
                             }
                         }
