@@ -27,6 +27,7 @@ kotlin{
             implementation(projects.common)
             api(projects.data.nightStudy)
             implementation(libs.dodam.design.system.cmm)
+            implementation(projects.ui)
         }
         androidMain.dependencies {
             implementation(libs.koin.android)
