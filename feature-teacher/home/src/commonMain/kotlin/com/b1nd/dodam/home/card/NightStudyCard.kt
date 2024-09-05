@@ -18,11 +18,11 @@ import com.b1nd.dodam.home.InnerCountCard
 import com.b1nd.dodam.ui.component.DodamContainer
 
 @Composable
-fun NightStudyCard(
+internal fun NightStudyCard(
 
 ) {
     DodamContainer(
-        icon = DodamIcons.DoorOpen,
+        icon = DodamIcons.MoonPlus,
         title = "심야 자습 현황"
     ) {
         Column(

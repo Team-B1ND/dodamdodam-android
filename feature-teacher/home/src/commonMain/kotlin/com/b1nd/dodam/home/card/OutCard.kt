@@ -17,7 +17,7 @@ import com.b1nd.dodam.home.InnerCountCard
 import com.b1nd.dodam.ui.component.DodamContainer
 
 @Composable
-fun OutCard(
+internal fun OutCard(
 
 ) {
     DodamContainer(
