@@ -36,11 +36,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.data.banner.model.Banner
 import com.b1nd.dodam.data.banner.model.BannerStatus
 import com.b1nd.dodam.data.meal.model.Meal
 import com.b1nd.dodam.data.meal.model.MealDetail
 import com.b1nd.dodam.data.meal.model.Menu
+import com.b1nd.dodam.data.schedule.model.Grade
+import com.b1nd.dodam.data.schedule.model.Schedule
+import com.b1nd.dodam.data.schedule.model.ScheduleType
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
@@ -55,13 +59,17 @@ import com.b1nd.dodam.home.card.BannerCard
 import com.b1nd.dodam.home.card.MealCard
 import com.b1nd.dodam.home.card.NightStudyCard
 import com.b1nd.dodam.home.card.OutCard
+import com.b1nd.dodam.home.card.ScheduleCard
 import com.b1nd.dodam.home.model.BannerUiState
 import com.b1nd.dodam.home.model.MealUiState
+import com.b1nd.dodam.home.model.ScheduleUiState
 import com.b1nd.dodam.ui.component.DodamContainer
 import com.b1nd.dodam.ui.icons.DodamLogo
 import io.ktor.utils.io.ByteReadChannel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -106,7 +114,7 @@ internal fun HomeScreen(
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .background(DodamTheme.colors.backgroundNeutral)
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -159,6 +167,42 @@ internal fun HomeScreen(
 
                 item {
                     NightStudyCard()
+                }
+
+                item {
+                    ScheduleCard(
+                        uiState = ScheduleUiState.Success(
+                            persistentListOf(
+                                Schedule(
+                                    id = 0,
+                                    name = "타운홀미팅",
+                                    place = "방송실",
+                                    type = ScheduleType.ACADEMIC,
+                                    date = persistentListOf(DodamDate.localDateNow()),
+                                    targetGrades = persistentListOf(Grade.GRADE_ALL)
+                                ),
+                                Schedule(
+                                    id = 1,
+                                    name = "교내 해커톤",
+                                    place = "방송실",
+                                    type = ScheduleType.ACADEMIC,
+                                    date = persistentListOf(DodamDate.localDateNow().plus(DatePeriod(days = 2))),
+                                    targetGrades = persistentListOf(Grade.GRADE_ALL)
+                                ),
+                                Schedule(
+                                    id = 2,
+                                    name = "직업 교육 박람회",
+                                    place = "방송실",
+                                    type = ScheduleType.ACADEMIC,
+                                    date = persistentListOf(DodamDate.localDateNow().plus(DatePeriod(days = 1))),
+                                    targetGrades = persistentListOf(Grade.GRADE_ALL)
+                                )
+                            )
+                        ),
+                        showShimmer = false,
+                        fetchSchedule = {},
+                        onContentClick = {}
+                    )
                 }
             }
         }
