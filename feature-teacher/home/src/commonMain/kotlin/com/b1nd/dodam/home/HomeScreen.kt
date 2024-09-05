@@ -153,6 +153,11 @@ internal fun HomeScreen(
                 item {
                     NightStudyCard(
                         showShimmer = state.showShimmer,
+                        uiState = state.nightStudyUiState,
+                        onContentClick = {},
+                        onRefreshClick = {
+                            viewModel.loadNightStudy()
+                        }
                     )
                 }
 

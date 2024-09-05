@@ -54,4 +54,18 @@ internal class NightStudyService(
                 .body<DefaultResponse>()
         }
     }
+
+    override suspend fun getNightStudy(): ImmutableList<NightStudyResponse> {
+        return safeRequest {
+            network.get(DodamUrl.NIGHT_STUDY)
+                .body<Response<List<NightStudyResponse>>>()
+        }.toImmutableList()
+    }
+
+    override suspend fun getNightStudyPending(): ImmutableList<NightStudyResponse> {
+        return safeRequest {
+            network.get(DodamUrl.NightStudy.PENDING)
+                .body<Response<List<NightStudyResponse>>>()
+        }.toImmutableList()
+    }
 }
