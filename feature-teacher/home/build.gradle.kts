@@ -44,9 +44,6 @@ kotlin {
             implementation(projects.data.nightStudy)
             implementation(projects.data.schedule)
         }
-//        iosMain.dependencies {
-//            implementation("io.ktor:ktor-client-ios:3.0.0-wasm2")
-//        }
     }
 }
 
