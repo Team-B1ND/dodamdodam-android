@@ -53,6 +53,7 @@ import com.b1nd.dodam.designsystem.foundation.DodamShapes
 import com.b1nd.dodam.designsystem.resources.Res
 import com.b1nd.dodam.home.card.BannerCard
 import com.b1nd.dodam.home.card.MealCard
+import com.b1nd.dodam.home.card.NightStudyCard
 import com.b1nd.dodam.home.card.OutCard
 import com.b1nd.dodam.home.model.BannerUiState
 import com.b1nd.dodam.home.model.MealUiState
@@ -154,6 +155,10 @@ internal fun HomeScreen(
 
                 item {
                     OutCard()
+                }
+
+                item {
+                    NightStudyCard()
                 }
             }
         }
