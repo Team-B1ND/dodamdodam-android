@@ -147,6 +147,7 @@ internal fun HomeScreen(
 
                     MealCard(
                         state = state.mealUiState,
+                        showShimmer = state.showShimmer,
                         onClickContent = {},
                         onClickRefresh = {
                             viewModel.loadMeal(DodamDate.localDateNow())
@@ -155,11 +156,15 @@ internal fun HomeScreen(
                 }
 
                 item {
-                    OutCard()
+                    OutCard(
+                        showShimmer = state.showShimmer,
+                    )
                 }
 
                 item {
-                    NightStudyCard()
+                    NightStudyCard(
+                        showShimmer = state.showShimmer,
+                    )
                 }
 
                 item {

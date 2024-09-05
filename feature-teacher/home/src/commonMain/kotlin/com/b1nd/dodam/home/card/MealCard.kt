@@ -39,88 +39,101 @@ import com.b1nd.dodam.ui.component.DodamContainer
 @Composable
 internal fun MealCard(
     state: MealUiState,
+    showShimmer: Boolean,
     onClickContent: () -> Unit,
     onClickRefresh: () -> Unit
 ) {
-    // 급식 리스트로 빠바박 3개옴
-    DodamContainer(
-        icon = DodamIcons.ForkAndKnife,
-        title = "오늘의 급식"
-    ) {
-        when (state) {
-            is MealUiState.Success -> {
-                val mealState = rememberPagerState { 3 }
-                Column {
-                    HorizontalPager(
-                        state = mealState,
-                        modifier = Modifier
-                            .padding(
-                                top = 6.dp,
-                                start = 6.dp,
-                                end = 6.dp,
-                            )
-                            .animateContentSize()
-                            .clickable(
-                                onClick = onClickContent,
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = rememberBounceIndication()
-                            )
-                    ) { index ->
-                        val meals = index.getMeal(state.data)?.details
-                        if (meals != null) {
-                            Column {
-                                for (i in meals.indices step 2) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth()
-                                    ) {
-                                        Text(
-                                            text = meals[i].name,
-                                            style = DodamTheme.typography.body1Medium(),
-                                            color = DodamTheme.colors.labelNormal
-                                        )
-                                        Spacer(Modifier.weight(1f))
-                                        Text(
-                                            text = meals.getOrNull(i)?.name ?: "",
-                                            style = DodamTheme.typography.body1Medium(),
-                                            color = DodamTheme.colors.labelNormal
-                                        )
-                                        Spacer(Modifier.weight(1f))
+    if (!showShimmer) {
+        DodamContainer(
+            icon = DodamIcons.ForkAndKnife,
+            title = "오늘의 급식"
+        ) {
+            when (state) {
+                is MealUiState.Success -> {
+                    val mealState = rememberPagerState { 3 }
+                    Column {
+                        HorizontalPager(
+                            state = mealState,
+                            modifier = Modifier
+                                .padding(
+                                    top = 6.dp,
+                                    start = 6.dp,
+                                    end = 6.dp,
+                                )
+                                .animateContentSize()
+                                .clickable(
+                                    onClick = onClickContent,
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberBounceIndication()
+                                )
+                        ) { index ->
+                            val meals = index.getMeal(state.data)?.details
+                            if (meals != null) {
+                                Column {
+                                    for (i in meals.indices step 2) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth()
+                                        ) {
+                                            Text(
+                                                text = meals[i].name,
+                                                style = DodamTheme.typography.body1Medium(),
+                                                color = DodamTheme.colors.labelNormal
+                                            )
+                                            Spacer(Modifier.weight(1f))
+                                            Text(
+                                                text = meals.getOrNull(i)?.name ?: "",
+                                                style = DodamTheme.typography.body1Medium(),
+                                                color = DodamTheme.colors.labelNormal
+                                            )
+                                            Spacer(Modifier.weight(1f))
+                                        }
                                     }
                                 }
+                            } else {
+                                DefaultText(
+                                    onClick = onClickContent,
+                                    label = "오늘은 급식이 없어요",
+                                    body = "내일 급식 보러가기",
+                                )
                             }
-                        } else {
-                            DefaultText(
-                                onClick = onClickContent,
-                                label = "오늘은 급식이 없어요",
-                                body = "내일 급식 보러가기",
-                            )
                         }
+                        DodamPageIndicator(
+                            modifier = Modifier
+                                .padding(end = 6.dp)
+                                .align(Alignment.End),
+                            pagerState = mealState
+                        )
                     }
-                    DodamPageIndicator(
+                }
+
+                is MealUiState.Loading -> {
+                    Box(
                         modifier = Modifier
-                            .padding(end = 6.dp)
-                            .align(Alignment.End),
-                        pagerState = mealState
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        DodamLoadingDots()
+                    }
+                }
+
+                is MealUiState.Error -> {
+                    DefaultText(
+                        onClick = onClickRefresh,
+                        label = "급식을 불러올 수 없어요",
+                        body = "다시 불러오기"
                     )
                 }
             }
-            is MealUiState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    DodamLoadingDots()
-                }
-            }
-            is MealUiState.Error -> {
-                DefaultText(
-                    onClick = onClickRefresh,
-                    label = "급식을 불러올 수 없어요",
-                    body = "다시 불러오기"
-                )
-            }
+        }
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            DodamLoadingDots()
         }
     }
 }
