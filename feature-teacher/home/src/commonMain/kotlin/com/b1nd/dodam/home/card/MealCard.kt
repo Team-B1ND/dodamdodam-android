@@ -43,11 +43,11 @@ internal fun MealCard(
     onClickContent: () -> Unit,
     onClickRefresh: () -> Unit
 ) {
-    if (!showShimmer) {
-        DodamContainer(
-            icon = DodamIcons.ForkAndKnife,
-            title = "오늘의 급식"
-        ) {
+    DodamContainer(
+        icon = DodamIcons.ForkAndKnife,
+        title = "오늘의 급식"
+    ) {
+        if (!showShimmer) {
             when (state) {
                 is MealUiState.Success -> {
                     val mealState = rememberPagerState { 3 }
@@ -125,15 +125,15 @@ internal fun MealCard(
                     )
                 }
             }
-        }
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            DodamLoadingDots()
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                DodamLoadingDots()
+            }
         }
     }
 }

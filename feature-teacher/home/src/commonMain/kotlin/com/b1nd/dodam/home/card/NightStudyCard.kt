@@ -24,11 +24,11 @@ import com.b1nd.dodam.ui.component.DodamContainer
 internal fun NightStudyCard(
     showShimmer: Boolean,
 ) {
-    if (!showShimmer) {
-        DodamContainer(
-            icon = DodamIcons.MoonPlus,
-            title = "심야 자습 현황"
-        ) {
+    DodamContainer(
+        icon = DodamIcons.MoonPlus,
+        title = "심야 자습 현황"
+    ) {
+        if (!showShimmer) {
             Column(
                 modifier = Modifier
                     .padding(6.dp)
@@ -43,15 +43,15 @@ internal fun NightStudyCard(
                     }
                 )
             }
-        }
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            DodamLoadingDots()
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                DodamLoadingDots()
+            }
         }
     }
 }
