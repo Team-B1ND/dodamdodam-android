@@ -204,6 +204,9 @@ internal fun HomeScreen(
                         onContentClick = {}
                     )
                 }
+                item {
+                    Spacer(modifier = Modifier.height(150.dp))
+                }
             }
         }
     }
