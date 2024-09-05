@@ -97,7 +97,9 @@ internal fun MealCard(
                         }
                     }
                     DodamPageIndicator(
-                        modifier = Modifier.align(Alignment.End),
+                        modifier = Modifier
+                            .padding(end = 6.dp)
+                            .align(Alignment.End),
                         pagerState = mealState
                     )
                 }

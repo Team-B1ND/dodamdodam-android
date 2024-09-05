@@ -44,12 +44,16 @@ import com.b1nd.dodam.data.meal.model.Menu
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
+import com.b1nd.dodam.designsystem.component.ButtonRole
+import com.b1nd.dodam.designsystem.component.ButtonSize
+import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.designsystem.foundation.DodamShapes
 import com.b1nd.dodam.designsystem.resources.Res
 import com.b1nd.dodam.home.card.BannerCard
 import com.b1nd.dodam.home.card.MealCard
+import com.b1nd.dodam.home.card.OutCard
 import com.b1nd.dodam.home.model.BannerUiState
 import com.b1nd.dodam.home.model.MealUiState
 import com.b1nd.dodam.ui.component.DodamContainer
@@ -147,6 +151,10 @@ internal fun HomeScreen(
                         onClickRefresh = {}
                     )
                 }
+
+                item {
+                    OutCard()
+                }
             }
         }
     }
@@ -182,5 +190,41 @@ internal fun DefaultText(onClick: () -> Unit, label: String, body: String) {
                 color = DodamTheme.colors.primaryNormal
             )
         }
+    }
+}
+
+@Composable
+internal fun InnerCountCard(
+    modifier: Modifier = Modifier,
+    title: String,
+    content: String,
+    buttonText: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column {
+            Text(
+                text = title,
+                style = DodamTheme.typography.labelMedium(),
+                color = DodamTheme.colors.labelAssistive
+            )
+            Text(
+                text = content,
+                style = DodamTheme.typography.heading2Medium(),
+                color = DodamTheme.colors.labelNormal
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.width(8.dp))
+        DodamButton(
+            text = buttonText,
+            onClick = onClick,
+            buttonRole = ButtonRole.Assistive,
+            buttonSize = ButtonSize.Small,
+        )
     }
 }
