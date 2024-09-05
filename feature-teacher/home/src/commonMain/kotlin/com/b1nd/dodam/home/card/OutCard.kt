@@ -23,11 +23,11 @@ import com.b1nd.dodam.ui.component.DodamContainer
 internal fun OutCard(
     showShimmer: Boolean,
 ) {
-    if (!showShimmer) {
-        DodamContainer(
-            icon = DodamIcons.DoorOpen,
-            title = "외출/외박 현황"
-        ) {
+    DodamContainer(
+        icon = DodamIcons.DoorOpen,
+        title = "외출/외박 현황"
+    ) {
+        if (!showShimmer) {
             Column(
                 modifier = Modifier
                     .padding(6.dp)
@@ -51,15 +51,15 @@ internal fun OutCard(
                     }
                 )
             }
-        }
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            DodamLoadingDots()
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                DodamLoadingDots()
+            }
         }
     }
 }

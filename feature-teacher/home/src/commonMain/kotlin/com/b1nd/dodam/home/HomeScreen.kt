@@ -129,18 +129,7 @@ internal fun HomeScreen(
             ) {
                 item {
                     BannerCard(
-                        state = BannerUiState.Success(
-                            persistentListOf(
-                                Banner(
-                                    id = 0,
-                                    imageUrl = "https://dodam.kr.object.ncloudstorage.com/dodam/6634113f-951b-430c-81c9-957de0e8abddalimo.png",
-                                    redirectUrl = "https://dodam.b1nd.com",
-                                    title = "test",
-                                    status = BannerStatus.ACTIVE,
-                                    expireAt = kotlinx.datetime.LocalDateTime.parse("2024-01-26T13:48:25.623088")
-                                )
-                            )
-                        )
+                        state = state.bannerUiState
                     )
                 }
                 item {
