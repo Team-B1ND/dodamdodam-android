@@ -63,8 +63,6 @@ internal fun BannerCard(
                                 urlHandler.openUri(banners[page].redirectUrl)
                             },
                         model = banners[page].imageUrl,
-                        placeholder = rememberVectorPainter(DodamIcons.Note.value),
-                        error = rememberVectorPainter(DodamIcons.XMarkCircle.value),
                         onError = {
                             it.result.throwable.printStackTrace()
                         },
