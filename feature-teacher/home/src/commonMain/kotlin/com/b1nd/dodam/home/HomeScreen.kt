@@ -1,7 +1,10 @@
 package com.b1nd.dodam.home
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,33 +14,49 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.data.banner.model.Banner
 import com.b1nd.dodam.data.banner.model.BannerStatus
+import com.b1nd.dodam.data.meal.model.Meal
+import com.b1nd.dodam.data.meal.model.MealDetail
+import com.b1nd.dodam.data.meal.model.Menu
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
 import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.designsystem.foundation.DodamShapes
 import com.b1nd.dodam.designsystem.resources.Res
 import com.b1nd.dodam.home.card.BannerCard
+import com.b1nd.dodam.home.card.MealCard
 import com.b1nd.dodam.home.model.BannerUiState
+import com.b1nd.dodam.home.model.MealUiState
+import com.b1nd.dodam.ui.component.DodamContainer
 import com.b1nd.dodam.ui.icons.DodamLogo
 import io.ktor.utils.io.ByteReadChannel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -103,7 +122,65 @@ internal fun HomeScreen(
                         )
                     )
                 }
+                item {
+
+                    MealCard(
+                        state = MealUiState.Success(
+                            data = Meal(
+                                exists = false,
+                                date = LocalDate.fromEpochDays(150000),
+                                breakfast = MealDetail(
+                                    details = listOf(
+                                        Menu(name = "쇠고기우엉볶음밥", allergies = listOf()),
+                                        Menu(name = "오이생채", allergies = listOf()),
+                                        Menu(name = "불고기치즈파니니", allergies = listOf()),
+                                        Menu(name = "배추김치", allergies = listOf()),
+                                        Menu(name = "계란실파국", allergies = listOf())
+                                    ),
+                                    calorie = 30f
+                                ),
+                                lunch = null,
+                                dinner = null
+                            )
+                        ),
+                        onClickContent = {},
+                        onClickRefresh = {}
+                    )
+                }
             }
+        }
+    }
+}
+
+@Composable
+internal fun DefaultText(onClick: () -> Unit, label: String, body: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberBounceIndication(),
+            ),
+        contentAlignment = Alignment.Center
+
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(6.dp)
+                .align(Alignment.CenterStart)
+        ) {
+            Text(
+                text = label,
+                style = DodamTheme.typography.caption1Medium(),
+                color = DodamTheme.colors.labelAlternative
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = body,
+                style = DodamTheme.typography.body1Bold().copy(fontWeight = FontWeight.Bold),
+                color = DodamTheme.colors.primaryNormal
+            )
         }
     }
 }
