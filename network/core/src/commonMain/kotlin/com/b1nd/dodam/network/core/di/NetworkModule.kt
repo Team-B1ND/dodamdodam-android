@@ -36,6 +36,7 @@ val log = logging()
 val networkCoreModule = module {
     single<HttpClient> {
         val datastore: DataStoreRepository = get()
+
         HttpClient(CIO) {
             install(ContentNegotiation) {
                 json(
