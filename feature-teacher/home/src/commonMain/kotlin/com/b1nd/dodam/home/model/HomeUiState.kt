@@ -35,7 +35,10 @@ sealed interface OutUiState {
 }
 
 sealed interface NightStudyUiState {
-    data class Success(val data: NightStudy?) : NightStudyUiState
+    data class Success(
+        val active: Int,
+        val pending: Int
+    ) : NightStudyUiState
     data object Loading : NightStudyUiState
     data object Error : NightStudyUiState
 }

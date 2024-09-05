@@ -5,15 +5,18 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.data.banner.BannerRepository
 import com.b1nd.dodam.data.meal.MealRepository
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.home.model.BannerUiState
 import com.b1nd.dodam.home.model.HomeUiState
 import com.b1nd.dodam.home.model.MealUiState
+import com.b1nd.dodam.home.model.NightStudyUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
@@ -27,6 +30,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
 
     private val bannerRepository: BannerRepository by inject()
     private val mealRepository: MealRepository by inject()
+    private val nightStudyRepository: NightStudyRepository by inject()
 
     private val _state = MutableStateFlow(HomeUiState())
     val state = _state.asStateFlow()
@@ -36,6 +40,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
             loadBanner()
             val date = DodamDate.localDateNow()
             loadMeal(date)
+            loadNightStudy()
         }
     }
 
@@ -96,8 +101,47 @@ class HomeViewModel: ViewModel(), KoinComponent {
             }
         }
     }
+
     fun loadNightStudy() = viewModelScope.launch {
-        val date = DodamDate.localDateNow()
-        nightStudyRepository
+        val nightStudyFlow = nightStudyRepository.getNightStudy()
+        val nightStudyPendingFlow = nightStudyRepository.getNightStudyPending()
+
+        nightStudyFlow.combine(nightStudyPendingFlow){ nightStudyFlow, nightStudyPendingFlow ->
+            var activeCount = 0
+            var pendingCount = 0
+
+            when (nightStudyFlow) {
+
+                is Result.Success -> {
+                    activeCount = nightStudyFlow.data.size
+                }
+                is Result.Loading -> {}
+                is Result.Error -> {
+                    return@combine NightStudyUiState.Error
+                }
+            }
+
+            when (nightStudyPendingFlow) {
+                is Result.Success -> {
+                    pendingCount = nightStudyPendingFlow.data.size
+                }
+                is Result.Loading -> {}
+                is Result.Error -> {
+                    return@combine NightStudyUiState.Error
+                }
+            }
+
+            return@combine NightStudyUiState.Success(
+                active = activeCount,
+                pending = pendingCount
+            )
+        }.collect {
+            _state.update { state ->
+                state.copy(
+                    showShimmer = false,
+                    nightStudyUiState = it
+                )
+            }
+        }
     }
 }
