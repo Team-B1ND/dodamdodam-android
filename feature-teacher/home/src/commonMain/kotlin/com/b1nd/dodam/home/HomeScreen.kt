@@ -25,6 +25,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,12 +73,18 @@ import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 internal fun HomeScreen(
-
+    viewModel: HomeViewModel = koinViewModel()
 ) {
+
+    val state by viewModel.state.collectAsState()
+
     Scaffold(
         modifier = Modifier.background(DodamTheme.colors.backgroundNeutral),
         topBar = {
@@ -138,26 +146,11 @@ internal fun HomeScreen(
                 item {
 
                     MealCard(
-                        state = MealUiState.Success(
-                            data = Meal(
-                                exists = false,
-                                date = LocalDate.fromEpochDays(150000),
-                                breakfast = MealDetail(
-                                    details = listOf(
-                                        Menu(name = "쇠고기우엉볶음밥", allergies = listOf()),
-                                        Menu(name = "오이생채", allergies = listOf()),
-                                        Menu(name = "불고기치즈파니니", allergies = listOf()),
-                                        Menu(name = "배추김치", allergies = listOf()),
-                                        Menu(name = "계란실파국", allergies = listOf())
-                                    ),
-                                    calorie = 30f
-                                ),
-                                lunch = null,
-                                dinner = null
-                            )
-                        ),
+                        state = state.mealUiState,
                         onClickContent = {},
-                        onClickRefresh = {}
+                        onClickRefresh = {
+                            viewModel.loadMeal(DodamDate.localDateNow())
+                        }
                     )
                 }
 

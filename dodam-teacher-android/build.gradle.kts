@@ -29,6 +29,18 @@ kotlin {
             implementation(projects.common)
             implementation(projects.network.core)
             implementation(projects.featureTeacher.home)
+
+            implementation(projects.data.login)
+            implementation(projects.data.banner)
+            implementation(projects.data.meal)
+            implementation(projects.data.outing)
+            implementation(projects.data.nightStudy)
+            implementation(projects.data.schedule)
+            implementation(projects.network.banner)
+            implementation(projects.network.meal)
+            implementation(projects.network.outing)
+            implementation(projects.network.nightStudy)
+            implementation(projects.network.schedule)
         }
 
         androidMain.dependencies {
