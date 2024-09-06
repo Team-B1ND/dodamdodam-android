@@ -41,7 +41,7 @@ fun DodamTeacherApp() {
     DodamTheme {
         NavHost(
             navController = navHostController,
-            startDestination = HOME_ROUTE,
+            startDestination = ONBOARDING_ROUTE,
         ) {
             onboardingScreen(
                 onRegisterClick = navHostController::navigateToInfo,
