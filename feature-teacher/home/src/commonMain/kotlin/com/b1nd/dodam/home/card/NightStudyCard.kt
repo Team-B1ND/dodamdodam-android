@@ -49,14 +49,14 @@ internal fun NightStudyCard(
                         )
                     }
                 }
-                NightStudyUiState.Error -> {
+                is NightStudyUiState.Error -> {
                     DefaultText(
                         onClick = onRefreshClick,
                         label = "심자 현황을 불러올 수 없어요",
                         body = "다시 불러오기"
                     )
                 }
-                NightStudyUiState.Loading -> {
+                is NightStudyUiState.Loading -> {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()

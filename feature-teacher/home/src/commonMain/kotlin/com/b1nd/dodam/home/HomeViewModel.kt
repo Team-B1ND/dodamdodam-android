@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.common.utiles.combineWhenAllComplete
 import com.b1nd.dodam.data.banner.BannerRepository
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.meal.MealRepository
@@ -16,9 +17,11 @@ import com.b1nd.dodam.home.model.MealUiState
 import com.b1nd.dodam.home.model.NightStudyUiState
 import com.b1nd.dodam.home.model.OutUiState
 import com.b1nd.dodam.home.model.ScheduleUiState
+import com.b1nd.dodam.logging.KmLogging
+import com.b1nd.dodam.logging.logging
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DatePeriod
@@ -109,7 +112,12 @@ class HomeViewModel: ViewModel(), KoinComponent {
 
     fun loadOuting() = viewModelScope.launch {
         val date = DodamDate.localDateNow()
-        combine(
+        _state.update {
+            it.copy(
+                outUiState = OutUiState.Loading
+            )
+        }
+        combineWhenAllComplete(
             outingRepository.getOutings(date),
             outingRepository.getSleepovers(date)
         ) { outing, sleepover ->
@@ -126,7 +134,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
                 is Result.Loading -> {}
                 is Result.Error -> {
                     outing.error.printStackTrace()
-                    return@combine OutUiState.Error
+                    return@combineWhenAllComplete OutUiState.Error
                 }
             }
 
@@ -138,17 +146,17 @@ class HomeViewModel: ViewModel(), KoinComponent {
                 is Result.Loading -> {}
                 is Result.Error -> {
                     sleepover.error.printStackTrace()
-                    return@combine OutUiState.Error
+                    return@combineWhenAllComplete OutUiState.Error
                 }
             }
 
-            return@combine OutUiState.Success(
+            return@combineWhenAllComplete   OutUiState.Success(
                 outAllowCount = outAllowCount,
                 outPendingCount = outPendingCount,
                 sleepoverAllowCount = sleepoverAllowCount,
                 sleepoverPendingCount = sleepoverPendingCount
             )
-        }.collect {
+        }.collectLatest {
             _state.update { state ->
                 state.copy(
                     showShimmer = false,
@@ -159,7 +167,13 @@ class HomeViewModel: ViewModel(), KoinComponent {
     }
 
     fun loadNightStudy() = viewModelScope.launch {
-        combine(
+        _state.update {
+            it.copy(
+                nightStudyUiState = NightStudyUiState.Loading
+            )
+        }
+
+        combineWhenAllComplete(
             nightStudyRepository.getNightStudy(),
             nightStudyRepository.getNightStudyPending()
         ){ nightStudyFlow, nightStudyPendingFlow ->
@@ -174,7 +188,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
                 is Result.Loading -> {}
                 is Result.Error -> {
                     nightStudyFlow.error.printStackTrace()
-                    return@combine NightStudyUiState.Error
+                    return@combineWhenAllComplete NightStudyUiState.Error
                 }
             }
 
@@ -185,15 +199,15 @@ class HomeViewModel: ViewModel(), KoinComponent {
                 is Result.Loading -> {}
                 is Result.Error -> {
                     nightStudyPendingFlow.error.printStackTrace()
-                    return@combine NightStudyUiState.Error
+                    return@combineWhenAllComplete NightStudyUiState.Error
                 }
             }
 
-            return@combine NightStudyUiState.Success(
+            return@combineWhenAllComplete NightStudyUiState.Success(
                 active = activeCount,
                 pending = pendingCount
             )
-        }.collect {
+        }.collectLatest {
             _state.update { state ->
                 state.copy(
                     showShimmer = false,
@@ -219,7 +233,13 @@ class HomeViewModel: ViewModel(), KoinComponent {
                         )
                     }
                 }
-                is Result.Loading -> {}
+                is Result.Loading -> {
+                    _state.update {
+                        it.copy(
+                            scheduleUiState = ScheduleUiState.Loading
+                        )
+                    }
+                }
                 is Result.Error -> {
                     it.error.printStackTrace()
                     _state.update {  state ->
