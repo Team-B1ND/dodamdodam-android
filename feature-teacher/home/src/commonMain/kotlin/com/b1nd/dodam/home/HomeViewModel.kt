@@ -42,8 +42,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
     init {
         viewModelScope.launch {
             loadBanner()
-            val date = DodamDate.localDateNow()
-            loadMeal(date)
+            loadMeal()
             loadOuting()
             loadNightStudy()
         }
@@ -62,6 +61,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
                 }
                 is Result.Loading -> {}
                 is Result.Error -> {
+                    it.error.printStackTrace()
                     _state.update { state ->
                         state.copy(
                             bannerUiState = BannerUiState.None
@@ -73,7 +73,8 @@ class HomeViewModel: ViewModel(), KoinComponent {
         }
     }
 
-    fun loadMeal(date: LocalDate) = viewModelScope.launch {
+    fun loadMeal() = viewModelScope.launch {
+        val date = DodamDate.localDateNow()
         mealRepository.getMeal(
             year = date.year,
             month = date.monthNumber,
@@ -125,6 +126,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
                 }
                 is Result.Loading -> {}
                 is Result.Error -> {
+                    outing.error.printStackTrace()
                     return@combine OutUiState.Error
                 }
             }
@@ -136,6 +138,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
                 }
                 is Result.Loading -> {}
                 is Result.Error -> {
+                    sleepover.error.printStackTrace()
                     return@combine OutUiState.Error
                 }
             }
@@ -157,10 +160,10 @@ class HomeViewModel: ViewModel(), KoinComponent {
     }
 
     fun loadNightStudy() = viewModelScope.launch {
-        val nightStudyFlow = nightStudyRepository.getNightStudy()
-        val nightStudyPendingFlow = nightStudyRepository.getNightStudyPending()
-
-        nightStudyFlow.combine(nightStudyPendingFlow){ nightStudyFlow, nightStudyPendingFlow ->
+        combine(
+            nightStudyRepository.getNightStudy(),
+            nightStudyRepository.getNightStudyPending()
+        ){ nightStudyFlow, nightStudyPendingFlow ->
             var activeCount = 0
             var pendingCount = 0
 
@@ -171,6 +174,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
                 }
                 is Result.Loading -> {}
                 is Result.Error -> {
+                    nightStudyFlow.error.printStackTrace()
                     return@combine NightStudyUiState.Error
                 }
             }
@@ -181,6 +185,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
                 }
                 is Result.Loading -> {}
                 is Result.Error -> {
+                    nightStudyPendingFlow.error.printStackTrace()
                     return@combine NightStudyUiState.Error
                 }
             }
