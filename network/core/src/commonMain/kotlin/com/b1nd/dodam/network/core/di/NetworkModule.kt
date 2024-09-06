@@ -8,8 +8,8 @@ import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.model.TokenRequest
 import com.b1nd.dodam.network.core.model.TokenResponse
 import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -33,11 +33,13 @@ private const val TIME_OUT = 60_000L
 
 val log = logging()
 
+internal expect fun getHttpClient(block: HttpClientConfig<*>.() -> Unit = {}): HttpClient
+
 val networkCoreModule = module {
     single<HttpClient> {
         val datastore: DataStoreRepository = get()
 
-        HttpClient(CIO) {
+        getHttpClient {
             install(ContentNegotiation) {
                 json(
                     Json {
