@@ -138,9 +138,7 @@ internal fun HomeScreen(
                         state = state.mealUiState,
                         showShimmer = state.showShimmer,
                         onClickContent = {},
-                        onClickRefresh = {
-                            viewModel.loadMeal(DodamDate.localDateNow())
-                        }
+                        onClickRefresh = viewModel::loadMeal
                     )
                 }
 
@@ -148,9 +146,7 @@ internal fun HomeScreen(
                     OutCard(
                         showShimmer = state.showShimmer,
                         uiState = state.outUiState,
-                        onRefreshClick = {
-                            viewModel.loadOuting()
-                        },
+                        onRefreshClick = viewModel::loadOuting,
                         onOutingClick = {},
                         onSleepoverClick = {}
                     )
@@ -161,9 +157,7 @@ internal fun HomeScreen(
                         showShimmer = state.showShimmer,
                         uiState = state.nightStudyUiState,
                         onContentClick = {},
-                        onRefreshClick = {
-                            viewModel.loadNightStudy()
-                        }
+                        onRefreshClick = viewModel::loadNightStudy
                     )
                 }
 
