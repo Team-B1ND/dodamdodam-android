@@ -6,12 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.banner.BannerRepository
+import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.meal.MealRepository
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
+import com.b1nd.dodam.data.outing.OutingRepository
 import com.b1nd.dodam.home.model.BannerUiState
 import com.b1nd.dodam.home.model.HomeUiState
 import com.b1nd.dodam.home.model.MealUiState
 import com.b1nd.dodam.home.model.NightStudyUiState
+import com.b1nd.dodam.home.model.OutUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +33,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
 
     private val bannerRepository: BannerRepository by inject()
     private val mealRepository: MealRepository by inject()
+    private val outingRepository: OutingRepository by inject()
     private val nightStudyRepository: NightStudyRepository by inject()
 
     private val _state = MutableStateFlow(HomeUiState())
@@ -40,6 +44,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
             loadBanner()
             val date = DodamDate.localDateNow()
             loadMeal(date)
+            loadOuting()
             loadNightStudy()
         }
     }
@@ -98,6 +103,55 @@ class HomeViewModel: ViewModel(), KoinComponent {
                         )
                     }
                 }
+            }
+        }
+    }
+
+    fun loadOuting() = viewModelScope.launch {
+        val date = DodamDate.localDateNow()
+        combine(
+            outingRepository.getOutings(date),
+            outingRepository.getSleepovers(date)
+        ) { outing, sleepover ->
+            var outAllowCount = 0
+            var outPendingCount = 0
+            var sleepoverAllowCount = 0
+            var sleepoverPendingCount = 0
+
+            when (outing) {
+                is Result.Success -> {
+                    outAllowCount = outing.data.filter { it.status == Status.ALLOWED }.size
+                    outPendingCount = outing.data.filter { it.status == Status.PENDING }.size
+                }
+                is Result.Loading -> {}
+                is Result.Error -> {
+                    return@combine OutUiState.Error
+                }
+            }
+
+            when (sleepover) {
+                is Result.Success -> {
+                    sleepoverAllowCount = sleepover.data.filter { it.status == Status.ALLOWED }.size
+                    sleepoverPendingCount = sleepover.data.filter { it.status == Status.PENDING }.size
+                }
+                is Result.Loading -> {}
+                is Result.Error -> {
+                    return@combine OutUiState.Error
+                }
+            }
+
+            return@combine OutUiState.Success(
+                outAllowCount = outAllowCount,
+                outPendingCount = outPendingCount,
+                sleepoverAllowCount = sleepoverAllowCount,
+                sleepoverPendingCount = sleepoverPendingCount
+            )
+        }.collect {
+            _state.update { state ->
+                state.copy(
+                    showShimmer = false,
+                    outUiState = it
+                )
             }
         }
     }

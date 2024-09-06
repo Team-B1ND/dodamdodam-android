@@ -147,6 +147,12 @@ internal fun HomeScreen(
                 item {
                     OutCard(
                         showShimmer = state.showShimmer,
+                        uiState = state.outUiState,
+                        onRefreshClick = {
+                            viewModel.loadOuting()
+                        },
+                        onOutingClick = {},
+                        onSleepoverClick = {}
                     )
                 }
 

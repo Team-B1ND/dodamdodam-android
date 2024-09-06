@@ -29,7 +29,12 @@ sealed interface MealUiState {
 }
 
 sealed interface OutUiState {
-    data class Success(val data: Outing?) : OutUiState
+    data class Success(
+        val outAllowCount: Int,
+        val outPendingCount: Int,
+        val sleepoverAllowCount: Int,
+        val sleepoverPendingCount: Int,
+    ) : OutUiState
     data object Loading : OutUiState
     data object Error : OutUiState
 }
