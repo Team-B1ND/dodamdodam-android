@@ -9,15 +9,10 @@ import platform.Foundation.NSDate
 import platform.Foundation.now
 
 actual object DodamDate {
-    actual fun now(): LocalDateTime =
-        NSDate
-            .now()
-            .toKotlinInstant()
-            .toLocalDateTime(TimeZone.currentSystemDefault())
+    actual fun now(): LocalDateTime = NSDate
+        .now()
+        .toKotlinInstant()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
 
     actual fun localDateNow(): LocalDate = now().date
-
-
-
-
 }

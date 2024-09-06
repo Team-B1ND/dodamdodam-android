@@ -47,7 +47,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             nightStudyRepositoryModule,
             nightStudyDataSourceModule,
             scheduleRepositoryModule,
-            scheduleDatasourceModule
+            scheduleDatasourceModule,
         )
         block()
     }

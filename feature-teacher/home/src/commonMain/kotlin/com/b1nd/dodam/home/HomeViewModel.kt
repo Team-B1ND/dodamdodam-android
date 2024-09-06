@@ -17,8 +17,6 @@ import com.b1nd.dodam.home.model.MealUiState
 import com.b1nd.dodam.home.model.NightStudyUiState
 import com.b1nd.dodam.home.model.OutUiState
 import com.b1nd.dodam.home.model.ScheduleUiState
-import com.b1nd.dodam.logging.KmLogging
-import com.b1nd.dodam.logging.logging
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -29,7 +27,7 @@ import kotlinx.datetime.plus
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class HomeViewModel: ViewModel(), KoinComponent {
+class HomeViewModel : ViewModel(), KoinComponent {
 
     private val bannerRepository: BannerRepository by inject()
     private val mealRepository: MealRepository by inject()
@@ -57,7 +55,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
                     _state.update { state ->
                         state.copy(
                             showShimmer = false,
-                            bannerUiState = BannerUiState.Success(it.data)
+                            bannerUiState = BannerUiState.Success(it.data),
                         )
                     }
                 }
@@ -66,11 +64,10 @@ class HomeViewModel: ViewModel(), KoinComponent {
                     it.error.printStackTrace()
                     _state.update { state ->
                         state.copy(
-                            bannerUiState = BannerUiState.None
+                            bannerUiState = BannerUiState.None,
                         )
                     }
                 }
-
             }
         }
     }
@@ -80,29 +77,29 @@ class HomeViewModel: ViewModel(), KoinComponent {
         mealRepository.getMeal(
             year = date.year,
             month = date.monthNumber,
-            day = date.dayOfMonth
+            day = date.dayOfMonth,
         ).collect {
             when (it) {
                 is Result.Success -> {
-                    _state.update { state  ->
+                    _state.update { state ->
                         state.copy(
                             showShimmer = false,
-                            mealUiState = MealUiState.Success(it.data)
+                            mealUiState = MealUiState.Success(it.data),
                         )
                     }
                 }
                 is Result.Loading -> {
-                    _state.update { state  ->
+                    _state.update { state ->
                         state.copy(
-                            mealUiState = MealUiState.Loading
+                            mealUiState = MealUiState.Loading,
                         )
                     }
                 }
                 is Result.Error -> {
                     it.error.printStackTrace()
-                    _state.update { state  ->
+                    _state.update { state ->
                         state.copy(
-                            mealUiState = MealUiState.Error
+                            mealUiState = MealUiState.Error,
                         )
                     }
                 }
@@ -114,12 +111,12 @@ class HomeViewModel: ViewModel(), KoinComponent {
         val date = DodamDate.localDateNow()
         _state.update {
             it.copy(
-                outUiState = OutUiState.Loading
+                outUiState = OutUiState.Loading,
             )
         }
         combineWhenAllComplete(
             outingRepository.getOutings(date),
-            outingRepository.getSleepovers(date)
+            outingRepository.getSleepovers(date),
         ) { outing, sleepover ->
             var outAllowCount = 0
             var outPendingCount = 0
@@ -150,17 +147,17 @@ class HomeViewModel: ViewModel(), KoinComponent {
                 }
             }
 
-            return@combineWhenAllComplete   OutUiState.Success(
+            return@combineWhenAllComplete OutUiState.Success(
                 outAllowCount = outAllowCount,
                 outPendingCount = outPendingCount,
                 sleepoverAllowCount = sleepoverAllowCount,
-                sleepoverPendingCount = sleepoverPendingCount
+                sleepoverPendingCount = sleepoverPendingCount,
             )
         }.collectLatest {
             _state.update { state ->
                 state.copy(
                     showShimmer = false,
-                    outUiState = it
+                    outUiState = it,
                 )
             }
         }
@@ -169,19 +166,18 @@ class HomeViewModel: ViewModel(), KoinComponent {
     fun loadNightStudy() = viewModelScope.launch {
         _state.update {
             it.copy(
-                nightStudyUiState = NightStudyUiState.Loading
+                nightStudyUiState = NightStudyUiState.Loading,
             )
         }
 
         combineWhenAllComplete(
             nightStudyRepository.getNightStudy(),
-            nightStudyRepository.getNightStudyPending()
-        ){ nightStudyFlow, nightStudyPendingFlow ->
+            nightStudyRepository.getNightStudyPending(),
+        ) { nightStudyFlow, nightStudyPendingFlow ->
             var activeCount = 0
             var pendingCount = 0
 
             when (nightStudyFlow) {
-
                 is Result.Success -> {
                     activeCount = nightStudyFlow.data.size
                 }
@@ -205,13 +201,13 @@ class HomeViewModel: ViewModel(), KoinComponent {
 
             return@combineWhenAllComplete NightStudyUiState.Success(
                 active = activeCount,
-                pending = pendingCount
+                pending = pendingCount,
             )
         }.collectLatest {
             _state.update { state ->
                 state.copy(
                     showShimmer = false,
-                    nightStudyUiState = it
+                    nightStudyUiState = it,
                 )
             }
         }
@@ -222,30 +218,30 @@ class HomeViewModel: ViewModel(), KoinComponent {
         val endDate = startDate.plus(DatePeriod(months = 1))
         scheduleRepository.getScheduleBetweenPeriods(
             startAt = startDate,
-            endAt = endDate
+            endAt = endDate,
         ).collect {
             when (it) {
                 is Result.Success -> {
-                    _state.update {  state ->
+                    _state.update { state ->
                         state.copy(
                             showShimmer = false,
-                            scheduleUiState = ScheduleUiState.Success(data = it.data)
+                            scheduleUiState = ScheduleUiState.Success(data = it.data),
                         )
                     }
                 }
                 is Result.Loading -> {
                     _state.update {
                         it.copy(
-                            scheduleUiState = ScheduleUiState.Loading
+                            scheduleUiState = ScheduleUiState.Loading,
                         )
                     }
                 }
                 is Result.Error -> {
                     it.error.printStackTrace()
-                    _state.update {  state ->
+                    _state.update { state ->
                         state.copy(
                             showShimmer = false,
-                            scheduleUiState = ScheduleUiState.Error
+                            scheduleUiState = ScheduleUiState.Error,
                         )
                     }
                 }

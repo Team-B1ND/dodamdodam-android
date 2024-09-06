@@ -2,11 +2,8 @@ package com.b1nd.dodam.home.model
 
 import com.b1nd.dodam.data.banner.model.Banner
 import com.b1nd.dodam.data.meal.model.Meal
-import com.b1nd.dodam.data.nightstudy.model.NightStudy
-import com.b1nd.dodam.data.outing.model.Outing
 import com.b1nd.dodam.data.schedule.model.Schedule
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableMap
 
 data class HomeUiState(
     val showShimmer: Boolean = true,
@@ -42,7 +39,7 @@ sealed interface OutUiState {
 sealed interface NightStudyUiState {
     data class Success(
         val active: Int,
-        val pending: Int
+        val pending: Int,
     ) : NightStudyUiState
     data object Loading : NightStudyUiState
     data object Error : NightStudyUiState

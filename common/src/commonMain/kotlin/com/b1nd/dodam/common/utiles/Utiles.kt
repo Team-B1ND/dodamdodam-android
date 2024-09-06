@@ -9,12 +9,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
 
-
-fun <T1, T2, R> combineWhenAllComplete(
-    flow1: Flow<T1>,
-    flow2: Flow<T2>,
-    transform: suspend (T1, T2) -> R
-): Flow<R> = flow {
+fun <T1, T2, R> combineWhenAllComplete(flow1: Flow<T1>, flow2: Flow<T2>, transform: suspend (T1, T2) -> R): Flow<R> = flow {
     var lastValue1: T1? = null
     var lastValue2: T2? = null
 

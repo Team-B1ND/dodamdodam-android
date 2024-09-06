@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -36,10 +34,8 @@ import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.DodamLoadingDots
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.home.DefaultText
-import com.b1nd.dodam.home.InnerCountCard
 import com.b1nd.dodam.home.model.ScheduleUiState
 import com.b1nd.dodam.ui.component.DodamContainer
-import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.DatePeriod
@@ -47,12 +43,7 @@ import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.plus
 
 @Composable
-internal fun ScheduleCard(
-    uiState: ScheduleUiState,
-    showShimmer: Boolean,
-    fetchSchedule: () -> Unit,
-    onContentClick: () -> Unit,
-) {
+internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchSchedule: () -> Unit, onContentClick: () -> Unit) {
     val current = DodamDate.now().date
     val tomorrow = current.plus(DatePeriod(days = 1))
 
@@ -106,7 +97,7 @@ internal fun ScheduleCard(
                                     "금",
                                     "토",
                                     "일",
-                                )[if (current == latestSchedule) current.dayOfWeek.isoDayNumber-1 else latestSchedule.dayOfWeek.isoDayNumber-1] + "요일",
+                                )[if (current == latestSchedule) current.dayOfWeek.isoDayNumber - 1 else latestSchedule.dayOfWeek.isoDayNumber - 1] + "요일",
                                 body = remember {
                                     schedules.filter {
                                         latestSchedule in it.date
@@ -141,7 +132,7 @@ internal fun ScheduleCard(
                                         "금",
                                         "토",
                                         "일",
-                                    )[it.dayOfWeek.isoDayNumber-1] + "요일",
+                                    )[it.dayOfWeek.isoDayNumber - 1] + "요일",
                                     body = remember {
                                         schedules.filter { schedule ->
                                             it in schedule.date
@@ -185,31 +176,25 @@ internal fun ScheduleCard(
     }
 }
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ScheduleComponent(
-    modifier: Modifier = Modifier,
-    day: String,
-    dayOfWeek: String,
-    body: ImmutableList<Schedule>
-) {
+private fun ScheduleComponent(modifier: Modifier = Modifier, day: String, dayOfWeek: String, body: ImmutableList<Schedule>) {
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Row(
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom,
         ) {
             Text(
                 text = day,
                 style = DodamTheme.typography.heading2Bold(),
-                color = DodamTheme.colors.labelNormal
+                color = DodamTheme.colors.labelNormal,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = dayOfWeek,
                 style = DodamTheme.typography.labelMedium(),
-                color = DodamTheme.colors.labelAlternative
+                color = DodamTheme.colors.labelAlternative,
             )
         }
         Spacer(Modifier.height(8.dp))
@@ -242,7 +227,7 @@ private fun ScheduleComponent(
                     modifier = Modifier.basicMarquee(),
                     text = it.name,
                     style = DodamTheme.typography.body1Medium().copy(
-                        lineHeight = 19.sp
+                        lineHeight = 19.sp,
                     ),
                     color = DodamTheme.colors.labelNeutral,
                 )
