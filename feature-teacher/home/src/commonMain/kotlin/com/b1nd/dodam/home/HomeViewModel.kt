@@ -1,7 +1,6 @@
 package com.b1nd.dodam.home
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.common.result.Result
@@ -18,17 +17,11 @@ import com.b1nd.dodam.home.model.NightStudyUiState
 import com.b1nd.dodam.home.model.OutUiState
 import com.b1nd.dodam.home.model.ScheduleUiState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -214,8 +207,8 @@ class HomeViewModel: ViewModel(), KoinComponent {
         val startDate = DodamDate.localDateNow()
         val endDate = startDate.plus(DatePeriod(months = 1))
         scheduleRepository.getScheduleBetweenPeriods(
-            startDate = startDate,
-            endDate = endDate
+            startAt = startDate,
+            endAt = endDate
         ).collect {
             when (it) {
                 is Result.Success -> {
