@@ -18,8 +18,8 @@ internal class ScheduleService(
     override suspend fun getScheduleBetweenPeriods(startDate: String, endDate: String): ImmutableList<ScheduleResponse> {
         return safeRequest {
             client.get(DodamUrl.Schedule.SEARCH) {
-                parameter("startDate", startDate)
-                parameter("endDate", endDate)
+                parameter("startAt", startDate)
+                parameter("endAt", endDate)
             }.body<Response<List<ScheduleResponse>>>()
         }.toImmutableList()
     }

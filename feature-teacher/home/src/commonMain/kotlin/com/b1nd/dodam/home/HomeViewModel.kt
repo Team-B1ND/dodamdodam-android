@@ -10,11 +10,13 @@ import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.meal.MealRepository
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.outing.OutingRepository
+import com.b1nd.dodam.data.schedule.ScheduleRepository
 import com.b1nd.dodam.home.model.BannerUiState
 import com.b1nd.dodam.home.model.HomeUiState
 import com.b1nd.dodam.home.model.MealUiState
 import com.b1nd.dodam.home.model.NightStudyUiState
 import com.b1nd.dodam.home.model.OutUiState
+import com.b1nd.dodam.home.model.ScheduleUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +27,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -35,6 +39,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
     private val mealRepository: MealRepository by inject()
     private val outingRepository: OutingRepository by inject()
     private val nightStudyRepository: NightStudyRepository by inject()
+    private val scheduleRepository: ScheduleRepository by inject()
 
     private val _state = MutableStateFlow(HomeUiState())
     val state = _state.asStateFlow()
@@ -45,6 +50,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
             loadMeal()
             loadOuting()
             loadNightStudy()
+            loadSchedule()
         }
     }
 
@@ -200,6 +206,36 @@ class HomeViewModel: ViewModel(), KoinComponent {
                     showShimmer = false,
                     nightStudyUiState = it
                 )
+            }
+        }
+    }
+
+    fun loadSchedule() = viewModelScope.launch {
+        val startDate = DodamDate.localDateNow()
+        val endDate = startDate.plus(DatePeriod(months = 1))
+        scheduleRepository.getScheduleBetweenPeriods(
+            startDate = startDate,
+            endDate = endDate
+        ).collect {
+            when (it) {
+                is Result.Success -> {
+                    _state.update {  state ->
+                        state.copy(
+                            showShimmer = false,
+                            scheduleUiState = ScheduleUiState.Success(data = it.data)
+                        )
+                    }
+                }
+                is Result.Loading -> {}
+                is Result.Error -> {
+                    it.error.printStackTrace()
+                    _state.update {  state ->
+                        state.copy(
+                            showShimmer = false,
+                            scheduleUiState = ScheduleUiState.Error
+                        )
+                    }
+                }
             }
         }
     }

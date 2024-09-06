@@ -163,36 +163,9 @@ internal fun HomeScreen(
 
                 item {
                     ScheduleCard(
-                        uiState = ScheduleUiState.Success(
-                            persistentListOf(
-                                Schedule(
-                                    id = 0,
-                                    name = "타운홀미팅",
-                                    place = "방송실",
-                                    type = ScheduleType.ACADEMIC,
-                                    date = persistentListOf(DodamDate.localDateNow()),
-                                    targetGrades = persistentListOf(Grade.GRADE_ALL)
-                                ),
-                                Schedule(
-                                    id = 1,
-                                    name = "교내 해커톤",
-                                    place = "방송실",
-                                    type = ScheduleType.ACADEMIC,
-                                    date = persistentListOf(DodamDate.localDateNow().plus(DatePeriod(days = 2))),
-                                    targetGrades = persistentListOf(Grade.GRADE_ALL)
-                                ),
-                                Schedule(
-                                    id = 2,
-                                    name = "직업 교육 박람회",
-                                    place = "방송실",
-                                    type = ScheduleType.ACADEMIC,
-                                    date = persistentListOf(DodamDate.localDateNow().plus(DatePeriod(days = 1))),
-                                    targetGrades = persistentListOf(Grade.GRADE_ALL)
-                                )
-                            )
-                        ),
-                        showShimmer = false,
-                        fetchSchedule = {},
+                        uiState = state.scheduleUiState,
+                        showShimmer = state.showShimmer,
+                        fetchSchedule = viewModel::loadSchedule,
                         onContentClick = {}
                     )
                 }
