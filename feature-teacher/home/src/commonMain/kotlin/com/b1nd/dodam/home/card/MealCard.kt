@@ -70,22 +70,22 @@ internal fun MealCard(
                             val meals = index.getMeal(state.data)?.details
                             if (meals != null) {
                                 Column {
-                                    for (i in meals.indices step 2) {
+                                    for (i in meals.indices step 2 ) {
                                         Row(
                                             modifier = Modifier.fillMaxWidth()
                                         ) {
                                             Text(
+                                                modifier = Modifier.weight(1f),
                                                 text = meals[i].name,
                                                 style = DodamTheme.typography.body1Medium(),
                                                 color = DodamTheme.colors.labelNormal
                                             )
-                                            Spacer(Modifier.weight(1f))
                                             Text(
-                                                text = meals.getOrNull(i)?.name ?: "",
+                                                modifier = Modifier.weight(1f),
+                                                text = meals.getOrNull(i+1)?.name ?: "",
                                                 style = DodamTheme.typography.body1Medium(),
                                                 color = DodamTheme.colors.labelNormal
                                             )
-                                            Spacer(Modifier.weight(1f))
                                         }
                                     }
                                 }
