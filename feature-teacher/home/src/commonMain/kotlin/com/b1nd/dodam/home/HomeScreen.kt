@@ -20,14 +20,21 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -77,13 +84,32 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
 
-@OptIn(KoinExperimentalAPI::class)
+@OptIn(KoinExperimentalAPI::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel()
 ) {
 
     val state by viewModel.state.collectAsState()
+    var isRefreshing by remember { mutableStateOf(false) }
+
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            isRefreshing = true
+            viewModel.run {
+                loadMeal()
+                loadOuting()
+                loadNightStudy()
+                loadSchedule()
+                loadBanner()
+            }
+        }
+    )
+
+    LaunchedEffect(state.mealUiState) {
+        isRefreshing = false
+    }
 
     Scaffold(
         modifier = Modifier.background(DodamTheme.colors.backgroundNeutral),
@@ -117,7 +143,8 @@ internal fun HomeScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it),
+                .padding(it)
+                .pullRefresh(pullRefreshState),
             contentAlignment = Alignment.TopCenter,
         ) {
             LazyColumn(
@@ -173,6 +200,10 @@ internal fun HomeScreen(
                     Spacer(modifier = Modifier.height(150.dp))
                 }
             }
+            PullRefreshIndicator(
+                refreshing = isRefreshing,
+                state = pullRefreshState
+            )
         }
     }
 }

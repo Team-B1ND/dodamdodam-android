@@ -47,7 +47,7 @@ class HomeViewModel: ViewModel(), KoinComponent {
         }
     }
 
-    private fun loadBanner() = viewModelScope.launch {
+    fun loadBanner() = viewModelScope.launch {
         bannerRepository.getActiveBanner().collect {
             when (it) {
                 is Result.Success -> {
