@@ -51,7 +51,7 @@ fun DodamContainer(
                         Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberBounceIndication(),
-                            onClick = onNextClick?: {}
+                            onClick = onNextClick ?: {},
                         )
                     } else {
                         Modifier
@@ -100,7 +100,7 @@ fun DodamContainer(
             }
         }
         Box(
-            modifier = Modifier.padding(horizontal = 6.dp)
+            modifier = Modifier.padding(horizontal = 6.dp),
         ) {
             content()
         }
