@@ -14,6 +14,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -37,6 +38,22 @@ internal class OutingService(
         return safeRequest {
             client.get(DodamUrl.Outing.MY)
                 .body<Response<List<OutingResponse>>>()
+        }.toImmutableList()
+    }
+
+    override suspend fun getSleepovers(date: LocalDate): ImmutableList<SleepoverResponse> {
+        return safeRequest {
+            client.get(DodamUrl.Sleepover.VALID) {
+                parameter("date", date)
+            }.body<Response<List<SleepoverResponse>>>()
+        }.toImmutableList()
+    }
+
+    override suspend fun getOutings(date: LocalDate): ImmutableList<OutingResponse> {
+        return safeRequest {
+            client.get(DodamUrl.OUTING) {
+                parameter("date", date)
+            }.body<Response<List<OutingResponse>>>()
         }.toImmutableList()
     }
 

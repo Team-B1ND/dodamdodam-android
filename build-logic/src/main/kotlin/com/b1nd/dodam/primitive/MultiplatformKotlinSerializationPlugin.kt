@@ -18,6 +18,8 @@ class MultiplatformKotlinSerializationPlugin : Plugin<Project> {
                 sourceSets.commonMain {
                     dependencies {
                         implementation(libs.library("kotlinx-serialization-json"))
+                        implementation(libs.library("kotlinx-io-core"))
+                        implementation(libs.library("kotlinx-io-bytestring"))
                     }
                 }
             }

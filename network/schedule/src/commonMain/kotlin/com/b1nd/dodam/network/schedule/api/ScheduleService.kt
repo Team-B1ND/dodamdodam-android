@@ -11,15 +11,16 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.LocalDate
 
 internal class ScheduleService(
     private val client: HttpClient,
 ) : ScheduleDataSource {
-    override suspend fun getScheduleBetweenPeriods(startDate: String, endDate: String): ImmutableList<ScheduleResponse> {
+    override suspend fun getScheduleBetweenPeriods(startAt: LocalDate, endAt: LocalDate): ImmutableList<ScheduleResponse> {
         return safeRequest {
             client.get(DodamUrl.Schedule.SEARCH) {
-                parameter("startDate", startDate)
-                parameter("endDate", endDate)
+                parameter("startAt", startAt)
+                parameter("endAt", endAt)
             }.body<Response<List<ScheduleResponse>>>()
         }.toImmutableList()
     }

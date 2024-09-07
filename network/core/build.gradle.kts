@@ -11,14 +11,16 @@ plugins {
 kotlin {
     sourceSets {
         androidMain.dependencies {
-
+            implementation(libs.ktor.client.cio)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         commonMain.dependencies {
             implementation(projects.datastore)
             implementation(projects.common)
             api(libs.ktor.client.core)
             implementation(libs.ktor.client.logging)
-            implementation(libs.ktor.client.cio)
             implementation(libs.ktor.client.auth)
             api(libs.ktor.client.content.negotiation)
             api(libs.ktor.serialization.kotlinx.json)
