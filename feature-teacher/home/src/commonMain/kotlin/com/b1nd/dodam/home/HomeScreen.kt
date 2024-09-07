@@ -206,7 +206,7 @@ internal fun DefaultText(onClick: () -> Unit, label: String, body: String) {
 }
 
 @Composable
-internal fun InnerCountCard(modifier: Modifier = Modifier, title: String, content: String, buttonText: String, onClick: () -> Unit) {
+internal fun InnerCountCard(modifier: Modifier = Modifier, title: String, content: String, buttonText: String, showButton: Boolean, onClick: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth(),
@@ -224,13 +224,15 @@ internal fun InnerCountCard(modifier: Modifier = Modifier, title: String, conten
                 color = DodamTheme.colors.labelNormal,
             )
         }
-        Spacer(modifier = Modifier.weight(1f))
-        Spacer(modifier = Modifier.width(8.dp))
-        DodamButton(
-            text = buttonText,
-            onClick = onClick,
-            buttonRole = ButtonRole.Assistive,
-            buttonSize = ButtonSize.Small,
-        )
+        if (showButton) {
+            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(8.dp))
+            DodamButton(
+                text = buttonText,
+                onClick = onClick,
+                buttonRole = ButtonRole.Assistive,
+                buttonSize = ButtonSize.Small,
+            )
+        }
     }
 }

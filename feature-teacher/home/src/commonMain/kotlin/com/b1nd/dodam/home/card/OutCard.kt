@@ -35,6 +35,7 @@ internal fun OutCard(showShimmer: Boolean, uiState: OutUiState, onRefreshClick: 
                             title = "현재 외출중인 학생",
                             content = "${uiState.outAllowCount}명",
                             buttonText = "${uiState.outPendingCount}명 대기중",
+                            showButton = uiState.outPendingCount != 0,
                             onClick = onOutingClick,
                         )
                         Spacer(modifier = Modifier.height(16.dp))
@@ -42,6 +43,7 @@ internal fun OutCard(showShimmer: Boolean, uiState: OutUiState, onRefreshClick: 
                             title = "현재 외박중인 학생",
                             content = "${uiState.sleepoverAllowCount}명",
                             buttonText = "${uiState.sleepoverPendingCount}명 대기중",
+                            showButton = uiState.sleepoverPendingCount != 0,
                             onClick = onSleepoverClick,
                         )
                     }
