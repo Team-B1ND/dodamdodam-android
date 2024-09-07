@@ -34,6 +34,7 @@ internal fun NightStudyCard(uiState: NightStudyUiState, showShimmer: Boolean, on
                             title = "현재 자습중인 학생",
                             content = "${uiState.active}명",
                             buttonText = "${uiState.pending}명 대기중",
+                            showButton = uiState.pending != 0,
                             onClick = onContentClick,
                         )
                     }
