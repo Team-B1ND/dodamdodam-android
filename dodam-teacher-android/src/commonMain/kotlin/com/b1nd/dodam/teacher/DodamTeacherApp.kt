@@ -4,7 +4,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.memory.MemoryCache
+import coil3.network.ktor.KtorNetworkFetcherFactory
+import coil3.request.crossfade
+import coil3.util.DebugLogger
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.home.navigation.homeScreen
+import com.b1nd.dodam.home.navigation.navigateToHome
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
@@ -15,9 +25,12 @@ import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
 import com.b1nd.dodam.register.navigation.navigateToInfo
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class)
 @Composable
 fun DodamTeacherApp() {
+    setSingletonImageLoaderFactory { context ->
+        getAsyncImageLoader(context)
+    }
     val navHostController = rememberNavController()
     DodamTheme {
         NavHost(
@@ -49,9 +62,25 @@ fun DodamTeacherApp() {
 
             loginScreen(
                 onBackClick = navHostController::popBackStack,
-                navigateToMain = {},
+                navigateToMain = navHostController::navigateToHome,
                 role = "TEACHER",
             )
+
+            homeScreen()
         }
     }
 }
+
+@OptIn(ExperimentalCoilApi::class)
+internal fun getAsyncImageLoader(context: PlatformContext) = ImageLoader.Builder(context)
+    .crossfade(true)
+    .memoryCache {
+        MemoryCache.Builder()
+            .maxSizePercent(context, percent = 0.25)
+            .build()
+    }
+    .logger(DebugLogger())
+    .components {
+        add(KtorNetworkFetcherFactory())
+    }
+    .build()

@@ -4,7 +4,6 @@ import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
-import com.b1nd.dodam.common.utiles.javaFormat
 import com.b1nd.dodam.data.schedule.ScheduleRepository
 import com.b1nd.dodam.data.schedule.model.Schedule
 import com.b1nd.dodam.data.schedule.model.toModel
@@ -21,12 +20,12 @@ internal class ScheduleRepositoryImpl constructor(
     private val network: ScheduleDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : ScheduleRepository {
-    override fun getScheduleBetweenPeriods(startDate: LocalDate, endDate: LocalDate): Flow<Result<ImmutableList<Schedule>>> {
+    override fun getScheduleBetweenPeriods(startAt: LocalDate, endAt: LocalDate): Flow<Result<ImmutableList<Schedule>>> {
         return flow {
             emit(
                 network.getScheduleBetweenPeriods(
-                    String.javaFormat("%02d-%02d-%02d", startDate.year, startDate.monthNumber, startDate.dayOfMonth),
-                    String.javaFormat("%02d-%02d-%02d", endDate.year, endDate.monthNumber, endDate.dayOfMonth),
+                    startAt = startAt,
+                    endAt = endAt,
                 ).map {
                     it.toModel()
                 }.toImmutableList(),

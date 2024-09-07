@@ -14,6 +14,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://jitpack.io")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
     }
 }
 
@@ -69,5 +70,6 @@ include(
     ":feature-student:ask-wakeup-song",
     ":logging",
     ":dodam-teacher-android",
-    ":feature-teacher:register"
+    ":feature-teacher:register",
+    ":feature-teacher:home",
 )
