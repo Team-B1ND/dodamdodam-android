@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -14,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
@@ -54,7 +52,7 @@ fun DodamTeacherApp() {
 
     DodamTheme {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             NavHost(
                 modifier = Modifier.fillMaxSize(),
@@ -102,7 +100,7 @@ fun DodamTeacherApp() {
                 backStackEntry = backStackEntry,
                 onClick = { destination ->
                     navHostController.navigate(
-                        route = destination
+                        route = destination,
                     ) {
                         popUpTo(navHostController.graph.findStartDestination().route.toString()) {
                             saveState = true
@@ -110,18 +108,14 @@ fun DodamTeacherApp() {
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
             )
         }
     }
 }
 
 @Composable
-private fun DodamTeacherBottomNavigation(
-    modifier: Modifier = Modifier,
-    backStackEntry: NavBackStackEntry?,
-    onClick: (destination: String) -> Unit,
-) {
+private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
     val route = backStackEntry?.destination?.route
 
     if (route != null && route in listOf(HOME_ROUTE)) {
@@ -134,33 +128,32 @@ private fun DodamTeacherBottomNavigation(
                     onClick = {
                         onClick(HOME_ROUTE)
                     },
-                    enable = route != HOME_ROUTE
+                    enable = route != HOME_ROUTE,
                 ),
                 DodamNavigationBarItem(
                     selected = route == "",
                     icon = DodamIcons.ForkAndKnife,
-                    onClick = {}
+                    onClick = {},
                 ),
                 DodamNavigationBarItem(
                     selected = route == "",
                     icon = DodamIcons.DoorOpen,
-                    onClick = {}
+                    onClick = {},
                 ),
                 DodamNavigationBarItem(
                     selected = route == "",
                     icon = DodamIcons.MoonPlus,
-                    onClick = {}
+                    onClick = {},
                 ),
                 DodamNavigationBarItem(
                     selected = route == "",
                     icon = DodamIcons.Menu,
-                    onClick = {}
+                    onClick = {},
                 ),
-            )
+            ),
         )
     }
 }
-
 
 @OptIn(ExperimentalCoilApi::class)
 internal fun getAsyncImageLoader(context: PlatformContext) = ImageLoader.Builder(context)
