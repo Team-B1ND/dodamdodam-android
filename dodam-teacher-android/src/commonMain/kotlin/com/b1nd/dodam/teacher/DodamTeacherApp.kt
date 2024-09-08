@@ -99,7 +99,7 @@ fun DodamTeacherApp() {
                     .padding(
                         start = 16.dp,
                         end = 16.dp,
-                        bottom = 8.dp
+                        bottom = 8.dp,
                     ),
                 backStackEntry = backStackEntry,
                 onClick = { destination ->
