@@ -24,6 +24,7 @@ kotlin {
             implementation(projects.network.login)
 
             implementation(projects.feature.onboarding)
+            implementation(projects.featureTeacher.nightstudy)
             api(projects.feature.login)
             implementation(projects.datastore)
             implementation(projects.logging)
