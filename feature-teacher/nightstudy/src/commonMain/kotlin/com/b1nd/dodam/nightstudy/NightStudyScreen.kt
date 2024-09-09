@@ -30,7 +30,7 @@ import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
-import com.b1nd.dodam.ui.component.UserItem
+import com.b1nd.dodam.ui.component.DodamMember
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -89,7 +89,7 @@ fun NightStudyScreen(
     val pending = listOf("병준5", "병준6")
 
     LaunchedEffect(key1 = true) {
-        viewModel.check()
+        viewModel.load()
     }
 
     Scaffold(
@@ -127,7 +127,7 @@ fun NightStudyScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 20.dp, bottom = 20.dp)
+                        .padding(vertical = 20.dp)
                         .wrapContentHeight()
                         .clip(shape = RoundedCornerShape(18.dp))
                         .background(DodamTheme.colors.staticWhite),
@@ -143,20 +143,19 @@ fun NightStudyScreen(
                         modifier = Modifier
                             .padding(10.dp)
                     ) {
-                        when (uiState.nightStudyUiState) {
+                        when (val data = if (titleIndex == 0) uiState.nightStudyUiState else uiState.nightStudyPendingUiState) {
                             is NightStudyUiState.Success -> {
-                                val studying =
-                                    (uiState.nightStudyUiState as NightStudyUiState.Success).data
-                                items(if (titleIndex == 0) studying.size else pending.size) { listIndex ->
-                                    UserItem(
-                                        userName = if (titleIndex == 0) studying[listIndex]?.student?.name
-                                            ?: "" else pending[listIndex],
-                                        modifier = Modifier.padding(bottom = 12.dp)
+                                val memberData = data.data
+                                items(memberData.size) { listIndex ->
+                                    DodamMember(
+                                        name = memberData[listIndex]?.student?.name ?:"",
+                                        modifier = Modifier.padding(bottom = 12.dp),
+                                        icon = null
                                     ) {
                                         val start =
-                                            studying[listIndex]?.startAt?.date.toString().split("-")
+                                            memberData[0]?.startAt?.date.toString().split("-")
                                         val end =
-                                            studying[listIndex]?.endAt?.date.toString().split("-")
+                                            memberData[0]?.endAt?.date.toString().split("-")
 
                                         val a =
                                             if (end[2].toInt() > start[2].toInt()) {

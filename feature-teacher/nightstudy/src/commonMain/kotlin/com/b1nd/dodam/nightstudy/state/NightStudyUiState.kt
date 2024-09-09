@@ -5,6 +5,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class NightStudyScreenUiState(
     val nightStudyUiState: NightStudyUiState = NightStudyUiState.Loading,
+    val nightStudyPendingUiState: NightStudyUiState = NightStudyUiState.Loading,
 )
 
 
