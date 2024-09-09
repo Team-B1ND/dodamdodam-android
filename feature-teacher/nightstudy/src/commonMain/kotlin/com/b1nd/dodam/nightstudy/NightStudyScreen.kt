@@ -141,26 +141,52 @@ fun NightStudyScreen(
                     )
                     LazyColumn(
                         modifier = Modifier
-                            .padding(horizontal = 10.dp)
-                            .padding(bottom = 10.dp)
+                            .padding(10.dp)
                     ) {
                         when (uiState.nightStudyUiState) {
                             is NightStudyUiState.Success -> {
-                                val studying = (uiState.nightStudyUiState as NightStudyUiState.Success).data
+                                val studying =
+                                    (uiState.nightStudyUiState as NightStudyUiState.Success).data
                                 items(if (titleIndex == 0) studying.size else pending.size) { listIndex ->
                                     UserItem(
-                                        userName = if (titleIndex == 0) studying[listIndex]?.student?.name ?: "" else pending[listIndex],
+                                        userName = if (titleIndex == 0) studying[listIndex]?.student?.name
+                                            ?: "" else pending[listIndex],
+                                        modifier = Modifier.padding(bottom = 12.dp)
                                     ) {
                                         val start =
-                                            studying[listIndex]?.startAt?.date.toString().split("-")[2].toInt()
+                                            studying[listIndex]?.startAt?.date.toString().split("-")
                                         val end =
-                                            studying[listIndex]?.endAt?.date.toString().split("-")[2].toInt()
+                                            studying[listIndex]?.endAt?.date.toString().split("-")
 
-                                        val a = end - start
+                                        val a =
+                                            if (end[2].toInt() > start[2].toInt()) {
+                                                end[2].toInt() - start[2].toInt()
+                                            } else {
+                                                when (end[1].toInt()) {
+                                                    1, 3, 5, 7, 8, 10, 12 -> {
+                                                        (end[2].toInt() - 31) + start[2].toInt()
+                                                    }
+
+                                                    4, 6, 9, 11 -> {
+                                                        (end[2].toInt() - 30) + start[2].toInt()
+                                                    }
+
+                                                    2 -> {
+                                                        if (end[0].toInt() % 4 == 0 && (end[0].toInt() % 100 != 0 || end[0].toInt() % 400 == 0)) {
+                                                            end[2].toInt() - 29 - start[2].toInt()
+                                                        } else {
+                                                            end[2].toInt() - 20 - start[2].toInt()
+                                                        }
+                                                    }
+                                                    else -> {
+                                                        0
+                                                    }
+                                                }
+                                            }
 
                                         if (titleIndex == 0) {
                                             Text(
-                                                text = if (a == 1)"오늘 종료" else "${a}일 남음",
+                                                text = if (a == 1) "오늘 종료" else "${a}일 남음",
                                                 style = DodamTheme.typography.headlineMedium(),
                                                 color = if (a == 1) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive,
                                             )
@@ -175,6 +201,7 @@ fun NightStudyScreen(
                                     }
                                 }
                             }
+
                             NightStudyUiState.Error -> {}
                             NightStudyUiState.Loading -> {}
                         }
