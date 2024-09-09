@@ -51,7 +51,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             scheduleRepositoryModule,
             scheduleDatasourceModule,
             DodamTeacherAppViewModelModule,
-            mealViewModelModule
+            mealViewModelModule,
         )
         block()
     }
