@@ -5,14 +5,12 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
@@ -31,7 +29,7 @@ fun DodamMember(
         verticalAlignment = Alignment.CenterVertically
     ) {
         DodamAvatar(
-            avatarSize = AvatarSize.Small,
+            avatarSize = AvatarSize.Large,
             model = icon,
             contentDescription = null
         )
