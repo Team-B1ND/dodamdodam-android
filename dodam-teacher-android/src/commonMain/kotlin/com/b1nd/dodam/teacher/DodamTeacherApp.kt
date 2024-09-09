@@ -1,15 +1,24 @@
 package com.b1nd.dodam.teacher
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -39,81 +48,96 @@ import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
 import com.b1nd.dodam.register.navigation.navigateToInfo
+import com.b1nd.dodam.ui.icons.B1NDLogo
+import com.b1nd.dodam.ui.icons.DodamLogo
 import kotlinx.collections.immutable.persistentListOf
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class, KoinExperimentalAPI::class)
 @Composable
-fun DodamTeacherApp() {
+fun DodamTeacherApp(
+    viewModel: DodamTeacherAppViewModel = koinViewModel()
+) {
     setSingletonImageLoaderFactory { context ->
         getAsyncImageLoader(context)
     }
+
     val navHostController = rememberNavController()
     val backStackEntry by navHostController.currentBackStackEntryAsState()
+    val isLogin by viewModel.isLoginState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        viewModel.loadToken()
+    }
     DodamTheme {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            NavHost(
+        if (isLogin == null) {
+            LunchScreen()
+        } else {
+            Box(
                 modifier = Modifier.fillMaxSize(),
-                navController = navHostController,
-                startDestination = ONBOARDING_ROUTE,
             ) {
-                onboardingScreen(
-                    onRegisterClick = navHostController::navigateToInfo,
-                    onLoginClick = navHostController::navigationToLogin,
-                )
+                NavHost(
+                    modifier = Modifier.fillMaxSize(),
+                    navController = navHostController,
+                    startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE ,
+                ) {
+                    onboardingScreen(
+                        onRegisterClick = navHostController::navigateToInfo,
+                        onLoginClick = navHostController::navigationToLogin,
+                    )
 
-                infoScreen(
-                    onNextClick = { name, teacherRole, email, phoneNumber, extensionNumber ->
-                        navHostController.navigateToAuth(
-                            name = name,
-                            teacherRole = teacherRole,
-                            email = email,
-                            phoneNumber = phoneNumber,
-                            extensionNumber = extensionNumber,
-                        )
-                    },
-                    onBackClick = navHostController::popBackStack,
-                )
+                    infoScreen(
+                        onNextClick = { name, teacherRole, email, phoneNumber, extensionNumber ->
+                            navHostController.navigateToAuth(
+                                name = name,
+                                teacherRole = teacherRole,
+                                email = email,
+                                phoneNumber = phoneNumber,
+                                extensionNumber = extensionNumber,
+                            )
+                        },
+                        onBackClick = navHostController::popBackStack,
+                    )
 
-                authScreen(
-                    onRegisterClick = navHostController::navigateToOnboarding,
-                    onBackClick = navHostController::popBackStack,
-                )
+                    authScreen(
+                        onRegisterClick = navHostController::navigateToOnboarding,
+                        onBackClick = navHostController::popBackStack,
+                    )
 
-                loginScreen(
-                    onBackClick = navHostController::popBackStack,
-                    navigateToMain = navHostController::navigateToHome,
-                    role = "TEACHER",
-                )
+                    loginScreen(
+                        onBackClick = navHostController::popBackStack,
+                        navigateToMain = navHostController::navigateToHome,
+                        role = "TEACHER",
+                    )
 
-                homeScreen()
-            }
+                    homeScreen()
+                }
 
-            // Bottom Navigation
-            DodamTeacherBottomNavigation(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .navigationBarsPadding()
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        bottom = 8.dp,
-                    ),
-                backStackEntry = backStackEntry,
-                onClick = { destination ->
-                    navHostController.navigate(
-                        route = destination,
-                    ) {
-                        popUpTo(navHostController.graph.findStartDestination().route.toString()) {
-                            saveState = true
+                // Bottom Navigation
+                DodamTeacherBottomNavigation(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .navigationBarsPadding()
+                        .padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            bottom = 8.dp,
+                        ),
+                    backStackEntry = backStackEntry,
+                    onClick = { destination ->
+                        navHostController.navigate(
+                            route = destination,
+                        ) {
+                            popUpTo(navHostController.graph.findStartDestination().route.toString()) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-            )
+                    },
+                )
+            }
         }
     }
 }
@@ -155,6 +179,34 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     onClick = {},
                 ),
             ),
+        )
+    }
+}
+
+@Composable
+private fun LunchScreen(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(DodamTheme.colors.backgroundNeutral)
+    ) {
+        Image(
+            modifier = Modifier.align(Alignment.Center),
+            imageVector = DodamLogo,
+            colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
+            contentDescription = null
+        )
+        Image(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .width(60.dp)
+                .height(16.dp)
+                .navigationBarsPadding(),
+            imageVector = B1NDLogo,
+            colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
+            contentDescription = null
         )
     }
 }
