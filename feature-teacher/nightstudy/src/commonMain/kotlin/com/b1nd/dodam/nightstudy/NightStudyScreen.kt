@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -26,11 +27,15 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
+import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.UserItem
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun NightStudyScreen() {
+fun NightStudyScreen(
+    viewModel: NightStudyViewModel = koinViewModel()
+) {
     var classIndex by remember { mutableIntStateOf(0) }
     val classNumber = listOf(
         "전체",
@@ -78,6 +83,10 @@ fun NightStudyScreen() {
 
     val dummy1 = listOf("병준1", "병준2", "병준3", "병준4")
     val dummy2 = listOf("병준5", "병준6")
+
+    LaunchedEffect(key1 = true){
+        viewModel.check()
+    }
 
     Scaffold(
         topBar = {

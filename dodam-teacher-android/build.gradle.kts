@@ -33,6 +33,7 @@ kotlin {
             implementation(projects.network.register)
             implementation(projects.common)
             implementation(projects.network.core)
+            implementation(projects.network.nightStudy)
         }
     }
 }
