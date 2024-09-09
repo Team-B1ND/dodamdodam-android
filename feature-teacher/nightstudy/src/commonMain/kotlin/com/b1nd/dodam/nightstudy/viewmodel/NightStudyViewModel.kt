@@ -22,7 +22,7 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
 
     fun check() {
         viewModelScope.launch {
-            nightStudyRepository.getPendingNightStudy().collect { result ->
+            nightStudyRepository.getStudyingNightStudy().collect { result ->
                 when (result){
                     is Result.Success -> {
                         _uiState.update {
