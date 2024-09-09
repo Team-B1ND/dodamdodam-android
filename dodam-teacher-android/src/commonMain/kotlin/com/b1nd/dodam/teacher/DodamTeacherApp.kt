@@ -42,6 +42,7 @@ import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
+import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import com.b1nd.dodam.register.navigation.authScreen
@@ -78,7 +79,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                 NavHost(
                     modifier = Modifier.fillMaxSize(),
                     navController = navHostController,
-                    startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE,
+                    startDestination = if (isLogin!!) NIGHT_STUDY_ROUTE else ONBOARDING_ROUTE,
                 ) {
                     onboardingScreen(
                         onRegisterClick = navHostController::navigateToInfo,
@@ -110,6 +111,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                     )
 
                     homeScreen()
+                    nightStudyScreen()
                 }
 
                 // Bottom Navigation

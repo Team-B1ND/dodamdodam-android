@@ -18,6 +18,7 @@ import com.b1nd.dodam.network.meal.di.mealDataSourceModule
 import com.b1nd.dodam.network.nightstudy.di.nightStudyDataSourceModule
 import com.b1nd.dodam.network.outing.di.outingDataSourceModule
 import com.b1nd.dodam.network.schedule.di.scheduleDatasourceModule
+import com.b1nd.dodam.nightstudy.di.nightStudyViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
 import com.b1nd.dodam.register.di.registerRepositoryModule
 import com.b1nd.dodam.register.di.registerViewModelModule
@@ -47,6 +48,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             outingDataSourceModule,
             nightStudyRepositoryModule,
             nightStudyDataSourceModule,
+            nightStudyViewModelModule,
             scheduleRepositoryModule,
             scheduleDatasourceModule,
             DodamTeacherAppViewModelModule,
