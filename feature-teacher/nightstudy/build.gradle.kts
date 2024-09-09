@@ -26,6 +26,7 @@ kotlin{
         commonMain.dependencies {
             implementation(projects.common)
             api(projects.data.nightStudy)
+            api(projects.network.core)
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.ui)
         }

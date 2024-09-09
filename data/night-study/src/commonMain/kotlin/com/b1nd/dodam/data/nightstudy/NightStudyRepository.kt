@@ -10,6 +10,8 @@ import kotlinx.datetime.LocalDate
 interface NightStudyRepository {
     fun getMyNightStudy(): Flow<Result<ImmutableList<NightStudy>>>
 
+    fun getPendingNightStudy(): Flow<Result<ImmutableList<NightStudy>>>
+
     fun askNightStudy(place: Place, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate): Flow<Result<Unit>>
 
     fun deleteNightStudy(id: Long): Flow<Result<Unit>>
