@@ -5,10 +5,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
-import java.time.LocalDateTime
-import java.time.LocalTime
+import com.b1nd.dodam.common.date.DodamDate
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.LocalTime
 
 @Composable
 internal fun rememberMealScreenState(lazyListState: LazyListState = rememberLazyListState()): MealScreenState = remember(lazyListState) {
@@ -19,9 +18,9 @@ internal fun rememberMealScreenState(lazyListState: LazyListState = rememberLazy
 internal class MealScreenState(
     val lazyListState: LazyListState,
 ) {
-    private val current = LocalDateTime.now()
-    private val currentTime = current.toLocalTime()
-    val currentDate = current.toLocalDate()
+    private val current = DodamDate.now()
+    private val currentTime = current.time
+    val currentDate = current.date
 
     val canScrollBackward: Boolean
         get() = lazyListState.canScrollBackward
@@ -30,13 +29,13 @@ internal class MealScreenState(
         get() = lazyListState.canScrollForward
 
     val mealTime: MealTime = when {
-        currentTime <= LocalTime.of(8, 20) -> MealTime.BREAKFAST
-        currentTime <= LocalTime.of(13, 30) -> MealTime.LUNCH
-        currentTime <= LocalTime.of(19, 10) -> MealTime.DINNER
+        currentTime <= LocalTime(8, 20) -> MealTime.BREAKFAST
+        currentTime <= LocalTime(13, 30) -> MealTime.LUNCH
+        currentTime <= LocalTime(19, 10) -> MealTime.DINNER
         else -> MealTime.TOMORROW
     }
 
-    fun isDateInToday(date: LocalDate): Boolean = currentDate.toKotlinLocalDate() == date
+    fun isDateInToday(date: LocalDate): Boolean = currentDate == date
 }
 
 enum class MealTime {

@@ -29,6 +29,7 @@ kotlin {
             implementation(projects.common)
             implementation(projects.network.core)
             implementation(projects.featureTeacher.home)
+            implementation(projects.feature.meal)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)

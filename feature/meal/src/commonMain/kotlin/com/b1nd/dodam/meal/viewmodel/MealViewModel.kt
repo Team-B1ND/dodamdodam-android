@@ -2,10 +2,10 @@ package com.b1nd.dodam.meal.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.meal.MealRepository
 import com.b1nd.dodam.data.meal.model.Meal
-import java.time.LocalDateTime
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -14,12 +14,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.datetime.toKotlinLocalDateTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class MealViewModel : ViewModel(), KoinComponent {
-    private val current = LocalDateTime.now().toKotlinLocalDateTime()
+    private val current = DodamDate.now()
     private var getOnlyOnce = true
 
     private var meals: PersistentList<Meal> = persistentListOf()

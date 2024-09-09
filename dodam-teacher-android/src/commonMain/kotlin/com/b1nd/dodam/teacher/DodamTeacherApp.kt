@@ -40,6 +40,9 @@ import com.b1nd.dodam.home.navigation.homeScreen
 import com.b1nd.dodam.home.navigation.navigateToHome
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
+import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
+import com.b1nd.dodam.meal.navigation.mealScreen
+import com.b1nd.dodam.meal.navigation.navigationToMeal
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -108,7 +111,13 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                         role = "TEACHER",
                     )
 
-                    homeScreen()
+                    homeScreen(
+                        navigateToMeal = navHostController::navigationToMeal,
+                        navigateToOuting = {},
+                        navigateToNightStudy = {},
+                    )
+
+                    mealScreen()
                 }
 
                 // Bottom Navigation
@@ -143,7 +152,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
     val route = backStackEntry?.destination?.route
 
-    if (route != null && route in listOf(HOME_ROUTE)) {
+    if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE)) {
         DodamNavigationBar(
             modifier = modifier,
             items = persistentListOf(
@@ -156,9 +165,12 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     enable = route != HOME_ROUTE,
                 ),
                 DodamNavigationBarItem(
-                    selected = route == "",
+                    selected = route == MEAL_ROUTE,
                     icon = DodamIcons.ForkAndKnife,
-                    onClick = {},
+                    onClick = {
+                        onClick(MEAL_ROUTE)
+                    },
+                    enable = route != MEAL_ROUTE,
                 ),
                 DodamNavigationBarItem(
                     selected = route == "",

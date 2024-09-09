@@ -1,10 +1,10 @@
 package com.b1nd.dodam.meal
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -22,60 +23,55 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.b1nd.dodam.data.meal.model.Menu
-import com.b1nd.dodam.dds.component.DodamTopAppBar
-import com.b1nd.dodam.dds.style.BodyLarge
-import com.b1nd.dodam.dds.style.BodyMedium
-import com.b1nd.dodam.dds.style.LabelLarge
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.meal.viewmodel.MealUiState
 import com.b1nd.dodam.meal.viewmodel.MealViewModel
-import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlin.math.roundToInt
-import org.koin.androidx.compose.koinViewModel
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.isoDayNumber
+import kotlinx.datetime.plus
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @ExperimentalMaterial3Api
 @Composable
 fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
-    val uiState by viewModel.mealUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.mealUiState.collectAsState()
     val mealScreenState = rememberMealScreenState()
-
-    val color = MaterialTheme.colorScheme
 
     LaunchedEffect(mealScreenState.canScrollForward) {
         if (!mealScreenState.canScrollForward) {
-            val date = mealScreenState.currentDate.plusMonths(1)
-            viewModel.getMealOfMonth(date.year, date.monthValue)
+            val date = mealScreenState.currentDate.plus(DatePeriod(months = 1))
+            viewModel.getMealOfMonth(date.year, date.monthNumber)
         }
     }
 
     Scaffold(
         topBar = {
-            Column {
-                DodamTopAppBar(
-                    title = { Text(text = "급식") },
-                )
-                AnimatedVisibility(mealScreenState.canScrollBackward) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(color.outlineVariant),
-                    )
-                }
-            }
+            DodamDefaultTopAppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(DodamTheme.colors.backgroundNeutral)
+                    .statusBarsPadding(),
+                title = "급식",
+            )
         },
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color.surface)
+                .background(DodamTheme.colors.backgroundNeutral)
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -97,19 +93,16 @@ fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
                                         modifier = Modifier
                                             .background(
                                                 if (mealScreenState.isDateInToday(meal.date)) {
-                                                    color.primary
+                                                    DodamTheme.colors.primaryNormal
                                                 } else {
-                                                    color.secondaryContainer
+                                                    DodamTheme.colors.lineNeutral
                                                 },
                                                 CircleShape,
                                             )
                                             .padding(horizontal = 60.dp, vertical = 4.dp),
                                     ) {
-                                        BodyMedium(
-                                            text = String.format(
-                                                "%d월 %d일 (%s)",
-                                                meal.date.monthNumber,
-                                                meal.date.dayOfMonth,
+                                        Text(
+                                            text = "${meal.date.monthNumber}월 ${meal.date.dayOfMonth}일 (" +
                                                 listOf(
                                                     "월",
                                                     "화",
@@ -118,12 +111,15 @@ fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
                                                     "금",
                                                     "토",
                                                     "일",
-                                                )[meal.date.dayOfWeek.value - 1],
-                                            ),
-                                            color = if (mealScreenState.isDateInToday(meal.date)) {
-                                                color.onPrimary
+                                                )[meal.date.dayOfWeek.isoDayNumber - 1] + ")",
+                                            style = DodamTheme.typography.labelMedium(),
+                                            color = if (mealScreenState.isDateInToday(
+                                                    meal.date,
+                                                )
+                                            ) {
+                                                DodamTheme.colors.backgroundNormal
                                             } else {
-                                                color.onSecondaryContainer
+                                                DodamTheme.colors.labelNeutral
                                             },
                                         )
                                     }
@@ -132,9 +128,9 @@ fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
                                         MealCard(
                                             mealType = "아침",
                                             statusColor = if (mealScreenState.isDateInToday(meal.date) && mealScreenState.mealTime == MealTime.BREAKFAST) {
-                                                color.primary
+                                                DodamTheme.colors.primaryNormal
                                             } else {
-                                                color.onSurfaceVariant
+                                                DodamTheme.colors.lineNormal
                                             },
                                             calorie = breakfast.calorie,
                                             menus = breakfast.details,
@@ -145,9 +141,9 @@ fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
                                         MealCard(
                                             mealType = "점심",
                                             statusColor = if (mealScreenState.isDateInToday(meal.date) && mealScreenState.mealTime == MealTime.LUNCH) {
-                                                color.primary
+                                                DodamTheme.colors.primaryNormal
                                             } else {
-                                                color.onSurfaceVariant
+                                                DodamTheme.colors.lineNormal
                                             },
                                             calorie = lunch.calorie,
                                             menus = lunch.details,
@@ -158,9 +154,9 @@ fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
                                         MealCard(
                                             mealType = "저녁",
                                             statusColor = if (mealScreenState.isDateInToday(meal.date) && mealScreenState.mealTime == MealTime.DINNER) {
-                                                color.primary
+                                                DodamTheme.colors.primaryNormal
                                             } else {
-                                                color.onSurfaceVariant
+                                                DodamTheme.colors.lineNormal
                                             },
                                             calorie = dinner.calorie,
                                             menus = dinner.details,
@@ -175,9 +171,10 @@ fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                LabelLarge(
+                                Text(
                                     text = "이번 달 급식이 없어요.",
-                                    color = MaterialTheme.colorScheme.tertiary,
+                                    style = DodamTheme.typography.labelBold(),
+                                    color = DodamTheme.colors.fillAlternative,
                                 )
                             }
                         }
@@ -190,8 +187,8 @@ fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(
-                                    MaterialTheme.colorScheme.surfaceContainer,
-                                    MaterialTheme.shapes.large,
+                                    color = DodamTheme.colors.backgroundNormal,
+                                    shape = DodamTheme.shapes.large,
                                 )
                                 .padding(16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -261,11 +258,63 @@ fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
 
 @Composable
 private fun MealCard(mealType: String, statusColor: Color, calorie: Float, menus: List<Menu>) {
-    DodamCard(
+    DodamMealCard(
         statusText = mealType,
         statusColor = statusColor,
         labelText = "${calorie.roundToInt()} Kcal",
     ) {
-        BodyLarge(text = menus.joinToString("\n") { it.name })
+        Text(
+            text = menus.joinToString("\n") { it.name },
+            style = DodamTheme.typography.body1Medium(),
+            color = DodamTheme.colors.labelNormal,
+        )
+    }
+}
+
+@Composable
+private fun DodamMealCard(
+    modifier: Modifier = Modifier,
+    statusText: String,
+    statusTextColor: Color = MaterialTheme.colorScheme.onPrimary,
+    statusColor: Color = MaterialTheme.colorScheme.primary,
+    labelText: String,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = DodamTheme.colors.backgroundNormal,
+                shape = DodamTheme.shapes.large,
+            )
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .clip(shape = RoundedCornerShape(100))
+                    .background(statusColor)
+                    .padding(
+                        vertical = 4.dp,
+                        horizontal = 12.dp,
+                    ),
+            ) {
+                Text(
+                    text = statusText,
+                    color = statusTextColor,
+                    style = DodamTheme.typography.body1Bold(),
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = labelText,
+                color = DodamTheme.colors.lineNormal,
+                style = DodamTheme.typography.labelMedium(),
+            )
+        }
+
+        content()
     }
 }
