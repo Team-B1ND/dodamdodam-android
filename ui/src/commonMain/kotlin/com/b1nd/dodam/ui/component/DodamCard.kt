@@ -60,7 +60,7 @@ fun DodamCard(
             Text(
                 text = labelText,
                 color = DodamTheme.colors.lineNormal,
-                style = DodamTheme.typography.body1Bold(),
+                style = DodamTheme.typography.labelMedium(),
             )
         }
 
