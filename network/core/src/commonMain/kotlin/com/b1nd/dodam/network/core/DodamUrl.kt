@@ -45,6 +45,7 @@ object DodamUrl {
 
     object Sleepover {
         const val MY = "$SLEEPOVER/my"
+        const val VALID = "$SLEEPOVER/valid"
     }
 
     object Outing {

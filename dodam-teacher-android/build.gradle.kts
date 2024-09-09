@@ -6,21 +6,17 @@ plugins {
     alias(libs.plugins.dodam.multiplatform.application)
     alias(libs.plugins.dodam.multiplatform.compose)
     alias(libs.plugins.dodam.multiplatform.kotlin)
+    alias(libs.plugins.dodam.multiplatform.coil)
     alias(libs.plugins.dodam.multiplatform.koin)
 }
 kotlin {
     setIOS("DodamTeacher", "com.b1nd.dodam.teacher")
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.compose.activity)
-            implementation(libs.koin.android)
-            implementation(projects.keystore)
-        }
         commonMain.dependencies {
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.common)
+            implementation(projects.ui)
             implementation(projects.network.login)
 
             implementation(projects.feature.onboarding)
@@ -34,6 +30,26 @@ kotlin {
             implementation(projects.common)
             implementation(projects.network.core)
             implementation(projects.network.nightStudy)
+            implementation(projects.featureTeacher.home)
+
+            implementation(projects.data.login)
+            implementation(projects.data.banner)
+            implementation(projects.data.meal)
+            implementation(projects.data.outing)
+            implementation(projects.data.nightStudy)
+            implementation(projects.data.schedule)
+            implementation(projects.network.banner)
+            implementation(projects.network.meal)
+            implementation(projects.network.outing)
+            implementation(projects.network.nightStudy)
+            implementation(projects.network.schedule)
+        }
+
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(libs.androidx.compose.activity)
+            implementation(libs.koin.android)
+            implementation(projects.keystore)
         }
     }
 }
