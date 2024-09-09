@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import com.b1nd.dodam.common.date.DodamDate
-import kotlinx.datetime.LocalTime
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 
 @Composable
 internal fun rememberMealScreenState(lazyListState: LazyListState = rememberLazyListState()): MealScreenState = remember(lazyListState) {

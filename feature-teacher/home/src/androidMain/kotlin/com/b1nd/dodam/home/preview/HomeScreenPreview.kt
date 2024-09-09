@@ -12,7 +12,7 @@ fun HomeScreenPreview() {
         HomeScreen(
             navigateToOuting = {},
             navigateToMeal = {},
-            navigateToNightStudy = {}
+            navigateToNightStudy = {},
         )
     }
 }

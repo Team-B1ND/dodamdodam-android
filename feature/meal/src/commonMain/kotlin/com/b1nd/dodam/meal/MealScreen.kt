@@ -1,6 +1,5 @@
 package com.b1nd.dodam.meal
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,13 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,30 +32,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.data.meal.model.Menu
 import com.b1nd.dodam.designsystem.DodamTheme
-import com.b1nd.dodam.designsystem.component.ActionIcon
-import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
-import com.b1nd.dodam.designsystem.component.DodamTopAppBar
-import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.meal.viewmodel.MealUiState
 import com.b1nd.dodam.meal.viewmodel.MealViewModel
-import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import com.b1nd.dodam.ui.icons.DodamLogo
-import kotlinx.collections.immutable.persistentListOf
+import kotlin.math.roundToInt
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.plus
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import kotlin.math.roundToInt
 
 @OptIn(KoinExperimentalAPI::class)
 @ExperimentalMaterial3Api
 @Composable
-fun MealScreen(
-    viewModel: MealViewModel = koinViewModel()
-) {
+fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
     val uiState by viewModel.mealUiState.collectAsState()
     val mealScreenState = rememberMealScreenState()
 
@@ -115,17 +103,24 @@ fun MealScreen(
                                     ) {
                                         Text(
                                             text = "${meal.date.monthNumber}월 ${meal.date.dayOfMonth}일 (" +
-                                                    listOf(
-                                                        "월",
-                                                        "화",
-                                                        "수",
-                                                        "목",
-                                                        "금",
-                                                        "토",
-                                                        "일",
-                                                    )[meal.date.dayOfWeek.isoDayNumber - 1] + ")",
+                                                listOf(
+                                                    "월",
+                                                    "화",
+                                                    "수",
+                                                    "목",
+                                                    "금",
+                                                    "토",
+                                                    "일",
+                                                )[meal.date.dayOfWeek.isoDayNumber - 1] + ")",
                                             style = DodamTheme.typography.labelMedium(),
-                                            color = if (mealScreenState.isDateInToday(meal.date)) DodamTheme.colors.backgroundNormal else DodamTheme.colors.labelNeutral
+                                            color = if (mealScreenState.isDateInToday(
+                                                    meal.date,
+                                                )
+                                            ) {
+                                                DodamTheme.colors.backgroundNormal
+                                            } else {
+                                                DodamTheme.colors.labelNeutral
+                                            },
                                         )
                                     }
 
@@ -179,7 +174,7 @@ fun MealScreen(
                                 Text(
                                     text = "이번 달 급식이 없어요.",
                                     style = DodamTheme.typography.labelBold(),
-                                    color = DodamTheme.colors.fillAlternative
+                                    color = DodamTheme.colors.fillAlternative,
                                 )
                             }
                         }
@@ -271,7 +266,7 @@ private fun MealCard(mealType: String, statusColor: Color, calorie: Float, menus
         Text(
             text = menus.joinToString("\n") { it.name },
             style = DodamTheme.typography.body1Medium(),
-            color = DodamTheme.colors.labelNormal
+            color = DodamTheme.colors.labelNormal,
         )
     }
 }

@@ -12,11 +12,7 @@ const val HOME_ROUTE = "home"
 
 fun NavController.navigateToHome(navOptions: NavOptions? = null) = this.navigate(HOME_ROUTE)
 
-fun NavGraphBuilder.homeScreen(
-    navigateToMeal: () -> Unit,
-    navigateToOuting: () -> Unit,
-    navigateToNightStudy: () -> Unit,
-) {
+fun NavGraphBuilder.homeScreen(navigateToMeal: () -> Unit, navigateToOuting: () -> Unit, navigateToNightStudy: () -> Unit) {
     composable(
         route = HOME_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -27,7 +23,7 @@ fun NavGraphBuilder.homeScreen(
         HomeScreen(
             navigateToMeal = navigateToMeal,
             navigateToOuting = navigateToOuting,
-            navigateToNightStudy = navigateToNightStudy
+            navigateToNightStudy = navigateToNightStudy,
         )
     }
 }

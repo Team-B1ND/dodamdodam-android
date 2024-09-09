@@ -114,7 +114,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                     homeScreen(
                         navigateToMeal = navHostController::navigationToMeal,
                         navigateToOuting = {},
-                        navigateToNightStudy = {}
+                        navigateToNightStudy = {},
                     )
 
                     mealScreen()
@@ -170,7 +170,7 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     onClick = {
                         onClick(MEAL_ROUTE)
                     },
-                    enable = route != MEAL_ROUTE
+                    enable = route != MEAL_ROUTE,
                 ),
                 DodamNavigationBarItem(
                     selected = route == "",
