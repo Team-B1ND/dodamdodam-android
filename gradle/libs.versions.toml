@@ -67,7 +67,6 @@ coreKtx = "1.13.1"
 
 [libraries]
 # kotlin
-coil = { module = "io.coil-kt:coil", version.ref = "coilVersion" }
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
