@@ -8,7 +8,12 @@ import kotlinx.datetime.LocalDateTime
 
 interface OutingDataSource {
     suspend fun getMySleepover(): ImmutableList<SleepoverResponse>
+
     suspend fun getMyOuting(): ImmutableList<OutingResponse>
+
+    suspend fun getSleepovers(date: LocalDate): ImmutableList<SleepoverResponse>
+
+    suspend fun getOutings(date: LocalDate): ImmutableList<OutingResponse>
 
     suspend fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime)
 

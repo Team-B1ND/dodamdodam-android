@@ -35,9 +35,21 @@ internal class OutingRepositoryImpl(
         }.asResult().flowOn(dispatcher)
     }
 
+    override fun getOutings(date: LocalDate): Flow<Result<ImmutableList<Outing>>> {
+        return flow {
+            emit(network.getOutings(date).map { it.toModel() }.toImmutableList())
+        }.asResult().flowOn(dispatcher)
+    }
+
     override fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime): Flow<Result<Unit>> {
         return flow {
             emit(network.askOuting(reason, startAt, endAt))
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun getSleepovers(date: LocalDate): Flow<Result<ImmutableList<Outing>>> {
+        return flow {
+            emit(network.getSleepovers(date).map { it.toModel() }.toImmutableList())
         }.asResult().flowOn(dispatcher)
     }
 
