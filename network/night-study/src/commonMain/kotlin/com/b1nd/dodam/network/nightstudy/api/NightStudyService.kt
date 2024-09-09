@@ -37,6 +37,13 @@ internal class NightStudyService(
         }.toImmutableList()
     }
 
+    override suspend fun getStudyingNightStudy(): ImmutableList<NightStudyResponse> {
+        return safeRequest {
+            network.get(DodamUrl.NIGHT_STUDY)
+                .body<Response<List<NightStudyResponse>>>()
+        }.toImmutableList()
+    }
+
     override suspend fun askNightStudy(place: String, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) {
         return defaultSafeRequest {
             network.post(DodamUrl.NIGHT_STUDY) {

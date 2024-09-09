@@ -12,6 +12,8 @@ interface NightStudyRepository {
 
     fun getPendingNightStudy(): Flow<Result<ImmutableList<NightStudy>>>
 
+    fun getStudyingNightStudy(): Flow<Result<ImmutableList<NightStudy>>>
+
     fun askNightStudy(place: Place, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate): Flow<Result<Unit>>
 
     fun deleteNightStudy(id: Long): Flow<Result<Unit>>

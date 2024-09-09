@@ -34,6 +34,12 @@ internal class NightStudyRepositoryImpl(
         }.asResult().flowOn(dispatcher)
     }
 
+    override fun getStudyingNightStudy(): Flow<Result<ImmutableList<NightStudy>>> {
+        return flow {
+            emit(remote.getStudyingNightStudy().map { it.toModel() }.toImmutableList())
+        }.asResult().flowOn(dispatcher)
+    }
+
     override fun askNightStudy(
         place: Place,
         content: String,
