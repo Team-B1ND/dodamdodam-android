@@ -7,6 +7,8 @@ import androidx.navigation.compose.rememberNavController
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
+import com.b1nd.dodam.nightstudy.navigation.NiGHT_STUDY_ROUTE
+import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -22,7 +24,7 @@ fun DodamTeacherApp() {
     DodamTheme {
         NavHost(
             navController = navHostController,
-            startDestination = ONBOARDING_ROUTE,
+            startDestination = NiGHT_STUDY_ROUTE,
         ) {
             onboardingScreen(
                 onRegisterClick = navHostController::navigateToInfo,
@@ -52,6 +54,8 @@ fun DodamTeacherApp() {
                 navigateToMain = {},
                 role = "TEACHER",
             )
+
+            nightStudyScreen()
         }
     }
 }
