@@ -54,7 +54,12 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class, ExperimentalMaterialApi::class)
 @Composable
-internal fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
+internal fun HomeScreen(
+    viewModel: HomeViewModel = koinViewModel(),
+    navigateToMeal: () -> Unit,
+    navigateToOuting: () -> Unit,
+    navigateToNightStudy: () -> Unit,
+) {
     val state by viewModel.state.collectAsState()
     var isRefreshing by remember { mutableStateOf(false) }
 
@@ -128,7 +133,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
                     MealCard(
                         state = state.mealUiState,
                         showShimmer = state.showShimmer,
-                        onClickContent = {},
+                        onClickContent = navigateToMeal,
                         onClickRefresh = viewModel::loadMeal,
                     )
                 }
@@ -138,7 +143,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
                         showShimmer = state.showShimmer,
                         uiState = state.outUiState,
                         onRefreshClick = viewModel::loadOuting,
-                        onOutingClick = {},
+                        onOutingClick = navigateToOuting,
                         onSleepoverClick = {},
                     )
                 }
@@ -147,7 +152,7 @@ internal fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
                     NightStudyCard(
                         showShimmer = state.showShimmer,
                         uiState = state.nightStudyUiState,
-                        onContentClick = {},
+                        onContentClick = navigateToNightStudy,
                         onRefreshClick = viewModel::loadNightStudy,
                     )
                 }

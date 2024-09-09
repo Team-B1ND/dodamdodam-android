@@ -11,6 +11,7 @@ import com.b1nd.dodam.data.schedule.di.scheduleRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
 import com.b1nd.dodam.home.di.homeViewModelModule
 import com.b1nd.dodam.login.di.loginViewModelModule
+import com.b1nd.dodam.meal.di.mealViewModelModule
 import com.b1nd.dodam.network.banner.di.bannerDataSourceModule
 import com.b1nd.dodam.network.core.di.networkCoreModule
 import com.b1nd.dodam.network.login.di.loginDataSourceModule
@@ -50,6 +51,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             scheduleRepositoryModule,
             scheduleDatasourceModule,
             DodamTeacherAppViewModelModule,
+            mealViewModelModule,
         )
         block()
     }
