@@ -28,9 +28,7 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                         _uiState.update {
                             it.copy(
                                 nightStudyUiState = NightStudyUiState.Success(
-                                    result.data.minByOrNull { nightStudy ->
-                                        nightStudy.startAt
-                                    },
+                                    result.data
                                 ),
                             )
                         }
