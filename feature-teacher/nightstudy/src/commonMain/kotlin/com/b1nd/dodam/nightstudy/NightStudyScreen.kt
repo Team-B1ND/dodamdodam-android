@@ -26,6 +26,7 @@ import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
+import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
@@ -85,9 +86,7 @@ fun NightStudyScreen(
 
     val uiState by viewModel.uiState.collectAsState()
 
-
-    val pending = listOf("병준5", "병준6")
-
+    
     LaunchedEffect(key1 = true) {
         viewModel.load()
     }
