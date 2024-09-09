@@ -1,16 +1,12 @@
 package com.b1nd.dodam.nightstudy
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
@@ -20,13 +16,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -35,25 +26,40 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
-import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.component.UserItem
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun NightStudyScreen() {
-    var selectedIndex by remember { mutableIntStateOf(0) }
-    val texts = listOf(
-        "First",
-        "Second",
-        "Third",
-        "Fourth",
-        "Fifth",
+    var classIndex by remember { mutableIntStateOf(0) }
+    val classNumber = listOf(
+        "전체",
+        "1학년",
+        "2학년",
+        "3학년",
     )
-    val items = List(5) { index ->
+    val classItem = List(4) { index ->
         DodamSegment(
-            selected = selectedIndex == index,
-            text = texts[index],
-            onClick = { selectedIndex = index },
+            selected = classIndex == index,
+            text = classNumber[index],
+            onClick = { classIndex = index },
+        )
+    }.toImmutableList()
+
+    var gradeIndex by remember { mutableIntStateOf(0) }
+    val gradeNumber = listOf(
+        "전체",
+        "1반",
+        "2반",
+        "3반",
+        "4반",
+        "5반",
+    )
+    val gradeItem = List(6) { index ->
+        DodamSegment(
+            selected = gradeIndex == index,
+            text = gradeNumber[index],
+            onClick = { gradeIndex = index },
         )
     }.toImmutableList()
 
@@ -97,11 +103,11 @@ fun NightStudyScreen() {
                         modifier = Modifier.padding(top = 12.dp),
                     )
                     DodamSegmentedButton(
-                        segments = items,
+                        segments = classItem,
                         modifier = Modifier.padding(top = 12.dp),
                     )
                     DodamSegmentedButton(
-                        segments = items,
+                        segments = gradeItem,
                         modifier = Modifier.padding(top = 12.dp),
                     )
                 }
