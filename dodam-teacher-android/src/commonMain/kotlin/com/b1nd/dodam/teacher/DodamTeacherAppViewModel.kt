@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class DodamTeacherAppViewModel: ViewModel(), KoinComponent {
+class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
 
     private val dataStoreRepository: DataStoreRepository by inject()
 

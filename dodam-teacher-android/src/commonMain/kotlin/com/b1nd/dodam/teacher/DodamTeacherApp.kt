@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -56,9 +55,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class, KoinExperimentalAPI::class)
 @Composable
-fun DodamTeacherApp(
-    viewModel: DodamTeacherAppViewModel = koinViewModel()
-) {
+fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
     setSingletonImageLoaderFactory { context ->
         getAsyncImageLoader(context)
     }
@@ -80,7 +77,7 @@ fun DodamTeacherApp(
                 NavHost(
                     modifier = Modifier.fillMaxSize(),
                     navController = navHostController,
-                    startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE ,
+                    startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE,
                 ) {
                     onboardingScreen(
                         onRegisterClick = navHostController::navigateToInfo,
@@ -184,19 +181,17 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
 }
 
 @Composable
-private fun LunchScreen(
-    modifier: Modifier = Modifier
-) {
+private fun LunchScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(DodamTheme.colors.backgroundNeutral)
+            .background(DodamTheme.colors.backgroundNeutral),
     ) {
         Image(
             modifier = Modifier.align(Alignment.Center),
             imageVector = DodamLogo,
             colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
-            contentDescription = null
+            contentDescription = null,
         )
         Image(
             modifier = Modifier
@@ -206,7 +201,7 @@ private fun LunchScreen(
                 .navigationBarsPadding(),
             imageVector = B1NDLogo,
             colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
-            contentDescription = null
+            contentDescription = null,
         )
     }
 }
