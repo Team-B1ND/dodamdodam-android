@@ -9,6 +9,10 @@ import com.b1nd.dodam.home.HomeScreen
 @Preview
 fun HomeScreenPreview() {
     DodamTheme {
-        HomeScreen()
+        HomeScreen(
+            navigateToOuting = {},
+            navigateToMeal = {},
+            navigateToNightStudy = {}
+        )
     }
 }
