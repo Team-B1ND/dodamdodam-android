@@ -20,21 +20,42 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
     private val _uiState = MutableStateFlow(NightStudyScreenUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun check() {
+    fun load() {
         viewModelScope.launch {
-            nightStudyRepository.getStudyingNightStudy().collect { result ->
-                when (result){
-                    is Result.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                nightStudyUiState = NightStudyUiState.Success(
-                                    result.data
-                                ),
-                            )
+            launch {
+                nightStudyRepository.getStudyingNightStudy().collect { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            _uiState.update {
+                                it.copy(
+                                    nightStudyUiState = NightStudyUiState.Success(
+                                        result.data,
+                                    )
+                                )
+                            }
                         }
+
+                        is Result.Error -> {}
+                        Result.Loading -> {}
                     }
-                    is Result.Error -> {}
-                    Result.Loading -> {}
+                }
+            }
+            launch {
+                nightStudyRepository.getPendingNightStudy().collect{ result ->
+                    when (result) {
+                        is Result.Success -> {
+                            _uiState.update {
+                                it.copy(
+                                    nightStudyPendingUiState = NightStudyUiState.Success(
+                                        result.data
+                                    )
+                                )
+                            }
+                        }
+
+                        is Result.Error -> {}
+                        Result.Loading -> {}
+                    }
                 }
             }
         }
