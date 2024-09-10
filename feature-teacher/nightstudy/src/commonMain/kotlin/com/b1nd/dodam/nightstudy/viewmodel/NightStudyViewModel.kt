@@ -26,11 +26,10 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
 
     fun load() {
         viewModelScope.launch {
-
             combineWhenAllComplete(
                 nightStudyRepository.getStudyingNightStudy(),
-                nightStudyRepository.getPendingNightStudy()
-            ){studying, pending ->
+                nightStudyRepository.getPendingNightStudy(),
+            ) { studying, pending ->
                 var studyingMember: ImmutableList<NightStudy> = mutableListOf<NightStudy>().toImmutableList()
                 var pendingMember: ImmutableList<NightStudy> = mutableListOf<NightStudy>().toImmutableList()
 
@@ -60,12 +59,12 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
 
                 return@combineWhenAllComplete NightStudyUiState.Success(
                     pendingData = pendingMember.toImmutableList(),
-                    ingData = studyingMember.toImmutableList()
+                    ingData = studyingMember.toImmutableList(),
                 )
             }.collect { uiState ->
                 _uiState.update {
                     it.copy(
-                        nightStudyUiState = uiState
+                        nightStudyUiState = uiState,
                     )
                 }
             }

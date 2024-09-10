@@ -109,7 +109,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
         topBar = {
             DodamDefaultTopAppBar(
                 title = "심야 자습",
-                modifier = Modifier.statusBarsPadding()
+                modifier = Modifier.statusBarsPadding(),
             )
         },
     ) {
@@ -327,13 +327,13 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                             name = memberData.student.name,
                                             startDay = "${
                                                 memberData.startAt.date.toString().split(
-                                                "-",
-                                            )[1].toInt()}월 ${memberData.startAt.date.toString().split("-")[2].toInt()}일",
+                                                    "-",
+                                                )[1].toInt()}월 ${memberData.startAt.date.toString().split("-")[2].toInt()}일",
                                             endDay = "${
                                                 memberData.endAt.date.toString().split(
-                                                "-",
-                                            )[1].toInt()}월 ${memberData.endAt.date.toString().split("-")[2].toInt()}일",
-                                            place = memberData.place ,
+                                                    "-",
+                                                )[1].toInt()}월 ${memberData.endAt.date.toString().split("-")[2].toInt()}일",
+                                            place = memberData.place,
                                             content = memberData.content,
                                             doNeedPhone = memberData.doNeedPhone,
                                             reasonForPhone = memberData.reasonForPhone,

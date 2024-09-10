@@ -125,7 +125,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                                     }
                                     launchSingleTop = true
                                     restoreState = true
-                                }
+                                },
                             )
                         },
                         navigateToOuting = {},
@@ -137,7 +137,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                                     }
                                     launchSingleTop = true
                                     restoreState = true
-                                }
+                                },
                             )
                         },
                     )
@@ -208,7 +208,7 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     onClick = {
                         onClick(NIGHT_STUDY_ROUTE)
                     },
-                    enable = route != NIGHT_STUDY_ROUTE
+                    enable = route != NIGHT_STUDY_ROUTE,
                 ),
                 DodamNavigationBarItem(
                     selected = route == "",
