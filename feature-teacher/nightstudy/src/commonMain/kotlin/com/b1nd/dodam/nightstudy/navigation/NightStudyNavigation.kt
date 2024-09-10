@@ -1,6 +1,8 @@
 package com.b1nd.dodam.nightstudy.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -20,10 +22,10 @@ fun NavController.navigateToNightStudy(
 fun NavGraphBuilder.nightStudyScreen() {
     composable(
         route = NIGHT_STUDY_ROUTE,
-        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
-        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left) },
-        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right) },
-        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None }
     ) {
         NightStudyScreen()
     }
