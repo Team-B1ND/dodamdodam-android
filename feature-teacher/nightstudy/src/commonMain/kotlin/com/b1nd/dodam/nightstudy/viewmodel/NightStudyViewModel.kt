@@ -35,7 +35,9 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                             }
                         }
 
-                        is Result.Error -> {}
+                        is Result.Error -> {
+                            result.error.printStackTrace()
+                        }
                         Result.Loading -> {}
                     }
                 }
@@ -53,7 +55,9 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                             }
                         }
 
-                        is Result.Error -> {}
+                        is Result.Error -> {
+                            result.error.printStackTrace()
+                        }
                         Result.Loading -> {}
                     }
                 }
@@ -67,7 +71,9 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                 when (result) {
                     is Result.Success -> {
                     }
-                    is Result.Error -> {}
+                    is Result.Error -> {
+                        result.error.printStackTrace()
+                    }
                     Result.Loading -> {}
                 }
             }
@@ -80,7 +86,9 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                 when (result) {
                     is Result.Success -> {
                     }
-                    is Result.Error -> {}
+                    is Result.Error -> {
+                        result.error.printStackTrace()
+                    }
                     Result.Loading -> {}
                 }
             }
