@@ -30,7 +30,7 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                                 it.copy(
                                     nightStudyUiState = NightStudyUiState.Success(
                                         result.data,
-                                    )
+                                    ),
                                 )
                             }
                         }
@@ -41,14 +41,14 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                 }
             }
             launch {
-                nightStudyRepository.getPendingNightStudy().collect{ result ->
+                nightStudyRepository.getPendingNightStudy().collect { result ->
                     when (result) {
                         is Result.Success -> {
                             _uiState.update {
                                 it.copy(
                                     nightStudyPendingUiState = NightStudyUiState.Success(
-                                        result.data
-                                    )
+                                        result.data,
+                                    ),
                                 )
                             }
                         }
@@ -61,12 +61,11 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun allow(id: Long){
+    fun allow(id: Long) {
         viewModelScope.launch {
-            nightStudyRepository.allowNightStudy(id).collect{result ->
-                when(result){
+            nightStudyRepository.allowNightStudy(id).collect { result ->
+                when (result) {
                     is Result.Success -> {
-
                     }
                     is Result.Error -> {}
                     Result.Loading -> {}
@@ -75,12 +74,11 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun reject(id: Long){
+    fun reject(id: Long) {
         viewModelScope.launch {
-            nightStudyRepository.rejectNightStudy(id).collect{result ->
-                when(result){
+            nightStudyRepository.rejectNightStudy(id).collect { result ->
+                when (result) {
                     is Result.Success -> {
-
                     }
                     is Result.Error -> {}
                     Result.Loading -> {}

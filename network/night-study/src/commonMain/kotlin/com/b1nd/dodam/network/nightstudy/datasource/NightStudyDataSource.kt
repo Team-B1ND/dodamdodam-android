@@ -1,9 +1,7 @@
 package com.b1nd.dodam.network.nightstudy.datasource
 
-import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.network.nightstudy.model.NightStudyResponse
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 
 interface NightStudyDataSource {

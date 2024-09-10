@@ -1,6 +1,5 @@
 package com.b1nd.dodam.nightstudy
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,11 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,10 +24,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -41,23 +36,16 @@ import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.designsystem.component.DodamTextFieldDefaults
-import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.nightstudy.state.DetailMember
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
-import com.b1nd.dodam.ui.icons.BarChart
-import com.b1nd.dodam.ui.icons.ColoredCalendar
-import com.b1nd.dodam.ui.icons.ColoredPencil
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NightStudyScreen(
-    viewModel: NightStudyViewModel = koinViewModel()
-) {
+fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -92,13 +80,13 @@ fun NightStudyScreen(
     var titleIndex by remember { mutableIntStateOf(0) }
     val text = listOf(
         "심자 진행 중",
-        "심자 대기 중"
+        "심자 대기 중",
     )
     val item = List(2) { index: Int ->
         DodamSegment(
             selected = titleIndex == index,
             text = text[index],
-            onClick = { titleIndex = index }
+            onClick = { titleIndex = index },
         )
     }.toImmutableList()
 
@@ -108,7 +96,6 @@ fun NightStudyScreen(
     var detailMember by remember { mutableStateOf(DetailMember()) }
 
     val uiState by viewModel.uiState.collectAsState()
-
 
     LaunchedEffect(key1 = true) {
         viewModel.load()
@@ -127,45 +114,45 @@ fun NightStudyScreen(
                 .background(DodamTheme.colors.backgroundNeutral)
                 .padding(it),
         ) {
-            if (bottomSheet){
+            if (bottomSheet) {
                 DodamModalBottomSheet(
-                    onDismissRequest = {bottomSheet = false},
+                    onDismissRequest = { bottomSheet = false },
                     title = {
                         Text(
                             text = "${detailMember.name}의 심야 자습 정보",
                             style = DodamTheme.typography.heading1Bold(),
                             color = DodamTheme.colors.labelNormal,
-                            modifier = Modifier.padding(bottom = 16.dp)
+                            modifier = Modifier.padding(bottom = 16.dp),
                         )
                     },
                     content = {
                         Column(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(),
                         ) {
                             Row(
-                                modifier = Modifier.padding(bottom = 12.dp)
+                                modifier = Modifier.padding(bottom = 12.dp),
                             ) {
                                 Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
                                 Spacer(modifier = Modifier.weight(1f))
                                 Text(text = detailMember.startDay, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
                             }
                             Row(
-                                modifier = Modifier.padding(bottom = 12.dp)
+                                modifier = Modifier.padding(bottom = 12.dp),
                             ) {
                                 Text(text = "종료 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
                                 Spacer(modifier = Modifier.weight(1f))
                                 Text(text = detailMember.endDay, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
                             }
                             Row(
-                                modifier = Modifier.padding(bottom = 12.dp)
+                                modifier = Modifier.padding(bottom = 12.dp),
                             ) {
                                 Text(text = "자습 장소", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
                                 Spacer(modifier = Modifier.weight(1f))
                                 Text(text = detailMember.place, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
                             }
                             Row(
-                                modifier = Modifier.padding(bottom = 12.dp)
+                                modifier = Modifier.padding(bottom = 12.dp),
                             ) {
                                 Text(text = "학습 계획", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
                                 Spacer(modifier = Modifier.weight(1f))
@@ -176,19 +163,19 @@ fun NightStudyScreen(
                                     Text(
                                         text = "휴대폰 사용",
                                         style = DodamTheme.typography.headlineMedium(),
-                                        color = DodamTheme.colors.labelAssistive
+                                        color = DodamTheme.colors.labelAssistive,
                                     )
                                     Spacer(modifier = Modifier.weight(1f))
                                     Text(
                                         text = detailMember.reasonForPhone!!,
                                         style = DodamTheme.typography.headlineMedium(),
-                                        color = DodamTheme.colors.labelNeutral
+                                        color = DodamTheme.colors.labelNeutral,
                                     )
                                 }
                             }
 
                             Row(
-                                modifier = Modifier.padding(top = 16.dp)
+                                modifier = Modifier.padding(top = 16.dp),
                             ) {
                                 DodamButton(
                                     onClick = {
@@ -197,7 +184,7 @@ fun NightStudyScreen(
                                     text = "거절하기",
                                     buttonSize = ButtonSize.Large,
                                     buttonRole = ButtonRole.Assistive,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 DodamButton(
@@ -207,7 +194,7 @@ fun NightStudyScreen(
                                     text = "승인하기",
                                     buttonSize = ButtonSize.Large,
                                     buttonRole = ButtonRole.Primary,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
                                 )
                             }
                         }
@@ -242,9 +229,8 @@ fun NightStudyScreen(
                     onClickRemoveRequest = {
                         searchStudent = ""
                     },
-                    modifier = Modifier
+                    modifier = Modifier,
                 )
-
 
                 Column(
                     modifier = Modifier
@@ -259,11 +245,11 @@ fun NightStudyScreen(
                         color = DodamTheme.colors.labelStrong,
                         style = DodamTheme.typography.headlineBold(),
                         modifier = Modifier
-                            .padding(top = 16.dp, start = 16.dp, bottom = 6.dp)
+                            .padding(top = 16.dp, start = 16.dp, bottom = 6.dp),
                     )
                     LazyColumn(
                         modifier = Modifier
-                            .padding(10.dp)
+                            .padding(10.dp),
                     ) {
                         when (val data = if (titleIndex == 0) uiState.nightStudyUiState else uiState.nightStudyPendingUiState) {
                             is NightStudyUiState.Success -> {
@@ -271,11 +257,11 @@ fun NightStudyScreen(
 
                                 var filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
                                     memberList
-                                } else if (gradeIndex == 0 && roomIndex != 0){
+                                } else if (gradeIndex == 0 && roomIndex != 0) {
                                     memberList.filter {
                                         it?.student?.room == roomIndex
                                     }
-                                } else if (gradeIndex != 0 && roomIndex == 0){
+                                } else if (gradeIndex != 0 && roomIndex == 0) {
                                     memberList.filter {
                                         it?.student?.grade == gradeIndex
                                     }
@@ -291,9 +277,9 @@ fun NightStudyScreen(
                                 }
                                 items(filteredMemberList.size) { listIndex ->
                                     DodamMember(
-                                        name = filteredMemberList[listIndex]?.student?.name ?:"",
+                                        name = filteredMemberList[listIndex]?.student?.name ?: "",
                                         modifier = Modifier.padding(bottom = 12.dp),
-                                        icon = null
+                                        icon = null,
                                     ) {
                                         val start =
                                             filteredMemberList[listIndex]?.startAt?.date.toString().split("-")
@@ -328,14 +314,18 @@ fun NightStudyScreen(
 
                                         val memberData = filteredMemberList[listIndex]
                                         val detailData = DetailMember(
-                                            id = memberData?.id ?:0,
-                                            name = memberData?.student?.name ?:"",
-                                            startDay = "${memberData?.startAt?.date.toString().split("-")[1].toInt()}월 ${memberData?.startAt?.date.toString().split("-")[2].toInt()}일",
-                                            endDay =  "${memberData?.endAt?.date.toString().split("-")[1].toInt()}월 ${memberData?.endAt?.date.toString().split("-")[2].toInt()}일",
-                                            place = memberData?.place ?:"",
-                                            content = memberData?.content ?:"",
+                                            id = memberData?.id ?: 0,
+                                            name = memberData?.student?.name ?: "",
+                                            startDay = "${memberData?.startAt?.date.toString().split(
+                                                "-",
+                                            )[1].toInt()}월 ${memberData?.startAt?.date.toString().split("-")[2].toInt()}일",
+                                            endDay = "${memberData?.endAt?.date.toString().split(
+                                                "-",
+                                            )[1].toInt()}월 ${memberData?.endAt?.date.toString().split("-")[2].toInt()}일",
+                                            place = memberData?.place ?: "",
+                                            content = memberData?.content ?: "",
                                             doNeedPhone = memberData?.doNeedPhone ?: false,
-                                            reasonForPhone = memberData?.reasonForPhone
+                                            reasonForPhone = memberData?.reasonForPhone,
                                         )
 
                                         if (titleIndex == 0) {
@@ -345,7 +335,6 @@ fun NightStudyScreen(
                                                 color = if (a == 1) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive,
                                             )
                                         } else {
-
                                             DodamButton(
                                                 onClick = {
                                                     bottomSheet = true
@@ -353,7 +342,7 @@ fun NightStudyScreen(
                                                 },
                                                 text = "승인하기",
                                                 buttonSize = ButtonSize.Small,
-                                                buttonRole = ButtonRole.Assistive
+                                                buttonRole = ButtonRole.Assistive,
                                             )
                                         }
                                     }

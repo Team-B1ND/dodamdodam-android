@@ -6,9 +6,8 @@ import kotlinx.collections.immutable.ImmutableList
 data class NightStudyScreenUiState(
     val nightStudyUiState: NightStudyUiState = NightStudyUiState.Loading,
     val nightStudyPendingUiState: NightStudyUiState = NightStudyUiState.Loading,
-    val detailMember: DetailMember = DetailMember()
+    val detailMember: DetailMember = DetailMember(),
 )
-
 
 sealed interface NightStudyUiState {
     data class Success(val data: ImmutableList<NightStudy?>) : NightStudyUiState
@@ -24,5 +23,5 @@ data class DetailMember(
     val place: String = "",
     val content: String = "",
     val doNeedPhone: Boolean = false,
-    val reasonForPhone: String? = ""
+    val reasonForPhone: String? = "",
 )

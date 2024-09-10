@@ -16,28 +16,23 @@ import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
 
 @Composable
-fun DodamMember(
-    modifier: Modifier = Modifier,
-    icon: Any?,
-    name: String,
-    content: @Composable RowScope.() -> Unit,
-) {
+fun DodamMember(modifier: Modifier = Modifier, icon: Any?, name: String, content: @Composable RowScope.() -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 48.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         DodamAvatar(
             avatarSize = AvatarSize.Large,
             model = icon,
-            contentDescription = null
+            contentDescription = null,
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = name,
             style = DodamTheme.typography.headlineMedium(),
-            color = DodamTheme.colors.labelNormal
+            color = DodamTheme.colors.labelNormal,
         )
         Spacer(modifier = Modifier.weight(1f))
         content()
