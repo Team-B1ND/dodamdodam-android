@@ -68,9 +68,8 @@ fun NightStudyScreen(
         "2반",
         "3반",
         "4반",
-        "5반",
     )
-    val gradeItem = List(6) { index ->
+    val gradeItem = List(5) { index ->
         DodamSegment(
             selected = gradeIndex == index,
             text = gradeNumber[index],
