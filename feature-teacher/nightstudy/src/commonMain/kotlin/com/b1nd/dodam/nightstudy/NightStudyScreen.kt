@@ -1,7 +1,6 @@
 package com.b1nd.dodam.nightstudy
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,10 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -281,14 +278,12 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                 modifier = Modifier
                                     .padding(horizontal = 10.dp),
                             ) {
-
-
                                 items(filteredMemberList.size) { listIndex ->
                                     DodamMember(
                                         name = filteredMemberList[listIndex]?.student?.name ?: "",
                                         modifier = Modifier
                                             .padding(bottom = 12.dp),
-                                        icon = null
+                                        icon = null,
                                     ) {
                                         val start =
                                             filteredMemberList[listIndex]?.startAt?.date.toString()
@@ -366,35 +361,35 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                         NightStudyUiState.Loading -> {
                             Column(
                                 modifier = Modifier
-                                    .size(width = 360.dp, height = 166.dp)
-                            ){
+                                    .size(width = 360.dp, height = 166.dp),
+                            ) {
                                 Box(
                                     modifier = Modifier
                                         .size(width = 139.dp, height = 32.dp)
                                         .padding(top = 10.dp, start = 10.dp)
                                         .background(
                                             shimmerEffect(),
-                                            RoundedCornerShape(8.dp)
-                                        )
+                                            RoundedCornerShape(8.dp),
+                                        ),
                                 )
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(horizontal = 10.dp)
-                                        .padding(top = 12.dp)
+                                        .padding(top = 12.dp),
                                 ) {
                                     Row(
                                         modifier = Modifier
                                             .height(48.dp),
-                                        verticalAlignment = Alignment.CenterVertically
+                                        verticalAlignment = Alignment.CenterVertically,
                                     ) {
                                         Box(
                                             modifier = Modifier
                                                 .size(40.dp)
                                                 .background(
                                                     shimmerEffect(),
-                                                    RoundedCornerShape(50.dp)
-                                                )
+                                                    RoundedCornerShape(50.dp),
+                                                ),
                                         )
                                         Box(
                                             modifier = Modifier
@@ -402,8 +397,8 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                                 .padding(start = 8.dp)
                                                 .background(
                                                     shimmerEffect(),
-                                                    RoundedCornerShape(8.dp)
-                                                )
+                                                    RoundedCornerShape(8.dp),
+                                                ),
                                         )
                                         Spacer(modifier = Modifier.weight(1f))
 
@@ -412,23 +407,23 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                                 .size(width = 71.dp, height = 27.dp)
                                                 .background(
                                                     shimmerEffect(),
-                                                    RoundedCornerShape(8.dp)
-                                                )
+                                                    RoundedCornerShape(8.dp),
+                                                ),
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(12.dp))
                                     Row(
                                         modifier = Modifier
                                             .height(48.dp),
-                                        verticalAlignment = Alignment.CenterVertically
+                                        verticalAlignment = Alignment.CenterVertically,
                                     ) {
                                         Box(
                                             modifier = Modifier
                                                 .size(40.dp)
                                                 .background(
                                                     shimmerEffect(),
-                                                    RoundedCornerShape(50.dp)
-                                                )
+                                                    RoundedCornerShape(50.dp),
+                                                ),
                                         )
                                         Box(
                                             modifier = Modifier
@@ -436,8 +431,8 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                                 .padding(start = 8.dp)
                                                 .background(
                                                     shimmerEffect(),
-                                                    RoundedCornerShape(8.dp)
-                                                )
+                                                    RoundedCornerShape(8.dp),
+                                                ),
                                         )
                                         Spacer(modifier = Modifier.weight(1f))
 
@@ -446,16 +441,14 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                                 .size(width = 71.dp, height = 27.dp)
                                                 .background(
                                                     shimmerEffect(),
-                                                    RoundedCornerShape(8.dp)
-                                                )
+                                                    RoundedCornerShape(8.dp),
+                                                ),
                                         )
                                     }
                                 }
-
                             }
                         }
                     }
-
                 }
             }
         }
