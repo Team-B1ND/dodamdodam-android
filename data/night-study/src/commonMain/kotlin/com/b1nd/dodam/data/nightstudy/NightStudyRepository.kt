@@ -21,4 +21,8 @@ interface NightStudyRepository {
     fun getNightStudy(): Flow<Result<ImmutableList<NightStudy>>>
 
     fun getNightStudyPending(): Flow<Result<ImmutableList<NightStudy>>>
+
+    fun allowNightStudy(id: Long): Flow<Result<Unit>>
+
+    fun rejectNightStudy(id: Long): Flow<Result<Unit>>
 }

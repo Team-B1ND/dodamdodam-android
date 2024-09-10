@@ -179,7 +179,9 @@ fun NightStudyScreen(
                                 modifier = Modifier.padding(top = 16.dp)
                             ) {
                                 DodamButton(
-                                    onClick = {},
+                                    onClick = {
+                                        viewModel.reject(detailMember.id)
+                                    },
                                     text = "거절하기",
                                     buttonSize = ButtonSize.Large,
                                     buttonRole = ButtonRole.Assistive,
@@ -187,7 +189,9 @@ fun NightStudyScreen(
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 DodamButton(
-                                    onClick = {},
+                                    onClick = {
+                                        viewModel.allow(detailMember.id)
+                                    },
                                     text = "승인하기",
                                     buttonSize = ButtonSize.Large,
                                     buttonRole = ButtonRole.Primary,
@@ -278,6 +282,7 @@ fun NightStudyScreen(
 
                                         val memberData = memberList[listIndex]
                                         val detailData = DetailMember(
+                                            id = memberData?.id ?:0,
                                             name = memberData?.student?.name ?:"",
                                             startDay = "${memberData?.startAt?.date.toString().split("-")[1].toInt()}월 ${memberData?.startAt?.date.toString().split("-")[2].toInt()}일",
                                             endDay =  "${memberData?.endAt?.date.toString().split("-")[1].toInt()}월 ${memberData?.endAt?.date.toString().split("-")[2].toInt()}일",

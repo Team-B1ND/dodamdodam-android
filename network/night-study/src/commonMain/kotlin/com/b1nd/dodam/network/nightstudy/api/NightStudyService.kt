@@ -12,6 +12,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -81,5 +82,19 @@ internal class NightStudyService(
             network.get(DodamUrl.NightStudy.PENDING)
                 .body<Response<List<NightStudyResponse>>>()
         }.toImmutableList()
+    }
+
+    override suspend fun allowNightStudy(id: Long) {
+        return safeRequest {
+            network.patch(DodamUrl.NIGHT_STUDY + "/$id/allow")
+                .body()
+        }
+    }
+
+    override suspend fun rejectNightStudy(id: Long) {
+        return safeRequest {
+            network.patch(DodamUrl.NIGHT_STUDY + "/$id/reject")
+                .body()
+        }
     }
 }
