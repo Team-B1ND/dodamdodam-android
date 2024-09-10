@@ -115,7 +115,17 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 
                     nightStudyScreen()
                     homeScreen(
-                        navigateToMeal = navHostController::navigationToMeal,
+                        navigateToMeal = {
+                            navHostController.navigationToMeal(
+                                navOptions = navOptions {
+                                    popUpTo(navHostController.graph.findStartDestination().route.toString()) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            )
+                        },
                         navigateToOuting = {},
                         navigateToNightStudy = {},
                     )
