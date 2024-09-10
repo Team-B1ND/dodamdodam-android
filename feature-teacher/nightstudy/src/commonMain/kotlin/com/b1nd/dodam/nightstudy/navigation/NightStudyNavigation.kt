@@ -1,6 +1,5 @@
 package com.b1nd.dodam.nightstudy.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,7 +24,7 @@ fun NavGraphBuilder.nightStudyScreen() {
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
-        popExitTransition = { ExitTransition.None }
+        popExitTransition = { ExitTransition.None },
     ) {
         NightStudyScreen()
     }
