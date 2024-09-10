@@ -89,7 +89,7 @@ class DodamApplication : Application() {
                     loginViewModelModule,
                     registerViewModelModule,
                     settingViewModelModule,
-                    nightStudyViewModelModule
+                    nightStudyViewModelModule,
                 ) + mainViewModelModules,
             )
         }
