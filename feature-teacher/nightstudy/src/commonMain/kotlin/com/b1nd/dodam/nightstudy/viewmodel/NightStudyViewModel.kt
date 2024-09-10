@@ -60,4 +60,32 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
             }
         }
     }
+
+    fun allow(id: Long){
+        viewModelScope.launch {
+            nightStudyRepository.allowNightStudy(id).collect{result ->
+                when(result){
+                    is Result.Success -> {
+
+                    }
+                    is Result.Error -> {}
+                    Result.Loading -> {}
+                }
+            }
+        }
+    }
+
+    fun reject(id: Long){
+        viewModelScope.launch {
+            nightStudyRepository.rejectNightStudy(id).collect{result ->
+                when(result){
+                    is Result.Success -> {
+
+                    }
+                    is Result.Error -> {}
+                    Result.Loading -> {}
+                }
+            }
+        }
+    }
 }

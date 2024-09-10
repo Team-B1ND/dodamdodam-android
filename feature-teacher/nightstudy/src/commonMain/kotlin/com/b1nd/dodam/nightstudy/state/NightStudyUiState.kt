@@ -17,6 +17,7 @@ sealed interface NightStudyUiState {
 }
 
 data class DetailMember(
+    val id: Long = 0,
     val name: String = "",
     val startDay: String = "",
     val endDay: String = "",
