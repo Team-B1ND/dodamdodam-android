@@ -31,6 +31,7 @@ kotlin {
             implementation(projects.network.core)
             implementation(projects.network.nightStudy)
             implementation(projects.featureTeacher.home)
+            implementation(projects.feature.meal)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)
