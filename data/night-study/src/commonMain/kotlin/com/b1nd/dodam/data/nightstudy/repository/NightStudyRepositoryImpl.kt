@@ -81,13 +81,13 @@ internal class NightStudyRepositoryImpl(
     }
 
     override fun allowNightStudy(id: Long): Flow<Result<Unit>> {
-        return flow{
+        return flow {
             emit(remote.allowNightStudy(id))
         }.asResult().flowOn(dispatcher)
     }
 
     override fun rejectNightStudy(id: Long): Flow<Result<Unit>> {
-        return flow{
+        return flow {
             emit(remote.rejectNightStudy(id))
         }.asResult().flowOn(dispatcher)
     }
