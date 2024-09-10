@@ -12,11 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,11 +30,11 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
-import com.b1nd.dodam.designsystem.component.DodamButtonDialog
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
+import com.b1nd.dodam.nightstudy.state.DetailMember
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
@@ -95,6 +93,8 @@ fun NightStudyScreen(
 
     var bottomSheet by remember { mutableStateOf(false) }
 
+    var detailMember by remember { mutableStateOf(DetailMember()) }
+
     val uiState by viewModel.uiState.collectAsState()
 
 
@@ -120,7 +120,7 @@ fun NightStudyScreen(
                     onDismissRequest = {bottomSheet = false},
                     title = {
                         Text(
-                            text = "박병준님의 심야 자습 정보",
+                            text = "${detailMember.name}의 심야 자습 정보",
                             style = DodamTheme.typography.heading1Bold(),
                             color = DodamTheme.colors.labelNormal,
                             modifier = Modifier.padding(bottom = 16.dp)
@@ -136,35 +136,45 @@ fun NightStudyScreen(
                             ) {
                                 Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
                                 Spacer(modifier = Modifier.weight(1f))
-                                Text(text = "8월 19일", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
+                                Text(text = detailMember.startDay, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
                             }
                             Row(
                                 modifier = Modifier.padding(bottom = 12.dp)
                             ) {
-                                Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
+                                Text(text = "종료 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
                                 Spacer(modifier = Modifier.weight(1f))
-                                Text(text = "8월 19일", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
+                                Text(text = detailMember.endDay, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
                             }
                             Row(
                                 modifier = Modifier.padding(bottom = 12.dp)
                             ) {
-                                Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
+                                Text(text = "자습 장소", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
                                 Spacer(modifier = Modifier.weight(1f))
-                                Text(text = "8월 19일", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
+                                Text(text = detailMember.place, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
                             }
                             Row(
                                 modifier = Modifier.padding(bottom = 12.dp)
                             ) {
-                                Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
+                                Text(text = "학습 계획", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
                                 Spacer(modifier = Modifier.weight(1f))
-                                Text(text = "8월 19일", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
+                                Text(text = detailMember.content, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
                             }
-                            Row(
-                                modifier = Modifier.padding(bottom = 16.dp)
-                            ) {
-                                Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
-                                Spacer(modifier = Modifier.weight(1f))
-                                Text(text = "8월 19일", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
+                            if (detailMember.doNeedPhone) {
+                                Row(
+                                    modifier = Modifier.padding(bottom = 16.dp)
+                                ) {
+                                    Text(
+                                        text = "휴대폰 사용",
+                                        style = DodamTheme.typography.headlineMedium(),
+                                        color = DodamTheme.colors.labelAssistive
+                                    )
+                                    Spacer(modifier = Modifier.weight(1f))
+                                    Text(
+                                        text = detailMember.reasonForPhone!!,
+                                        style = DodamTheme.typography.headlineMedium(),
+                                        color = DodamTheme.colors.labelNeutral
+                                    )
+                                }
                             }
 
                             Row {
@@ -228,17 +238,17 @@ fun NightStudyScreen(
                     ) {
                         when (val data = if (titleIndex == 0) uiState.nightStudyUiState else uiState.nightStudyPendingUiState) {
                             is NightStudyUiState.Success -> {
-                                val memberData = data.data
-                                items(memberData.size) { listIndex ->
+                                val memberList = data.data
+                                items(memberList.size) { listIndex ->
                                     DodamMember(
-                                        name = memberData[listIndex]?.student?.name ?:"",
+                                        name = memberList[listIndex]?.student?.name ?:"",
                                         modifier = Modifier.padding(bottom = 12.dp),
                                         icon = null
                                     ) {
                                         val start =
-                                            memberData[0]?.startAt?.date.toString().split("-")
+                                            memberList[listIndex]?.startAt?.date.toString().split("-")
                                         val end =
-                                            memberData[0]?.endAt?.date.toString().split("-")
+                                            memberList[listIndex]?.endAt?.date.toString().split("-")
 
                                         val a =
                                             if (end[2].toInt() > start[2].toInt()) {
@@ -266,6 +276,17 @@ fun NightStudyScreen(
                                                 }
                                             }
 
+                                        val memberData = memberList[listIndex]
+                                        val detailData = DetailMember(
+                                            name = memberData?.student?.name ?:"",
+                                            startDay = "${memberData?.startAt?.date.toString().split("-")[1].toInt()}월 ${memberData?.startAt?.date.toString().split("-")[2].toInt()}일",
+                                            endDay =  "${memberData?.endAt?.date.toString().split("-")[1].toInt()}월 ${memberData?.endAt?.date.toString().split("-")[2].toInt()}일",
+                                            place = memberData?.place ?:"",
+                                            content = memberData?.content ?:"",
+                                            doNeedPhone = memberData?.doNeedPhone ?: false,
+                                            reasonForPhone = memberData?.reasonForPhone
+                                        )
+
                                         if (titleIndex == 0) {
                                             Text(
                                                 text = if (a == 1) "오늘 종료" else "${a}일 남음",
@@ -273,8 +294,12 @@ fun NightStudyScreen(
                                                 color = if (a == 1) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive,
                                             )
                                         } else {
+
                                             DodamButton(
-                                                onClick = {bottomSheet = true},
+                                                onClick = {
+                                                    bottomSheet = true
+                                                    detailMember = detailData
+                                                },
                                                 text = "승인하기",
                                                 buttonSize = ButtonSize.Small,
                                                 buttonRole = ButtonRole.Assistive
