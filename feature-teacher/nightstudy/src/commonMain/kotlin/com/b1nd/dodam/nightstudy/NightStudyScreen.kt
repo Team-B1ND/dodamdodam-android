@@ -1,5 +1,6 @@
 package com.b1nd.dodam.nightstudy
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,11 +9,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,8 +27,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -34,10 +40,16 @@ import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
+import com.b1nd.dodam.designsystem.component.DodamTextField
+import com.b1nd.dodam.designsystem.component.DodamTextFieldDefaults
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.nightstudy.state.DetailMember
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.icons.BarChart
+import com.b1nd.dodam.ui.icons.ColoredCalendar
+import com.b1nd.dodam.ui.icons.ColoredPencil
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -91,6 +103,7 @@ fun NightStudyScreen(
     }.toImmutableList()
 
     var bottomSheet by remember { mutableStateOf(false) }
+    var searchStudent by remember { mutableStateOf("") }
 
     var detailMember by remember { mutableStateOf(DetailMember()) }
 
@@ -220,6 +233,19 @@ fun NightStudyScreen(
                         modifier = Modifier.padding(top = 12.dp),
                     )
                 }
+                DodamTextField(
+                    value = searchStudent,
+                    onValueChange = {
+                        searchStudent = it
+                    },
+                    label = "학생 검색",
+                    onClickRemoveRequest = {
+                        searchStudent = ""
+                    },
+                    modifier = Modifier
+                )
+
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -243,7 +269,7 @@ fun NightStudyScreen(
                             is NightStudyUiState.Success -> {
                                 val memberList = data.data
 
-                                val filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
+                                var filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
                                     memberList
                                 } else if (gradeIndex == 0 && roomIndex != 0){
                                     memberList.filter {
@@ -256,6 +282,11 @@ fun NightStudyScreen(
                                 } else {
                                     memberList.filter {
                                         it?.student?.grade == gradeIndex && it.student.room == roomIndex
+                                    }
+                                }
+                                if (searchStudent.isNotEmpty()) {
+                                    filteredMemberList = filteredMemberList.filter {
+                                        it?.student?.name?.contains(searchStudent) == true
                                     }
                                 }
                                 items(filteredMemberList.size) { listIndex ->
