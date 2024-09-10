@@ -4,6 +4,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
@@ -15,6 +16,7 @@ const val MEAL_ROUTE = "meal"
 fun NavController.navigationToMeal(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
+        restoreState = true
     },
 ) = navigate(MEAL_ROUTE, navOptions)
 
