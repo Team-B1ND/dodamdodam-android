@@ -9,6 +9,7 @@ import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.nightstudy.state.NightStudyScreenUiState
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,8 +31,8 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                 nightStudyRepository.getStudyingNightStudy(),
                 nightStudyRepository.getPendingNightStudy(),
             ) { studying, pending ->
-                var studyingMember: ImmutableList<NightStudy> = mutableListOf<NightStudy>().toImmutableList()
-                var pendingMember: ImmutableList<NightStudy> = mutableListOf<NightStudy>().toImmutableList()
+                var studyingMember: ImmutableList<NightStudy> = persistentListOf()
+                var pendingMember: ImmutableList<NightStudy> = persistentListOf()
 
                 when (studying) {
                     is Result.Success -> {
