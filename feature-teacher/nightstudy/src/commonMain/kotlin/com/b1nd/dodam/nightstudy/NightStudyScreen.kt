@@ -46,34 +46,34 @@ import org.koin.compose.viewmodel.koinViewModel
 fun NightStudyScreen(
     viewModel: NightStudyViewModel = koinViewModel()
 ) {
-    var classIndex by remember { mutableIntStateOf(0) }
-    val classNumber = listOf(
+    var gradeIndex by remember { mutableIntStateOf(0) }
+    val gradeNumber = listOf(
         "전체",
         "1학년",
         "2학년",
         "3학년",
     )
-    val classItem = List(4) { index ->
+    val gradeItem = List(4) { index ->
         DodamSegment(
-            selected = classIndex == index,
-            text = classNumber[index],
-            onClick = { classIndex = index },
+            selected = gradeIndex == index,
+            text = gradeNumber[index],
+            onClick = { gradeIndex = index },
         )
     }.toImmutableList()
 
-    var gradeIndex by remember { mutableIntStateOf(0) }
-    val gradeNumber = listOf(
+    var roomIndex by remember { mutableIntStateOf(0) }
+    val roomNumber = listOf(
         "전체",
         "1반",
         "2반",
         "3반",
         "4반",
     )
-    val gradeItem = List(5) { index ->
+    val roomItem = List(5) { index ->
         DodamSegment(
-            selected = gradeIndex == index,
-            text = gradeNumber[index],
-            onClick = { gradeIndex = index },
+            selected = roomIndex == index,
+            text = roomNumber[index],
+            onClick = { roomIndex = index },
         )
     }.toImmutableList()
 
@@ -212,11 +212,11 @@ fun NightStudyScreen(
                         modifier = Modifier.padding(top = 12.dp),
                     )
                     DodamSegmentedButton(
-                        segments = classItem,
+                        segments = gradeItem,
                         modifier = Modifier.padding(top = 12.dp),
                     )
                     DodamSegmentedButton(
-                        segments = gradeItem,
+                        segments = roomItem,
                         modifier = Modifier.padding(top = 12.dp),
                     )
                 }
@@ -242,16 +242,32 @@ fun NightStudyScreen(
                         when (val data = if (titleIndex == 0) uiState.nightStudyUiState else uiState.nightStudyPendingUiState) {
                             is NightStudyUiState.Success -> {
                                 val memberList = data.data
-                                items(memberList.size) { listIndex ->
+
+                                val filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
+                                    memberList
+                                } else if (gradeIndex == 0 && roomIndex != 0){
+                                    memberList.filter {
+                                        it?.student?.room == roomIndex
+                                    }
+                                } else if (gradeIndex != 0 && roomIndex == 0){
+                                    memberList.filter {
+                                        it?.student?.grade == gradeIndex
+                                    }
+                                } else {
+                                    memberList.filter {
+                                        it?.student?.grade == gradeIndex && it.student.room == roomIndex
+                                    }
+                                }
+                                items(filteredMemberList.size) { listIndex ->
                                     DodamMember(
-                                        name = memberList[listIndex]?.student?.name ?:"",
+                                        name = filteredMemberList[listIndex]?.student?.name ?:"",
                                         modifier = Modifier.padding(bottom = 12.dp),
                                         icon = null
                                     ) {
                                         val start =
-                                            memberList[listIndex]?.startAt?.date.toString().split("-")
+                                            filteredMemberList[listIndex]?.startAt?.date.toString().split("-")
                                         val end =
-                                            memberList[listIndex]?.endAt?.date.toString().split("-")
+                                            filteredMemberList[listIndex]?.endAt?.date.toString().split("-")
 
                                         val a =
                                             if (end[2].toInt() > start[2].toInt()) {
@@ -279,7 +295,7 @@ fun NightStudyScreen(
                                                 }
                                             }
 
-                                        val memberData = memberList[listIndex]
+                                        val memberData = filteredMemberList[listIndex]
                                         val detailData = DetailMember(
                                             id = memberData?.id ?:0,
                                             name = memberData?.student?.name ?:"",
