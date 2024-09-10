@@ -113,7 +113,6 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                         role = "TEACHER",
                     )
 
-                    homeScreen()
                     nightStudyScreen()
                     homeScreen(
                         navigateToMeal = navHostController::navigationToMeal,
