@@ -5,12 +5,11 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class NightStudyScreenUiState(
     val nightStudyUiState: NightStudyUiState = NightStudyUiState.Loading,
-    val nightStudyPendingUiState: NightStudyUiState = NightStudyUiState.Loading,
     val detailMember: DetailMember = DetailMember(),
 )
 
 sealed interface NightStudyUiState {
-    data class Success(val data: ImmutableList<NightStudy?>) : NightStudyUiState
+    data class Success(val pendingData: ImmutableList<NightStudy>, val ingData: ImmutableList<NightStudy>) : NightStudyUiState
     data object Loading : NightStudyUiState
     data object Error : NightStudyUiState
 }
