@@ -49,11 +49,11 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             outingDataSourceModule,
             nightStudyRepositoryModule,
             nightStudyDataSourceModule,
-            nightStudyViewModelModule,
             scheduleRepositoryModule,
             scheduleDatasourceModule,
             DodamTeacherAppViewModelModule,
             mealViewModelModule,
+            nightStudyViewModelModule
         )
         block()
     }
