@@ -233,7 +233,7 @@ fun NightStudyScreen(
                         color = DodamTheme.colors.labelStrong,
                         style = DodamTheme.typography.headlineBold(),
                         modifier = Modifier
-                            .padding(top = 16.dp, start = 10.dp, bottom = 6.dp)
+                            .padding(top = 16.dp, start = 16.dp, bottom = 6.dp)
                     )
                     LazyColumn(
                         modifier = Modifier
