@@ -82,8 +82,8 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
 
     var titleIndex by remember { mutableIntStateOf(0) }
     val text = listOf(
-        "심자 진행 중",
-        "심자 대기 중",
+        "진행 중",
+        "대기 중",
     )
     val item = List(2) { index: Int ->
         DodamSegment(
