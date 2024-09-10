@@ -160,9 +160,7 @@ fun NightStudyScreen(
                                 Text(text = detailMember.content, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
                             }
                             if (detailMember.doNeedPhone) {
-                                Row(
-                                    modifier = Modifier.padding(bottom = 16.dp)
-                                ) {
+                                Row {
                                     Text(
                                         text = "휴대폰 사용",
                                         style = DodamTheme.typography.headlineMedium(),
@@ -177,7 +175,9 @@ fun NightStudyScreen(
                                 }
                             }
 
-                            Row {
+                            Row(
+                                modifier = Modifier.padding(top = 16.dp)
+                            ) {
                                 DodamButton(
                                     onClick = {},
                                     text = "거절하기",
