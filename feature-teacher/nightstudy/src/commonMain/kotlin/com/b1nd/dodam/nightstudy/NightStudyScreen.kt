@@ -245,28 +245,28 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                         .clip(shape = RoundedCornerShape(18.dp))
                         .background(DodamTheme.colors.staticWhite),
                 ) {
-                    when (val data = if (titleIndex == 0) uiState.nightStudyUiState else uiState.nightStudyPendingUiState) {
+                    when (val data = uiState.nightStudyUiState) {
                         is NightStudyUiState.Success -> {
-                            val memberList = data.data
+                            val memberList = if (titleIndex == 0) data.ingData else data.pendingData
 
                             var filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
                                 memberList
                             } else if (gradeIndex == 0 && roomIndex != 0) {
-                                memberList.filter {
-                                    it?.student?.room == roomIndex
+                                memberList.filter { studentData ->
+                                    studentData.student.room == roomIndex
                                 }
                             } else if (gradeIndex != 0 && roomIndex == 0) {
-                                memberList.filter {
-                                    it?.student?.grade == gradeIndex
+                                memberList.filter { studentData ->
+                                    studentData.student.grade == gradeIndex
                                 }
                             } else {
-                                memberList.filter {
-                                    it?.student?.grade == gradeIndex && it.student.room == roomIndex
+                                memberList.filter { studentData ->
+                                    studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
                                 }
                             }
                             if (searchStudent.isNotEmpty()) {
                                 filteredMemberList = filteredMemberList.filter {
-                                    it?.student?.name?.contains(searchStudent) == true
+                                    it.student.name.contains(searchStudent) == true
                                 }
                             }
                             Text(
@@ -282,16 +282,16 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                             ) {
                                 items(filteredMemberList.size) { listIndex ->
                                     DodamMember(
-                                        name = filteredMemberList[listIndex]?.student?.name ?: "",
+                                        name = filteredMemberList[listIndex].student.name ?: "",
                                         modifier = Modifier
                                             .padding(bottom = 12.dp),
                                         icon = null,
                                     ) {
                                         val start =
-                                            filteredMemberList[listIndex]?.startAt?.date.toString()
+                                            filteredMemberList[listIndex].startAt.date.toString()
                                                 .split("-")
                                         val end =
-                                            filteredMemberList[listIndex]?.endAt?.date.toString()
+                                            filteredMemberList[listIndex].endAt.date.toString()
                                                 .split("-")
 
                                         val a =
@@ -323,18 +323,20 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
 
                                         val memberData = filteredMemberList[listIndex]
                                         val detailData = DetailMember(
-                                            id = memberData?.id ?: 0,
-                                            name = memberData?.student?.name ?: "",
-                                            startDay = "${memberData?.startAt?.date.toString().split(
+                                            id = memberData.id,
+                                            name = memberData.student.name,
+                                            startDay = "${
+                                                memberData.startAt.date.toString().split(
                                                 "-",
-                                            )[1].toInt()}월 ${memberData?.startAt?.date.toString().split("-")[2].toInt()}일",
-                                            endDay = "${memberData?.endAt?.date.toString().split(
+                                            )[1].toInt()}월 ${memberData.startAt.date.toString().split("-")[2].toInt()}일",
+                                            endDay = "${
+                                                memberData.endAt.date.toString().split(
                                                 "-",
-                                            )[1].toInt()}월 ${memberData?.endAt?.date.toString().split("-")[2].toInt()}일",
-                                            place = memberData?.place ?: "",
-                                            content = memberData?.content ?: "",
-                                            doNeedPhone = memberData?.doNeedPhone ?: false,
-                                            reasonForPhone = memberData?.reasonForPhone,
+                                            )[1].toInt()}월 ${memberData.endAt.date.toString().split("-")[2].toInt()}일",
+                                            place = memberData.place ,
+                                            content = memberData.content,
+                                            doNeedPhone = memberData.doNeedPhone,
+                                            reasonForPhone = memberData.reasonForPhone,
                                         )
 
                                         if (titleIndex == 0) {

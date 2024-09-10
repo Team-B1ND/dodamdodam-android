@@ -3,9 +3,13 @@ package com.b1nd.dodam.nightstudy.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.common.utiles.combineWhenAllComplete
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
+import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.nightstudy.state.NightStudyScreenUiState
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,44 +26,47 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
 
     fun load() {
         viewModelScope.launch {
-            launch {
-                nightStudyRepository.getStudyingNightStudy().collect { result ->
-                    when (result) {
-                        is Result.Success -> {
-                            _uiState.update {
-                                it.copy(
-                                    nightStudyUiState = NightStudyUiState.Success(
-                                        result.data,
-                                    ),
-                                )
-                            }
-                        }
 
-                        is Result.Error -> {
-                            result.error.printStackTrace()
-                        }
-                        Result.Loading -> {}
+            combineWhenAllComplete(
+                nightStudyRepository.getStudyingNightStudy(),
+                nightStudyRepository.getPendingNightStudy()
+            ){studying, pending ->
+                var studyingMember: ImmutableList<NightStudy> = mutableListOf<NightStudy>().toImmutableList()
+                var pendingMember: ImmutableList<NightStudy> = mutableListOf<NightStudy>().toImmutableList()
+
+                when (studying) {
+                    is Result.Success -> {
+                        studyingMember = studying.data
                     }
+
+                    is Result.Error -> {
+                        studying.error.printStackTrace()
+                        return@combineWhenAllComplete NightStudyUiState.Error
+                    }
+                    Result.Loading -> {}
                 }
-            }
-            launch {
-                nightStudyRepository.getPendingNightStudy().collect { result ->
-                    when (result) {
-                        is Result.Success -> {
-                            _uiState.update {
-                                it.copy(
-                                    nightStudyPendingUiState = NightStudyUiState.Success(
-                                        result.data,
-                                    ),
-                                )
-                            }
-                        }
 
-                        is Result.Error -> {
-                            result.error.printStackTrace()
-                        }
-                        Result.Loading -> {}
+                when (pending) {
+                    is Result.Success -> {
+                        pendingMember = pending.data
                     }
+
+                    is Result.Error -> {
+                        pending.error.printStackTrace()
+                        return@combineWhenAllComplete NightStudyUiState.Error
+                    }
+                    Result.Loading -> {}
+                }
+
+                return@combineWhenAllComplete NightStudyUiState.Success(
+                    pendingData = pendingMember.toImmutableList(),
+                    ingData = studyingMember.toImmutableList()
+                )
+            }.collect { uiState ->
+                _uiState.update {
+                    it.copy(
+                        nightStudyUiState = uiState
+                    )
                 }
             }
         }
