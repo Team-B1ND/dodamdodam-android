@@ -20,7 +20,6 @@ kotlin {
 
     sourceSets.commonMain.dependencies {
         implementation(libs.dodam.design.system.cmm)
-        implementation(libs.coil3)
     }
 }
 
