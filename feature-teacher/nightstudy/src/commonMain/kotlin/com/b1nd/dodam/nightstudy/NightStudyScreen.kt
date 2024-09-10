@@ -3,19 +3,26 @@ package com.b1nd.dodam.nightstudy
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,6 +32,7 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamButtonDialog
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
@@ -35,6 +43,7 @@ import com.b1nd.dodam.ui.component.DodamMember
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NightStudyScreen(
     viewModel: NightStudyViewModel = koinViewModel()
@@ -84,9 +93,11 @@ fun NightStudyScreen(
         )
     }.toImmutableList()
 
+    var bottomSheet by remember { mutableStateOf(false) }
+
     val uiState by viewModel.uiState.collectAsState()
 
-    
+
     LaunchedEffect(key1 = true) {
         viewModel.load()
     }
@@ -104,6 +115,79 @@ fun NightStudyScreen(
                 .background(DodamTheme.colors.backgroundNeutral)
                 .padding(it),
         ) {
+            if (bottomSheet){
+                DodamModalBottomSheet(
+                    onDismissRequest = {bottomSheet = false},
+                    title = {
+                        Text(
+                            text = "박병준님의 심야 자습 정보",
+                            style = DodamTheme.typography.heading1Bold(),
+                            color = DodamTheme.colors.labelNormal,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                    },
+                    content = {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            ) {
+                                Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(text = "8월 19일", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
+                            }
+                            Row(
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            ) {
+                                Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(text = "8월 19일", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
+                            }
+                            Row(
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            ) {
+                                Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(text = "8월 19일", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
+                            }
+                            Row(
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            ) {
+                                Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(text = "8월 19일", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
+                            }
+                            Row(
+                                modifier = Modifier.padding(bottom = 16.dp)
+                            ) {
+                                Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(text = "8월 19일", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
+                            }
+
+                            Row {
+                                DodamButton(
+                                    onClick = {},
+                                    text = "거절하기",
+                                    buttonSize = ButtonSize.Large,
+                                    buttonRole = ButtonRole.Assistive,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                DodamButton(
+                                    onClick = {},
+                                    text = "승인하기",
+                                    buttonSize = ButtonSize.Large,
+                                    buttonRole = ButtonRole.Primary,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                        }
+                    },
+                )
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -190,7 +274,7 @@ fun NightStudyScreen(
                                             )
                                         } else {
                                             DodamButton(
-                                                onClick = {},
+                                                onClick = {bottomSheet = true},
                                                 text = "승인하기",
                                                 buttonSize = ButtonSize.Small,
                                                 buttonRole = ButtonRole.Assistive
