@@ -188,7 +188,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                     },
                                     text = "거절하기",
                                     buttonSize = ButtonSize.Large,
-                                    buttonRole = ButtonRole.Assistive,
+                                    buttonRole = ButtonRole.Negative,
                                     modifier = Modifier.weight(1f),
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
