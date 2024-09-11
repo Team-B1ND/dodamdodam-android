@@ -23,6 +23,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.annotation.ExperimentalCoilApi
@@ -43,6 +44,9 @@ import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.meal.navigation.navigationToMeal
+import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
+import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
+import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -111,10 +115,31 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                         role = "TEACHER",
                     )
 
+                    nightStudyScreen()
                     homeScreen(
-                        navigateToMeal = navHostController::navigationToMeal,
+                        navigateToMeal = {
+                            navHostController.navigationToMeal(
+                                navOptions = navOptions {
+                                    popUpTo(navHostController.graph.findStartDestination().route.toString()) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                },
+                            )
+                        },
                         navigateToOuting = {},
-                        navigateToNightStudy = {},
+                        navigateToNightStudy = {
+                            navHostController.navigateToNightStudy(
+                                navOptions = navOptions {
+                                    popUpTo(navHostController.graph.findStartDestination().route.toString()) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                },
+                            )
+                        },
                     )
 
                     mealScreen()
@@ -152,7 +177,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
     val route = backStackEntry?.destination?.route
 
-    if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE)) {
+    if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE, NIGHT_STUDY_ROUTE)) {
         DodamNavigationBar(
             modifier = modifier,
             items = persistentListOf(
@@ -178,9 +203,12 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     onClick = {},
                 ),
                 DodamNavigationBarItem(
-                    selected = route == "",
+                    selected = route == NIGHT_STUDY_ROUTE,
                     icon = DodamIcons.MoonPlus,
-                    onClick = {},
+                    onClick = {
+                        onClick(NIGHT_STUDY_ROUTE)
+                    },
+                    enable = route != NIGHT_STUDY_ROUTE,
                 ),
                 DodamNavigationBarItem(
                     selected = route == "",

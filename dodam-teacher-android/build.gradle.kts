@@ -20,6 +20,7 @@ kotlin {
             implementation(projects.network.login)
 
             implementation(projects.feature.onboarding)
+            implementation(projects.featureTeacher.nightstudy)
             api(projects.feature.login)
             implementation(projects.datastore)
             implementation(projects.logging)
@@ -28,6 +29,7 @@ kotlin {
             implementation(projects.network.register)
             implementation(projects.common)
             implementation(projects.network.core)
+            implementation(projects.network.nightStudy)
             implementation(projects.featureTeacher.home)
             implementation(projects.feature.meal)
 

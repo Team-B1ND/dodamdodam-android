@@ -73,3 +73,4 @@ include(
     ":feature-teacher:register",
     ":feature-teacher:home",
 )
+include(":feature-teacher:nightstudy")

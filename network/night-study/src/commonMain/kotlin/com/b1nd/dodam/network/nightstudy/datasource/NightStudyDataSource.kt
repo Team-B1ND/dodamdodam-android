@@ -7,6 +7,10 @@ import kotlinx.datetime.LocalDate
 interface NightStudyDataSource {
     suspend fun getMyNightStudy(): ImmutableList<NightStudyResponse>
 
+    suspend fun getPendingNightStudy(): ImmutableList<NightStudyResponse>
+
+    suspend fun getStudyingNightStudy(): ImmutableList<NightStudyResponse>
+
     suspend fun askNightStudy(place: String, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate)
 
     suspend fun deleteNightStudy(id: Long)
@@ -14,4 +18,8 @@ interface NightStudyDataSource {
     suspend fun getNightStudy(): ImmutableList<NightStudyResponse>
 
     suspend fun getNightStudyPending(): ImmutableList<NightStudyResponse>
+
+    suspend fun allowNightStudy(id: Long)
+
+    suspend fun rejectNightStudy(id: Long)
 }
