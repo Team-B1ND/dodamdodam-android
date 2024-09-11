@@ -185,6 +185,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                 DodamButton(
                                     onClick = {
                                         viewModel.reject(detailMember.id)
+                                        bottomSheet = false
                                     },
                                     text = "거절하기",
                                     buttonSize = ButtonSize.Large,
@@ -195,6 +196,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                 DodamButton(
                                     onClick = {
                                         viewModel.allow(detailMember.id)
+                                        bottomSheet = false
                                     },
                                     text = "승인하기",
                                     buttonSize = ButtonSize.Large,
