@@ -186,6 +186,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                     onClick = {
                                         viewModel.reject(detailMember.id)
                                         bottomSheet = false
+                                        viewModel.load()
                                     },
                                     text = "거절하기",
                                     buttonSize = ButtonSize.Large,
@@ -197,6 +198,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                     onClick = {
                                         viewModel.allow(detailMember.id)
                                         bottomSheet = false
+                                        viewModel.load()
                                     },
                                     text = "승인하기",
                                     buttonSize = ButtonSize.Large,
