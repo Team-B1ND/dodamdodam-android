@@ -11,6 +11,7 @@ import dodamdodam_android.ui.generated.resources.ic_colored_musical_note
 import dodamdodam_android.ui.generated.resources.ic_colored_pencil
 import dodamdodam_android.ui.generated.resources.ic_colored_tent
 import dodamdodam_android.ui.generated.resources.ic_default_profile
+import dodamdodam_android.ui.generated.resources.ic_default_user
 import dodamdodam_android.ui.generated.resources.ic_dodamlogo
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.vectorResource
@@ -54,3 +55,7 @@ val ColoredPencil
 val ColoredTent
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_tent)
+
+val DefaultUser
+    @Composable
+    get() = imageResource(Res.drawable.ic_default_user)

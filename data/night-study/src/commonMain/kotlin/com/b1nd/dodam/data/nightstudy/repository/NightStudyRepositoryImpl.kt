@@ -28,6 +28,18 @@ internal class NightStudyRepositoryImpl(
         }.asResult().flowOn(dispatcher)
     }
 
+    override fun getPendingNightStudy(): Flow<Result<ImmutableList<NightStudy>>> {
+        return flow {
+            emit(remote.getPendingNightStudy().map { it.toModel() }.toImmutableList())
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun getStudyingNightStudy(): Flow<Result<ImmutableList<NightStudy>>> {
+        return flow {
+            emit(remote.getStudyingNightStudy().map { it.toModel() }.toImmutableList())
+        }.asResult().flowOn(dispatcher)
+    }
+
     override fun askNightStudy(
         place: Place,
         content: String,
@@ -65,6 +77,18 @@ internal class NightStudyRepositoryImpl(
     override fun getNightStudyPending(): Flow<Result<ImmutableList<NightStudy>>> {
         return flow {
             emit(remote.getNightStudyPending().map { it.toModel() }.toImmutableList())
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun allowNightStudy(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(remote.allowNightStudy(id))
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun rejectNightStudy(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(remote.rejectNightStudy(id))
         }.asResult().flowOn(dispatcher)
     }
 }

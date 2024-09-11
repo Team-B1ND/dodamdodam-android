@@ -1,4 +1,4 @@
-package com.b1nd.dodam.meal.navigation
+package com.b1nd.dodam.nightstudy.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -7,27 +7,25 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import androidx.navigation.navOptions
-import com.b1nd.dodam.meal.MealScreen
+import com.b1nd.dodam.nightstudy.NightStudyScreen
 
-const val MEAL_ROUTE = "meal"
+const val NIGHT_STUDY_ROUTE = "night"
 
-fun NavController.navigationToMeal(
-    navOptions: NavOptions? = navOptions {
+fun NavController.navigateToNightStudy(
+    navOptions: NavOptions? = androidx.navigation.navOptions {
         launchSingleTop = true
-        restoreState = true
     },
-) = navigate(MEAL_ROUTE, navOptions)
+) = navigate(NIGHT_STUDY_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.mealScreen() {
+fun NavGraphBuilder.nightStudyScreen() {
     composable(
-        route = MEAL_ROUTE,
+        route = NIGHT_STUDY_ROUTE,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None },
     ) {
-        MealScreen()
+        NightStudyScreen()
     }
 }
