@@ -9,7 +9,7 @@ data class MyInfo(
     val phone: String,
     val profileImage: String?,
     val role: String,
-    val status: String,
+    val status: ActiveStatus,
     val student: Student?,
     val teacher: Teacher?,
 )
@@ -23,7 +23,7 @@ internal fun MyInfoResponse.toModel(): MyInfo = MyInfo(
     phone = phone,
     profileImage = profileImage,
     role = role,
-    status = status,
+    status = status.toActiveStatus(),
     student = student?.toModel(),
     teacher = teacher?.toModel(),
 )

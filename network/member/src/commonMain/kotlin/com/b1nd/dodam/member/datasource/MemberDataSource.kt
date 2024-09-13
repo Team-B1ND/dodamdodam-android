@@ -5,4 +5,5 @@ import com.b1nd.dodam.member.model.MyInfoResponse
 interface MemberDataSource {
     suspend fun getMyInfo(): MyInfoResponse
     suspend fun deactivation()
+    suspend fun getMemberAll(status: String): List<MyInfoResponse>
 }
