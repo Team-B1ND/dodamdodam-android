@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -50,6 +49,9 @@ import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
+import com.b1nd.dodam.point.navigation.POINT_ROUTE
+import com.b1nd.dodam.point.navigation.navigateToPoint
+import com.b1nd.dodam.point.navigation.pointScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
@@ -84,7 +86,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                 NavHost(
                     modifier = Modifier.fillMaxSize(),
                     navController = navHostController,
-                    startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE,
+                    startDestination = if (isLogin!!) POINT_ROUTE else ONBOARDING_ROUTE,
                 ) {
                     onboardingScreen(
                         onRegisterClick = navHostController::navigateToInfo,
@@ -143,6 +145,8 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                     )
 
                     mealScreen()
+
+                    pointScreen()
                 }
 
                 // Bottom Navigation
