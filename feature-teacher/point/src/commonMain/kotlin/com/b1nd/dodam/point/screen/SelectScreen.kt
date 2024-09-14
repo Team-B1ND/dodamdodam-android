@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
@@ -33,8 +35,10 @@ import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.logging.KmLogging
+import com.b1nd.dodam.point.getDodamSegment
 import com.b1nd.dodam.point.model.PointStudentModel
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -59,6 +63,9 @@ internal fun SelectScreen(
 
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding(),
         topBar = {
             DodamTopAppBar(
                 title = "상벌점 관리",
@@ -148,8 +155,9 @@ internal fun SelectScreen(
                                     modifier = Modifier
                                         .align(Alignment.CenterVertically)
                                         .size(24.dp),
-                                    imageVector = DodamIcons.CheckmarkCircle.value,
-                                    contentDescription = null
+                                    imageVector = ColoredCheckmarkCircle,
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
                                 )
                             }
                         }
@@ -159,13 +167,3 @@ internal fun SelectScreen(
         }
     }
 }
-
-private fun getDodamSegment(text: String, selectText: String, onClick: (String) -> Unit) =
-    DodamSegment(
-        selected = text == selectText,
-        onClick = {
-            onClick(text)
-        },
-        text = text,
-        enabled = true
-    )

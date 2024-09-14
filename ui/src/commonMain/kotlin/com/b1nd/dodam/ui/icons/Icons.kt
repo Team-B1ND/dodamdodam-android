@@ -4,12 +4,15 @@ import androidx.compose.runtime.Composable
 import dodamdodam_android.ui.generated.resources.Res
 import dodamdodam_android.ui.generated.resources.ic_b1ndlogo
 import dodamdodam_android.ui.generated.resources.ic_bar_chart
+import dodamdodam_android.ui.generated.resources.ic_colored_bullseye
 import dodamdodam_android.ui.generated.resources.ic_colored_bus
 import dodamdodam_android.ui.generated.resources.ic_colored_calendar
+import dodamdodam_android.ui.generated.resources.ic_colored_checkmark_circle_filled
 import dodamdodam_android.ui.generated.resources.ic_colored_megaphone
 import dodamdodam_android.ui.generated.resources.ic_colored_musical_note
 import dodamdodam_android.ui.generated.resources.ic_colored_pencil
 import dodamdodam_android.ui.generated.resources.ic_colored_tent
+import dodamdodam_android.ui.generated.resources.ic_colored_trophy
 import dodamdodam_android.ui.generated.resources.ic_default_profile
 import dodamdodam_android.ui.generated.resources.ic_default_user
 import dodamdodam_android.ui.generated.resources.ic_dodamlogo
@@ -59,3 +62,15 @@ val ColoredTent
 val DefaultUser
     @Composable
     get() = imageResource(Res.drawable.ic_default_user)
+
+val ColoredTrophy
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_trophy)
+
+val ColoredBullseye
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_bullseye)
+
+val ColoredCheckmarkCircle
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_checkmark_circle_filled)
