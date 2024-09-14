@@ -6,6 +6,7 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.data.point.PointRepository
 import com.b1nd.dodam.data.point.model.Point
+import com.b1nd.dodam.data.point.model.PointReason
 import com.b1nd.dodam.data.point.model.PointType
 import com.b1nd.dodam.data.point.model.toModel
 import com.b1nd.dodam.network.point.datasource.PointDataSource
@@ -28,6 +29,16 @@ internal class PointRepositoryImpl(
         ) { school, dormitory ->
             school.map { it.toModel(PointType.SCHOOL) }.toPersistentList()
                 .addAll(dormitory.map { it.toModel(PointType.DORMITORY) })
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override suspend fun getScoreReason(type: String): Flow<Result<ImmutableList<PointReason>>> {
+        return combine(
+            flow { emit(network.getScoreReason(PointType.SCHOOL.name)) },
+            flow { emit(network.getScoreReason(PointType.DORMITORY.name)) },
+        ) { school, dormitory ->
+            school.map { it.toModel() }.toPersistentList()
+                .addAll(dormitory.map { it.toModel() })
         }.asResult().flowOn(dispatcher)
     }
 }

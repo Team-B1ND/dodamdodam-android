@@ -68,5 +68,6 @@ object DodamUrl {
 
     object Point {
         const val MY = "$POINT/my"
+        const val REASON = "$POINT/reason"
     }
 }

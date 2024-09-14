@@ -4,6 +4,7 @@ import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.safeRequest
 import com.b1nd.dodam.network.point.datasource.PointDataSource
+import com.b1nd.dodam.network.point.model.PointReasonResponse
 import com.b1nd.dodam.network.point.model.PointResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -20,6 +21,14 @@ internal class PointService(
             client.get(DodamUrl.Point.MY) {
                 parameter("type", type)
             }.body<Response<List<PointResponse>>>()
+        }.toImmutableList()
+    }
+
+    override suspend fun getScoreReason(type: String): ImmutableList<PointReasonResponse> {
+        return safeRequest {
+            client.get(DodamUrl.Point.REASON) {
+                parameter("type", type)
+            }.body<Response<List<PointReasonResponse>>>()
         }.toImmutableList()
     }
 }
