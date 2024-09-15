@@ -7,7 +7,7 @@ import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.member.MemberRepository
 import com.b1nd.dodam.member.datasource.MemberDataSource
 import com.b1nd.dodam.member.model.ActiveStatus
-import com.b1nd.dodam.member.model.MyInfo
+import com.b1nd.dodam.member.model.MemberInfo
 import com.b1nd.dodam.member.model.toModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -20,7 +20,7 @@ internal class MemberRepositoryImpl(
     private val network: MemberDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : MemberRepository {
-    override suspend fun getMyInfo(): Flow<Result<MyInfo>> {
+    override suspend fun getMyInfo(): Flow<Result<MemberInfo>> {
         return flow {
             emit(network.getMyInfo().toModel())
         }
@@ -36,7 +36,7 @@ internal class MemberRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun getMemberActiveAll(): Flow<Result<ImmutableList<MyInfo>>> {
+    override suspend fun getMemberActiveAll(): Flow<Result<ImmutableList<MemberInfo>>> {
         return flow {
             emit(network.getMemberAll(ActiveStatus.ACTIVE.name).map { it.toModel() }.toImmutableList())
         }

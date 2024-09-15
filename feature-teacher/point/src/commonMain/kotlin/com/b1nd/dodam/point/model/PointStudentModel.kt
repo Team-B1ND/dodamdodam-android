@@ -1,6 +1,6 @@
 package com.b1nd.dodam.point.model
 
-import com.b1nd.dodam.member.model.MyInfo
+import com.b1nd.dodam.member.model.MemberInfo
 
 data class PointStudentModel(
     val id: Int = 0,
@@ -12,7 +12,7 @@ data class PointStudentModel(
     val profileImage: String? = null
 )
 
-internal fun MyInfo.toPointStudentModel() =
+internal fun MemberInfo.toPointStudentModel() =
     PointStudentModel(
         id = student?.id?: 0,
         name = name,
