@@ -1,6 +1,6 @@
 package com.b1nd.dodam.member.model
 
-data class MyInfo(
+data class MemberInfo(
     val createdAt: String,
     val email: String,
     val id: String,
@@ -14,7 +14,7 @@ data class MyInfo(
     val teacher: Teacher?,
 )
 
-internal fun MyInfoResponse.toModel(): MyInfo = MyInfo(
+internal fun MemberInfoResponse.toModel(): MemberInfo = MemberInfo(
     createdAt = createdAt,
     email = email,
     id = id,

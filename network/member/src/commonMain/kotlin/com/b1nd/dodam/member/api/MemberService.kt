@@ -1,7 +1,7 @@
 package com.b1nd.dodam.member.api
 
 import com.b1nd.dodam.member.datasource.MemberDataSource
-import com.b1nd.dodam.member.model.MyInfoResponse
+import com.b1nd.dodam.member.model.MemberInfoResponse
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.defaultSafeRequest
@@ -15,10 +15,10 @@ import io.ktor.client.request.patch
 internal class MemberService(
     private val client: HttpClient,
 ) : MemberDataSource {
-    override suspend fun getMyInfo(): MyInfoResponse {
+    override suspend fun getMyInfo(): MemberInfoResponse {
         return safeRequest {
             client.get(DodamUrl.Member.MY)
-                .body<Response<MyInfoResponse>>()
+                .body<Response<MemberInfoResponse>>()
         }
     }
 
@@ -31,7 +31,7 @@ internal class MemberService(
 
     override suspend fun getMemberAll(
         status: String
-    ): List<MyInfoResponse> {
+    ): List<MemberInfoResponse> {
         return safeRequest {
             client.get(DodamUrl.Member.STATUS) {
                 parameter("status", status)
