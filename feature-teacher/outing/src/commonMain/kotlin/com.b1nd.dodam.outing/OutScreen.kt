@@ -16,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -31,12 +33,18 @@ import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
+import com.b1nd.dodam.outing.model.OutPendingUiState
+import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.viewmodel.KoinViewModelFactory
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun OutScreen() {
+fun OutScreen(
+    viewModel: OutViewModel = koinViewModel()
+) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -82,7 +90,11 @@ fun OutScreen() {
     }.toImmutableList()
 
     var searchStudent by remember { mutableStateOf("") }
+    val state by viewModel.state.collectAsState()
 
+    LaunchedEffect(key1 = true) {
+        viewModel.load()
+    }
 
     Scaffold(
         topBar = {
@@ -132,41 +144,52 @@ fun OutScreen() {
                     modifier = Modifier
                         .padding(vertical = 20.dp)
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(18.dp))
-                            .background(DodamTheme.colors.staticWhite)
-                    ){
-                        Row(
-                            modifier = Modifier
-                                .padding(start = 16.dp, top = 16.dp)
-                        ) {
-                            Text(
-                                text = "현재 ",
-                                color = DodamTheme.colors.labelStrong,
-                                style = DodamTheme.typography.headlineBold())
-                            Text(
-                                text = "12명 ",
-                                color = DodamTheme.colors.primaryNormal,
-                                style = DodamTheme.typography.headlineBold()
-                            )
-                            Text(
-                                text = "승인 대기 중 ",
-                                color = DodamTheme.colors.labelStrong,
-                                style = DodamTheme.typography.headlineBold()
-                            )
-                        }
+                    when (val data = state.outPendingUiState) {
+                        OutPendingUiState.Error -> {}
+                        OutPendingUiState.Loading -> {}
+                        is OutPendingUiState.Success -> {
+                            val cnt =
+                                if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
+                            if (cnt != 0) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(shape = RoundedCornerShape(18.dp))
+                                        .background(DodamTheme.colors.staticWhite)
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(start = 16.dp, top = 16.dp)
+                                    ) {
+                                        Text(
+                                            text = "현재 ",
+                                            color = DodamTheme.colors.labelStrong,
+                                            style = DodamTheme.typography.headlineBold()
+                                        )
+                                        Text(
+                                            text = "${cnt}명 ",
+                                            color = DodamTheme.colors.primaryNormal,
+                                            style = DodamTheme.typography.headlineBold()
+                                        )
+                                        Text(
+                                            text = "승인 대기 중 ",
+                                            color = DodamTheme.colors.labelStrong,
+                                            style = DodamTheme.typography.headlineBold()
+                                        )
+                                    }
 
-                        DodamButton(
-                            onClick = {},
-                            text = "승인하러 가기",
-                            buttonRole = ButtonRole.Assistive,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .padding(top = 12.dp, bottom = 16.dp)
-                        )
+                                    DodamButton(
+                                        onClick = {},
+                                        text = "승인하러 가기",
+                                        buttonRole = ButtonRole.Assistive,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 16.dp)
+                                            .padding(top = 12.dp, bottom = 16.dp)
+                                    )
+                                }
+                            }
+                        }
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     Column(
