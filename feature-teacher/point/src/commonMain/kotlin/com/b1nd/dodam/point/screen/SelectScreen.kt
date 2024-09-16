@@ -59,7 +59,8 @@ internal fun SelectScreen(
         selectRoom = it
     }
 
-    val selectUserCount by remember { derivedStateOf { items.filter { it.selected } .size} }
+    // derivedStateOf 로 감쌌을 경우 감지 안됨
+    val selectUserCount = items.filter { it.selected } .size
 
 
     Scaffold(
@@ -127,8 +128,6 @@ internal fun SelectScreen(
                             val room = "${it.room}반"
                             val grade = "${it.grade}학년"
 
-
-                            KmLogging.debug("Test", "$room $grade ${(selectRoom == room && (selectGrade == "전체" || selectGrade == grade))}  ${(selectGrade == grade && (selectRoom == "전체" || selectRoom == room))}")
                             // 전체인 경우
                             if (selectRoom == "전체" && selectGrade == "전체") true
                             

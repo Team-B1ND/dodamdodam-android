@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.datetime.LocalDate
 
 internal class PointRepositoryImpl(
     private val network: PointDataSource,
@@ -32,7 +33,7 @@ internal class PointRepositoryImpl(
         }.asResult().flowOn(dispatcher)
     }
 
-    override suspend fun getScoreReason(type: String): Flow<Result<ImmutableList<PointReason>>> {
+    override suspend fun getAllScoreReason(): Flow<Result<ImmutableList<PointReason>>> {
         return combine(
             flow { emit(network.getScoreReason(PointType.SCHOOL.name)) },
             flow { emit(network.getScoreReason(PointType.DORMITORY.name)) },
@@ -41,4 +42,19 @@ internal class PointRepositoryImpl(
                 .addAll(dormitory.map { it.toModel() })
         }.asResult().flowOn(dispatcher)
     }
+
+    override suspend fun postGivePoint(
+        issueAt: LocalDate,
+        reasonId: Int,
+        studentIds: List<Int>,
+    ): Flow<Result<Unit>> = flow {
+        emit(
+            network.postGivePoint(
+                issueAt = issueAt,
+                reasonId = reasonId,
+                studentIds = studentIds
+            )
+        )
+    }
+        .asResult().flowOn(dispatcher)
 }

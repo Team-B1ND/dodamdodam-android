@@ -30,6 +30,7 @@ kotlin{
             implementation(projects.logging)
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.ui)
+            implementation(libs.kotlinx.datetime)
         }
     }
 }
