@@ -96,7 +96,7 @@ fun OutScreen(
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(key1 = true) {
-        viewModel.load()
+//        viewModel.load()
     }
 
     Scaffold(
@@ -143,129 +143,163 @@ fun OutScreen(
                     },
                     modifier = Modifier,
                 )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 20.dp)
-                ) {
-                    when (val data = state.outPendingUiState) {
-                        OutPendingUiState.Error -> {}
-                        OutPendingUiState.Loading -> {
-
+                when (val data = state.outPendingUiState) {
+                    OutPendingUiState.Error -> {}
+                    OutPendingUiState.Loading -> {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 20.dp)
+                                .clip(shape = RoundedCornerShape(18.dp))
+                                .background(DodamTheme.colors.staticWhite)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(width = 170.dp, height = 40.dp)
+                                    .padding(top = 16.dp, start = 10.dp)
+                                    .background(
+                                        shimmerEffect(),
+                                        RoundedCornerShape(8.dp),
+                                    ),
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(46.dp)
+                                    .padding(horizontal = 12.dp)
+                                    .padding(top = 12.dp, bottom = 10.dp)
+                                    .background(
+                                        shimmerEffect(),
+                                        RoundedCornerShape(8.dp),
+                                    ),
+                            )
+                        }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 20.dp)
+                                .clip(shape = RoundedCornerShape(18.dp))
+                                .background(DodamTheme.colors.staticWhite)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(width = 139.dp, height = 32.dp)
+                                    .padding(top = 10.dp, start = 10.dp)
+                                    .background(
+                                        shimmerEffect(),
+                                        RoundedCornerShape(8.dp),
+                                    ),
+                            )
                             Column(
                                 modifier = Modifier
-                                    .size(width = 360.dp, height = 166.dp)
-                                    .background(DodamTheme.colors.backgroundNormal),
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 10.dp)
+                                    .padding(top = 12.dp),
                             ) {
-                                Box(
+                                Row(
                                     modifier = Modifier
-                                        .size(width = 139.dp, height = 32.dp)
-                                        .padding(top = 10.dp, start = 10.dp)
-                                        .background(
-                                            shimmerEffect(),
-                                            RoundedCornerShape(8.dp),
-                                        ),
-                                )
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 10.dp)
-                                        .padding(top = 12.dp),
+                                        .height(48.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
                                 ) {
-                                    Row(
+                                    Box(
                                         modifier = Modifier
-                                            .height(48.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(40.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(50.dp),
-                                                ),
-                                        )
-                                        Box(
-                                            modifier = Modifier
-                                                .size(width = 71.dp, height = 27.dp)
-                                                .padding(start = 8.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(8.dp),
-                                                ),
-                                        )
-                                        Spacer(modifier = Modifier.weight(1f))
-
-                                        Box(
-                                            modifier = Modifier
-                                                .size(width = 71.dp, height = 27.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(8.dp),
-                                                ),
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.height(12.dp))
-                                    Row(
+                                            .size(40.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(50.dp),
+                                            ),
+                                    )
+                                    Box(
                                         modifier = Modifier
-                                            .height(48.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(40.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(50.dp),
-                                                ),
-                                        )
-                                        Box(
-                                            modifier = Modifier
-                                                .size(width = 71.dp, height = 27.dp)
-                                                .padding(start = 8.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(8.dp),
-                                                ),
-                                        )
-                                        Spacer(modifier = Modifier.weight(1f))
+                                            .size(width = 71.dp, height = 27.dp)
+                                            .padding(start = 8.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(8.dp),
+                                            ),
+                                    )
+                                    Spacer(modifier = Modifier.weight(1f))
 
-                                        Box(
-                                            modifier = Modifier
-                                                .size(width = 71.dp, height = 27.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(8.dp),
-                                                )
-                                        )
-                                    }
+                                    Box(
+                                        modifier = Modifier
+                                            .size(width = 71.dp, height = 27.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(8.dp),
+                                            ),
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Row(
+                                    modifier = Modifier
+                                        .height(48.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(50.dp),
+                                            ),
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .size(width = 71.dp, height = 27.dp)
+                                            .padding(start = 8.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(8.dp),
+                                            ),
+                                    )
+                                    Spacer(modifier = Modifier.weight(1f))
+
+                                    Box(
+                                        modifier = Modifier
+                                            .size(width = 71.dp, height = 27.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(8.dp),
+                                            )
+                                    )
                                 }
                             }
-
                         }
-                        is OutPendingUiState.Success -> {
-                            val cnt = if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
-                            val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
-                            var filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
-                                members
-                            } else if (gradeIndex == 0 && roomIndex != 0) {
-                                members.filter { studentData ->
-                                    studentData.student.room == roomIndex
-                                }
-                            } else if (gradeIndex != 0 && roomIndex == 0) {
-                                members.filter { studentData ->
-                                    studentData.student.grade == gradeIndex
-                                }
-                            } else {
-                                members.filter { studentData ->
-                                    studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
-                                }
+
+                    }
+
+                    is OutPendingUiState.Success -> {
+                        val cnt =
+                            if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
+                        val members =
+                            if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                        var filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
+                            members
+                        } else if (gradeIndex == 0 && roomIndex != 0) {
+                            members.filter { studentData ->
+                                studentData.student.room == roomIndex
                             }
-                            if (searchStudent.isNotEmpty()) {
-                                filteredMemberList = filteredMemberList.filter {
-                                    it.student.name.contains(searchStudent) == true
-                                }
+                        } else if (gradeIndex != 0 && roomIndex == 0) {
+                            members.filter { studentData ->
+                                studentData.student.grade == gradeIndex
                             }
+                        } else {
+                            members.filter { studentData ->
+                                studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
+                            }
+                        }
+                        if (searchStudent.isNotEmpty()) {
+                            filteredMemberList = filteredMemberList.filter {
+                                it.student.name.contains(searchStudent) == true
+                            }
+                        }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 20.dp)
+                                .clip(shape = RoundedCornerShape(18.dp))
+                                .background(DodamTheme.colors.staticWhite)
+                        ) {
                             if (cnt != 0) {
                                 Column(
                                     modifier = Modifier
@@ -326,9 +360,18 @@ fun OutScreen(
                                             .padding(horizontal = 10.dp),
                                     ) {
                                         items(filteredMemberList.size) { listIndex ->
-                                            val hours = remainingHours(filteredMemberList[listIndex].startAt.time.toString(), filteredMemberList[listIndex].endAt.time.toString())
-                                            val minutes =  remainingMinutes(filteredMemberList[listIndex].startAt.time.toString(), filteredMemberList[listIndex].endAt.time.toString())
-                                            val time = calculateDaysBetween(filteredMemberList[listIndex].startAt.date.toString(), filteredMemberList[listIndex].endAt.date.toString())
+                                            val hours = remainingHours(
+                                                filteredMemberList[listIndex].startAt.time.toString(),
+                                                filteredMemberList[listIndex].endAt.time.toString()
+                                            )
+                                            val minutes = remainingMinutes(
+                                                filteredMemberList[listIndex].startAt.time.toString(),
+                                                filteredMemberList[listIndex].endAt.time.toString()
+                                            )
+                                            val time = calculateDaysBetween(
+                                                filteredMemberList[listIndex].startAt.date.toString(),
+                                                filteredMemberList[listIndex].endAt.date.toString()
+                                            )
                                             DodamMember(
                                                 name = filteredMemberList[listIndex].student.name,
                                                 modifier = Modifier
@@ -368,7 +411,8 @@ fun remainingHours(startTime: String, endTime: String): Int {
     val startTotalMinutes = startHour * 60 + startMinute
     val endTotalMinutes = endHour * 60 + endMinute
 
-    val totalEndMinutesAdjusted = if (endTotalMinutes < startTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
+    val totalEndMinutesAdjusted =
+        if (endTotalMinutes < startTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
     val diffMinutes = totalEndMinutesAdjusted - startTotalMinutes
 
     return diffMinutes / 60
@@ -387,7 +431,8 @@ fun remainingMinutes(startTime: String, endTime: String): Int {
     val startTotalMinutes = startHour * 60 + startMinute
     val endTotalMinutes = endHour * 60 + endMinute
 
-    val totalEndMinutesAdjusted = if (endTotalMinutes < startTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
+    val totalEndMinutesAdjusted =
+        if (endTotalMinutes < startTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
     val diffMinutes = totalEndMinutesAdjusted - startTotalMinutes
 
     return diffMinutes % 60
