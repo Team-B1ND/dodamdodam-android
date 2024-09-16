@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class ApproveOutState(
     val outPendingUiState: OutPendingUiState = OutPendingUiState.Loading,
+    val detailMember: DetailMember = DetailMember()
 )
 
 
@@ -16,4 +17,13 @@ sealed interface OutPendingUiState {
     ) : OutPendingUiState
     data object Loading : OutPendingUiState
     data object Error : OutPendingUiState
+}
+
+data class DetailMember(
+    val name: String,
+    val start: String,
+    val end: String,
+    val reason: String
+){
+    constructor(): this("", "", "", "")
 }
