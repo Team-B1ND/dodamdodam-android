@@ -54,8 +54,6 @@ import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
-import com.b1nd.dodam.point.navigation.POINT_ROUTE
-import com.b1nd.dodam.point.navigation.navigateToPoint
 import com.b1nd.dodam.point.navigation.pointScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
