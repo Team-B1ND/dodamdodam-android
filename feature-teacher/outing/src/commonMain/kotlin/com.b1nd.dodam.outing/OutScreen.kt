@@ -142,6 +142,7 @@ fun OutScreen(
                 )
                 Column(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(vertical = 20.dp)
                 ) {
                     when (val data = state.outPendingUiState) {
@@ -150,6 +151,8 @@ fun OutScreen(
                         is OutPendingUiState.Success -> {
                             val cnt =
                                 if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
+                            val members =
+                                if (titleIndex == 0) data.outMembers else data.sleepoverMembers
                             if (cnt != 0) {
                                 Column(
                                     modifier = Modifier
@@ -188,40 +191,42 @@ fun OutScreen(
                                             .padding(top = 12.dp, bottom = 16.dp)
                                     )
                                 }
+                                Spacer(modifier = Modifier.height(20.dp))
                             }
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Column(
-                        modifier = Modifier
-                            .wrapContentHeight()
-                            .clip(shape = RoundedCornerShape(18.dp))
-                            .background(DodamTheme.colors.staticWhite),
-                    ) {
-                        Text(
-                            text = if (titleIndex == 0) "외출 중인 학생" else "외박 중인 학생",
-                            color = DodamTheme.colors.labelStrong,
-                            style = DodamTheme.typography.headlineBold(),
-                            modifier = Modifier
-                                .padding(top = 16.dp, start = 16.dp, bottom = 16.dp),
-                        )
-                        LazyColumn(
-                            modifier = Modifier
-                                .padding(horizontal = 10.dp),
-                        ) {
-                            items(500) { listIndex ->
-                                DodamMember(
-                                    name = "학준혁",
+                            if (members.size != 0) {
+                                Column(
                                     modifier = Modifier
-                                        .padding(bottom = 12.dp),
-                                    icon = null,
+                                        .wrapContentHeight()
+                                        .clip(shape = RoundedCornerShape(18.dp))
+                                        .background(DodamTheme.colors.staticWhite),
                                 ) {
                                     Text(
-                                        text = "30분 남음",
-                                        style = DodamTheme.typography.headlineMedium(),
-                                        color = DodamTheme.colors.primaryNormal,
+                                        text = if (titleIndex == 0) "외출 중인 학생" else "외박 중인 학생",
+                                        color = DodamTheme.colors.labelStrong,
+                                        style = DodamTheme.typography.headlineBold(),
+                                        modifier = Modifier
+                                            .padding(top = 16.dp, start = 16.dp, bottom = 16.dp),
                                     )
+                                    LazyColumn(
+                                        modifier = Modifier
+                                            .padding(horizontal = 10.dp),
+                                    ) {
+                                        items(members.size) { listIndex ->
+                                            DodamMember(
+                                                name = members[listIndex].student.name,
+                                                modifier = Modifier
+                                                    .padding(bottom = 12.dp),
+                                                icon = null,
+                                            ) {
+                                                Text(
+                                                    text = "30분 남음",
+                                                    style = DodamTheme.typography.headlineMedium(),
+                                                    color = DodamTheme.colors.primaryNormal,
+                                                )
 
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
