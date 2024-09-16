@@ -291,39 +291,10 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                             .padding(bottom = 12.dp),
                                         icon = null,
                                     ) {
-                                        val start =
-                                            filteredMemberList[listIndex].startAt.date.toString()
-                                                .split("-")
-                                        val end =
-                                            filteredMemberList[listIndex].endAt.date.toString()
-                                                .split("-")
+                                        val start = filteredMemberList[listIndex].startAt.date.toString()
+                                        val end = filteredMemberList[listIndex].endAt.date.toString()
 
-                                        val a =
-                                            if (end[2].toInt() > start[2].toInt()) {
-                                                end[2].toInt() - start[2].toInt()
-                                            } else {
-                                                when (end[1].toInt()) {
-                                                    1, 3, 5, 7, 8, 10, 12 -> {
-                                                        (end[2].toInt() - 31) + start[2].toInt()
-                                                    }
-
-                                                    4, 6, 9, 11 -> {
-                                                        (end[2].toInt() - 30) + start[2].toInt()
-                                                    }
-
-                                                    2 -> {
-                                                        if (end[0].toInt() % 4 == 0 && (end[0].toInt() % 100 != 0 || end[0].toInt() % 400 == 0)) {
-                                                            end[2].toInt() - 29 - start[2].toInt()
-                                                        } else {
-                                                            end[2].toInt() - 20 - start[2].toInt()
-                                                        }
-                                                    }
-
-                                                    else -> {
-                                                        0
-                                                    }
-                                                }
-                                            }
+                                        val a = calculateDaysBetween(start, end)
 
                                         val memberData = filteredMemberList[listIndex]
                                         val detailData = DetailMember(
@@ -461,4 +432,62 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
             }
         }
     }
+}
+
+fun calculateDaysBetween(startDate: String, endDate: String): Int {
+    val monthDays = mapOf(
+        1 to 31, 2 to 28, 3 to 31, 4 to 30, 5 to 31, 6 to 30,
+        7 to 31, 8 to 31, 9 to 30, 10 to 31, 11 to 30, 12 to 31
+    )
+
+    fun isLeapYear(year: Int) = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
+
+    fun daysInMonth(year: Int, month: Int): Int {
+        return if (month == 2 && isLeapYear(year)) 29 else monthDays[month] ?: 30
+    }
+
+    val startParts = startDate.split("-").map { it.toInt() }
+    val endParts = endDate.split("-").map { it.toInt() }
+
+    val startYear = startParts[0]
+    val startMonth = startParts[1]
+    val startDay = startParts[2]
+
+    val endYear = endParts[0]
+    val endMonth = endParts[1]
+    val endDay = endParts[2]
+
+    // 날짜 차이 계산
+    var totalDays = 0
+
+    if (startYear == endYear) {
+        if (startMonth == endMonth) {
+            totalDays = endDay - startDay
+        } else {
+            totalDays += daysInMonth(startYear, startMonth) - startDay
+            for (month in (startMonth + 1) until endMonth) {
+                totalDays += daysInMonth(startYear, month)
+            }
+            totalDays += endDay
+        }
+    } else {
+        // 시작 연도의 남은 일 수
+        totalDays += daysInMonth(startYear, startMonth) - startDay
+        for (month in (startMonth + 1)..12) {
+            totalDays += daysInMonth(startYear, month)
+        }
+
+        // 중간 연도 일 수
+        for (year in (startYear + 1) until endYear) {
+            totalDays += if (isLeapYear(year)) 366 else 365
+        }
+
+        // 종료 연도의 일 수
+        for (month in 1 until endMonth) {
+            totalDays += daysInMonth(endYear, month)
+        }
+        totalDays += endDay
+    }
+
+    return totalDays
 }
