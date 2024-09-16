@@ -96,7 +96,7 @@ fun OutScreen(
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(key1 = true) {
-//        viewModel.load()
+        viewModel.load()
     }
 
     Scaffold(
