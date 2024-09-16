@@ -146,6 +146,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 
                     mealScreen()
                     outingScreen()
+                    approveOutingScreen()
                 }
 
                 // Bottom Navigation
