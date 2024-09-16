@@ -38,7 +38,7 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
 
             when (outing) {
                 is Result.Success -> {
-                    outMembers = outing.data.filter { it.status == Status.ALLOWED }.toImmutableList()
+                    outMembers = outing.data.filter { it.status == Status.PENDING }.toImmutableList()
                 }
                 is Result.Loading -> {}
                 is Result.Error -> {
@@ -49,7 +49,7 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
 
             when (sleepover) {
                 is Result.Success -> {
-                    sleepoverMembers = sleepover.data.filter { it.status == Status.ALLOWED }.toImmutableList()
+                    sleepoverMembers = sleepover.data.filter { it.status == Status.PENDING }.toImmutableList()
                 }
                 is Result.Loading -> {}
                 is Result.Error -> {

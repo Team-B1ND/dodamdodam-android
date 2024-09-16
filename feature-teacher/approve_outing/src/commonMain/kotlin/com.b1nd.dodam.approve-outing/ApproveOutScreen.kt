@@ -13,6 +13,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,10 +34,13 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.DodamMember
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun ApproveOutScreen() {
+fun ApproveOutScreen(
+    viewModel: ApproveOutViewModel = koinViewModel()
+) {
 
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
@@ -85,6 +90,11 @@ fun ApproveOutScreen() {
 
     var selectedItemIndex by remember { mutableStateOf(-1) }
 
+    LaunchedEffect(key1 = true){
+        viewModel.load()
+    }
+    val state by viewModel.state.collectAsState()
+
     Scaffold(
         topBar = {
             DodamTopAppBar(
@@ -130,32 +140,58 @@ fun ApproveOutScreen() {
                     },
                     modifier = Modifier,
                 )
-
-                LazyColumn(
-                    modifier = Modifier.padding(top = 20.dp)
-                ) {
-                    items(3) { index ->
-                        DodamMember(
-                            name = "한준혁",
-                            icon = null,
-                            modifier = Modifier
-                                .padding(bottom = 12.dp)
-                                .clickable {
-                                    selectedItemIndex = index
-                                },
-                            content = {
-                                if (index == selectedItemIndex) {
-                                    Image(
-                                        modifier = Modifier
-                                            .align(Alignment.CenterVertically)
-                                            .size(24.dp),
-                                        imageVector = DodamIcons.CheckmarkCircle.value,
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
-                                    )
-                                }
+                when(val data = state.outPendingUiState){
+                    OutPendingUiState.Error -> {}
+                    OutPendingUiState.Loading -> {}
+                    is OutPendingUiState.Success -> {
+                        val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                        var filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
+                            members
+                        } else if (gradeIndex == 0 && roomIndex != 0) {
+                            members.filter { studentData ->
+                                studentData.student.room == roomIndex
                             }
-                        )
+                        } else if (gradeIndex != 0 && roomIndex == 0) {
+                            members.filter { studentData ->
+                                studentData.student.grade == gradeIndex
+                            }
+                        } else {
+                            members.filter { studentData ->
+                                studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
+                            }
+                        }
+                        if (searchStudent.isNotEmpty()) {
+                            filteredMemberList = filteredMemberList.filter {
+                                it.student.name.contains(searchStudent)
+                            }
+                        }
+                        LazyColumn(
+                            modifier = Modifier.padding(top = 20.dp)
+                        ) {
+                            items(filteredMemberList.size) { index ->
+                                DodamMember(
+                                    name = filteredMemberList[index].student.name,
+                                    icon = null,
+                                    modifier = Modifier
+                                        .padding(bottom = 12.dp)
+                                        .clickable {
+                                            selectedItemIndex = index
+                                        },
+                                    content = {
+                                        if (index == selectedItemIndex) {
+                                            Image(
+                                                modifier = Modifier
+                                                    .align(Alignment.CenterVertically)
+                                                    .size(24.dp),
+                                                imageVector = DodamIcons.CheckmarkCircle.value,
+                                                contentDescription = null,
+                                                colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             }
