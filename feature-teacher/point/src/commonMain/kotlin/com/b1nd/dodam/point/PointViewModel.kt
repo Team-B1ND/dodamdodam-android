@@ -113,6 +113,11 @@ class PointViewModel: ViewModel(), KoinComponent {
             when (it) {
                 is Result.Success -> {
                     _sideEffect.emit(PointSideEffect.SuccessGivePoint)
+                    _uiState.update {
+                        it.copy(
+                            students = it.students.map { it.copy(selected = false) }.toImmutableList()
+                        )
+                    }
                 }
                 is Result.Loading -> {}
                 is Result.Error -> {
