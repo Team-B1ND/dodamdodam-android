@@ -149,10 +149,28 @@ fun OutScreen(
                         OutPendingUiState.Error -> {}
                         OutPendingUiState.Loading -> {}
                         is OutPendingUiState.Success -> {
-                            val cnt =
-                                if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
-                            val members =
-                                if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                            val cnt = if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
+                            val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                            var filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
+                                members
+                            } else if (gradeIndex == 0 && roomIndex != 0) {
+                                members.filter { studentData ->
+                                    studentData.student.room == roomIndex
+                                }
+                            } else if (gradeIndex != 0 && roomIndex == 0) {
+                                members.filter { studentData ->
+                                    studentData.student.grade == gradeIndex
+                                }
+                            } else {
+                                members.filter { studentData ->
+                                    studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
+                                }
+                            }
+                            if (searchStudent.isNotEmpty()) {
+                                filteredMemberList = filteredMemberList.filter {
+                                    it.student.name.contains(searchStudent) == true
+                                }
+                            }
                             if (cnt != 0) {
                                 Column(
                                     modifier = Modifier
@@ -196,6 +214,7 @@ fun OutScreen(
                             if (members.size != 0) {
                                 Column(
                                     modifier = Modifier
+                                        .fillMaxWidth()
                                         .wrapContentHeight()
                                         .clip(shape = RoundedCornerShape(18.dp))
                                         .background(DodamTheme.colors.staticWhite),
@@ -211,9 +230,9 @@ fun OutScreen(
                                         modifier = Modifier
                                             .padding(horizontal = 10.dp),
                                     ) {
-                                        items(members.size) { listIndex ->
+                                        items(filteredMemberList.size) { listIndex ->
                                             DodamMember(
-                                                name = members[listIndex].student.name,
+                                                name = filteredMemberList[listIndex].student.name,
                                                 modifier = Modifier
                                                     .padding(bottom = 12.dp),
                                                 icon = null,
