@@ -298,8 +298,6 @@ fun OutScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 20.dp)
-                                .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite)
                         ) {
                             if (cnt != 0) {
                                 Column(
