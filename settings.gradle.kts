@@ -74,3 +74,4 @@ include(
     ":feature-teacher:home",
 )
 include(":feature-teacher:nightstudy")
+include(":feature-teacher:outing")
