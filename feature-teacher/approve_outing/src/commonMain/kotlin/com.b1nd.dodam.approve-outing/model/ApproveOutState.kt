@@ -11,8 +11,6 @@ data class ApproveOutState(
 
 sealed interface OutPendingUiState {
     data class Success(
-        val outPendingCount: Int,
-        val sleepoverPendingCount: Int,
         val outMembers: ImmutableList<Outing>,
         val sleepoverMembers: ImmutableList<Outing>
     ) : OutPendingUiState
