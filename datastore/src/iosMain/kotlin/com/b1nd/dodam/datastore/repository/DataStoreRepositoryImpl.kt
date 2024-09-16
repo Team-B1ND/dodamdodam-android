@@ -111,7 +111,7 @@ class DataStoreRepositoryImpl : DataStoreRepository {
         )
 
         val updateQuery = query(
-            kSecValueData to data
+            kSecValueData to data,
         )
 
         SecItemUpdate(query, updateQuery).validate()

@@ -9,17 +9,13 @@ import com.b1nd.dodam.ui.component.SnackbarState
 
 const val POINT_ROUTE = "point"
 
-fun NavController.navigateToPoint(navOptions: NavOptions? = null) =
-    this.navigate(POINT_ROUTE)
+fun NavController.navigateToPoint(navOptions: NavOptions? = null) = this.navigate(POINT_ROUTE)
 
-fun NavGraphBuilder.pointScreen(
-    showSnackbar: (state: SnackbarState, message: String) -> Unit,
-    popBackStack: () -> Unit
-) {
+fun NavGraphBuilder.pointScreen(showSnackbar: (state: SnackbarState, message: String) -> Unit, popBackStack: () -> Unit) {
     composable(POINT_ROUTE) {
         PointScreen(
             showSnackbar = showSnackbar,
-            popBackStack = popBackStack
+            popBackStack = popBackStack,
         )
     }
 }

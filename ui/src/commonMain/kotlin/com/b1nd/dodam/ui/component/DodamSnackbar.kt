@@ -25,53 +25,48 @@ import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import com.b1nd.dodam.ui.icons.ColoredXMarkCircle
 
 @Composable
-fun DodamSnackbar(
-    state: SnackbarState,
-    text: String,
-    showDismissAction: Boolean,
-    onDismissRequest: () -> Unit
-) {
+fun DodamSnackbar(state: SnackbarState, text: String, showDismissAction: Boolean, onDismissRequest: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
                 start = 12.dp,
                 end = 12.dp,
-                bottom = 20.dp
+                bottom = 20.dp,
             )
             .dropShadow(
                 offsetY = 4.dp,
                 blur = 4.dp,
-                color = DodamTheme.colors.labelNormal.copy(alpha = 0.2f)
+                color = DodamTheme.colors.labelNormal.copy(alpha = 0.2f),
             )
             .background(
                 color = DodamTheme.colors.backgroundNormal,
-                shape = DodamTheme.shapes.extraSmall
+                shape = DodamTheme.shapes.extraSmall,
             ),
     ) {
         Row(
             modifier = Modifier
                 .padding(
                     vertical = 20.dp,
-                    horizontal = 12.dp
+                    horizontal = 12.dp,
                 )
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 modifier = Modifier.size(24.dp),
                 imageVector = when (state) {
                     SnackbarState.SUCCESS -> ColoredCheckmarkCircle
-                    SnackbarState.WARRING ->  ColoredCheckmarkCircle
+                    SnackbarState.WARRING -> ColoredCheckmarkCircle
                     else -> ColoredXMarkCircle
                 },
-                contentDescription = null
+                contentDescription = null,
             )
             Spacer(modifier = Modifier.width(15.dp))
             Text(
                 text = text,
                 style = DodamTheme.typography.heading2Medium(),
-                color = DodamTheme.colors.labelNormal
+                color = DodamTheme.colors.labelNormal,
             )
             if (showDismissAction) {
                 Spacer(modifier = Modifier.weight(1f))
@@ -81,19 +76,18 @@ fun DodamSnackbar(
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberBounceIndication(),
-                            onClick = onDismissRequest
+                            onClick = onDismissRequest,
                         ),
                     imageVector = Close,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         }
     }
 }
 
-
 enum class SnackbarState {
     SUCCESS,
     ERROR,
-    WARRING
+    WARRING,
 }

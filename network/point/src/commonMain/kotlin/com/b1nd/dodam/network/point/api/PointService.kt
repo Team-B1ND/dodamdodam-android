@@ -40,19 +40,15 @@ internal class PointService(
         }.toImmutableList()
     }
 
-    override suspend fun postGivePoint(
-        issueAt: LocalDate,
-        reasonId: Int,
-        studentIds: List<Int>,
-    ) {
+    override suspend fun postGivePoint(issueAt: LocalDate, reasonId: Int, studentIds: List<Int>) {
         return defaultSafeRequest {
             client.post(DodamUrl.POINT) {
                 setBody(
                     PointRequest(
                         issueAt = issueAt,
                         reasonId = reasonId,
-                        studentIds = studentIds
-                    )
+                        studentIds = studentIds,
+                    ),
                 )
                 contentType(ContentType.Application.Json)
             }.body<DefaultResponse>()

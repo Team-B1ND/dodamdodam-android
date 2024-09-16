@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,11 +30,8 @@ import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
-import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
-import com.b1nd.dodam.designsystem.foundation.DodamIcons
-import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.point.getDodamSegment
 import com.b1nd.dodam.point.model.PointStudentModel
 import com.b1nd.dodam.ui.component.DodamMember
@@ -50,7 +46,6 @@ internal fun SelectScreen(
     onClickNextPage: () -> Unit,
     popBackStack: () -> Unit,
 ) {
-
     var selectGrade by remember { mutableStateOf("전체") }
     var selectRoom by remember { mutableStateOf("전체") }
     val onSelectGrade: (String) -> Unit = {
@@ -61,8 +56,7 @@ internal fun SelectScreen(
     }
 
     // derivedStateOf 로 감쌌을 경우 감지 안됨
-    val selectUserCount = items.filter { it.selected } .size
-
+    val selectUserCount = items.filter { it.selected }.size
 
     Scaffold(
         modifier = Modifier
@@ -88,13 +82,13 @@ internal fun SelectScreen(
                 buttonSize = ButtonSize.Large,
             )
         },
-        containerColor = DodamTheme.colors.backgroundNormal
+        containerColor = DodamTheme.colors.backgroundNormal,
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             DodamSegmentedButton(
@@ -104,7 +98,7 @@ internal fun SelectScreen(
                     getDodamSegment("1학년", selectGrade, onSelectGrade),
                     getDodamSegment("2학년", selectGrade, onSelectGrade),
                     getDodamSegment("3학년", selectGrade, onSelectGrade),
-                )
+                ),
             )
             Spacer(modifier = Modifier.height(12.dp))
             DodamSegmentedButton(
@@ -115,14 +109,14 @@ internal fun SelectScreen(
                     getDodamSegment("2반", selectRoom, onSelectRoom),
                     getDodamSegment("3반", selectRoom, onSelectRoom),
                     getDodamSegment("4반", selectRoom, onSelectRoom),
-                )
+                ),
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 items(
                     items = items
@@ -130,15 +124,17 @@ internal fun SelectScreen(
                             val room = "${it.room}반"
                             val grade = "${it.grade}학년"
 
-                            // 전체인 경우
-                            if (selectRoom == "전체" && selectGrade == "전체") true
-                            
-                            // 반은 같고, 학년이 전체 이거나, 같은 학년 인 경우
-                            else if (selectRoom == room && (selectGrade == "전체" || selectGrade == grade)) true
-                            else if (selectGrade == grade && (selectRoom == "전체" || selectRoom == room)) true
-                            else false
+                            if (selectRoom == "전체" && selectGrade == "전체") {
+                                true
+                            } else if (selectRoom == room && (selectGrade == "전체" || selectGrade == grade)) {
+                                true
+                            } else if (selectGrade == grade && (selectRoom == "전체" || selectRoom == room)) {
+                                true
+                            } else {
+                                false
+                            }
                         },
-                    key = { it.id }
+                    key = { it.id },
                 ) {
                     DodamMember(
                         modifier = Modifier
@@ -146,7 +142,7 @@ internal fun SelectScreen(
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = rememberBounceIndication(),
-                                onClick = { onClickStudent(it) }
+                                onClick = { onClickStudent(it) },
                             ),
                         icon = it.profileImage,
                         name = it.name,
@@ -158,10 +154,10 @@ internal fun SelectScreen(
                                         .size(24.dp),
                                     imageVector = ColoredCheckmarkCircle,
                                     contentDescription = null,
-                                    colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
+                                    colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                                 )
                             }
-                        }
+                        },
                     )
                 }
             }

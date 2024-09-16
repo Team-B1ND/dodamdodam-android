@@ -29,9 +29,7 @@ internal class MemberService(
         }
     }
 
-    override suspend fun getMemberAll(
-        status: String
-    ): List<MemberInfoResponse> {
+    override suspend fun getMemberAll(status: String): List<MemberInfoResponse> {
         return safeRequest {
             client.get(DodamUrl.Member.STATUS) {
                 parameter("status", status)

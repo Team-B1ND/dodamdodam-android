@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -51,18 +49,16 @@ import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDivider
-import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
-import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.point.getDodamSegment
 import com.b1nd.dodam.point.model.PointStudentModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.modifier.dropShadow
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.icons.ColoredBullseye
-import com.b1nd.dodam.ui.icons.ColoredTrophy
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
+import com.b1nd.dodam.ui.icons.ColoredTrophy
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -88,8 +84,6 @@ internal fun GiveScreen(
         selectScoreType = it
     }
 
-
-
     val nowPointType by remember {
         derivedStateOf {
             if (selectPointType == "학교") PointType.SCHOOL else PointType.DORMITORY
@@ -105,7 +99,7 @@ internal fun GiveScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .systemBarsPadding()
+            .systemBarsPadding(),
     ) {
         Scaffold(
             topBar = {
@@ -114,13 +108,13 @@ internal fun GiveScreen(
                     onBackClick = popBackStack,
                 )
             },
-            containerColor = DodamTheme.colors.backgroundNormal
+            containerColor = DodamTheme.colors.backgroundNormal,
         ) { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp),
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
                 DodamSegmentedButton(
@@ -128,7 +122,7 @@ internal fun GiveScreen(
                     segments = persistentListOf(
                         getDodamSegment("학교", selectPointType, onSelectGrade),
                         getDodamSegment("기숙사", selectPointType, onSelectGrade),
-                    )
+                    ),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 DodamSegmentedButton(
@@ -136,7 +130,7 @@ internal fun GiveScreen(
                     segments = persistentListOf(
                         getDodamSegment("상점", selectScoreType, onSelectRoom),
                         getDodamSegment("벌점", selectScoreType, onSelectRoom),
-                    )
+                    ),
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -145,27 +139,26 @@ internal fun GiveScreen(
                         .fillMaxWidth()
                         .weight(
                             weight = 1f,
-                            fill = false
-                        )
+                            fill = false,
+                        ),
                 ) {
                     Text(
                         text = "상점 목록",
                         style = DodamTheme.typography.headlineBold(),
-                        color = DodamTheme.colors.labelNormal
+                        color = DodamTheme.colors.labelNormal,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-
                         // TODO 스페이싱 추가하기
                         items(
                             items = reasonList
                                 .filter {
                                     it.scoreType == nowScoreType && it.pointType == nowPointType
                                 },
-                            key = { it.id }
+                            key = { it.id },
                         ) {
                             Row(
                                 modifier = Modifier
@@ -175,18 +168,18 @@ internal fun GiveScreen(
                                         indication = rememberBounceIndication(),
                                         onClick = {
                                             selectReason = if (selectReason == it) null else it
-                                        }
+                                        },
                                     ),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Box(
                                     modifier = Modifier
                                         .size(40.dp)
                                         .background(
                                             color = DodamTheme.colors.backgroundAlternative,
-                                            shape = CircleShape
+                                            shape = CircleShape,
                                         ),
-                                    contentAlignment = Alignment.Center
+                                    contentAlignment = Alignment.Center,
                                 ) {
                                     Image(
                                         modifier = Modifier
@@ -202,7 +195,7 @@ internal fun GiveScreen(
                                 Text(
                                     text = it.reason,
                                     style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelNormal
+                                    color = DodamTheme.colors.labelNormal,
                                 )
 
                                 if (selectReason == it) {
@@ -211,7 +204,7 @@ internal fun GiveScreen(
                                         modifier = Modifier.size(24.dp),
                                         imageVector = ColoredCheckmarkCircle,
                                         contentDescription = null,
-                                        colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
+                                        colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                                     )
                                 }
                             }
@@ -224,7 +217,7 @@ internal fun GiveScreen(
                     modifier = Modifier
                         .height(8.dp)
                         .fillMaxWidth(),
-                    type = DividerType.Thick
+                    type = DividerType.Thick,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -233,32 +226,32 @@ internal fun GiveScreen(
                         .fillMaxWidth()
                         .weight(
                             weight = 1f,
-                            fill = false
-                        )
+                            fill = false,
+                        ),
                 ) {
                     Text(
                         text = "학생 목록",
                         style = DodamTheme.typography.headlineBold(),
-                        color = DodamTheme.colors.labelNormal
+                        color = DodamTheme.colors.labelNormal,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         items(
                             items = studentList
                                 .filter {
                                     it.selected
                                 },
-                            key = { it.id }
+                            key = { it.id },
                         ) {
                             DodamMember(
                                 modifier = Modifier
                                     .fillMaxWidth(),
                                 icon = it.profileImage,
                                 name = it.name,
-                                content = { }
+                                content = { },
                             )
                         }
                     }
@@ -272,24 +265,24 @@ internal fun GiveScreen(
                     Text(
                         text = "상벌점 정보",
                         style = DodamTheme.typography.heading1Bold(),
-                        color = DodamTheme.colors.labelNormal
+                        color = DodamTheme.colors.labelNormal,
                     )
                 },
                 content = {
                     GiveCategoryComponent(
                         category = "상벌점 종류",
-                        content = selectScoreType
+                        content = selectScoreType,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     GiveCategoryComponent(
                         category = "발급 점수",
-                        content = "${selectReason!!.score}점"
+                        content = "${selectReason!!.score}점",
                     )
                     Spacer(modifier = Modifier.height(12.dp))
 
                     GiveCategoryComponent(
                         category = "발급 사유",
-                        content = selectReason!!.reason
+                        content = selectReason!!.reason,
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     DodamButton(
@@ -300,31 +293,27 @@ internal fun GiveScreen(
                         onClick = {
                             onClickGivePoint(
                                 studentList.filter { it.selected }.toImmutableList(),
-                                selectReason!!
+                                selectReason!!,
                             )
-                        }
+                        },
                     )
                 },
-                space = 16.dp
+                space = 16.dp,
             )
         }
     }
 }
 
 @Composable
-private fun GiveCategoryComponent(
-    modifier: Modifier = Modifier,
-    category: String,
-    content: String
-) {
+private fun GiveCategoryComponent(modifier: Modifier = Modifier, category: String, content: String) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Text(
             text = category,
             style = DodamTheme.typography.headlineMedium(),
-            color = DodamTheme.colors.labelAssistive
+            color = DodamTheme.colors.labelAssistive,
         )
         Spacer(modifier = Modifier.width(16.dp))
         Spacer(modifier = Modifier.weight(1f))
@@ -332,7 +321,7 @@ private fun GiveCategoryComponent(
             text = content,
             style = DodamTheme.typography.headlineMedium(),
             color = DodamTheme.colors.labelNeutral,
-            textAlign = TextAlign.Right
+            textAlign = TextAlign.Right,
         )
     }
 }
@@ -350,15 +339,15 @@ private fun FakeBottomSheet(
             .dropShadow(
                 blur = 8.dp,
                 offsetY = (-4).dp,
-                color = DodamTheme.colors.staticBlack.copy(alpha = 0.1f)
+                color = DodamTheme.colors.staticBlack.copy(alpha = 0.1f),
             )
             .background(
                 color = DodamTheme.colors.backgroundNormal,
                 shape = RoundedCornerShape(
                     topStart = 28.dp,
-                    topEnd = 28.dp
-                )
-            )
+                    topEnd = 28.dp,
+                ),
+            ),
 //            .dropShadow()
     ) {
         Surface(
@@ -366,7 +355,7 @@ private fun FakeBottomSheet(
                 .align(Alignment.CenterHorizontally)
                 .padding(
                     top = 24.dp,
-                    bottom = 16.dp
+                    bottom = 16.dp,
                 ),
         ) {
             Box(
@@ -375,8 +364,8 @@ private fun FakeBottomSheet(
                     .height(6.dp)
                     .background(
                         color = DodamTheme.colors.fillAlternative,
-                        shape = DodamTheme.shapes.extraSmall
-                    )
+                        shape = DodamTheme.shapes.extraSmall,
+                    ),
             )
         }
         Column(
@@ -384,8 +373,8 @@ private fun FakeBottomSheet(
                 .padding(
                     start = 24.dp,
                     end = 24.dp,
-                    bottom = 24.dp
-                )
+                    bottom = 24.dp,
+                ),
         ) {
             title()
             Spacer(modifier = Modifier.height(space))

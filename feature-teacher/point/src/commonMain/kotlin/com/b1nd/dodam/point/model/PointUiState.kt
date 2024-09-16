@@ -7,5 +7,5 @@ import kotlinx.collections.immutable.persistentListOf
 data class PointUiState(
     val loading: Boolean = true,
     val students: ImmutableList<PointStudentModel> = persistentListOf(),
-    val reasons: ImmutableList<PointReason> = persistentListOf()
+    val reasons: ImmutableList<PointReason> = persistentListOf(),
 )

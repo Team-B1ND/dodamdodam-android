@@ -43,17 +43,13 @@ internal class PointRepositoryImpl(
         }.asResult().flowOn(dispatcher)
     }
 
-    override suspend fun postGivePoint(
-        issueAt: LocalDate,
-        reasonId: Int,
-        studentIds: List<Int>,
-    ): Flow<Result<Unit>> = flow {
+    override suspend fun postGivePoint(issueAt: LocalDate, reasonId: Int, studentIds: List<Int>): Flow<Result<Unit>> = flow {
         emit(
             network.postGivePoint(
                 issueAt = issueAt,
                 reasonId = reasonId,
-                studentIds = studentIds
-            )
+                studentIds = studentIds,
+            ),
         )
     }
         .asResult().flowOn(dispatcher)
