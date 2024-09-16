@@ -26,7 +26,7 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
     val state = _state.asStateFlow()
 
 
-    fun load()  = viewModelScope.launch {
+    fun load() = viewModelScope.launch {
         val date = DodamDate.localDateNow()
 
         combineWhenAllComplete(
@@ -38,8 +38,10 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
 
             when (outing) {
                 is Result.Success -> {
-                    outMembers = outing.data.filter { it.status == Status.PENDING }.toImmutableList()
+                    outMembers =
+                        outing.data.filter { it.status == Status.PENDING }.toImmutableList()
                 }
+
                 is Result.Loading -> {}
                 is Result.Error -> {
                     outing.error.printStackTrace()
@@ -49,8 +51,10 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
 
             when (sleepover) {
                 is Result.Success -> {
-                    sleepoverMembers = sleepover.data.filter { it.status == Status.PENDING }.toImmutableList()
+                    sleepoverMembers =
+                        sleepover.data.filter { it.status == Status.PENDING }.toImmutableList()
                 }
+
                 is Result.Loading -> {}
                 is Result.Error -> {
                     sleepover.error.printStackTrace()
@@ -66,6 +70,26 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
             _state.update {
                 it.copy(
                     outPendingUiState = state
+                )
+            }
+        }
+    }
+
+    fun detailMember(
+        name: String,
+        start: String,
+        end: String,
+        reason: String
+    ) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    detailMember = DetailMember(
+                        name = name,
+                        start = start,
+                        end = end,
+                        reason = reason
+                    )
                 )
             }
         }
