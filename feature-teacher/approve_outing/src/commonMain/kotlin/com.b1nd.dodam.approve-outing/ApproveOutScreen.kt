@@ -27,13 +27,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
-import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
@@ -175,6 +173,11 @@ fun ApproveOutScreen(
                         ) {
                             DodamButton(
                                 onClick = {
+                                    if (titleIndex == 1){
+                                        viewModel.rejectSleepover(state.detailMember.id)
+                                    }else{
+                                        viewModel.rejectGoing(state.detailMember.id)
+                                    }
                                     selectedItemIndex = -1
                                 },
                                 text = "거절하기",
@@ -185,6 +188,11 @@ fun ApproveOutScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                             DodamButton(
                                 onClick = {
+                                    if (titleIndex == 1){
+                                        viewModel.allowSleepover(state.detailMember.id)
+                                    }else{
+                                        viewModel.allowGoing(state.detailMember.id)
+                                    }
                                     selectedItemIndex = -1
                                 },
                                 text = "승인하기",
@@ -276,6 +284,7 @@ fun ApproveOutScreen(
                                                     start = getDate(filteredMemberList[index].startAt.date.toString()),
                                                     end = getDate(filteredMemberList[index].endAt.date.toString()),
                                                     reason = filteredMemberList[index].reason,
+                                                    id = filteredMemberList[index].id
                                                     )
                                             }else{
                                                 viewModel.detailMember(
@@ -283,6 +292,7 @@ fun ApproveOutScreen(
                                                     start = getTime( filteredMemberList[index].startAt.toString()),
                                                     end = getTime( filteredMemberList[index].endAt.toString()),
                                                     reason = filteredMemberList[index].reason,
+                                                    id = filteredMemberList[index].id
                                                 )
                                             }
                                         },

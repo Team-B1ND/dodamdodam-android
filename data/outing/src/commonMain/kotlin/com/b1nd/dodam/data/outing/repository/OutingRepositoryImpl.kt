@@ -76,4 +76,26 @@ internal class OutingRepositoryImpl(
             emit(network.deleteSleepover(id))
         }.asResult().flowOn(dispatcher)
     }
+
+    override fun allowSleepover(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(network.allowSleepover(id))
+        }.asResult().flowOn(dispatcher)
+    }
+    override fun allowGoing(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(network.allowGoing(id))
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun rejectSleepover(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(network.rejectSleepover(id))
+        }.asResult().flowOn(dispatcher)
+    }
+    override fun rejectGoing(id: Long): Flow<Result<Unit>> {
+        return flow {
+            emit(network.rejectGoing(id))
+        }.asResult().flowOn(dispatcher)
+    }
 }

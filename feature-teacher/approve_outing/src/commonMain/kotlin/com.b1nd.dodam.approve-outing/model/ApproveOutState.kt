@@ -23,7 +23,8 @@ data class DetailMember(
     val name: String,
     val start: String,
     val end: String,
-    val reason: String
+    val reason: String,
+    val id: Long
 ){
-    constructor(): this("", "", "", "")
+    constructor(): this("", "", "", "", 0)
 }
