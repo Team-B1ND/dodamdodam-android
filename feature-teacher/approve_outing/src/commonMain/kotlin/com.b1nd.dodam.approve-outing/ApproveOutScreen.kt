@@ -46,7 +46,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ApproveOutScreen(
-    viewModel: ApproveOutViewModel = koinViewModel()
+    viewModel: ApproveOutViewModel = koinViewModel(),
+    onBackClick: () -> Unit
 ) {
 
     var gradeIndex by remember { mutableIntStateOf(0) }
@@ -107,7 +108,9 @@ fun ApproveOutScreen(
             DodamTopAppBar(
                 title = "외출/외박 승인",
                 modifier = Modifier.statusBarsPadding(),
-                onBackClick = {}
+                onBackClick = {
+                    onBackClick()
+                }
             )
         },
     ) {

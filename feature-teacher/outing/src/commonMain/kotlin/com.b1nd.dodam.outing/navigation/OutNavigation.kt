@@ -18,7 +18,7 @@ fun NavController.navigateToOuting(
 ) = navigate(OUTING_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.outingScreen() {
+fun NavGraphBuilder.outingScreen(navigateToApprove: () -> Unit) {
     composable(
         route = OUTING_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -26,6 +26,8 @@ fun NavGraphBuilder.outingScreen() {
         popEnterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None },
     ) {
-        OutScreen()
+        OutScreen(
+            navigateToApprove = navigateToApprove
+        )
     }
 }

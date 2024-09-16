@@ -32,6 +32,9 @@ import coil3.memory.MemoryCache
 import coil3.network.ktor.KtorNetworkFetcherFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
+import com.b1nd.dodam.approve.APPROVE_OUTING_ROUTE
+import com.b1nd.dodam.approve.approveOutingScreen
+import com.b1nd.dodam.approve.navigateToApproveOuting
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
@@ -51,6 +54,7 @@ import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import com.b1nd.dodam.outing.navigation.OUTING_ROUTE
+import com.b1nd.dodam.outing.navigation.navigateToOuting
 import com.b1nd.dodam.outing.navigation.outingScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
@@ -130,7 +134,17 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                                 },
                             )
                         },
-                        navigateToOuting = {},
+                        navigateToOuting = {
+                            navHostController.navigateToOuting(
+                                navOptions = navOptions {
+                                    popUpTo(navHostController.graph.findStartDestination().route.toString()) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                },
+                            )
+                        },
                         navigateToNightStudy = {
                             navHostController.navigateToNightStudy(
                                 navOptions = navOptions {
@@ -145,8 +159,12 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                     )
 
                     mealScreen()
-                    outingScreen()
-                    approveOutingScreen()
+                    outingScreen(
+                        navHostController::navigateToApproveOuting
+                    )
+                    approveOutingScreen(
+                        onBackClick = navHostController::popBackStack
+                    )
                 }
 
                 // Bottom Navigation
@@ -181,7 +199,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
     val route = backStackEntry?.destination?.route
 
-    if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE, NIGHT_STUDY_ROUTE)) {
+    if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE, NIGHT_STUDY_ROUTE, OUTING_ROUTE)) {
         DodamNavigationBar(
             modifier = modifier,
             items = persistentListOf(
@@ -202,9 +220,11 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     enable = route != MEAL_ROUTE,
                 ),
                 DodamNavigationBarItem(
-                    selected = route == "",
+                    selected = route == OUTING_ROUTE,
                     icon = DodamIcons.DoorOpen,
-                    onClick = {},
+                    onClick = {
+                        onClick(OUTING_ROUTE)
+                    },
                 ),
                 DodamNavigationBarItem(
                     selected = route == NIGHT_STUDY_ROUTE,
