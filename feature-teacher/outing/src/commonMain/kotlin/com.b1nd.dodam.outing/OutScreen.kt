@@ -231,6 +231,9 @@ fun OutScreen(
                                             .padding(horizontal = 10.dp),
                                     ) {
                                         items(filteredMemberList.size) { listIndex ->
+                                            val hours = remainingHours(filteredMemberList[listIndex].startAt.time.toString(), filteredMemberList[listIndex].endAt.time.toString())
+                                            val minutes =  remainingMinutes(filteredMemberList[listIndex].startAt.time.toString(), filteredMemberList[listIndex].endAt.time.toString())
+                                            val time = calculateDaysBetween(filteredMemberList[listIndex].startAt.date.toString(), filteredMemberList[listIndex].endAt.date.toString())
                                             DodamMember(
                                                 name = filteredMemberList[listIndex].student.name,
                                                 modifier = Modifier
@@ -238,9 +241,9 @@ fun OutScreen(
                                                 icon = null,
                                             ) {
                                                 Text(
-                                                    text = "30분 남음",
+                                                    text = if (titleIndex == 0) if (hours > 0) "${hours}시간 남음" else "${minutes}분 남음" else if (time > 1) "${time}일 남음" else "오늘 복귀",
                                                     style = DodamTheme.typography.headlineMedium(),
-                                                    color = DodamTheme.colors.primaryNormal,
+                                                    color = if (hours > 0 || minutes > 30 || time > 1) DodamTheme.colors.labelAssistive else DodamTheme.colors.primaryNormal,
                                                 )
 
                                             }
@@ -254,4 +257,101 @@ fun OutScreen(
             }
         }
     }
+}
+
+
+fun remainingHours(startTime: String, endTime: String): Int {
+    val startParts = startTime.split(":")
+    val endParts = endTime.split(":")
+
+    val startHour = startParts[0].toInt()
+    val startMinute = startParts[1].toInt()
+
+    val endHour = endParts[0].toInt()
+    val endMinute = endParts[1].toInt()
+
+    val startTotalMinutes = startHour * 60 + startMinute
+    val endTotalMinutes = endHour * 60 + endMinute
+
+    val totalEndMinutesAdjusted = if (endTotalMinutes < startTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
+    val diffMinutes = totalEndMinutesAdjusted - startTotalMinutes
+
+    return diffMinutes / 60
+}
+
+fun remainingMinutes(startTime: String, endTime: String): Int {
+    val startParts = startTime.split(":")
+    val endParts = endTime.split(":")
+
+    val startHour = startParts[0].toInt()
+    val startMinute = startParts[1].toInt()
+
+    val endHour = endParts[0].toInt()
+    val endMinute = endParts[1].toInt()
+
+    val startTotalMinutes = startHour * 60 + startMinute
+    val endTotalMinutes = endHour * 60 + endMinute
+
+    val totalEndMinutesAdjusted = if (endTotalMinutes < startTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
+    val diffMinutes = totalEndMinutesAdjusted - startTotalMinutes
+
+    return diffMinutes % 60
+}
+
+fun calculateDaysBetween(startDate: String, endDate: String): Int {
+    val monthDays = mapOf(
+        1 to 31, 2 to 28, 3 to 31, 4 to 30, 5 to 31, 6 to 30,
+        7 to 31, 8 to 31, 9 to 30, 10 to 31, 11 to 30, 12 to 31
+    )
+
+    fun isLeapYear(year: Int) = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
+
+    fun daysInMonth(year: Int, month: Int): Int {
+        return if (month == 2 && isLeapYear(year)) 29 else monthDays[month] ?: 30
+    }
+
+    val startParts = startDate.split("-").map { it.toInt() }
+    val endParts = endDate.split("-").map { it.toInt() }
+
+    val startYear = startParts[0]
+    val startMonth = startParts[1]
+    val startDay = startParts[2]
+
+    val endYear = endParts[0]
+    val endMonth = endParts[1]
+    val endDay = endParts[2]
+
+    // 날짜 차이 계산
+    var totalDays = 0
+
+    if (startYear == endYear) {
+        if (startMonth == endMonth) {
+            totalDays = endDay - startDay
+        } else {
+            totalDays += daysInMonth(startYear, startMonth) - startDay
+            for (month in (startMonth + 1) until endMonth) {
+                totalDays += daysInMonth(startYear, month)
+            }
+            totalDays += endDay
+        }
+    } else {
+        // 시작 연도의 남은 일 수
+        totalDays += daysInMonth(startYear, startMonth) - startDay
+        for (month in (startMonth + 1)..12) {
+            totalDays += daysInMonth(startYear, month)
+        }
+
+        // 중간 연도 일 수
+        for (year in (startYear + 1) until endYear) {
+            totalDays += if (isLeapYear(year)) 366 else 365
+        }
+
+        // 종료 연도의 일 수
+        for (month in 1 until endMonth) {
+            totalDays += daysInMonth(endYear, month)
+        }
+        totalDays += endDay
+    }
+
+    return totalDays
 }
