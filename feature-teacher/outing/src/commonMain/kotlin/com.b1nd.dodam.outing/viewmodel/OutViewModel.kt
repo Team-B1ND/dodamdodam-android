@@ -34,7 +34,7 @@ class OutViewModel  : ViewModel(), KoinComponent {
 
         combineWhenAllComplete(
             outingRepository.getOutings(date),
-            outingRepository.getSleepovers(date),
+            outingRepository.getAllSleepovers(date),
         ) { outing, sleepover ->
             var outPendingCount = 0
             var sleepoverPendingCount = 0
