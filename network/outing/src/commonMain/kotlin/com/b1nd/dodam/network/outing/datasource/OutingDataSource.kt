@@ -13,6 +13,8 @@ interface OutingDataSource {
 
     suspend fun getSleepovers(date: LocalDate): ImmutableList<SleepoverResponse>
 
+    suspend fun getAllSleepovers(date: LocalDate): ImmutableList<SleepoverResponse>
+
     suspend fun getOutings(date: LocalDate): ImmutableList<OutingResponse>
 
     suspend fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime)

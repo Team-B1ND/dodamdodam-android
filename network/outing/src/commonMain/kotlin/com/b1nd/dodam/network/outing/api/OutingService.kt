@@ -49,6 +49,14 @@ internal class OutingService(
         }.toImmutableList()
     }
 
+    override suspend fun getAllSleepovers(date: LocalDate): ImmutableList<SleepoverResponse> {
+        return safeRequest {
+            client.get(DodamUrl.Sleepover.ALL) {
+                parameter("endAt", date)
+            }.body<Response<List<SleepoverResponse>>>()
+        }.toImmutableList()
+    }
+
     override suspend fun getOutings(date: LocalDate): ImmutableList<OutingResponse> {
         return safeRequest {
             client.get(DodamUrl.OUTING) {
