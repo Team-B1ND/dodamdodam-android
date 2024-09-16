@@ -33,14 +33,11 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
             outingRepository.getOutings(date),
             outingRepository.getAllSleepovers(date),
         ) { outing, sleepover ->
-            var outPendingCount = 0
-            var sleepoverPendingCount = 0
             var outMembers: ImmutableList<Outing> = persistentListOf()
             var sleepoverMembers: ImmutableList<Outing> = persistentListOf()
 
             when (outing) {
                 is Result.Success -> {
-                    outPendingCount = outing.data.filter { it.status == Status.PENDING }.size
                     outMembers = outing.data.filter { it.status == Status.ALLOWED }.toImmutableList()
                 }
                 is Result.Loading -> {}
@@ -52,7 +49,6 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
 
             when (sleepover) {
                 is Result.Success -> {
-                    sleepoverPendingCount = sleepover.data.filter { it.status == Status.PENDING }.size
                     sleepoverMembers = sleepover.data.filter { it.status == Status.ALLOWED }.toImmutableList()
                 }
                 is Result.Loading -> {}
@@ -63,8 +59,6 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
             }
 
             return@combineWhenAllComplete OutPendingUiState.Success(
-                outPendingCount = outPendingCount,
-                sleepoverPendingCount = sleepoverPendingCount,
                 outMembers = outMembers,
                 sleepoverMembers = sleepoverMembers
             )
