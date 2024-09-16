@@ -46,7 +46,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun OutScreen(
-    viewModel: OutViewModel = koinViewModel()
+    viewModel: OutViewModel = koinViewModel(),
+    navigateToApprove: () -> Unit
 ) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
@@ -329,7 +330,9 @@ fun OutScreen(
                                     }
 
                                     DodamButton(
-                                        onClick = {},
+                                        onClick = {
+                                            navigateToApprove()
+                                        },
                                         text = "승인하러 가기",
                                         buttonRole = ButtonRole.Assistive,
                                         modifier = Modifier

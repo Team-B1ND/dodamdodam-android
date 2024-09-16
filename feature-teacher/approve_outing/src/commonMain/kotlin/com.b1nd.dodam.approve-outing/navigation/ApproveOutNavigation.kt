@@ -1,5 +1,6 @@
 package com.b1nd.dodam.approve
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,14 +19,14 @@ fun NavController.navigateToApproveOuting(
 ) = navigate(APPROVE_OUTING_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.approveOutingScreen() {
+fun NavGraphBuilder.approveOutingScreen(onBackClick: () -> Unit) {
     composable(
         route = APPROVE_OUTING_ROUTE,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None },
-        popEnterTransition = { EnterTransition.None },
-        popExitTransition = { ExitTransition.None },
+        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
+        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
-        ApproveOutScreen()
+        ApproveOutScreen(
+            onBackClick = onBackClick
+        )
     }
 }
