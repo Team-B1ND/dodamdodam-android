@@ -9,15 +9,14 @@ data class PointStudentModel(
     val room: Int = 0,
     val number: Int = 0,
     val selected: Boolean = false,
-    val profileImage: String? = null
+    val profileImage: String? = null,
 )
 
-internal fun MemberInfo.toPointStudentModel() =
-    PointStudentModel(
-        id = student?.id?: 0,
-        name = name,
-        grade = student?.grade?: 0,
-        room = student?.room?: 0,
-        number = student?.number?: 0,
-        profileImage = profileImage
-    )
+internal fun MemberInfo.toPointStudentModel() = PointStudentModel(
+    id = student?.id ?: 0,
+    name = name,
+    grade = student?.grade ?: 0,
+    room = student?.room ?: 0,
+    number = student?.number ?: 0,
+    profileImage = profileImage,
+)

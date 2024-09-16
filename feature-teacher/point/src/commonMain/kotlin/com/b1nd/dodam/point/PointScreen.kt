@@ -30,11 +30,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-internal fun PointScreen(
-    viewModel: PointViewModel = koinViewModel(),
-    showSnackbar: (state: SnackbarState, message: String) -> Unit,
-    popBackStack: () -> Unit
-) {
+internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), showSnackbar: (state: SnackbarState, message: String) -> Unit, popBackStack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     var nowPage by remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
@@ -43,7 +39,7 @@ internal fun PointScreen(
         viewModel.sideEffect.collect {
             when (it) {
                 is PointSideEffect.FailedGivePoint -> {
-                    showSnackbar(SnackbarState.ERROR, it.throwable.message?: "상벌점 부여에 실패했습니다.")
+                    showSnackbar(SnackbarState.ERROR, it.throwable.message ?: "상벌점 부여에 실패했습니다.")
                 }
                 is PointSideEffect.SuccessGivePoint -> {
                     showSnackbar(SnackbarState.SUCCESS, "상벌점 부여에 성공하였습니다.")
@@ -56,12 +52,12 @@ internal fun PointScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         AnimatedVisibility(
             visible = nowPage == 0,
             enter = fadeIn(),
-            exit = fadeOut()
+            exit = fadeOut(),
         ) {
             SelectScreen(
                 items = uiState.students,
@@ -69,13 +65,13 @@ internal fun PointScreen(
                 onClickNextPage = {
                     nowPage = 1
                 },
-                popBackStack = popBackStack
+                popBackStack = popBackStack,
             )
         }
         AnimatedVisibility(
             visible = nowPage == 1,
             enter = fadeIn(),
-            exit = fadeOut()
+            exit = fadeOut(),
         ) {
             GiveScreen(
                 studentList = uiState.students,
@@ -83,7 +79,7 @@ internal fun PointScreen(
                 onClickGivePoint = { students, reason ->
                     viewModel.givePoint(
                         students = students,
-                        reason = reason
+                        reason = reason,
                     )
                 },
                 popBackStack = {
@@ -96,7 +92,7 @@ internal fun PointScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(DodamTheme.colors.labelNormal.copy(alpha = 0.3f)),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 DodamLoadingDots()
             }
@@ -104,12 +100,11 @@ internal fun PointScreen(
     }
 }
 
-internal fun getDodamSegment(text: String, selectText: String, onClick: (String) -> Unit) =
-    DodamSegment(
-        selected = text == selectText,
-        onClick = {
-            onClick(text)
-        },
-        text = text,
-        enabled = true
-    )
+internal fun getDodamSegment(text: String, selectText: String, onClick: (String) -> Unit) = DodamSegment(
+    selected = text == selectText,
+    onClick = {
+        onClick(text)
+    },
+    text = text,
+    enabled = true,
+)

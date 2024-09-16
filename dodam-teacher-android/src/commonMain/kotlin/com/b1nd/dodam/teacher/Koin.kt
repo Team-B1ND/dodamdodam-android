@@ -24,7 +24,6 @@ import com.b1nd.dodam.network.outing.di.outingDataSourceModule
 import com.b1nd.dodam.network.point.di.pointDataSourceModule
 import com.b1nd.dodam.network.schedule.di.scheduleDatasourceModule
 import com.b1nd.dodam.nightstudy.di.nightStudyViewModelModule
-import com.b1nd.dodam.point.PointViewModel
 import com.b1nd.dodam.point.di.pointViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
 import com.b1nd.dodam.register.di.registerRepositoryModule
@@ -64,7 +63,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             memberDataSourceModule,
             pointViewModelModule,
             pointRepositoryModule,
-            pointDataSourceModule
+            pointDataSourceModule,
         )
         block()
     }

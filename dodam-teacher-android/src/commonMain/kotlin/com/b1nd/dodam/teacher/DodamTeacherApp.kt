@@ -55,7 +55,6 @@ import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import com.b1nd.dodam.point.navigation.POINT_ROUTE
-import com.b1nd.dodam.point.navigation.navigateToPoint
 import com.b1nd.dodam.point.navigation.pointScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
@@ -94,7 +93,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
             snackbarState = state
             snackbarHostState.showSnackbar(
                 message = message,
-                withDismissAction = true
+                withDismissAction = true,
             )
         }
     }
@@ -109,10 +108,10 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                         showDismissAction = it.visuals.withDismissAction,
                         onDismissRequest = {
                             it.dismiss()
-                        }
+                        },
                     )
                 }
-            }
+            },
         ) {
             if (isLogin == null) {
                 LunchScreen()
@@ -185,7 +184,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 
                         pointScreen(
                             showSnackbar = showSnackbar,
-                            popBackStack = navHostController::popBackStack
+                            popBackStack = navHostController::popBackStack,
                         )
                     }
 

@@ -1,17 +1,14 @@
 package com.b1nd.dodam.ui.component.modifier
 
-
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.NativePaint
-
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-
 
 /**
  * Seugi DropShadow
@@ -19,12 +16,7 @@ import androidx.compose.ui.unit.dp
  * @param type: the size of the shadow according to the design system.
  * @param modifier: the Modifier to be applied to this drop shadow
  */
-fun Modifier.dropShadow(
-    blur: Dp,
-    offsetY: Dp,
-    color: Color,
-    modifier: Modifier = Modifier
-) = then(
+fun Modifier.dropShadow(blur: Dp, offsetY: Dp, color: Color, modifier: Modifier = Modifier) = then(
     modifier.drawBehind {
         drawIntoCanvas { canvas ->
 

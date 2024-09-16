@@ -25,7 +25,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 
-class PointViewModel: ViewModel(), KoinComponent {
+class PointViewModel : ViewModel(), KoinComponent {
 
     private val memberRepository: MemberRepository by inject()
     private val pointRepository: PointRepository by inject()
@@ -47,7 +47,7 @@ class PointViewModel: ViewModel(), KoinComponent {
                             _uiState.update { state ->
                                 state.copy(
                                     students = it.data.map { it.toPointStudentModel() }.toImmutableList(),
-                                    loading = false
+                                    loading = false,
                                 )
                             }
                         }
@@ -56,7 +56,7 @@ class PointViewModel: ViewModel(), KoinComponent {
                             it.error.printStackTrace()
                             _uiState.update { state ->
                                 state.copy(
-                                    loading = false
+                                    loading = false,
                                 )
                             }
                         }
@@ -70,7 +70,7 @@ class PointViewModel: ViewModel(), KoinComponent {
                         is Result.Success -> {
                             _uiState.update { state ->
                                 state.copy(
-                                    reasons = it.data
+                                    reasons = it.data,
                                 )
                             }
                         }
@@ -85,16 +85,16 @@ class PointViewModel: ViewModel(), KoinComponent {
     }
 
     fun clickStudent(student: PointStudentModel) = viewModelScope.launch(dispatcher) {
-        _uiState.update {  state ->
+        _uiState.update { state ->
             state.copy(
                 students = state.students.map {
                     if (it.id == student.id) {
                         return@map it.copy(
-                            selected = it.selected.not()
+                            selected = it.selected.not(),
                         )
                     }
                     return@map it
-                }.toImmutableList()
+                }.toImmutableList(),
             )
         }
     }
@@ -102,20 +102,20 @@ class PointViewModel: ViewModel(), KoinComponent {
     fun givePoint(students: List<PointStudentModel>, reason: PointReason) = viewModelScope.launch(dispatcher) {
         _uiState.update {
             it.copy(
-                loading = true
+                loading = true,
             )
         }
         pointRepository.postGivePoint(
             issueAt = DodamDate.localDateNow(),
             reasonId = reason.id,
-            studentIds = students.map { it.id }
+            studentIds = students.map { it.id },
         ).collect {
             when (it) {
                 is Result.Success -> {
                     _sideEffect.emit(PointSideEffect.SuccessGivePoint)
                     _uiState.update {
                         it.copy(
-                            students = it.students.map { it.copy(selected = false) }.toImmutableList()
+                            students = it.students.map { it.copy(selected = false) }.toImmutableList(),
                         )
                     }
                 }
@@ -128,9 +128,8 @@ class PointViewModel: ViewModel(), KoinComponent {
         }
         _uiState.update {
             it.copy(
-                loading = false
+                loading = false,
             )
         }
     }
-
 }

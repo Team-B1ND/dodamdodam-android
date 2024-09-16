@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 data class PointRequest(
     val issueAt: LocalDate,
     val reasonId: Int,
-    val studentIds: List<Int>
+    val studentIds: List<Int>,
 )
