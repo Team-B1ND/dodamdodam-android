@@ -36,7 +36,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 
 @Composable
-fun OutingScreen() {
+fun OutScreen() {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
