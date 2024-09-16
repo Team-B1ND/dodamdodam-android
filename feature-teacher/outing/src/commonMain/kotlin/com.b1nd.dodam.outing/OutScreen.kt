@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +24,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -36,6 +38,7 @@ import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.outing.model.OutPendingUiState
 import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.KoinViewModelFactory
 import org.koin.compose.viewmodel.koinViewModel
@@ -147,7 +150,99 @@ fun OutScreen(
                 ) {
                     when (val data = state.outPendingUiState) {
                         OutPendingUiState.Error -> {}
-                        OutPendingUiState.Loading -> {}
+                        OutPendingUiState.Loading -> {
+
+                            Column(
+                                modifier = Modifier
+                                    .size(width = 360.dp, height = 166.dp)
+                                    .background(DodamTheme.colors.backgroundNormal),
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(width = 139.dp, height = 32.dp)
+                                        .padding(top = 10.dp, start = 10.dp)
+                                        .background(
+                                            shimmerEffect(),
+                                            RoundedCornerShape(8.dp),
+                                        ),
+                                )
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 10.dp)
+                                        .padding(top = 12.dp),
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .height(48.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(40.dp)
+                                                .background(
+                                                    shimmerEffect(),
+                                                    RoundedCornerShape(50.dp),
+                                                ),
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .size(width = 71.dp, height = 27.dp)
+                                                .padding(start = 8.dp)
+                                                .background(
+                                                    shimmerEffect(),
+                                                    RoundedCornerShape(8.dp),
+                                                ),
+                                        )
+                                        Spacer(modifier = Modifier.weight(1f))
+
+                                        Box(
+                                            modifier = Modifier
+                                                .size(width = 71.dp, height = 27.dp)
+                                                .background(
+                                                    shimmerEffect(),
+                                                    RoundedCornerShape(8.dp),
+                                                ),
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    Row(
+                                        modifier = Modifier
+                                            .height(48.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(40.dp)
+                                                .background(
+                                                    shimmerEffect(),
+                                                    RoundedCornerShape(50.dp),
+                                                ),
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .size(width = 71.dp, height = 27.dp)
+                                                .padding(start = 8.dp)
+                                                .background(
+                                                    shimmerEffect(),
+                                                    RoundedCornerShape(8.dp),
+                                                ),
+                                        )
+                                        Spacer(modifier = Modifier.weight(1f))
+
+                                        Box(
+                                            modifier = Modifier
+                                                .size(width = 71.dp, height = 27.dp)
+                                                .background(
+                                                    shimmerEffect(),
+                                                    RoundedCornerShape(8.dp),
+                                                )
+                                        )
+                                    }
+                                }
+                            }
+
+                        }
                         is OutPendingUiState.Success -> {
                             val cnt = if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
                             val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
