@@ -28,6 +28,8 @@ kotlin{
             api(projects.network.core)
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.ui)
+            implementation(projects.network.outing)
+            implementation(projects.data.outing)
         }
         androidMain.dependencies {
             implementation(libs.koin.android)
