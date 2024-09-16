@@ -43,7 +43,10 @@ import com.b1nd.dodam.data.point.model.PointType
 import com.b1nd.dodam.data.point.model.ScoreType
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.ButtonRole
+import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DividerType
+import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
@@ -59,13 +62,14 @@ import com.b1nd.dodam.ui.icons.ColoredTrophy
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GiveScreen(
-    isLoading: Boolean,
     reasonList: ImmutableList<PointReason>,
     studentList: ImmutableList<PointStudentModel>,
+    onClickGivePoint: (ImmutableList<PointStudentModel>, PointReason) -> Unit,
     popBackStack: () -> Unit,
 ) {
     var selectPointType by remember { mutableStateOf("학교") }
@@ -104,7 +108,8 @@ internal fun GiveScreen(
                     title = "상벌점 부여",
                     onBackClick = popBackStack,
                 )
-            }
+            },
+            containerColor = DodamTheme.colors.backgroundNormal
         ) { paddingValues ->
             Column(
                 modifier = Modifier
@@ -147,6 +152,8 @@ internal fun GiveScreen(
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth()
                     ) {
+
+                        // TODO 스페이싱 추가하기
                         items(
                             items = reasonList
                                 .filter {
@@ -277,7 +284,20 @@ internal fun GiveScreen(
                         category = "발급 사유",
                         content = selectReason!!.reason
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    DodamButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "부여하기",
+                        buttonRole = if (nowScoreType == ScoreType.BONUS) ButtonRole.Primary else ButtonRole.Negative,
+                        buttonSize = ButtonSize.Large,
+                        onClick = {
+                            onClickGivePoint(
+                                studentList.filter { it.selected }.toImmutableList(),
+                                selectReason!!
+                            )
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
 
                 },
                 space = 16.dp

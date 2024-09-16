@@ -41,12 +41,14 @@ kotlin {
             implementation(projects.data.nightStudy)
             implementation(projects.data.schedule)
             implementation(projects.data.member)
+            implementation(projects.data.point)
             implementation(projects.network.banner)
             implementation(projects.network.meal)
             implementation(projects.network.outing)
             implementation(projects.network.nightStudy)
             implementation(projects.network.schedule)
             implementation(projects.network.member)
+            implementation(projects.network.point)
         }
 
         androidMain.dependencies {
