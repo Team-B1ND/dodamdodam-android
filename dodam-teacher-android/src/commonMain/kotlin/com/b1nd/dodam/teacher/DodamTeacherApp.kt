@@ -55,6 +55,7 @@ import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import com.b1nd.dodam.point.navigation.POINT_ROUTE
+import com.b1nd.dodam.point.navigation.navigateToPoint
 import com.b1nd.dodam.point.navigation.pointScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
@@ -122,7 +123,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                     NavHost(
                         modifier = Modifier.fillMaxSize(),
                         navController = navHostController,
-                        startDestination = if (isLogin!!) POINT_ROUTE else ONBOARDING_ROUTE,
+                        startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE,
                     ) {
                         onboardingScreen(
                             onRegisterClick = navHostController::navigateToInfo,
