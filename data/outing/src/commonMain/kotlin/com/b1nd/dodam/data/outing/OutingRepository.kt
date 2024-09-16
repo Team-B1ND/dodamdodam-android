@@ -23,4 +23,12 @@ interface OutingRepository {
     fun deleteOuting(id: Long): Flow<Result<Unit>>
 
     fun deleteSleepover(id: Long): Flow<Result<Unit>>
+
+    fun allowSleepover(id: Long): Flow<Result<Unit>>
+
+    fun allowGoing(id: Long): Flow<Result<Unit>>
+
+    fun rejectSleepover(id: Long): Flow<Result<Unit>>
+
+    fun rejectGoing(id: Long): Flow<Result<Unit>>
 }

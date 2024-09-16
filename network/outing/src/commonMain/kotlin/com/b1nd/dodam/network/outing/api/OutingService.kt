@@ -15,6 +15,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -93,6 +94,34 @@ internal class OutingService(
     override suspend fun deleteSleepover(id: Long) {
         return defaultSafeRequest {
             client.delete(DodamUrl.SLEEPOVER + "/$id")
+                .body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun allowSleepover(id: Long) {
+        return defaultSafeRequest {
+            client.patch(DodamUrl.SLEEPOVER + "/$id/allow")
+                .body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun allowGoing(id: Long) {
+        return defaultSafeRequest {
+            client.patch(DodamUrl.OUTING + "/$id/allow")
+                .body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun rejectSleepover(id: Long) {
+        return defaultSafeRequest {
+            client.patch(DodamUrl.SLEEPOVER + "/$id/reject")
+                .body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun rejectGoing(id: Long) {
+        return defaultSafeRequest {
+            client.patch(DodamUrl.OUTING + "/$id/reject")
                 .body<DefaultResponse>()
         }
     }

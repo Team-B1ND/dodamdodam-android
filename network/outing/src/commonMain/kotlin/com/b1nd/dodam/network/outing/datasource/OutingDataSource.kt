@@ -24,4 +24,14 @@ interface OutingDataSource {
     suspend fun deleteOuting(id: Long)
 
     suspend fun deleteSleepover(id: Long)
+
+    suspend fun allowSleepover(id: Long)
+
+    suspend fun allowGoing(id: Long)
+
+    suspend fun rejectSleepover(id: Long)
+
+    suspend fun rejectGoing(id: Long)
+
+
 }

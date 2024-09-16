@@ -75,11 +75,68 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
         }
     }
 
+    fun allowSleepover(id: Long){
+        viewModelScope.launch {
+            outingRepository.allowSleepover(id).collect{
+                when(it){
+                    is Result.Error -> {
+                        it.error.printStackTrace()
+                    }
+                    Result.Loading -> {}
+                    is Result.Success -> {}
+                }
+            }
+        }
+    }
+
+    fun allowGoing(id: Long){
+        viewModelScope.launch {
+            outingRepository.allowGoing(id).collect{
+                when(it){
+                    is Result.Error -> {
+                        it.error.printStackTrace()
+                    }
+                    Result.Loading -> {}
+                    is Result.Success -> {}
+                }
+            }
+        }
+    }
+
+    fun rejectSleepover(id: Long){
+        viewModelScope.launch {
+            outingRepository.rejectSleepover(id).collect{
+                when(it){
+                    is Result.Error -> {
+                        it.error.printStackTrace()
+                    }
+                    Result.Loading -> {}
+                    is Result.Success -> {}
+                }
+            }
+        }
+    }
+
+    fun rejectGoing(id: Long){
+        viewModelScope.launch {
+            outingRepository.rejectGoing(id).collect{
+                when(it){
+                    is Result.Error -> {
+                        it.error.printStackTrace()
+                    }
+                    Result.Loading -> {}
+                    is Result.Success -> {}
+                }
+            }
+        }
+    }
+
     fun detailMember(
         name: String,
         start: String,
         end: String,
-        reason: String
+        reason: String,
+        id: Long
     ) {
         viewModelScope.launch {
             _state.update {
@@ -88,7 +145,8 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
                         name = name,
                         start = start,
                         end = end,
-                        reason = reason
+                        reason = reason,
+                        id = id
                     )
                 )
             }
