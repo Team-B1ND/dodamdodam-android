@@ -268,6 +268,7 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     onClick = {
                         onClick(OUTING_ROUTE)
                     },
+                    enable = route != OUTING_ROUTE
                 ),
                 DodamNavigationBarItem(
                     selected = route == NIGHT_STUDY_ROUTE,
