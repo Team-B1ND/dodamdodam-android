@@ -41,7 +41,10 @@ import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -282,6 +285,9 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                             } else {
                                 filteredList
                             }
+                        }.filter { studentData ->
+                            val minutesRemaining = remainingMinutes(studentData.endAt.time.toString())
+                            minutesRemaining > 0
                         }
                         Column(
                             modifier = Modifier
@@ -354,14 +360,13 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                                     ) {
                                         items(filteredMemberList.size) { listIndex ->
                                             val hours = remainingHours(
-                                                filteredMemberList[listIndex].startAt.time.toString(),
                                                 filteredMemberList[listIndex].endAt.time.toString(),
                                             )
                                             val minutes = remainingMinutes(
-                                                filteredMemberList[listIndex].startAt.time.toString(),
                                                 filteredMemberList[listIndex].endAt.time.toString(),
                                             )
-                                            val time = filteredMemberList[listIndex].startAt.date.daysUntil(filteredMemberList[listIndex].endAt.date)
+                                            val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+                                            val time = currentDate.daysUntil(filteredMemberList[listIndex].endAt.date)
                                             DodamMember(
                                                 name = filteredMemberList[listIndex].student.name,
                                                 modifier = Modifier
@@ -394,42 +399,39 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
     }
 }
 
-fun remainingHours(startTime: String, endTime: String): Int {
-    val startParts = startTime.split(":")
+fun remainingHours(endTime: String): Int {
+    val currentTime = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
     val endParts = endTime.split(":")
-
-    val startHour = startParts[0].toInt()
-    val startMinute = startParts[1].toInt()
 
     val endHour = endParts[0].toInt()
     val endMinute = endParts[1].toInt()
 
-    val startTotalMinutes = startHour * 60 + startMinute
+    val currentTotalMinutes = currentTime.hour * 60 + currentTime.minute
     val endTotalMinutes = endHour * 60 + endMinute
 
-    val totalEndMinutesAdjusted =
-        if (endTotalMinutes < startTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
-    val diffMinutes = totalEndMinutesAdjusted - startTotalMinutes
+    val totalEndMinutesAdjusted = if (endTotalMinutes < currentTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
+    val diffMinutes = totalEndMinutesAdjusted - currentTotalMinutes
 
     return diffMinutes / 60
 }
 
-fun remainingMinutes(startTime: String, endTime: String): Int {
-    val startParts = startTime.split(":")
-    val endParts = endTime.split(":")
 
-    val startHour = startParts[0].toInt()
-    val startMinute = startParts[1].toInt()
+fun remainingMinutes(endTime: String): Int {
+    val currentTime = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
+    val endParts = endTime.split(":")
 
     val endHour = endParts[0].toInt()
     val endMinute = endParts[1].toInt()
 
-    val startTotalMinutes = startHour * 60 + startMinute
+    val currentTotalMinutes = currentTime.hour * 60 + currentTime.minute
     val endTotalMinutes = endHour * 60 + endMinute
 
-    val totalEndMinutesAdjusted =
-        if (endTotalMinutes < startTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
-    val diffMinutes = totalEndMinutesAdjusted - startTotalMinutes
+    val diffMinutes = if (endTotalMinutes < currentTotalMinutes) {
+        // 현재 시간이 끝나는 시간을 넘기면 0분을 리턴
+        0
+    } else {
+        endTotalMinutes - currentTotalMinutes
+    }
 
     return diffMinutes % 60
 }

@@ -45,7 +45,10 @@ import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.until
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -291,10 +294,11 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                             .padding(bottom = 12.dp),
                                         icon = null,
                                     ) {
-                                        val start = filteredMemberList[listIndex].startAt.date
+                                        val currentDate = Clock.System.now().toLocalDateTime(
+                                            TimeZone.currentSystemDefault()).date
                                         val end = filteredMemberList[listIndex].endAt.date
 
-                                        val a = start.daysUntil(end)
+                                        val a = currentDate.daysUntil(end)
 
                                         val memberData = filteredMemberList[listIndex]
                                         val detailData = DetailMember(
