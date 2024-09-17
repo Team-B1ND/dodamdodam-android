@@ -49,7 +49,6 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.datetime.until
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -295,7 +294,8 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                         icon = null,
                                     ) {
                                         val currentDate = Clock.System.now().toLocalDateTime(
-                                            TimeZone.currentSystemDefault()).date
+                                            TimeZone.currentSystemDefault(),
+                                        ).date
                                         val end = filteredMemberList[listIndex].endAt.date
 
                                         val a = currentDate.daysUntil(end)
