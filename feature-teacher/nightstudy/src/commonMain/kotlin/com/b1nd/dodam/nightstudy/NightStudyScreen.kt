@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.common.utiles.calculateDaysBetween
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
@@ -430,62 +431,4 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
             }
         }
     }
-}
-
-fun calculateDaysBetween(startDate: String, endDate: String): Int {
-    val monthDays = mapOf(
-        1 to 31, 2 to 28, 3 to 31, 4 to 30, 5 to 31, 6 to 30,
-        7 to 31, 8 to 31, 9 to 30, 10 to 31, 11 to 30, 12 to 31,
-    )
-
-    fun isLeapYear(year: Int) = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
-
-    fun daysInMonth(year: Int, month: Int): Int {
-        return if (month == 2 && isLeapYear(year)) 29 else monthDays[month] ?: 30
-    }
-
-    val startParts = startDate.split("-").map { it.toInt() }
-    val endParts = endDate.split("-").map { it.toInt() }
-
-    val startYear = startParts[0]
-    val startMonth = startParts[1]
-    val startDay = startParts[2]
-
-    val endYear = endParts[0]
-    val endMonth = endParts[1]
-    val endDay = endParts[2]
-
-    // 날짜 차이 계산
-    var totalDays = 0
-
-    if (startYear == endYear) {
-        if (startMonth == endMonth) {
-            totalDays = endDay - startDay
-        } else {
-            totalDays += daysInMonth(startYear, startMonth) - startDay
-            for (month in (startMonth + 1) until endMonth) {
-                totalDays += daysInMonth(startYear, month)
-            }
-            totalDays += endDay
-        }
-    } else {
-        // 시작 연도의 남은 일 수
-        totalDays += daysInMonth(startYear, startMonth) - startDay
-        for (month in (startMonth + 1)..12) {
-            totalDays += daysInMonth(startYear, month)
-        }
-
-        // 중간 연도 일 수
-        for (year in (startYear + 1) until endYear) {
-            totalDays += if (isLeapYear(year)) 366 else 365
-        }
-
-        // 종료 연도의 일 수
-        for (month in 1 until endMonth) {
-            totalDays += daysInMonth(endYear, month)
-        }
-        totalDays += endDay
-    }
-
-    return totalDays
 }
