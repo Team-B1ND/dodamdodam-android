@@ -279,7 +279,8 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                             )
                             LazyColumn(
                                 modifier = Modifier
-                                    .padding(horizontal = 10.dp),
+                                    .padding(horizontal = 10.dp)
+                                    .padding(bottom = 150.dp),
                             ) {
                                 items(filteredMemberList.size) { listIndex ->
                                     DodamMember(
