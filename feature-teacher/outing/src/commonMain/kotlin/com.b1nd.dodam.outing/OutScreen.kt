@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.common.utiles.calculateDaysBetween
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
@@ -41,6 +40,7 @@ import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.daysUntil
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -358,10 +358,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                                                 filteredMemberList[listIndex].startAt.time.toString(),
                                                 filteredMemberList[listIndex].endAt.time.toString(),
                                             )
-                                            val time = calculateDaysBetween(
-                                                filteredMemberList[listIndex].startAt.date.toString(),
-                                                filteredMemberList[listIndex].endAt.date.toString(),
-                                            )
+                                            val time = filteredMemberList[listIndex].startAt.date.daysUntil(filteredMemberList[listIndex].endAt.date)
                                             DodamMember(
                                                 name = filteredMemberList[listIndex].student.name,
                                                 modifier = Modifier

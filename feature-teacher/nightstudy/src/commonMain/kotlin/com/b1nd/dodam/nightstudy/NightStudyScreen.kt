@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.common.utiles.calculateDaysBetween
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
@@ -46,6 +45,8 @@ import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.daysUntil
+import kotlinx.datetime.until
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -290,10 +291,10 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                             .padding(bottom = 12.dp),
                                         icon = null,
                                     ) {
-                                        val start = filteredMemberList[listIndex].startAt.date.toString()
-                                        val end = filteredMemberList[listIndex].endAt.date.toString()
+                                        val start = filteredMemberList[listIndex].startAt.date
+                                        val end = filteredMemberList[listIndex].endAt.date
 
-                                        val a = calculateDaysBetween(start, end)
+                                        val a = start.daysUntil(end)
 
                                         val memberData = filteredMemberList[listIndex]
                                         val detailData = DetailMember(
