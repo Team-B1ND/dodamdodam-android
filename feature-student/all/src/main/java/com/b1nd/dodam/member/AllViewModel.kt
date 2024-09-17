@@ -24,10 +24,10 @@ class AllViewModel : ViewModel(), KoinComponent {
                 _uiState.update { uiState ->
                     when (result) {
                         is Result.Success -> {
-                            Log.d("AllViewModel", "myInfo ${uiState.myInfo?.name}")
+                            Log.d("AllViewModel", "myInfo ${uiState.memberInfo?.name}")
                             uiState.copy(
                                 isLoading = false,
-                                myInfo = result.data,
+                                memberInfo = result.data,
                                 isSimmer = false,
                             )
                         }

@@ -19,6 +19,7 @@ kotlin {
     )
 
     sourceSets.commonMain.dependencies {
+        implementation(libs.multiplatform.compose.ui.graphics)
         implementation(libs.dodam.design.system.cmm)
     }
 }

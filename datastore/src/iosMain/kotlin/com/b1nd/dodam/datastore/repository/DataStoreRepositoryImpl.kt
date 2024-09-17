@@ -18,6 +18,7 @@ import platform.CoreFoundation.CFDictionaryRef
 import platform.CoreFoundation.CFStringRef
 import platform.CoreFoundation.CFTypeRef
 import platform.CoreFoundation.CFTypeRefVar
+import platform.CoreFoundation.kCFBooleanFalse
 import platform.CoreFoundation.kCFBooleanTrue
 import platform.Foundation.CFBridgingRelease
 import platform.Foundation.CFBridgingRetain
@@ -106,10 +107,14 @@ class DataStoreRepositoryImpl : DataStoreRepository {
         val query = query(
             kSecClass to kSecClassGenericPassword,
             kSecAttrAccount to account,
+            kSecReturnData to kCFBooleanFalse,
+        )
+
+        val updateQuery = query(
             kSecValueData to data,
         )
 
-        SecItemUpdate(query, null).validate()
+        SecItemUpdate(query, updateQuery).validate()
     }
 
     private fun delete(key: String): Boolean = context(key) { (account) ->
