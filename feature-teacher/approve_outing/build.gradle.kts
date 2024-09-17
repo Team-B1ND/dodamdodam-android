@@ -31,9 +31,6 @@ kotlin{
             implementation(projects.network.outing)
             implementation(projects.data.outing)
         }
-        androidMain.dependencies {
-            implementation(libs.koin.android)
-        }
     }
 }
 

@@ -30,9 +30,6 @@ kotlin{
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.ui)
         }
-        androidMain.dependencies {
-            implementation(libs.koin.android)
-        }
     }
 }
 
