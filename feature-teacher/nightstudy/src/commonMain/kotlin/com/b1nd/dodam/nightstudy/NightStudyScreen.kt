@@ -121,6 +121,10 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
         ) {
             if (bottomSheet) {
                 DodamModalBottomSheet(
+                    shape = RoundedCornerShape(
+                        topStart = 28.dp,
+                        topEnd = 28.dp
+                    ),
                     onDismissRequest = { bottomSheet = false },
                     title = {
                         Text(

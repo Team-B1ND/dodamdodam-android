@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -111,6 +112,10 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
     ) {
         if (selectedItemIndex >= 0) {
             DodamModalBottomSheet(
+                shape = RoundedCornerShape(
+                    topStart = 28.dp,
+                    topEnd = 28.dp
+                ),
                 onDismissRequest = { selectedItemIndex = -1 },
                 title = {
                     Text(
