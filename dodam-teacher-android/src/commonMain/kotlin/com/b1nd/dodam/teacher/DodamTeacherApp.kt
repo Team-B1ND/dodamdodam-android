@@ -207,7 +207,6 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                         approveOutingScreen(
                             onBackClick = navHostController::popBackStack,
                         )
-
                     }
 
                     // Bottom Navigation
@@ -231,7 +230,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                                 launchSingleTop = true
                                 restoreState = true
                             }
-                        }
+                        },
                     )
                 }
             }
@@ -240,11 +239,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 }
 
 @Composable
-private fun DodamTeacherBottomNavigation(
-    modifier: Modifier = Modifier,
-    backStackEntry: NavBackStackEntry?,
-    onClick: (destination: String) -> Unit
-) {
+private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
     val route = backStackEntry?.destination?.route
 
     if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE, NIGHT_STUDY_ROUTE, OUTING_ROUTE)) {
