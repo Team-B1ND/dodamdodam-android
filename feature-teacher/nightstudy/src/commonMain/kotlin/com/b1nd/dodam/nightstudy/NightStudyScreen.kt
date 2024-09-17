@@ -252,6 +252,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                         .fillMaxWidth()
                         .padding(vertical = 20.dp)
                         .wrapContentHeight()
+                        .padding(bottom = 80.dp)
                         .clip(shape = RoundedCornerShape(18.dp))
                         .background(DodamTheme.colors.staticWhite),
                 ) {
@@ -281,8 +282,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                             )
                             LazyColumn(
                                 modifier = Modifier
-                                    .padding(horizontal = 10.dp)
-                                    .padding(bottom = 150.dp),
+                                    .padding(horizontal = 10.dp),
                             ) {
                                 items(filteredMemberList.size) { listIndex ->
                                     DodamMember(

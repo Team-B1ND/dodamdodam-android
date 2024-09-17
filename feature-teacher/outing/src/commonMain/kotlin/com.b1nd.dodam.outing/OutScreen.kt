@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -285,6 +286,8 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .fillMaxHeight()
+                                .padding(bottom = 60.dp)
                                 .padding(vertical = 20.dp),
                         ) {
                             if (cnt != 0) {
@@ -335,7 +338,8 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                                         .fillMaxWidth()
                                         .wrapContentHeight()
                                         .clip(shape = RoundedCornerShape(18.dp))
-                                        .background(DodamTheme.colors.staticWhite),
+                                        .background(DodamTheme.colors.staticWhite)
+
                                 ) {
                                     Text(
                                         text = if (titleIndex == 0) "외출 중인 학생" else "외박 중인 학생",
@@ -347,7 +351,6 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                                     LazyColumn(
                                         modifier = Modifier
                                             .padding(horizontal = 10.dp)
-                                            .padding(bottom = 150.dp),
                                     ) {
                                         items(filteredMemberList.size) { listIndex ->
                                             val hours = remainingHours(
