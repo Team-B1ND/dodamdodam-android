@@ -1,4 +1,4 @@
-package com.b1nd.dodam.approve
+package com.b1nd.dodam.approveouting
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.approveouting.viewmodel.ApproveOutViewModel
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
@@ -248,7 +249,7 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                     OutPendingUiState.Error -> {}
                     OutPendingUiState.Loading -> {}
                     is OutPendingUiState.Success -> {
-                        val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                        val members = if (titleIndex == 0) data.ingData else data.pendingData
                         val filteredMemberList = members.filter { studentData ->
                             when {
                                 gradeIndex == 0 && roomIndex == 0 -> true

@@ -1,4 +1,4 @@
-package com.b1nd.dodam.approve
+package com.b1nd.dodam.approveouting
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.material3.ExperimentalMaterial3Api
