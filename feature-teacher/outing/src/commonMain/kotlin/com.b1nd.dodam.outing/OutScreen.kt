@@ -266,26 +266,19 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                     is OutPendingUiState.Success -> {
                         val cnt =
                             if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
-                        val members =
-                            if (titleIndex == 0) data.outMembers else data.sleepoverMembers
-                        var filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
-                            members
-                        } else if (gradeIndex == 0 && roomIndex != 0) {
-                            members.filter { studentData ->
-                                studentData.student.room == roomIndex
+                        val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                        val filteredMemberList = members.filter { studentData ->
+                            when {
+                                gradeIndex == 0 && roomIndex == 0 -> true
+                                gradeIndex == 0 && roomIndex != 0 -> studentData.student.room == roomIndex
+                                gradeIndex != 0 && roomIndex == 0 -> studentData.student.grade == gradeIndex
+                                else -> studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
                             }
-                        } else if (gradeIndex != 0 && roomIndex == 0) {
-                            members.filter { studentData ->
-                                studentData.student.grade == gradeIndex
-                            }
-                        } else {
-                            members.filter { studentData ->
-                                studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
-                            }
-                        }
-                        if (searchStudent.isNotEmpty()) {
-                            filteredMemberList = filteredMemberList.filter {
-                                it.student.name.contains(searchStudent) == true
+                        }.let { filteredList ->
+                            if (searchStudent.isNotEmpty()) {
+                                filteredList.filter { it.student.name.contains(searchStudent) }
+                            } else {
+                                filteredList
                             }
                         }
                         Column(
