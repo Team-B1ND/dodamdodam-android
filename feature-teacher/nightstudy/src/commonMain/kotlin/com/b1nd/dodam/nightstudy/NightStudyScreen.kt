@@ -255,26 +255,19 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                 ) {
                     when (val data = uiState.nightStudyUiState) {
                         is NightStudyUiState.Success -> {
-                            val memberList = if (titleIndex == 0) data.ingData else data.pendingData
-
-                            var filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
-                                memberList
-                            } else if (gradeIndex == 0 && roomIndex != 0) {
-                                memberList.filter { studentData ->
-                                    studentData.student.room == roomIndex
+                            val members = if (titleIndex == 0) data.ingData else data.pendingData
+                            val filteredMemberList = members.filter { studentData ->
+                                when {
+                                    gradeIndex == 0 && roomIndex == 0 -> true
+                                    gradeIndex == 0 && roomIndex != 0 -> studentData.student.room == roomIndex
+                                    gradeIndex != 0 && roomIndex == 0 -> studentData.student.grade == gradeIndex
+                                    else -> studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
                                 }
-                            } else if (gradeIndex != 0 && roomIndex == 0) {
-                                memberList.filter { studentData ->
-                                    studentData.student.grade == gradeIndex
-                                }
-                            } else {
-                                memberList.filter { studentData ->
-                                    studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
-                                }
-                            }
-                            if (searchStudent.isNotEmpty()) {
-                                filteredMemberList = filteredMemberList.filter {
-                                    it.student.name.contains(searchStudent) == true
+                            }.let { filteredList ->
+                                if (searchStudent.isNotEmpty()) {
+                                    filteredList.filter { it.student.name.contains(searchStudent) }
+                                } else {
+                                    filteredList
                                 }
                             }
                             Text(
