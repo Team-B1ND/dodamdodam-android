@@ -3,7 +3,7 @@ package com.b1nd.dodam.member.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MyInfoResponse(
+data class MemberInfoResponse(
     val createdAt: String,
     val email: String,
     val id: String,

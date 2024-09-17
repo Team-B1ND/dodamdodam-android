@@ -34,6 +34,7 @@ kotlin {
             implementation(projects.feature.meal)
             implementation(projects.featureTeacher.outing)
             implementation(projects.featureTeacher.approveOuting)
+            implementation(projects.featureTeacher.point)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)
@@ -41,11 +42,15 @@ kotlin {
             implementation(projects.data.outing)
             implementation(projects.data.nightStudy)
             implementation(projects.data.schedule)
+            implementation(projects.data.member)
+            implementation(projects.data.point)
             implementation(projects.network.banner)
             implementation(projects.network.meal)
             implementation(projects.network.outing)
             implementation(projects.network.nightStudy)
             implementation(projects.network.schedule)
+            implementation(projects.network.member)
+            implementation(projects.network.point)
         }
 
         androidMain.dependencies {
