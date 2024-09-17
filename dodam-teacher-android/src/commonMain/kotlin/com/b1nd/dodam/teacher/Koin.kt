@@ -1,6 +1,6 @@
 package com.b1nd.dodam.teacher
 
-import com.b1nd.dodam.approve.approveOutingViewModelModule
+import com.b1nd.dodam.approveouting.approveOutingViewModelModule
 import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
 import com.b1nd.dodam.data.banner.di.bannerRepositoryModule
