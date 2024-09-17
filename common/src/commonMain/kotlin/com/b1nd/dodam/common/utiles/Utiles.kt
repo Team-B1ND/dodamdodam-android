@@ -29,7 +29,6 @@ fun <T1, T2, R> combineWhenAllComplete(flow1: Flow<T1>, flow2: Flow<T2>, transfo
     emit(transform(lastValue1!!, lastValue2!!))
 }
 
-
 fun calculateDaysBetween(startDate: String, endDate: String): Int {
     val monthDays = mapOf(
         1 to 31, 2 to 28, 3 to 31, 4 to 30, 5 to 31, 6 to 30,
