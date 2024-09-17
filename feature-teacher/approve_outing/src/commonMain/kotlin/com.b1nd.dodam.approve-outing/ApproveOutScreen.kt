@@ -42,14 +42,9 @@ import com.b1nd.dodam.ui.component.DodamMember
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApproveOutScreen(
-    viewModel: ApproveOutViewModel = koinViewModel(),
-    onBackClick: () -> Unit
-) {
-
+fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackClick: () -> Unit) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -110,7 +105,7 @@ fun ApproveOutScreen(
                 modifier = Modifier.statusBarsPadding(),
                 onBackClick = {
                     onBackClick()
-                }
+                },
             )
         },
     ) {
@@ -122,14 +117,14 @@ fun ApproveOutScreen(
                         text = "${state.detailMember.name}님의 ${if (titleIndex == 0)"외출" else "외박"}정보",
                         style = DodamTheme.typography.heading1Bold(),
                         color = DodamTheme.colors.labelNormal,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier.padding(bottom = 16.dp),
                     )
                 },
                 content = {
                     Column {
-                        Row (
-                            modifier = Modifier.padding(bottom = 12.dp)
-                        ){
+                        Row(
+                            modifier = Modifier.padding(bottom = 12.dp),
+                        ) {
                             Text(
                                 text = if (titleIndex == 0)"외출 일시" else "외박 날짜",
                                 style = DodamTheme.typography.headlineMedium(),
@@ -142,9 +137,9 @@ fun ApproveOutScreen(
                                 color = DodamTheme.colors.labelNeutral,
                             )
                         }
-                        Row (
-                            modifier = Modifier.padding(bottom = 12.dp)
-                        ){
+                        Row(
+                            modifier = Modifier.padding(bottom = 12.dp),
+                        ) {
                             Text(
                                 text = if (titleIndex == 0)"복귀 일시" else "복귀 날짜",
                                 style = DodamTheme.typography.headlineMedium(),
@@ -176,9 +171,9 @@ fun ApproveOutScreen(
                         ) {
                             DodamButton(
                                 onClick = {
-                                    if (titleIndex == 1){
+                                    if (titleIndex == 1) {
                                         viewModel.rejectSleepover(state.detailMember.id)
-                                    }else{
+                                    } else {
                                         viewModel.rejectGoing(state.detailMember.id)
                                     }
                                     selectedItemIndex = -1
@@ -191,9 +186,9 @@ fun ApproveOutScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                             DodamButton(
                                 onClick = {
-                                    if (titleIndex == 1){
+                                    if (titleIndex == 1) {
                                         viewModel.allowSleepover(state.detailMember.id)
-                                    }else{
+                                    } else {
                                         viewModel.allowGoing(state.detailMember.id)
                                     }
                                     selectedItemIndex = -1
@@ -205,7 +200,7 @@ fun ApproveOutScreen(
                             )
                         }
                     }
-                }
+                },
             )
         }
         Box(
@@ -271,7 +266,7 @@ fun ApproveOutScreen(
                             }
                         }
                         LazyColumn(
-                            modifier = Modifier.padding(top = 20.dp)
+                            modifier = Modifier.padding(top = 20.dp),
                         ) {
                             items(filteredMemberList.size) { index ->
                                 DodamMember(
@@ -287,15 +282,15 @@ fun ApproveOutScreen(
                                                     start = getDate(filteredMemberList[index].startAt.date.toString()),
                                                     end = getDate(filteredMemberList[index].endAt.date.toString()),
                                                     reason = filteredMemberList[index].reason,
-                                                    id = filteredMemberList[index].id
-                                                    )
-                                            }else{
+                                                    id = filteredMemberList[index].id,
+                                                )
+                                            } else {
                                                 viewModel.detailMember(
                                                     name = filteredMemberList[index].student.name,
-                                                    start = getTime( filteredMemberList[index].startAt.toString()),
-                                                    end = getTime( filteredMemberList[index].endAt.toString()),
+                                                    start = getTime(filteredMemberList[index].startAt.toString()),
+                                                    end = getTime(filteredMemberList[index].endAt.toString()),
                                                     reason = filteredMemberList[index].reason,
-                                                    id = filteredMemberList[index].id
+                                                    id = filteredMemberList[index].id,
                                                 )
                                             }
                                         },
@@ -307,10 +302,10 @@ fun ApproveOutScreen(
                                                     .size(24.dp),
                                                 imageVector = DodamIcons.CheckmarkCircle.value,
                                                 contentDescription = null,
-                                                colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
+                                                colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                                             )
                                         }
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -321,15 +316,15 @@ fun ApproveOutScreen(
     }
 }
 
-fun getTime(time: String): String{
+fun getTime(time: String): String {
     val date1 = time.split("T")[0].split("-")[1].toInt()
     val date2 = time.split("T")[0].split("-")[2].toInt()
     val hour = time.split("T")[1].split(":")[0].toInt()
     val minute = time.split("T")[1].split(":")[1].toInt()
 
-    return "${date1}월 ${date2}일 ${hour}:${minute}"
+    return "${date1}월 ${date2}일 $hour:$minute"
 }
-fun getDate(date: String): String{
+fun getDate(date: String): String {
     val atoms = date.split("-")
     return "${atoms[1].toInt()}월 ${atoms[2].toInt()}일"
 }

@@ -18,13 +18,11 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-
 class ApproveOutViewModel : ViewModel(), KoinComponent {
     private val outingRepository: OutingRepository by inject()
 
     private val _state = MutableStateFlow(ApproveOutState())
     val state = _state.asStateFlow()
-
 
     fun load() = viewModelScope.launch {
         val date = DodamDate.localDateNow()
@@ -64,21 +62,21 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
 
             return@combineWhenAllComplete OutPendingUiState.Success(
                 outMembers = outMembers,
-                sleepoverMembers = sleepoverMembers
+                sleepoverMembers = sleepoverMembers,
             )
         }.collect { state ->
             _state.update {
                 it.copy(
-                    outPendingUiState = state
+                    outPendingUiState = state,
                 )
             }
         }
     }
 
-    fun allowSleepover(id: Long){
+    fun allowSleepover(id: Long) {
         viewModelScope.launch {
-            outingRepository.allowSleepover(id).collect{
-                when(it){
+            outingRepository.allowSleepover(id).collect {
+                when (it) {
                     is Result.Error -> {
                         it.error.printStackTrace()
                     }
@@ -89,10 +87,10 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun allowGoing(id: Long){
+    fun allowGoing(id: Long) {
         viewModelScope.launch {
-            outingRepository.allowGoing(id).collect{
-                when(it){
+            outingRepository.allowGoing(id).collect {
+                when (it) {
                     is Result.Error -> {
                         it.error.printStackTrace()
                     }
@@ -103,10 +101,10 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun rejectSleepover(id: Long){
+    fun rejectSleepover(id: Long) {
         viewModelScope.launch {
-            outingRepository.rejectSleepover(id).collect{
-                when(it){
+            outingRepository.rejectSleepover(id).collect {
+                when (it) {
                     is Result.Error -> {
                         it.error.printStackTrace()
                     }
@@ -117,10 +115,10 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun rejectGoing(id: Long){
+    fun rejectGoing(id: Long) {
         viewModelScope.launch {
-            outingRepository.rejectGoing(id).collect{
-                when(it){
+            outingRepository.rejectGoing(id).collect {
+                when (it) {
                     is Result.Error -> {
                         it.error.printStackTrace()
                     }
@@ -131,13 +129,7 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun detailMember(
-        name: String,
-        start: String,
-        end: String,
-        reason: String,
-        id: Long
-    ) {
+    fun detailMember(name: String, start: String, end: String, reason: String, id: Long) {
         viewModelScope.launch {
             _state.update {
                 it.copy(
@@ -146,8 +138,8 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
                         start = start,
                         end = end,
                         reason = reason,
-                        id = id
-                    )
+                        id = id,
+                    ),
                 )
             }
         }

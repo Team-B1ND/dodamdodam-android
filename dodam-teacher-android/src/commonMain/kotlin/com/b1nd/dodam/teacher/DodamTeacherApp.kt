@@ -32,7 +32,6 @@ import coil3.memory.MemoryCache
 import coil3.network.ktor.KtorNetworkFetcherFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
-import com.b1nd.dodam.approve.APPROVE_OUTING_ROUTE
 import com.b1nd.dodam.approve.approveOutingScreen
 import com.b1nd.dodam.approve.navigateToApproveOuting
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -160,10 +159,10 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 
                     mealScreen()
                     outingScreen(
-                        navHostController::navigateToApproveOuting
+                        navHostController::navigateToApproveOuting,
                     )
                     approveOutingScreen(
-                        onBackClick = navHostController::popBackStack
+                        onBackClick = navHostController::popBackStack,
                     )
                 }
 

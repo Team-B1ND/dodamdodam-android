@@ -57,7 +57,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             mealViewModelModule,
             nightStudyViewModelModule,
             outingViewModelModule,
-            approveOutingViewModelModule
+            approveOutingViewModelModule,
         )
         block()
     }

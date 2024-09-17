@@ -1,7 +1,6 @@
 package com.b1nd.dodam.outing.model
 
 import com.b1nd.dodam.data.outing.model.Outing
-import com.b1nd.dodam.network.outing.model.OutingResponse
 import kotlinx.collections.immutable.ImmutableList
 
 data class OutState(
@@ -13,7 +12,7 @@ sealed interface OutPendingUiState {
         val outPendingCount: Int,
         val sleepoverPendingCount: Int,
         val outMembers: ImmutableList<Outing>,
-        val sleepoverMembers: ImmutableList<Outing>
+        val sleepoverMembers: ImmutableList<Outing>,
     ) : OutPendingUiState
     data object Loading : OutPendingUiState
     data object Error : OutPendingUiState
