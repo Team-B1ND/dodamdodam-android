@@ -102,6 +102,7 @@ multiplatform-compose-material3 = { group = "org.jetbrains.compose.material3", n
 multiplatform-compose-material = { group = "org.jetbrains.compose.material", name = "material", version.ref = "compose-plugin"}
 multiplatform-compose-ui-tooling-preview = { group = "org.jetbrains.compose.ui", name = "ui-tooling-preview", version.ref = "compose-plugin"}
 multiplatform-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
+multiplatform-compose-ui-graphics = { group = "org.jetbrains.compose.ui", name = "ui-graphics", version.ref = "compose-plugin"}
 multiplatform-compose-components-resources = { group = "org.jetbrains.compose.components", name = "components-resources", version.ref = "compose-plugin"}
 
 # google

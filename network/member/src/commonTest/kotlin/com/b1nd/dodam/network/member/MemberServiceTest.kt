@@ -1,7 +1,7 @@
 package com.b1nd.dodam.network.member
 
 import com.b1nd.dodam.member.api.MemberService
-import com.b1nd.dodam.member.model.MyInfoResponse
+import com.b1nd.dodam.member.model.MemberInfoResponse
 import com.b1nd.dodam.member.model.StudentResponse
 import com.b1nd.dodam.member.model.TeacherResponse
 import com.b1nd.dodam.network.core.DodamUrl
@@ -102,7 +102,7 @@ class MemberServiceTest {
         val response = memberService.getMyInfo()
 
         assertEquals(
-            MyInfoResponse(
+            MemberInfoResponse(
                 createdAt = "2023-08-01T12:00:00Z",
                 email = "example@example.com",
                 id = "12345",

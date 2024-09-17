@@ -450,7 +450,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                                 .background(
                                                     shimmerEffect(),
                                                     RoundedCornerShape(8.dp),
-                                                )
+                                                ),
                                         )
                                     }
                                 }
