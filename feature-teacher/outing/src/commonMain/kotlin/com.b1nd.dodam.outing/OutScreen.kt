@@ -344,7 +344,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                                         .fillMaxWidth()
                                         .wrapContentHeight()
                                         .clip(shape = RoundedCornerShape(18.dp))
-                                        .background(DodamTheme.colors.staticWhite)
+                                        .background(DodamTheme.colors.staticWhite),
 
                                 ) {
                                     Text(
@@ -356,7 +356,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                                     )
                                     LazyColumn(
                                         modifier = Modifier
-                                            .padding(horizontal = 10.dp)
+                                            .padding(horizontal = 10.dp),
                                     ) {
                                         items(filteredMemberList.size) { listIndex ->
                                             val hours = remainingHours(
@@ -414,7 +414,6 @@ fun remainingHours(endTime: String): Int {
 
     return diffMinutes / 60
 }
-
 
 fun remainingMinutes(endTime: String): Int {
     val currentTime = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
