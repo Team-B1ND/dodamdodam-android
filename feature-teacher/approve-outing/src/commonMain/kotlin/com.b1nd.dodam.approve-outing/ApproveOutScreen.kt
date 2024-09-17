@@ -249,19 +249,19 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                     OutPendingUiState.Error -> {}
                     OutPendingUiState.Loading -> {}
                     is OutPendingUiState.Success -> {
-                        val members = if (titleIndex == 0) data.ingData else data.pendingData
+                        val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
                         val filteredMemberList = members.filter { member ->
                             when {
                                 gradeIndex == 0 && roomIndex == 0 -> true
                                 gradeIndex == 0 && roomIndex != 0 -> member.student.room == roomIndex
                                 gradeIndex != 0 && roomIndex == 0 -> member.student.grade == gradeIndex
-                                else -> studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
+                                else -> member.student.grade == gradeIndex && member.student.room == roomIndex
                             }
                         }.let { list ->
                             if (searchStudent.isNotEmpty()) {
-                                filteredList.filter { it.list.name.contains(searchStudent) }
+                                list.filter { it.student.name.contains(searchStudent) }
                             } else {
-                                filteredList
+                                list
                             }
                         }
                         LazyColumn(

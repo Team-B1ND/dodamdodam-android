@@ -204,7 +204,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                             navHostController::navigateToOuting,
                         )
                         approveOutingScreen(
-                            onBackClick = navHostController::popBackStack
+                            onBackClick = navHostController::popBackStack,
                         )
                     }
 
@@ -267,7 +267,7 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     onClick = {
                         onClick(OUTING_ROUTE)
                     },
-                    enable = route != OUTING_ROUTE
+                    enable = route != OUTING_ROUTE,
                 ),
                 DodamNavigationBarItem(
                     selected = route == NIGHT_STUDY_ROUTE,

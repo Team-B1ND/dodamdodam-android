@@ -2,9 +2,9 @@ package com.b1nd.dodam.approveouting.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.b1nd.dodam.approve.ApproveOutState
-import com.b1nd.dodam.approve.DetailMember
-import com.b1nd.dodam.approve.OutPendingUiState
+import com.b1nd.dodam.approveouting.ApproveOutState
+import com.b1nd.dodam.approveouting.DetailMember
+import com.b1nd.dodam.approveouting.OutPendingUiState
 import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.utiles.combineWhenAllComplete
