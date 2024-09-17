@@ -114,7 +114,7 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
             DodamModalBottomSheet(
                 shape = RoundedCornerShape(
                     topStart = 28.dp,
-                    topEnd = 28.dp
+                    topEnd = 28.dp,
                 ),
                 onDismissRequest = { selectedItemIndex = -1 },
                 title = {

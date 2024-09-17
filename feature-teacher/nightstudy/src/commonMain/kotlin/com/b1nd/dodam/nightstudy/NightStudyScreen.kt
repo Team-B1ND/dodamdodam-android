@@ -123,7 +123,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                 DodamModalBottomSheet(
                     shape = RoundedCornerShape(
                         topStart = 28.dp,
-                        topEnd = 28.dp
+                        topEnd = 28.dp,
                     ),
                     onDismissRequest = { bottomSheet = false },
                     title = {
