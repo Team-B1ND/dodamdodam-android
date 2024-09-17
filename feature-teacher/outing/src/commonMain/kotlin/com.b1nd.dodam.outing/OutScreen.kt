@@ -40,15 +40,10 @@ import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.toImmutableList
-import org.koin.compose.viewmodel.KoinViewModelFactory
 import org.koin.compose.viewmodel.koinViewModel
 
-
 @Composable
-fun OutScreen(
-    viewModel: OutViewModel = koinViewModel(),
-    navigateToApprove: () -> Unit
-) {
+fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -> Unit) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -152,7 +147,7 @@ fun OutScreen(
                                 .fillMaxWidth()
                                 .padding(top = 20.dp)
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite)
+                                .background(DodamTheme.colors.staticWhite),
                         ) {
                             Box(
                                 modifier = Modifier
@@ -180,7 +175,7 @@ fun OutScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 20.dp)
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite)
+                                .background(DodamTheme.colors.staticWhite),
                         ) {
                             Box(
                                 modifier = Modifier
@@ -261,12 +256,11 @@ fun OutScreen(
                                             .background(
                                                 shimmerEffect(),
                                                 RoundedCornerShape(8.dp),
-                                            )
+                                            ),
                                     )
                                 }
                             }
                         }
-
                     }
 
                     is OutPendingUiState.Success -> {
@@ -297,33 +291,33 @@ fun OutScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 20.dp)
+                                .padding(vertical = 20.dp),
                         ) {
                             if (cnt != 0) {
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clip(shape = RoundedCornerShape(18.dp))
-                                        .background(DodamTheme.colors.staticWhite)
+                                        .background(DodamTheme.colors.staticWhite),
                                 ) {
                                     Row(
                                         modifier = Modifier
-                                            .padding(start = 16.dp, top = 16.dp)
+                                            .padding(start = 16.dp, top = 16.dp),
                                     ) {
                                         Text(
                                             text = "현재 ",
                                             color = DodamTheme.colors.labelStrong,
-                                            style = DodamTheme.typography.headlineBold()
+                                            style = DodamTheme.typography.headlineBold(),
                                         )
                                         Text(
                                             text = "${cnt}명 ",
                                             color = DodamTheme.colors.primaryNormal,
-                                            style = DodamTheme.typography.headlineBold()
+                                            style = DodamTheme.typography.headlineBold(),
                                         )
                                         Text(
                                             text = "승인 대기 중 ",
                                             color = DodamTheme.colors.labelStrong,
-                                            style = DodamTheme.typography.headlineBold()
+                                            style = DodamTheme.typography.headlineBold(),
                                         )
                                     }
 
@@ -336,7 +330,7 @@ fun OutScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(horizontal = 16.dp)
-                                            .padding(top = 12.dp, bottom = 16.dp)
+                                            .padding(top = 12.dp, bottom = 16.dp),
                                     )
                                 }
                                 Spacer(modifier = Modifier.height(20.dp))
@@ -363,15 +357,15 @@ fun OutScreen(
                                         items(filteredMemberList.size) { listIndex ->
                                             val hours = remainingHours(
                                                 filteredMemberList[listIndex].startAt.time.toString(),
-                                                filteredMemberList[listIndex].endAt.time.toString()
+                                                filteredMemberList[listIndex].endAt.time.toString(),
                                             )
                                             val minutes = remainingMinutes(
                                                 filteredMemberList[listIndex].startAt.time.toString(),
-                                                filteredMemberList[listIndex].endAt.time.toString()
+                                                filteredMemberList[listIndex].endAt.time.toString(),
                                             )
                                             val time = calculateDaysBetween(
                                                 filteredMemberList[listIndex].startAt.date.toString(),
-                                                filteredMemberList[listIndex].endAt.date.toString()
+                                                filteredMemberList[listIndex].endAt.date.toString(),
                                             )
                                             DodamMember(
                                                 name = filteredMemberList[listIndex].student.name,
@@ -380,11 +374,18 @@ fun OutScreen(
                                                 icon = null,
                                             ) {
                                                 Text(
-                                                    text = if (titleIndex == 0) if (hours > 0) "${hours}시간 남음" else "${minutes}분 남음" else if (time > 1) "${time}일 남음" else "오늘 복귀",
+                                                    text = if (titleIndex == 0) {
+                                                        if (hours > 0) "${hours}시간 남음" else "${minutes}분 남음"
+                                                    } else {
+                                                        if (time > 1) "${time}일 남음" else "오늘 복귀"
+                                                    },
                                                     style = DodamTheme.typography.headlineMedium(),
-                                                    color = if (hours > 0 || minutes > 30 || time > 1) DodamTheme.colors.labelAssistive else DodamTheme.colors.primaryNormal,
+                                                    color = if (hours > 0 || minutes > 30 || time > 1) {
+                                                        DodamTheme.colors.labelAssistive
+                                                    } else {
+                                                        DodamTheme.colors.primaryNormal
+                                                    },
                                                 )
-
                                             }
                                         }
                                     }
@@ -397,7 +398,6 @@ fun OutScreen(
         }
     }
 }
-
 
 fun remainingHours(startTime: String, endTime: String): Int {
     val startParts = startTime.split(":")
@@ -442,7 +442,7 @@ fun remainingMinutes(startTime: String, endTime: String): Int {
 fun calculateDaysBetween(startDate: String, endDate: String): Int {
     val monthDays = mapOf(
         1 to 31, 2 to 28, 3 to 31, 4 to 30, 5 to 31, 6 to 30,
-        7 to 31, 8 to 31, 9 to 30, 10 to 31, 11 to 30, 12 to 31
+        7 to 31, 8 to 31, 9 to 30, 10 to 31, 11 to 30, 12 to 31,
     )
 
     fun isLeapYear(year: Int) = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))

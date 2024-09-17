@@ -421,7 +421,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                                 .background(
                                                     shimmerEffect(),
                                                     RoundedCornerShape(8.dp),
-                                                )
+                                                ),
                                         )
                                     }
                                 }
@@ -437,7 +437,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
 fun calculateDaysBetween(startDate: String, endDate: String): Int {
     val monthDays = mapOf(
         1 to 31, 2 to 28, 3 to 31, 4 to 30, 5 to 31, 6 to 30,
-        7 to 31, 8 to 31, 9 to 30, 10 to 31, 11 to 30, 12 to 31
+        7 to 31, 8 to 31, 9 to 30, 10 to 31, 11 to 30, 12 to 31,
     )
 
     fun isLeapYear(year: Int) = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))

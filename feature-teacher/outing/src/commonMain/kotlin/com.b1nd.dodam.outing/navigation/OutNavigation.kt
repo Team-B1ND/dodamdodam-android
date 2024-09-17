@@ -27,7 +27,7 @@ fun NavGraphBuilder.outingScreen(navigateToApprove: () -> Unit) {
         popExitTransition = { ExitTransition.None },
     ) {
         OutScreen(
-            navigateToApprove = navigateToApprove
+            navigateToApprove = navigateToApprove,
         )
     }
 }

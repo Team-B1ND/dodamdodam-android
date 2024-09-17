@@ -32,6 +32,4 @@ interface OutingDataSource {
     suspend fun rejectSleepover(id: Long)
 
     suspend fun rejectGoing(id: Long)
-
-
 }
