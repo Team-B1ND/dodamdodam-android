@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TeacherResponse(
-    val id: Int,
+    val name: String,
     val position: String,
     val tel: String,
 )

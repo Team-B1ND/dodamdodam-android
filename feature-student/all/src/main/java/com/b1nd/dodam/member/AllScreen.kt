@@ -130,7 +130,7 @@ fun AllScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    uiState.myInfo?.let { myInfo ->
+                    uiState.memberInfo?.let { myInfo ->
                         Box {
                             if (myInfo.profileImage != null) {
                                 AsyncImage(

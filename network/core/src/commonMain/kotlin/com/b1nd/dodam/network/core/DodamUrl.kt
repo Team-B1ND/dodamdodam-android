@@ -32,6 +32,7 @@ object DodamUrl {
         const val REGISTER_TEACHER = "$MEMBER/join-teacher"
         const val MY = "$MEMBER/my"
         const val DEACTIVATION = "$MEMBER/deactivate"
+        const val STATUS = "$MEMBER/status"
     }
 
     object WakeupSong {
@@ -68,5 +69,6 @@ object DodamUrl {
 
     object Point {
         const val MY = "$POINT/my"
+        const val REASON = "$POINT/reason"
     }
 }

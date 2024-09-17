@@ -9,15 +9,19 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -52,6 +56,7 @@ import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
+import com.b1nd.dodam.point.navigation.pointScreen
 import com.b1nd.dodam.outing.navigation.OUTING_ROUTE
 import com.b1nd.dodam.outing.navigation.navigateToOuting
 import com.b1nd.dodam.outing.navigation.outingScreen
@@ -59,9 +64,12 @@ import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
 import com.b1nd.dodam.register.navigation.navigateToInfo
+import com.b1nd.dodam.ui.component.DodamSnackbar
+import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.icons.B1NDLogo
 import com.b1nd.dodam.ui.icons.DodamLogo
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -75,63 +83,136 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
     val navHostController = rememberNavController()
     val backStackEntry by navHostController.currentBackStackEntryAsState()
     val isLogin by viewModel.isLoginState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    var snackbarState: SnackbarState = remember { SnackbarState.SUCCESS }
 
     LaunchedEffect(Unit) {
         viewModel.loadToken()
     }
+
+    val showSnackbar: (state: SnackbarState, message: String) -> Unit = { state, message ->
+        // ui 스레드일지 알 수 없음
+        coroutineScope.launch {
+            snackbarState = state
+            snackbarHostState.showSnackbar(
+                message = message,
+                withDismissAction = true,
+            )
+        }
+    }
+
     DodamTheme {
-        if (isLogin == null) {
-            LunchScreen()
-        } else {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                NavHost(
-                    modifier = Modifier.fillMaxSize(),
-                    navController = navHostController,
-                    startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE,
-                ) {
-                    onboardingScreen(
-                        onRegisterClick = navHostController::navigateToInfo,
-                        onLoginClick = navHostController::navigationToLogin,
-                    )
-
-                    infoScreen(
-                        onNextClick = { name, teacherRole, email, phoneNumber, extensionNumber ->
-                            navHostController.navigateToAuth(
-                                name = name,
-                                teacherRole = teacherRole,
-                                email = email,
-                                phoneNumber = phoneNumber,
-                                extensionNumber = extensionNumber,
-                            )
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState) {
+                    DodamSnackbar(
+                        state = snackbarState,
+                        text = it.visuals.message,
+                        showDismissAction = it.visuals.withDismissAction,
+                        onDismissRequest = {
+                            it.dismiss()
                         },
-                        onBackClick = navHostController::popBackStack,
                     )
+                }
+            },
+        ) {
+            if (isLogin == null) {
+                LunchScreen()
+            } else {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    NavHost(
+                        modifier = Modifier.fillMaxSize(),
+                        navController = navHostController,
+                        startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE,
+                    ) {
+                        onboardingScreen(
+                            onRegisterClick = navHostController::navigateToInfo,
+                            onLoginClick = navHostController::navigationToLogin,
+                        )
 
-                    authScreen(
-                        onRegisterClick = navHostController::navigateToOnboarding,
-                        onBackClick = navHostController::popBackStack,
-                    )
+                        infoScreen(
+                            onNextClick = { name, teacherRole, email, phoneNumber, extensionNumber ->
+                                navHostController.navigateToAuth(
+                                    name = name,
+                                    teacherRole = teacherRole,
+                                    email = email,
+                                    phoneNumber = phoneNumber,
+                                    extensionNumber = extensionNumber,
+                                )
+                            },
+                            onBackClick = navHostController::popBackStack,
+                        )
 
-                    loginScreen(
-                        onBackClick = navHostController::popBackStack,
-                        navigateToMain = navHostController::navigateToHome,
-                        role = "TEACHER",
-                    )
+                        authScreen(
+                            onRegisterClick = navHostController::navigateToOnboarding,
+                            onBackClick = navHostController::popBackStack,
+                        )
 
-                    nightStudyScreen()
-                    homeScreen(
-                        navigateToMeal = {
-                            navHostController.navigationToMeal(
-                                navOptions = navOptions {
-                                    popUpTo(navHostController.graph.findStartDestination().route.toString()) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                },
-                            )
+                        loginScreen(
+                            onBackClick = navHostController::popBackStack,
+                            navigateToMain = navHostController::navigateToHome,
+                            role = "TEACHER",
+                        )
+
+                        nightStudyScreen()
+                        homeScreen(
+                            navigateToMeal = {
+                                navHostController.navigationToMeal(
+                                    navOptions = navOptions {
+                                        popUpTo(navHostController.graph.findStartDestination().route.toString()) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    },
+                                )
+                            },
+                            navigateToOuting = {},
+                            navigateToNightStudy = {
+                                navHostController.navigateToNightStudy(
+                                    navOptions = navOptions {
+                                        popUpTo(navHostController.graph.findStartDestination().route.toString()) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    },
+                                )
+                            },
+                        )
+
+                        mealScreen()
+
+                        pointScreen(
+                            showSnackbar = showSnackbar,
+                            popBackStack = navHostController::popBackStack,
+                        )
+                    }
+
+                    // Bottom Navigation
+                    DodamTeacherBottomNavigation(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .navigationBarsPadding()
+                            .padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                bottom = 8.dp,
+                            ),
+                        backStackEntry = backStackEntry,
+                        onClick = { destination ->
+                            navHostController.navigate(
+                                route = destination,
+                            ) {
+                                popUpTo(navHostController.graph.findStartDestination().route.toString()) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         },
                         navigateToOuting = {
                             navHostController.navigateToOuting(
@@ -165,30 +246,6 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                         onBackClick = navHostController::popBackStack,
                     )
                 }
-
-                // Bottom Navigation
-                DodamTeacherBottomNavigation(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .navigationBarsPadding()
-                        .padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            bottom = 8.dp,
-                        ),
-                    backStackEntry = backStackEntry,
-                    onClick = { destination ->
-                        navHostController.navigate(
-                            route = destination,
-                        ) {
-                            popUpTo(navHostController.graph.findStartDestination().route.toString()) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                )
             }
         }
     }
