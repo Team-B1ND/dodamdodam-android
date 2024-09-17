@@ -56,10 +56,10 @@ import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
-import com.b1nd.dodam.point.navigation.pointScreen
 import com.b1nd.dodam.outing.navigation.OUTING_ROUTE
 import com.b1nd.dodam.outing.navigation.navigateToOuting
 import com.b1nd.dodam.outing.navigation.outingScreen
+import com.b1nd.dodam.point.navigation.pointScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
