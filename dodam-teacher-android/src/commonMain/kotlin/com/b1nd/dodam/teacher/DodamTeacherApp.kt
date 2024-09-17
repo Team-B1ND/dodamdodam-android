@@ -170,7 +170,17 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                                     },
                                 )
                             },
-                            navigateToOuting = {},
+                            navigateToOuting = {
+                                navHostController.navigateToOuting(
+                                    navOptions = navOptions {
+                                        popUpTo(navHostController.graph.findStartDestination().route.toString()) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    },
+                                )
+                            },
                             navigateToNightStudy = {
                                 navHostController.navigateToNightStudy(
                                     navOptions = navOptions {
@@ -190,6 +200,14 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                             showSnackbar = showSnackbar,
                             popBackStack = navHostController::popBackStack,
                         )
+                        mealScreen()
+                        outingScreen(
+                            navHostController::navigateToApproveOuting,
+                        )
+                        approveOutingScreen(
+                            onBackClick = navHostController::popBackStack,
+                        )
+
                     }
 
                     // Bottom Navigation
@@ -213,37 +231,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                                 launchSingleTop = true
                                 restoreState = true
                             }
-                        },
-                        navigateToOuting = {
-                            navHostController.navigateToOuting(
-                                navOptions = navOptions {
-                                    popUpTo(navHostController.graph.findStartDestination().route.toString()) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                },
-                            )
-                        },
-                        navigateToNightStudy = {
-                            navHostController.navigateToNightStudy(
-                                navOptions = navOptions {
-                                    popUpTo(navHostController.graph.findStartDestination().route.toString()) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                },
-                            )
-                        },
-                    )
-
-                    mealScreen()
-                    outingScreen(
-                        navHostController::navigateToApproveOuting,
-                    )
-                    approveOutingScreen(
-                        onBackClick = navHostController::popBackStack,
+                        }
                     )
                 }
             }
@@ -252,7 +240,11 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 }
 
 @Composable
-private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
+private fun DodamTeacherBottomNavigation(
+    modifier: Modifier = Modifier,
+    backStackEntry: NavBackStackEntry?,
+    onClick: (destination: String) -> Unit
+) {
     val route = backStackEntry?.destination?.route
 
     if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE, NIGHT_STUDY_ROUTE, OUTING_ROUTE)) {
