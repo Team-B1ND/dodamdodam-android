@@ -250,16 +250,16 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                     OutPendingUiState.Loading -> {}
                     is OutPendingUiState.Success -> {
                         val members = if (titleIndex == 0) data.ingData else data.pendingData
-                        val filteredMemberList = members.filter { studentData ->
+                        val filteredMemberList = members.filter { member ->
                             when {
                                 gradeIndex == 0 && roomIndex == 0 -> true
-                                gradeIndex == 0 && roomIndex != 0 -> studentData.student.room == roomIndex
-                                gradeIndex != 0 && roomIndex == 0 -> studentData.student.grade == gradeIndex
+                                gradeIndex == 0 && roomIndex != 0 -> member.student.room == roomIndex
+                                gradeIndex != 0 && roomIndex == 0 -> member.student.grade == gradeIndex
                                 else -> studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
                             }
-                        }.let { filteredList ->
+                        }.let { list ->
                             if (searchStudent.isNotEmpty()) {
-                                filteredList.filter { it.student.name.contains(searchStudent) }
+                                filteredList.filter { it.list.name.contains(searchStudent) }
                             } else {
                                 filteredList
                             }

@@ -19,7 +19,7 @@ kotlin{
     }
     setIOS(
         name = "ApproveOuting",
-        bundleId = "com.b1nd.dodam.approveouting"
+        bundleId = "com.b1nd.dodam.approve-outing"
     )
 
     sourceSets{
@@ -36,7 +36,7 @@ kotlin{
 
 
 androidLibrary {
-    namespace = "com.b1nd.dodam.approveouting"
+    namespace = "com.b1nd.dodam.approve-outing"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     buildFeatures {
