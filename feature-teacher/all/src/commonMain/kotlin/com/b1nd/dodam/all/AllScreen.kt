@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,23 +44,29 @@ import com.b1nd.dodam.ui.icons.Tent
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-internal fun AllScreen() {
+internal fun AllScreen(
+    navigateToSetting: () -> Unit,
+    navigateToOut: () -> Unit,
+    navigateToNightStudy: () -> Unit,
+    navigateToPoint: () -> Unit,
+) {
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding(),
+            .fillMaxSize(),
         topBar = {
             DodamDefaultTopAppBar(
+                modifier = Modifier.statusBarsPadding(),
                 title = "전체",
                 actionIcons = persistentListOf(
                     ActionIcon(
                         icon = DodamIcons.Gear,
-                        onClick = {},
+                        onClick = navigateToSetting,
                         enabled = false
                     )
-                )
+                ),
             )
-        }
+        },
+        containerColor = DodamTheme.colors.backgroundNeutral
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -103,7 +110,7 @@ internal fun AllScreen() {
                 AllCard(
                     image = Tent,
                     text = "외출/외박 승인하기",
-                    onClick = {}
+                    onClick = navigateToOut
                 )
             }
 
@@ -111,7 +118,7 @@ internal fun AllScreen() {
                 AllCard(
                     image = ColoredPencil,
                     text = "심야 자습 승인하기",
-                    onClick = {}
+                    onClick = navigateToNightStudy
                 )
             }
 
@@ -119,7 +126,7 @@ internal fun AllScreen() {
                 AllCard(
                     image = ColoredTrophy,
                     text = "상벌점 부여하기",
-                    onClick = {}
+                    onClick = navigateToPoint
                 )
             }
 

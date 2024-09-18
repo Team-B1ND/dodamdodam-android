@@ -14,10 +14,20 @@ fun NavController.navigateToAll(navOptions: NavOptions? = null) =
         navOptions = navOptions
     )
 
-fun NavGraphBuilder.allScreen() {
+fun NavGraphBuilder.allScreen(
+    navigateToSetting: () -> Unit,
+    navigateToOut: () -> Unit,
+    navigateToNightStudy: () -> Unit,
+    navigateToPoint: () -> Unit,
+) {
     composable(
         route = ALL_ROUTE,
     ) {
-        AllScreen()
+        AllScreen(
+            navigateToSetting = navigateToSetting,
+            navigateToOut = navigateToOut,
+            navigateToNightStudy = navigateToNightStudy,
+            navigateToPoint = navigateToPoint
+        )
     }
 }
