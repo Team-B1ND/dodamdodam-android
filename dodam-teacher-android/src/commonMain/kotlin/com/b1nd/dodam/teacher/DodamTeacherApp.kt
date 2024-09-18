@@ -36,6 +36,8 @@ import coil3.memory.MemoryCache
 import coil3.network.ktor.KtorNetworkFetcherFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
+import com.b1nd.dodam.all.navigation.ALL_ROUTE
+import com.b1nd.dodam.all.navigation.allScreen
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
@@ -121,7 +123,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                     NavHost(
                         modifier = Modifier.fillMaxSize(),
                         navController = navHostController,
-                        startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE,
+                        startDestination = if (isLogin!!) ALL_ROUTE else ONBOARDING_ROUTE,
                     ) {
                         onboardingScreen(
                             onRegisterClick = navHostController::navigateToInfo,
@@ -185,6 +187,8 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                             showSnackbar = showSnackbar,
                             popBackStack = navHostController::popBackStack,
                         )
+
+                        allScreen()
                     }
 
                     // Bottom Navigation

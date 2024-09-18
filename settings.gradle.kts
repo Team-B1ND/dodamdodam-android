@@ -73,5 +73,6 @@ include(
     ":feature-teacher:register",
     ":feature-teacher:home",
     ":feature-teacher:point",
+    ":feature-teacher:all",
 )
 include(":feature-teacher:nightstudy")
