@@ -32,14 +32,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
-import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
-import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.nightstudy.state.DetailMember
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
@@ -53,7 +50,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
+fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateToApproveStudy: () -> Unit) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -85,23 +82,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
         )
     }.toImmutableList()
 
-    var titleIndex by remember { mutableIntStateOf(0) }
-    val text = listOf(
-        "진행 중",
-        "대기 중",
-    )
-    val item = List(2) { index: Int ->
-        DodamSegment(
-            selected = titleIndex == index,
-            text = text[index],
-            onClick = { titleIndex = index },
-        )
-    }.toImmutableList()
-
-    var bottomSheet by remember { mutableStateOf(false) }
     var searchStudent by remember { mutableStateOf("") }
-
-    var detailMember by remember { mutableStateOf(DetailMember()) }
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -123,101 +104,6 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                 .background(DodamTheme.colors.backgroundNeutral)
                 .padding(it),
         ) {
-            if (bottomSheet) {
-                DodamModalBottomSheet(
-                    shape = RoundedCornerShape(
-                        topStart = 28.dp,
-                        topEnd = 28.dp,
-                    ),
-                    onDismissRequest = { bottomSheet = false },
-                    title = {
-                        Text(
-                            text = "${detailMember.name}의 심야 자습 정보",
-                            style = DodamTheme.typography.heading1Bold(),
-                            color = DodamTheme.colors.labelNormal,
-                            modifier = Modifier.padding(bottom = 16.dp),
-                        )
-                    },
-                    content = {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(bottom = 12.dp),
-                            ) {
-                                Text(text = "시작 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
-                                Spacer(modifier = Modifier.weight(1f))
-                                Text(text = detailMember.startDay, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
-                            }
-                            Row(
-                                modifier = Modifier.padding(bottom = 12.dp),
-                            ) {
-                                Text(text = "종료 날짜", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
-                                Spacer(modifier = Modifier.weight(1f))
-                                Text(text = detailMember.endDay, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
-                            }
-                            Row(
-                                modifier = Modifier.padding(bottom = 12.dp),
-                            ) {
-                                Text(text = "자습 장소", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
-                                Spacer(modifier = Modifier.weight(1f))
-                                Text(text = detailMember.place, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
-                            }
-                            Row(
-                                modifier = Modifier.padding(bottom = 12.dp),
-                            ) {
-                                Text(text = "학습 계획", style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelAssistive)
-                                Spacer(modifier = Modifier.weight(1f))
-                                Text(text = detailMember.content, style = DodamTheme.typography.headlineMedium(), color = DodamTheme.colors.labelNeutral)
-                            }
-                            if (detailMember.doNeedPhone) {
-                                Row {
-                                    Text(
-                                        text = "휴대폰 사용",
-                                        style = DodamTheme.typography.headlineMedium(),
-                                        color = DodamTheme.colors.labelAssistive,
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    Text(
-                                        text = detailMember.reasonForPhone!!,
-                                        style = DodamTheme.typography.headlineMedium(),
-                                        color = DodamTheme.colors.labelNeutral,
-                                    )
-                                }
-                            }
-
-                            Row(
-                                modifier = Modifier.padding(top = 16.dp),
-                            ) {
-                                DodamButton(
-                                    onClick = {
-                                        viewModel.reject(detailMember.id)
-                                        bottomSheet = false
-                                        viewModel.load()
-                                    },
-                                    text = "거절하기",
-                                    buttonSize = ButtonSize.Large,
-                                    buttonRole = ButtonRole.Negative,
-                                    modifier = Modifier.weight(1f),
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                DodamButton(
-                                    onClick = {
-                                        viewModel.allow(detailMember.id)
-                                        bottomSheet = false
-                                        viewModel.load()
-                                    },
-                                    text = "승인하기",
-                                    buttonSize = ButtonSize.Large,
-                                    buttonRole = ButtonRole.Primary,
-                                    modifier = Modifier.weight(1f),
-                                )
-                            }
-                        }
-                    },
-                )
-            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -225,10 +111,6 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                     .padding(horizontal = 16.dp),
             ) {
                 Column {
-                    DodamSegmentedButton(
-                        segments = item,
-                        modifier = Modifier.padding(top = 12.dp),
-                    )
                     DodamSegmentedButton(
                         segments = gradeItem,
                         modifier = Modifier.padding(top = 12.dp),
@@ -250,33 +132,73 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                     modifier = Modifier,
                 )
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 20.dp)
-                        .wrapContentHeight()
-                        .clip(shape = RoundedCornerShape(18.dp))
-                        .background(DodamTheme.colors.staticWhite),
-                ) {
-                    when (val data = uiState.nightStudyUiState) {
-                        is NightStudyUiState.Success -> {
-                            val members = if (titleIndex == 0) data.ingData else data.pendingData
-                            val filteredMemberList = members.filter { studentData ->
-                                when {
-                                    gradeIndex == 0 && roomIndex == 0 -> true
-                                    gradeIndex == 0 && roomIndex != 0 -> studentData.student.room == roomIndex
-                                    gradeIndex != 0 && roomIndex == 0 -> studentData.student.grade == gradeIndex
-                                    else -> studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
-                                }
-                            }.let { filteredList ->
-                                if (searchStudent.isNotEmpty()) {
-                                    filteredList.filter { it.student.name.contains(searchStudent) }
-                                } else {
-                                    filteredList
-                                }
+                when (val data = uiState.nightStudyUiState) {
+                    is NightStudyUiState.Success -> {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 20.dp)
+                                .clip(shape = RoundedCornerShape(18.dp))
+                                .background(DodamTheme.colors.staticWhite),
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .padding(start = 16.dp, top = 16.dp),
+                            ) {
+                                Text(
+                                    text = "현재 ",
+                                    color = DodamTheme.colors.labelStrong,
+                                    style = DodamTheme.typography.headlineBold(),
+                                )
+                                Text(
+                                    text = "${data.pendingCnt}명 ",
+                                    color = DodamTheme.colors.primaryNormal,
+                                    style = DodamTheme.typography.headlineBold(),
+                                )
+                                Text(
+                                    text = "승인 대기 중 ",
+                                    color = DodamTheme.colors.labelStrong,
+                                    style = DodamTheme.typography.headlineBold(),
+                                )
                             }
+
+                            DodamButton(
+                                onClick = {
+                                    navigateToApproveStudy()
+                                },
+                                text = "승인하러 가기",
+                                buttonRole = ButtonRole.Assistive,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp)
+                                    .padding(top = 12.dp, bottom = 16.dp),
+                            )
+                        }
+                        val members = data.ingData
+                        val filteredMemberList = members.filter { studentData ->
+                            when {
+                                gradeIndex == 0 && roomIndex == 0 -> true
+                                gradeIndex == 0 && roomIndex != 0 -> studentData.student.room == roomIndex
+                                gradeIndex != 0 && roomIndex == 0 -> studentData.student.grade == gradeIndex
+                                else -> studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
+                            }
+                        }.let { filteredList ->
+                            if (searchStudent.isNotEmpty()) {
+                                filteredList.filter { it.student.name.contains(searchStudent) }
+                            } else {
+                                filteredList
+                            }
+                        }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 20.dp)
+                                .wrapContentHeight()
+                                .clip(shape = RoundedCornerShape(18.dp))
+                                .background(DodamTheme.colors.staticWhite),
+                        ) {
                             Text(
-                                text = if (titleIndex == 0) "심자 자습중인 학생" else "심자 대기중인 학생",
+                                text = "심자 자습중인 학생",
                                 color = DodamTheme.colors.labelStrong,
                                 style = DodamTheme.typography.headlineBold(),
                                 modifier = Modifier
@@ -300,51 +222,54 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
 
                                         val a = currentDate.daysUntil(end)
 
-                                        val memberData = filteredMemberList[listIndex]
-                                        val detailData = DetailMember(
-                                            id = memberData.id,
-                                            name = memberData.student.name,
-                                            startDay = "${
-                                                memberData.startAt.date.toString().split(
-                                                    "-",
-                                                )[1].toInt()}월 ${memberData.startAt.date.toString().split("-")[2].toInt()}일",
-                                            endDay = "${
-                                                memberData.endAt.date.toString().split(
-                                                    "-",
-                                                )[1].toInt()}월 ${memberData.endAt.date.toString().split("-")[2].toInt()}일",
-                                            place = memberData.place,
-                                            content = memberData.content,
-                                            doNeedPhone = memberData.doNeedPhone,
-                                            reasonForPhone = memberData.reasonForPhone,
+                                        Text(
+                                            text = if (a == 1) "오늘 종료" else "${a}일 남음",
+                                            style = DodamTheme.typography.headlineMedium(),
+                                            color = if (a == 1) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive,
                                         )
-
-                                        if (titleIndex == 0) {
-                                            Text(
-                                                text = if (a == 1) "오늘 종료" else "${a}일 남음",
-                                                style = DodamTheme.typography.headlineMedium(),
-                                                color = if (a == 1) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive,
-                                            )
-                                        } else {
-                                            DodamButton(
-                                                onClick = {
-                                                    bottomSheet = true
-                                                    detailMember = detailData
-                                                },
-                                                text = "승인하기",
-                                                buttonSize = ButtonSize.Small,
-                                                buttonRole = ButtonRole.Assistive,
-                                            )
-                                        }
                                     }
                                 }
                             }
                         }
-                        NightStudyUiState.Error -> {}
-                        NightStudyUiState.Loading -> {
-                            Column(
+                    }
+
+                    NightStudyUiState.Error -> {}
+                    NightStudyUiState.Loading -> {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 20.dp)
+                                .clip(shape = RoundedCornerShape(18.dp))
+                                .background(DodamTheme.colors.staticWhite),
+                        ) {
+                            Box(
                                 modifier = Modifier
-                                    .size(width = 360.dp, height = 166.dp),
-                            ) {
+                                    .size(width = 170.dp, height = 40.dp)
+                                    .padding(top = 16.dp, start = 10.dp)
+                                    .background(
+                                        shimmerEffect(),
+                                        RoundedCornerShape(8.dp),
+                                    ),
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(46.dp)
+                                    .padding(horizontal = 12.dp)
+                                    .padding(top = 12.dp, bottom = 10.dp)
+                                    .background(
+                                        shimmerEffect(),
+                                        RoundedCornerShape(8.dp),
+                                    ),
+                            )
+                        }
+                        Column(
+                            modifier = Modifier
+                                .padding(top = 20.dp)
+                                .clip(shape = RoundedCornerShape(18.dp))
+                                .background(DodamTheme.colors.backgroundNormal),
+                        ) {
+                            Column {
                                 Box(
                                     modifier = Modifier
                                         .size(width = 139.dp, height = 32.dp)
@@ -354,79 +279,79 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                             RoundedCornerShape(8.dp),
                                         ),
                                 )
-                                Column(
+                            }
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 10.dp)
+                                    .padding(top = 12.dp),
+                            ) {
+                                Row(
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 10.dp)
-                                        .padding(top = 12.dp),
+                                        .height(48.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
                                 ) {
-                                    Row(
+                                    Box(
                                         modifier = Modifier
-                                            .height(48.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(40.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(50.dp),
-                                                ),
-                                        )
-                                        Box(
-                                            modifier = Modifier
-                                                .size(width = 71.dp, height = 27.dp)
-                                                .padding(start = 8.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(8.dp),
-                                                ),
-                                        )
-                                        Spacer(modifier = Modifier.weight(1f))
-
-                                        Box(
-                                            modifier = Modifier
-                                                .size(width = 71.dp, height = 27.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(8.dp),
-                                                ),
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.height(12.dp))
-                                    Row(
+                                            .size(40.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(50.dp),
+                                            ),
+                                    )
+                                    Box(
                                         modifier = Modifier
-                                            .height(48.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(40.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(50.dp),
-                                                ),
-                                        )
-                                        Box(
-                                            modifier = Modifier
-                                                .size(width = 71.dp, height = 27.dp)
-                                                .padding(start = 8.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(8.dp),
-                                                ),
-                                        )
-                                        Spacer(modifier = Modifier.weight(1f))
+                                            .size(width = 71.dp, height = 27.dp)
+                                            .padding(start = 8.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(8.dp),
+                                            ),
+                                    )
+                                    Spacer(modifier = Modifier.weight(1f))
 
-                                        Box(
-                                            modifier = Modifier
-                                                .size(width = 71.dp, height = 27.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(8.dp),
-                                                ),
-                                        )
-                                    }
+                                    Box(
+                                        modifier = Modifier
+                                            .size(width = 71.dp, height = 27.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(8.dp),
+                                            ),
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Row(
+                                    modifier = Modifier
+                                        .height(48.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(50.dp),
+                                            ),
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .size(width = 71.dp, height = 27.dp)
+                                            .padding(start = 8.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(8.dp),
+                                            ),
+                                    )
+                                    Spacer(modifier = Modifier.weight(1f))
+
+                                    Box(
+                                        modifier = Modifier
+                                            .size(width = 71.dp, height = 27.dp)
+                                            .background(
+                                                shimmerEffect(),
+                                                RoundedCornerShape(8.dp),
+                                            ),
+                                    )
                                 }
                             }
                         }

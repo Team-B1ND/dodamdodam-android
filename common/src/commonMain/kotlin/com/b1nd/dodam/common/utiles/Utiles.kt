@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
+import kotlinx.datetime.LocalDate
 
 fun <T1, T2, R> combineWhenAllComplete(flow1: Flow<T1>, flow2: Flow<T2>, transform: suspend (T1, T2) -> R): Flow<R> = flow {
     var lastValue1: T1? = null
@@ -27,4 +28,8 @@ fun <T1, T2, R> combineWhenAllComplete(flow1: Flow<T1>, flow2: Flow<T2>, transfo
 
     // 두 Flow가 모두 종료되었을 때 마지막 값으로 변환 작업 수행
     emit(transform(lastValue1!!, lastValue2!!))
+}
+
+fun getDate(date: LocalDate): String {
+    return "${date.monthNumber}월 ${date.dayOfMonth}일"
 }

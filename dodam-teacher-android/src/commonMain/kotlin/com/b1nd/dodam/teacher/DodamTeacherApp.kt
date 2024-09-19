@@ -38,6 +38,8 @@ import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.b1nd.dodam.all.navigation.ALL_ROUTE
 import com.b1nd.dodam.all.navigation.allScreen
+import com.b1nd.dodam.approvenightstudy.approveNightStudyScreen
+import com.b1nd.dodam.approvenightstudy.navigateToApproveNightStudy
 import com.b1nd.dodam.approveouting.approveOutingScreen
 import com.b1nd.dodam.approveouting.navigateToApproveOuting
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -59,7 +61,6 @@ import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import com.b1nd.dodam.outing.navigation.OUTING_ROUTE
-import com.b1nd.dodam.outing.navigation.navigateToOuting
 import com.b1nd.dodam.outing.navigation.outingScreen
 import com.b1nd.dodam.point.navigation.navigateToPoint
 import com.b1nd.dodam.point.navigation.pointScreen
@@ -162,7 +163,9 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             role = "TEACHER",
                         )
 
-                        nightStudyScreen()
+                        nightStudyScreen(
+                            navigateToApproveStudy = navHostController::navigateToApproveNightStudy,
+                        )
                         homeScreen(
                             navigateToMeal = {
                                 navHostController.navigationToMeal(
@@ -175,28 +178,17 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                                     },
                                 )
                             },
-                            navigateToOuting = {
-                                navHostController.navigateToOuting(
-                                    navOptions = navOptions {
-                                        popUpTo(navHostController.graph.findStartDestination().route.toString()) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    },
+                            navigateToOut = {
+                                navHostController.navigateToApproveOuting(
+                                    title = 0,
                                 )
                             },
-                            navigateToNightStudy = {
-                                navHostController.navigateToNightStudy(
-                                    navOptions = navOptions {
-                                        popUpTo(navHostController.graph.findStartDestination().route.toString()) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    },
+                            navigateToSleep = {
+                                navHostController.navigateToApproveOuting(
+                                    title = 1,
                                 )
                             },
+                            navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                         )
 
                         mealScreen()
@@ -207,7 +199,11 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
                         mealScreen()
                         outingScreen(
-                            navHostController::navigateToApproveOuting,
+                            navigateToApprove = { title ->
+                                navHostController.navigateToApproveOuting(
+                                    title = title,
+                                )
+                            },
                         )
                         approveOutingScreen(
                             onBackClick = navHostController::popBackStack,
@@ -215,9 +211,13 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 
                         allScreen(
                             navigateToSetting = navHostController::navigateToSetting,
-                            navigateToOut = {},
-                            navigateToNightStudy = {},
+                            navigateToOut = navHostController::navigateToApproveOuting,
+                            navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                             navigateToPoint = navHostController::navigateToPoint,
+                        )
+
+                        approveNightStudyScreen(
+                            onBackClick = navHostController::popBackStack,
                         )
 
                         settingScreen(
@@ -260,7 +260,14 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
     val route = backStackEntry?.destination?.route
 
-    if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE, NIGHT_STUDY_ROUTE, ALL_ROUTE, OUTING_ROUTE)) {
+    if (route != null && route in listOf(
+            HOME_ROUTE,
+            MEAL_ROUTE,
+            NIGHT_STUDY_ROUTE,
+            ALL_ROUTE,
+            OUTING_ROUTE,
+        )
+    ) {
         DodamNavigationBar(
             modifier = modifier,
             items = persistentListOf(
