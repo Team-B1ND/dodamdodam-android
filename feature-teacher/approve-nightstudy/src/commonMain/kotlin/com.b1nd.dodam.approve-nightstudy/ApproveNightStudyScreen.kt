@@ -41,6 +41,7 @@ import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -309,7 +310,7 @@ fun ApproveNightStudyScreen(
                                                 modifier = Modifier
                                                     .align(Alignment.CenterVertically)
                                                     .size(24.dp),
-                                                imageVector = DodamIcons.CheckmarkCircle.value,
+                                                imageVector = ColoredCheckmarkCircle,
                                                 contentDescription = null,
                                                 colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                                             )
