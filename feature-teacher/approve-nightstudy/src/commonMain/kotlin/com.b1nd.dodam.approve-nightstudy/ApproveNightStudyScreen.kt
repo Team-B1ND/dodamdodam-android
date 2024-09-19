@@ -207,6 +207,7 @@ fun ApproveNightStudyScreen(
                         ) {
                             DodamButton(
                                 onClick = {
+                                    viewModel.reject(state.detailMember.id)
                                 },
                                 text = "거절하기",
                                 buttonSize = ButtonSize.Large,
@@ -216,6 +217,7 @@ fun ApproveNightStudyScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                             DodamButton(
                                 onClick = {
+                                    viewModel.allow(state.detailMember.id)
                                 },
                                 text = "승인하기",
                                 buttonSize = ButtonSize.Large,
