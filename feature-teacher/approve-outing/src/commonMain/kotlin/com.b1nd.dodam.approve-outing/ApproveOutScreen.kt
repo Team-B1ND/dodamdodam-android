@@ -107,7 +107,7 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
             DodamTopAppBar(
                 title = "외출/외박 승인",
                 modifier = Modifier.statusBarsPadding(),
-                onBackClick = onBackClick
+                onBackClick = onBackClick,
             )
         },
     ) {
