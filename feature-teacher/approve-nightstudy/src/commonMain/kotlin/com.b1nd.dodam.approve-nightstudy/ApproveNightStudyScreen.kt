@@ -290,8 +290,8 @@ fun ApproveNightStudyScreen(onBackClick: () -> Unit, viewModel: ApproveNightStud
                                             selectedItemIndex = index
                                             viewModel.detailMember(
                                                 id = filterMemberData.id,
-                                                start = getDate(filterMemberData.startAt.date.toString()),
-                                                end = getDate(filterMemberData.endAt.date.toString()),
+                                                start = getDate(filterMemberData.startAt.date),
+                                                end = getDate(filterMemberData.endAt.date),
                                                 place = filterMemberData.place,
                                                 doNeedPhone = filterMemberData.doNeedPhone,
                                                 reasonForPhone = filterMemberData.reasonForPhone,
