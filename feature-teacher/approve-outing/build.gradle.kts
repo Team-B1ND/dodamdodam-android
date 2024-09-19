@@ -18,24 +18,25 @@ kotlin{
         }
     }
     setIOS(
-        name = "NightStudy",
-        bundleId = "com.b1nd.dodam.nightstudy"
+        name = "ApproveOuting",
+        bundleId = "com.b1nd.dodam.approve_outing"
     )
 
     sourceSets{
         commonMain.dependencies {
             implementation(projects.common)
-            api(projects.data.nightStudy)
             api(projects.network.core)
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.ui)
+            implementation(projects.network.outing)
+            implementation(projects.data.outing)
         }
     }
 }
 
 
 androidLibrary {
-    namespace = "com.b1nd.dodam.nightstudy"
+    namespace = "com.b1nd.dodam.approve_outing"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     buildFeatures {

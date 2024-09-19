@@ -76,3 +76,5 @@ include(
     ":feature-teacher:all",
 )
 include(":feature-teacher:nightstudy")
+include(":feature-teacher:outing")
+include(":feature-teacher:approve-outing")

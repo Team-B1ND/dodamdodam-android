@@ -45,6 +45,10 @@ import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -121,6 +125,10 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
         ) {
             if (bottomSheet) {
                 DodamModalBottomSheet(
+                    shape = RoundedCornerShape(
+                        topStart = 28.dp,
+                        topEnd = 28.dp,
+                    ),
                     onDismissRequest = { bottomSheet = false },
                     title = {
                         Text(
@@ -213,6 +221,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(bottom = 60.dp)
                     .padding(horizontal = 16.dp),
             ) {
                 Column {
@@ -251,26 +260,19 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                 ) {
                     when (val data = uiState.nightStudyUiState) {
                         is NightStudyUiState.Success -> {
-                            val memberList = if (titleIndex == 0) data.ingData else data.pendingData
-
-                            var filteredMemberList = if (gradeIndex == 0 && roomIndex == 0) {
-                                memberList
-                            } else if (gradeIndex == 0 && roomIndex != 0) {
-                                memberList.filter { studentData ->
-                                    studentData.student.room == roomIndex
+                            val members = if (titleIndex == 0) data.ingData else data.pendingData
+                            val filteredMemberList = members.filter { studentData ->
+                                when {
+                                    gradeIndex == 0 && roomIndex == 0 -> true
+                                    gradeIndex == 0 && roomIndex != 0 -> studentData.student.room == roomIndex
+                                    gradeIndex != 0 && roomIndex == 0 -> studentData.student.grade == gradeIndex
+                                    else -> studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
                                 }
-                            } else if (gradeIndex != 0 && roomIndex == 0) {
-                                memberList.filter { studentData ->
-                                    studentData.student.grade == gradeIndex
-                                }
-                            } else {
-                                memberList.filter { studentData ->
-                                    studentData.student.grade == gradeIndex && studentData.student.room == roomIndex
-                                }
-                            }
-                            if (searchStudent.isNotEmpty()) {
-                                filteredMemberList = filteredMemberList.filter {
-                                    it.student.name.contains(searchStudent) == true
+                            }.let { filteredList ->
+                                if (searchStudent.isNotEmpty()) {
+                                    filteredList.filter { it.student.name.contains(searchStudent) }
+                                } else {
+                                    filteredList
                                 }
                             }
                             Text(
@@ -291,39 +293,12 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                             .padding(bottom = 12.dp),
                                         icon = null,
                                     ) {
-                                        val start =
-                                            filteredMemberList[listIndex].startAt.date.toString()
-                                                .split("-")
-                                        val end =
-                                            filteredMemberList[listIndex].endAt.date.toString()
-                                                .split("-")
+                                        val currentDate = Clock.System.now().toLocalDateTime(
+                                            TimeZone.currentSystemDefault(),
+                                        ).date
+                                        val end = filteredMemberList[listIndex].endAt.date
 
-                                        val a =
-                                            if (end[2].toInt() > start[2].toInt()) {
-                                                end[2].toInt() - start[2].toInt()
-                                            } else {
-                                                when (end[1].toInt()) {
-                                                    1, 3, 5, 7, 8, 10, 12 -> {
-                                                        (end[2].toInt() - 31) + start[2].toInt()
-                                                    }
-
-                                                    4, 6, 9, 11 -> {
-                                                        (end[2].toInt() - 30) + start[2].toInt()
-                                                    }
-
-                                                    2 -> {
-                                                        if (end[0].toInt() % 4 == 0 && (end[0].toInt() % 100 != 0 || end[0].toInt() % 400 == 0)) {
-                                                            end[2].toInt() - 29 - start[2].toInt()
-                                                        } else {
-                                                            end[2].toInt() - 20 - start[2].toInt()
-                                                        }
-                                                    }
-
-                                                    else -> {
-                                                        0
-                                                    }
-                                                }
-                                            }
+                                        val a = currentDate.daysUntil(end)
 
                                         val memberData = filteredMemberList[listIndex]
                                         val detailData = DetailMember(
@@ -364,7 +339,6 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                                 }
                             }
                         }
-
                         NightStudyUiState.Error -> {}
                         NightStudyUiState.Loading -> {
                             Column(
