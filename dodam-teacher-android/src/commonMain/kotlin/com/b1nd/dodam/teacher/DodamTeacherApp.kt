@@ -40,6 +40,7 @@ import com.b1nd.dodam.all.navigation.ALL_ROUTE
 import com.b1nd.dodam.all.navigation.allScreen
 import com.b1nd.dodam.approvenightstudy.APPROVE_NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.approvenightstudy.approveNightStudyScreen
+import com.b1nd.dodam.approvenightstudy.navigateToApproveNightStudy
 import com.b1nd.dodam.approveouting.approveOutingScreen
 import com.b1nd.dodam.approveouting.navigateToApproveOuting
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -162,7 +163,9 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                             role = "TEACHER",
                         )
 
-                        nightStudyScreen()
+                        nightStudyScreen(
+                            navigateToApproveStudy = navHostController::navigateToApproveNightStudy
+                        )
                         homeScreen(
                             navigateToMeal = {
                                 navHostController.navigationToMeal(

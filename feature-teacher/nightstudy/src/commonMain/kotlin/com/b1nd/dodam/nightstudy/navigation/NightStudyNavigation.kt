@@ -18,7 +18,7 @@ fun NavController.navigateToNightStudy(
 ) = navigate(NIGHT_STUDY_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.nightStudyScreen() {
+fun NavGraphBuilder.nightStudyScreen(navigateToApproveStudy: () -> Unit) {
     composable(
         route = NIGHT_STUDY_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -26,6 +26,8 @@ fun NavGraphBuilder.nightStudyScreen() {
         popEnterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None },
     ) {
-        NightStudyScreen()
+        NightStudyScreen(
+            navigateToApproveStudy = navigateToApproveStudy
+        )
     }
 }
