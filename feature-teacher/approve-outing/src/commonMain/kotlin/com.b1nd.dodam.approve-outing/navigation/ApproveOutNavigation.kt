@@ -11,7 +11,7 @@ import androidx.navigation.navArgument
 
 const val APPROVE_OUTING_ROUTE = "approve_outing"
 
-fun NavController.navigateToApproveOuting(title: Int, navOptions: NavOptions? = null) = navigate(
+fun NavController.navigateToApproveOuting(title: Int = 0, navOptions: NavOptions? = null) = navigate(
     route = "$APPROVE_OUTING_ROUTE/$title",
     navOptions = navOptions,
 )
