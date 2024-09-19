@@ -31,6 +31,7 @@ import com.b1nd.dodam.point.di.pointViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
 import com.b1nd.dodam.register.di.registerRepositoryModule
 import com.b1nd.dodam.register.di.registerViewModelModule
+import com.b1nd.dodam.setting.di.settingViewModelModule
 import com.b1nd.dodam.teacher.di.DodamTeacherAppViewModelModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -70,6 +71,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             outingViewModelModule,
             approveOutingViewModelModule,
             allViewModelModule,
+            settingViewModelModule,
         )
         block()
     }

@@ -3,6 +3,7 @@ package com.b1nd.dodam.setting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.datastore.repository.DataStoreRepository
 import com.b1nd.dodam.member.MemberRepository
 import com.b1nd.dodam.setting.model.SettingUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import org.koin.core.component.inject
 class SettingViewModel : ViewModel(), KoinComponent {
 
     private val memberRepository: MemberRepository by inject()
+    private val dataStoreRepository: DataStoreRepository by inject()
 
     private val _uiState = MutableStateFlow(SettingUiState())
     val uiState = _uiState.asStateFlow()
@@ -55,6 +57,7 @@ class SettingViewModel : ViewModel(), KoinComponent {
 
     fun deactivate() {
         viewModelScope.launch {
+            dataStoreRepository.deleteUser()
             memberRepository.deactivation().collect { result ->
                 _uiState.update { uiState ->
                     when (result) {
@@ -76,6 +79,12 @@ class SettingViewModel : ViewModel(), KoinComponent {
                     }
                 }
             }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            dataStoreRepository.deleteUser()
         }
     }
 }

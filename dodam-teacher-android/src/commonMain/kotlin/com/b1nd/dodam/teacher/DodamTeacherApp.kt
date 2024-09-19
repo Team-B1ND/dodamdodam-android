@@ -67,6 +67,8 @@ import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
 import com.b1nd.dodam.register.navigation.navigateToInfo
+import com.b1nd.dodam.setting.navigation.navigateToSetting
+import com.b1nd.dodam.setting.navigation.settingScreen
 import com.b1nd.dodam.ui.component.DodamSnackbar
 import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.icons.B1NDLogo
@@ -78,7 +80,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class, KoinExperimentalAPI::class)
 @Composable
-fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
+fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koinViewModel()) {
     setSingletonImageLoaderFactory { context ->
         getAsyncImageLoader(context)
     }
@@ -212,10 +214,16 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                         )
 
                         allScreen(
-                            navigateToSetting = {},
+                            navigateToSetting = navHostController::navigateToSetting,
                             navigateToOut = {},
                             navigateToNightStudy = {},
                             navigateToPoint = navHostController::navigateToPoint,
+                        )
+
+                        settingScreen(
+                            popBackStack = navHostController::popBackStack,
+                            logout = exit,
+                            versionInfo = "3.2.0",
                         )
                     }
 
