@@ -132,7 +132,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                     NavHost(
                         modifier = Modifier.fillMaxSize(),
                         navController = navHostController,
-                        startDestination = if (isLogin!!) NIGHT_STUDY_ROUTE else ONBOARDING_ROUTE,
+                        startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE,
                     ) {
                         onboardingScreen(
                             onRegisterClick = navHostController::navigateToInfo,
