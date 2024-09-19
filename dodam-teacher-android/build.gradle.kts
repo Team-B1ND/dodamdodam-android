@@ -33,6 +33,7 @@ kotlin {
             implementation(projects.featureTeacher.home)
             implementation(projects.feature.meal)
             implementation(projects.featureTeacher.point)
+            implementation(projects.featureTeacher.all)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)
