@@ -138,7 +138,7 @@ internal fun AllScreen(
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(
-                            text = "환영합니다, 박병춘님",
+                            text = "환영합니다, " + uiState.memberInfo.name + "님",
                             style = DodamTheme.typography.headlineBold(),
                             color = DodamTheme.colors.labelNormal,
                         )
