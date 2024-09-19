@@ -380,10 +380,19 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                                                         if (time > 1) "${time}일 남음" else "오늘 복귀"
                                                     },
                                                     style = DodamTheme.typography.headlineMedium(),
-                                                    color = if (hours > 0 || minutes > 30 || time > 1) {
-                                                        DodamTheme.colors.labelAssistive
+                                                    color = if (titleIndex == 0) {
+                                                        if ( hours > 0 || minutes > 30 || time > 1) {
+                                                            DodamTheme.colors.labelAssistive
+                                                        }else{
+                                                            DodamTheme.colors.primaryNormal
+                                                        }
                                                     } else {
-                                                        DodamTheme.colors.primaryNormal
+                                                        if (time <= 1) {
+                                                            DodamTheme.colors.primaryNormal
+                                                        }
+                                                        else{
+                                                            DodamTheme.colors.labelAssistive
+                                                        }
                                                     },
                                                 )
                                             }
