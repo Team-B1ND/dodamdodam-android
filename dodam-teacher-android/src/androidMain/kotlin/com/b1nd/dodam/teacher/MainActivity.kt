@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             DodamTeacherApp(
-                exit = this::finish
+                exit = this::finish,
             )
         }
     }
