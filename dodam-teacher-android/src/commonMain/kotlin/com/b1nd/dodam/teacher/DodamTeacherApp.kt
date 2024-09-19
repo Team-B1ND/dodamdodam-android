@@ -188,9 +188,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                                     title = 1,
                                 )
                             },
-                            navigateToNightStudy = {
-                                navHostController.navigateToApproveNightStudy()
-                            },
+                            navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                         )
 
                         mealScreen()
