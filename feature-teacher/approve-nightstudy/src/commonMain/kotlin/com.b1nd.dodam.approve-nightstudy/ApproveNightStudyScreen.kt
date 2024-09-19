@@ -1,4 +1,4 @@
-package com.b1nd.dodam.`approve-nightstudy`
+package com.b1nd.dodam.approvenightstudy
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -41,12 +42,14 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.DodamMember
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ApproveNightStudyScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    viewModel: ApproveNightStudyViewModel = koinViewModel()
 ) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
@@ -85,9 +88,9 @@ fun ApproveNightStudyScreen(
     var selectedItemIndex by remember { mutableStateOf(-1) }
 
     LaunchedEffect(key1 = true) {
-//        viewModel.load()
+        viewModel.load()
     }
-//    val state by viewModel.state.collectAsState()
+    val state by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
