@@ -144,7 +144,7 @@ internal fun HomeScreen(
                         uiState = state.outUiState,
                         onRefreshClick = viewModel::loadOuting,
                         onOutingClick = navigateToOuting,
-                        onSleepoverClick = {},
+                        onSleepoverClick = navigateToOuting,
                     )
                 }
 
