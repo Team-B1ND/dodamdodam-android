@@ -59,7 +59,7 @@ internal fun HomeScreen(
     navigateToMeal: () -> Unit,
     navigateToOuting: () -> Unit,
     navigateToNightStudy: () -> Unit,
-    navigateToSleep: () -> Unit
+    navigateToSleep: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     var isRefreshing by remember { mutableStateOf(false) }

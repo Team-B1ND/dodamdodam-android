@@ -40,7 +40,6 @@ import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
-import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import kotlinx.collections.immutable.toImmutableList
@@ -48,11 +47,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApproveOutScreen(
-    viewModel: ApproveOutViewModel = koinViewModel(),
-    onBackClick: () -> Unit,
-    title: Int
-) {
+fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackClick: () -> Unit, title: Int) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",

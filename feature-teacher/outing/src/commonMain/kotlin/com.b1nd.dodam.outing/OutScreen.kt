@@ -327,7 +327,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                     DodamButton(
                                         onClick = {
                                             navigateToApprove(
-                                                titleIndex
+                                                titleIndex,
                                             )
                                         },
                                         text = "승인하러 가기",

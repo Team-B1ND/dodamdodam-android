@@ -27,7 +27,7 @@ fun NavGraphBuilder.nightStudyScreen(navigateToApproveStudy: () -> Unit) {
         popExitTransition = { ExitTransition.None },
     ) {
         NightStudyScreen(
-            navigateToApproveStudy = navigateToApproveStudy
+            navigateToApproveStudy = navigateToApproveStudy,
         )
     }
 }
