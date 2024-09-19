@@ -252,7 +252,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
     val route = backStackEntry?.destination?.route
 
-    if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE, NIGHT_STUDY_ROUTE, ALL_ROUTE)) {
+    if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE, NIGHT_STUDY_ROUTE, ALL_ROUTE, OUTING_ROUTE)) {
         DodamNavigationBar(
             modifier = modifier,
             items = persistentListOf(
