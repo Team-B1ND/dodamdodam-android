@@ -36,10 +36,10 @@ import coil3.memory.MemoryCache
 import coil3.network.ktor.KtorNetworkFetcherFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
-import com.b1nd.dodam.approveouting.approveOutingScreen
-import com.b1nd.dodam.approveouting.navigateToApproveOuting
 import com.b1nd.dodam.all.navigation.ALL_ROUTE
 import com.b1nd.dodam.all.navigation.allScreen
+import com.b1nd.dodam.approveouting.approveOutingScreen
+import com.b1nd.dodam.approveouting.navigateToApproveOuting
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
@@ -58,10 +58,10 @@ import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
-import com.b1nd.dodam.point.navigation.navigateToPoint
 import com.b1nd.dodam.outing.navigation.OUTING_ROUTE
 import com.b1nd.dodam.outing.navigation.navigateToOuting
 import com.b1nd.dodam.outing.navigation.outingScreen
+import com.b1nd.dodam.point.navigation.navigateToPoint
 import com.b1nd.dodam.point.navigation.pointScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
