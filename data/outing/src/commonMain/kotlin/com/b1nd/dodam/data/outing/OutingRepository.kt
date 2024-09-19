@@ -16,9 +16,19 @@ interface OutingRepository {
 
     fun getSleepovers(date: LocalDate): Flow<Result<ImmutableList<Outing>>>
 
+    fun getAllSleepovers(date: LocalDate): Flow<Result<ImmutableList<Outing>>>
+
     fun askSleepover(reason: String, startAt: LocalDate, endAt: LocalDate): Flow<Result<Unit>>
 
     fun deleteOuting(id: Long): Flow<Result<Unit>>
 
     fun deleteSleepover(id: Long): Flow<Result<Unit>>
+
+    fun allowSleepover(id: Long): Flow<Result<Unit>>
+
+    fun allowGoing(id: Long): Flow<Result<Unit>>
+
+    fun rejectSleepover(id: Long): Flow<Result<Unit>>
+
+    fun rejectGoing(id: Long): Flow<Result<Unit>>
 }

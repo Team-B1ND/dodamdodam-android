@@ -1,6 +1,7 @@
 package com.b1nd.dodam.teacher
 
 import com.b1nd.dodam.all.di.allViewModelModule
+import com.b1nd.dodam.approveouting.approveOutingViewModelModule
 import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
 import com.b1nd.dodam.data.banner.di.bannerRepositoryModule
@@ -25,6 +26,7 @@ import com.b1nd.dodam.network.outing.di.outingDataSourceModule
 import com.b1nd.dodam.network.point.di.pointDataSourceModule
 import com.b1nd.dodam.network.schedule.di.scheduleDatasourceModule
 import com.b1nd.dodam.nightstudy.di.nightStudyViewModelModule
+import com.b1nd.dodam.outing.di.outingViewModelModule
 import com.b1nd.dodam.point.di.pointViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
 import com.b1nd.dodam.register.di.registerRepositoryModule
@@ -65,6 +67,8 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             pointViewModelModule,
             pointRepositoryModule,
             pointDataSourceModule,
+            outingViewModelModule,
+            approveOutingViewModelModule,
             allViewModelModule,
         )
         block()
