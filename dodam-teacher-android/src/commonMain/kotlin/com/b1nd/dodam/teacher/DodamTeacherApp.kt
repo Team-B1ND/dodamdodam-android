@@ -214,7 +214,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         allScreen(
                             navigateToSetting = navHostController::navigateToSetting,
                             navigateToOut = navHostController::navigateToApproveOuting,
-                            navigateToNightStudy = navHostController::navigateToApproveNightStudy
+                            navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                             navigateToPoint = navHostController::navigateToPoint,
                         )
 
