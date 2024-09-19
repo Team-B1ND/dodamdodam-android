@@ -18,7 +18,7 @@ fun NavController.navigateToSetting(
 ) = navigate(SETTING_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.settingScreen(popBackStack: () -> Unit, logout: () -> Unit) {
+fun NavGraphBuilder.settingScreen(versionInfo: String, popBackStack: () -> Unit, logout: () -> Unit) {
     composable(
         route = SETTING_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -27,6 +27,7 @@ fun NavGraphBuilder.settingScreen(popBackStack: () -> Unit, logout: () -> Unit) 
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         SettingScreen(
+            versionInfo = versionInfo,
             popBackStack = popBackStack,
             logout = logout,
         )
