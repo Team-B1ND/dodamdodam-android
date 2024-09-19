@@ -34,6 +34,7 @@ kotlin {
             implementation(projects.feature.meal)
             implementation(projects.featureTeacher.point)
             implementation(projects.featureTeacher.all)
+            implementation(projects.feature.setting)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)

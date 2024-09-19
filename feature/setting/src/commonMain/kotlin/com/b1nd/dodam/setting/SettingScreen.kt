@@ -114,7 +114,10 @@ internal fun SettingScreen(
             onDismissRequest = { showLogoutDialog = false },
         ) {
             DodamButtonDialog(
-                confirmButton = logout,
+                confirmButton = {
+                    viewModel.logout()
+                    logout()
+                },
                 confirmButtonText = "로그아웃",
                 confirmButtonRole = ButtonRole.Negative,
                 dismissButton = { showLogoutDialog = false },
@@ -223,7 +226,7 @@ internal fun SettingScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        if (uiState.profile != null) {
+                        if (uiState.profile != null && uiState.profile != "") {
                             AsyncImage(
                                 modifier = Modifier
                                     .clip(DodamTheme.shapes.medium)
