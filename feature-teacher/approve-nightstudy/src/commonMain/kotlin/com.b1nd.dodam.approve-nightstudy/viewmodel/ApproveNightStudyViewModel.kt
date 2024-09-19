@@ -28,16 +28,17 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
 
     fun load() {
         viewModelScope.launch {
-            nightStudyRepository.getPendingNightStudy().collect{
-                when(it){
+            nightStudyRepository.getPendingNightStudy().collect {
+                when (it) {
                     is Result.Error -> {
                         it.error.printStackTrace()
                     }
+
                     Result.Loading -> {}
                     is Result.Success -> {
                         _uiState.update { ui ->
                             ui.copy(
-                                nightStudyUiState =  NightStudyUiState.Success(
+                                nightStudyUiState = NightStudyUiState.Success(
                                     pendingData = it.data
                                 )
                             )
@@ -45,8 +46,25 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
                     }
                 }
             }
+        }
+    }
 
-
+    fun detailMember(name: String, start: String, end: String, reason: String, id: Long, place: String, doNeedPhone: Boolean, reasonForPhone: String?) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    detailMember = DetailMember(
+                        id = id,
+                        name = name,
+                        startDay = start,
+                        endDay = end,
+                        place = place,
+                        content = reason,
+                        doNeedPhone = doNeedPhone,
+                        reasonForPhone = reasonForPhone
+                    ),
+                )
+            }
         }
     }
 }
