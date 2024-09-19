@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.common.utiles.getDate
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
@@ -295,8 +296,8 @@ fun ApproveNightStudyScreen(
                                             selectedItemIndex = index
                                             viewModel.detailMember(
                                                 id = filterMemberData.id,
-                                                start = filterMemberData.startAt.date.toString(),
-                                                end = filterMemberData.endAt.date.toString(),
+                                                start = getDate(filterMemberData.startAt.date.toString()),
+                                                end = getDate(filterMemberData.endAt.date.toString()),
                                                 place = filterMemberData.place,
                                                 doNeedPhone = filterMemberData.doNeedPhone,
                                                 reasonForPhone = filterMemberData.reasonForPhone,

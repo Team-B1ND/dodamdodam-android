@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.approveouting.viewmodel.ApproveOutViewModel
+import com.b1nd.dodam.common.utiles.getDate
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
@@ -323,8 +324,4 @@ fun getTime(time: String): String {
     val minute = time.split("T")[1].split(":")[1].toInt()
 
     return "${date1}월 ${date2}일 $hour:$minute"
-}
-fun getDate(date: String): String {
-    val atoms = date.split("-")
-    return "${atoms[1].toInt()}월 ${atoms[2].toInt()}일"
 }

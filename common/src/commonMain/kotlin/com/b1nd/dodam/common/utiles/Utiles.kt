@@ -28,3 +28,9 @@ fun <T1, T2, R> combineWhenAllComplete(flow1: Flow<T1>, flow2: Flow<T2>, transfo
     // 두 Flow가 모두 종료되었을 때 마지막 값으로 변환 작업 수행
     emit(transform(lastValue1!!, lastValue2!!))
 }
+
+fun getDate(date: String): String {
+    val atoms = date.split("-")
+    return "${atoms[1].toInt()}월 ${atoms[2].toInt()}일"
+}
+
