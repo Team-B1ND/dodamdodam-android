@@ -222,7 +222,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(bottom = 60.dp)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp),
             ) {
                 Column {
                     DodamSegmentedButton(
