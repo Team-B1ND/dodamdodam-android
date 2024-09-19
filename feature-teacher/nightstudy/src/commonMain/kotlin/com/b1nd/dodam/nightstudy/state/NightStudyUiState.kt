@@ -9,7 +9,7 @@ data class NightStudyScreenUiState(
 )
 
 sealed interface NightStudyUiState {
-    data class Success(val pendingData: ImmutableList<NightStudy>, val ingData: ImmutableList<NightStudy>) : NightStudyUiState
+    data class Success(val pendingCnt: Int, val ingData: ImmutableList<NightStudy>) : NightStudyUiState
     data object Loading : NightStudyUiState
     data object Error : NightStudyUiState
 }
