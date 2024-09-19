@@ -35,6 +35,7 @@ kotlin {
             implementation(projects.featureTeacher.outing)
             implementation(projects.featureTeacher.approveOuting)
             implementation(projects.featureTeacher.point)
+            implementation(projects.featureTeacher.all)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)

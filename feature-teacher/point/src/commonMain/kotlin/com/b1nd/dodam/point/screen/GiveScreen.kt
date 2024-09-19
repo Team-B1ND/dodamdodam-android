@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -98,12 +98,12 @@ internal fun GiveScreen(
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding(),
+            .fillMaxSize(),
     ) {
         Scaffold(
             topBar = {
                 DodamTopAppBar(
+                    modifier = Modifier.statusBarsPadding(),
                     title = "상벌점 부여",
                     onBackClick = popBackStack,
                 )
