@@ -193,7 +193,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                             navigateToSetting = {},
                             navigateToOut = {},
                             navigateToNightStudy = {},
-                            navigateToPoint = navHostController::navigateToPoint
+                            navigateToPoint = navHostController::navigateToPoint,
                         )
                     }
 
@@ -269,7 +269,7 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     onClick = {
                         onClick(ALL_ROUTE)
                     },
-                    enable = route != ALL_ROUTE
+                    enable = route != ALL_ROUTE,
                 ),
             ),
         )

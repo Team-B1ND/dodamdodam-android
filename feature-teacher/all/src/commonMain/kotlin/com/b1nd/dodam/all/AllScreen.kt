@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,12 +14,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,20 +38,32 @@ import com.b1nd.dodam.designsystem.component.ActionIcon
 import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDivider
-import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ColoredPencil
 import com.b1nd.dodam.ui.icons.ColoredTrophy
+import com.b1nd.dodam.ui.icons.DefaultProfile
 import com.b1nd.dodam.ui.icons.Tent
 import kotlinx.collections.immutable.persistentListOf
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 internal fun AllScreen(
+    viewModel: AllViewModel = koinViewModel(),
     navigateToSetting: () -> Unit,
     navigateToOut: () -> Unit,
     navigateToNightStudy: () -> Unit,
     navigateToPoint: () -> Unit,
 ) {
+
+    val uiState by viewModel.state.collectAsState()
+
+    LaunchedEffect(true) {
+        viewModel.loadProfile()
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -85,20 +99,52 @@ internal fun AllScreen(
                         ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    AsyncImage(
-                        modifier = Modifier
-                            .size(70.dp)
-                            .clip(DodamTheme.shapes.medium),
-                        model = "https://i.namu.wiki/i/4Mlxj6PmC-VGpH89-MVlhAEezBnrd5vMiYjF6HOEWEyIPeui5oSLYgRyqaOlMKy4Ss0jSz1LZBxkP549NvOsWA.webp",
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        text = "환영합니다, 박병춘님",
-                        style = DodamTheme.typography.headlineBold(),
-                        color = DodamTheme.colors.labelNormal
-                    )
+                    if (uiState.isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .size(70.dp)
+                                .background(
+                                    brush = shimmerEffect(),
+                                    shape = DodamTheme.shapes.extraSmall,
+                                ),
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Box(
+                            modifier = Modifier
+                                .width(130.dp)
+                                .height(20.dp)
+                                .background(
+                                    brush = shimmerEffect(),
+                                    shape = DodamTheme.shapes.medium,
+                                ),
+                        )
+                    } else {
+                        if (uiState.memberInfo.profileImage == null || uiState.memberInfo.profileImage == "") {
+                            Image(
+                                bitmap = DefaultProfile,
+                                contentDescription = "profile",
+                                modifier = Modifier
+                                    .size(70.dp)
+                                    .clip(DodamTheme.shapes.medium),
+                                contentScale = ContentScale.Crop,
+                            )
+                        } else {
+                            AsyncImage(
+                                modifier = Modifier
+                                    .size(70.dp)
+                                    .clip(DodamTheme.shapes.medium),
+                                model = uiState.memberInfo.profileImage,
+                                contentDescription = "profile",
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = "환영합니다, 박병춘님",
+                            style = DodamTheme.typography.headlineBold(),
+                            color = DodamTheme.colors.labelNormal
+                        )
+                    }
                 }
             }
 
