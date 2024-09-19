@@ -109,10 +109,12 @@ fun ApproveNightStudyScreen(
                     topStart = 28.dp,
                     topEnd = 28.dp,
                 ),
-                onDismissRequest = { },
+                onDismissRequest = {
+                    selectedItemIndex = -1
+                },
                 title = {
                     Text(
-                        text = "하준혁의 심야 자습 정보",
+                        text = "${state.detailMember.name}님의 심야 자습 정보",
                         style = DodamTheme.typography.heading1Bold(),
                         color = DodamTheme.colors.labelNormal,
                         modifier = Modifier.padding(bottom = 16.dp),
@@ -133,7 +135,7 @@ fun ApproveNightStudyScreen(
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = "detailMember.startDay",
+                                text = state.detailMember.startDay,
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelNeutral
                             )
@@ -148,7 +150,7 @@ fun ApproveNightStudyScreen(
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = "detailMember.endDay",
+                                text = state.detailMember.endDay,
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelNeutral
                             )
@@ -163,7 +165,7 @@ fun ApproveNightStudyScreen(
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = "detailMember.place",
+                                text = state.detailMember.place,
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelNeutral
                             )
@@ -174,16 +176,17 @@ fun ApproveNightStudyScreen(
                             Text(
                                 text = "학습 계획",
                                 style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelAssistive
+                                color = DodamTheme.colors.labelAssistive,
+                                modifier = Modifier.padding(end = 16.dp)
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = "detailMember.content",
+                                text = state.detailMember.content,
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelNeutral
                             )
                         }
-                        if (true) {
+                        if (state.detailMember.doNeedPhone) {
                             Row {
                                 Text(
                                     text = "휴대폰 사용",
@@ -192,7 +195,7 @@ fun ApproveNightStudyScreen(
                                 )
                                 Spacer(modifier = Modifier.weight(1f))
                                 Text(
-                                    text = "detailMember.reasonForPhone!!",
+                                    text = state.detailMember.reasonForPhone ?:"",
                                     style = DodamTheme.typography.headlineMedium(),
                                     color = DodamTheme.colors.labelNeutral,
                                 )
@@ -256,51 +259,63 @@ fun ApproveNightStudyScreen(
                     },
                     modifier = Modifier,
                 )
-//                when (val data = state.outPendingUiState) {
-//                    OutPendingUiState.Error -> {}
-//                    OutPendingUiState.Loading -> {}
-//                    is OutPendingUiState.Success -> {
-//                        val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
-//                        val filteredMemberList = members.filter { member ->
-//                            when {
-//                                gradeIndex == 0 && roomIndex == 0 -> true
-//                                gradeIndex == 0 && roomIndex != 0 -> member.student.room == roomIndex
-//                                gradeIndex != 0 && roomIndex == 0 -> member.student.grade == gradeIndex
-//                                else -> member.student.grade == gradeIndex && member.student.room == roomIndex
-//                            }
-//                        }.let { list ->
-//                            if (searchStudent.isNotEmpty()) {
-//                                list.filter { it.student.name.contains(searchStudent) }
-//                            } else {
-//                                list
-//                            }
-//                        }
-                LazyColumn(
-                    modifier = Modifier.padding(top = 20.dp),
-                ) {
-                    items(3) { index ->
-                        DodamMember(
-                            name = "filteredMemberList[index].student.name",
-                            icon = null,
-                            modifier = Modifier
-                                .padding(bottom = 12.dp)
-                                .clickable {
-                                    selectedItemIndex = index
-
-                                },
-                            content = {
-                                if (index == selectedItemIndex) {
-                                    Image(
-                                        modifier = Modifier
-                                            .align(Alignment.CenterVertically)
-                                            .size(24.dp),
-                                        imageVector = DodamIcons.CheckmarkCircle.value,
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
-                                    )
-                                }
-                            },
-                        )
+                when (val data = state.nightStudyUiState) {
+                    is NightStudyUiState.Error -> {}
+                    is NightStudyUiState.Loading -> {}
+                    is NightStudyUiState.Success -> {
+                        val members = data.pendingData
+                        val filteredMemberList = members.filter { member ->
+                            when {
+                                gradeIndex == 0 && roomIndex == 0 -> true
+                                gradeIndex == 0 && roomIndex != 0 -> member.student.room == roomIndex
+                                gradeIndex != 0 && roomIndex == 0 -> member.student.grade == gradeIndex
+                                else -> member.student.grade == gradeIndex && member.student.room == roomIndex
+                            }
+                        }.let { list ->
+                            if (searchStudent.isNotEmpty()) {
+                                list.filter { it.student.name.contains(searchStudent) }
+                            } else {
+                                list
+                            }
+                        }
+                        LazyColumn(
+                            modifier = Modifier.padding(top = 20.dp),
+                        ) {
+                            items(filteredMemberList.size) { index ->
+                                val filterMemberData = filteredMemberList[index]
+                                DodamMember(
+                                    name = filterMemberData.student.name,
+                                    icon = null,
+                                    modifier = Modifier
+                                        .padding(bottom = 12.dp)
+                                        .clickable {
+                                            selectedItemIndex = index
+                                            viewModel.detailMember(
+                                                id = filterMemberData.id,
+                                                start = filterMemberData.startAt.date.toString(),
+                                                end = filterMemberData.endAt.date.toString(),
+                                                place = filterMemberData.place,
+                                                doNeedPhone = filterMemberData.doNeedPhone,
+                                                reasonForPhone = filterMemberData.reasonForPhone,
+                                                reason = filterMemberData.content,
+                                                name = filterMemberData.student.name
+                                            )
+                                        },
+                                    content = {
+                                        if (index == selectedItemIndex) {
+                                            Image(
+                                                modifier = Modifier
+                                                    .align(Alignment.CenterVertically)
+                                                    .size(24.dp),
+                                                imageVector = DodamIcons.CheckmarkCircle.value,
+                                                contentDescription = null,
+                                                colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
+                                            )
+                                        }
+                                    },
+                                )
+                            }
+                        }
                     }
                 }
             }
