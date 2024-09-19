@@ -55,6 +55,7 @@ import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.meal.navigation.navigationToMeal
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
+import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
@@ -210,8 +211,9 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 
                         allScreen(
                             navigateToSetting = {},
-                            navigateToOut = {},
-                            navigateToNightStudy = {},
+                            navigateToOut = navHostController::navigateToApproveOuting,
+                            navigateToNightStudy = navHostController::navigateToApproveNightStudy
+                            ,
                             navigateToPoint = navHostController::navigateToPoint,
                         )
 
