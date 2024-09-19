@@ -20,6 +20,7 @@ kotlin {
         implementation(projects.common)
         implementation(projects.ui)
         implementation(projects.logging)
+        implementation(projects.datastore)
     }
 }
 

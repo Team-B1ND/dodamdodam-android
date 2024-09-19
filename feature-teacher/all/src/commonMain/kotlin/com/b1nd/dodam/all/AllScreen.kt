@@ -73,7 +73,7 @@ internal fun AllScreen(
                     ActionIcon(
                         icon = DodamIcons.Gear,
                         onClick = navigateToSetting,
-                        enabled = false,
+                        enabled = true,
                     ),
                 ),
             )
