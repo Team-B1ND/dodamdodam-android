@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,7 +56,6 @@ internal fun AllScreen(
     navigateToNightStudy: () -> Unit,
     navigateToPoint: () -> Unit,
 ) {
-
     val uiState by viewModel.state.collectAsState()
 
     LaunchedEffect(true) {
@@ -75,19 +73,19 @@ internal fun AllScreen(
                     ActionIcon(
                         icon = DodamIcons.Gear,
                         onClick = navigateToSetting,
-                        enabled = false
-                    )
+                        enabled = false,
+                    ),
                 ),
             )
         },
-        containerColor = DodamTheme.colors.backgroundNeutral
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             item {
                 Row(
@@ -95,9 +93,9 @@ internal fun AllScreen(
                         .fillMaxWidth()
                         .padding(
                             top = 12.dp,
-                            bottom = 8.dp
+                            bottom = 8.dp,
                         ),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (uiState.isLoading) {
                         Box(
@@ -135,14 +133,14 @@ internal fun AllScreen(
                                     .clip(DodamTheme.shapes.medium),
                                 model = uiState.memberInfo.profileImage,
                                 contentDescription = "profile",
-                                contentScale = ContentScale.Crop
+                                contentScale = ContentScale.Crop,
                             )
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(
                             text = "환영합니다, 박병춘님",
                             style = DodamTheme.typography.headlineBold(),
-                            color = DodamTheme.colors.labelNormal
+                            color = DodamTheme.colors.labelNormal,
                         )
                     }
                 }
@@ -156,7 +154,7 @@ internal fun AllScreen(
                 AllCard(
                     image = Tent,
                     text = "외출/외박 승인하기",
-                    onClick = navigateToOut
+                    onClick = navigateToOut,
                 )
             }
 
@@ -164,7 +162,7 @@ internal fun AllScreen(
                 AllCard(
                     image = ColoredPencil,
                     text = "심야 자습 승인하기",
-                    onClick = navigateToNightStudy
+                    onClick = navigateToNightStudy,
                 )
             }
 
@@ -172,63 +170,58 @@ internal fun AllScreen(
                 AllCard(
                     image = ColoredTrophy,
                     text = "상벌점 부여하기",
-                    onClick = navigateToPoint
+                    onClick = navigateToPoint,
                 )
             }
-
         }
     }
 }
 
 @Composable
-private fun AllCard(
-    image: ImageVector,
-    text: String,
-    onClick: () -> Unit
-) {
+private fun AllCard(image: ImageVector, text: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberBounceIndication(),
-                onClick = onClick
+                onClick = onClick,
             ),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             modifier = Modifier
                 .padding(
                     start = 8.dp,
                     top = 4.dp,
-                    bottom = 4.dp
+                    bottom = 4.dp,
                 )
                 .background(
                     color = DodamTheme.colors.fillAlternative,
-                    shape = DodamTheme.shapes.extraSmall
+                    shape = DodamTheme.shapes.extraSmall,
                 ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Image(
                 modifier = Modifier
                     .padding(6.dp)
                     .size(20.dp),
                 imageVector = image,
-                contentDescription = null
+                contentDescription = null,
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = text,
             style = DodamTheme.typography.headlineMedium(),
-            color = DodamTheme.colors.labelNormal
+            color = DodamTheme.colors.labelNormal,
         )
         Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = Modifier.size(14.dp),
             imageVector = DodamIcons.ChevronRight.value,
             contentDescription = null,
-            colorFilter = ColorFilter.tint(DodamTheme.colors.labelAssistive)
+            colorFilter = ColorFilter.tint(DodamTheme.colors.labelAssistive),
         )
         Spacer(modifier = Modifier.width(4.dp))
     }
