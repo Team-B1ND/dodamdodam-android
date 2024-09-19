@@ -38,6 +38,8 @@ import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.b1nd.dodam.all.navigation.ALL_ROUTE
 import com.b1nd.dodam.all.navigation.allScreen
+import com.b1nd.dodam.approvenightstudy.APPROVE_NIGHT_STUDY_ROUTE
+import com.b1nd.dodam.approvenightstudy.approveNightStudyScreen
 import com.b1nd.dodam.approveouting.approveOutingScreen
 import com.b1nd.dodam.approveouting.navigateToApproveOuting
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -129,7 +131,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                     NavHost(
                         modifier = Modifier.fillMaxSize(),
                         navController = navHostController,
-                        startDestination = if (isLogin!!) HOME_ROUTE else ONBOARDING_ROUTE,
+                        startDestination = if (isLogin!!) APPROVE_NIGHT_STUDY_ROUTE else ONBOARDING_ROUTE,
                     ) {
                         onboardingScreen(
                             onRegisterClick = navHostController::navigateToInfo,
@@ -216,6 +218,10 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                             navigateToOut = {},
                             navigateToNightStudy = {},
                             navigateToPoint = navHostController::navigateToPoint,
+                        )
+
+                        approveNightStudyScreen(
+                            onBackClick = navHostController::popBackStack
                         )
                     }
 

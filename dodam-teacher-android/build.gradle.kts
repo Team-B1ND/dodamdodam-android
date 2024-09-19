@@ -34,6 +34,7 @@ kotlin {
             implementation(projects.feature.meal)
             implementation(projects.featureTeacher.outing)
             implementation(projects.featureTeacher.approveOuting)
+            implementation(projects.featureTeacher.approveNightstudy)
             implementation(projects.featureTeacher.point)
             implementation(projects.featureTeacher.all)
 
