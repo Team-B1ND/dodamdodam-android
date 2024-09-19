@@ -233,6 +233,7 @@ fun DodamApp(
                 },
             )
             settingScreen(
+                versionInfo = "3.2.0",
                 popBackStack = navController::popBackStack,
                 logout = logout,
             )
