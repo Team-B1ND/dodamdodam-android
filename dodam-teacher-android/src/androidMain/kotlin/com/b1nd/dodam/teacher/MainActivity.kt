@@ -38,7 +38,9 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
-            DodamTeacherApp()
+            DodamTeacherApp(
+                exit = this::finish,
+            )
         }
     }
 }
