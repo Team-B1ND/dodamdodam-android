@@ -1,3 +1,5 @@
+package com.b1nd.dodam.`approve-nightstudy`
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,7 +20,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,7 +45,9 @@ import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApproveNightStudyScreen() {
+fun ApproveNightStudyScreen(
+    onBackClick: () -> Unit
+) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -91,7 +94,9 @@ fun ApproveNightStudyScreen() {
             DodamTopAppBar(
                 title = "심야 자습 승인",
                 modifier = Modifier.statusBarsPadding(),
-                onBackClick = {},
+                onBackClick = {
+                    onBackClick()
+                },
             )
         },
     ) {
