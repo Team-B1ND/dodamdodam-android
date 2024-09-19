@@ -59,7 +59,7 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                 }
 
                 return@combineWhenAllComplete NightStudyUiState.Success(
-                    pendingData = pendingMember.toImmutableList(),
+                    pendingCnt = pendingMember.size,
                     ingData = studyingMember.toImmutableList(),
                 )
             }.collect { uiState ->
@@ -67,36 +67,6 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                     it.copy(
                         nightStudyUiState = uiState,
                     )
-                }
-            }
-        }
-    }
-
-    fun allow(id: Long) {
-        viewModelScope.launch {
-            nightStudyRepository.allowNightStudy(id).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                    }
-                    is Result.Error -> {
-                        result.error.printStackTrace()
-                    }
-                    Result.Loading -> {}
-                }
-            }
-        }
-    }
-
-    fun reject(id: Long) {
-        viewModelScope.launch {
-            nightStudyRepository.rejectNightStudy(id).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                    }
-                    is Result.Error -> {
-                        result.error.printStackTrace()
-                    }
-                    Result.Loading -> {}
                 }
             }
         }

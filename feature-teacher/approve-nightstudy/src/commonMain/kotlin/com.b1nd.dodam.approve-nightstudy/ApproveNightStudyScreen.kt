@@ -1,4 +1,4 @@
-package com.b1nd.dodam.approveouting
+package com.b1nd.dodam.approvenightstudy
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -29,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.approveouting.viewmodel.ApproveOutViewModel
 import com.b1nd.dodam.common.utiles.getDate
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -47,7 +47,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackClick: () -> Unit, title: Int) {
+fun ApproveNightStudyScreen(onBackClick: () -> Unit, viewModel: ApproveNightStudyViewModel = koinViewModel()) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -79,35 +79,22 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
         )
     }.toImmutableList()
 
-    var titleIndex by remember { mutableIntStateOf(0) }
-    val text = listOf(
-        "외출",
-        "외박",
-    )
-    val item = List(2) { index: Int ->
-        DodamSegment(
-            selected = titleIndex == index,
-            text = text[index],
-            onClick = { titleIndex = index },
-        )
-    }.toImmutableList()
-
     var searchStudent by remember { mutableStateOf("") }
 
     var selectedItemIndex by remember { mutableStateOf(-1) }
 
     LaunchedEffect(key1 = true) {
-        titleIndex = if (title == 0) 0 else 1
         viewModel.load()
     }
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
             DodamTopAppBar(
-                title = "외출/외박 승인",
+                title = "심야 자습 승인",
                 modifier = Modifier.statusBarsPadding(),
                 onBackClick = onBackClick,
+
             )
         },
     ) {
@@ -117,28 +104,33 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                     topStart = 28.dp,
                     topEnd = 28.dp,
                 ),
-                onDismissRequest = { selectedItemIndex = -1 },
+                onDismissRequest = {
+                    selectedItemIndex = -1
+                },
                 title = {
                     Text(
-                        text = "${state.detailMember.name}님의 ${if (titleIndex == 0)"외출" else "외박"}정보",
+                        text = "${state.detailMember.name}님의 심야 자습 정보",
                         style = DodamTheme.typography.heading1Bold(),
                         color = DodamTheme.colors.labelNormal,
                         modifier = Modifier.padding(bottom = 16.dp),
                     )
                 },
                 content = {
-                    Column {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    ) {
                         Row(
                             modifier = Modifier.padding(bottom = 12.dp),
                         ) {
                             Text(
-                                text = if (titleIndex == 0)"외출 일시" else "외박 날짜",
+                                text = "시작 날짜",
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelAssistive,
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = state.detailMember.start,
+                                text = state.detailMember.startDay,
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelNeutral,
                             )
@@ -147,29 +139,62 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                             modifier = Modifier.padding(bottom = 12.dp),
                         ) {
                             Text(
-                                text = if (titleIndex == 0)"복귀 일시" else "복귀 날짜",
+                                text = "종료 날짜",
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelAssistive,
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = state.detailMember.end,
+                                text = state.detailMember.endDay,
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelNeutral,
                             )
                         }
-                        Row {
+                        Row(
+                            modifier = Modifier.padding(bottom = 12.dp),
+                        ) {
                             Text(
-                                text = if (titleIndex == 0)"외출 사유" else "외박 사유",
+                                text = "자습 장소",
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelAssistive,
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = state.detailMember.reason,
+                                text = state.detailMember.place,
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelNeutral,
                             )
+                        }
+                        Row(
+                            modifier = Modifier.padding(bottom = 12.dp),
+                        ) {
+                            Text(
+                                text = "학습 계획",
+                                style = DodamTheme.typography.headlineMedium(),
+                                color = DodamTheme.colors.labelAssistive,
+                                modifier = Modifier.padding(end = 16.dp),
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text(
+                                text = state.detailMember.content,
+                                style = DodamTheme.typography.headlineMedium(),
+                                color = DodamTheme.colors.labelNeutral,
+                            )
+                        }
+                        if (state.detailMember.doNeedPhone) {
+                            Row {
+                                Text(
+                                    text = "휴대폰 사용",
+                                    style = DodamTheme.typography.headlineMedium(),
+                                    color = DodamTheme.colors.labelAssistive,
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(
+                                    text = state.detailMember.reasonForPhone ?: "",
+                                    style = DodamTheme.typography.headlineMedium(),
+                                    color = DodamTheme.colors.labelNeutral,
+                                )
+                            }
                         }
 
                         Row(
@@ -177,12 +202,7 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                         ) {
                             DodamButton(
                                 onClick = {
-                                    if (titleIndex == 1) {
-                                        viewModel.rejectSleepover(state.detailMember.id)
-                                    } else {
-                                        viewModel.rejectGoing(state.detailMember.id)
-                                    }
-                                    selectedItemIndex = -1
+                                    viewModel.reject(state.detailMember.id)
                                 },
                                 text = "거절하기",
                                 buttonSize = ButtonSize.Large,
@@ -192,12 +212,7 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                             Spacer(modifier = Modifier.width(8.dp))
                             DodamButton(
                                 onClick = {
-                                    if (titleIndex == 1) {
-                                        viewModel.allowSleepover(state.detailMember.id)
-                                    } else {
-                                        viewModel.allowGoing(state.detailMember.id)
-                                    }
-                                    selectedItemIndex = -1
+                                    viewModel.allow(state.detailMember.id)
                                 },
                                 text = "승인하기",
                                 buttonSize = ButtonSize.Large,
@@ -222,10 +237,6 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
             ) {
                 Column {
                     DodamSegmentedButton(
-                        segments = item,
-                        modifier = Modifier.padding(top = 12.dp),
-                    )
-                    DodamSegmentedButton(
                         segments = gradeItem,
                         modifier = Modifier.padding(top = 12.dp),
                     )
@@ -245,11 +256,11 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                     },
                     modifier = Modifier,
                 )
-                when (val data = state.outPendingUiState) {
-                    OutPendingUiState.Error -> {}
-                    OutPendingUiState.Loading -> {}
-                    is OutPendingUiState.Success -> {
-                        val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                when (val data = state.nightStudyUiState) {
+                    is NightStudyUiState.Error -> {}
+                    is NightStudyUiState.Loading -> {}
+                    is NightStudyUiState.Success -> {
+                        val members = data.pendingData
                         val filteredMemberList = members.filter { member ->
                             when {
                                 gradeIndex == 0 && roomIndex == 0 -> true
@@ -268,30 +279,24 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                             modifier = Modifier.padding(top = 20.dp),
                         ) {
                             items(filteredMemberList.size) { index ->
+                                val filterMemberData = filteredMemberList[index]
                                 DodamMember(
-                                    name = filteredMemberList[index].student.name,
+                                    name = filterMemberData.student.name,
                                     icon = null,
                                     modifier = Modifier
                                         .padding(bottom = 12.dp)
                                         .clickable {
                                             selectedItemIndex = index
-                                            if (titleIndex == 1) {
-                                                viewModel.detailMember(
-                                                    name = filteredMemberList[index].student.name,
-                                                    start = getDate(filteredMemberList[index].startAt.date),
-                                                    end = getDate(filteredMemberList[index].endAt.date),
-                                                    reason = filteredMemberList[index].reason,
-                                                    id = filteredMemberList[index].id,
-                                                )
-                                            } else {
-                                                viewModel.detailMember(
-                                                    name = filteredMemberList[index].student.name,
-                                                    start = getTime(filteredMemberList[index].startAt.toString()),
-                                                    end = getTime(filteredMemberList[index].endAt.toString()),
-                                                    reason = filteredMemberList[index].reason,
-                                                    id = filteredMemberList[index].id,
-                                                )
-                                            }
+                                            viewModel.detailMember(
+                                                id = filterMemberData.id,
+                                                start = getDate(filterMemberData.startAt.date),
+                                                end = getDate(filterMemberData.endAt.date),
+                                                place = filterMemberData.place,
+                                                doNeedPhone = filterMemberData.doNeedPhone,
+                                                reasonForPhone = filterMemberData.reasonForPhone,
+                                                reason = filterMemberData.content,
+                                                name = filterMemberData.student.name,
+                                            )
                                         },
                                     content = {
                                         if (index == selectedItemIndex) {
@@ -313,13 +318,4 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
             }
         }
     }
-}
-
-fun getTime(time: String): String {
-    val date1 = time.split("T")[0].split("-")[1].toInt()
-    val date2 = time.split("T")[0].split("-")[2].toInt()
-    val hour = time.split("T")[1].split(":")[0].toInt()
-    val minute = time.split("T")[1].split(":")[1].toInt()
-
-    return "${date1}월 ${date2}일 $hour:$minute"
 }

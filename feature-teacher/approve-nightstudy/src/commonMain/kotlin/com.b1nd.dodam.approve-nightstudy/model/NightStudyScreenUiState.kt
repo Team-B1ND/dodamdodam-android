@@ -1,4 +1,4 @@
-package com.b1nd.dodam.nightstudy.state
+package com.b1nd.dodam.approvenightstudy
 
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import kotlinx.collections.immutable.ImmutableList
@@ -9,7 +9,7 @@ data class NightStudyScreenUiState(
 )
 
 sealed interface NightStudyUiState {
-    data class Success(val pendingCnt: Int, val ingData: ImmutableList<NightStudy>) : NightStudyUiState
+    data class Success(val pendingData: ImmutableList<NightStudy>) : NightStudyUiState
     data object Loading : NightStudyUiState
     data object Error : NightStudyUiState
 }

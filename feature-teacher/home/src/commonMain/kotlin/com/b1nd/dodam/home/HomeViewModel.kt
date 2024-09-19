@@ -116,7 +116,7 @@ class HomeViewModel : ViewModel(), KoinComponent {
         }
         combineWhenAllComplete(
             outingRepository.getOutings(date),
-            outingRepository.getSleepovers(date),
+            outingRepository.getAllSleepovers(date),
         ) { outing, sleepover ->
             var outAllowCount = 0
             var outPendingCount = 0
