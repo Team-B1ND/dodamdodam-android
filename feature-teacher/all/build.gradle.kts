@@ -35,6 +35,7 @@ kotlin {
             implementation(projects.common)
             implementation(projects.ui)
             implementation(projects.logging)
+            implementation(projects.data.member)
         }
     }
 }
