@@ -381,16 +381,15 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
                                                     },
                                                     style = DodamTheme.typography.headlineMedium(),
                                                     color = if (titleIndex == 0) {
-                                                        if ( hours > 0 || minutes > 30 || time > 1) {
+                                                        if (hours > 0 || minutes > 30 || time > 1) {
                                                             DodamTheme.colors.labelAssistive
-                                                        }else{
+                                                        } else {
                                                             DodamTheme.colors.primaryNormal
                                                         }
                                                     } else {
                                                         if (time <= 1) {
                                                             DodamTheme.colors.primaryNormal
-                                                        }
-                                                        else{
+                                                        } else {
                                                             DodamTheme.colors.labelAssistive
                                                         }
                                                     },
