@@ -179,7 +179,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                                 )
                             },
                             navigateToOuting = {
-                                navHostController.navigateToOuting(
+                                navHostController.navigateToApproveOuting(
                                     navOptions = navOptions {
                                         popUpTo(navHostController.graph.findStartDestination().route.toString()) {
                                             saveState = true
@@ -190,7 +190,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                                 )
                             },
                             navigateToNightStudy = {
-                                navHostController.navigateToNightStudy(
+                                navHostController.navigateToApproveNightStudy(
                                     navOptions = navOptions {
                                         popUpTo(navHostController.graph.findStartDestination().route.toString()) {
                                             saveState = true
