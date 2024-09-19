@@ -48,7 +48,11 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackClick: () -> Unit) {
+fun ApproveOutScreen(
+    viewModel: ApproveOutViewModel = koinViewModel(),
+    onBackClick: () -> Unit,
+    title: Int
+) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -98,6 +102,7 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
     var selectedItemIndex by remember { mutableStateOf(-1) }
 
     LaunchedEffect(key1 = true) {
+        titleIndex = if (title == 0) 0 else 1
         viewModel.load()
     }
     val state by viewModel.state.collectAsState()
