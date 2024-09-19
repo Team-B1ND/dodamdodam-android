@@ -48,7 +48,7 @@ import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -> Unit) {
+fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (title: Int) -> Unit) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -326,7 +326,9 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: () -
 
                                     DodamButton(
                                         onClick = {
-                                            navigateToApprove()
+                                            navigateToApprove(
+                                                titleIndex
+                                            )
                                         },
                                         text = "승인하러 가기",
                                         buttonRole = ButtonRole.Assistive,
