@@ -6,8 +6,6 @@ import com.b1nd.dodam.all.model.AllUiState
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.member.MemberRepository
-import com.b1nd.dodam.member.model.ActiveStatus
-import com.b1nd.dodam.member.model.MemberInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +15,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 
-class AllViewModel: ViewModel(), KoinComponent {
+class AllViewModel : ViewModel(), KoinComponent {
 
     private val memberRepository: MemberRepository by inject()
     private val dispatcher: CoroutineDispatcher by inject(named(DispatcherType.IO))
@@ -32,7 +30,7 @@ class AllViewModel: ViewModel(), KoinComponent {
                     _state.update { state ->
                         state.copy(
                             memberInfo = it.data,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -41,7 +39,7 @@ class AllViewModel: ViewModel(), KoinComponent {
                     it.error.printStackTrace()
                     _state.update { state ->
                         state.copy(
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }

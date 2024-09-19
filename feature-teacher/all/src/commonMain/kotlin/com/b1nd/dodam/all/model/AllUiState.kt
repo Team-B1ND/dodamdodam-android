@@ -16,6 +16,6 @@ data class AllUiState(
         role = "",
         status = ActiveStatus.ACTIVE,
         student = null,
-        teacher = null
-    )
+        teacher = null,
+    ),
 )
