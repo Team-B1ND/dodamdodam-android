@@ -93,9 +93,8 @@ fun ApproveNightStudyScreen(onBackClick: () -> Unit, viewModel: ApproveNightStud
             DodamTopAppBar(
                 title = "심야 자습 승인",
                 modifier = Modifier.statusBarsPadding(),
-                onBackClick = {
-                    onBackClick()
-                },
+                onBackClick = onBackClick
+
             )
         },
     ) {
