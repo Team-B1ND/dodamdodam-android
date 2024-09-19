@@ -13,7 +13,7 @@ const val APPROVE_OUTING_ROUTE = "approve_outing"
 
 fun NavController.navigateToApproveOuting(title: Int, navOptions: NavOptions? = null) = navigate(
     route = "$APPROVE_OUTING_ROUTE/$title",
-    navOptions = navOptions
+    navOptions = navOptions,
 )
 
 @ExperimentalMaterial3Api

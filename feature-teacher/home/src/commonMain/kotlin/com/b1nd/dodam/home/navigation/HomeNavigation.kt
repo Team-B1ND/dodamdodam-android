@@ -24,7 +24,7 @@ fun NavGraphBuilder.homeScreen(navigateToMeal: () -> Unit, navigateToOut: () -> 
             navigateToMeal = navigateToMeal,
             navigateToOuting = navigateToOut,
             navigateToNightStudy = navigateToNightStudy,
-            navigateToSleep = navigateToSleep
+            navigateToSleep = navigateToSleep,
         )
     }
 }

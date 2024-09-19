@@ -32,14 +32,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
-import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
-import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.nightstudy.state.DetailMember
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
@@ -53,10 +50,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NightStudyScreen(
-    viewModel: NightStudyViewModel = koinViewModel(),
-    navigateToApproveStudy: () -> Unit
-) {
+fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateToApproveStudy: () -> Unit) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -88,9 +82,7 @@ fun NightStudyScreen(
         )
     }.toImmutableList()
 
-
     var searchStudent by remember { mutableStateOf("") }
-
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -203,9 +195,8 @@ fun NightStudyScreen(
                                 .padding(vertical = 20.dp)
                                 .wrapContentHeight()
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite)
+                                .background(DodamTheme.colors.staticWhite),
                         ) {
-
                             Text(
                                 text = "심자 자습중인 학생",
                                 color = DodamTheme.colors.labelStrong,
@@ -236,7 +227,6 @@ fun NightStudyScreen(
                                             style = DodamTheme.typography.headlineMedium(),
                                             color = if (a == 1) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive,
                                         )
-
                                     }
                                 }
                             }

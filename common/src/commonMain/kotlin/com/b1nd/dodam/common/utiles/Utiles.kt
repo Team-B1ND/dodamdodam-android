@@ -33,4 +33,3 @@ fun getDate(date: String): String {
     val atoms = date.split("-")
     return "${atoms[1].toInt()}월 ${atoms[2].toInt()}일"
 }
-

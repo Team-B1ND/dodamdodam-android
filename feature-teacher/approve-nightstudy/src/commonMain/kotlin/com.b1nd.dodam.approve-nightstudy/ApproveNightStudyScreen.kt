@@ -40,19 +40,14 @@ import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
-import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApproveNightStudyScreen(
-    onBackClick: () -> Unit,
-    viewModel: ApproveNightStudyViewModel = koinViewModel()
-) {
+fun ApproveNightStudyScreen(onBackClick: () -> Unit, viewModel: ApproveNightStudyViewModel = koinViewModel()) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -83,7 +78,6 @@ fun ApproveNightStudyScreen(
             onClick = { roomIndex = index },
         )
     }.toImmutableList()
-
 
     var searchStudent by remember { mutableStateOf("") }
 
@@ -133,13 +127,13 @@ fun ApproveNightStudyScreen(
                             Text(
                                 text = "시작 날짜",
                                 style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelAssistive
+                                color = DodamTheme.colors.labelAssistive,
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
                                 text = state.detailMember.startDay,
                                 style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelNeutral
+                                color = DodamTheme.colors.labelNeutral,
                             )
                         }
                         Row(
@@ -148,13 +142,13 @@ fun ApproveNightStudyScreen(
                             Text(
                                 text = "종료 날짜",
                                 style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelAssistive
+                                color = DodamTheme.colors.labelAssistive,
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
                                 text = state.detailMember.endDay,
                                 style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelNeutral
+                                color = DodamTheme.colors.labelNeutral,
                             )
                         }
                         Row(
@@ -163,13 +157,13 @@ fun ApproveNightStudyScreen(
                             Text(
                                 text = "자습 장소",
                                 style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelAssistive
+                                color = DodamTheme.colors.labelAssistive,
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
                                 text = state.detailMember.place,
                                 style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelNeutral
+                                color = DodamTheme.colors.labelNeutral,
                             )
                         }
                         Row(
@@ -179,13 +173,13 @@ fun ApproveNightStudyScreen(
                                 text = "학습 계획",
                                 style = DodamTheme.typography.headlineMedium(),
                                 color = DodamTheme.colors.labelAssistive,
-                                modifier = Modifier.padding(end = 16.dp)
+                                modifier = Modifier.padding(end = 16.dp),
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
                                 text = state.detailMember.content,
                                 style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelNeutral
+                                color = DodamTheme.colors.labelNeutral,
                             )
                         }
                         if (state.detailMember.doNeedPhone) {
@@ -197,7 +191,7 @@ fun ApproveNightStudyScreen(
                                 )
                                 Spacer(modifier = Modifier.weight(1f))
                                 Text(
-                                    text = state.detailMember.reasonForPhone ?:"",
+                                    text = state.detailMember.reasonForPhone ?: "",
                                     style = DodamTheme.typography.headlineMedium(),
                                     color = DodamTheme.colors.labelNeutral,
                                 )
@@ -302,7 +296,7 @@ fun ApproveNightStudyScreen(
                                                 doNeedPhone = filterMemberData.doNeedPhone,
                                                 reasonForPhone = filterMemberData.reasonForPhone,
                                                 reason = filterMemberData.content,
-                                                name = filterMemberData.student.name
+                                                name = filterMemberData.student.name,
                                             )
                                         },
                                     content = {

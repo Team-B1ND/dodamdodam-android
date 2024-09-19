@@ -161,7 +161,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                         )
 
                         nightStudyScreen(
-                            navigateToApproveStudy = navHostController::navigateToApproveNightStudy
+                            navigateToApproveStudy = navHostController::navigateToApproveNightStudy,
                         )
                         homeScreen(
                             navigateToMeal = {
@@ -177,12 +177,12 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                             },
                             navigateToOut = {
                                 navHostController.navigateToApproveOuting(
-                                    title = 0
+                                    title = 0,
                                 )
                             },
                             navigateToSleep = {
                                 navHostController.navigateToApproveOuting(
-                                    title = 1
+                                    title = 1,
                                 )
                             },
                             navigateToNightStudy = {
@@ -200,9 +200,9 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                         outingScreen(
                             navigateToApprove = { title ->
                                 navHostController.navigateToApproveOuting(
-                                    title = title
+                                    title = title,
                                 )
-                            }
+                            },
                         )
                         approveOutingScreen(
                             onBackClick = navHostController::popBackStack,
@@ -216,7 +216,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                         )
 
                         approveNightStudyScreen(
-                            onBackClick = navHostController::popBackStack
+                            onBackClick = navHostController::popBackStack,
                         )
                     }
 
@@ -250,11 +250,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 }
 
 @Composable
-private fun DodamTeacherBottomNavigation(
-    modifier: Modifier = Modifier,
-    backStackEntry: NavBackStackEntry?,
-    onClick: (destination: String) -> Unit
-) {
+private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
     val route = backStackEntry?.destination?.route
 
     if (route != null && route in listOf(
@@ -262,7 +258,7 @@ private fun DodamTeacherBottomNavigation(
             MEAL_ROUTE,
             NIGHT_STUDY_ROUTE,
             ALL_ROUTE,
-            OUTING_ROUTE
+            OUTING_ROUTE,
         )
     ) {
         DodamNavigationBar(

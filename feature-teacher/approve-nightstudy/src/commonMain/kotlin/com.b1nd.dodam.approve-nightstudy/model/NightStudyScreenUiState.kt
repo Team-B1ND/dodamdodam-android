@@ -3,7 +3,6 @@ package com.b1nd.dodam.approvenightstudy
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import kotlinx.collections.immutable.ImmutableList
 
-
 data class NightStudyScreenUiState(
     val nightStudyUiState: NightStudyUiState = NightStudyUiState.Loading,
     val detailMember: DetailMember = DetailMember(),
