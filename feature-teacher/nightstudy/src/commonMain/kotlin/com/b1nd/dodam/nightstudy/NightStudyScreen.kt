@@ -53,7 +53,10 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
+fun NightStudyScreen(
+    viewModel: NightStudyViewModel = koinViewModel(),
+    navigateToApproveStudy: () -> Unit
+) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -169,7 +172,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel()) {
 
                             DodamButton(
                                 onClick = {
-
+                                    navigateToApproveStudy()
                                 },
                                 text = "승인하러 가기",
                                 buttonRole = ButtonRole.Assistive,
