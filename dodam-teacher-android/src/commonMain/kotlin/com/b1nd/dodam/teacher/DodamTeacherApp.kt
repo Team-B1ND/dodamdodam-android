@@ -36,6 +36,8 @@ import coil3.memory.MemoryCache
 import coil3.network.ktor.KtorNetworkFetcherFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
+import com.b1nd.dodam.all.navigation.ALL_ROUTE
+import com.b1nd.dodam.all.navigation.allScreen
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
@@ -54,6 +56,7 @@ import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
+import com.b1nd.dodam.point.navigation.navigateToPoint
 import com.b1nd.dodam.point.navigation.pointScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
@@ -185,6 +188,13 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
                             showSnackbar = showSnackbar,
                             popBackStack = navHostController::popBackStack,
                         )
+
+                        allScreen(
+                            navigateToSetting = {},
+                            navigateToOut = {},
+                            navigateToNightStudy = {},
+                            navigateToPoint = navHostController::navigateToPoint,
+                        )
                     }
 
                     // Bottom Navigation
@@ -220,7 +230,7 @@ fun DodamTeacherApp(viewModel: DodamTeacherAppViewModel = koinViewModel()) {
 private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
     val route = backStackEntry?.destination?.route
 
-    if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE, NIGHT_STUDY_ROUTE)) {
+    if (route != null && route in listOf(HOME_ROUTE, MEAL_ROUTE, NIGHT_STUDY_ROUTE, ALL_ROUTE)) {
         DodamNavigationBar(
             modifier = modifier,
             items = persistentListOf(
@@ -254,9 +264,12 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     enable = route != NIGHT_STUDY_ROUTE,
                 ),
                 DodamNavigationBarItem(
-                    selected = route == "",
+                    selected = route == ALL_ROUTE,
                     icon = DodamIcons.Menu,
-                    onClick = {},
+                    onClick = {
+                        onClick(ALL_ROUTE)
+                    },
+                    enable = route != ALL_ROUTE,
                 ),
             ),
         )
