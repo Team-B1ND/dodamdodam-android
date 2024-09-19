@@ -7,7 +7,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,15 +15,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +34,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -53,28 +45,18 @@ import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamButtonDialog
 import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamDivider
-import com.b1nd.dodam.designsystem.component.DodamTextButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
-import com.b1nd.dodam.logging.KmLogging
-import com.b1nd.dodam.ui.component.InputField
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.DefaultProfile
-import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import kotlin.math.log
 
 @OptIn(KoinExperimentalAPI::class)
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingScreen(
-    viewModel: SettingViewModel = koinViewModel(),
-    versionInfo: String = "3.2.0",
-    popBackStack: () -> Unit,
-    logout: () -> Unit
-) {
+internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versionInfo: String = "3.2.0", popBackStack: () -> Unit, logout: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }
@@ -104,7 +86,7 @@ internal fun SettingScreen(
                 dismissButtonText = "취소",
                 dismissButtonRole = ButtonRole.Assistive,
                 title = "이스터에그를 찾았어요!",
-                body = "아래 링크로 이동하시겠어요?"
+                body = "아래 링크로 이동하시겠어요?",
             )
         }
     }
@@ -168,7 +150,7 @@ internal fun SettingScreen(
                 onBackClick = popBackStack,
             )
         },
-        containerColor = DodamTheme.colors.backgroundNeutral
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -184,13 +166,13 @@ internal fun SettingScreen(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberBounceIndication(),
-                        onClick = { showDialog = true }
+                        onClick = { showDialog = true },
                     ),
             ) {
                 if (uiState.isLoading) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         Box(
                             modifier = Modifier
@@ -250,13 +232,13 @@ internal fun SettingScreen(
                             Text(
                                 text = uiState.name,
                                 style = DodamTheme.typography.headlineBold(),
-                                color = DodamTheme.colors.labelNormal
+                                color = DodamTheme.colors.labelNormal,
                             )
                             Text(
                                 text = "정보 수정",
                                 style = DodamTheme.typography.labelMedium(),
                                 color = DodamTheme.colors.labelAlternative,
-                                textDecoration = TextDecoration.Underline
+                                textDecoration = TextDecoration.Underline,
                             )
                         }
                     }
@@ -264,7 +246,7 @@ internal fun SettingScreen(
             }
 
             DodamDivider(
-                type = DividerType.Normal
+                type = DividerType.Normal,
             )
 
             SettingCard(
@@ -286,11 +268,11 @@ internal fun SettingScreen(
                 description = versionInfo,
                 onClick = {
                     count++
-                }
+                },
             )
 
             DodamDivider(
-                type = DividerType.Normal
+                type = DividerType.Normal,
             )
 
             SettingCard(
@@ -301,35 +283,29 @@ internal fun SettingScreen(
             SettingCard(
                 onClick = { showDeactivationDialog = true },
                 text = "회원탈퇴",
-                textColor = DodamTheme.colors.statusNegative
+                textColor = DodamTheme.colors.statusNegative,
             )
         }
     }
 }
 
-
 @Composable
-private fun SettingCard(
-    modifier: Modifier = Modifier,
-    text: String,
-    textColor: Color = DodamTheme.colors.labelNormal,
-    onClick: () -> Unit
-) {
+private fun SettingCard(modifier: Modifier = Modifier, text: String, textColor: Color = DodamTheme.colors.labelNormal, onClick: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberBounceIndication(),
-                onClick = onClick
+                onClick = onClick,
             ),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             modifier = Modifier.padding(vertical = 3.5.dp),
             text = text,
             color = textColor,
-            style = DodamTheme.typography.headlineMedium()
+            style = DodamTheme.typography.headlineMedium(),
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -337,7 +313,7 @@ private fun SettingCard(
             modifier = Modifier.size(14.dp),
             imageVector = DodamIcons.ChevronRight.value,
             contentDescription = null,
-            colorFilter = ColorFilter.tint(DodamTheme.colors.labelAssistive)
+            colorFilter = ColorFilter.tint(DodamTheme.colors.labelAssistive),
         )
     }
 }
@@ -360,23 +336,23 @@ private fun SettingCard(
                 clickable(
                     interactionSource = interactionSource,
                     indication = indication,
-                    onClick = onClick!!
+                    onClick = onClick!!,
                 )
             },
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             modifier = Modifier.padding(vertical = 3.5.dp),
             text = text,
             color = textColor,
-            style = DodamTheme.typography.headlineMedium()
+            style = DodamTheme.typography.headlineMedium(),
         )
 
         Spacer(modifier = Modifier.weight(1f))
         Text(
             text = description,
             color = descriptionColor,
-            style = DodamTheme.typography.headlineRegular()
+            style = DodamTheme.typography.headlineRegular(),
         )
     }
 }

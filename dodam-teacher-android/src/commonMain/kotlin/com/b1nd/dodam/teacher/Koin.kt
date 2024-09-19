@@ -67,7 +67,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             pointRepositoryModule,
             pointDataSourceModule,
             allViewModelModule,
-            settingViewModelModule
+            settingViewModelModule,
         )
         block()
     }

@@ -75,10 +75,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class, KoinExperimentalAPI::class)
 @Composable
-fun DodamTeacherApp(
-    exit: () -> Unit,
-    viewModel: DodamTeacherAppViewModel = koinViewModel()
-) {
+fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koinViewModel()) {
     setSingletonImageLoaderFactory { context ->
         getAsyncImageLoader(context)
     }
@@ -204,7 +201,7 @@ fun DodamTeacherApp(
                         settingScreen(
                             popBackStack = navHostController::popBackStack,
                             logout = exit,
-                            versionInfo = "3.2.0"
+                            versionInfo = "3.2.0",
                         )
                     }
 
