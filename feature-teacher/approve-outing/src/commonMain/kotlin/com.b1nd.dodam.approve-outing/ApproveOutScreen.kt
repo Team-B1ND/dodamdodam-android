@@ -280,8 +280,8 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                                             if (titleIndex == 1) {
                                                 viewModel.detailMember(
                                                     name = filteredMemberList[index].student.name,
-                                                    start = getDate(filteredMemberList[index].startAt.date.toString()),
-                                                    end = getDate(filteredMemberList[index].endAt.date.toString()),
+                                                    start = getDate(filteredMemberList[index].startAt.date),
+                                                    end = getDate(filteredMemberList[index].endAt.date),
                                                     reason = filteredMemberList[index].reason,
                                                     id = filteredMemberList[index].id,
                                                 )
