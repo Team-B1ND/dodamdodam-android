@@ -8,6 +8,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.b1nd.dodam.ui.component.SnackbarState
 
 const val APPROVE_OUTING_ROUTE = "approve_outing"
 
@@ -17,7 +18,10 @@ fun NavController.navigateToApproveOuting(title: Int = 0, navOptions: NavOptions
 )
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.approveOutingScreen(onBackClick: () -> Unit) {
+fun NavGraphBuilder.approveOutingScreen(
+    onBackClick: () -> Unit,
+    showSnackbar: (state: SnackbarState, message: String) -> Unit,
+) {
     composable(
         route = "$APPROVE_OUTING_ROUTE/{title}",
         arguments = listOf(
@@ -29,6 +33,7 @@ fun NavGraphBuilder.approveOutingScreen(onBackClick: () -> Unit) {
         ApproveOutScreen(
             onBackClick = onBackClick,
             title = it.arguments?.getInt("title") ?: 0,
+            showSnackbar = showSnackbar
         )
     }
 }

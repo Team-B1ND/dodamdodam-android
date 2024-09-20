@@ -1,4 +1,4 @@
-package com.b1nd.dodam.approveouting
+package com.b1nd.dodam.approveouting.model
 
 import com.b1nd.dodam.data.outing.model.Outing
 import kotlinx.collections.immutable.ImmutableList
