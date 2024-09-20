@@ -9,11 +9,12 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
         maven("https://jitpack.io")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
     }
 }
 
@@ -67,4 +68,14 @@ include(
     ":data:point",
     ":feature-student:point",
     ":feature-student:ask-wakeup-song",
+    ":logging",
+    ":dodam-teacher-android",
+    ":feature-teacher:register",
+    ":feature-teacher:home",
+    ":feature-teacher:point",
+    ":feature-teacher:all",
 )
+include(":feature-teacher:nightstudy")
+include(":feature-teacher:outing")
+include(":feature-teacher:approve-outing")
+include(":feature-teacher:approve-nightstudy")

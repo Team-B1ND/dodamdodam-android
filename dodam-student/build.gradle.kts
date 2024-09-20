@@ -2,9 +2,10 @@ plugins {
     alias(libs.plugins.dodam.android.application)
     alias(libs.plugins.dodam.android.kotlin)
     alias(libs.plugins.dodam.android.compose)
-    alias(libs.plugins.dodam.android.hilt)
+//    alias(libs.plugins.dodam.android.hilt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firbase.crashlytics)
+    alias(libs.plugins.dodam.koin)
 }
 
 android {
@@ -34,6 +35,7 @@ android {
 
 dependencies {
     implementation(libs.dodam.design.system)
+    implementation(libs.dodam.design.system.cmm)
     implementation(projects.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
@@ -57,4 +59,31 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.google.app.update)
+
+    implementation(projects.keystore)
+    implementation(projects.datastore)
+    implementation(projects.network.core)
+    implementation(projects.common)
+    implementation(projects.data.meal)
+    implementation(projects.network.meal)
+    implementation(projects.data.wakeupSong)
+    implementation(projects.network.wakeupSong)
+    implementation(projects.data.outing)
+    implementation(projects.network.outing)
+    implementation(projects.data.schedule)
+    implementation(projects.network.schedule)
+    implementation(projects.data.banner)
+    implementation(projects.network.banner)
+    implementation(projects.data.nightStudy)
+    implementation(projects.network.nightStudy)
+    implementation(projects.data.bus)
+    implementation(projects.network.bus)
+    implementation(projects.data.point)
+    implementation(projects.network.point)
+    implementation(projects.data.register)
+    implementation(projects.network.register)
+    implementation(projects.data.member)
+    implementation(projects.network.member)
+    implementation(projects.data.login)
+    implementation(projects.network.login)
 }

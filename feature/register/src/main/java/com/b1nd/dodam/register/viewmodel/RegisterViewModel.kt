@@ -5,19 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.register.repository.RegisterRepository
 import com.b1nd.dodam.register.state.RegisterUiState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-@HiltViewModel
-class RegisterViewModel @Inject constructor(
-    private val registerRepository: RegisterRepository,
-) : ViewModel() {
+class RegisterViewModel : ViewModel(), KoinComponent {
+
+    private val registerRepository: RegisterRepository by inject()
+
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState = _uiState.asStateFlow()
 

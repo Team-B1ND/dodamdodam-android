@@ -7,19 +7,19 @@ import com.b1nd.dodam.bus.model.BusUiState
 import com.b1nd.dodam.bus.repository.BusRepository
 import com.b1nd.dodam.common.exception.DataNotFoundException
 import com.b1nd.dodam.common.result.Result
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-@HiltViewModel
-class BusViewModel @Inject constructor(
-    private val busRepository: BusRepository,
-) : ViewModel() {
+class BusViewModel : ViewModel(), KoinComponent {
+
+    private val busRepository: BusRepository by inject()
+
     private val _uiState = MutableStateFlow(BusUiState())
     val uiState = _uiState.asStateFlow()
 

@@ -43,8 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.animation.bounceCombinedClick
@@ -62,6 +61,7 @@ import com.b1nd.dodam.ui.util.NoInteractionSource
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import com.b1nd.dodam.wakeupsong.viewmodel.Event
 import com.b1nd.dodam.wakeupsong.viewmodel.WakeupSongViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -69,7 +69,7 @@ fun WakeupSongScreen(
     onClickAddWakeupSong: () -> Unit,
     popBackStack: () -> Unit,
     showToast: (String, String) -> Unit,
-    viewModel: WakeupSongViewModel = hiltViewModel(),
+    viewModel: WakeupSongViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -261,7 +261,7 @@ fun WakeupSongScreen(
 @Composable
 fun WakeupSongCard(
     modifier: Modifier = Modifier,
-    viewModel: WakeupSongViewModel = hiltViewModel(),
+    viewModel: WakeupSongViewModel = koinViewModel(),
     wakeupSong: WakeupSong? = null,
     index: Int? = null,
     selectedTabIndex: Int? = null,
