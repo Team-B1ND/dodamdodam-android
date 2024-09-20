@@ -2,9 +2,10 @@ package com.b1nd.dodam.approveouting.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.b1nd.dodam.approveouting.ApproveOutState
-import com.b1nd.dodam.approveouting.DetailMember
-import com.b1nd.dodam.approveouting.OutPendingUiState
+import com.b1nd.dodam.approveouting.model.ApproveOutState
+import com.b1nd.dodam.approveouting.model.ApproveSideEffect
+import com.b1nd.dodam.approveouting.model.DetailMember
+import com.b1nd.dodam.approveouting.model.OutPendingUiState
 import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.utiles.combineWhenAllComplete
@@ -14,7 +15,9 @@ import com.b1nd.dodam.data.outing.model.Outing
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,6 +26,9 @@ import org.koin.core.component.inject
 
 class ApproveOutViewModel : ViewModel(), KoinComponent {
     private val outingRepository: OutingRepository by inject()
+
+    private val _sideEffect = MutableSharedFlow<ApproveSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
     private val _state = MutableStateFlow(ApproveOutState())
     val state = _state.asStateFlow()
@@ -81,10 +87,14 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
             outingRepository.allowSleepover(id).collect {
                 when (it) {
                     is Result.Error -> {
+                        _sideEffect.emit(ApproveSideEffect.Failed(it.error))
                         it.error.printStackTrace()
                     }
                     Result.Loading -> {}
-                    is Result.Success -> {}
+                    is Result.Success -> {
+                        filterMember(id, false)
+                        _sideEffect.emit(ApproveSideEffect.SuccessApprove)
+                    }
                 }
             }
         }
@@ -95,10 +105,14 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
             outingRepository.allowGoing(id).collect {
                 when (it) {
                     is Result.Error -> {
+                        _sideEffect.emit(ApproveSideEffect.Failed(it.error))
                         it.error.printStackTrace()
                     }
                     Result.Loading -> {}
-                    is Result.Success -> {}
+                    is Result.Success -> {
+                        filterMember(id, true)
+                        _sideEffect.emit(ApproveSideEffect.SuccessApprove)
+                    }
                 }
             }
         }
@@ -109,10 +123,14 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
             outingRepository.rejectSleepover(id).collect {
                 when (it) {
                     is Result.Error -> {
+                        _sideEffect.emit(ApproveSideEffect.Failed(it.error))
                         it.error.printStackTrace()
                     }
                     Result.Loading -> {}
-                    is Result.Success -> {}
+                    is Result.Success -> {
+                        filterMember(id, false)
+                        _sideEffect.emit(ApproveSideEffect.SuccessReject)
+                    }
                 }
             }
         }
@@ -123,10 +141,14 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
             outingRepository.rejectGoing(id).collect {
                 when (it) {
                     is Result.Error -> {
+                        _sideEffect.emit(ApproveSideEffect.Failed(it.error))
                         it.error.printStackTrace()
                     }
                     Result.Loading -> {}
-                    is Result.Success -> {}
+                    is Result.Success -> {
+                        filterMember(id, true)
+                        _sideEffect.emit(ApproveSideEffect.SuccessReject)
+                    }
                 }
             }
         }
@@ -145,6 +167,31 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
                     ),
                 )
             }
+        }
+    }
+
+    private fun filterMember(id: Long, isOut: Boolean) {
+        _state.update {
+            if (it.outPendingUiState is OutPendingUiState.Success) {
+                if (isOut) {
+                    return@update it.copy(
+                        outPendingUiState = it.outPendingUiState.copy(
+                            outMembers = it.outPendingUiState.outMembers.filter {
+                                it.id != id
+                            }.toImmutableList()
+                        )
+                    )
+                } else {
+                    return@update it.copy(
+                        outPendingUiState = it.outPendingUiState.copy(
+                            sleepoverMembers = it.outPendingUiState.sleepoverMembers.filter {
+                                it.id != id
+                            }.toImmutableList()
+                        )
+                    )
+                }
+            }
+            it
         }
     }
 }

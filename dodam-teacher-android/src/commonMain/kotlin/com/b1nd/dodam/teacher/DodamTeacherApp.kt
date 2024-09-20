@@ -207,6 +207,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
                         approveOutingScreen(
                             onBackClick = navHostController::popBackStack,
+                            showSnackbar = showSnackbar
                         )
 
                         allScreen(

@@ -29,6 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.approveouting.model.ApproveSideEffect
+import com.b1nd.dodam.approveouting.model.OutPendingUiState
 import com.b1nd.dodam.approveouting.viewmodel.ApproveOutViewModel
 import com.b1nd.dodam.common.utiles.getDate
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -41,13 +43,19 @@ import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackClick: () -> Unit, title: Int) {
+fun ApproveOutScreen(
+    viewModel: ApproveOutViewModel = koinViewModel(),
+    onBackClick: () -> Unit,
+    title: Int,
+    showSnackbar: (state: SnackbarState, message: String) -> Unit,
+) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -100,6 +108,23 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
         titleIndex = if (title == 0) 0 else 1
         viewModel.load()
     }
+
+    LaunchedEffect(true) {
+        viewModel.sideEffect.collect {
+            when (it) {
+                is ApproveSideEffect.Failed -> {
+                    showSnackbar(SnackbarState.ERROR, it.throwable.message.toString())
+                }
+                ApproveSideEffect.SuccessApprove -> {
+                    showSnackbar(SnackbarState.SUCCESS, "신청을 승인하였습니다.")
+                }
+                ApproveSideEffect.SuccessReject -> {
+                    showSnackbar(SnackbarState.SUCCESS, "신청을 거절하였습니다.")
+                }
+            }
+        }
+    }
+
     val state by viewModel.state.collectAsState()
 
     Scaffold(
@@ -309,6 +334,8 @@ fun ApproveOutScreen(viewModel: ApproveOutViewModel = koinViewModel(), onBackCli
                             }
                         }
                     }
+
+                    else -> {}
                 }
             }
         }
