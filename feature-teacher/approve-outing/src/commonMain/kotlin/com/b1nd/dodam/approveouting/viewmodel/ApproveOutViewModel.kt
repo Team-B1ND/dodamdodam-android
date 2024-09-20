@@ -178,16 +178,16 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
                         outPendingUiState = it.outPendingUiState.copy(
                             outMembers = it.outPendingUiState.outMembers.filter {
                                 it.id != id
-                            }.toImmutableList()
-                        )
+                            }.toImmutableList(),
+                        ),
                     )
                 } else {
                     return@update it.copy(
                         outPendingUiState = it.outPendingUiState.copy(
                             sleepoverMembers = it.outPendingUiState.sleepoverMembers.filter {
                                 it.id != id
-                            }.toImmutableList()
-                        )
+                            }.toImmutableList(),
+                        ),
                     )
                 }
             }

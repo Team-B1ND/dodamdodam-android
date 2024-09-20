@@ -18,10 +18,7 @@ fun NavController.navigateToApproveNightStudy(
 ) = navigate(APPROVE_NIGHT_STUDY_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.approveNightStudyScreen(
-    onBackClick: () -> Unit,
-    showSnackbar: (snackbarState: SnackbarState, message: String) -> Unit
-) {
+fun NavGraphBuilder.approveNightStudyScreen(onBackClick: () -> Unit, showSnackbar: (snackbarState: SnackbarState, message: String) -> Unit) {
     composable(
         route = APPROVE_NIGHT_STUDY_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -29,7 +26,7 @@ fun NavGraphBuilder.approveNightStudyScreen(
     ) {
         ApproveNightStudyScreen(
             onBackClick = onBackClick,
-            showSnackbar = showSnackbar
+            showSnackbar = showSnackbar,
         )
     }
 }

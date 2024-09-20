@@ -54,7 +54,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun ApproveNightStudyScreen(
     onBackClick: () -> Unit,
     viewModel: ApproveNightStudyViewModel = koinViewModel(),
-    showSnackbar: (snackbarState: SnackbarState, message: String) -> Unit
+    showSnackbar: (snackbarState: SnackbarState, message: String) -> Unit,
 ) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
