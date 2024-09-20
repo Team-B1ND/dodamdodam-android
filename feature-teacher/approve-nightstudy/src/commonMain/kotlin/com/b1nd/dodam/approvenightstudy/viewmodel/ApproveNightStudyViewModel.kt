@@ -113,8 +113,8 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
                     nightStudyUiState = it.nightStudyUiState.copy(
                         pendingData = it.nightStudyUiState.pendingData.filter {
                             it.id != id
-                        }.toImmutableList()
-                    )
+                        }.toImmutableList(),
+                    ),
                 )
             }
             it

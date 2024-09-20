@@ -18,10 +18,7 @@ fun NavController.navigateToApproveOuting(title: Int = 0, navOptions: NavOptions
 )
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.approveOutingScreen(
-    onBackClick: () -> Unit,
-    showSnackbar: (state: SnackbarState, message: String) -> Unit,
-) {
+fun NavGraphBuilder.approveOutingScreen(onBackClick: () -> Unit, showSnackbar: (state: SnackbarState, message: String) -> Unit) {
     composable(
         route = "$APPROVE_OUTING_ROUTE/{title}",
         arguments = listOf(
@@ -33,7 +30,7 @@ fun NavGraphBuilder.approveOutingScreen(
         ApproveOutScreen(
             onBackClick = onBackClick,
             title = it.arguments?.getInt("title") ?: 0,
-            showSnackbar = showSnackbar
+            showSnackbar = showSnackbar,
         )
     }
 }

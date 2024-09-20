@@ -106,7 +106,7 @@ internal fun HomeScreen(
                     ActionIcon(
                         icon = DodamIcons.Bell,
                         onClick = {},
-                        enabled = false
+                        enabled = false,
                     ),
                 ),
             )
