@@ -224,7 +224,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         settingScreen(
                             popBackStack = navHostController::popBackStack,
                             logout = exit,
-                            versionInfo = "3.2.0",
+                            versionInfo = "3.0.0",
                         )
                     }
 
