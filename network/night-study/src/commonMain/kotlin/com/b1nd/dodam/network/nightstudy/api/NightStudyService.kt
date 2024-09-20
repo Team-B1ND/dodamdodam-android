@@ -85,14 +85,14 @@ internal class NightStudyService(
     }
 
     override suspend fun allowNightStudy(id: Long) {
-        return safeRequest {
+        return defaultSafeRequest {
             network.patch(DodamUrl.NIGHT_STUDY + "/$id/allow")
                 .body()
         }
     }
 
     override suspend fun rejectNightStudy(id: Long) {
-        return safeRequest {
+        return defaultSafeRequest {
             network.patch(DodamUrl.NIGHT_STUDY + "/$id/reject")
                 .body()
         }

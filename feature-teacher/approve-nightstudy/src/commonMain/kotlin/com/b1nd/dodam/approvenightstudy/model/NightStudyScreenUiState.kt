@@ -1,4 +1,4 @@
-package com.b1nd.dodam.approvenightstudy
+package com.b1nd.dodam.approvenightstudy.model
 
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import kotlinx.collections.immutable.ImmutableList

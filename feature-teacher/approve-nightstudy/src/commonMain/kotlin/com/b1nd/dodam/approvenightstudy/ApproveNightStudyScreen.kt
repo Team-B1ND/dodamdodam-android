@@ -30,6 +30,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.approvenightstudy.model.NightStudySideEffect
+import com.b1nd.dodam.approvenightstudy.model.NightStudyUiState
+import com.b1nd.dodam.approvenightstudy.viewmodel.ApproveNightStudyViewModel
 import com.b1nd.dodam.common.utiles.getDate
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -41,13 +44,18 @@ import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApproveNightStudyScreen(onBackClick: () -> Unit, viewModel: ApproveNightStudyViewModel = koinViewModel()) {
+fun ApproveNightStudyScreen(
+    onBackClick: () -> Unit,
+    viewModel: ApproveNightStudyViewModel = koinViewModel(),
+    showSnackbar: (snackbarState: SnackbarState, message: String) -> Unit
+) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -85,6 +93,25 @@ fun ApproveNightStudyScreen(onBackClick: () -> Unit, viewModel: ApproveNightStud
 
     LaunchedEffect(key1 = true) {
         viewModel.load()
+    }
+
+    LaunchedEffect(true) {
+        viewModel.sideEffect.collect {
+            when (it) {
+                is NightStudySideEffect.SuccessAllow -> {
+                    showSnackbar(SnackbarState.SUCCESS, "승인에 성공하였습니다.")
+                    selectedItemIndex = -1
+                }
+                is NightStudySideEffect.SuccessReject -> {
+                    showSnackbar(SnackbarState.SUCCESS, "거절에 성공하였습니다.")
+                    selectedItemIndex = -1
+                }
+                is NightStudySideEffect.Failed -> {
+                    showSnackbar(SnackbarState.ERROR, it.throwable.message.toString())
+                    selectedItemIndex = -1
+                }
+            }
+        }
     }
     val state by viewModel.uiState.collectAsState()
 
