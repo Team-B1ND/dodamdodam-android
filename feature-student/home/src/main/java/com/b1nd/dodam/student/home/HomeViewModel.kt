@@ -17,11 +17,9 @@ import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import javax.inject.Inject
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.delay
@@ -33,16 +31,17 @@ import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.plus
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val mealRepository: MealRepository,
-    private val wakeupSongRepository: WakeupSongRepository,
-    private val outingRepository: OutingRepository,
-    private val nightStudyRepository: NightStudyRepository,
-    private val scheduleRepository: ScheduleRepository,
-    private val bannerRepository: BannerRepository,
-) : ViewModel() {
+class HomeViewModel : ViewModel(), KoinComponent {
+    private val outingRepository: OutingRepository by inject()
+    private val mealRepository: MealRepository by inject()
+    private val wakeupSongRepository: WakeupSongRepository by inject()
+    private val scheduleRepository: ScheduleRepository by inject()
+    private val bannerRepository: BannerRepository by inject()
+    private val nightStudyRepository: NightStudyRepository by inject()
+
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -187,8 +186,8 @@ class HomeViewModel @Inject constructor(
             }
             launch {
                 scheduleRepository.getScheduleBetweenPeriods(
-                    startDate = LocalDate.of(localDate.year, localDate.monthNumber, localDate.dayOfMonth).toKotlinLocalDate(),
-                    endDate = LocalDate.of(nextDate.year, nextDate.monthNumber, nextDate.dayOfMonth).toKotlinLocalDate(),
+                    startAt = LocalDate.of(localDate.year, localDate.monthNumber, localDate.dayOfMonth).toKotlinLocalDate(),
+                    endAt = LocalDate.of(nextDate.year, nextDate.monthNumber, nextDate.dayOfMonth).toKotlinLocalDate(),
                 ).collect { result ->
                     when (result) {
                         is Result.Success -> {
@@ -404,8 +403,8 @@ class HomeViewModel @Inject constructor(
 
     fun fetchSchedule() = viewModelScope.launch {
         scheduleRepository.getScheduleBetweenPeriods(
-            startDate = LocalDate.of(localDate.year, localDate.monthNumber, localDate.dayOfMonth).toKotlinLocalDate(),
-            endDate = LocalDate.of(nextDate.year, nextDate.monthNumber, nextDate.dayOfMonth).toKotlinLocalDate(),
+            startAt = LocalDate.of(localDate.year, localDate.monthNumber, localDate.dayOfMonth).toKotlinLocalDate(),
+            endAt = LocalDate.of(nextDate.year, nextDate.monthNumber, nextDate.dayOfMonth).toKotlinLocalDate(),
         ).collect { result ->
             when (result) {
                 is Result.Success -> {

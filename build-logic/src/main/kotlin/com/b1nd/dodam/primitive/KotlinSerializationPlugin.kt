@@ -15,6 +15,8 @@ class KotlinSerializationPlugin : Plugin<Project> {
             }
             dependencies {
                 implementation(libs.library("kotlinx-serialization-json"))
+                implementation(libs.library("kotlinx-io-core"))
+                implementation(libs.library("kotlinx-io-bytestring"))
             }
         }
     }

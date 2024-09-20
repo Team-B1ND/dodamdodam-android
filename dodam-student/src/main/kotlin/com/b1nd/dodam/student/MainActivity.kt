@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.b1nd.dodam.datastore.repository.DatastoreRepository
+import com.b1nd.dodam.datastore.repository.DataStoreRepository
 import com.b1nd.dodam.dds.theme.DodamTheme
 import com.b1nd.dodam.ui.icons.B1NDLogo
 import com.b1nd.dodam.ui.icons.DodamLogo
@@ -33,18 +33,16 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var datastoreRepository: DatastoreRepository
+
+    private val datastoreRepository: DataStoreRepository by inject()
 
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
 
@@ -75,43 +73,44 @@ class MainActivity : ComponentActivity() {
                     isLogin = datastoreRepository.token.first().isNotEmpty()
                 }
             }
-
-            DodamTheme {
-                isLogin?.let {
-                    DodamApp(
-                        isLogin = it,
-                        logout = {
-                            lifecycleScope.launch {
-                                datastoreRepository.deleteUser()
-                                finish()
-                            }
-                        },
-                        firebaseAnalytics = firebaseAnalytics,
-                        firebaseCrashlytics = firebaseCrashlytics,
-                    )
-                } ?: run {
-                    Box(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
-                            .fillMaxSize(),
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .size(180.dp)
-                                .align(Alignment.Center),
-                            imageVector = DodamLogo,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
+            com.b1nd.dodam.designsystem.DodamTheme {
+                DodamTheme {
+                    isLogin?.let {
+                        DodamApp(
+                            isLogin = it,
+                            logout = {
+                                lifecycleScope.launch {
+                                    datastoreRepository.deleteUser()
+                                    finish()
+                                }
+                            },
+                            firebaseAnalytics = firebaseAnalytics,
+                            firebaseCrashlytics = firebaseCrashlytics,
                         )
-
-                        Icon(
+                    } ?: run {
+                        Box(
                             modifier = Modifier
-                                .size(60.dp)
-                                .align(Alignment.BottomCenter),
-                            imageVector = B1NDLogo,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
+                                .background(MaterialTheme.colorScheme.background)
+                                .fillMaxSize(),
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .size(180.dp)
+                                    .align(Alignment.Center),
+                                imageVector = DodamLogo,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+
+                            Icon(
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .align(Alignment.BottomCenter),
+                                imageVector = B1NDLogo,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
                     }
                 }
             }

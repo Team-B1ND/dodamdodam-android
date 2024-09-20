@@ -1,7 +1,8 @@
+
 plugins {
     alias(libs.plugins.dodam.android)
-    alias(libs.plugins.dodam.android.kotlin)
-    alias(libs.plugins.dodam.android.hilt)
+    alias(libs.plugins.dodam.koin)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -9,8 +10,12 @@ android {
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
     }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 dependencies {
     implementation(projects.common)
+    implementation(libs.androidx.core.ktx)
 }

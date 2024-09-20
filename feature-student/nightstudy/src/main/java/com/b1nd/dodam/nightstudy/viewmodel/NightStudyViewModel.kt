@@ -5,18 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-@HiltViewModel
-class NightStudyViewModel @Inject constructor(
-    private val nightStudyRepository: NightStudyRepository,
-) : ViewModel() {
+class NightStudyViewModel : ViewModel(), KoinComponent {
+    private val nightStudyRepository: NightStudyRepository by inject()
+
     private val _uiState: MutableStateFlow<NightStudyUiState> = MutableStateFlow(NightStudyUiState.Loading)
     val uiState = _uiState.asStateFlow()
 

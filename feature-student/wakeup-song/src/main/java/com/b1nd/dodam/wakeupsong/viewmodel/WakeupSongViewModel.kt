@@ -6,20 +6,19 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import com.b1nd.dodam.wakeupsong.WakeupSongUiState
-import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-@HiltViewModel
-class WakeupSongViewModel @Inject constructor(
-    private val wakeupSongRepository: WakeupSongRepository,
-) : ViewModel() {
+class WakeupSongViewModel : ViewModel(), KoinComponent {
+    private val wakeupSongRepository: WakeupSongRepository by inject()
+
     private val _uiState = MutableStateFlow(WakeupSongUiState())
     val uiState = _uiState.asStateFlow()
     private val current = LocalDateTime.now()

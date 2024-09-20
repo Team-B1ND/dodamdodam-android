@@ -10,7 +10,6 @@ class AndroidFeaturePlugin : Plugin<Project> {
                 apply("b1nd.dodam.primitive.android")
                 apply("b1nd.dodam.primitive.android.kotlin")
                 apply("b1nd.dodam.primitive.android.compose")
-                apply("b1nd.dodam.primitive.android.hilt")
             }
         }
     }
