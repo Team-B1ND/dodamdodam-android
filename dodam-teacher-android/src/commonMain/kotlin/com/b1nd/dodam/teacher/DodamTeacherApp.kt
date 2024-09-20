@@ -38,8 +38,8 @@ import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.b1nd.dodam.all.navigation.ALL_ROUTE
 import com.b1nd.dodam.all.navigation.allScreen
-import com.b1nd.dodam.approvenightstudy.approveNightStudyScreen
-import com.b1nd.dodam.approvenightstudy.navigateToApproveNightStudy
+import com.b1nd.dodam.approvenightstudy.navigation.approveNightStudyScreen
+import com.b1nd.dodam.approvenightstudy.navigation.navigateToApproveNightStudy
 import com.b1nd.dodam.approveouting.approveOutingScreen
 import com.b1nd.dodam.approveouting.navigateToApproveOuting
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -55,7 +55,6 @@ import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.meal.navigation.navigationToMeal
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
-import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
@@ -219,6 +218,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 
                         approveNightStudyScreen(
                             onBackClick = navHostController::popBackStack,
+                            showSnackbar = showSnackbar
                         )
 
                         settingScreen(
