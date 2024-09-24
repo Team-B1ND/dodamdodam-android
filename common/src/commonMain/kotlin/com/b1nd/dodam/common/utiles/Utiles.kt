@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 
 fun <T1, T2, R> combineWhenAllComplete(flow1: Flow<T1>, flow2: Flow<T2>, transform: suspend (T1, T2) -> R): Flow<R> = flow {
     var lastValue1: T1? = null
@@ -32,4 +33,8 @@ fun <T1, T2, R> combineWhenAllComplete(flow1: Flow<T1>, flow2: Flow<T2>, transfo
 
 fun getDate(date: LocalDate): String {
     return "${date.monthNumber}월 ${date.dayOfMonth}일"
+}
+
+fun LocalTime.plusHour(hour: Int): LocalTime {
+    return LocalTime((this.hour + hour) % 24, minute, second, nanosecond)
 }

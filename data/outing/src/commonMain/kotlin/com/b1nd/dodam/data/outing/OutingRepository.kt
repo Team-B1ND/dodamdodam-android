@@ -12,7 +12,7 @@ interface OutingRepository {
 
     fun getOutings(date: LocalDate): Flow<Result<ImmutableList<Outing>>>
 
-    fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime): Flow<Result<Unit>>
+    fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime, isDinner: Boolean?): Flow<Result<Unit>>
 
     fun getSleepovers(date: LocalDate): Flow<Result<ImmutableList<Outing>>>
 

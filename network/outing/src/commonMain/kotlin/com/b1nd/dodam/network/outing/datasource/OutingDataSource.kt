@@ -17,7 +17,7 @@ interface OutingDataSource {
 
     suspend fun getOutings(date: LocalDate): ImmutableList<OutingResponse>
 
-    suspend fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime)
+    suspend fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime, isDinner: Boolean?)
 
     suspend fun askSleepover(reason: String, startAt: LocalDate, endAt: LocalDate)
 

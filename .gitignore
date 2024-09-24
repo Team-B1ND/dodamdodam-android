@@ -333,3 +333,5 @@ xcuserdata
 
 *.xcodeproj
 *.xcworkspace
+
+!Contents.json
