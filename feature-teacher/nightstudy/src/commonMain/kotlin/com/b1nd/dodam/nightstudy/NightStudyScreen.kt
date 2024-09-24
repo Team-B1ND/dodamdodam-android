@@ -219,7 +219,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                     )
                                     filteredMemberList.fastForEachIndexed { index, nightStudy ->
                                         DodamMember(
-                                            name = filteredMemberList[index].student.name ?: "",
+                                            name = filteredMemberList[index].student.name,
                                             modifier = Modifier
                                                 .padding(bottom = 12.dp),
                                             icon = null,
