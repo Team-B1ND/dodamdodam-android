@@ -111,10 +111,12 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 60.dp)
+//                    .padding(bottom = 80.dp)
                     .padding(horizontal = 16.dp),
             ) {
-                Column {
+                Column(
+                    modifier = Modifier.padding(bottom = 20.dp)
+                ) {
                     DodamSegmentedButton(
                         segments = gradeItem,
                         modifier = Modifier.padding(top = 12.dp),
@@ -123,61 +125,20 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                         segments = roomItem,
                         modifier = Modifier.padding(top = 12.dp),
                     )
+                    DodamTextField(
+                        value = searchStudent,
+                        onValueChange = {
+                            searchStudent = it
+                        },
+                        label = "학생 검색",
+                        onClickRemoveRequest = {
+                            searchStudent = ""
+                        },
+                    )
                 }
-                DodamTextField(
-                    value = searchStudent,
-                    onValueChange = {
-                        searchStudent = it
-                    },
-                    label = "학생 검색",
-                    onClickRemoveRequest = {
-                        searchStudent = ""
-                    },
-                    modifier = Modifier,
-                )
 
                 when (val data = uiState.nightStudyUiState) {
                     is NightStudyUiState.Success -> {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 20.dp)
-                                .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.backgroundNormal),
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .padding(start = 16.dp, top = 16.dp),
-                            ) {
-                                Text(
-                                    text = "현재 ",
-                                    color = DodamTheme.colors.labelStrong,
-                                    style = DodamTheme.typography.headlineBold(),
-                                )
-                                Text(
-                                    text = "${data.pendingCnt}명 ",
-                                    color = DodamTheme.colors.primaryNormal,
-                                    style = DodamTheme.typography.headlineBold(),
-                                )
-                                Text(
-                                    text = "승인 대기 중 ",
-                                    color = DodamTheme.colors.labelStrong,
-                                    style = DodamTheme.typography.headlineBold(),
-                                )
-                            }
-
-                            DodamButton(
-                                onClick = {
-                                    navigateToApproveStudy()
-                                },
-                                text = "승인하러 가기",
-                                buttonRole = ButtonRole.Assistive,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
-                                    .padding(top = 12.dp, bottom = 16.dp),
-                            )
-                        }
                         val members = data.ingData
                         val filteredMemberList = members.filter { studentData ->
                             when {
@@ -193,28 +154,72 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                 filteredList
                             }
                         }
-                        Column(
+                        LazyColumn(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 20.dp)
-                                .wrapContentHeight()
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.backgroundNormal),
                         ) {
-                            Text(
-                                text = "심자 자습중인 학생",
-                                color = DodamTheme.colors.labelStrong,
-                                style = DodamTheme.typography.headlineBold(),
-                                modifier = Modifier
-                                    .padding(top = 16.dp, start = 16.dp, bottom = 16.dp),
-                            )
-                            LazyColumn(
-                                modifier = Modifier
-                                    .padding(horizontal = 10.dp),
-                            ) {
-                                items(filteredMemberList.size) { listIndex ->
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(shape = RoundedCornerShape(18.dp))
+                                        .background(DodamTheme.colors.backgroundNormal)
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(start = 16.dp, top = 16.dp),
+                                    ) {
+                                        Text(
+                                            text = "현재 ",
+                                            color = DodamTheme.colors.labelStrong,
+                                            style = DodamTheme.typography.headlineBold(),
+                                        )
+                                        Text(
+                                            text = "${data.pendingCnt}명 ",
+                                            color = DodamTheme.colors.primaryNormal,
+                                            style = DodamTheme.typography.headlineBold(),
+                                        )
+                                        Text(
+                                            text = "승인 대기 중 ",
+                                            color = DodamTheme.colors.labelStrong,
+                                            style = DodamTheme.typography.headlineBold(),
+                                        )
+                                    }
+
+                                    DodamButton(
+                                        onClick = {
+                                            navigateToApproveStudy()
+                                        },
+                                        text = "승인하러 가기",
+                                        buttonRole = ButtonRole.Assistive,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 16.dp)
+                                            .padding(top = 12.dp, bottom = 16.dp),
+                                    )
+                                }
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+                            item{
+                                Column(
+                                    modifier = Modifier
+                                        .wrapContentHeight()
+                                        .clip(shape = RoundedCornerShape(18.dp))
+                                        .background(DodamTheme.colors.backgroundNormal)
+                                        .padding(horizontal = 16.dp)
+                                ) {
+                                Text(
+                                    text = "심자 자습중인 학생",
+                                    color = DodamTheme.colors.labelStrong,
+                                    style = DodamTheme.typography.headlineBold(),
+                                    modifier = Modifier
+                                        .padding(vertical = 10.dp),
+                                )
+                                filteredMemberList.forEachIndexed { index, nightStudy ->
                                     DodamMember(
-                                        name = filteredMemberList[listIndex].student.name ?: "",
+                                        name = filteredMemberList[index].student.name ?: "",
                                         modifier = Modifier
                                             .padding(bottom = 12.dp),
                                         icon = null,
@@ -222,7 +227,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                         val currentDate = Clock.System.now().toLocalDateTime(
                                             TimeZone.currentSystemDefault(),
                                         ).date
-                                        val end = filteredMemberList[listIndex].endAt.date
+                                        val end = filteredMemberList[index].endAt.date
 
                                         val a = currentDate.daysUntil(end)
 
@@ -233,6 +238,10 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                         )
                                     }
                                 }
+                                    }
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(80.dp))
                             }
                         }
                     }
@@ -242,7 +251,6 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 20.dp)
                                 .clip(shape = RoundedCornerShape(18.dp))
                                 .background(DodamTheme.colors.backgroundNormal),
                         ) {
