@@ -115,6 +115,7 @@ internal fun HomeScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(DodamTheme.colors.backgroundNeutral)
                 .padding(it)
                 .pullRefresh(pullRefreshState),
             contentAlignment = Alignment.TopCenter,
