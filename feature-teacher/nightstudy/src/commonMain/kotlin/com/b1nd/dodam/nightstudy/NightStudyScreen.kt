@@ -139,7 +139,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                 .fillMaxWidth()
                                 .padding(top = 20.dp)
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite),
+                                .background(DodamTheme.colors.backgroundNormal),
                         ) {
                             Row(
                                 modifier = Modifier
@@ -195,7 +195,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                 .padding(vertical = 20.dp)
                                 .wrapContentHeight()
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite),
+                                .background(DodamTheme.colors.backgroundNormal),
                         ) {
                             Text(
                                 text = "심자 자습중인 학생",
@@ -240,7 +240,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                 .fillMaxWidth()
                                 .padding(top = 20.dp)
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite),
+                                .background(DodamTheme.colors.backgroundNormal),
                         ) {
                             Box(
                                 modifier = Modifier
