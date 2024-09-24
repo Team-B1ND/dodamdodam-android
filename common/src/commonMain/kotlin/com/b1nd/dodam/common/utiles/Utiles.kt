@@ -35,7 +35,6 @@ fun getDate(date: LocalDate): String {
     return "${date.monthNumber}월 ${date.dayOfMonth}일"
 }
 
-
 fun LocalTime.plusHour(hour: Int): LocalTime {
     return LocalTime((this.hour + hour) % 24, minute, second, nanosecond)
 }

@@ -5,35 +5,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,9 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.common.utiles.plusHour
@@ -52,7 +39,6 @@ import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.CalendarDate
-import com.b1nd.dodam.designsystem.component.CalendarModel
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamButtonDialog
 import com.b1nd.dodam.designsystem.component.DodamDatePickerBottomSheet
@@ -61,14 +47,11 @@ import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTimePickerBottomSheet
-import com.b1nd.dodam.designsystem.component.DodamTimePickerDialog
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.rememberDodamDatePickerState
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
-import com.b1nd.dodam.ui.component.InputField
 import com.b1nd.dodam.ui.util.addFocusCleaner
-import com.commandiron.wheel_picker_compose.WheelDatePicker
-import com.commandiron.wheel_picker_compose.WheelDateTimePicker
+import java.time.ZoneId
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DayOfWeek
@@ -77,11 +60,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.plus
 import kotlinx.datetime.toJavaLocalDate
-import java.time.format.DateTimeFormatter
-import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.datetime.toKotlinLocalDateTime
 import org.koin.androidx.compose.koinViewModel
-import java.time.ZoneId
 
 @ExperimentalMaterial3Api
 @Composable
@@ -95,16 +74,16 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
     var sleepoverReason by remember { mutableStateOf("") }
 
     var outingDate by remember { mutableStateOf(DodamDate.localDateNow()) }
-    var outingStartTime by remember { mutableStateOf(DodamDate.localTimeNow())}
-    var outingEndTime by remember { mutableStateOf(DodamDate.localTimeNow().plusHour(1))}
+    var outingStartTime by remember { mutableStateOf(DodamDate.localTimeNow()) }
+    var outingEndTime by remember { mutableStateOf(DodamDate.localTimeNow().plusHour(1)) }
 
     var sleepoverStartDate by remember { mutableStateOf(DodamDate.localDateNow()) }
-    var sleepoverEndDate by remember { mutableStateOf(DodamDate.localDateNow().plus(DatePeriod(days=2))) }
+    var sleepoverEndDate by remember { mutableStateOf(DodamDate.localDateNow().plus(DatePeriod(days = 2))) }
 
     // Pair<Boolean(show 여부), Boolean(true: 시작, false: 복귀)>
     var showTimePicker by remember { mutableStateOf(false to true) }
     // Triple<Boolean(show 여부), String, Boolean(true: 시작, false: 복귀)>
-    var showDatePicker by remember { mutableStateOf(Triple(false , "외박", true)) }
+    var showDatePicker by remember { mutableStateOf(Triple(false, "외박", true)) }
     var showMealPicker by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDodamDatePickerState(initialSelectDateMillis = outingDate.toJavaLocalDate().getUtcTimeMill())
@@ -127,7 +106,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
 
     if (showDialog) {
         Dialog(
-            onDismissRequest = { showDialog = false }
+            onDismissRequest = { showDialog = false },
         ) {
             DodamDialog(
                 confirmButton = { showDialog = false },
@@ -140,7 +119,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
     if (showDatePicker.first) {
         DodamDatePickerBottomSheet(
             sheetState = rememberModalBottomSheetState(
-                skipPartiallyExpanded = true
+                skipPartiallyExpanded = true,
             ),
             state = datePickerState,
             shape = DodamTheme.shapes.extraLarge.copy(
@@ -148,7 +127,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                 bottomEnd = CornerSize(0.dp),
             ),
             onDismissRequest = {
-                showDatePicker = Triple(false , "외출", true)
+                showDatePicker = Triple(false, "외출", true)
             },
             onClickDate = { date, isValid ->
                 if (!isValid) {
@@ -169,19 +148,19 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                         sleepoverEndDate = temporaryDate
                     }
                 }
-                showDatePicker = Triple(false , "외출", true)
+                showDatePicker = Triple(false, "외출", true)
             },
         )
     }
 
     val startTime = if (showTimePicker.second) outingStartTime.hour else outingEndTime.hour
-    if (showTimePicker.first) { 
+    if (showTimePicker.first) {
         DodamTimePickerBottomSheet(
             onDismissRequest = {
                 showTimePicker = false to false
             },
             sheetState = rememberModalBottomSheetState(
-                skipPartiallyExpanded = true
+                skipPartiallyExpanded = true,
             ),
             startTime = if (startTime == 0) startTime + 1 else startTime,
             startMinute = if (showTimePicker.second) outingStartTime.minute else outingEndTime.minute,
@@ -196,13 +175,13 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
             shape = DodamTheme.shapes.extraLarge.copy(
                 bottomStart = CornerSize(0.dp),
                 bottomEnd = CornerSize(0.dp),
-            )
+            ),
         )
     }
 
     if (showMealPicker) {
         Dialog(
-            onDismissRequest = { showMealPicker = false }
+            onDismissRequest = { showMealPicker = false },
         ) {
             DodamButtonDialog(
                 confirmButton = {
@@ -220,7 +199,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                         reason = outingReason,
                         startAt = LocalDateTime(outingDate, outingStartTime),
                         endAt = LocalDateTime(outingDate, outingEndTime),
-                        isDinner = false
+                        isDinner = false,
                     )
                 },
                 dismissButtonText = "아니요",
@@ -231,7 +210,6 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
         }
     }
 
-
     Scaffold(
         modifier = Modifier
             .addFocusCleaner(focusManager),
@@ -239,16 +217,16 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
             DodamTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = "외출/외박 신청하기",
-                onBackClick = popBackStack
+                onBackClick = popBackStack,
             )
         },
-        containerColor = DodamTheme.colors.backgroundNeutral
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             DodamSegmentedButton(
@@ -260,16 +238,16 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                     ),
                     DodamSegment(
                         selected = !selectedItem.isOut(),
-                        onClick = { selectedItem = "외박"},
+                        onClick = { selectedItem = "외박" },
                         text = "외박",
-                    )
-                )
+                    ),
+                ),
             )
             Spacer(modifier = Modifier.height(20.dp))
 
             Column(
                 modifier = Modifier.animateContentSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 DodamTextField(
                     value = if (selectedItem.isOut()) outingReason else sleepoverReason,
@@ -287,7 +265,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                         } else {
                             sleepoverReason = ""
                         }
-                    }
+                    },
                 )
 
                 if (selectedItem.isOut()) {
@@ -298,7 +276,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                             temporaryDate = outingDate
                             datePickerState.selectedDate = outingDate.toCalendarDate()
                             showDatePicker = Triple(true, "외출", true)
-                        }
+                        },
                     )
                 }
 
@@ -313,7 +291,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                             datePickerState.selectedDate = sleepoverStartDate.toCalendarDate()
                             showDatePicker = Triple(true, "외박", true)
                         }
-                    }
+                    },
                 )
 
                 AskOutButton(
@@ -327,7 +305,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                             datePickerState.selectedDate = sleepoverEndDate.toCalendarDate()
                             showDatePicker = Triple(true, "외박", false)
                         }
-                    }
+                    },
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -350,14 +328,14 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                                 viewModel.askSleepover(
                                     reason = sleepoverReason,
                                     startAt = sleepoverStartDate,
-                                    endAt = sleepoverEndDate
+                                    endAt = sleepoverEndDate,
                                 )
                             }
                         }
                     },
                     text = "신청",
                     buttonRole = ButtonRole.Primary,
-                    buttonSize = ButtonSize.Large
+                    buttonSize = ButtonSize.Large,
                 )
             }
         }
@@ -365,71 +343,60 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
 }
 
 @Composable
-private fun AskOutButton(
-    modifier: Modifier = Modifier,
-    title: String,
-    description: String,
-    onClick: () -> Unit
-) {
+private fun AskOutButton(modifier: Modifier = Modifier, title: String, description: String, onClick: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberBounceIndication(),
-                onClick = onClick
+                onClick = onClick,
             ),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             modifier = Modifier.padding(vertical = 8.dp),
             text = title,
             color = DodamTheme.colors.labelAlternative,
-            style = DodamTheme.typography.headlineMedium()
+            style = DodamTheme.typography.headlineMedium(),
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
             text = description,
             color = DodamTheme.colors.primaryNormal,
-            style = DodamTheme.typography.headlineRegular()
+            style = DodamTheme.typography.headlineRegular(),
         )
         Spacer(modifier = Modifier.width(12.dp))
         Image(
             imageVector = DodamIcons.Calendar.value,
             contentDescription = "calendar",
-            colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
+            colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
         )
     }
 }
 
-private fun String.isOut() =
-    this == "외출"
+private fun String.isOut() = this == "외출"
 
-private fun LocalTime.toHourMinString(): String =
-    "${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}"
+private fun LocalTime.toHourMinString(): String = "${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}"
 
-private fun LocalDate.toDateString(): String =
-    "${monthNumber}월 ${dayOfMonth}일 (${dayOfWeek.toShortKoreanWeek()})"
+private fun LocalDate.toDateString(): String = "${monthNumber}월 ${dayOfMonth}일 (${dayOfWeek.toShortKoreanWeek()})"
 
-private fun DayOfWeek.toShortKoreanWeek() =
-    when (this) {
-        DayOfWeek.MONDAY -> "월"
-        DayOfWeek.TUESDAY -> "화"
-        DayOfWeek.WEDNESDAY -> "수"
-        DayOfWeek.THURSDAY -> "목"
-        DayOfWeek.FRIDAY -> "금"
-        DayOfWeek.SATURDAY -> "토"
-        DayOfWeek.SUNDAY -> "일"
-    }
+private fun DayOfWeek.toShortKoreanWeek() = when (this) {
+    DayOfWeek.MONDAY -> "월"
+    DayOfWeek.TUESDAY -> "화"
+    DayOfWeek.WEDNESDAY -> "수"
+    DayOfWeek.THURSDAY -> "목"
+    DayOfWeek.FRIDAY -> "금"
+    DayOfWeek.SATURDAY -> "토"
+    DayOfWeek.SUNDAY -> "일"
+}
 
 private val utcTimeZoneId: ZoneId = ZoneId.of("UTC")
 
-private fun java.time.LocalDate.getUtcTimeMill(): Long =
-    this
-        .atTime(java.time.LocalTime.MIDNIGHT)
-        .atZone(utcTimeZoneId)
-        .toInstant()
-        .toEpochMilli()
+private fun java.time.LocalDate.getUtcTimeMill(): Long = this
+    .atTime(java.time.LocalTime.MIDNIGHT)
+    .atZone(utcTimeZoneId)
+    .toInstant()
+    .toEpochMilli()
 
-private fun LocalDate.toCalendarDate(): CalendarDate =
-    CalendarDate(year, monthNumber, dayOfMonth, this.toJavaLocalDate().getUtcTimeMill())
+private fun LocalDate.toCalendarDate(): CalendarDate = CalendarDate(year, monthNumber, dayOfMonth, this.toJavaLocalDate().getUtcTimeMill())
