@@ -129,6 +129,7 @@ fun ApproveNightStudyScreen(
 
             )
         },
+        containerColor = DodamTheme.colors.backgroundNormal
     ) {
         if (selectedItemIndex >= 0) {
             DodamModalBottomSheet(
@@ -259,7 +260,6 @@ fun ApproveNightStudyScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DodamTheme.colors.backgroundNormal)
                 .padding(it),
         ) {
             Column(
