@@ -28,7 +28,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEachIndexed
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
@@ -40,6 +42,7 @@ import com.b1nd.dodam.outing.model.OutPendingUiState
 import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -96,11 +99,14 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
     var searchStudent by remember { mutableStateOf("") }
     val state by viewModel.state.collectAsState()
 
+    val focusManager = LocalFocusManager.current
+
     LaunchedEffect(key1 = true) {
         viewModel.load()
     }
 
     Scaffold(
+        modifier = Modifier.addFocusCleaner(focusManager),
         topBar = {
             DodamDefaultTopAppBar(
                 title = "외출/외박",
@@ -152,7 +158,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                 .fillMaxWidth()
                                 .padding(top = 20.dp)
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite),
+                                .background(DodamTheme.colors.backgroundNormal),
                         ) {
                             Box(
                                 modifier = Modifier
@@ -180,7 +186,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                 .fillMaxWidth()
                                 .padding(vertical = 20.dp)
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite),
+                                .background(DodamTheme.colors.backgroundNormal),
                         ) {
                             Box(
                                 modifier = Modifier
@@ -271,7 +277,8 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                     is OutPendingUiState.Success -> {
                         val cnt =
                             if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
-                        val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                        val members =
+                            if (titleIndex == 0) data.outMembers else data.sleepoverMembers
                         val filteredMemberList = members.filter { studentData ->
                             when {
                                 gradeIndex == 0 && roomIndex == 0 -> true
@@ -286,119 +293,123 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                 filteredList
                             }
                         }.filter { studentData ->
-                            val minutesRemaining = remainingMinutes(studentData.endAt.time.toString())
+                            val minutesRemaining =
+                                remainingMinutes(studentData.endAt.time.toString())
                             minutesRemaining > 0
                         }
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .fillMaxHeight()
-                                .padding(bottom = 60.dp)
                                 .padding(vertical = 20.dp),
                         ) {
-                            if (cnt != 0) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clip(shape = RoundedCornerShape(18.dp))
-                                        .background(DodamTheme.colors.staticWhite),
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .padding(start = 16.dp, top = 16.dp),
-                                    ) {
-                                        Text(
-                                            text = "현재 ",
-                                            color = DodamTheme.colors.labelStrong,
-                                            style = DodamTheme.typography.headlineBold(),
-                                        )
-                                        Text(
-                                            text = "${cnt}명 ",
-                                            color = DodamTheme.colors.primaryNormal,
-                                            style = DodamTheme.typography.headlineBold(),
-                                        )
-                                        Text(
-                                            text = "승인 대기 중 ",
-                                            color = DodamTheme.colors.labelStrong,
-                                            style = DodamTheme.typography.headlineBold(),
-                                        )
-                                    }
-
-                                    DodamButton(
-                                        onClick = {
-                                            navigateToApprove(
-                                                titleIndex,
-                                            )
-                                        },
-                                        text = "승인하러 가기",
-                                        buttonRole = ButtonRole.Assistive,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 16.dp)
-                                            .padding(top = 12.dp, bottom = 16.dp),
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-                            if (members.size != 0) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .wrapContentHeight()
-                                        .clip(shape = RoundedCornerShape(18.dp))
-                                        .background(DodamTheme.colors.staticWhite),
-
-                                ) {
-                                    Text(
-                                        text = if (titleIndex == 0) "외출 중인 학생" else "외박 중인 학생",
-                                        color = DodamTheme.colors.labelStrong,
-                                        style = DodamTheme.typography.headlineBold(),
-                                        modifier = Modifier
-                                            .padding(top = 16.dp, start = 16.dp, bottom = 16.dp),
-                                    )
-                                    LazyColumn(
-                                        modifier = Modifier
-                                            .padding(horizontal = 10.dp),
-                                    ) {
-                                        items(filteredMemberList.size) { listIndex ->
-                                            val hours = remainingHours(
-                                                filteredMemberList[listIndex].endAt.time.toString(),
-                                            )
-                                            val minutes = remainingMinutes(
-                                                filteredMemberList[listIndex].endAt.time.toString(),
-                                            )
-                                            val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-                                            val time = currentDate.daysUntil(filteredMemberList[listIndex].endAt.date)
-                                            DodamMember(
-                                                name = filteredMemberList[listIndex].student.name,
+                            LazyColumn(
+                                modifier = Modifier
+                                    .clip(shape = RoundedCornerShape(18.dp)),
+                            ) {
+                                if (cnt != 0) {
+                                    item {
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .clip(shape = RoundedCornerShape(18.dp))
+                                                .background(DodamTheme.colors.backgroundNormal),
+                                        ) {
+                                            Row(
                                                 modifier = Modifier
-                                                    .padding(bottom = 12.dp),
-                                                icon = null,
+                                                    .padding(start = 16.dp, top = 16.dp),
                                             ) {
                                                 Text(
-                                                    text = if (titleIndex == 0) {
-                                                        if (hours > 0) "${hours}시간 남음" else "${minutes}분 남음"
-                                                    } else {
-                                                        if (time > 1) "${time}일 남음" else "오늘 복귀"
-                                                    },
-                                                    style = DodamTheme.typography.headlineMedium(),
-                                                    color = if (titleIndex == 0) {
-                                                        if (hours > 0 || minutes > 30 || time > 1) {
-                                                            DodamTheme.colors.labelAssistive
-                                                        } else {
-                                                            DodamTheme.colors.primaryNormal
-                                                        }
-                                                    } else {
-                                                        if (time <= 1) {
-                                                            DodamTheme.colors.primaryNormal
-                                                        } else {
-                                                            DodamTheme.colors.labelAssistive
-                                                        }
-                                                    },
+                                                    text = "현재 ",
+                                                    color = DodamTheme.colors.labelStrong,
+                                                    style = DodamTheme.typography.headlineBold(),
                                                 )
+                                                Text(
+                                                    text = "${cnt}명 ",
+                                                    color = DodamTheme.colors.primaryNormal,
+                                                    style = DodamTheme.typography.headlineBold(),
+                                                )
+                                                Text(
+                                                    text = "승인 대기 중 ",
+                                                    color = DodamTheme.colors.labelStrong,
+                                                    style = DodamTheme.typography.headlineBold(),
+                                                )
+                                            }
+
+                                            DodamButton(
+                                                onClick = {
+                                                    navigateToApprove(
+                                                        titleIndex,
+                                                    )
+                                                },
+                                                text = "승인하러 가기",
+                                                buttonRole = ButtonRole.Assistive,
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(horizontal = 16.dp)
+                                                    .padding(top = 12.dp, bottom = 16.dp),
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(20.dp))
+                                    }
+                                }
+                                if (filteredMemberList.isNotEmpty()) {
+                                    item {
+                                        Column(
+                                            modifier = Modifier
+                                                .wrapContentHeight()
+                                                .clip(shape = RoundedCornerShape(18.dp))
+                                                .background(DodamTheme.colors.backgroundNormal)
+                                                .padding(horizontal = 10.dp),
+                                        ) {
+                                            Text(
+                                                text = if (titleIndex == 0) "외출 중인 학생" else "외박 중인 학생",
+                                                color = DodamTheme.colors.labelStrong,
+                                                style = DodamTheme.typography.headlineBold(),
+                                                modifier = Modifier
+                                                    .padding(top = 10.dp, bottom = 6.dp, start = 6.dp),
+                                            )
+
+                                            filteredMemberList.fastForEachIndexed { index, member ->
+                                                val hours = remainingHours(member.endAt.time.toString())
+                                                val minutes = remainingMinutes(member.endAt.time.toString())
+                                                val currentDate = Clock.System.now()
+                                                    .toLocalDateTime(TimeZone.currentSystemDefault()).date
+                                                val daysUntilReturn = currentDate.daysUntil(member.endAt.date)
+
+                                                DodamMember(
+                                                    name = member.student.name,
+                                                    modifier = Modifier.padding(bottom = 12.dp),
+                                                    icon = null,
+                                                ) {
+                                                    Text(
+                                                        text = if (titleIndex == 0) {
+                                                            if (hours > 0) "${hours}시간 남음" else "${minutes}분 남음"
+                                                        } else {
+                                                            if (daysUntilReturn > 1) "${daysUntilReturn}일 남음" else "오늘 복귀"
+                                                        },
+                                                        style = DodamTheme.typography.headlineMedium(),
+                                                        color = if (titleIndex == 0) {
+                                                            if (hours > 0 || minutes > 30) {
+                                                                DodamTheme.colors.labelAssistive
+                                                            } else {
+                                                                DodamTheme.colors.primaryNormal
+                                                            }
+                                                        } else {
+                                                            if (daysUntilReturn <= 1) {
+                                                                DodamTheme.colors.primaryNormal
+                                                            } else {
+                                                                DodamTheme.colors.labelAssistive
+                                                            }
+                                                        },
+                                                    )
+                                                }
                                             }
                                         }
                                     }
+                                }
+                                item {
+                                    Spacer(modifier = Modifier.height(80.dp))
                                 }
                             }
                         }
@@ -410,7 +421,8 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
 }
 
 fun remainingHours(endTime: String): Int {
-    val currentTime = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
+    val currentTime =
+        Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
     val endParts = endTime.split(":")
 
     val endHour = endParts[0].toInt()
@@ -419,14 +431,16 @@ fun remainingHours(endTime: String): Int {
     val currentTotalMinutes = currentTime.hour * 60 + currentTime.minute
     val endTotalMinutes = endHour * 60 + endMinute
 
-    val totalEndMinutesAdjusted = if (endTotalMinutes < currentTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
+    val totalEndMinutesAdjusted =
+        if (endTotalMinutes < currentTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
     val diffMinutes = totalEndMinutesAdjusted - currentTotalMinutes
 
     return diffMinutes / 60
 }
 
 fun remainingMinutes(endTime: String): Int {
-    val currentTime = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
+    val currentTime =
+        Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
     val endParts = endTime.split(":")
 
     val endHour = endParts[0].toInt()
