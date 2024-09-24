@@ -2,6 +2,7 @@ package com.b1nd.dodam.common.date
 
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinInstant
 import kotlinx.datetime.toLocalDateTime
@@ -15,4 +16,5 @@ actual object DodamDate {
         .toLocalDateTime(TimeZone.currentSystemDefault())
 
     actual fun localDateNow(): LocalDate = now().date
+    actual fun localTimeNow(): LocalTime = now().time
 }

@@ -8,4 +8,5 @@ data class OutingRequest(
     val reason: String,
     val startAt: LocalDateTime,
     val endAt: LocalDateTime,
+    val isDinner: Boolean?,
 )
