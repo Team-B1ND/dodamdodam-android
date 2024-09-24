@@ -1,5 +1,9 @@
 package com.b1nd.dodam.askout
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,16 +13,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,56 +38,83 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.b1nd.dodam.dds.component.DodamDialog
-import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
-import com.b1nd.dodam.dds.component.DodamTextField
-import com.b1nd.dodam.dds.component.button.DodamCTAButton
-import com.b1nd.dodam.dds.component.button.DodamSegment
-import com.b1nd.dodam.dds.component.button.DodamSegmentedButtonRow
-import com.b1nd.dodam.dds.component.button.DodamTextButton
-import com.b1nd.dodam.dds.style.BodyLarge
-import com.b1nd.dodam.dds.style.ChevronRightIcon
-import com.b1nd.dodam.dds.style.TitleLarge
+import androidx.compose.ui.window.Dialog
+import com.b1nd.dodam.common.date.DodamDate
+import com.b1nd.dodam.common.utiles.plusHour
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.ButtonRole
+import com.b1nd.dodam.designsystem.component.ButtonSize
+import com.b1nd.dodam.designsystem.component.CalendarDate
+import com.b1nd.dodam.designsystem.component.CalendarModel
+import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamButtonDialog
+import com.b1nd.dodam.designsystem.component.DodamDatePickerBottomSheet
+import com.b1nd.dodam.designsystem.component.DodamDialog
+import com.b1nd.dodam.designsystem.component.DodamSegment
+import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
+import com.b1nd.dodam.designsystem.component.DodamTextField
+import com.b1nd.dodam.designsystem.component.DodamTimePickerBottomSheet
+import com.b1nd.dodam.designsystem.component.DodamTimePickerDialog
+import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.component.rememberDodamDatePickerState
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.InputField
+import com.b1nd.dodam.ui.util.addFocusCleaner
 import com.commandiron.wheel_picker_compose.WheelDatePicker
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
-import java.time.LocalDate
-import java.time.LocalDateTime
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.plus
+import kotlinx.datetime.toJavaLocalDate
 import java.time.format.DateTimeFormatter
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
 import org.koin.androidx.compose.koinViewModel
+import java.time.ZoneId
 
 @ExperimentalMaterial3Api
 @Composable
 internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
+    val focusManager = LocalFocusManager.current
 
-    val scrollState = rememberScrollState()
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    var selectedItem by remember { mutableStateOf("외출") }
 
     var outingReason by remember { mutableStateOf("") }
     var sleepoverReason by remember { mutableStateOf("") }
 
-    var outingStartDateTime by remember { mutableStateOf(LocalDateTime.now()) }
-    var outingEndDateTime by remember { mutableStateOf(LocalDateTime.now().plusHours(1)) }
+    var outingDate by remember { mutableStateOf(DodamDate.localDateNow()) }
+    var outingStartTime by remember { mutableStateOf(DodamDate.localTimeNow())}
+    var outingEndTime by remember { mutableStateOf(DodamDate.localTimeNow().plusHour(1))}
 
-    var sleepoverStartDate by remember { mutableStateOf(LocalDate.now()) }
-    var sleepoverEndDate by remember { mutableStateOf(LocalDate.now().plusDays(2)) }
+    var sleepoverStartDate by remember { mutableStateOf(DodamDate.localDateNow()) }
+    var sleepoverEndDate by remember { mutableStateOf(DodamDate.localDateNow().plus(DatePeriod(days=2))) }
 
-    var showDateTimePicker by remember { mutableStateOf(false to "외출") }
-    var showDatePicker by remember { mutableStateOf(false to "외박") }
-
+    // Pair<Boolean(show 여부), Boolean(true: 시작, false: 복귀)>
+    var showTimePicker by remember { mutableStateOf(false to true) }
+    // Triple<Boolean(show 여부), String, Boolean(true: 시작, false: 복귀)>
+    var showDatePicker by remember { mutableStateOf(Triple(false , "외박", true)) }
+    var showMealPicker by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+    val datePickerState = rememberDodamDatePickerState(initialSelectDateMillis = outingDate.toJavaLocalDate().getUtcTimeMill())
+
+    var temporaryDate by remember { mutableStateOf(DodamDate.localDateNow()) }
 
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect {
             when (it) {
                 Event.Success -> {
-                    showToast("SUCCESS", if (selectedIndex == 0) "외출 신청을 성공했어요" else "외박 신청을 성공했어요")
+                    showToast("SUCCESS", if (selectedItem.isOut()) "외출 신청을 성공했어요" else "외박 신청을 성공했어요")
                     popBackStack()
                 }
                 Event.ShowDialog -> {
@@ -89,269 +125,278 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
     }
 
     if (showDialog) {
-        DodamDialog(
-            onDismissRequest = { showDialog = false },
-            confirmText = {
-                DodamTextButton(onClick = { showDialog = false }) {
-                    Text(text = "확인")
-                }
-            },
-            title = { Text(text = "${if (selectedIndex == 0) "외출" else "외박"}을 신청할 수 없어요") },
-            text = { Text(text = uiState.message) },
-        )
-    }
-
-    if (showDateTimePicker.first) {
-        ModalBottomSheet(
-            onDismissRequest = { showDateTimePicker = Pair(false, "") },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+        Dialog(
+            onDismissRequest = { showDialog = false }
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            ) {
-                TitleLarge(
-                    modifier = Modifier.padding(8.dp),
-                    text = if (showDateTimePicker.second == "외출") {
-                        "외출일자"
-                    } else {
-                        "복귀일자"
-                    },
-                    fontSize = 20.sp,
-                )
-                WheelDateTimePicker(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    startDateTime = if (showDateTimePicker.second == "외출") {
-                        outingStartDateTime
-                    } else {
-                        outingEndDateTime
-                    },
-                    minDateTime = LocalDateTime.now(),
-                    maxDateTime = LocalDateTime.now().plusMonths(2),
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
-                    textColor = MaterialTheme.colorScheme.onSurface,
-                    onSnappedDateTime = {
-                        if (showDateTimePicker.second == "외출") {
-                            outingStartDateTime = it
-                        } else {
-                            outingEndDateTime = it
-                        }
-                    },
-                )
-            }
+            DodamDialog(
+                confirmButton = { showDialog = false },
+                title = "${if (selectedItem.isOut()) "외출" else "외박"}을 신청할 수 없어요",
+                body = uiState.message,
+            )
         }
     }
 
     if (showDatePicker.first) {
-        ModalBottomSheet(
-            onDismissRequest = { showDatePicker = Pair(false, "") },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            ) {
-                TitleLarge(
-                    modifier = Modifier.padding(8.dp),
-                    text = if (showDatePicker.second == "외박") {
-                        "외박일자"
-                    } else {
-                        "복귀일자"
-                    },
-                    fontSize = 20.sp,
-                )
-                WheelDatePicker(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    startDate = if (showDatePicker.second == "외박") {
-                        sleepoverStartDate
-                    } else {
-                        sleepoverEndDate
-                    },
-                    minDate = LocalDate.now(),
-                    maxDate = LocalDate.now().plusMonths(2),
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
-                    textColor = MaterialTheme.colorScheme.onSurface,
-                    onSnappedDate = {
-                        if (showDatePicker.second == "외박") {
-                            sleepoverStartDate = it
-                        } else {
-                            sleepoverEndDate = it
-                        }
-                    },
-                )
+        DodamDatePickerBottomSheet(
+            sheetState = rememberModalBottomSheetState(
+                skipPartiallyExpanded = true
+            ),
+            state = datePickerState,
+            onDismissRequest = {
+                showDatePicker = Triple(false , "외출", true)
+            },
+            onClickDate = { date, isValid ->
+                if (!isValid) {
+                    return@DodamDatePickerBottomSheet
+                }
+                temporaryDate = LocalDate(date.year, date.month, date.dayOfMonth)
+                datePickerState.selectedDate = date
+            },
+            onClickSuccess = {
+                when {
+                    showDatePicker.second.isOut() -> {
+                        outingDate = temporaryDate
+                    }
+                    showDatePicker.third -> {
+                        sleepoverStartDate = temporaryDate
+                    }
+                    showDatePicker.third.not() -> {
+                        sleepoverEndDate = temporaryDate
+                    }
+                }
+                showDatePicker = Triple(false , "외출", true)
             }
+        )
+    }
+
+    val startTime = if (showTimePicker.second) outingStartTime.hour else outingEndTime.hour
+    if (showTimePicker.first) { 
+        DodamTimePickerBottomSheet(
+            onDismissRequest = {
+                showTimePicker = false to false
+            },
+            sheetState = rememberModalBottomSheetState(
+                skipPartiallyExpanded = true
+            ),
+            startTime = if (startTime == 0) startTime + 1 else startTime,
+            startMinute = if (showTimePicker.second) outingStartTime.minute else outingEndTime.minute,
+            onSelectTime = { hour, minute ->
+                if (showTimePicker.second) {
+                    outingStartTime = LocalTime(hour, minute)
+                } else {
+                    outingEndTime = LocalTime(hour, minute)
+                }
+                showTimePicker = false to false
+            },
+        )
+    }
+
+    if (showMealPicker) {
+        Dialog(
+            onDismissRequest = { showMealPicker = false }
+        ) {
+            DodamButtonDialog(
+                confirmButton = {
+
+                },
+                confirmButtonText = "네, 먹습니다",
+                confirmButtonRole = ButtonRole.Primary,
+                dismissButton = {
+
+                },
+                dismissButtonText = "아니요",
+                dismissButtonRole = ButtonRole.Assistive,
+                title = "오늘 저녁 급식을 드시나요? \uD83E\uDD7A",
+                body = "급식 수요조사를 위해 알려주시면 감사드리겠습니다",
+            )
         }
     }
 
+
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .imePadding(),
-        containerColor = MaterialTheme.colorScheme.background,
+            .addFocusCleaner(focusManager),
         topBar = {
-            DodamSmallTopAppBar(
-                title = { Text(text = "외출/외박 신청하기") },
-                onNavigationIconClick = popBackStack,
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+            DodamTopAppBar(
+                modifier = Modifier.statusBarsPadding(),
+                title = "외출/외박 신청하기",
+                onBackClick = popBackStack
             )
         },
+        containerColor = DodamTheme.colors.backgroundNeutral
     ) { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(horizontal = 16.dp),
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp),
-                ) {
-                    Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+            DodamSegmentedButton(
+                segments = persistentListOf(
+                    DodamSegment(
+                        selected = selectedItem.isOut(),
+                        onClick = { selectedItem = "외출" },
+                        text = "외출",
+                    ),
+                    DodamSegment(
+                        selected = !selectedItem.isOut(),
+                        onClick = { selectedItem = "외박"},
+                        text = "외박",
+                    )
+                )
+            )
+            Spacer(modifier = Modifier.height(20.dp))
 
-                    DodamSegmentedButtonRow(selectedIndex = selectedIndex) {
-                        DodamSegment(
-                            selected = selectedIndex == 0,
-                            onClick = { selectedIndex = 0 },
-                        ) {
-                            Text(text = "외출")
+            Column(
+                modifier = Modifier.animateContentSize(),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                DodamTextField(
+                    value = if (selectedItem.isOut()) outingReason else sleepoverReason,
+                    onValueChange = {
+                        if (selectedItem.isOut()) {
+                            outingReason = it
+                        } else {
+                            sleepoverReason = it
                         }
-                        DodamSegment(
-                            selected = selectedIndex == 1,
-                            onClick = { selectedIndex = 1 },
-                        ) {
-                            Text(text = "외박")
+                    },
+                    label = "$selectedItem 사유",
+                    onClickRemoveRequest = {
+                        if (selectedItem.isOut()) {
+                            outingReason = ""
+                        } else {
+                            sleepoverReason = ""
                         }
                     }
+                )
 
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    DodamTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = if (selectedIndex == 0) outingReason else sleepoverReason,
-                        onValueChange = {
-                            if (selectedIndex == 0) {
-                                outingReason = it
-                            } else {
-                                sleepoverReason = it
-                            }
-                        },
-                        textStyle = MaterialTheme.typography.bodyLarge,
-                        label = { Text(text = if (selectedIndex == 0) "외출 사유" else "외박 사유") },
+                if (selectedItem.isOut()) {
+                    AskOutButton(
+                        title = "외출 날짜",
+                        description = outingDate.toDateString(),
+                        onClick = {
+                            temporaryDate = outingDate
+                            datePickerState.selectedDate = outingDate.toCalendarDate()
+                            showDatePicker = Triple(true, "외출", true)
+                        }
                     )
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
-
-                InputField(
+                AskOutButton(
+                    title = "$selectedItem ${if (selectedItem.isOut()) "시간" else "날짜"}",
+                    description = if (selectedItem.isOut()) outingStartTime.toHourMinString() else sleepoverStartDate.toDateString(),
                     onClick = {
-                        if (selectedIndex == 0) {
-                            showDateTimePicker = Pair(true, "외출")
+                        if (selectedItem.isOut()) {
+                            showTimePicker = true to true
                         } else {
-                            showDatePicker = Pair(true, "외박")
+                            temporaryDate = sleepoverStartDate
+                            datePickerState.selectedDate = sleepoverStartDate.toCalendarDate()
+                            showDatePicker = Triple(true, "외박", true)
                         }
-                    },
-                    text = {
-                        BodyLarge(
-                            text = if (selectedIndex == 0) "외출일시" else "외박 일자",
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.tertiary,
-                        )
-                    },
-                    content = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        ) {
-                            BodyLarge(
-                                text = if (selectedIndex == 0) {
-                                    outingStartDateTime.format(DateTimeFormatter.ofPattern("MM월 dd일 HH:mm"))
-                                } else {
-                                    sleepoverStartDate.format(DateTimeFormatter.ofPattern("MM월 dd일"))
-                                },
-                                fontWeight = FontWeight.Normal,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                            ChevronRightIcon(
-                                modifier = Modifier.size(16.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    },
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                InputField(
-                    onClick = {
-                        if (selectedIndex == 0) {
-                            showDateTimePicker = Pair(true, "복귀")
-                        } else {
-                            showDatePicker = Pair(true, "복귀")
-                        }
-                    },
-                    text = {
-                        BodyLarge(
-                            text = if (selectedIndex == 0) "복귀일시" else "복귀 일자",
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.tertiary,
-                        )
-                    },
-                    content = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        ) {
-                            BodyLarge(
-                                text = if (selectedIndex == 0) {
-                                    outingEndDateTime.format(DateTimeFormatter.ofPattern("MM월 dd일 HH:mm"))
-                                } else {
-                                    sleepoverEndDate.format(DateTimeFormatter.ofPattern("MM월 dd일"))
-                                },
-                                fontWeight = FontWeight.Normal,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                            ChevronRightIcon(
-                                modifier = Modifier.size(16.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    },
-                )
-            }
-
-            DodamCTAButton(
-                modifier = Modifier.imePadding(),
-                onClick = {
-                    if (selectedIndex == 0) {
-                        viewModel.askOuting(
-                            outingReason,
-                            outingStartDateTime.toKotlinLocalDateTime(),
-                            outingEndDateTime.toKotlinLocalDateTime(),
-                        )
-                    } else {
-                        viewModel.askSleepover(
-                            sleepoverReason,
-                            sleepoverStartDate.toKotlinLocalDate(),
-                            sleepoverEndDate.toKotlinLocalDate(),
-                        )
                     }
-                },
-                enabled = if (selectedIndex == 0) {
-                    outingReason.isNotBlank() && outingStartDateTime < outingEndDateTime
-                } else {
-                    sleepoverReason.isNotBlank() && sleepoverStartDate < sleepoverEndDate
-                },
-                isLoading = uiState.isLoading,
-            ) {
-                Text(text = "확인")
+                )
+
+                AskOutButton(
+                    title = "복귀 ${if (selectedItem.isOut()) "시간" else "날짜"}",
+                    description = if (selectedItem.isOut()) outingEndTime.toHourMinString() else sleepoverEndDate.toDateString(),
+                    onClick = {
+                        if (selectedItem.isOut()) {
+                            showTimePicker = true to false
+                        } else {
+                            temporaryDate = sleepoverEndDate
+                            datePickerState.selectedDate = sleepoverEndDate.toCalendarDate()
+                            showDatePicker = Triple(true, "외박", false)
+                        }
+                    }
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.height(20.dp))
+                DodamButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        if (selectedItem.isOut() && outingDate.dayOfWeek == java.time.DayOfWeek.WEDNESDAY) {
+                            showMealPicker = true
+                        } else {
+
+                        }
+                    },
+                    text = "신청",
+                    buttonRole = ButtonRole.Primary,
+                    buttonSize = ButtonSize.Large
+                )
             }
         }
     }
 }
+
+@Composable
+private fun AskOutButton(
+    modifier: Modifier = Modifier,
+    title: String,
+    description: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberBounceIndication(),
+                onClick = onClick
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.padding(vertical = 8.dp),
+            text = title,
+            color = DodamTheme.colors.labelAlternative,
+            style = DodamTheme.typography.headlineMedium()
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = description,
+            color = DodamTheme.colors.primaryNormal,
+            style = DodamTheme.typography.headlineRegular()
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Image(
+            imageVector = DodamIcons.Calendar.value,
+            contentDescription = "calendar",
+            colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
+        )
+    }
+}
+
+private fun String.isOut() =
+    this == "외출"
+
+private fun LocalTime.toHourMinString(): String =
+    "${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}"
+
+private fun LocalDate.toDateString(): String =
+    "${monthNumber}월 ${dayOfMonth}일 (${dayOfWeek.toShortKoreanWeek()})"
+
+private fun DayOfWeek.toShortKoreanWeek() =
+    when (this) {
+        DayOfWeek.MONDAY -> "월"
+        DayOfWeek.TUESDAY -> "화"
+        DayOfWeek.WEDNESDAY -> "수"
+        DayOfWeek.THURSDAY -> "목"
+        DayOfWeek.FRIDAY -> "금"
+        DayOfWeek.SATURDAY -> "토"
+        DayOfWeek.SUNDAY -> "일"
+    }
+
+private val utcTimeZoneId: ZoneId = ZoneId.of("UTC")
+
+private fun java.time.LocalDate.getUtcTimeMill(): Long =
+    this
+        .atTime(java.time.LocalTime.MIDNIGHT)
+        .atZone(utcTimeZoneId)
+        .toInstant()
+        .toEpochMilli()
+
+private fun LocalDate.toCalendarDate(): CalendarDate =
+    CalendarDate(year, monthNumber, dayOfMonth, this.toJavaLocalDate().getUtcTimeMill())
