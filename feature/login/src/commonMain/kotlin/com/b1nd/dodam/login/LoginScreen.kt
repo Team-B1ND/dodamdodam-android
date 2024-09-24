@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,8 +42,6 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.designsystem.component.DodamTopAppBar
-import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.login.viewmodel.Event
 import com.b1nd.dodam.login.viewmodel.LoginViewModel
@@ -202,7 +199,7 @@ private fun LoginScreen(
                     color = DodamTheme.colors.labelNormal,
                 )
             }
-        }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier

@@ -1,7 +1,6 @@
 package com.b1nd.dodam.outing
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -307,7 +305,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                         ) {
                             LazyColumn(
                                 modifier = Modifier
-                                    .clip(shape = RoundedCornerShape(18.dp))
+                                    .clip(shape = RoundedCornerShape(18.dp)),
                             ) {
                                 if (cnt != 0) {
                                     item {
@@ -362,7 +360,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                                 .wrapContentHeight()
                                                 .clip(shape = RoundedCornerShape(18.dp))
                                                 .background(DodamTheme.colors.backgroundNormal)
-                                                .padding(horizontal = 10.dp)
+                                                .padding(horizontal = 10.dp),
                                         ) {
                                             Text(
                                                 text = if (titleIndex == 0) "외출 중인 학생" else "외박 중인 학생",
