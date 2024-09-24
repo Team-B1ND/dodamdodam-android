@@ -208,7 +208,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                         .wrapContentHeight()
                                         .clip(shape = RoundedCornerShape(18.dp))
                                         .background(DodamTheme.colors.backgroundNormal)
-                                        .padding(horizontal = 16.dp)
+                                        .padding(horizontal = 10.dp)
                                 ) {
                                 Text(
                                     text = "심자 자습중인 학생",
