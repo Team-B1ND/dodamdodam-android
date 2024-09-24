@@ -1,12 +1,17 @@
 package com.b1nd.dodam.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,8 +26,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -31,11 +38,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.login.viewmodel.Event
 import com.b1nd.dodam.login.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
@@ -159,20 +169,45 @@ private fun LoginScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(DodamTheme.colors.backgroundNeutral)
             .systemBarsPadding(),
         topBar = {
-            DodamTopAppBar(
-                title = "아이디와 비밀번호를\n" +
-                    "입력해주세요",
-                onBackClick = onBackClick,
-                type = TopAppBarType.Medium,
-            )
-        },
+            Column {
+                DodamContentTopAppBar(
+                    content = {
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberBounceIndication(),
+                                    onClick = onBackClick,
+                                ),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .size(24.dp),
+                                imageVector = DodamIcons.ArrowLeft.value,
+                                contentDescription = "뒤로가기",
+                                colorFilter = ColorFilter.tint(DodamTheme.colors.labelNormal),
+                            )
+                        }
+                    },
+                )
+                Text(
+                    modifier = Modifier.padding(start = 16.dp),
+                    text = "아이디와 비밀번호를\n입력해주세요",
+                    style = DodamTheme.typography.title3Bold(),
+                    color = DodamTheme.colors.labelNormal,
+                )
+            }
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(DodamTheme.colors.backgroundNeutral)
                 .padding(paddingValues)
                 .padding(horizontal = 24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
