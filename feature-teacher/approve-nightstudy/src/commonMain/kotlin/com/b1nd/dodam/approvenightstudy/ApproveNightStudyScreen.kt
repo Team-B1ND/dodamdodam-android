@@ -1,7 +1,6 @@
 package com.b1nd.dodam.approvenightstudy
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -129,7 +128,7 @@ fun ApproveNightStudyScreen(
 
             )
         },
-        containerColor = DodamTheme.colors.backgroundNormal
+        containerColor = DodamTheme.colors.backgroundNormal,
     ) {
         if (selectedItemIndex >= 0) {
             DodamModalBottomSheet(
