@@ -232,9 +232,9 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                             val a = currentDate.daysUntil(end)
 
                                             Text(
-                                                text = if (a == 1) "오늘 종료" else "${a}일 남음",
+                                                text = if (a <= 1) "오늘 종료" else "${a}일 남음",
                                                 style = DodamTheme.typography.headlineMedium(),
-                                                color = if (a == 1) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive,
+                                                color = if (a <= 1) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive,
                                             )
                                         }
                                     }
