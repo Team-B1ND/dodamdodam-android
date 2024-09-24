@@ -1,7 +1,6 @@
 package com.b1nd.dodam.approveouting
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -140,7 +139,7 @@ fun ApproveOutScreen(
                 onBackClick = onBackClick,
             )
         },
-        containerColor = DodamTheme.colors.backgroundNormal
+        containerColor = DodamTheme.colors.backgroundNormal,
     ) {
         if (selectedItemIndex >= 0) {
             DodamModalBottomSheet(
