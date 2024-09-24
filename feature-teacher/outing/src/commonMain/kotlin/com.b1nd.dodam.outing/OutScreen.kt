@@ -353,7 +353,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                         Spacer(modifier = Modifier.height(20.dp))
                                     }
                                 }
-                                if (members.size != 0) {
+                                if (filteredMemberList.isNotEmpty()) {
                                     item {
                                         Column(
                                             modifier = Modifier
