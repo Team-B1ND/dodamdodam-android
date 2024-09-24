@@ -140,6 +140,7 @@ fun ApproveOutScreen(
                 onBackClick = onBackClick,
             )
         },
+        containerColor = DodamTheme.colors.backgroundNormal
     ) {
         if (selectedItemIndex >= 0) {
             DodamModalBottomSheet(
@@ -242,7 +243,6 @@ fun ApproveOutScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DodamTheme.colors.backgroundNormal)
                 .padding(it),
         ) {
             Column(
