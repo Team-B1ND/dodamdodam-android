@@ -41,9 +41,9 @@ internal class OutingRepositoryImpl(
         }.asResult().flowOn(dispatcher)
     }
 
-    override fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime): Flow<Result<Unit>> {
+    override fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime, isDinner: Boolean?): Flow<Result<Unit>> {
         return flow {
-            emit(network.askOuting(reason, startAt, endAt))
+            emit(network.askOuting(reason, startAt, endAt, isDinner))
         }.asResult().flowOn(dispatcher)
     }
 

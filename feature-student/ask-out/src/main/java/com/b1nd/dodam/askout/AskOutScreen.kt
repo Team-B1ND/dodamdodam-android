@@ -197,12 +197,22 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
         ) {
             DodamButtonDialog(
                 confirmButton = {
-
+                    viewModel.askOuting(
+                        reason = outingReason,
+                        startAt = LocalDateTime(outingDate, outingStartTime),
+                        endAt = LocalDateTime(outingDate, outingEndTime),
+                        isDinner = true,
+                    )
                 },
                 confirmButtonText = "네, 먹습니다",
                 confirmButtonRole = ButtonRole.Primary,
                 dismissButton = {
-
+                    viewModel.askOuting(
+                        reason = outingReason,
+                        startAt = LocalDateTime(outingDate, outingStartTime),
+                        endAt = LocalDateTime(outingDate, outingEndTime),
+                        isDinner = false
+                    )
                 },
                 dismissButtonText = "아니요",
                 dismissButtonRole = ButtonRole.Assistive,
@@ -316,10 +326,24 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                 DodamButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        if (selectedItem.isOut() && outingDate.dayOfWeek == java.time.DayOfWeek.WEDNESDAY) {
-                            showMealPicker = true
-                        } else {
-
+                        when {
+                            selectedItem.isOut() && outingDate.dayOfWeek == java.time.DayOfWeek.WEDNESDAY -> {
+                                showMealPicker = true
+                            }
+                            selectedItem.isOut() -> {
+                                viewModel.askOuting(
+                                    reason = outingReason,
+                                    startAt = LocalDateTime(outingDate, outingStartTime),
+                                    endAt = LocalDateTime(outingDate, outingEndTime),
+                                )
+                            }
+                            else -> {
+                                viewModel.askSleepover(
+                                    reason = sleepoverReason,
+                                    startAt = sleepoverStartDate,
+                                    endAt = sleepoverEndDate
+                                )
+                            }
                         }
                     },
                     text = "신청",
