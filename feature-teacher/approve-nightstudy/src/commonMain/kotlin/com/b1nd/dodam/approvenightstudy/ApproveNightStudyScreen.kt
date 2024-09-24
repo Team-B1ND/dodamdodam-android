@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.approvenightstudy.model.NightStudySideEffect
 import com.b1nd.dodam.approvenightstudy.model.NightStudyUiState
@@ -46,6 +47,7 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
+import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -95,6 +97,8 @@ fun ApproveNightStudyScreen(
         viewModel.load()
     }
 
+    val focusManager = LocalFocusManager.current
+
     LaunchedEffect(true) {
         viewModel.sideEffect.collect {
             when (it) {
@@ -116,6 +120,7 @@ fun ApproveNightStudyScreen(
     val state by viewModel.uiState.collectAsState()
 
     Scaffold(
+        modifier = Modifier.addFocusCleaner(focusManager),
         topBar = {
             DodamTopAppBar(
                 title = "심야 자습 승인",

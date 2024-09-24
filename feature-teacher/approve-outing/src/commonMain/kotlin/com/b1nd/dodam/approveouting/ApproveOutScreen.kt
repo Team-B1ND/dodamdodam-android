@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.approveouting.model.ApproveSideEffect
 import com.b1nd.dodam.approveouting.model.OutPendingUiState
@@ -45,6 +46,7 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
+import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -104,6 +106,8 @@ fun ApproveOutScreen(
 
     var selectedItemIndex by remember { mutableStateOf(-1) }
 
+    val focusManager = LocalFocusManager.current
+
     LaunchedEffect(key1 = true) {
         titleIndex = if (title == 0) 0 else 1
         viewModel.load()
@@ -128,6 +132,7 @@ fun ApproveOutScreen(
     val state by viewModel.state.collectAsState()
 
     Scaffold(
+        modifier = Modifier.addFocusCleaner(focusManager),
         topBar = {
             DodamTopAppBar(
                 title = "외출/외박 승인",
