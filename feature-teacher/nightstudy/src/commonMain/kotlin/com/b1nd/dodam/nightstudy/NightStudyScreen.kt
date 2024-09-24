@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEachIndexed
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
@@ -216,7 +217,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                         modifier = Modifier
                                             .padding(vertical = 10.dp),
                                     )
-                                    filteredMemberList.forEachIndexed { index, nightStudy ->
+                                    filteredMemberList.fastForEachIndexed { index, nightStudy ->
                                         DodamMember(
                                             name = filteredMemberList[index].student.name ?: "",
                                             modifier = Modifier
