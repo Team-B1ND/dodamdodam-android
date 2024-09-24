@@ -152,7 +152,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                 .fillMaxWidth()
                                 .padding(top = 20.dp)
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite),
+                                .background(DodamTheme.colors.backgroundNormal),
                         ) {
                             Box(
                                 modifier = Modifier
@@ -180,7 +180,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                 .fillMaxWidth()
                                 .padding(vertical = 20.dp)
                                 .clip(shape = RoundedCornerShape(18.dp))
-                                .background(DodamTheme.colors.staticWhite),
+                                .background(DodamTheme.colors.backgroundNormal),
                         ) {
                             Box(
                                 modifier = Modifier
@@ -301,7 +301,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clip(shape = RoundedCornerShape(18.dp))
-                                        .background(DodamTheme.colors.staticWhite),
+                                        .background(DodamTheme.colors.backgroundNormal),
                                 ) {
                                     Row(
                                         modifier = Modifier
@@ -346,7 +346,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                         .fillMaxWidth()
                                         .wrapContentHeight()
                                         .clip(shape = RoundedCornerShape(18.dp))
-                                        .background(DodamTheme.colors.staticWhite),
+                                        .background(DodamTheme.colors.backgroundNormal),
 
                                 ) {
                                     Text(
