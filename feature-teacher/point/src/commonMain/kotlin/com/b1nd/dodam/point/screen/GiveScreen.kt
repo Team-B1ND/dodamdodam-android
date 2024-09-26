@@ -143,7 +143,7 @@ internal fun GiveScreen(
                         ),
                 ) {
                     Text(
-                        text = "상점 목록",
+                        text = "$selectScoreType 목록",
                         style = DodamTheme.typography.headlineBold(),
                         color = DodamTheme.colors.labelNormal,
                     )
