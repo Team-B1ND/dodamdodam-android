@@ -66,11 +66,11 @@ internal class OutingService(
         }.toImmutableList()
     }
 
-    override suspend fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime) {
+    override suspend fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime, isDinner: Boolean?) {
         return defaultSafeRequest {
             client.post(DodamUrl.OUTING) {
                 contentType(ContentType.Application.Json)
-                setBody(OutingRequest(reason, startAt, endAt))
+                setBody(OutingRequest(reason, startAt, endAt, isDinner))
             }.body<DefaultResponse>()
         }
     }

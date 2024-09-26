@@ -26,8 +26,8 @@ class AskOutViewModel : ViewModel(), KoinComponent {
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
 
-    fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime) = viewModelScope.launch {
-        outingRepository.askOuting(reason, startAt, endAt)
+    fun askOuting(reason: String, startAt: LocalDateTime, endAt: LocalDateTime, isDinner: Boolean? = null) = viewModelScope.launch {
+        outingRepository.askOuting(reason, startAt, endAt, isDinner)
             .collect { result ->
                 when (result) {
                     is Result.Success -> {
