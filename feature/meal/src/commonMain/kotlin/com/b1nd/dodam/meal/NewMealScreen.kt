@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -17,7 +18,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,10 +48,12 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.CalendarDate
 import com.b1nd.dodam.designsystem.component.CalendarMonth
+import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamDatePicker
 import com.b1nd.dodam.designsystem.component.DodamDatePickerDefaults
 import com.b1nd.dodam.designsystem.component.DodamDatePickerState
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
+import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTag
 import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.component.rememberDodamDatePickerState
@@ -62,15 +67,57 @@ internal fun NewMealScreen() {
             DodamDefaultTopAppBar(
                 title = "?월 급식"
             )
-        }
+        },
+        containerColor = DodamTheme.colors.backgroundNeutral
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .animateContentSize()
+                .padding(it)
+                .padding(horizontal = 16.dp)
         ) {
             ExpandableCalendar()
+            Spacer(modifier = Modifier.height(16.dp))
+            DodamDivider(type = DividerType.Normal)
+            Spacer(modifier = Modifier.height(16.dp))
 
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                MealCard(
+                    tagText = "아침",
+                    content = "쇠고기우엉볶음밥\n" +
+                            "불고기치즈파니니\n" +
+                            "계란실파국\n" +
+                            "오이생채\n" +
+                            "배추김치",
+                    kcalText = "709Kcal"
+                )
+
+                MealCard(
+                    tagText = "아침",
+                    content = "쇠고기우엉볶음밥\n" +
+                            "불고기치즈파니니\n" +
+                            "계란실파국\n" +
+                            "오이생채\n" +
+                            "배추김치",
+                    kcalText = "709Kcal"
+                )
+
+                MealCard(
+                    tagText = "아침",
+                    content = "쇠고기우엉볶음밥\n" +
+                            "불고기치즈파니니\n" +
+                            "계란실파국\n" +
+                            "오이생채\n" +
+                            "배추김치",
+                    kcalText = "709Kcal"
+                )
+            }
         }
     }
 }
