@@ -1,6 +1,8 @@
 package com.b1nd.dodam.meal
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,12 +11,15 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,11 +48,74 @@ import com.b1nd.dodam.designsystem.component.CalendarMonth
 import com.b1nd.dodam.designsystem.component.DodamDatePicker
 import com.b1nd.dodam.designsystem.component.DodamDatePickerDefaults
 import com.b1nd.dodam.designsystem.component.DodamDatePickerState
+import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
+import com.b1nd.dodam.designsystem.component.DodamTag
+import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.component.rememberDodamDatePickerState
 import com.b1nd.dodam.logging.KmLog
 import com.b1nd.dodam.logging.KmLogging
 
-class NewMealScreen {
+@Composable
+internal fun NewMealScreen() {
+    Scaffold(
+        topBar = {
+            DodamDefaultTopAppBar(
+                title = "?월 급식"
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .animateContentSize()
+        ) {
+            ExpandableCalendar()
+
+        }
+    }
+}
+
+@Composable
+internal fun MealCard(
+    modifier: Modifier = Modifier,
+    tagText: String,
+    content: String,
+    kcalText: String
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth(),
+        color = DodamTheme.colors.backgroundNormal,
+        shape = DodamTheme.shapes.large
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                DodamTag(
+                    text = tagText,
+                    tagType = TagType.Primary
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = kcalText,
+                    style = DodamTheme.typography.labelMedium(),
+                    color = DodamTheme.colors.labelAlternative
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = content,
+                style = DodamTheme.typography.body1Medium(),
+                color = DodamTheme.colors.labelNormal,
+                textAlign = TextAlign.Start
+            )
+        }
+    }
 }
 
 @Composable
@@ -63,18 +131,32 @@ internal fun ExpandableCalendar(
         datePickerState.selectedDate = date
     }
 
-    val cellHeight = (55.33).dp
-    val cellCount = MAX_CALENDAR_ROWS
+    val cellHeight = (36).dp
+    val cellCount = when {
+        (30 == month.numberOfDays && month.daysFromStartOfWeekToFirstOfMonth == 6) ||
+                (31 == month.numberOfDays && (month.daysFromStartOfWeekToFirstOfMonth == 5 || month.daysFromStartOfWeekToFirstOfMonth == 6)) -> 6
+        (28 == month.numberOfDays && month.daysFromStartOfWeekToFirstOfMonth == 0) -> 4
+        else -> 5
+    }
     val cellAllHeight = cellHeight * cellCount
     val scrollRange = cellHeight * (cellCount - 1)
 
-    var offsetY by remember { mutableStateOf(0.dp) }
-    val animateHeight by animateDpAsState(targetValue = cellAllHeight + offsetY, label = "")
     var scrollRatio by remember { mutableFloatStateOf(0f) }
+    var offsetY by remember { mutableStateOf(0.dp) }
+
+    val animateHeight by animateDpAsState(targetValue = cellAllHeight + offsetY + (12.dp * scrollRatio), label = "")
 
     var clickRowIndex by remember { mutableIntStateOf(0) }
 
-    val animateOffsetY by animateDpAsState(targetValue = (138.dp - cellHeight * clickRowIndex) * scrollRatio, label = "")
+
+    val baseOffSetPadding = when(cellCount) {
+        4 -> 54.dp
+        5 -> 72.dp
+        6 -> 90.dp
+        else -> 0.dp
+    }
+
+    val animateOffsetY by animateDpAsState(targetValue = (baseOffSetPadding +  - cellHeight * clickRowIndex) * scrollRatio, label = "")
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth(),
@@ -187,7 +269,7 @@ internal fun ExpandableCalendar(
                                     DodamDatePickerDefaults.SelectDayContainerColor
                                 val backgroundModifier = if (isSelect) Modifier.drawBehind {
                                     val boxWidth = size.width
-                                    val indicatorSize = 38.dp.toPx()
+                                    val indicatorSize = 36.dp.toPx()
                                     val offsetX = (boxWidth - indicatorSize) / 2
                                     drawRoundRect(
                                         color = selectContainerColor,
@@ -195,13 +277,14 @@ internal fun ExpandableCalendar(
                                         size = Size(indicatorSize, indicatorSize),
                                         topLeft = Offset(
                                             x = offsetX,
-                                            y = -(9).dp.toPx(),
+                                            y = -(0.5).dp.toPx(),
                                         ),
                                     )
                                 } else Modifier
                                 Box(
                                     modifier = Modifier
                                         .weight(1f)
+                                        .height(cellHeight)
                                         .clickable(
                                             onClick = {
                                                 clickRowIndex = weekIndex
