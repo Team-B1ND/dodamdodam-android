@@ -44,6 +44,7 @@ import com.b1nd.dodam.designsystem.component.DodamDatePickerState
 import com.b1nd.dodam.designsystem.component.rememberDodamDatePickerState
 import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.meal.ExpandableCalendar
+import com.b1nd.dodam.meal.NewMealScreen
 
 @Preview
 @Composable
@@ -51,6 +52,6 @@ fun MealScreenPreview(
 
 ) {
     DodamTheme {
-        ExpandableCalendar()
+        NewMealScreen()
     }
 }
