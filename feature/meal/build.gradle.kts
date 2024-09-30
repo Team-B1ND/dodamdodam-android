@@ -19,6 +19,7 @@ kotlin {
         implementation(projects.ui)
         implementation(projects.data.meal)
         implementation(libs.kotlinx.datetime)
+        implementation(projects.logging)
 
         implementation(libs.dodam.design.system.cmm)
         implementation(libs.multiplatform.compose.material)
