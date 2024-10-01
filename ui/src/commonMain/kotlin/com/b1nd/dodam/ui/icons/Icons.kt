@@ -9,6 +9,7 @@ import dodamdodam_android.ui.generated.resources.ic_colored_bullseye
 import dodamdodam_android.ui.generated.resources.ic_colored_bus
 import dodamdodam_android.ui.generated.resources.ic_colored_calendar
 import dodamdodam_android.ui.generated.resources.ic_colored_checkmark_circle_filled
+import dodamdodam_android.ui.generated.resources.ic_colored_cookedrice
 import dodamdodam_android.ui.generated.resources.ic_colored_exclamationmark_circle
 import dodamdodam_android.ui.generated.resources.ic_colored_megaphone
 import dodamdodam_android.ui.generated.resources.ic_colored_musical_note
@@ -89,3 +90,7 @@ val ColoredExclamationMarkCircle
 val ColoredXMarkCircle
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_xmark_circle)
+
+val ColoredCookedRice
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_cookedrice)
