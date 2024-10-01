@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -67,15 +66,13 @@ import com.b1nd.dodam.meal.model.MealUiState
 import com.b1nd.dodam.meal.viewmodel.MealViewModel
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ColoredCookedRice
+import kotlin.math.roundToInt
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import kotlin.math.roundToInt
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-internal fun MealScreen(
-    viewModel: MealViewModel = koinViewModel()
-) {
+internal fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
     val datePickerState = rememberDodamDatePickerState()
     val uiState by viewModel.mealUiState.collectAsState()
     val nowDate = DodamDate.localDateNow()
@@ -88,24 +85,24 @@ internal fun MealScreen(
         topBar = {
             DodamDefaultTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
-                title = "${nowDate.monthNumber}월 급식"
+                title = "${nowDate.monthNumber}월 급식",
             )
         },
-        containerColor = DodamTheme.colors.backgroundNeutral
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .animateContentSize()
                 .padding(it)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             ExpandableCalendar(
                 datePickerState = datePickerState,
                 onClickDate = { date, isValid ->
                     datePickerState.selectedDate = date
-                }
+                },
             )
             Spacer(modifier = Modifier.height(16.dp))
             DodamDivider(type = DividerType.Normal)
@@ -117,7 +114,7 @@ internal fun MealScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .verticalScroll(rememberScrollState()),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         val uiState = uiState as MealUiState.Success
 
@@ -130,7 +127,7 @@ internal fun MealScreen(
                                 MealCard(
                                     tagText = "아침",
                                     content = meal.breakfast!!.details.fastJoinToString("\n") { it.name },
-                                    kcalText = "${meal.breakfast!!.calorie.roundToInt()}Kcal"
+                                    kcalText = "${meal.breakfast!!.calorie.roundToInt()}Kcal",
                                 )
                             }
 
@@ -138,7 +135,7 @@ internal fun MealScreen(
                                 MealCard(
                                     tagText = "점심",
                                     content = meal.lunch!!.details.fastJoinToString("\n") { it.name },
-                                    kcalText = "${meal.lunch!!.calorie.roundToInt()}Kcal"
+                                    kcalText = "${meal.lunch!!.calorie.roundToInt()}Kcal",
                                 )
                             }
 
@@ -146,7 +143,7 @@ internal fun MealScreen(
                                 MealCard(
                                     tagText = "저녁",
                                     content = meal.dinner!!.details.fastJoinToString("\n") { it.name },
-                                    kcalText = "${meal.dinner!!.calorie.roundToInt()}Kcal"
+                                    kcalText = "${meal.dinner!!.calorie.roundToInt()}Kcal",
                                 )
                             }
 
@@ -164,14 +161,14 @@ internal fun MealScreen(
                         modifier = Modifier
                             .fillMaxWidth(),
                         color = DodamTheme.colors.backgroundNormal,
-                        shape = DodamTheme.shapes.large
+                        shape = DodamTheme.shapes.large,
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier.padding(16.dp),
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Box(
                                     modifier = Modifier
@@ -179,8 +176,8 @@ internal fun MealScreen(
                                         .width(52.dp)
                                         .background(
                                             brush = shimmerEffect(),
-                                            shape = RoundedCornerShape(12.dp)
-                                        )
+                                            shape = RoundedCornerShape(12.dp),
+                                        ),
                                 )
                                 Spacer(modifier = Modifier.weight(1f))
                                 Box(
@@ -189,8 +186,8 @@ internal fun MealScreen(
                                         .width(54.dp)
                                         .background(
                                             brush = shimmerEffect(),
-                                            shape = RoundedCornerShape(12.dp)
-                                        )
+                                            shape = RoundedCornerShape(12.dp),
+                                        ),
                                 )
                             }
                             Spacer(modifier = Modifier.height(12.dp))
@@ -200,8 +197,8 @@ internal fun MealScreen(
                                     .height(120.dp)
                                     .background(
                                         brush = shimmerEffect(),
-                                        shape = RoundedCornerShape(12.dp)
-                                    )
+                                        shape = RoundedCornerShape(12.dp),
+                                    ),
                             )
                         }
                     }
@@ -216,56 +213,51 @@ private fun NotFoundMeal() {
     Box(
         modifier = Modifier
             .fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Column(
             modifier = Modifier.padding(vertical = 40.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 modifier = Modifier.size(36.dp),
                 imageVector = ColoredCookedRice,
-                contentDescription = null
+                contentDescription = null,
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "급식이 없어요",
                 style = DodamTheme.typography.labelMedium(),
-                color = DodamTheme.colors.labelAlternative.copy(alpha = 0.5f)
+                color = DodamTheme.colors.labelAlternative.copy(alpha = 0.5f),
             )
         }
     }
 }
 
 @Composable
-internal fun MealCard(
-    modifier: Modifier = Modifier,
-    tagText: String,
-    content: String,
-    kcalText: String
-) {
+internal fun MealCard(modifier: Modifier = Modifier, tagText: String, content: String, kcalText: String) {
     Surface(
         modifier = modifier
             .fillMaxWidth(),
         color = DodamTheme.colors.backgroundNormal,
-        shape = DodamTheme.shapes.large
+        shape = DodamTheme.shapes.large,
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 DodamTag(
                     text = tagText,
-                    tagType = TagType.Primary
+                    tagType = TagType.Primary,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = kcalText,
                     style = DodamTheme.typography.labelMedium(),
-                    color = DodamTheme.colors.labelAlternative
+                    color = DodamTheme.colors.labelAlternative,
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
@@ -274,7 +266,7 @@ internal fun MealCard(
                 text = content,
                 style = DodamTheme.typography.body1Medium(),
                 color = DodamTheme.colors.labelNormal,
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Start,
             )
         }
     }
@@ -286,8 +278,6 @@ internal fun ExpandableCalendar(
     onClickDate: (date: CalendarDate, isValid: Boolean) -> Unit,
     isValidDate: (date: CalendarDate) -> Boolean = datePickerState::validDate,
     getUtcTimeMillis: (year: Int, month: Int, dayOfMonth: Int) -> Long = datePickerState::getUtcTimeMillis,
-
-
 ) {
     val weekdayNames = datePickerState.weekdayNames
     val month = datePickerState.month
@@ -296,7 +286,7 @@ internal fun ExpandableCalendar(
     val cellHeight = (36).dp
     val cellCount = when {
         (30 == month.numberOfDays && month.daysFromStartOfWeekToFirstOfMonth == 6) ||
-                (31 == month.numberOfDays && (month.daysFromStartOfWeekToFirstOfMonth == 5 || month.daysFromStartOfWeekToFirstOfMonth == 6)) -> 6
+            (31 == month.numberOfDays && (month.daysFromStartOfWeekToFirstOfMonth == 5 || month.daysFromStartOfWeekToFirstOfMonth == 6)) -> 6
         (28 == month.numberOfDays && month.daysFromStartOfWeekToFirstOfMonth == 0) -> 4
         else -> 5
     }
@@ -310,15 +300,14 @@ internal fun ExpandableCalendar(
 
     var clickRowIndex by remember { mutableIntStateOf(0) }
 
-
-    val baseOffSetPadding = when(cellCount) {
+    val baseOffSetPadding = when (cellCount) {
         4 -> 54.dp
         5 -> 72.dp
         6 -> 90.dp
         else -> 0.dp
     }
 
-    val animateOffsetY by animateDpAsState(targetValue = (baseOffSetPadding +  - cellHeight * clickRowIndex) * scrollRatio, label = "")
+    val animateOffsetY by animateDpAsState(targetValue = (baseOffSetPadding + -cellHeight * clickRowIndex) * scrollRatio, label = "")
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth(),
@@ -335,7 +324,7 @@ internal fun ExpandableCalendar(
                     text = weekdayName,
                     style = DodamTheme.typography.labelRegular(),
                     textAlign = TextAlign.Center,
-                    color = DodamTheme.colors.labelAlternative
+                    color = DodamTheme.colors.labelAlternative,
                 )
             }
         }
@@ -379,17 +368,17 @@ internal fun ExpandableCalendar(
                             offsetY += dragAmount.toDp()
 
                             scrollRatio = (-offsetY.value / scrollRange.value).coerceIn(0f, 1f)
-                        }
+                        },
                     )
                 }
                 .height(animateHeight)
-                .clip(RoundedCornerShape(0.dp))
+                .clip(RoundedCornerShape(0.dp)),
 
         ) {
             Column(
                 modifier = Modifier
                     .offset(y = animateOffsetY)
-                    .requiredHeight(cellAllHeight)
+                    .requiredHeight(cellAllHeight),
             ) {
                 val maxCalendarRows = MAX_CALENDAR_ROWS
 
@@ -415,8 +404,8 @@ internal fun ExpandableCalendar(
                                 val dayNumber =
                                     cellIndex - month.daysFromStartOfWeekToFirstOfMonth + 1
                                 val isSelect = dayNumber == selectDate?.dayOfMonth &&
-                                        month.month == selectDate.month &&
-                                        month.year == selectDate.year
+                                    month.month == selectDate.month &&
+                                    month.year == selectDate.year
                                 val date = CalendarDate(
                                     year = month.year,
                                     month = month.month,
@@ -424,27 +413,31 @@ internal fun ExpandableCalendar(
                                     utcTimeMillis = getUtcTimeMillis(
                                         month.year,
                                         month.month,
-                                        dayNumber
-                                    )
+                                        dayNumber,
+                                    ),
                                 )
                                 val isValid = isValidDate(date)
 
                                 val selectContainerColor =
                                     DodamDatePickerDefaults.SelectDayContainerColor
-                                val backgroundModifier = if (isSelect) Modifier.drawBehind {
-                                    val boxWidth = size.width
-                                    val indicatorSize = 36.dp.toPx()
-                                    val offsetX = (boxWidth - indicatorSize) / 2
-                                    drawRoundRect(
-                                        color = selectContainerColor,
-                                        cornerRadius = CornerRadius(DodamDatePickerDefaults.SelectDayShape.toPx()),
-                                        size = Size(indicatorSize, indicatorSize),
-                                        topLeft = Offset(
-                                            x = offsetX,
-                                            y = -(0.5).dp.toPx(),
-                                        ),
-                                    )
-                                } else Modifier
+                                val backgroundModifier = if (isSelect) {
+                                    Modifier.drawBehind {
+                                        val boxWidth = size.width
+                                        val indicatorSize = 36.dp.toPx()
+                                        val offsetX = (boxWidth - indicatorSize) / 2
+                                        drawRoundRect(
+                                            color = selectContainerColor,
+                                            cornerRadius = CornerRadius(DodamDatePickerDefaults.SelectDayShape.toPx()),
+                                            size = Size(indicatorSize, indicatorSize),
+                                            topLeft = Offset(
+                                                x = offsetX,
+                                                y = -(0.5).dp.toPx(),
+                                            ),
+                                        )
+                                    }
+                                } else {
+                                    Modifier
+                                }
                                 Box(
                                     modifier = Modifier
                                         .weight(1f)
@@ -456,8 +449,8 @@ internal fun ExpandableCalendar(
                                             },
                                             interactionSource = remember { MutableInteractionSource() },
                                             indication = rememberBounceIndication(
-                                                showBackground = false
-                                            )
+                                                showBackground = false,
+                                            ),
                                         )
                                         .then(backgroundModifier),
                                     contentAlignment = Alignment.Center,

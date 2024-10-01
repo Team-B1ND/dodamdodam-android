@@ -7,9 +7,7 @@ import com.b1nd.dodam.meal.MealScreen
 
 @Preview
 @Composable
-fun MealScreenPreview(
-
-) {
+fun MealScreenPreview() {
     DodamTheme {
         MealScreen()
     }
