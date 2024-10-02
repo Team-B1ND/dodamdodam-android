@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.member.navigation.allScreen
@@ -129,7 +130,7 @@ internal fun MainScreen(
         ) {
             val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
-            com.b1nd.dodam.designsystem.component.DodamNavigationBar(
+            DodamNavigationBar(
                 items = mainScreenState.mainDestinations.map {
                     DodamNavigationBarItem(
                         selected = currentRoute == it.route,
@@ -137,7 +138,7 @@ internal fun MainScreen(
                         enable = currentRoute != it.route,
                         onClick = {
                             mainScreenState.navigateToMainDestination(it)
-                        }
+                        },
                     )
                 }.toImmutableList(),
             )
