@@ -23,7 +23,7 @@ internal fun rememberMainScreenState(navController: NavHostController) = remembe
 
 @Stable
 internal class MainScreenState(
-    val navController: NavHostController,
+    private val navController: NavHostController,
 ) {
     val mainDestinations = MainDestination.entries
 
