@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
+import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
@@ -45,6 +46,7 @@ import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
@@ -275,12 +277,12 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                     }
 
                     is OutPendingUiState.Success -> {
-                        val cnt =
-                            if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
-                        val members =
-                            if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                        val cnt = if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
+                        val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+
                         val filteredMemberList = members.filter { studentData ->
                             when {
+                                // 전체인 경우
                                 gradeIndex == 0 && roomIndex == 0 -> true
                                 gradeIndex == 0 && roomIndex != 0 -> studentData.student.room == roomIndex
                                 gradeIndex != 0 && roomIndex == 0 -> studentData.student.grade == gradeIndex
@@ -292,11 +294,16 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                             } else {
                                 filteredList
                             }
-                        }.filter { studentData ->
-                            val minutesRemaining =
-                                remainingMinutes(studentData.endAt.time.toString())
-                            minutesRemaining > 0
                         }
+                            .filter { studentData ->
+                            if (titleIndex == 0) {
+                                val minutesRemaining =
+                                    remainingMinutes(studentData.endAt.time.toString())
+                                return@filter minutesRemaining > 0
+                            }
+                            return@filter true
+                        }.toImmutableList()
+
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -440,7 +447,7 @@ fun remainingHours(endTime: String): Int {
 
 fun remainingMinutes(endTime: String): Int {
     val currentTime =
-        Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
+        DodamDate.localTimeNow()
     val endParts = endTime.split(":")
 
     val endHour = endParts[0].toInt()
@@ -448,7 +455,6 @@ fun remainingMinutes(endTime: String): Int {
 
     val currentTotalMinutes = currentTime.hour * 60 + currentTime.minute
     val endTotalMinutes = endHour * 60 + endMinute
-
     val diffMinutes = if (endTotalMinutes < currentTotalMinutes) {
         // 현재 시간이 끝나는 시간을 넘기면 0분을 리턴
         0
