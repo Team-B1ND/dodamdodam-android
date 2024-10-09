@@ -42,6 +42,7 @@ import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.outing.model.OutPendingUiState
 import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.component.DodamReloadCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
@@ -154,7 +155,13 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                     modifier = Modifier,
                 )
                 when (val data = state.outPendingUiState) {
-                    OutPendingUiState.Error -> {}
+                    OutPendingUiState.Error -> {
+                        Spacer(modifier = Modifier.height(20.dp))
+                        DodamReloadCard(
+                            onClickReload = viewModel::load,
+                            title = "${if (titleIndex == 0) "외출" else "외박"}을 불러올 수 없어요."
+                        )
+                    }
                     OutPendingUiState.Loading -> {
                         Column(
                             modifier = Modifier

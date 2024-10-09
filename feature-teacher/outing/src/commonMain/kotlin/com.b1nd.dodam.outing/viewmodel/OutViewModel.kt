@@ -13,6 +13,7 @@ import com.b1nd.dodam.outing.model.OutState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -28,6 +29,11 @@ class OutViewModel : ViewModel(), KoinComponent {
     val state = _state.asStateFlow()
 
     fun load() = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                outPendingUiState = OutPendingUiState.Loading
+            )
+        }
         val date = DodamDate.localDateNow()
 
         combineWhenAllComplete(
