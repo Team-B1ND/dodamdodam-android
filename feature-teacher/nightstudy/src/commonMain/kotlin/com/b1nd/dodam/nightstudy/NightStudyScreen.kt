@@ -42,6 +42,7 @@ import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.component.DodamReloadCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
@@ -246,7 +247,13 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                         }
                     }
 
-                    NightStudyUiState.Error -> {}
+                    NightStudyUiState.Error -> {
+                        Spacer(modifier = Modifier.height(20.dp))
+                        DodamReloadCard(
+                            onClickReload = viewModel::load,
+                            title = "심야 자습을 불러올 수 없어요."
+                        )
+                    }
                     NightStudyUiState.Loading -> {
                         Column(
                             modifier = Modifier
