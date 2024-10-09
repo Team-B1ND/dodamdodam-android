@@ -51,6 +51,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.time.Duration.Companion.minutes
 
 @Composable
 fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (title: Int) -> Unit) {
@@ -294,11 +295,10 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                             } else {
                                 filteredList
                             }
-                        }
-                            .filter { studentData ->
+                        }.filter { studentData ->
                             if (titleIndex == 0) {
                                 val minutesRemaining =
-                                    remainingMinutes(studentData.endAt.time.toString())
+                                    remainingMinutes(studentData.endAt.time)
                                 return@filter minutesRemaining > 0
                             }
                             return@filter true
@@ -378,8 +378,8 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                             )
 
                                             filteredMemberList.fastForEachIndexed { index, member ->
-                                                val hours = remainingHours(member.endAt.time.toString())
-                                                val minutes = remainingMinutes(member.endAt.time.toString())
+                                                val hours = remainingHours(member.endAt.time)
+                                                val minutes = remainingMinutes(member.endAt.time)
                                                 val currentDate = Clock.System.now()
                                                     .toLocalDateTime(TimeZone.currentSystemDefault()).date
                                                 val daysUntilReturn = currentDate.daysUntil(member.endAt.date)
@@ -427,16 +427,12 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
     }
 }
 
-fun remainingHours(endTime: String): Int {
+fun remainingHours(endTime: LocalTime): Int {
     val currentTime =
         Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
-    val endParts = endTime.split(":")
-
-    val endHour = endParts[0].toInt()
-    val endMinute = endParts[1].toInt()
 
     val currentTotalMinutes = currentTime.hour * 60 + currentTime.minute
-    val endTotalMinutes = endHour * 60 + endMinute
+    val endTotalMinutes = endTime.hour * 60 + endTime.minute
 
     val totalEndMinutesAdjusted =
         if (endTotalMinutes < currentTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
@@ -445,16 +441,12 @@ fun remainingHours(endTime: String): Int {
     return diffMinutes / 60
 }
 
-fun remainingMinutes(endTime: String): Int {
+fun remainingMinutes(endTime: LocalTime): Int {
     val currentTime =
         DodamDate.localTimeNow()
-    val endParts = endTime.split(":")
-
-    val endHour = endParts[0].toInt()
-    val endMinute = endParts[1].toInt()
 
     val currentTotalMinutes = currentTime.hour * 60 + currentTime.minute
-    val endTotalMinutes = endHour * 60 + endMinute
+    val endTotalMinutes = endTime.hour * 60 + endTime.minute
     val diffMinutes = if (endTotalMinutes < currentTotalMinutes) {
         // 현재 시간이 끝나는 시간을 넘기면 0분을 리턴
         0
