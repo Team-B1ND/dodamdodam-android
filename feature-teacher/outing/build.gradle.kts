@@ -30,6 +30,8 @@ kotlin{
             implementation(projects.ui)
             implementation(projects.network.outing)
             implementation(projects.data.outing)
+            implementation(projects.logging)
+
         }
     }
 }

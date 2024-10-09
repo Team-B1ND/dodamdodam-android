@@ -39,6 +39,7 @@ import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
+import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.outing.model.OutPendingUiState
 import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
@@ -47,6 +48,8 @@ import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
@@ -303,12 +306,9 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                 filteredList
                             }
                         }.filter { studentData ->
-                            if (titleIndex == 0) {
-                                val minutesRemaining =
-                                    remainingMinutes(studentData.endAt.time)
-                                return@filter minutesRemaining > 0
-                            }
-                            return@filter true
+                            val minutesRemaining =
+                                remainingMinutes(studentData.endAt)
+                            return@filter minutesRemaining > 0
                         }.toImmutableList()
 
                         Column(
@@ -386,7 +386,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
 
                                             filteredMemberList.fastForEachIndexed { index, member ->
                                                 val hours = remainingHours(member.endAt.time)
-                                                val minutes = remainingMinutes(member.endAt.time)
+                                                val minutes = remainingMinutes(member.endAt)
                                                 val currentDate = Clock.System.now()
                                                     .toLocalDateTime(TimeZone.currentSystemDefault()).date
                                                 val daysUntilReturn = currentDate.daysUntil(member.endAt.date)
@@ -400,7 +400,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                                         text = if (titleIndex == 0) {
                                                             if (hours > 0) "${hours}시간 남음" else "${minutes}분 남음"
                                                         } else {
-                                                            if (daysUntilReturn > 1) "${daysUntilReturn}일 남음" else "오늘 복귀"
+                                                            if (daysUntilReturn > 0) "${daysUntilReturn}일 남음" else "오늘 복귀"
                                                         },
                                                         style = DodamTheme.typography.headlineMedium(),
                                                         color = if (titleIndex == 0) {
@@ -410,7 +410,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                                                 DodamTheme.colors.primaryNormal
                                                             }
                                                         } else {
-                                                            if (daysUntilReturn <= 1) {
+                                                            if (daysUntilReturn <= 0) {
                                                                 DodamTheme.colors.primaryNormal
                                                             } else {
                                                                 DodamTheme.colors.labelAssistive
@@ -448,18 +448,21 @@ fun remainingHours(endTime: LocalTime): Int {
     return diffMinutes / 60
 }
 
-fun remainingMinutes(endTime: LocalTime): Int {
+fun remainingMinutes(endTime: LocalDateTime): Int {
     val currentTime =
-        DodamDate.localTimeNow()
+        DodamDate.now()
 
-    val currentTotalMinutes = currentTime.hour * 60 + currentTime.minute
-    val endTotalMinutes = endTime.hour * 60 + endTime.minute
-    val diffMinutes = if (endTotalMinutes < currentTotalMinutes) {
+    val currentTotalMinutes = (currentTime.dayOfMonth * 24 + currentTime.hour) * 60 + currentTime.minute
+    val endTotalMinutes = (endTime.dayOfMonth * 24 + endTime.hour) * 60 + endTime.minute
+
+    val diffMinutes = if (endTotalMinutes <= currentTotalMinutes) {
         // 현재 시간이 끝나는 시간을 넘기면 0분을 리턴
         0
     } else {
         endTotalMinutes - currentTotalMinutes
     }
+
+    KmLogging.debug("debug", "${currentTotalMinutes} ${endTotalMinutes} ${diffMinutes % 60}")
 
     return diffMinutes % 60
 }
