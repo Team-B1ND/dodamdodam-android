@@ -78,6 +78,12 @@ internal fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
     val nowDate = DodamDate.localDateNow()
 
     LaunchedEffect(true) {
+        datePickerState.selectedDate = CalendarDate(
+            year = nowDate.year,
+            month = nowDate.monthNumber,
+            dayOfMonth = nowDate.dayOfMonth,
+            utcTimeMillis = datePickerState.getUtcTimeMillis(nowDate.year, nowDate.monthNumber, nowDate.dayOfMonth)
+        )
         viewModel.getMealOfMonth(nowDate.year, nowDate.monthNumber)
     }
 
