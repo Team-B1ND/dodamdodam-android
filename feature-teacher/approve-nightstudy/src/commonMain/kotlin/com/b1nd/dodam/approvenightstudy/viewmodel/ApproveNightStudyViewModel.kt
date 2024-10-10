@@ -33,10 +33,21 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
             nightStudyRepository.getPendingNightStudy().collect {
                 when (it) {
                     is Result.Error -> {
+                        _uiState.update { uiState ->
+                            uiState.copy(
+                                nightStudyUiState = NightStudyUiState.Error
+                            )
+                        }
                         it.error.printStackTrace()
                     }
 
-                    Result.Loading -> {}
+                    Result.Loading -> {
+                        _uiState.update { uiState ->
+                            uiState.copy(
+                                nightStudyUiState = NightStudyUiState.Loading
+                            )
+                        }
+                    }
                     is Result.Success -> {
                         _uiState.update { ui ->
                             ui.copy(

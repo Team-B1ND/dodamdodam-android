@@ -34,6 +34,13 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
     val state = _state.asStateFlow()
 
     fun load() = viewModelScope.launch {
+
+        _state.update {
+            it.copy(
+                outPendingUiState = OutPendingUiState.Loading
+            )
+        }
+
         val date = DodamDate.localDateNow()
 
         combineWhenAllComplete(
