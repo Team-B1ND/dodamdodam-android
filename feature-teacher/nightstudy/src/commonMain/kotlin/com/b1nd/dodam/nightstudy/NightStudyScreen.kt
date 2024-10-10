@@ -208,6 +208,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                 Column(
                                     modifier = Modifier
                                         .wrapContentHeight()
+                                        .fillMaxWidth()
                                         .clip(shape = RoundedCornerShape(18.dp))
                                         .background(DodamTheme.colors.backgroundNormal)
                                         .padding(horizontal = 10.dp),
