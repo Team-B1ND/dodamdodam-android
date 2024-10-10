@@ -186,7 +186,8 @@ private fun AllCard(image: ImageVector, text: String, onClick: () -> Unit) {
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberBounceIndication(),
                 onClick = onClick,
-            ),
+            )
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
