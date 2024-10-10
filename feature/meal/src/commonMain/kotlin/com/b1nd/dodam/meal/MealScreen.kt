@@ -82,7 +82,7 @@ internal fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
             year = nowDate.year,
             month = nowDate.monthNumber,
             dayOfMonth = nowDate.dayOfMonth,
-            utcTimeMillis = datePickerState.getUtcTimeMillis(nowDate.year, nowDate.monthNumber, nowDate.dayOfMonth)
+            utcTimeMillis = datePickerState.getUtcTimeMillis(nowDate.year, nowDate.monthNumber, nowDate.dayOfMonth),
         )
         viewModel.getMealOfMonth(nowDate.year, nowDate.monthNumber)
     }
