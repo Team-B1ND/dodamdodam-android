@@ -1,12 +1,15 @@
 package com.b1nd.dodam.approveouting
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -37,12 +40,14 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.component.DodamMemberLoadingCard
 import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import com.b1nd.dodam.ui.util.addFocusCleaner
@@ -275,8 +280,31 @@ fun ApproveOutScreen(
                     modifier = Modifier,
                 )
                 when (val data = state.outPendingUiState) {
-                    OutPendingUiState.Error -> {}
-                    OutPendingUiState.Loading -> {}
+                    OutPendingUiState.Error -> {
+                        DodamEmpty(
+                            modifier = Modifier
+                                .padding(top = 20.dp)
+                                .fillMaxWidth(),
+                            onClick = viewModel::load,
+                            title = "${if (titleIndex == 0) "외출" else "외박"} 자습을 불러올 수 없어요.",
+                            buttonText = "다시 불러오기",
+                            border = BorderStroke(
+                                width = 1.dp,
+                                color = DodamTheme.colors.lineAlternative
+                            )
+                        )
+                    }
+                    OutPendingUiState.Loading -> {
+                        Column(
+                            modifier = Modifier
+                                .padding(top = 20.dp)
+                                .fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            DodamMemberLoadingCard()
+                            DodamMemberLoadingCard()
+                        }
+                    }
                     is OutPendingUiState.Success -> {
                         val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
                         val filteredMemberList = members.filter { member ->

@@ -36,6 +36,7 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
+import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
@@ -249,9 +250,11 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
 
                     NightStudyUiState.Error -> {
                         Spacer(modifier = Modifier.height(20.dp))
-                        DodamReloadCard(
-                            onClickReload = viewModel::load,
-                            title = "심야 자습을 불러올 수 없어요."
+                        DodamEmpty(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = viewModel::load,
+                            title = "심야 자습을 불러올 수 없어요.",
+                            buttonText = "다시 불러오기"
                         )
                     }
                     NightStudyUiState.Loading -> {

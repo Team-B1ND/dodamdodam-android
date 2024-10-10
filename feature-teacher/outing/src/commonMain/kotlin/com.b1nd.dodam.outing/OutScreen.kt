@@ -36,6 +36,7 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
+import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
@@ -160,9 +161,11 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                 when (val data = state.outPendingUiState) {
                     OutPendingUiState.Error -> {
                         Spacer(modifier = Modifier.height(20.dp))
-                        DodamReloadCard(
-                            onClickReload = viewModel::load,
-                            title = "${if (titleIndex == 0) "외출" else "외박"}을 불러올 수 없어요."
+                        DodamEmpty(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = viewModel::load,
+                            title = "${if (titleIndex == 0) "외출" else "외박"} 명단을 불러올 수 없어요.",
+                            buttonText = "다시 불러오기"
                         )
                     }
                     OutPendingUiState.Loading -> {
@@ -461,8 +464,6 @@ fun remainingMinutes(endTime: LocalDateTime): Int {
     } else {
         endTotalMinutes - currentTotalMinutes
     }
-
-    KmLogging.debug("debug", "${currentTotalMinutes} ${endTotalMinutes} ${diffMinutes % 60}")
 
     return diffMinutes % 60
 }
