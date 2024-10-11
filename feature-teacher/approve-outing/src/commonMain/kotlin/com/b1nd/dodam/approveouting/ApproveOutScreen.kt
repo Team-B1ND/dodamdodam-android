@@ -352,5 +352,4 @@ fun getTime(time: String): String {
     val hour = time.split("T")[1].split(":")[0].toInt()
     val minute = time.split("T")[1].split(":")[1].toInt()
     return "${date1}월 ${date2}일 ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}"
-
 }
