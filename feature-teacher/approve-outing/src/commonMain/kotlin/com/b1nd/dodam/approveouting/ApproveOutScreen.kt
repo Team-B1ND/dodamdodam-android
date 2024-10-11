@@ -351,9 +351,6 @@ fun getTime(time: String): String {
     val date2 = time.split("T")[0].split("-")[2].toInt()
     val hour = time.split("T")[1].split(":")[0].toInt()
     val minute = time.split("T")[1].split(":")[1].toInt()
-    if (minute < 10) {
-        return "${date1}월 ${date2}일 $hour:0$minute"
-    } else {
-        return "${date1}월 ${date2}일 $hour:$minute"
-    }
+    return "${date1}월 ${date2}일 ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}"
+
 }
