@@ -16,6 +16,10 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -54,7 +58,7 @@ import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun ApproveOutScreen(
     viewModel: ApproveOutViewModel = koinViewModel(),
@@ -135,242 +139,264 @@ fun ApproveOutScreen(
 
     val state by viewModel.state.collectAsState()
 
-    Scaffold(
-        modifier = Modifier.addFocusCleaner(focusManager),
-        topBar = {
-            DodamTopAppBar(
-                title = "외출/외박 승인",
-                modifier = Modifier.statusBarsPadding(),
-                onBackClick = onBackClick,
-            )
-        },
-        containerColor = DodamTheme.colors.backgroundNormal,
-    ) {
-        if (selectedItemIndex >= 0) {
-            DodamModalBottomSheet(
-                shape = RoundedCornerShape(
-                    topStart = 28.dp,
-                    topEnd = 28.dp,
-                ),
-                onDismissRequest = { selectedItemIndex = -1 },
-                title = {
-                    Text(
-                        text = "${state.detailMember.name}님의 ${if (titleIndex == 0)"외출" else "외박"}정보",
-                        style = DodamTheme.typography.heading1Bold(),
-                        color = DodamTheme.colors.labelNormal,
-                        modifier = Modifier.padding(bottom = 16.dp),
-                    )
-                },
-                content = {
-                    Column {
-                        Row(
-                            modifier = Modifier.padding(bottom = 12.dp),
-                        ) {
-                            Text(
-                                text = if (titleIndex == 0)"외출 일시" else "외박 날짜",
-                                style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelAssistive,
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-                            Text(
-                                text = state.detailMember.start,
-                                style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelNeutral,
-                            )
-                        }
-                        Row(
-                            modifier = Modifier.padding(bottom = 12.dp),
-                        ) {
-                            Text(
-                                text = if (titleIndex == 0)"복귀 일시" else "복귀 날짜",
-                                style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelAssistive,
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-                            Text(
-                                text = state.detailMember.end,
-                                style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelNeutral,
-                            )
-                        }
-                        Row {
-                            Text(
-                                text = if (titleIndex == 0)"외출 사유" else "외박 사유",
-                                style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelAssistive,
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-                            Text(
-                                text = state.detailMember.reason,
-                                style = DodamTheme.typography.headlineMedium(),
-                                color = DodamTheme.colors.labelNeutral,
-                            )
-                        }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = state.isRefresh,
+        onRefresh = viewModel::refresh
+    )
 
-                        Row(
-                            modifier = Modifier.padding(top = 16.dp),
-                        ) {
-                            DodamButton(
-                                onClick = {
-                                    if (titleIndex == 1) {
-                                        viewModel.rejectSleepover(state.detailMember.id)
-                                    } else {
-                                        viewModel.rejectGoing(state.detailMember.id)
-                                    }
-                                    selectedItemIndex = -1
-                                },
-                                text = "거절하기",
-                                buttonSize = ButtonSize.Large,
-                                buttonRole = ButtonRole.Negative,
-                                modifier = Modifier.weight(1f),
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            DodamButton(
-                                onClick = {
-                                    if (titleIndex == 1) {
-                                        viewModel.allowSleepover(state.detailMember.id)
-                                    } else {
-                                        viewModel.allowGoing(state.detailMember.id)
-                                    }
-                                    selectedItemIndex = -1
-                                },
-                                text = "승인하기",
-                                buttonSize = ButtonSize.Large,
-                                buttonRole = ButtonRole.Primary,
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
-                    }
-                },
-            )
-        }
-        Box(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pullRefresh(pullRefreshState),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it),
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-            ) {
-                Column {
-                    DodamSegmentedButton(
-                        segments = item,
-                        modifier = Modifier.padding(top = 12.dp),
-                    )
-                    DodamSegmentedButton(
-                        segments = gradeItem,
-                        modifier = Modifier.padding(top = 12.dp),
-                    )
-                    DodamSegmentedButton(
-                        segments = roomItem,
-                        modifier = Modifier.padding(top = 12.dp),
-                    )
-                }
-                DodamTextField(
-                    value = searchStudent,
-                    onValueChange = {
-                        searchStudent = it
-                    },
-                    label = "학생 검색",
-                    onClickRemoveRequest = {
-                        searchStudent = ""
-                    },
-                    modifier = Modifier,
+                .addFocusCleaner(focusManager),
+            topBar = {
+                DodamTopAppBar(
+                    title = "외출/외박 승인",
+                    modifier = Modifier.statusBarsPadding(),
+                    onBackClick = onBackClick,
                 )
-                when (val data = state.outPendingUiState) {
-                    OutPendingUiState.Error -> {
-                        DodamEmpty(
-                            modifier = Modifier
-                                .padding(top = 20.dp)
-                                .fillMaxWidth(),
-                            onClick = viewModel::load,
-                            title = "${if (titleIndex == 0) "외출" else "외박"} 자습을 불러올 수 없어요.",
-                            buttonText = "다시 불러오기",
-                            border = BorderStroke(
-                                width = 1.dp,
-                                color = DodamTheme.colors.lineAlternative
-                            )
+            },
+            containerColor = DodamTheme.colors.backgroundNormal,
+        ) {
+            if (selectedItemIndex >= 0) {
+                DodamModalBottomSheet(
+                    shape = RoundedCornerShape(
+                        topStart = 28.dp,
+                        topEnd = 28.dp,
+                    ),
+                    onDismissRequest = { selectedItemIndex = -1 },
+                    title = {
+                        Text(
+                            text = "${state.detailMember.name}님의 ${if (titleIndex == 0) "외출" else "외박"}정보",
+                            style = DodamTheme.typography.heading1Bold(),
+                            color = DodamTheme.colors.labelNormal,
+                            modifier = Modifier.padding(bottom = 16.dp),
                         )
-                    }
-                    OutPendingUiState.Loading -> {
-                        Column(
-                            modifier = Modifier
-                                .padding(top = 20.dp)
-                                .fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            DodamMemberLoadingCard()
-                            DodamMemberLoadingCard()
-                        }
-                    }
-                    is OutPendingUiState.Success -> {
-                        val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
-                        val filteredMemberList = members.filter { member ->
-                            when {
-                                gradeIndex == 0 && roomIndex == 0 -> true
-                                gradeIndex == 0 && roomIndex != 0 -> member.student.room == roomIndex
-                                gradeIndex != 0 && roomIndex == 0 -> member.student.grade == gradeIndex
-                                else -> member.student.grade == gradeIndex && member.student.room == roomIndex
+                    },
+                    content = {
+                        Column {
+                            Row(
+                                modifier = Modifier.padding(bottom = 12.dp),
+                            ) {
+                                Text(
+                                    text = if (titleIndex == 0) "외출 일시" else "외박 날짜",
+                                    style = DodamTheme.typography.headlineMedium(),
+                                    color = DodamTheme.colors.labelAssistive,
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(
+                                    text = state.detailMember.start,
+                                    style = DodamTheme.typography.headlineMedium(),
+                                    color = DodamTheme.colors.labelNeutral,
+                                )
                             }
-                        }.let { list ->
-                            if (searchStudent.isNotEmpty()) {
-                                list.filter { it.student.name.contains(searchStudent) }
-                            } else {
-                                list
+                            Row(
+                                modifier = Modifier.padding(bottom = 12.dp),
+                            ) {
+                                Text(
+                                    text = if (titleIndex == 0) "복귀 일시" else "복귀 날짜",
+                                    style = DodamTheme.typography.headlineMedium(),
+                                    color = DodamTheme.colors.labelAssistive,
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(
+                                    text = state.detailMember.end,
+                                    style = DodamTheme.typography.headlineMedium(),
+                                    color = DodamTheme.colors.labelNeutral,
+                                )
                             }
-                        }
-                        LazyColumn(
-                            modifier = Modifier.padding(top = 20.dp),
-                        ) {
-                            items(filteredMemberList.size) { index ->
-                                DodamMember(
-                                    name = filteredMemberList[index].student.name,
-                                    icon = null,
-                                    modifier = Modifier
-                                        .padding(bottom = 12.dp)
-                                        .clickable {
-                                            selectedItemIndex = index
-                                            if (titleIndex == 1) {
-                                                viewModel.detailMember(
-                                                    name = filteredMemberList[index].student.name,
-                                                    start = getDate(filteredMemberList[index].startAt.date),
-                                                    end = getDate(filteredMemberList[index].endAt.date),
-                                                    reason = filteredMemberList[index].reason,
-                                                    id = filteredMemberList[index].id,
-                                                )
-                                            } else {
-                                                viewModel.detailMember(
-                                                    name = filteredMemberList[index].student.name,
-                                                    start = getTime(filteredMemberList[index].startAt.toString()),
-                                                    end = getTime(filteredMemberList[index].endAt.toString()),
-                                                    reason = filteredMemberList[index].reason,
-                                                    id = filteredMemberList[index].id,
-                                                )
-                                            }
-                                        },
-                                    content = {
-                                        if (index == selectedItemIndex) {
-                                            Image(
-                                                modifier = Modifier
-                                                    .align(Alignment.CenterVertically)
-                                                    .size(24.dp),
-                                                imageVector = ColoredCheckmarkCircle,
-                                                contentDescription = null,
-                                                colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
-                                            )
+                            Row {
+                                Text(
+                                    text = if (titleIndex == 0) "외출 사유" else "외박 사유",
+                                    style = DodamTheme.typography.headlineMedium(),
+                                    color = DodamTheme.colors.labelAssistive,
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(
+                                    text = state.detailMember.reason,
+                                    style = DodamTheme.typography.headlineMedium(),
+                                    color = DodamTheme.colors.labelNeutral,
+                                )
+                            }
+
+                            Row(
+                                modifier = Modifier.padding(top = 16.dp),
+                            ) {
+                                DodamButton(
+                                    onClick = {
+                                        if (titleIndex == 1) {
+                                            viewModel.rejectSleepover(state.detailMember.id)
+                                        } else {
+                                            viewModel.rejectGoing(state.detailMember.id)
                                         }
+                                        selectedItemIndex = -1
                                     },
+                                    text = "거절하기",
+                                    buttonSize = ButtonSize.Large,
+                                    buttonRole = ButtonRole.Negative,
+                                    modifier = Modifier.weight(1f),
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                DodamButton(
+                                    onClick = {
+                                        if (titleIndex == 1) {
+                                            viewModel.allowSleepover(state.detailMember.id)
+                                        } else {
+                                            viewModel.allowGoing(state.detailMember.id)
+                                        }
+                                        selectedItemIndex = -1
+                                    },
+                                    text = "승인하기",
+                                    buttonSize = ButtonSize.Large,
+                                    buttonRole = ButtonRole.Primary,
+                                    modifier = Modifier.weight(1f),
                                 )
                             }
                         }
+                    },
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp),
+                ) {
+                    Column {
+                        DodamSegmentedButton(
+                            segments = item,
+                            modifier = Modifier.padding(top = 12.dp),
+                        )
+                        DodamSegmentedButton(
+                            segments = gradeItem,
+                            modifier = Modifier.padding(top = 12.dp),
+                        )
+                        DodamSegmentedButton(
+                            segments = roomItem,
+                            modifier = Modifier.padding(top = 12.dp),
+                        )
                     }
+                    DodamTextField(
+                        value = searchStudent,
+                        onValueChange = {
+                            searchStudent = it
+                        },
+                        label = "학생 검색",
+                        onClickRemoveRequest = {
+                            searchStudent = ""
+                        },
+                        modifier = Modifier,
+                    )
+                    when (val data = state.outPendingUiState) {
+                        OutPendingUiState.Error -> {
+                            DodamEmpty(
+                                modifier = Modifier
+                                    .padding(top = 20.dp)
+                                    .fillMaxWidth(),
+                                onClick = viewModel::load,
+                                title = "${if (titleIndex == 0) "외출" else "외박"} 자습을 불러올 수 없어요.",
+                                buttonText = "다시 불러오기",
+                                border = BorderStroke(
+                                    width = 1.dp,
+                                    color = DodamTheme.colors.lineAlternative
+                                )
+                            )
+                        }
 
-                    else -> {}
+                        OutPendingUiState.Loading -> {
+                            Column(
+                                modifier = Modifier
+                                    .padding(top = 20.dp)
+                                    .fillMaxWidth(),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                DodamMemberLoadingCard()
+                                DodamMemberLoadingCard()
+                            }
+                        }
+
+                        is OutPendingUiState.Success -> {
+                            val members =
+                                if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                            val filteredMemberList = members.filter { member ->
+                                when {
+                                    gradeIndex == 0 && roomIndex == 0 -> true
+                                    gradeIndex == 0 && roomIndex != 0 -> member.student.room == roomIndex
+                                    gradeIndex != 0 && roomIndex == 0 -> member.student.grade == gradeIndex
+                                    else -> member.student.grade == gradeIndex && member.student.room == roomIndex
+                                }
+                            }.let { list ->
+                                if (searchStudent.isNotEmpty()) {
+                                    list.filter { it.student.name.contains(searchStudent) }
+                                } else {
+                                    list
+                                }
+                            }
+                            LazyColumn(
+                                modifier = Modifier.padding(top = 20.dp),
+                            ) {
+                                items(filteredMemberList.size) { index ->
+                                    DodamMember(
+                                        name = filteredMemberList[index].student.name,
+                                        icon = null,
+                                        modifier = Modifier
+                                            .padding(bottom = 12.dp)
+                                            .clickable {
+                                                selectedItemIndex = index
+                                                if (titleIndex == 1) {
+                                                    viewModel.detailMember(
+                                                        name = filteredMemberList[index].student.name,
+                                                        start = getDate(filteredMemberList[index].startAt.date),
+                                                        end = getDate(filteredMemberList[index].endAt.date),
+                                                        reason = filteredMemberList[index].reason,
+                                                        id = filteredMemberList[index].id,
+                                                    )
+                                                } else {
+                                                    viewModel.detailMember(
+                                                        name = filteredMemberList[index].student.name,
+                                                        start = getTime(filteredMemberList[index].startAt.toString()),
+                                                        end = getTime(filteredMemberList[index].endAt.toString()),
+                                                        reason = filteredMemberList[index].reason,
+                                                        id = filteredMemberList[index].id,
+                                                    )
+                                                }
+                                            },
+                                        content = {
+                                            if (index == selectedItemIndex) {
+                                                Image(
+                                                    modifier = Modifier
+                                                        .align(Alignment.CenterVertically)
+                                                        .size(24.dp),
+                                                    imageVector = ColoredCheckmarkCircle,
+                                                    contentDescription = null,
+                                                    colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
+                                                )
+                                            }
+                                        },
+                                    )
+                                }
+                            }
+                        }
+
+                        else -> {}
+                    }
                 }
             }
         }
+
+        PullRefreshIndicator(
+            refreshing = state.isRefresh,
+            state = pullRefreshState
+        )
     }
 }
 
