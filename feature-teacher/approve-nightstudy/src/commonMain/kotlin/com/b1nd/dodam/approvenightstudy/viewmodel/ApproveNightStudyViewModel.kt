@@ -35,7 +35,8 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
                     is Result.Error -> {
                         _uiState.update { uiState ->
                             uiState.copy(
-                                nightStudyUiState = NightStudyUiState.Error
+                                nightStudyUiState = NightStudyUiState.Error,
+                                isRefresh = false
                             )
                         }
                         it.error.printStackTrace()
@@ -44,7 +45,7 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
                     Result.Loading -> {
                         _uiState.update { uiState ->
                             uiState.copy(
-                                nightStudyUiState = NightStudyUiState.Loading
+                                nightStudyUiState = NightStudyUiState.Loading,
                             )
                         }
                     }
@@ -54,6 +55,7 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
                                 nightStudyUiState = NightStudyUiState.Success(
                                     pendingData = it.data,
                                 ),
+                                isRefresh = false
                             )
                         }
                     }
@@ -115,6 +117,15 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
                 }
             }
         }
+    }
+
+    fun refresh() {
+        _uiState.update {
+            it.copy(
+                isRefresh = true
+            )
+        }
+        load()
     }
 
     private fun filterMember(id: Long) {
