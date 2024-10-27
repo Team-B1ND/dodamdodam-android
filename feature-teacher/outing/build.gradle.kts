@@ -31,7 +31,7 @@ kotlin{
             implementation(projects.network.outing)
             implementation(projects.data.outing)
             implementation(projects.logging)
-
+            implementation(libs.multiplatform.compose.material)
         }
     }
 }
