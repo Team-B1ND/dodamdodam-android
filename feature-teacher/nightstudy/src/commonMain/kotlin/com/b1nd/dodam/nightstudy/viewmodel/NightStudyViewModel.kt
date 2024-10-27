@@ -73,9 +73,19 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                 _uiState.update {
                     it.copy(
                         nightStudyUiState = uiState,
+                        isRefresh = false
                     )
                 }
             }
         }
+    }
+
+    fun refresh() {
+        _uiState.update {
+            it.copy(
+                isRefresh = true
+            )
+        }
+        load()
     }
 }
