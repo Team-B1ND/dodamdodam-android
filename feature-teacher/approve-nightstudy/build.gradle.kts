@@ -29,6 +29,7 @@ kotlin{
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.ui)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.multiplatform.compose.material)
         }
     }
 }
