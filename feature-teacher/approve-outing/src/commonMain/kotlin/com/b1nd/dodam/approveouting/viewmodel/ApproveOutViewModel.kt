@@ -34,10 +34,9 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
     val state = _state.asStateFlow()
 
     fun load() = viewModelScope.launch {
-
         _state.update {
             it.copy(
-                outPendingUiState = OutPendingUiState.Loading
+                outPendingUiState = OutPendingUiState.Loading,
             )
         }
 
@@ -84,7 +83,7 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
             _state.update {
                 it.copy(
                     outPendingUiState = state,
-                    isRefresh = false
+                    isRefresh = false,
                 )
             }
         }
@@ -181,7 +180,7 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
     fun refresh() {
         _state.update {
             it.copy(
-                isRefresh = true
+                isRefresh = true,
             )
         }
         load()

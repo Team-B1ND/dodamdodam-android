@@ -2,7 +2,6 @@ package com.b1nd.dodam.approvenightstudy
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,10 +42,8 @@ import com.b1nd.dodam.approvenightstudy.model.NightStudyUiState
 import com.b1nd.dodam.approvenightstudy.viewmodel.ApproveNightStudyViewModel
 import com.b1nd.dodam.common.utiles.getDate
 import com.b1nd.dodam.designsystem.DodamTheme
-import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
-import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
@@ -57,7 +54,6 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.DodamMemberLoadingCard
 import com.b1nd.dodam.ui.component.SnackbarState
-import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
@@ -133,13 +129,13 @@ fun ApproveNightStudyScreen(
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefresh,
-        onRefresh = viewModel::refresh
+        onRefresh = viewModel::refresh,
     )
 
     Box(
         modifier = Modifier
             .pullRefresh(pullRefreshState),
-        contentAlignment = Alignment.TopCenter
+        contentAlignment = Alignment.TopCenter,
     ) {
         Scaffold(
             modifier = Modifier
@@ -151,7 +147,7 @@ fun ApproveNightStudyScreen(
                     modifier = Modifier.statusBarsPadding(),
                     onBackClick = onBackClick,
 
-                    )
+                )
             },
             containerColor = DodamTheme.colors.backgroundNormal,
         ) {
@@ -195,7 +191,6 @@ fun ApproveNightStudyScreen(
                             Row(
                                 modifier = Modifier.padding(bottom = 12.dp),
                             ) {
-
                                 Text(
                                     text = "종료 날짜",
                                     style = DodamTheme.typography.headlineMedium(),
@@ -323,8 +318,8 @@ fun ApproveNightStudyScreen(
                                 buttonText = "다시 불러오기",
                                 border = BorderStroke(
                                     width = 1.dp,
-                                    color = DodamTheme.colors.lineAlternative
-                                )
+                                    color = DodamTheme.colors.lineAlternative,
+                                ),
                             )
                         }
 
@@ -333,7 +328,7 @@ fun ApproveNightStudyScreen(
                                 modifier = Modifier
                                     .padding(top = 20.dp)
                                     .fillMaxWidth(),
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                                verticalArrangement = Arrangement.spacedBy(12.dp),
                             ) {
                                 DodamMemberLoadingCard()
                                 DodamMemberLoadingCard()
@@ -401,7 +396,7 @@ fun ApproveNightStudyScreen(
         }
         PullRefreshIndicator(
             refreshing = state.isRefresh,
-            state = pullRefreshState
+            state = pullRefreshState,
         )
     }
 }

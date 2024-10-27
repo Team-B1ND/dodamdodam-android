@@ -44,23 +44,20 @@ import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.outing.model.OutPendingUiState
 import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
-import com.b1nd.dodam.ui.component.DodamReloadCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
-import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -116,7 +113,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefresh,
-        onRefresh = viewModel::refresh
+        onRefresh = viewModel::refresh,
     )
 
     LaunchedEffect(key1 = true) {
@@ -177,7 +174,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                             modifier = Modifier.fillMaxWidth(),
                             onClick = viewModel::load,
                             title = "${if (titleIndex == 0) "외출" else "외박"} 명단을 불러올 수 없어요.",
-                            buttonText = "다시 불러오기"
+                            buttonText = "다시 불러오기",
                         )
                     }
                     OutPendingUiState.Loading -> {
@@ -447,7 +444,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
             }
             PullRefreshIndicator(
                 refreshing = state.isRefresh,
-                state = pullRefreshState
+                state = pullRefreshState,
             )
         }
     }

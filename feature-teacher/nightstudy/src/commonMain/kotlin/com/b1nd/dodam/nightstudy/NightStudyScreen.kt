@@ -47,7 +47,6 @@ import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.nightstudy.state.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
-import com.b1nd.dodam.ui.component.DodamReloadCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
@@ -98,7 +97,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = uiState.isRefresh,
-        onRefresh = viewModel::refresh
+        onRefresh = viewModel::refresh,
     )
 
     LaunchedEffect(key1 = true) {
@@ -109,7 +108,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
         modifier = Modifier
             .fillMaxSize()
             .pullRefresh(pullRefreshState),
-        contentAlignment = Alignment.TopCenter
+        contentAlignment = Alignment.TopCenter,
     ) {
         Scaffold(
             modifier = Modifier
@@ -273,7 +272,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = viewModel::load,
                                 title = "심야 자습을 불러올 수 없어요.",
-                                buttonText = "다시 불러오기"
+                                buttonText = "다시 불러오기",
                             )
                         }
 
@@ -404,7 +403,7 @@ fun NightStudyScreen(viewModel: NightStudyViewModel = koinViewModel(), navigateT
         }
         PullRefreshIndicator(
             refreshing = uiState.isRefresh,
-            state = pullRefreshState
+            state = pullRefreshState,
         )
     }
 }

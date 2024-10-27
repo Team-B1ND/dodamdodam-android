@@ -141,14 +141,14 @@ fun ApproveOutScreen(
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefresh,
-        onRefresh = viewModel::refresh
+        onRefresh = viewModel::refresh,
     )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .pullRefresh(pullRefreshState),
-        contentAlignment = Alignment.TopCenter
+        contentAlignment = Alignment.TopCenter,
     ) {
         Scaffold(
             modifier = Modifier
@@ -307,8 +307,8 @@ fun ApproveOutScreen(
                                 buttonText = "다시 불러오기",
                                 border = BorderStroke(
                                     width = 1.dp,
-                                    color = DodamTheme.colors.lineAlternative
-                                )
+                                    color = DodamTheme.colors.lineAlternative,
+                                ),
                             )
                         }
 
@@ -317,7 +317,7 @@ fun ApproveOutScreen(
                                 modifier = Modifier
                                     .padding(top = 20.dp)
                                     .fillMaxWidth(),
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                                verticalArrangement = Arrangement.spacedBy(12.dp),
                             ) {
                                 DodamMemberLoadingCard()
                                 DodamMemberLoadingCard()
@@ -395,7 +395,7 @@ fun ApproveOutScreen(
 
         PullRefreshIndicator(
             refreshing = state.isRefresh,
-            state = pullRefreshState
+            state = pullRefreshState,
         )
     }
 }

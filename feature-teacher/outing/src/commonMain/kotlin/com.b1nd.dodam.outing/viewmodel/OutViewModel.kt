@@ -15,7 +15,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -33,7 +32,7 @@ class OutViewModel : ViewModel(), KoinComponent {
     fun load() = viewModelScope.launch {
         _state.update {
             it.copy(
-                outPendingUiState = OutPendingUiState.Loading
+                outPendingUiState = OutPendingUiState.Loading,
             )
         }
         val date = DodamDate.localDateNow()
@@ -90,7 +89,7 @@ class OutViewModel : ViewModel(), KoinComponent {
     fun refresh() = viewModelScope.launch(Dispatchers.IO) {
         _state.update {
             it.copy(
-                isRefresh = true
+                isRefresh = true,
             )
         }
         load()
