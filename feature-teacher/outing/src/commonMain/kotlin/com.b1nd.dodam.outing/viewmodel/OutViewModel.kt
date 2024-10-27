@@ -13,6 +13,8 @@ import com.b1nd.dodam.outing.model.OutState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -78,9 +80,19 @@ class OutViewModel : ViewModel(), KoinComponent {
         }.collect { state ->
             _state.update {
                 it.copy(
+                    isRefresh = false,
                     outPendingUiState = state,
                 )
             }
         }
+    }
+
+    fun refresh() = viewModelScope.launch(Dispatchers.IO) {
+        _state.update {
+            it.copy(
+                isRefresh = true
+            )
+        }
+        load()
     }
 }
