@@ -36,7 +36,7 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
                         _uiState.update { uiState ->
                             uiState.copy(
                                 nightStudyUiState = NightStudyUiState.Error,
-                                isRefresh = false
+                                isRefresh = false,
                             )
                         }
                         it.error.printStackTrace()
@@ -55,7 +55,7 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
                                 nightStudyUiState = NightStudyUiState.Success(
                                     pendingData = it.data,
                                 ),
-                                isRefresh = false
+                                isRefresh = false,
                             )
                         }
                     }
@@ -122,7 +122,7 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
     fun refresh() {
         _uiState.update {
             it.copy(
-                isRefresh = true
+                isRefresh = true,
             )
         }
         load()

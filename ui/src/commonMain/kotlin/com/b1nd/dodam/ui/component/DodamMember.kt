@@ -45,12 +45,10 @@ fun DodamMember(modifier: Modifier = Modifier, icon: Any?, name: String, content
 }
 
 @Composable
-fun DodamMemberLoadingCard(
-    modifier: Modifier = Modifier
-) {
+fun DodamMemberLoadingCard(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         DodamAvatar(
             modifier = Modifier.padding(vertical = 4.dp),
@@ -65,9 +63,8 @@ fun DodamMemberLoadingCard(
                 .height(27.dp)
                 .background(
                     brush = shimmerEffect(),
-                    shape = DodamTheme.shapes.extraLarge
-                )
+                    shape = DodamTheme.shapes.extraLarge,
+                ),
         )
-
     }
 }

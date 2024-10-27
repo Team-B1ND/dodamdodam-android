@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,22 +21,22 @@ fun DodamReloadCard(
     title: String,
     buttonText: String = "다시 불러오기",
     buttonRole: ButtonRole = ButtonRole.Primary,
-    buttonSize: ButtonSize = ButtonSize.Large
+    buttonSize: ButtonSize = ButtonSize.Large,
 ) {
     Surface(
         modifier = modifier,
         color = DodamTheme.colors.backgroundNormal,
-        shape = DodamTheme.shapes.large
+        shape = DodamTheme.shapes.large,
     ) {
         Column(
             modifier = Modifier.padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
                 modifier = Modifier.padding(start = 6.dp),
                 text = title,
                 style = DodamTheme.typography.heading2Bold(),
-                color = DodamTheme.colors.labelStrong
+                color = DodamTheme.colors.labelStrong,
             )
             DodamButton(
                 modifier = Modifier
