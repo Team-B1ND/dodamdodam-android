@@ -303,7 +303,7 @@ fun ApproveOutScreen(
                                     .padding(top = 20.dp)
                                     .fillMaxWidth(),
                                 onClick = viewModel::load,
-                                title = "${if (titleIndex == 0) "외출" else "외박"} 자습을 불러올 수 없어요.",
+                                title = "외출 명단을 불러올 수 없어요.",
                                 buttonText = "다시 불러오기",
                                 border = BorderStroke(
                                     width = 1.dp,
