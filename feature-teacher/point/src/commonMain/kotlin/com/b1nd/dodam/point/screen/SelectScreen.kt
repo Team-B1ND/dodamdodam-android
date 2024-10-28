@@ -40,7 +40,6 @@ import com.b1nd.dodam.point.model.PointStudentModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.DodamMemberLoadingCard
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -128,8 +127,8 @@ internal fun SelectScreen(
                         buttonText = "다시 불러오기",
                         border = BorderStroke(
                             width = 1.dp,
-                            color = DodamTheme.colors.lineAlternative
-                        )
+                            color = DodamTheme.colors.lineAlternative,
+                        ),
                     )
                 }
                 is PointLoadingUiState.Loading -> {
