@@ -30,3 +30,5 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 }
+
+composeCompiler
