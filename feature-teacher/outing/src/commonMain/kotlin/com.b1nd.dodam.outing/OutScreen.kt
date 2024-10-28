@@ -15,6 +15,10 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,10 +35,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
+import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
+import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
@@ -43,13 +49,17 @@ import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (title: Int) -> Unit) {
     var gradeIndex by remember { mutableIntStateOf(0) }
@@ -101,6 +111,11 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
 
     val focusManager = LocalFocusManager.current
 
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = state.isRefresh,
+        onRefresh = viewModel::refresh,
+    )
+
     LaunchedEffect(key1 = true) {
         viewModel.load()
     }
@@ -118,7 +133,9 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
             modifier = Modifier
                 .fillMaxSize()
                 .background(DodamTheme.colors.backgroundNeutral)
-                .padding(it),
+                .padding(it)
+                .pullRefresh(pullRefreshState),
+            contentAlignment = Alignment.TopCenter,
         ) {
             Column(
                 modifier = Modifier
@@ -151,7 +168,15 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                     modifier = Modifier,
                 )
                 when (val data = state.outPendingUiState) {
-                    OutPendingUiState.Error -> {}
+                    OutPendingUiState.Error -> {
+                        Spacer(modifier = Modifier.height(20.dp))
+                        DodamEmpty(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = viewModel::load,
+                            title = "${if (titleIndex == 0) "외출" else "외박"} 명단을 불러올 수 없어요.",
+                            buttonText = "다시 불러오기",
+                        )
+                    }
                     OutPendingUiState.Loading -> {
                         Column(
                             modifier = Modifier
@@ -275,12 +300,12 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                     }
 
                     is OutPendingUiState.Success -> {
-                        val cnt =
-                            if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
-                        val members =
-                            if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+                        val cnt = if (titleIndex == 0) data.outPendingCount else data.sleepoverPendingCount
+                        val members = if (titleIndex == 0) data.outMembers else data.sleepoverMembers
+
                         val filteredMemberList = members.filter { studentData ->
                             when {
+                                // 전체인 경우
                                 gradeIndex == 0 && roomIndex == 0 -> true
                                 gradeIndex == 0 && roomIndex != 0 -> studentData.student.room == roomIndex
                                 gradeIndex != 0 && roomIndex == 0 -> studentData.student.grade == gradeIndex
@@ -294,9 +319,10 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                             }
                         }.filter { studentData ->
                             val minutesRemaining =
-                                remainingMinutes(studentData.endAt.time.toString())
-                            minutesRemaining > 0
-                        }
+                                remainingMinutes(studentData.endAt)
+                            return@filter minutesRemaining > 0
+                        }.toImmutableList()
+
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -371,8 +397,8 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                             )
 
                                             filteredMemberList.fastForEachIndexed { index, member ->
-                                                val hours = remainingHours(member.endAt.time.toString())
-                                                val minutes = remainingMinutes(member.endAt.time.toString())
+                                                val hours = remainingHours(member.endAt.time)
+                                                val minutes = remainingMinutes(member.endAt)
                                                 val currentDate = Clock.System.now()
                                                     .toLocalDateTime(TimeZone.currentSystemDefault()).date
                                                 val daysUntilReturn = currentDate.daysUntil(member.endAt.date)
@@ -386,7 +412,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                                         text = if (titleIndex == 0) {
                                                             if (hours > 0) "${hours}시간 남음" else "${minutes}분 남음"
                                                         } else {
-                                                            if (daysUntilReturn > 1) "${daysUntilReturn}일 남음" else "오늘 복귀"
+                                                            if (daysUntilReturn > 0) "${daysUntilReturn}일 남음" else "오늘 복귀"
                                                         },
                                                         style = DodamTheme.typography.headlineMedium(),
                                                         color = if (titleIndex == 0) {
@@ -396,7 +422,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                                                                 DodamTheme.colors.primaryNormal
                                                             }
                                                         } else {
-                                                            if (daysUntilReturn <= 1) {
+                                                            if (daysUntilReturn <= 0) {
                                                                 DodamTheme.colors.primaryNormal
                                                             } else {
                                                                 DodamTheme.colors.labelAssistive
@@ -416,20 +442,20 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                     }
                 }
             }
+            PullRefreshIndicator(
+                refreshing = state.isRefresh,
+                state = pullRefreshState,
+            )
         }
     }
 }
 
-fun remainingHours(endTime: String): Int {
+fun remainingHours(endTime: LocalTime): Int {
     val currentTime =
         Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
-    val endParts = endTime.split(":")
-
-    val endHour = endParts[0].toInt()
-    val endMinute = endParts[1].toInt()
 
     val currentTotalMinutes = currentTime.hour * 60 + currentTime.minute
-    val endTotalMinutes = endHour * 60 + endMinute
+    val endTotalMinutes = endTime.hour * 60 + endTime.minute
 
     val totalEndMinutesAdjusted =
         if (endTotalMinutes < currentTotalMinutes) endTotalMinutes + 24 * 60 else endTotalMinutes
@@ -438,18 +464,14 @@ fun remainingHours(endTime: String): Int {
     return diffMinutes / 60
 }
 
-fun remainingMinutes(endTime: String): Int {
+fun remainingMinutes(endTime: LocalDateTime): Int {
     val currentTime =
-        Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).time
-    val endParts = endTime.split(":")
+        DodamDate.now()
 
-    val endHour = endParts[0].toInt()
-    val endMinute = endParts[1].toInt()
+    val currentTotalMinutes = (currentTime.dayOfMonth * 24 + currentTime.hour) * 60 + currentTime.minute
+    val endTotalMinutes = (endTime.dayOfMonth * 24 + endTime.hour) * 60 + endTime.minute
 
-    val currentTotalMinutes = currentTime.hour * 60 + currentTime.minute
-    val endTotalMinutes = endHour * 60 + endMinute
-
-    val diffMinutes = if (endTotalMinutes < currentTotalMinutes) {
+    val diffMinutes = if (endTotalMinutes <= currentTotalMinutes) {
         // 현재 시간이 끝나는 시간을 넘기면 0분을 리턴
         0
     } else {

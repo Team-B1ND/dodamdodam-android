@@ -4,6 +4,7 @@ import com.b1nd.dodam.data.outing.model.Outing
 import kotlinx.collections.immutable.ImmutableList
 
 data class OutState(
+    val isRefresh: Boolean = false,
     val outPendingUiState: OutPendingUiState = OutPendingUiState.Loading,
 )
 

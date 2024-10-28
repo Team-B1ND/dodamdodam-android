@@ -30,6 +30,7 @@ kotlin{
             implementation(projects.ui)
             implementation(projects.network.outing)
             implementation(projects.data.outing)
+            implementation(libs.multiplatform.compose.material)
         }
     }
 }

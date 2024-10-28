@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class ApproveOutState(
     val outPendingUiState: OutPendingUiState = OutPendingUiState.Loading,
     val detailMember: DetailMember = DetailMember(),
+    val isRefresh: Boolean = false,
 )
 
 sealed interface OutPendingUiState {
