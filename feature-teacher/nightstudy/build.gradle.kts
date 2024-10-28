@@ -29,6 +29,8 @@ kotlin{
             api(projects.network.core)
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.ui)
+
+            implementation(libs.multiplatform.compose.material)
         }
     }
 }

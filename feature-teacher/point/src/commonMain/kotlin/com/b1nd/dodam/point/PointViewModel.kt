@@ -9,12 +9,15 @@ import com.b1nd.dodam.data.point.PointRepository
 import com.b1nd.dodam.data.point.model.PointReason
 import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.member.MemberRepository
+import com.b1nd.dodam.point.model.PointLoadingUiState
 import com.b1nd.dodam.point.model.PointSideEffect
 import com.b1nd.dodam.point.model.PointStudentModel
 import com.b1nd.dodam.point.model.PointUiState
 import com.b1nd.dodam.point.model.toPointStudentModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -38,63 +41,90 @@ class PointViewModel : ViewModel(), KoinComponent {
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch(dispatcher) {
-            launch {
-                memberRepository.getMemberActiveAll().collect {
-                    when (it) {
-                        is Result.Success -> {
-                            KmLogging.debug("test", "${it.data}")
-                            _uiState.update { state ->
-                                state.copy(
-                                    students = it.data.map { it.toPointStudentModel() }.toImmutableList(),
-                                    loading = false,
-                                )
-                            }
-                        }
-                        is Result.Loading -> {}
-                        is Result.Error -> {
-                            it.error.printStackTrace()
-                            _uiState.update { state ->
-                                state.copy(
-                                    loading = false,
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+        load()
+    }
 
-            launch {
-                pointRepository.getAllScoreReason().collect {
-                    when (it) {
-                        is Result.Success -> {
-                            _uiState.update { state ->
-                                state.copy(
-                                    reasons = it.data,
-                                )
-                            }
-                        }
-                        is Result.Loading -> {}
-                        is Result.Error -> {
-                            it.error.printStackTrace()
-                        }
+    fun load() = viewModelScope.launch(dispatcher) {
+        _uiState.update {
+            it.copy(
+                uiState = PointLoadingUiState.Loading,
+            )
+        }
+        val job1 = async {
+            var data: ImmutableList<PointStudentModel>? = null
+            memberRepository.getMemberActiveAll().collect {
+                when (it) {
+                    is Result.Success -> {
+                        KmLogging.debug("test", "${it.data}")
+                        data = it.data.map { it.toPointStudentModel() }.toImmutableList()
+                    }
+                    is Result.Loading -> {}
+                    is Result.Error -> {
+                        it.error.printStackTrace()
                     }
                 }
             }
+            return@async data
+        }
+
+        val job2 = async {
+            var data: ImmutableList<PointReason>? = null
+            pointRepository.getAllScoreReason().collect {
+                when (it) {
+                    is Result.Success -> {
+                        data = it.data
+                    }
+
+                    is Result.Loading -> {}
+                    is Result.Error -> {
+                        it.error.printStackTrace()
+                    }
+                }
+            }
+            return@async data
+        }
+
+        val pointStudents = job1.await()
+        val pointReasons = job2.await()
+
+        if (pointStudents == null || pointReasons == null) {
+            _uiState.update {
+                it.copy(
+                    uiState = PointLoadingUiState.Error,
+                )
+            }
+            return@launch
+        }
+
+        _uiState.update {
+            it.copy(
+                uiState = PointLoadingUiState.Success(
+                    students = pointStudents,
+                    reasons = pointReasons,
+                ),
+            )
         }
     }
 
     fun clickStudent(student: PointStudentModel) = viewModelScope.launch(dispatcher) {
+        var uiState = uiState.value.uiState
+
+        if (uiState is PointLoadingUiState.Success) {
+            uiState = uiState.copy(
+                students = uiState.students
+                    .map {
+                        if (it.id == student.id) {
+                            return@map it.copy(
+                                selected = it.selected.not(),
+                            )
+                        }
+                        return@map it
+                    }.toImmutableList(),
+            )
+        }
         _uiState.update { state ->
             state.copy(
-                students = state.students.map {
-                    if (it.id == student.id) {
-                        return@map it.copy(
-                            selected = it.selected.not(),
-                        )
-                    }
-                    return@map it
-                }.toImmutableList(),
+                uiState = uiState,
             )
         }
     }
@@ -102,7 +132,7 @@ class PointViewModel : ViewModel(), KoinComponent {
     fun givePoint(students: List<PointStudentModel>, reason: PointReason) = viewModelScope.launch(dispatcher) {
         _uiState.update {
             it.copy(
-                loading = true,
+                isNetworkLoading = true,
             )
         }
         pointRepository.postGivePoint(
@@ -113,9 +143,17 @@ class PointViewModel : ViewModel(), KoinComponent {
             when (it) {
                 is Result.Success -> {
                     _sideEffect.emit(PointSideEffect.SuccessGivePoint)
+
+                    var uiState = uiState.value.uiState
+                    if (uiState is PointLoadingUiState.Success) {
+                        uiState = uiState.copy(
+                            students = uiState.students.map { it.copy(selected = false) }.toImmutableList(),
+                        )
+                    }
+
                     _uiState.update {
                         it.copy(
-                            students = it.students.map { it.copy(selected = false) }.toImmutableList(),
+                            uiState = uiState,
                         )
                     }
                 }
@@ -128,7 +166,7 @@ class PointViewModel : ViewModel(), KoinComponent {
         }
         _uiState.update {
             it.copy(
-                loading = false,
+                isNetworkLoading = false,
             )
         }
     }
