@@ -60,11 +60,12 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), showSnackb
             exit = fadeOut(),
         ) {
             SelectScreen(
-                items = uiState.students,
+                uiState = uiState.uiState,
                 onClickStudent = viewModel::clickStudent,
                 onClickNextPage = {
                     nowPage = 1
                 },
+                reloadStudent = viewModel::load,
                 popBackStack = popBackStack,
             )
         }
@@ -74,20 +75,20 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), showSnackb
             exit = fadeOut(),
         ) {
             GiveScreen(
-                studentList = uiState.students,
-                reasonList = uiState.reasons,
+                uiState = uiState.uiState,
                 onClickGivePoint = { students, reason ->
                     viewModel.givePoint(
                         students = students,
                         reason = reason,
                     )
                 },
+                reload = viewModel::load,
                 popBackStack = {
                     nowPage = 0
                 },
             )
         }
-        if (uiState.loading) {
+        if (uiState.isNetworkLoading) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()

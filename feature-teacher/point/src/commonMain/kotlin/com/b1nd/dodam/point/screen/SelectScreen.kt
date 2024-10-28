@@ -1,5 +1,6 @@
 package com.b1nd.dodam.point.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,9 +31,11 @@ import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.point.getDodamSegment
+import com.b1nd.dodam.point.model.PointLoadingUiState
 import com.b1nd.dodam.point.model.PointStudentModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
@@ -41,9 +44,10 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun SelectScreen(
-    items: ImmutableList<PointStudentModel>,
+    uiState: PointLoadingUiState,
     onClickStudent: (student: PointStudentModel) -> Unit,
     onClickNextPage: () -> Unit,
+    reloadStudent: () -> Unit,
     popBackStack: () -> Unit,
 ) {
     var selectGrade by remember { mutableStateOf("전체") }
@@ -54,9 +58,6 @@ internal fun SelectScreen(
     val onSelectRoom: (String) -> Unit = {
         selectRoom = it
     }
-
-    // derivedStateOf 로 감쌌을 경우 감지 안됨
-    val selectUserCount = items.filter { it.selected }.size
 
     Scaffold(
         modifier = Modifier
@@ -69,18 +70,21 @@ internal fun SelectScreen(
             )
         },
         bottomBar = {
-            DodamButton(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .navigationBarsPadding()
-                    .padding(bottom = 8.dp)
-                    .fillMaxWidth(),
-                onClick = onClickNextPage,
-                text = "${selectUserCount}명 선택하기",
-                enabled = selectUserCount > 0,
-                buttonRole = ButtonRole.Primary,
-                buttonSize = ButtonSize.Large,
-            )
+            if (uiState is PointLoadingUiState.Success) {
+                val selectUserCount = uiState.students.filter { it.selected }.size
+                DodamButton(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .navigationBarsPadding()
+                        .padding(bottom = 8.dp)
+                        .fillMaxWidth(),
+                    onClick = onClickNextPage,
+                    text = "${selectUserCount}명 선택하기",
+                    enabled = selectUserCount > 0,
+                    buttonRole = ButtonRole.Primary,
+                    buttonSize = ButtonSize.Large,
+                )
+            }
         },
         containerColor = DodamTheme.colors.backgroundNormal,
     ) { paddingValues ->
@@ -114,51 +118,71 @@ internal fun SelectScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                items(
-                    items = items
-                        .filter {
-                            val room = "${it.room}반"
-                            val grade = "${it.grade}학년"
-
-                            if (selectRoom == "전체" && selectGrade == "전체") {
-                                true
-                            } else if (selectRoom == room && (selectGrade == "전체" || selectGrade == grade)) {
-                                true
-                            } else if (selectGrade == grade && (selectRoom == "전체" || selectRoom == room)) {
-                                true
-                            } else {
-                                false
-                            }
-                        },
-                    key = { it.id },
-                ) {
-                    DodamMember(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = rememberBounceIndication(),
-                                onClick = { onClickStudent(it) },
-                            ),
-                        icon = it.profileImage,
-                        name = it.name,
-                        content = {
-                            if (it.selected) {
-                                Image(
-                                    modifier = Modifier
-                                        .align(Alignment.CenterVertically)
-                                        .size(24.dp),
-                                    imageVector = ColoredCheckmarkCircle,
-                                    contentDescription = null,
-                                    colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
-                                )
-                            }
-                        },
+            when (uiState) {
+                PointLoadingUiState.Error -> {
+                    DodamEmpty(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = reloadStudent,
+                        title = "학생 명단을 불러올 수 없어요.",
+                        buttonText = "다시 불러오기",
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = DodamTheme.colors.lineAlternative
+                        )
                     )
+                }
+                is PointLoadingUiState.Loading -> {
+
+                }
+                is PointLoadingUiState.Success -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        items(
+                            items = uiState
+                                .students
+                                .filter {
+                                    val room = "${it.room}반"
+                                    val grade = "${it.grade}학년"
+
+                                    if (selectRoom == "전체" && selectGrade == "전체") {
+                                        true
+                                    } else if (selectRoom == room && (selectGrade == "전체" || selectGrade == grade)) {
+                                        true
+                                    } else if (selectGrade == grade && (selectRoom == "전체" || selectRoom == room)) {
+                                        true
+                                    } else {
+                                        false
+                                    }
+                                },
+                            key = { it.id },
+                        ) {
+                            DodamMember(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = rememberBounceIndication(),
+                                        onClick = { onClickStudent(it) },
+                                    ),
+                                icon = it.profileImage,
+                                name = it.name,
+                                content = {
+                                    if (it.selected) {
+                                        Image(
+                                            modifier = Modifier
+                                                .align(Alignment.CenterVertically)
+                                                .size(24.dp),
+                                            imageVector = ColoredCheckmarkCircle,
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
+                                        )
+                                    }
+                                },
+                            )
+                        }
+                    }
                 }
             }
         }
