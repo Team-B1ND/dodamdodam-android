@@ -3,6 +3,7 @@ package com.b1nd.dodam.primitive
 import com.b1nd.dodam.dsl.android
 import com.b1nd.dodam.dsl.androidKotlin
 import com.b1nd.dodam.dsl.androidTestImplementation
+import com.b1nd.dodam.dsl.composeCompiler
 import com.b1nd.dodam.dsl.debugImplementation
 import com.b1nd.dodam.dsl.library
 import com.b1nd.dodam.dsl.libs
@@ -14,6 +15,7 @@ import com.b1nd.dodam.dsl.plugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.dependencies
 
 
@@ -56,6 +58,11 @@ class AndroidComposePlugin : Plugin<Project> {
                 implementation(libs.library("androidx-lifecycle-runtime"))
                 implementation(libs.library("androidx-compose-ui-tooling"))
                 debugImplementation(libs.library("androidx-compose-ui-test-manifest"))
+            }
+
+            composeCompiler {
+                reportsDestination = layout.buildDirectory.dir("compose_compiler")
+                metricsDestination = layout.buildDirectory.dir("compose_compiler")
             }
         }
     }
