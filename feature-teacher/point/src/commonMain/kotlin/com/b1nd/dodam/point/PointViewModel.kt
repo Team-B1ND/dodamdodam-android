@@ -9,7 +9,6 @@ import com.b1nd.dodam.data.point.PointRepository
 import com.b1nd.dodam.data.point.model.PointReason
 import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.member.MemberRepository
-import com.b1nd.dodam.member.model.MemberInfo
 import com.b1nd.dodam.point.model.PointLoadingUiState
 import com.b1nd.dodam.point.model.PointSideEffect
 import com.b1nd.dodam.point.model.PointStudentModel
@@ -48,7 +47,7 @@ class PointViewModel : ViewModel(), KoinComponent {
     fun load() = viewModelScope.launch(dispatcher) {
         _uiState.update {
             it.copy(
-                uiState = PointLoadingUiState.Loading
+                uiState = PointLoadingUiState.Loading,
             )
         }
         val job1 = async {
@@ -91,7 +90,7 @@ class PointViewModel : ViewModel(), KoinComponent {
         if (pointStudents == null || pointReasons == null) {
             _uiState.update {
                 it.copy(
-                    uiState = PointLoadingUiState.Error
+                    uiState = PointLoadingUiState.Error,
                 )
             }
             return@launch
@@ -101,11 +100,10 @@ class PointViewModel : ViewModel(), KoinComponent {
             it.copy(
                 uiState = PointLoadingUiState.Success(
                     students = pointStudents,
-                    reasons = pointReasons
-                )
+                    reasons = pointReasons,
+                ),
             )
         }
-
     }
 
     fun clickStudent(student: PointStudentModel) = viewModelScope.launch(dispatcher) {
@@ -121,12 +119,12 @@ class PointViewModel : ViewModel(), KoinComponent {
                             )
                         }
                         return@map it
-                    }.toImmutableList()
+                    }.toImmutableList(),
             )
         }
         _uiState.update { state ->
             state.copy(
-                uiState = uiState
+                uiState = uiState,
             )
         }
     }
@@ -155,7 +153,7 @@ class PointViewModel : ViewModel(), KoinComponent {
 
                     _uiState.update {
                         it.copy(
-                            uiState = uiState
+                            uiState = uiState,
                         )
                     }
                 }

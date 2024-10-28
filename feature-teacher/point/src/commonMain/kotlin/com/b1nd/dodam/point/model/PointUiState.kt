@@ -6,7 +6,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 enum class PointPage {
     GIVE,
-    SELECT
+    SELECT,
 }
 
 data class PointUiState(
@@ -16,7 +16,7 @@ data class PointUiState(
 
 sealed interface PointLoadingUiState {
     data class Success(
-        val students:  ImmutableList<PointStudentModel> = persistentListOf(),
+        val students: ImmutableList<PointStudentModel> = persistentListOf(),
         val reasons: ImmutableList<PointReason> = persistentListOf(),
     ) : PointLoadingUiState
     data object Loading : PointLoadingUiState

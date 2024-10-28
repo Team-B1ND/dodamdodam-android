@@ -157,92 +157,92 @@ internal fun GiveScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                       when (uiState) {
-                           PointLoadingUiState.Error -> {
-                               item {
-                                   DodamEmpty(
-                                       modifier = Modifier.fillMaxWidth(),
-                                       onClick = reload,
-                                       title = "$selectPointType 목록 을 불러올 수 없어요.",
-                                       buttonText = "다시 불러오기",
-                                       border = BorderStroke(
-                                           width = 1.dp,
-                                           color = DodamTheme.colors.lineAlternative
-                                       )
-                                   )
-                               }
-                           }
-                           PointLoadingUiState.Loading -> {
-                               item {
+                        when (uiState) {
+                            PointLoadingUiState.Error -> {
+                                item {
+                                    DodamEmpty(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        onClick = reload,
+                                        title = "$selectPointType 목록 을 불러올 수 없어요.",
+                                        buttonText = "다시 불러오기",
+                                        border = BorderStroke(
+                                            width = 1.dp,
+                                            color = DodamTheme.colors.lineAlternative,
+                                        ),
+                                    )
+                                }
+                            }
+                            PointLoadingUiState.Loading -> {
+                                item {
                                     Column(
-                                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                                        verticalArrangement = Arrangement.spacedBy(12.dp),
                                     ) {
                                         GiveReasonLoadingCard()
                                         GiveReasonLoadingCard()
                                     }
-                               }
-                           }
-                           is PointLoadingUiState.Success -> {
-                               // TODO 스페이싱 추가하기
-                               items(
-                                   items = uiState.reasons
-                                       .filter {
-                                           it.scoreType == nowScoreType && it.pointType == nowPointType
-                                       },
-                                   key = { it.id },
-                               ) {
-                                   Row(
-                                       modifier = Modifier
-                                           .fillMaxWidth()
-                                           .clickable(
-                                               interactionSource = remember { MutableInteractionSource() },
-                                               indication = rememberBounceIndication(),
-                                               onClick = {
-                                                   selectReason = if (selectReason == it) null else it
-                                               },
-                                           ),
-                                       verticalAlignment = Alignment.CenterVertically,
-                                   ) {
-                                       Box(
-                                           modifier = Modifier
-                                               .padding(vertical = 4.dp)
-                                               .size(40.dp)
-                                               .background(
-                                                   color = DodamTheme.colors.backgroundAlternative,
-                                                   shape = CircleShape,
-                                               ),
-                                           contentAlignment = Alignment.Center,
-                                       ) {
-                                           Image(
-                                               modifier = Modifier
-                                                   .size(24.dp)
-                                                   .`if`(nowScoreType != ScoreType.BONUS) {
-                                                       offset(x = 1.dp)
-                                                   },
-                                               imageVector = if (nowScoreType == ScoreType.BONUS) ColoredTrophy else ColoredBullseye,
-                                               contentDescription = null,
-                                           )
-                                       }
-                                       Spacer(modifier = Modifier.width(8.dp))
-                                       Text(
-                                           text = it.reason,
-                                           style = DodamTheme.typography.headlineMedium(),
-                                           color = DodamTheme.colors.labelNormal,
-                                       )
+                                }
+                            }
+                            is PointLoadingUiState.Success -> {
+                                // TODO 스페이싱 추가하기
+                                items(
+                                    items = uiState.reasons
+                                        .filter {
+                                            it.scoreType == nowScoreType && it.pointType == nowPointType
+                                        },
+                                    key = { it.id },
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clickable(
+                                                interactionSource = remember { MutableInteractionSource() },
+                                                indication = rememberBounceIndication(),
+                                                onClick = {
+                                                    selectReason = if (selectReason == it) null else it
+                                                },
+                                            ),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .padding(vertical = 4.dp)
+                                                .size(40.dp)
+                                                .background(
+                                                    color = DodamTheme.colors.backgroundAlternative,
+                                                    shape = CircleShape,
+                                                ),
+                                            contentAlignment = Alignment.Center,
+                                        ) {
+                                            Image(
+                                                modifier = Modifier
+                                                    .size(24.dp)
+                                                    .`if`(nowScoreType != ScoreType.BONUS) {
+                                                        offset(x = 1.dp)
+                                                    },
+                                                imageVector = if (nowScoreType == ScoreType.BONUS) ColoredTrophy else ColoredBullseye,
+                                                contentDescription = null,
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                        Text(
+                                            text = it.reason,
+                                            style = DodamTheme.typography.headlineMedium(),
+                                            color = DodamTheme.colors.labelNormal,
+                                        )
 
-                                       if (selectReason == it) {
-                                           Spacer(modifier = Modifier.weight(1f))
-                                           Image(
-                                               modifier = Modifier.size(24.dp),
-                                               imageVector = ColoredCheckmarkCircle,
-                                               contentDescription = null,
-                                               colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
-                                           )
-                                       }
-                                   }
-                               }
-                           }
-                       }
+                                        if (selectReason == it) {
+                                            Spacer(modifier = Modifier.weight(1f))
+                                            Image(
+                                                modifier = Modifier.size(24.dp),
+                                                imageVector = ColoredCheckmarkCircle,
+                                                contentDescription = null,
+                                                colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -363,9 +363,7 @@ internal fun GiveScreen(
 }
 
 @Composable
-private fun GiveReasonLoadingCard(
-    modifier: Modifier = Modifier
-) {
+private fun GiveReasonLoadingCard(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth(),
@@ -374,7 +372,7 @@ private fun GiveReasonLoadingCard(
         Box(
             modifier = Modifier
                 .padding(
-                    vertical = 4.dp
+                    vertical = 4.dp,
                 )
                 .size(40.dp)
                 .background(
