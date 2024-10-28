@@ -5,7 +5,15 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class PointUiState(
-    val loading: Boolean = true,
-    val students: ImmutableList<PointStudentModel> = persistentListOf(),
-    val reasons: ImmutableList<PointReason> = persistentListOf(),
+    val isNetworkLoading: Boolean = false,
+    val uiState: PointLoadingUiState = PointLoadingUiState.Loading,
 )
+
+sealed interface PointLoadingUiState {
+    data class Success(
+        val students:  ImmutableList<PointStudentModel> = persistentListOf(),
+        val reasons: ImmutableList<PointReason> = persistentListOf(),
+    ) : PointLoadingUiState
+    data object Loading : PointLoadingUiState
+    data object Error : PointLoadingUiState
+}

@@ -1,5 +1,6 @@
 package com.b1nd.dodam.point.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,9 +50,11 @@ import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDivider
+import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.point.getDodamSegment
+import com.b1nd.dodam.point.model.PointLoadingUiState
 import com.b1nd.dodam.point.model.PointStudentModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.modifier.dropShadow
@@ -66,9 +69,9 @@ import kotlinx.collections.immutable.toImmutableList
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GiveScreen(
-    reasonList: ImmutableList<PointReason>,
-    studentList: ImmutableList<PointStudentModel>,
+    uiState: PointLoadingUiState,
     onClickGivePoint: (ImmutableList<PointStudentModel>, PointReason) -> Unit,
+    reload: () -> Unit,
     popBackStack: () -> Unit,
 ) {
     var selectPointType by remember { mutableStateOf("학교") }
@@ -152,63 +155,82 @@ internal fun GiveScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        // TODO 스페이싱 추가하기
-                        items(
-                            items = reasonList
-                                .filter {
-                                    it.scoreType == nowScoreType && it.pointType == nowPointType
-                                },
-                            key = { it.id },
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = rememberBounceIndication(),
-                                        onClick = {
-                                            selectReason = if (selectReason == it) null else it
-                                        },
-                                    ),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .background(
-                                            color = DodamTheme.colors.backgroundAlternative,
-                                            shape = CircleShape,
-                                        ),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    Image(
-                                        modifier = Modifier
-                                            .size(24.dp)
-                                            .`if`(nowScoreType != ScoreType.BONUS) {
-                                                offset(x = 1.dp)
-                                            },
-                                        imageVector = if (nowScoreType == ScoreType.BONUS) ColoredTrophy else ColoredBullseye,
-                                        contentDescription = null,
-                                    )
-                                }
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = it.reason,
-                                    style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelNormal,
-                                )
+                       when (uiState) {
+                           PointLoadingUiState.Error -> {
+                               item {
+                                   DodamEmpty(
+                                       modifier = Modifier.fillMaxWidth(),
+                                       onClick = reload,
+                                       title = "$selectPointType 목록 을 불러올 수 없어요.",
+                                       buttonText = "다시 불러오기",
+                                       border = BorderStroke(
+                                           width = 1.dp,
+                                           color = DodamTheme.colors.lineAlternative
+                                       )
+                                   )
+                               }
+                           }
+                           PointLoadingUiState.Loading -> {}
+                           is PointLoadingUiState.Success -> {
+                               // TODO 스페이싱 추가하기
+                               items(
+                                   items = uiState.reasons
+                                       .filter {
+                                           it.scoreType == nowScoreType && it.pointType == nowPointType
+                                       },
+                                   key = { it.id },
+                               ) {
+                                   Row(
+                                       modifier = Modifier
+                                           .fillMaxWidth()
+                                           .clickable(
+                                               interactionSource = remember { MutableInteractionSource() },
+                                               indication = rememberBounceIndication(),
+                                               onClick = {
+                                                   selectReason = if (selectReason == it) null else it
+                                               },
+                                           ),
+                                       verticalAlignment = Alignment.CenterVertically,
+                                   ) {
+                                       Box(
+                                           modifier = Modifier
+                                               .size(40.dp)
+                                               .background(
+                                                   color = DodamTheme.colors.backgroundAlternative,
+                                                   shape = CircleShape,
+                                               ),
+                                           contentAlignment = Alignment.Center,
+                                       ) {
+                                           Image(
+                                               modifier = Modifier
+                                                   .size(24.dp)
+                                                   .`if`(nowScoreType != ScoreType.BONUS) {
+                                                       offset(x = 1.dp)
+                                                   },
+                                               imageVector = if (nowScoreType == ScoreType.BONUS) ColoredTrophy else ColoredBullseye,
+                                               contentDescription = null,
+                                           )
+                                       }
+                                       Spacer(modifier = Modifier.width(8.dp))
+                                       Text(
+                                           text = it.reason,
+                                           style = DodamTheme.typography.headlineMedium(),
+                                           color = DodamTheme.colors.labelNormal,
+                                       )
 
-                                if (selectReason == it) {
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    Image(
-                                        modifier = Modifier.size(24.dp),
-                                        imageVector = ColoredCheckmarkCircle,
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
-                                    )
-                                }
-                            }
-                        }
+                                       if (selectReason == it) {
+                                           Spacer(modifier = Modifier.weight(1f))
+                                           Image(
+                                               modifier = Modifier.size(24.dp),
+                                               imageVector = ColoredCheckmarkCircle,
+                                               contentDescription = null,
+                                               colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
+                                           )
+                                       }
+                                   }
+                               }
+                           }
+                       }
                     }
                 }
 
@@ -239,20 +261,35 @@ internal fun GiveScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        items(
-                            items = studentList
-                                .filter {
-                                    it.selected
-                                },
-                            key = { it.id },
-                        ) {
-                            DodamMember(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                icon = it.profileImage,
-                                name = it.name,
-                                content = { },
-                            )
+                        when (uiState) {
+                            PointLoadingUiState.Error -> {
+                                item {
+                                    DodamEmpty(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        onClick = reload,
+                                        title = "학생 목록 을 불러올 수 없어요.",
+                                        buttonText = "다시 불러오기",
+                                    )
+                                }
+                            }
+                            PointLoadingUiState.Loading -> {}
+                            is PointLoadingUiState.Success -> {
+                                items(
+                                    items = uiState.students
+                                        .filter {
+                                            it.selected
+                                        },
+                                    key = { it.id },
+                                ) {
+                                    DodamMember(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        icon = it.profileImage,
+                                        name = it.name,
+                                        content = { },
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -291,10 +328,12 @@ internal fun GiveScreen(
                         buttonRole = if (nowScoreType == ScoreType.BONUS) ButtonRole.Primary else ButtonRole.Negative,
                         buttonSize = ButtonSize.Large,
                         onClick = {
-                            onClickGivePoint(
-                                studentList.filter { it.selected }.toImmutableList(),
-                                selectReason!!,
-                            )
+                            if (uiState is PointLoadingUiState.Success) {
+                                onClickGivePoint(
+                                    uiState.students.filter { it.selected }.toImmutableList(),
+                                    selectReason!!,
+                                )
+                            }
                         },
                     )
                 },
