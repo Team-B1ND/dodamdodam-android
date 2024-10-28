@@ -4,6 +4,11 @@ import com.b1nd.dodam.data.point.model.PointReason
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+enum class PointPage {
+    GIVE,
+    SELECT
+}
+
 data class PointUiState(
     val isNetworkLoading: Boolean = false,
     val uiState: PointLoadingUiState = PointLoadingUiState.Loading,
