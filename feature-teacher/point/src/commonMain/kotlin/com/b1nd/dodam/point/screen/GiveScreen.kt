@@ -57,8 +57,10 @@ import com.b1nd.dodam.point.getDodamSegment
 import com.b1nd.dodam.point.model.PointLoadingUiState
 import com.b1nd.dodam.point.model.PointStudentModel
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.component.DodamMemberLoadingCard
 import com.b1nd.dodam.ui.component.modifier.dropShadow
 import com.b1nd.dodam.ui.component.modifier.`if`
+import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ColoredBullseye
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import com.b1nd.dodam.ui.icons.ColoredTrophy
@@ -170,7 +172,16 @@ internal fun GiveScreen(
                                    )
                                }
                            }
-                           PointLoadingUiState.Loading -> {}
+                           PointLoadingUiState.Loading -> {
+                               item {
+                                    Column(
+                                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                                    ) {
+                                        GiveReasonLoadingCard()
+                                        GiveReasonLoadingCard()
+                                    }
+                               }
+                           }
                            is PointLoadingUiState.Success -> {
                                // TODO 스페이싱 추가하기
                                items(
@@ -194,6 +205,7 @@ internal fun GiveScreen(
                                    ) {
                                        Box(
                                            modifier = Modifier
+                                               .padding(vertical = 4.dp)
                                                .size(40.dp)
                                                .background(
                                                    color = DodamTheme.colors.backgroundAlternative,
@@ -272,7 +284,14 @@ internal fun GiveScreen(
                                     )
                                 }
                             }
-                            PointLoadingUiState.Loading -> {}
+                            PointLoadingUiState.Loading -> {
+                                item {
+                                    Column {
+                                        DodamMemberLoadingCard()
+                                        DodamMemberLoadingCard()
+                                    }
+                                }
+                            }
                             is PointLoadingUiState.Success -> {
                                 items(
                                     items = uiState.students
@@ -340,6 +359,40 @@ internal fun GiveScreen(
                 space = 16.dp,
             )
         }
+    }
+}
+
+@Composable
+private fun GiveReasonLoadingCard(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(
+                    vertical = 4.dp
+                )
+                .size(40.dp)
+                .background(
+                    brush = shimmerEffect(),
+                    shape = CircleShape,
+                ),
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Box(
+            modifier = Modifier
+                .height(27.dp)
+                .width(100.dp)
+                .background(
+                    brush = shimmerEffect(),
+                    shape = CircleShape,
+                ),
+        )
     }
 }
 

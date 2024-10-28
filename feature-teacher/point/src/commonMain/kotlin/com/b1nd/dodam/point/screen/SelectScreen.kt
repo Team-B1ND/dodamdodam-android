@@ -38,6 +38,7 @@ import com.b1nd.dodam.point.getDodamSegment
 import com.b1nd.dodam.point.model.PointLoadingUiState
 import com.b1nd.dodam.point.model.PointStudentModel
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.component.DodamMemberLoadingCard
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -132,7 +133,9 @@ internal fun SelectScreen(
                     )
                 }
                 is PointLoadingUiState.Loading -> {
-
+                    DodamMemberLoadingCard()
+                    Spacer(modifier = Modifier.height(12.dp))
+                    DodamMemberLoadingCard()
                 }
                 is PointLoadingUiState.Success -> {
                     LazyColumn(
