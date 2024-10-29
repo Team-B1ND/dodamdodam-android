@@ -12,16 +12,21 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -43,6 +48,7 @@ import com.b1nd.dodam.approvenightstudy.navigation.navigateToApproveNightStudy
 import com.b1nd.dodam.approveouting.approveOutingScreen
 import com.b1nd.dodam.approveouting.navigateToApproveOuting
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
@@ -78,6 +84,8 @@ import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
+const val VERSION_INFO = "3.0.0"
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class, KoinExperimentalAPI::class)
 @Composable
 fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koinViewModel()) {
@@ -88,12 +96,21 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
     val navHostController = rememberNavController()
     val backStackEntry by navHostController.currentBackStackEntryAsState()
     val isLogin by viewModel.isLoginState.collectAsState()
+    val bundleData by viewModel.bundleModel.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
     var snackbarState: SnackbarState = remember { SnackbarState.SUCCESS }
+    var showVersionDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.loadToken()
+        viewModel.getBundleId()
+    }
+
+    LaunchedEffect(bundleData.bundleId){
+        if (bundleData.bundleId != VERSION_INFO && getPlatformName() == PlatformModel.IOS.name){
+            showVersionDialog = true
+        }
     }
 
     val showSnackbar: (state: SnackbarState, message: String) -> Unit = { state, message ->
@@ -122,6 +139,22 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                 }
             },
         ) {
+            if (showVersionDialog){
+                Dialog(
+                    onDismissRequest = {
+                        showVersionDialog = false
+                    }
+                ){
+                    DodamDialog(
+                        confirmButton = {
+                            showVersionDialog = false
+                        },
+                        title = "최신 버전의 앱이 있습니다.",
+                        body = "최적의 사용 환경을 위해 최신 버전의\n앱으로 업데이트해주세요"
+                    )
+                }
+            }
+
             if (isLogin == null) {
                 LunchScreen()
             } else {
@@ -224,7 +257,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         settingScreen(
                             popBackStack = navHostController::popBackStack,
                             logout = exit,
-                            versionInfo = "3.0.0",
+                            versionInfo = getPlatformName(),
                         )
                     }
 
@@ -256,6 +289,8 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
         }
     }
 }
+
+expect fun getPlatformName(): String
 
 @Composable
 private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
