@@ -82,6 +82,7 @@ val networkCoreModule = module {
                         when (request.url.toString()) {
                             DodamUrl.Auth.LOGIN -> false
                             DodamUrl.Member.REGISTER -> false
+                            DodamUrl.GET_BUNDLE_ID -> false
                             else -> true
                         }
                     }

@@ -10,6 +10,7 @@ import com.b1nd.dodam.bus.di.busViewModelModule
 import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
 import com.b1nd.dodam.data.banner.di.bannerRepositoryModule
+import com.b1nd.dodam.data.bundleidinfo.di.bundleIdInfoRepositoryModule
 import com.b1nd.dodam.data.login.di.loginRepositoryModule
 import com.b1nd.dodam.data.meal.di.mealRepositoryModule
 import com.b1nd.dodam.data.nightstudy.di.nightStudyRepositoryModule
@@ -40,6 +41,7 @@ import com.b1nd.dodam.student.point.di.pointViewModelModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongDataSourceModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongRepositoryModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongViewModelModule
+import com.seugi.network.bundleidinfo.di.bundleIdInfoDataSourceModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -92,6 +94,8 @@ class DodamApplication : Application() {
                     settingViewModelModule,
                     nightStudyViewModelModule,
                     outingViewModelModule,
+                    bundleIdInfoRepositoryModule,
+                    bundleIdInfoDataSourceModule,
                 ) + mainViewModelModules,
             )
         }
