@@ -10,7 +10,6 @@ import com.b1nd.dodam.teacher.model.BundleIdInfoModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -34,10 +33,10 @@ class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
         _isLoginState.value = dataStoreRepository.token.first().isNotEmpty()
     }
 
-    fun getBundleId(){
+    fun getBundleId() {
         viewModelScope.launch(dispatcher) {
-            bundleIdInfoRepository.getBundleId().collect{
-                when(it){
+            bundleIdInfoRepository.getBundleId().collect {
+                when (it) {
                     is Result.Error -> {
                         it.error.printStackTrace()
                     }
@@ -45,7 +44,7 @@ class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
                     is Result.Success -> {
                         _bundleModel.update { model ->
                             model.copy(
-                                bundleId = it.data
+                                bundleId = it.data,
                             )
                         }
                     }

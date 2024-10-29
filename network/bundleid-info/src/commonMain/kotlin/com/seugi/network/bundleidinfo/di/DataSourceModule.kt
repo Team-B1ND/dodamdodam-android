@@ -9,4 +9,3 @@ val bundleIdInfoDataSourceModule = module {
         BundleIdInfoService(get())
     }
 }
-

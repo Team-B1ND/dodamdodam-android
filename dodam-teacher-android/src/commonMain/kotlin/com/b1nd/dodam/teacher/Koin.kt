@@ -77,7 +77,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             approveNightStudyViewModelModule,
             settingViewModelModule,
             bundleIdInfoRepositoryModule,
-            bundleIdInfoDataSourceModule
+            bundleIdInfoDataSourceModule,
         )
         block()
     }
