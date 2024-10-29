@@ -6,13 +6,17 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-//    private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
+    private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        checkAppUpdate()
+        checkAppUpdate()
         setContent {
             LaunchedEffect(Unit) {
                 launch {
@@ -34,37 +38,37 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        appUpdateManager
-//            .appUpdateInfo
-//            .addOnSuccessListener { appUpdateInfo ->
-//                if (appUpdateInfo.updateAvailability()
-//                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
-//                ) {
-//                    // 인앱 업데이트가 이미 실행 중인 경우 재개 업데이트.
-//                    appUpdateManager.startUpdateFlow(
-//                        appUpdateInfo,
-//                        this,
-//                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
-//                    )
-//                }
-//            }
-//    }
+    override fun onResume() {
+        super.onResume()
+        appUpdateManager
+            .appUpdateInfo
+            .addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability()
+                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
+                ) {
+                    // 인앱 업데이트가 이미 실행 중인 경우 재개 업데이트.
+                    appUpdateManager.startUpdateFlow(
+                        appUpdateInfo,
+                        this,
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+                    )
+                }
+            }
+    }
 
-//    private fun checkAppUpdate() {
-//        appUpdateManager
-//            .appUpdateInfo
-//            .addOnSuccessListener { appUpdateInfo ->
-//                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-//                    appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
-//                ) {
-//                    appUpdateManager.startUpdateFlow(
-//                        appUpdateInfo,
-//                        this,
-//                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
-//                    )
-//                }
-//            }
-//    }
+    private fun checkAppUpdate() {
+        appUpdateManager
+            .appUpdateInfo
+            .addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                    appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                ) {
+                    appUpdateManager.startUpdateFlow(
+                        appUpdateInfo,
+                        this,
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+                    )
+                }
+            }
+    }
 }
