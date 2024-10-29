@@ -38,7 +38,9 @@ class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch(dispatcher) {
             bundleIdInfoRepository.getBundleId().collect{
                 when(it){
-                    is Result.Error -> {}
+                    is Result.Error -> {
+                        it.error.printStackTrace()
+                    }
                     is Result.Loading -> {}
                     is Result.Success -> {
                         _bundleModel.update { model ->
