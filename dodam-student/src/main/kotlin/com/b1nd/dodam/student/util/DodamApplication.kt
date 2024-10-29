@@ -95,7 +95,7 @@ class DodamApplication : Application() {
                     nightStudyViewModelModule,
                     outingViewModelModule,
                     bundleIdInfoRepositoryModule,
-                    bundleIdInfoDataSourceModule
+                    bundleIdInfoDataSourceModule,
                 ) + mainViewModelModules,
             )
         }

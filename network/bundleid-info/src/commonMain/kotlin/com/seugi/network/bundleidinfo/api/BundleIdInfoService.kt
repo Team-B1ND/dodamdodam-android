@@ -10,9 +10,9 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
-class BundleIdInfoService (
-    private val network: HttpClient
-): BundleIdInfoDataSource {
+class BundleIdInfoService(
+    private val network: HttpClient,
+) : BundleIdInfoDataSource {
 
     override suspend fun getBundleId(): String? {
         val response = network.get(DodamUrl.GET_BUNDLE_ID)
