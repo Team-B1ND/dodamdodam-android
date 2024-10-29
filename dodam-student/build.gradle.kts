@@ -86,4 +86,6 @@ dependencies {
     implementation(projects.network.member)
     implementation(projects.data.login)
     implementation(projects.network.login)
+    implementation(projects.network.bundleidInfo)
+    implementation(projects.data.bundleidInfo)
 }
