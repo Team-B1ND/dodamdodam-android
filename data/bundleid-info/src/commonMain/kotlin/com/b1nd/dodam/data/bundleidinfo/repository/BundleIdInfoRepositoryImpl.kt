@@ -19,7 +19,7 @@ class BundleIdInfoRepositoryImpl(
     override suspend fun getBundleId(): Flow<Result<String>> {
         return flow {
             emit(
-                remote.getBundleId()?:"버전없음"
+                remote.getBundleId()?:"오류"
             )
         }.asResult().flowOn(dispatcher)
     }

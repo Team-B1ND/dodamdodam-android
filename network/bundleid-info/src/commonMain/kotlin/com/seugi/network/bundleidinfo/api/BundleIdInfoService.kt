@@ -25,13 +25,8 @@ class BundleIdInfoService (
             if (results != null && results.isNotEmpty()) {
                 val firstResult = results[0].jsonObject
                 val currentVersion = firstResult["version"]?.jsonPrimitive?.content
-                println("currentVersion: $currentVersion")
                 return currentVersion
-            } else {
-                println("No results found")
             }
-        } else {
-            println("Failed to connect, Response Code: ${response.status.value}")
         }
         return null
     }
