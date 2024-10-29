@@ -54,6 +54,8 @@ kotlin {
             implementation(projects.network.schedule)
             implementation(projects.network.member)
             implementation(projects.network.point)
+            implementation(projects.network.bundleidInfo)
+            implementation(projects.data.bundleidInfo)
         }
 
         androidMain.dependencies {
@@ -61,6 +63,7 @@ kotlin {
             implementation(libs.androidx.compose.activity)
             implementation(libs.koin.android)
             implementation(projects.keystore)
+            implementation(libs.google.app.update)
         }
     }
 }
