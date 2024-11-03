@@ -59,11 +59,6 @@ class AndroidComposePlugin : Plugin<Project> {
                 implementation(libs.library("androidx-compose-ui-tooling"))
                 debugImplementation(libs.library("androidx-compose-ui-test-manifest"))
             }
-
-            composeCompiler {
-                reportsDestination = layout.buildDirectory.dir("compose_compiler")
-                metricsDestination = layout.buildDirectory.dir("compose_compiler")
-            }
         }
     }
 
