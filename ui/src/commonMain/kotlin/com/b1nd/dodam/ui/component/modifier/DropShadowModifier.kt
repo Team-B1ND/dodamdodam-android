@@ -15,14 +15,14 @@ fun Modifier.dropShadow(blur: Dp, offsetY: Dp, color: Color, modifier: Modifier 
         drawIntoCanvas { canvas ->
 
             val paint = Paint()
-            val frameworkPaint = paint.asFrameworkPaint()
+            val frameworkPaint: NativePaint = paint.asFrameworkPaint() as NativePaint
             val spreadPixel = 0f
             val leftPixel = (0f - spreadPixel) + 0f // offsetX
             val topPixel = (0f - spreadPixel) + offsetY.toPx()
             val rightPixel = size.width + spreadPixel
             val bottomPixel = size.height + spreadPixel
 
-            frameworkPaint.color = color.toArgb()
+            frameworkPaint.setColor(color.toArgb())
 
             if (blur != 0.dp) {
                 (frameworkPaint as? NativePaint)?.setMaskFilter((blur.toPx()))
@@ -40,3 +40,5 @@ fun Modifier.dropShadow(blur: Dp, offsetY: Dp, color: Color, modifier: Modifier 
         }
     },
 )
+
+expect fun NativePaint.setColor(color: Int)
