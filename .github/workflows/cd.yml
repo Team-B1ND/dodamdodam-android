@@ -62,7 +62,7 @@ jobs:
     
 
     - name: Deploy to Internal Channel
-      uses: r0adkll/upload-google-play@v1.0.19
+      uses: r0adkll/upload-google-play@v1
       with:
         serviceAccountJson: service_account.json
         packageName: com.b1nd.dodam.student
