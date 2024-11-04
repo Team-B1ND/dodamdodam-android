@@ -1,0 +1,26 @@
+name: Android CI
+
+on:
+  pull_request:
+    branches: ["develop"]
+
+jobs:
+  cd-build:
+    env:
+      TITLE: ${{ github.event.pull_request.title }}
+      KEYSTORE: ${{ secrets.DODAM_KEYSTORE }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+    - name: Check Env
+      run: echo '${{ env.KEYSTORE }}'
+
+    
