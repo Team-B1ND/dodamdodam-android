@@ -56,7 +56,10 @@ jobs:
         keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
 
     - name: Setup Authorization With Google Play Store
-      run: echo '${{ secrets.DODAM_GOOGLE_PLAY_API_AUTH }}' > service_account.json
+      run: |
+        echo '${{ secrets.DODAM_GOOGLE_PLAY_API_AUTH }}' > service_account.json
+        mkdir whatsNewDirectory
+    
 
     - name: Deploy to Internal Channel
       uses: r0adkll/upload-google-play@v1.0.19
