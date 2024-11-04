@@ -88,4 +88,5 @@ dependencies {
     implementation(projects.network.login)
     implementation(projects.network.bundleidInfo)
     implementation(projects.data.bundleidInfo)
+    implementation(projects.feature.editMemberInfo)
 }
