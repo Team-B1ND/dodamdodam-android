@@ -29,8 +29,11 @@ jobs:
         echo '${{ env.KEYSTORE }}' | base64 --d > ./dodam.jks
         ls
 
-    - name: Extract Version Name
-      run: echo "##[set-output name=version;]v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release v\K[0-9]+\.[0-9]+\.[0-9]+')"
+    - name: 버전 이름 추출
       id: extract_version
+      run: echo "version=v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release v\\K[0-9]+\\.[0-9]+\\.[0-9]+')" >> $GITHUB_ENV
+
+    - name: 버전 출력
+      run: echo "Extract Version ${{ env.version }}"
 
 
