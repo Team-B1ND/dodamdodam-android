@@ -46,7 +46,7 @@ jobs:
     - name: Sign Release
       uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: dodam-student/build/outputs/bundle/release
+        releaseDirectory: ./dodam-student/build/outputs/bundle/release
         signingKeyBase64: ${{ secrets.DODAM_KEYSTORE }}
         keyStorePassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
         alias: ${{ secrets.DODAM_KEYSTORE_ALIAS }}
