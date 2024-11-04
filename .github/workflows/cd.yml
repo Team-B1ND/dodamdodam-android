@@ -70,7 +70,7 @@ jobs:
         track: production
         status: inProgress
         inAppUpdatePriority: 2
-        userFraction: 1
+        userFraction: 1.0
         whatsNewDirectory: whatsNewDirectory/
 
 
