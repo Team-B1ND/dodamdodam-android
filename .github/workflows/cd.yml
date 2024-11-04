@@ -69,6 +69,8 @@ jobs:
         releaseFiles: ./dodam-student/build/outputs/bundle/release/dodam-student-release.aab
         track: production
         status: inProgress
+        inAppUpdatePriority: 2
+        userFraction: 1
         whatsNewDirectory: whatsNewDirectory/
 
 
