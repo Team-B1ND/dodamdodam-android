@@ -14,6 +14,7 @@ import com.b1nd.dodam.data.outing.di.outingRepositoryModule
 import com.b1nd.dodam.data.point.di.pointRepositoryModule
 import com.b1nd.dodam.data.schedule.di.scheduleRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
+import com.b1nd.dodam.editmemberinfo.di.editMemberInfoViewModelModule
 import com.b1nd.dodam.home.di.homeViewModelModule
 import com.b1nd.dodam.login.di.loginViewModelModule
 import com.b1nd.dodam.meal.di.mealViewModelModule
@@ -78,6 +79,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             settingViewModelModule,
             bundleIdInfoRepositoryModule,
             bundleIdInfoDataSourceModule,
+            editMemberInfoViewModelModule
         )
         block()
     }

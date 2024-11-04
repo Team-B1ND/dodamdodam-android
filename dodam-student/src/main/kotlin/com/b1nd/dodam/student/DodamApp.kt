@@ -36,6 +36,8 @@ import com.b1nd.dodam.bus.navigation.navigateToBus
 import com.b1nd.dodam.dds.component.DodamErrorToast
 import com.b1nd.dodam.dds.component.DodamSuccessToast
 import com.b1nd.dodam.dds.component.DodamWarningToast
+import com.b1nd.dodam.editmemberinfo.navigation.editMemberInfoScreen
+import com.b1nd.dodam.editmemberinfo.navigation.navigationToEditMemberInfo
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
@@ -236,6 +238,7 @@ fun DodamApp(
                 versionInfo = "3.2.0",
                 popBackStack = navController::popBackStack,
                 logout = logout,
+                navigationToEditMemberInfo = navController::navigationToEditMemberInfo
             )
             askWakeupSongScreen(
                 popBackStack = navController::popBackStack,
@@ -246,6 +249,9 @@ fun DodamApp(
             )
             pointScreen(
                 popBackStack = navController::popBackStack,
+            )
+            editMemberInfoScreen (
+                popBackStack = navController::popBackStack
             )
         }
     }

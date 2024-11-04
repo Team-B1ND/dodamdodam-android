@@ -18,6 +18,7 @@ import com.b1nd.dodam.data.outing.di.outingRepositoryModule
 import com.b1nd.dodam.data.point.di.pointRepositoryModule
 import com.b1nd.dodam.data.schedule.di.scheduleRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
+import com.b1nd.dodam.editmemberinfo.di.editMemberInfoViewModelModule
 import com.b1nd.dodam.keystore.keystoreManagerModule
 import com.b1nd.dodam.login.di.loginViewModelModule
 import com.b1nd.dodam.member.di.memberDataSourceModule
@@ -96,6 +97,7 @@ class DodamApplication : Application() {
                     outingViewModelModule,
                     bundleIdInfoRepositoryModule,
                     bundleIdInfoDataSourceModule,
+                    editMemberInfoViewModelModule
                 ) + mainViewModelModules,
             )
         }
