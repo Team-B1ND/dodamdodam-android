@@ -67,8 +67,8 @@ jobs:
         serviceAccountJson: service_account.json
         packageName: com.b1nd.dodam.student
         releaseFiles: ./dodam-student/build/outputs/bundle/release/dodam-student-release.aab
-        track: internal
-        status: 'completed'
+        track: production
+        status: 'inProgress'
         whatsNewDirectory: whatsNewDirectory/
 
 
