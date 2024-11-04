@@ -43,6 +43,9 @@ jobs:
       if: startsWith(env.TITLE, 'Student')
       run: ./gradlew dodam-student:spotlessCheck
 
+    - name: Assemble Release Bundle
+      run: ./gradlew bundleRelease
+
     - name: Sign Release
       uses: r0adkll/sign-android-release@v1
       with:
