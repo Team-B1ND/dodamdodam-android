@@ -3,8 +3,8 @@ coilVersion = "2.7.0"
 compileSdk = "34"
 minSdk = "28"
 targetSdk = "34"
-appVersion = "3.3.0"
-versionCode = "6"
+appVersion = "3.4.0"
+versionCode = "7"
 
 # kotlin
 kotlin = "2.0.0"
