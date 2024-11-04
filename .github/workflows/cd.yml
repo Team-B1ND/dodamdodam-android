@@ -55,5 +55,18 @@ jobs:
         alias: ${{ secrets.DODAM_KEYSTORE_ALIAS }}
         keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
 
+    - name: Setup Authorization With Google Play Store
+      run: echo '${{ secrets.DODAM_GOOGLE_PLAY_API_AUTH }}' > service_account.json
+
+    - name: Deploy to Internal Channel
+      uses: r0adkll/upload-google-play@v1.0.19
+      with:
+        serviceAccountJson: service_account.json
+        packageName: com.b1nd.dodam.student
+        releaseFiles: ./dodam-student/build/outputs/bundle/release/dodam-student-release.aab
+        track: internal
+        status: 'completed'
+        whatsNewDirectory: whatsNewDirectory/
+
 
 
