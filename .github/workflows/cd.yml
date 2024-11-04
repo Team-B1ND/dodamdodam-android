@@ -31,9 +31,26 @@ jobs:
 
     - name: 버전 이름 추출
       id: extract_version
-      run: echo "version=v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release v\\K[0-9]+\\.[0-9]+\\.[0-9]+')" >> $GITHUB_ENV
+      run: echo "version=v$(echo '${{ env.TITLE }}' | grep -oP 'release v\\K[0-9]+\\.[0-9]+\\.[0-9]+')"
 
     - name: 버전 출력
       run: echo "Extract Version ${{ env.version }}"
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Run Student spotless
+      if: startsWith(env.TITLE, 'Student')
+      run: ./gradlew dodam-student:spotlessCheck
+
+    - name: Sign Release
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: dodam-student/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.DODAM_KEYSTORE }}
+        keyStorePassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
+        alias: ${{ secrets.DODAM_KEYSTORE_ALIAS }}
+        keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
+
 
 
