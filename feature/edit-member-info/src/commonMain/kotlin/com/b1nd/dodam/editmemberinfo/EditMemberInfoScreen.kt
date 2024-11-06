@@ -2,6 +2,7 @@ package com.b1nd.dodam.editmemberinfo
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,9 +27,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.AvatarSize
+import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.icons.ColoredPencil
 import com.b1nd.dodam.ui.icons.DefaultProfile
 import com.b1nd.dodam.ui.icons.Plus
@@ -66,26 +71,20 @@ internal fun EditMemberInfoScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box{
-                    if (!true) {
-                        AsyncImage(
-                            modifier = Modifier
-                                .clip(DodamTheme.shapes.medium)
-                                .size(128.dp),
-                            model = "uiState.profile",
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                        )
-                    } else {
-                        Image(
-                            modifier = Modifier
-                                .clip(DodamTheme.shapes.medium)
-                                .size(128.dp),
-                            bitmap = DefaultProfile,
-                            contentDescription = "프로필 이미지",
-                            contentScale = ContentScale.Crop,
-                        )
-                    }
+                val borderColor = DodamTheme.colors.lineAlternative
+                Box {
+                    DodamAvatar(
+                        avatarSize = AvatarSize.XXL,
+                        contentDescription = "프로필 이미지",
+                        modifier = Modifier
+                            .`if`(true) {
+                                border(
+                                    width = 1.dp,
+                                    color = borderColor,
+                                    shape = CircleShape
+                                )
+                            }
+                    )
                     Image(
                         imageVector = Plus,
                         contentDescription = "image",
