@@ -25,6 +25,8 @@ fun NavGraphBuilder.editMemberInfoScreen(popBackStack: () -> Unit) {
         popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
-        EditMemberInfoScreen()
+        EditMemberInfoScreen(
+            popBackStack = popBackStack
+        )
     }
 }
