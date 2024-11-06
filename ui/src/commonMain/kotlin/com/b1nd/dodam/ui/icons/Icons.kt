@@ -20,6 +20,7 @@ import dodamdodam_android.ui.generated.resources.ic_colored_xmark_circle
 import dodamdodam_android.ui.generated.resources.ic_default_profile
 import dodamdodam_android.ui.generated.resources.ic_default_user
 import dodamdodam_android.ui.generated.resources.ic_dodamlogo
+import dodamdodam_android.ui.generated.resources.ic_plus
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -94,3 +95,7 @@ val ColoredXMarkCircle
 val ColoredCookedRice
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_cookedrice)
+
+val Plus
+    @Composable
+    get() = vectorResource(Res.drawable.ic_plus)
