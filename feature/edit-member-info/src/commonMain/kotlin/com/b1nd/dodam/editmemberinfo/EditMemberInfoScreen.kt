@@ -40,6 +40,7 @@ import com.b1nd.dodam.ui.util.addFocusCleaner
 
 @Composable
 internal fun EditMemberInfoScreen(
+    profileImage: String?,
     popBackStack: () -> Unit
 ) {
 
@@ -76,14 +77,16 @@ internal fun EditMemberInfoScreen(
                     DodamAvatar(
                         avatarSize = AvatarSize.XXL,
                         contentDescription = "프로필 이미지",
+                        model = if (profileImage == "default") null else  profileImage,
                         modifier = Modifier
-                            .`if`(true) {
+                            .`if`(profileImage == "default") {
                                 border(
                                     width = 1.dp,
                                     color = borderColor,
                                     shape = CircleShape
                                 )
-                            }
+                            },
+                        contentScale = ContentScale.Crop
                     )
                     Image(
                         imageVector = Plus,

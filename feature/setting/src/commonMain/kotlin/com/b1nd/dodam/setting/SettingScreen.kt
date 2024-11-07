@@ -56,7 +56,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @OptIn(KoinExperimentalAPI::class)
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versionInfo: String = "3.2.0", popBackStack: () -> Unit, logout: () -> Unit, navigationToEditMemberInfo: () -> Unit) {
+internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versionInfo: String = "3.2.0", popBackStack: () -> Unit, logout: () -> Unit, navigationToEditMemberInfo: (profileImage: String?) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }
@@ -166,7 +166,7 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberBounceIndication(),
-                        onClick =  navigationToEditMemberInfo ,
+                        onClick = { navigationToEditMemberInfo(uiState.profile) } ,
                     ),
             ) {
                 if (uiState.isLoading) {

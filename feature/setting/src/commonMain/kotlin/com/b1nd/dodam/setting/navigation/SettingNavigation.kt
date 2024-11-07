@@ -18,7 +18,7 @@ fun NavController.navigateToSetting(
 ) = navigate(SETTING_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.settingScreen(versionInfo: String, popBackStack: () -> Unit, logout: () -> Unit, navigationToEditMemberInfo: () -> Unit) {
+fun NavGraphBuilder.settingScreen(versionInfo: String, popBackStack: () -> Unit, logout: () -> Unit, navigationToEditMemberInfo: (profileImage: String?) -> Unit) {
     composable(
         route = SETTING_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
