@@ -21,11 +21,12 @@ kotlin {
         implementation(projects.common)
         implementation(projects.ui)
         implementation(projects.logging)
+        implementation("com.mohamedrejeb.calf:calf-file-picker:0.5.5")
+        implementation("com.mohamedrejeb.calf:calf-permissions:0.5.5")
     }
 }
-
 android {
-    namespace = "com.b1nd.dodam.setting"
+    namespace = "com.b1nd.dodam.edit_member_info"
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
     }
