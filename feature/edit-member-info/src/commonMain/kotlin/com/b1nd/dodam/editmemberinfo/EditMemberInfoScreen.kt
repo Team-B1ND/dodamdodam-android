@@ -3,6 +3,7 @@ package com.b1nd.dodam.editmemberinfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,18 +15,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
@@ -33,14 +35,19 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.component.modifier.`if`
-import com.b1nd.dodam.ui.icons.ColoredPencil
-import com.b1nd.dodam.ui.icons.DefaultProfile
 import com.b1nd.dodam.ui.icons.Plus
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import com.mohamedrejeb.calf.core.LocalPlatformContext
+import com.mohamedrejeb.calf.io.getPath
+import com.mohamedrejeb.calf.io.readByteArray
+import com.mohamedrejeb.calf.picker.FilePickerFileType
+import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
+import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun EditMemberInfoScreen(
-    profileImage: String?,
+    profileImage: String,
     popBackStack: () -> Unit
 ) {
 
@@ -49,6 +56,29 @@ internal fun EditMemberInfoScreen(
     var phone by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
 
+    val scope = rememberCoroutineScope()
+    val context = LocalPlatformContext.current
+
+
+    var byteArray by remember { mutableStateOf(ByteArray(0)) }
+    var platformSpecificFilePath by remember { mutableStateOf("") }
+
+    val pickerLauncher = rememberFilePickerLauncher(
+        type = FilePickerFileType.Image,
+        selectionMode = FilePickerSelectionMode.Multiple,
+        onResult = { files ->
+            scope.launch {
+                files.firstOrNull()?.let {
+                    byteArray = it.readByteArray(context)
+                    platformSpecificFilePath = it.getPath(context) ?:""
+                }
+            }
+        }
+    )
+
+    LaunchedEffect(true){
+        platformSpecificFilePath = profileImage
+    }
 
     Scaffold(
         modifier = Modifier.addFocusCleaner(focusManager),
@@ -77,9 +107,9 @@ internal fun EditMemberInfoScreen(
                     DodamAvatar(
                         avatarSize = AvatarSize.XXL,
                         contentDescription = "프로필 이미지",
-                        model = if (profileImage == "default") null else  profileImage,
+                        model = if (platformSpecificFilePath == "default") null else platformSpecificFilePath ,
                         modifier = Modifier
-                            .`if`(profileImage == "default") {
+                            .`if`(platformSpecificFilePath == "default") {
                                 border(
                                     width = 1.dp,
                                     color = borderColor,
@@ -94,6 +124,9 @@ internal fun EditMemberInfoScreen(
                         modifier = Modifier
                             .size(32.dp)
                             .align(Alignment.BottomEnd)
+                            .clickable {
+                                pickerLauncher.launch()
+                            }
                     )
                 }
                 Column(
