@@ -48,12 +48,15 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun EditMemberInfoScreen(
     profileImage: String,
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
+    name: String,
+    email: String,
+    phone: String
 ) {
 
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf(name) }
+    var email by remember { mutableStateOf(email) }
+    var phone by remember { mutableStateOf(phone) }
     val focusManager = LocalFocusManager.current
 
     val scope = rememberCoroutineScope()
