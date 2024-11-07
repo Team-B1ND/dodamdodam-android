@@ -238,7 +238,11 @@ fun DodamApp(
                 versionInfo = "3.2.0",
                 popBackStack = navController::popBackStack,
                 logout = logout,
-                navigationToEditMemberInfo = navController::navigationToEditMemberInfo
+                navigationToEditMemberInfo = { profileImage ->
+                    navController.navigationToEditMemberInfo(
+                        profileImage
+                    )
+                }
             )
             askWakeupSongScreen(
                 popBackStack = navController::popBackStack,
