@@ -238,9 +238,12 @@ fun DodamApp(
                 versionInfo = "3.2.0",
                 popBackStack = navController::popBackStack,
                 logout = logout,
-                navigationToEditMemberInfo = { profileImage ->
+                navigationToEditMemberInfo = { profileImage, name, email, phone ->
                     navController.navigationToEditMemberInfo(
-                        profileImage
+                        profileImage = profileImage,
+                        name = name,
+                        email = email,
+                        phone = phone
                     )
                 }
             )

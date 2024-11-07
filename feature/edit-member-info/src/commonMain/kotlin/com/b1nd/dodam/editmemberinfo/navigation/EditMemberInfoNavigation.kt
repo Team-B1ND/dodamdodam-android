@@ -21,20 +21,26 @@ const val EDIT_MEMBER_INFO_ROUTE = "login"
 
 fun NavController.navigationToEditMemberInfo(
     profileImage: String?,
+    name: String,
+    phone: String,
+    email: String,
     navOptions: NavOptions? = androidx.navigation.navOptions {
         launchSingleTop = true
     },
 ) {
     val image = (profileImage ?: "default").toByteArray().encodeBase64()
-    navigate("$EDIT_MEMBER_INFO_ROUTE/$image", navOptions)
+    navigate("$EDIT_MEMBER_INFO_ROUTE/$image/$name/$email/$phone", navOptions)
 }
 
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.editMemberInfoScreen(popBackStack: () -> Unit) {
     composable(
-        route = "$EDIT_MEMBER_INFO_ROUTE/{image}",
+        route = "$EDIT_MEMBER_INFO_ROUTE/{image}/{name}/{email}/{phone}",
         arguments = listOf(
-            navArgument("image") { type = NavType.StringType }
+            navArgument("image") { type = NavType.StringType },
+            navArgument("name") { type = NavType.StringType },
+            navArgument("email") { type = NavType.StringType },
+            navArgument("phone") { type = NavType.StringType },
         ),
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -43,9 +49,15 @@ fun NavGraphBuilder.editMemberInfoScreen(popBackStack: () -> Unit) {
     ) {
         val encodedImage = it.arguments?.getString("image") ?: "default"
         val profileImage = encodedImage.decodeBase64String()
+        val name = it.arguments?.getString("name") ?: ""
+        val email = it.arguments?.getString("email") ?: ""
+        val phone = it.arguments?.getString("phone") ?: ""
         EditMemberInfoScreen(
             profileImage = profileImage,
-            popBackStack = popBackStack
+            popBackStack = popBackStack,
+            name = name,
+            email = email,
+            phone = phone
         )
     }
 }

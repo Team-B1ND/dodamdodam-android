@@ -31,6 +31,8 @@ class SettingViewModel : ViewModel(), KoinComponent {
                                 isLoading = false,
                                 name = result.data.name,
                                 profile = result.data.profileImage,
+                                email = result.data.email,
+                                phone = result.data.phone
                             )
                         }
                     }
