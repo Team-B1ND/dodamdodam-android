@@ -2,6 +2,7 @@ package com.b1nd.dodam.setting
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -40,8 +42,10 @@ import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DividerType
+import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButtonDialog
 import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamDivider
@@ -176,10 +180,10 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(56.dp)
+                                .size(64.dp)
                                 .background(
                                     brush = shimmerEffect(),
-                                    shape = DodamTheme.shapes.medium,
+                                    shape = CircleShape,
                                 ),
                         )
 
@@ -208,25 +212,21 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        if (uiState.profile != null && uiState.profile != "") {
-                            AsyncImage(
-                                modifier = Modifier
-                                    .clip(DodamTheme.shapes.medium)
-                                    .size(56.dp),
-                                model = uiState.profile,
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                            )
-                        } else {
-                            Image(
-                                modifier = Modifier
-                                    .clip(DodamTheme.shapes.medium)
-                                    .size(56.dp),
-                                bitmap = DefaultProfile,
-                                contentDescription = "프로필 이미지",
-                                contentScale = ContentScale.Crop,
-                            )
-                        }
+                        val borderColor = DodamTheme.colors.lineAlternative
+                        DodamAvatar(
+                            avatarSize = AvatarSize.ExtraLarge,
+                            contentDescription = "프로필 이미지",
+                            model = uiState.profile ,
+                            modifier = Modifier
+                                .`if`(uiState.profile.isNullOrEmpty()) {
+                                    border(
+                                        width = 1.dp,
+                                        color = borderColor,
+                                        shape = CircleShape
+                                    )
+                                },
+                            contentScale = ContentScale.Crop
+                        )
 
                         Column {
                             Text(

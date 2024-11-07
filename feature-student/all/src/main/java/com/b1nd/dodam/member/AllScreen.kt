@@ -2,6 +2,7 @@ package com.b1nd.dodam.member
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -39,7 +41,10 @@ import com.b1nd.dodam.dds.foundation.DodamIcons
 import com.b1nd.dodam.dds.style.BodyLarge
 import com.b1nd.dodam.dds.style.GearIcon
 import com.b1nd.dodam.dds.style.LabelLarge
-import com.b1nd.dodam.dds.theme.DodamTheme
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.AvatarSize
+import com.b1nd.dodam.designsystem.component.DodamAvatar
+import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.BarChart
 import com.b1nd.dodam.ui.icons.ColoredBus
@@ -80,15 +85,15 @@ fun AllScreen(
                     }
                 },
                 colors = TopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    scrolledContainerColor = MaterialTheme.colorScheme.background,
-                    navigationIconContentColor = MaterialTheme.colorScheme.background,
+                    containerColor = DodamTheme.colors.backgroundNeutral,
+                    scrolledContainerColor = DodamTheme.colors.backgroundNeutral,
+                    navigationIconContentColor = DodamTheme.colors.backgroundNeutral,
                     titleContentColor = MaterialTheme.colorScheme.onBackground,
                     actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 ),
             )
         },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -102,10 +107,10 @@ fun AllScreen(
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(70.dp)
+                            .size(64.dp)
                             .background(
                                 shimmerEffect(),
-                                RoundedCornerShape(12.dp),
+                                CircleShape,
                             ),
                     )
                     Spacer(modifier = Modifier.width(16.dp))
@@ -132,25 +137,21 @@ fun AllScreen(
                 ) {
                     uiState.memberInfo?.let { myInfo ->
                         Box {
-                            if (myInfo.profileImage != null) {
-                                AsyncImage(
-                                    model = myInfo.profileImage,
-                                    contentDescription = "profile",
-                                    modifier = Modifier
-                                        .clip(shape = RoundedCornerShape(12.dp))
-                                        .size(70.dp),
-                                    contentScale = ContentScale.Crop,
-                                )
-                            } else {
-                                Image(
-                                    bitmap = DefaultProfile,
-                                    contentDescription = "profile",
-                                    modifier = Modifier
-                                        .clip(shape = RoundedCornerShape(12.dp))
-                                        .size(70.dp),
-                                    contentScale = ContentScale.Crop,
-                                )
-                            }
+                            val borderColor = DodamTheme.colors.lineAlternative
+                            DodamAvatar(
+                                avatarSize = AvatarSize.ExtraLarge,
+                                contentDescription = "프로필 이미지",
+                                model = myInfo.profileImage ,
+                                modifier = Modifier
+                                    .`if`(myInfo.profileImage.isNullOrEmpty()) {
+                                        border(
+                                            width = 1.dp,
+                                            color = borderColor,
+                                            shape = CircleShape
+                                        )
+                                    },
+                                contentScale = ContentScale.Crop
+                            )
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         val classInfo = myInfo.student

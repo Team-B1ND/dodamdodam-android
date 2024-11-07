@@ -100,7 +100,7 @@ internal fun AllScreen(
                     if (uiState.isLoading) {
                         Box(
                             modifier = Modifier
-                                .size(70.dp)
+                                .size(64.dp)
                                 .background(
                                     brush = shimmerEffect(),
                                     shape = DodamTheme.shapes.extraSmall,
