@@ -31,10 +31,10 @@ jobs:
 
     - name: 버전 이름 추출
       id: extract_version
-      run: echo "version=v$(echo '${{ env.TITLE }}' | grep -oP 'release v\\K[0-9]+\\.[0-9]+\\.[0-9]+')"
+      run: echo "version=v$(echo '${{ env.TITLE }}' | grep -oP 'release v\\K[0-9]+\\.[0-9]+\\.[0-9]+')" >> $GITHUB_ENV
 
     - name: 버전 출력
-      run: echo "Extract Version ${{ env.version }}"
+      run: echo "Extract Version ${{ steps.extract_version.outputs.version }}"
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
