@@ -43,13 +43,33 @@ jobs:
       if: startsWith(env.TITLE, 'Student')
       run: ./gradlew dodam-student:spotlessCheck
 
-    - name: Assemble Release Bundle
-      run: ./gradlew bundleRelease
+    - name: Run Teacher spotless
+      if: startsWith(env.TITLE, 'Teacher')
+      run: ./gradlew dodam-teacher-android:spotlessCheck
 
-    - name: Sign Release
+    - name: Assemble Student Release Bundle
+      if: startsWith(env.TITLE, 'Student')
+      run: ./gradlew dodam-student:bundleRelease
+
+    - name: Assemble Teacher Release Bundle
+      if: startsWith(env.TITLE, 'Teacher')
+      run: ./gradlew dodam-teacher-android:bundleRelease
+
+    - name: Sign Student Release
+      if: startsWith(env.TITLE, 'Student')
       uses: r0adkll/sign-android-release@v1
       with:
         releaseDirectory: ./dodam-student/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.DODAM_KEYSTORE }}
+        keyStorePassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
+        alias: ${{ secrets.DODAM_KEYSTORE_ALIAS }}
+        keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
+
+    - name: Sign Teacher Release
+      if: startsWith(env.TITLE, 'Teacher')
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: ./dodam-teacher-android/build/outputs/bundle/release
         signingKeyBase64: ${{ secrets.DODAM_KEYSTORE }}
         keyStorePassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
         alias: ${{ secrets.DODAM_KEYSTORE_ALIAS }}
@@ -61,12 +81,25 @@ jobs:
         mkdir whatsNewDirectory
     
 
-    - name: Deploy to Internal Channel
+    - name: Student Dodam Deploy to Production Channel
+      if: startsWith(env.TITLE, 'Student')
       uses: r0adkll/upload-google-play@v1
       with:
         serviceAccountJson: service_account.json
         packageName: com.b1nd.dodam.student
         releaseFiles: ./dodam-student/build/outputs/bundle/release/dodam-student-release.aab
+        track: production
+        status: completed
+        inAppUpdatePriority: 2
+        whatsNewDirectory: whatsNewDirectory/
+
+    - name: Teacher Dodam Deploy to Production Channel
+      if: startsWith(env.TITLE, 'Teacher')
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJson: service_account.json
+        packageName: com.b1nd.dodam.teacher
+        releaseFiles: ./dodam-teacher-android/build/outputs/bundle/release/dodam-teacher-android-release.aab
         track: production
         status: completed
         inAppUpdatePriority: 2
