@@ -36,7 +36,9 @@ import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.editmemberinfo.model.EditMemberInfoSideEffect
 import com.b1nd.dodam.editmemberinfo.viewmodel.EditMemberInfoViewModel
+import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.icons.Plus
 import com.b1nd.dodam.ui.util.addFocusCleaner
@@ -98,6 +100,13 @@ internal fun EditMemberInfoScreen(
         viewModel.setProfile(
             if (profileImage == "default") null else profileImage
         )
+        viewModel.sideEffect.collect{
+            when(it){
+                EditMemberInfoSideEffect.SuccessEditMemberInfo -> {
+                    popBackStack()
+                }
+            }
+        }
     }
 
     Scaffold(
