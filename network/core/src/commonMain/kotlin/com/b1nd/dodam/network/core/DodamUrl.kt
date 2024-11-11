@@ -15,6 +15,7 @@ object DodamUrl {
     const val BANNER = "$BASE_URL/banner"
     const val POINT = "$BASE_URL/point"
     const val GET_BUNDLE_ID = "https://itunes.apple.com/lookup?bundleId=com.b1nd.dodam.teacher&country=br"
+    const val UPLOAD = "$BASE_URL/upload"
 
     object Meal {
         const val MONTH = "$MEAL/month"
@@ -34,6 +35,7 @@ object DodamUrl {
         const val MY = "$MEMBER/my"
         const val DEACTIVATION = "$MEMBER/deactivate"
         const val STATUS = "$MEMBER/status"
+        const val EDIT = "$MEMBER/info"
     }
 
     object WakeupSong {

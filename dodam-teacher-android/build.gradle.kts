@@ -57,6 +57,8 @@ kotlin {
             implementation(projects.network.bundleidInfo)
             implementation(projects.data.bundleidInfo)
             implementation(projects.feature.editMemberInfo)
+            implementation(projects.network.upload)
+            implementation(projects.data.upload)
         }
 
         androidMain.dependencies {

@@ -21,6 +21,7 @@ kotlin {
         implementation(projects.common)
         implementation(projects.ui)
         implementation(projects.logging)
+        implementation(projects.data.upload)
         implementation("com.mohamedrejeb.calf:calf-file-picker:0.5.5")
         implementation("com.mohamedrejeb.calf:calf-permissions:0.5.5")
     }
