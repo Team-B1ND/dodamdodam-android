@@ -72,6 +72,10 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
 
     var count by remember { mutableIntStateOf(0) }
 
+    LaunchedEffect(key1 = true){
+        viewModel.getMyInfo()
+    }
+
     LaunchedEffect(count) {
         if (count == 10) {
             showEasterEggDialog = true

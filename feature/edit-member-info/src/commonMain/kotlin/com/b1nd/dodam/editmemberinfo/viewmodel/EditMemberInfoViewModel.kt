@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.upload.UploadRepository
+import com.b1nd.dodam.editmemberinfo.model.EditMemberInfoSideEffect
 import com.b1nd.dodam.editmemberinfo.model.ProfileModel
 import com.b1nd.dodam.member.MemberRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,6 +22,9 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
 
     private val _uiState = MutableStateFlow(ProfileModel())
     val uiState = _uiState.asStateFlow()
+
+    private val _sideEffect = MutableSharedFlow<EditMemberInfoSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
     fun setProfile(
         profileImage: String?
@@ -45,6 +51,7 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
             ).collect {
                 when (it) {
                     is Result.Success -> {
+                        _sideEffect.emit(EditMemberInfoSideEffect.SuccessEditMemberInfo)
                         println(it.data)
                     }
 
