@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,25 +29,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.editmemberinfo.viewmodel.EditMemberInfoViewModel
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.icons.Plus
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import com.mohamedrejeb.calf.core.LocalPlatformContext
+import com.mohamedrejeb.calf.io.getName
 import com.mohamedrejeb.calf.io.getPath
 import com.mohamedrejeb.calf.io.readByteArray
 import com.mohamedrejeb.calf.picker.FilePickerFileType
 import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
 import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun EditMemberInfoScreen(
+    viewModel: EditMemberInfoViewModel = koinViewModel(),
     profileImage: String,
     popBackStack: () -> Unit,
     name: String,
@@ -58,6 +64,8 @@ internal fun EditMemberInfoScreen(
     var email by remember { mutableStateOf(email) }
     var phone by remember { mutableStateOf(phone) }
     val focusManager = LocalFocusManager.current
+
+    val uiState by viewModel.uiState.collectAsState()
 
     val scope = rememberCoroutineScope()
     val context = LocalPlatformContext.current
@@ -71,16 +79,25 @@ internal fun EditMemberInfoScreen(
         selectionMode = FilePickerSelectionMode.Multiple,
         onResult = { files ->
             scope.launch {
-                files.firstOrNull()?.let {
-                    byteArray = it.readByteArray(context)
-                    platformSpecificFilePath = it.getPath(context) ?:""
+                files.firstOrNull()?.let { file ->
+                    byteArray = file.readByteArray(context)
+                    platformSpecificFilePath = file.getPath(context) ?: ""
+                    file.getName(context)
+                    viewModel.fileUpload(
+                        fileByteArray = byteArray,
+                        fileMimeType = file.getPath(context) ?: "",
+                        fileName = file.getName(context) ?: ""
+                    )
                 }
             }
         }
     )
 
-    LaunchedEffect(true){
+    LaunchedEffect(true) {
         platformSpecificFilePath = profileImage
+        viewModel.setProfile(
+            if (profileImage == "default") null else profileImage
+        )
     }
 
     Scaffold(
@@ -110,7 +127,7 @@ internal fun EditMemberInfoScreen(
                     DodamAvatar(
                         avatarSize = AvatarSize.XXL,
                         contentDescription = "프로필 이미지",
-                        model = if (platformSpecificFilePath == "default") null else platformSpecificFilePath ,
+                        model = if (uiState.image == "default") null else uiState.image,
                         modifier = Modifier
                             .`if`(platformSpecificFilePath == "default") {
                                 border(
@@ -175,7 +192,14 @@ internal fun EditMemberInfoScreen(
                 }
             }
             DodamButton(
-                onClick = {},
+                onClick = {
+                    viewModel.editMember(
+                        email = email,
+                        name = name,
+                        phone = phone,
+                        profileImage = uiState.image
+                    )
+                },
                 text = "수정 완료",
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
