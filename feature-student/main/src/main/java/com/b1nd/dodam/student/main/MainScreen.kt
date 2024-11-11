@@ -100,7 +100,7 @@ internal fun MainScreen(
             allScreen(
                 navigateToSetting = navigateToSetting,
                 navigateToMyPoint = navigateToMyPoint,
-                navigateToAddBus =  navigateToAddBus,
+                navigateToAddBus = navigateToAddBus,
                 navigateToOuting = {
                     navController.navigateToOuting(
                         navOptions = navOptions {
@@ -109,7 +109,7 @@ internal fun MainScreen(
                             }
                             launchSingleTop = true
                             restoreState = true
-                        }
+                        },
                     )
                 },
                 navigateToWakeUpSong = navigateToWakeUpSong,
