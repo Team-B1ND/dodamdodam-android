@@ -1,13 +1,13 @@
-name: Android CI
+name: Android Release CD
 
 on:
-  pull_request:
-    branches: ["develop"]
+  release:
+    types: [published]
 
 jobs:
-  cd-build:
+  release:
     env:
-      TITLE: ${{ github.event.pull_request.title }}
+      TITLE: ${{ github.event.release.name }}
       KEYSTORE: ${{ secrets.DODAM_KEYSTORE }}
 
     runs-on: ubuntu-latest
@@ -20,21 +20,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: gradle
-    - name: Check Env
-      run: |
-        echo '${{ env.KEYSTORE }}'
 
     - name: Generate Keystore File
       run: |
         echo '${{ env.KEYSTORE }}' | base64 --d > ./dodam.jks
         ls
-
-    - name: 버전 이름 추출
-      id: extract_version
-      run: echo "version=v$(echo '${{ env.TITLE }}' | grep -oP 'release v\\K[0-9]+\\.[0-9]+\\.[0-9]+')" >> $GITHUB_ENV
-
-    - name: 버전 출력
-      run: echo "Extract Version ${{ steps.extract_version.outputs.version }}"
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -76,10 +66,12 @@ jobs:
         keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
 
     - name: Setup Authorization With Google Play Store
+      run: echo '${{ secrets.DODAM_GOOGLE_PLAY_API_AUTH }}' > service_account.json
+
+    - name: Prepare Patch Notes
       run: |
-        echo '${{ secrets.DODAM_GOOGLE_PLAY_API_AUTH }}' > service_account.json
-        mkdir whatsNewDirectory
-    
+        mkdir -p whatsNewDirectory
+        echo "${{ github.event.release.body }}" > whatsNewDirectory/whatsnew-ko-KR   
 
     - name: Student Dodam Deploy to Production Channel
       if: startsWith(env.TITLE, 'Student')
