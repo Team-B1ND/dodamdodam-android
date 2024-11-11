@@ -243,9 +243,9 @@ fun DodamApp(
                         profileImage = profileImage,
                         name = name,
                         email = email,
-                        phone = phone
+                        phone = phone,
                     )
-                }
+                },
             )
             askWakeupSongScreen(
                 popBackStack = navController::popBackStack,
@@ -257,8 +257,8 @@ fun DodamApp(
             pointScreen(
                 popBackStack = navController::popBackStack,
             )
-            editMemberInfoScreen (
-                popBackStack = navController::popBackStack
+            editMemberInfoScreen(
+                popBackStack = navController::popBackStack,
             )
         }
     }

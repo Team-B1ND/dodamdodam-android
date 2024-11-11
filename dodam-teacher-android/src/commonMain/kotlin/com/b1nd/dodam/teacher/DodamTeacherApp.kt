@@ -258,18 +258,18 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             popBackStack = navHostController::popBackStack,
                             logout = exit,
                             versionInfo = getPlatformName(),
-                            navigationToEditMemberInfo = {profileImage, name, email, phone ->
+                            navigationToEditMemberInfo = { profileImage, name, email, phone ->
                                 navHostController.navigationToEditMemberInfo(
                                     profileImage = profileImage,
                                     name = name,
                                     email = email,
-                                    phone = phone
+                                    phone = phone,
                                 )
-                            }
+                            },
                         )
 
                         editMemberInfoScreen(
-                            popBackStack = navHostController::popBackStack
+                            popBackStack = navHostController::popBackStack,
                         )
                     }
 

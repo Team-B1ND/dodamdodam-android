@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class UploadResponse(
     val status: Int,
     val message: String,
-    val data: String
+    val data: String,
 )

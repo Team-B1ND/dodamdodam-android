@@ -31,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -39,7 +38,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import coil3.compose.AsyncImage
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.AvatarSize
@@ -53,14 +51,19 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import com.b1nd.dodam.ui.icons.DefaultProfile
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versionInfo: String = "3.2.0", popBackStack: () -> Unit, logout: () -> Unit, navigationToEditMemberInfo: (profileImage: String?, name: String, email: String, phone: String) -> Unit) {
+internal fun SettingScreen(
+    viewModel: SettingViewModel = koinViewModel(),
+    versionInfo: String = "3.2.0",
+    popBackStack: () -> Unit,
+    logout: () -> Unit,
+    navigationToEditMemberInfo: (profileImage: String?, name: String, email: String, phone: String) -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }
@@ -72,7 +75,7 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
 
     var count by remember { mutableIntStateOf(0) }
 
-    LaunchedEffect(key1 = true){
+    LaunchedEffect(key1 = true) {
         viewModel.getMyInfo()
     }
 
@@ -174,12 +177,14 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberBounceIndication(),
-                        onClick = { navigationToEditMemberInfo(
-                            uiState.profile,
-                            uiState.name,
-                            uiState.email,
-                            uiState.phone
-                        ) } ,
+                        onClick = {
+                            navigationToEditMemberInfo(
+                                uiState.profile,
+                                uiState.name,
+                                uiState.email,
+                                uiState.phone,
+                            )
+                        },
                     ),
             ) {
                 if (uiState.isLoading) {
@@ -225,16 +230,16 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
                         DodamAvatar(
                             avatarSize = AvatarSize.ExtraLarge,
                             contentDescription = "프로필 이미지",
-                            model = uiState.profile ,
+                            model = uiState.profile,
                             modifier = Modifier
                                 .`if`(uiState.profile.isNullOrEmpty()) {
                                     border(
                                         width = 1.dp,
                                         color = borderColor,
-                                        shape = CircleShape
+                                        shape = CircleShape,
                                     )
                                 },
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
                         )
 
                         Column {

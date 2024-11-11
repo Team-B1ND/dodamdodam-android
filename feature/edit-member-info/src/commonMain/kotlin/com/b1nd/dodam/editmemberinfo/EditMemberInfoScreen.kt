@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,7 +37,6 @@ import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.editmemberinfo.model.EditMemberInfoSideEffect
 import com.b1nd.dodam.editmemberinfo.viewmodel.EditMemberInfoViewModel
-import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.icons.Plus
 import com.b1nd.dodam.ui.util.addFocusCleaner
@@ -59,9 +57,8 @@ internal fun EditMemberInfoScreen(
     popBackStack: () -> Unit,
     name: String,
     email: String,
-    phone: String
+    phone: String,
 ) {
-
     var name by remember { mutableStateOf(name) }
     var email by remember { mutableStateOf(email) }
     var phone by remember { mutableStateOf(phone) }
@@ -71,7 +68,6 @@ internal fun EditMemberInfoScreen(
 
     val scope = rememberCoroutineScope()
     val context = LocalPlatformContext.current
-
 
     var byteArray by remember { mutableStateOf(ByteArray(0)) }
     var platformSpecificFilePath by remember { mutableStateOf("") }
@@ -88,20 +84,20 @@ internal fun EditMemberInfoScreen(
                     viewModel.fileUpload(
                         fileByteArray = byteArray,
                         fileMimeType = file.getPath(context) ?: "",
-                        fileName = file.getName(context) ?: ""
+                        fileName = file.getName(context) ?: "",
                     )
                 }
             }
-        }
+        },
     )
 
     LaunchedEffect(true) {
         platformSpecificFilePath = profileImage
         viewModel.setProfile(
-            if (profileImage == "default") null else profileImage
+            if (profileImage == "default") null else profileImage,
         )
-        viewModel.sideEffect.collect{
-            when(it){
+        viewModel.sideEffect.collect {
+            when (it) {
                 EditMemberInfoSideEffect.SuccessEditMemberInfo -> {
                     popBackStack()
                 }
@@ -117,7 +113,7 @@ internal fun EditMemberInfoScreen(
                 title = "정보수정",
                 onBackClick = popBackStack,
             )
-        }
+        },
     ) {
         Box(
             modifier = Modifier
@@ -125,11 +121,11 @@ internal fun EditMemberInfoScreen(
                 .background(DodamTheme.colors.backgroundNeutral)
                 .padding(it)
                 .padding(horizontal = 16.dp)
-                .padding(vertical = 12.dp)
+                .padding(vertical = 12.dp),
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 val borderColor = DodamTheme.colors.lineAlternative
                 Box {
@@ -142,10 +138,10 @@ internal fun EditMemberInfoScreen(
                                 border(
                                     width = 1.dp,
                                     color = borderColor,
-                                    shape = CircleShape
+                                    shape = CircleShape,
                                 )
                             },
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
                     )
                     Image(
                         imageVector = Plus,
@@ -155,13 +151,13 @@ internal fun EditMemberInfoScreen(
                             .align(Alignment.BottomEnd)
                             .clickable {
                                 pickerLauncher.launch()
-                            }
+                            },
                     )
                 }
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 24.dp)
+                        .padding(top = 24.dp),
                 ) {
                     DodamTextField(
                         value = name,
@@ -206,7 +202,7 @@ internal fun EditMemberInfoScreen(
                         email = email,
                         name = name,
                         phone = phone,
-                        profileImage = uiState.image
+                        profileImage = uiState.image,
                     )
                 },
                 text = "수정 완료",

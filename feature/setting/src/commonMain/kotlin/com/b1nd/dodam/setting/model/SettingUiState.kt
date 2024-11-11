@@ -5,5 +5,5 @@ data class SettingUiState(
     val profile: String? = null,
     val name: String = "",
     val email: String = "",
-    val phone: String = ""
+    val phone: String = "",
 )
