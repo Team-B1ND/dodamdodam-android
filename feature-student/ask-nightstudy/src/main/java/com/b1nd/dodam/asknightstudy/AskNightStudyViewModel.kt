@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.asknightstudy.model.AskNightStudyUiState
 import com.b1nd.dodam.common.exception.BadRequestException
+import com.b1nd.dodam.common.exception.ConflictException
 import com.b1nd.dodam.common.exception.ForbiddenException
 import com.b1nd.dodam.common.exception.NotFoundException
 import com.b1nd.dodam.common.result.Result
@@ -64,8 +65,9 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
                                 message = result.error.message.toString(),
                             )
                         }
+
                         when (result.error) {
-                            is ForbiddenException, is NotFoundException, is BadRequestException -> {
+                            is ForbiddenException, is NotFoundException, is BadRequestException, is ConflictException -> {
                                 _event.emit(Event.ShowDialog)
                             }
                         }
