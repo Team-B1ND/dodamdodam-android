@@ -7,5 +7,5 @@ data class EditMemberInfoRequest(
     val email: String,
     val name: String,
     val phone: String,
-    val profileImage: String?
+    val profileImage: String?,
 )

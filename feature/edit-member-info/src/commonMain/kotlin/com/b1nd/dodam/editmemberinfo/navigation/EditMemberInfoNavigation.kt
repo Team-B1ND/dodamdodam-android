@@ -9,13 +9,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.b1nd.dodam.editmemberinfo.EditMemberInfoScreen
-import io.ktor.http.encodeURLPath
 import io.ktor.util.decodeBase64String
 import io.ktor.util.encodeBase64
 import io.ktor.utils.io.core.toByteArray
-import kotlinx.io.bytestring.encodeToByteString
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 const val EDIT_MEMBER_INFO_ROUTE = "login"
 
@@ -57,7 +53,7 @@ fun NavGraphBuilder.editMemberInfoScreen(popBackStack: () -> Unit) {
             popBackStack = popBackStack,
             name = name,
             email = email,
-            phone = phone
+            phone = phone,
         )
     }
 }

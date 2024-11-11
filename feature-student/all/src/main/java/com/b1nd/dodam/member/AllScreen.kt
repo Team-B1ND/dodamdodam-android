@@ -29,12 +29,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.dds.component.DodamTopAppBar
 import com.b1nd.dodam.dds.component.button.DodamIconButton
@@ -53,7 +51,6 @@ import com.b1nd.dodam.ui.icons.ColoredMegaphone
 import com.b1nd.dodam.ui.icons.ColoredMusicalNote
 import com.b1nd.dodam.ui.icons.ColoredPencil
 import com.b1nd.dodam.ui.icons.ColoredTent
-import com.b1nd.dodam.ui.icons.DefaultProfile
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -146,16 +143,16 @@ fun AllScreen(
                             DodamAvatar(
                                 avatarSize = AvatarSize.ExtraLarge,
                                 contentDescription = "프로필 이미지",
-                                model = myInfo.profileImage ,
+                                model = myInfo.profileImage,
                                 modifier = Modifier
                                     .`if`(myInfo.profileImage.isNullOrEmpty()) {
                                         border(
                                             width = 1.dp,
                                             color = borderColor,
-                                            shape = CircleShape
+                                            shape = CircleShape,
                                         )
                                     },
-                                contentScale = ContentScale.Crop
+                                contentScale = ContentScale.Crop,
                             )
                         }
                         Spacer(modifier = Modifier.width(16.dp))

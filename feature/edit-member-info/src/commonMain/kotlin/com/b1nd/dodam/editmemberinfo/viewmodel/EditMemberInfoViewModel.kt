@@ -26,28 +26,21 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
     private val _sideEffect = MutableSharedFlow<EditMemberInfoSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
-    fun setProfile(
-        profileImage: String?
-    ) {
+    fun setProfile(profileImage: String?) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(
-                image = profileImage
+                image = profileImage,
             )
         }
     }
 
-    fun editMember(
-        email: String,
-        name: String,
-        phone: String,
-        profileImage: String?
-    ) {
+    fun editMember(email: String, name: String, phone: String, profileImage: String?) {
         viewModelScope.launch {
             memberRepository.editMemberInfo(
                 name = name,
                 email = email,
                 phone = phone,
-                profileImage = profileImage
+                profileImage = profileImage,
             ).collect {
                 when (it) {
                     is Result.Success -> {
@@ -65,16 +58,12 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun fileUpload(
-        fileByteArray: ByteArray,
-        fileMimeType: String,
-        fileName: String
-    ) {
+    fun fileUpload(fileByteArray: ByteArray, fileMimeType: String, fileName: String) {
         viewModelScope.launch {
             uploadRepository.upload(
                 fileName = fileName,
                 fileMimeType = fileMimeType,
-                byteArray = fileByteArray
+                byteArray = fileByteArray,
             ).collect {
                 when (it) {
                     is Result.Error -> {
@@ -85,7 +74,7 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
                         _uiState.update { ui ->
                             println(it.data)
                             ui.copy(
-                                image = it.data.profileImage
+                                image = it.data.profileImage,
                             )
                         }
                     }

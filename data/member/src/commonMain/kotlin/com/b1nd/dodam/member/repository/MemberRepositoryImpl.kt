@@ -9,7 +9,6 @@ import com.b1nd.dodam.member.datasource.MemberDataSource
 import com.b1nd.dodam.member.model.ActiveStatus
 import com.b1nd.dodam.member.model.MemberInfo
 import com.b1nd.dodam.member.model.toModel
-import com.b1nd.dodam.network.core.model.DefaultResponse
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -45,13 +44,8 @@ internal class MemberRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun editMemberInfo(
-        name: String,
-        email: String,
-        phone: String,
-        profileImage: String?
-    ): Flow<Result<Unit>> {
-        return flow{
+    override suspend fun editMemberInfo(name: String, email: String, phone: String, profileImage: String?): Flow<Result<Unit>> {
+        return flow {
             emit(network.editMemberInfo(name, email, phone, profileImage))
         }
             .asResult()

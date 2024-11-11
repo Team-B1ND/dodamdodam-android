@@ -101,7 +101,7 @@ class DodamApplication : Application() {
                     bundleIdInfoDataSourceModule,
                     editMemberInfoViewModelModule,
                     uploadDatasourceModule,
-                    uploadRepositoryModule
+                    uploadRepositoryModule,
                 ) + mainViewModelModules,
             )
         }

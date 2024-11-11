@@ -4,5 +4,5 @@ data class ProfileModel(
     val name: String = "",
     val email: String = "",
     val phone: String = "",
-    val image: String? = null
+    val image: String? = null,
 )

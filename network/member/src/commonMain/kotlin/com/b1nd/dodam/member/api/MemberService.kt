@@ -40,21 +40,16 @@ internal class MemberService(
         }
     }
 
-    override suspend fun editMemberInfo(
-        name: String,
-        email: String,
-        phone: String,
-        profileImage: String?
-    ) {
+    override suspend fun editMemberInfo(name: String, email: String, phone: String, profileImage: String?) {
         return defaultSafeRequest {
-            client.patch(DodamUrl.Member.EDIT){
+            client.patch(DodamUrl.Member.EDIT) {
                 setBody(
                     EditMemberInfoRequest(
                         name = name,
-                        email =  email,
+                        email = email,
                         phone = phone,
-                        profileImage = profileImage
-                    )
+                        profileImage = profileImage,
+                    ),
                 )
             }.body<DefaultResponse>()
         }

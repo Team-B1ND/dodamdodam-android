@@ -83,7 +83,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             bundleIdInfoDataSourceModule,
             editMemberInfoViewModelModule,
             uploadDatasourceModule,
-            uploadRepositoryModule
+            uploadRepositoryModule,
         )
         block()
     }

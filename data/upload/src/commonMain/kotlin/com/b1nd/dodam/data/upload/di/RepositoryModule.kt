@@ -6,7 +6,6 @@ import com.b1nd.dodam.data.upload.repository.UploadRepositoryImpl
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-
 val uploadRepositoryModule = module {
     single<UploadRepository> {
         UploadRepositoryImpl(
