@@ -21,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -41,6 +42,7 @@ import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
+import com.b1nd.dodam.outing.nanigation.navigateToOuting
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
@@ -146,9 +148,6 @@ fun DodamApp(
                 navigateToMyPoint = navController::navigateToPoint,
                 navigateToAddBus = {
                     navController.navigateToBus()
-                },
-                navigateToSchedule = {
-                    TODO("navigate to schedule screen")
                 },
                 navigateToWakeUpSong = {
                     navController.navigateToWakeupSong()
