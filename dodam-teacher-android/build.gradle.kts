@@ -78,7 +78,7 @@ android {
         applicationId = "com.b1nd.dodam.teacher"
         minSdk = 28
         targetSdk = 34
-        versionCode = 1
+        versionCode = 2
         versionName = "3.0.0"
 
     }
