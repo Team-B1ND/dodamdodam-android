@@ -49,7 +49,6 @@ import com.b1nd.dodam.ui.icons.ColoredBus
 import com.b1nd.dodam.ui.icons.ColoredMegaphone
 import com.b1nd.dodam.ui.icons.ColoredMusicalNote
 import com.b1nd.dodam.ui.icons.ColoredTent
-import com.b1nd.dodam.ui.icons.DefaultProfile
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
 
@@ -72,11 +71,11 @@ fun AllScreen(
             DodamDefaultTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = "전체",
-                actionIcons =  persistentListOf(
+                actionIcons = persistentListOf(
                     ActionIcon(
                         icon = DodamIcons.Gear,
-                        onClick = navigateToSetting
-                    )
+                        onClick = navigateToSetting,
+                    ),
                 ),
             )
         },
@@ -105,7 +104,7 @@ fun AllScreen(
                     Spacer(modifier = Modifier.width(16.dp))
                     Column(
                         modifier = Modifier.padding(top = 9.5.dp),
-                        horizontalAlignment = Alignment.Start
+                        horizontalAlignment = Alignment.Start,
                     ) {
                         Box(
                             modifier = Modifier
@@ -148,16 +147,16 @@ fun AllScreen(
                                         .border(
                                             width = 1.dp,
                                             color = DodamTheme.colors.lineAlternative,
-                                            shape = CircleShape
+                                            shape = CircleShape,
                                         ),
-                                    contentAlignment = Alignment.Center
+                                    contentAlignment = Alignment.Center,
                                 ) {
                                     Image(
                                         imageVector = DodamIcons.Person.value,
                                         contentDescription = "profile",
                                         modifier = Modifier.size(40.dp),
                                         contentScale = ContentScale.Crop,
-                                        colorFilter = ColorFilter.tint(DodamTheme.colors.fillAlternative)
+                                        colorFilter = ColorFilter.tint(DodamTheme.colors.fillAlternative),
                                     )
                                 }
                             }
@@ -187,7 +186,7 @@ fun AllScreen(
                 AllCardView(
                     imageVector = BarChart,
                     text = "내 상벌점 보기",
-                    onClick = navigateToMyPoint
+                    onClick = navigateToMyPoint,
                 )
 
                 DodamDivider(type = DividerType.Normal)
@@ -195,25 +194,25 @@ fun AllScreen(
                 AllCardView(
                     imageVector = ColoredBus,
                     text = "귀가 버스 신청하기",
-                    onClick = navigateToAddBus
+                    onClick = navigateToAddBus,
                 )
 
                 AllCardView(
                     imageVector = ColoredTent,
                     text = "외출/외박 확인하기",
-                    onClick = navigateToOuting
+                    onClick = navigateToOuting,
                 )
 
                 AllCardView(
                     imageVector = ColoredMegaphone,
                     text = "기상송 확인하기",
-                    onClick = navigateToWakeUpSong
+                    onClick = navigateToWakeUpSong,
                 )
 
                 AllCardView(
                     imageVector = ColoredMusicalNote,
                     text = "기상송 신청하기",
-                    onClick = navigateToAddWakeUpSong
+                    onClick = navigateToAddWakeUpSong,
                 )
             }
         }
@@ -228,13 +227,13 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
             .clickable(
                 indication = rememberBounceIndication(),
                 interactionSource = remember { MutableInteractionSource() },
-                onClick = onClick
+                onClick = onClick,
             )
             .padding(
                 top = 4.dp,
                 bottom = 4.dp,
                 start = 8.dp,
-                end = 4.dp
+                end = 4.dp,
             ),
     ) {
         Box(
@@ -242,9 +241,9 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
                 .size(32.dp)
                 .background(
                     color = DodamTheme.colors.fillAlternative,
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(8.dp),
                 ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Image(
                 imageVector = imageVector,
@@ -257,7 +256,7 @@ fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
         Text(
             text = text,
             color = DodamTheme.colors.labelNormal,
-            style = DodamTheme.typography.headlineMedium()
+            style = DodamTheme.typography.headlineMedium(),
         )
         Spacer(modifier = Modifier.weight(1f))
         Icon(
