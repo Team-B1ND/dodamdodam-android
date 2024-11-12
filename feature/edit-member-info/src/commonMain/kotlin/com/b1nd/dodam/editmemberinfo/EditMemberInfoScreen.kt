@@ -81,6 +81,7 @@ internal fun EditMemberInfoScreen(
                     byteArray = file.readByteArray(context)
                     platformSpecificFilePath = file.getPath(context) ?: ""
                     file.getName(context)
+                    viewModel.setProfile(profileImage)
                     viewModel.fileUpload(
                         fileByteArray = byteArray,
                         fileMimeType = file.getPath(context) ?: "",
