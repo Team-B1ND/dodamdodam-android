@@ -147,9 +147,6 @@ fun DodamApp(
                 navigateToAddBus = {
                     navController.navigateToBus()
                 },
-                navigateToSchedule = {
-                    TODO("navigate to schedule screen")
-                },
                 navigateToWakeUpSong = {
                     navController.navigateToWakeupSong()
                 },
