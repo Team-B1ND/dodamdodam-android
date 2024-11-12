@@ -9,11 +9,15 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.b1nd.dodam.editmemberinfo.EditMemberInfoScreen
+import io.ktor.http.URLBuilder
+import io.ktor.http.Url
+import io.ktor.http.encodeURLParameter
 import io.ktor.util.decodeBase64String
 import io.ktor.util.encodeBase64
 import io.ktor.utils.io.core.toByteArray
+import net.thauvin.erik.urlencoder.UrlEncoderUtil
 
-const val EDIT_MEMBER_INFO_ROUTE = "login"
+const val EDIT_MEMBER_INFO_ROUTE = "edit_member_info"
 
 fun NavController.navigationToEditMemberInfo(
     profileImage: String?,
@@ -24,7 +28,11 @@ fun NavController.navigationToEditMemberInfo(
         launchSingleTop = true
     },
 ) {
-    val image = (profileImage ?: "default").toByteArray().encodeBase64()
+    val image = if (profileImage.isNullOrEmpty()){
+        "default"
+    }else{
+        UrlEncoderUtil.encode(profileImage)
+    }
     navigate("$EDIT_MEMBER_INFO_ROUTE/$image/$name/$email/$phone", navOptions)
 }
 
@@ -44,7 +52,7 @@ fun NavGraphBuilder.editMemberInfoScreen(popBackStack: () -> Unit) {
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         val encodedImage = it.arguments?.getString("image") ?: "default"
-        val profileImage = encodedImage.decodeBase64String()
+        val profileImage = UrlEncoderUtil.decode(encodedImage)
         val name = it.arguments?.getString("name") ?: ""
         val email = it.arguments?.getString("email") ?: ""
         val phone = it.arguments?.getString("phone") ?: ""
