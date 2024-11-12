@@ -43,6 +43,7 @@ import com.b1nd.dodam.ui.util.addFocusCleaner
 import com.mohamedrejeb.calf.core.LocalPlatformContext
 import com.mohamedrejeb.calf.io.getName
 import com.mohamedrejeb.calf.io.getPath
+import com.mohamedrejeb.calf.io.isFile
 import com.mohamedrejeb.calf.io.readByteArray
 import com.mohamedrejeb.calf.picker.FilePickerFileType
 import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
@@ -71,6 +72,7 @@ internal fun EditMemberInfoScreen(
 
     var byteArray by remember { mutableStateOf(ByteArray(0)) }
     var platformSpecificFilePath by remember { mutableStateOf("") }
+    var fileName by remember { mutableStateOf("") }
 
     val pickerLauncher = rememberFilePickerLauncher(
         type = FilePickerFileType.Image,
@@ -80,12 +82,12 @@ internal fun EditMemberInfoScreen(
                 files.firstOrNull()?.let { file ->
                     byteArray = file.readByteArray(context)
                     platformSpecificFilePath = file.getPath(context) ?: ""
-                    file.getName(context)
+                    fileName = file.getName(context)?:""
                     viewModel.setProfile(profileImage)
                     viewModel.fileUpload(
                         fileByteArray = byteArray,
-                        fileMimeType = file.getPath(context) ?: "",
-                        fileName = file.getName(context) ?: "",
+                        fileMimeType = fileName.split(".")[1],
+                        fileName = fileName.split(".")[0],
                     )
                 }
             }
