@@ -175,6 +175,7 @@ internal fun SettingScreen(
                     .padding(bottom = 8.dp)
                     .fillMaxWidth()
                     .clickable(
+                        enabled = uiState.name.isNotEmpty(),
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberBounceIndication(),
                         onClick = {
