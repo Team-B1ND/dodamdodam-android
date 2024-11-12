@@ -135,9 +135,9 @@ internal fun EditMemberInfoScreen(
                     DodamAvatar(
                         avatarSize = AvatarSize.XXL,
                         contentDescription = "프로필 이미지",
-                        model = if (uiState.image == "default") null else uiState.image,
+                        model = uiState.image,
                         modifier = Modifier
-                            .`if`(platformSpecificFilePath == "default") {
+                            .`if`(uiState.image.isNullOrEmpty()) {
                                 border(
                                     width = 1.dp,
                                     color = borderColor,
