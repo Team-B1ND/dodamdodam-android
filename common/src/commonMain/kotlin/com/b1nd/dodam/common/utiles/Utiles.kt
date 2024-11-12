@@ -38,3 +38,5 @@ fun getDate(date: LocalDate): String {
 fun LocalTime.plusHour(hour: Int): LocalTime {
     return LocalTime((this.hour + hour) % 24, minute, second, nanosecond)
 }
+
+expect val LocalDate.utcTimeMill: Long
