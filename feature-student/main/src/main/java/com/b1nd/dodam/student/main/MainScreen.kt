@@ -22,14 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navOptions
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
+import com.b1nd.dodam.outing.nanigation.navigateToOuting
 import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.student.home.navigation.homeScreen
@@ -47,7 +50,6 @@ internal fun MainScreen(
     navigateToSetting: () -> Unit,
     navigateToMyPoint: () -> Unit,
     navigateToAddBus: () -> Unit,
-    navigateToSchedule: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
     showToast: (String, String) -> Unit,
@@ -96,14 +98,22 @@ internal fun MainScreen(
                 dispose = dispose,
             )
             allScreen(
-                navigateToSetting,
-                navigateToMyPoint,
-                navigateToAddBus,
-                navigateToAskNightStudy,
-                navigateToAddOuting,
-                navigateToSchedule,
-                navigateToWakeUpSong,
-                navigateToAddWakeUpSong,
+                navigateToSetting = navigateToSetting,
+                navigateToMyPoint = navigateToMyPoint,
+                navigateToAddBus = navigateToAddBus,
+                navigateToOuting = {
+                    navController.navigateToOuting(
+                        navOptions = navOptions {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        },
+                    )
+                },
+                navigateToWakeUpSong = navigateToWakeUpSong,
+                navigateToAddWakeUpSong = navigateToAddWakeUpSong,
             )
         }
 
