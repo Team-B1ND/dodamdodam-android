@@ -128,7 +128,6 @@ fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Uni
             DodamButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
                     .padding(bottom = 12.dp),
                 onClick = {
                     if (uiState.selectedBus == null) {
