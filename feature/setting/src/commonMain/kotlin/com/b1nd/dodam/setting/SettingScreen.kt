@@ -230,7 +230,7 @@ internal fun SettingScreen(
                         DodamAvatar(
                             avatarSize = AvatarSize.ExtraLarge,
                             contentDescription = "프로필 이미지",
-                            model = uiState.profile,
+                            model = if (uiState.profile.isNullOrEmpty()) null else uiState.profile,
                             modifier = Modifier
                                 .`if`(uiState.profile.isNullOrEmpty()) {
                                     border(

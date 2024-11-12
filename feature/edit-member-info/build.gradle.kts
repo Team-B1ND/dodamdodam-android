@@ -24,6 +24,7 @@ kotlin {
         implementation(projects.data.upload)
         implementation("com.mohamedrejeb.calf:calf-file-picker:0.5.5")
         implementation("com.mohamedrejeb.calf:calf-permissions:0.5.5")
+        implementation("net.thauvin.erik.urlencoder:urlencoder-lib:1.6.0")
     }
 }
 android {
