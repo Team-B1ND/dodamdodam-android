@@ -19,12 +19,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,21 +36,15 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
-import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamButtonDialog
-import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
-import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
@@ -102,10 +93,10 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = koinViewModel(), pop
                     .addFocusCleaner(focusManager),
                 title = "기상송\n검색해 주세요",
                 onBackClick = popBackStack,
-                type = TopAppBarType.Medium
+                type = TopAppBarType.Medium,
             )
         },
-        containerColor = DodamTheme.colors.backgroundNeutral
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -130,54 +121,66 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = koinViewModel(), pop
                 )
             }
             Spacer(modifier = Modifier.height(40.dp))
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
-                Text(
-                    text = "이런 노래는 어떤가요?",
-                    style = DodamTheme.typography.headlineBold(),
-                    color = DodamTheme.colors.labelNormal
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "요즘 인기있는 노래를 바로 신청해보세요",
-                    style = DodamTheme.typography.labelMedium(),
-                    color = DodamTheme.colors.labelNormal
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            if (!uiState.isLoading) {
-                LazyColumn {
-                    if (!uiState.isSearchLoading) {
-                        items(uiState.melonChartSongs.size) { index ->
-                            WakeupSongCard(
-                                rankWidth = rankTextWidth,
-                                melonChartSong = uiState.melonChartSongs[index],
-                                index = index + 1,
-                            )
-                        }
+
+            LazyColumn {
+                if (!uiState.isSearchLoading && uiState.searchWakeupSongs.isNotEmpty()) {
+                    items(uiState.searchWakeupSongs.size) { index ->
+                        WakeupSongCard(
+                            melonChartSong = uiState.searchWakeupSongs[index],
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(24.dp))
                     }
                 }
-            } else {
-                WakeupSongShimmer(
-                    rankWidth = rankTextWidth
-                )
+                item {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    ) {
+                        Text(
+                            text = "이런 노래는 어떤가요?",
+                            style = DodamTheme.typography.headlineBold(),
+                            color = DodamTheme.colors.labelNormal,
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "요즘 인기있는 노래를 바로 신청해보세요",
+                            style = DodamTheme.typography.labelMedium(),
+                            color = DodamTheme.colors.labelNormal,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+                if (!uiState.isLoading) {
+                    items(uiState.melonChartSongs.size) { index ->
+                        WakeupSongCard(
+                            rankWidth = rankTextWidth,
+                            melonChartSong = uiState.melonChartSongs[index],
+                            index = index + 1,
+                        )
+                    }
+                } else {
+                    item {
+                        WakeupSongShimmer(
+                            rankWidth = rankTextWidth,
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun WakeupSongShimmer(
-    rankWidth: Dp
-) {
+fun WakeupSongShimmer(rankWidth: Dp) {
     Column {
         repeat(5) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Column {
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Spacer(modifier = Modifier.width(16.dp))
                         Box(
@@ -241,13 +244,13 @@ fun WakeupSongCard(viewModel: AskWakeupSongViewModel = koinViewModel(), rankWidt
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = {
                     showDialog = true
-                }
+                },
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (showDialog) {
             Dialog(
-                onDismissRequest = { showDialog = false }
+                onDismissRequest = { showDialog = false },
             ) {
                 DodamButtonDialog(
                     title = "기상송을 신청하시겠어요?",
@@ -277,7 +280,7 @@ fun WakeupSongCard(viewModel: AskWakeupSongViewModel = koinViewModel(), rankWidt
                         text = index.toString(),
                         style = DodamTheme.typography.labelBold(),
                         color = DodamTheme.colors.primaryNormal,
-                        textAlign = TextAlign.Start
+                        textAlign = TextAlign.Start,
                     )
                 }
 
@@ -297,19 +300,15 @@ fun WakeupSongCard(viewModel: AskWakeupSongViewModel = koinViewModel(), rankWidt
                     Text(
                         modifier = Modifier.basicMarquee(),
                         text = melonChartSong.name,
-                        color = DodamTheme.colors.labelNormal
+                        color = DodamTheme.colors.labelNormal,
+                        style = DodamTheme.typography.body1Bold(),
                     )
 
                     Text(
                         modifier = Modifier.basicMarquee(),
                         text = melonChartSong.artist,
-                        color = DodamTheme.colors.labelNormal
-                    )
-                    Text(
-                        text = melonChartSong.album,
-                        modifier = Modifier.basicMarquee(),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                        color = DodamTheme.colors.labelNormal,
+                        style = DodamTheme.typography.caption1Medium(),
                     )
                 }
                 Spacer(modifier = Modifier.width(16.dp))
@@ -319,101 +318,77 @@ fun WakeupSongCard(viewModel: AskWakeupSongViewModel = koinViewModel(), rankWidt
     }
 }
 
-//@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-//@Composable
-//fun WakeupSongCard(viewModel: AskWakeupSongViewModel = koinViewModel(), melonChartSong: SearchWakeupSong) {
-//    var showDialog by remember {
-//        mutableStateOf(false)
-//    }
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .bounceClick(onClick = {
-//                showDialog = true
-//            }),
-//        verticalAlignment = Alignment.CenterVertically,
-//    ) {
-//        if (showDialog) {
-//            DodamDialog(
-//                onDismissRequest = {
-//                    showDialog = false
-//                },
-//                confirmText = {
-//                    Row {
-//                        DodamLargeFilledButton(
-//                            onClick = {
-//                                showDialog = false
-//                            },
-//                            modifier = Modifier.weight(1.0f),
-//                            colors = ButtonDefaults.buttonColors(
-//                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-//                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-//                            ),
-//                        ) {
-//                            BodyLarge(text = "취소")
-//                        }
-//                        Spacer(modifier = Modifier.width(8.dp))
-//                        DodamLargeFilledButton(
-//                            onClick = {
-//                                viewModel.postWakeupSong(
-//                                    melonChartSong.channelTitle,
-//                                    melonChartSong.videoTitle,
-//                                )
-//                                showDialog = false
-//                            },
-//                            modifier = Modifier.weight(1.0f),
-//                            colors = ButtonDefaults.buttonColors(
-//                                containerColor = MaterialTheme.colorScheme.primary,
-//                                contentColor = MaterialTheme.colorScheme.onPrimary,
-//                            ),
-//                        ) {
-//                            BodyLarge(text = "신청")
-//                        }
-//                    }
-//                },
-//                text = {
-//                    Text(
-//                        text = "${melonChartSong.channelTitle} - '${melonChartSong.videoTitle}'",
-//                        style = MaterialTheme.typography.bodyMedium.copy(
-//                            fontWeight = FontWeight.Medium,
-//                        ),
-//                    )
-//                },
-//                title = { TitleLarge(text = "기상송을 신청하시겠어요?") },
-//            )
-//        }
-//        Column {
-//            Spacer(modifier = Modifier.height(8.dp))
-//            Row {
-//                Spacer(modifier = Modifier.width(8.dp))
-//                AsyncImage(
-//                    modifier = Modifier
-//                        .height(67.dp)
-//                        .width(120.dp)
-//                        .clip(RoundedCornerShape(8.dp)),
-//                    model = melonChartSong.thumbnail,
-//                    contentDescription = "profile_image",
-//                    contentScale = ContentScale.Crop,
-//                )
-//
-//                Spacer(modifier = Modifier.width(16.dp))
-//
-//                Column {
-//                    BodyMedium(
-//                        text = melonChartSong.videoTitle,
-//                        modifier = Modifier.basicMarquee(),
-//                        color = MaterialTheme.colorScheme.onBackground,
-//                    )
-//                    Text(
-//                        text = melonChartSong.channelTitle,
-//                        modifier = Modifier.basicMarquee(),
-//                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-//                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
-//                    )
-//                }
-//                Spacer(modifier = Modifier.width(16.dp))
-//            }
-//            Spacer(modifier = Modifier.height(8.dp))
-//        }
-//    }
-//}
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun WakeupSongCard(viewModel: AskWakeupSongViewModel = koinViewModel(), melonChartSong: SearchWakeupSong) {
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                indication = rememberBounceIndication(),
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = {
+                    showDialog = true
+                },
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (showDialog) {
+            Dialog(
+                onDismissRequest = { showDialog = false },
+            ) {
+                DodamButtonDialog(
+                    title = "기상송을 신청하시겠어요?",
+                    body = "${melonChartSong.channelTitle} - '${melonChartSong.videoTitle}'",
+                    dismissButton = {
+                        showDialog = false
+                    },
+                    confirmButton = {
+                        viewModel.postWakeupSong(
+                            melonChartSong.channelTitle,
+                            melonChartSong.videoTitle,
+                        )
+                        showDialog = false
+                    },
+                )
+            }
+        }
+        Column {
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                Spacer(modifier = Modifier.width(8.dp))
+                AsyncImage(
+                    modifier = Modifier
+                        .height(67.dp)
+                        .width(120.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    model = melonChartSong.thumbnail,
+                    contentDescription = "profile_image",
+                    contentScale = ContentScale.Crop,
+                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Column {
+                    Text(
+                        modifier = Modifier.basicMarquee(),
+                        text = melonChartSong.videoTitle,
+                        color = DodamTheme.colors.labelNormal,
+                        style = DodamTheme.typography.body1Bold(),
+                    )
+                    Text(
+                        text = melonChartSong.channelTitle,
+                        modifier = Modifier.basicMarquee(),
+                        color = DodamTheme.colors.labelAlternative,
+                        style = DodamTheme.typography.caption1Medium(),
+                    )
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+    }
+}
