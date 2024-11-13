@@ -247,6 +247,7 @@ private fun HomeScreen(
                         showShimmer = showShimmer,
                         onContentClick = navigateToMeal,
                         fetchMeal = fetchMeal,
+                        navigateToMeal = navigateToMeal
                     )
                 }
 

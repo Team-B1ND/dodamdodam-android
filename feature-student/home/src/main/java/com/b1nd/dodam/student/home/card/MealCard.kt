@@ -41,7 +41,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 @ExperimentalFoundationApi
 @Composable
-internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick: () -> Unit, fetchMeal: () -> Unit) {
+internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, navigateToMeal: () -> Unit, onContentClick: () -> Unit, fetchMeal: () -> Unit) {
     val currentTime = LocalTime.now()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
@@ -52,6 +52,8 @@ internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick
     DodamContainer(
         icon = DodamIcons.ForkAndKnife.value,
         title = mealTitle,
+        showNextButton = true,
+        onNextClick = navigateToMeal,
         content = {
             if (!showShimmer) {
                 when (uiState) {
