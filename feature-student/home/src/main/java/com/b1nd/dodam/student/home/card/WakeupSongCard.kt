@@ -1,8 +1,6 @@
 package com.b1nd.dodam.student.home.card
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -21,7 +19,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -83,7 +79,7 @@ internal fun WakeupSongCard(
                                                 urlHandler.openUri(wakeupSongs[wakeupSongPagerState.currentPage].videoUrl)
                                             },
                                             interactionSource = remember { MutableInteractionSource() },
-                                            indication = rememberBounceIndication()
+                                            indication = rememberBounceIndication(),
                                         )
                                         .padding(6.dp),
                                     state = wakeupSongPagerState,
@@ -109,7 +105,7 @@ internal fun WakeupSongCard(
                                                 modifier = Modifier.basicMarquee(),
                                                 text = wakeupSongs[page].videoTitle,
                                                 color = DodamTheme.colors.labelNormal,
-                                                style = DodamTheme.typography.body1Medium()
+                                                style = DodamTheme.typography.body1Medium(),
                                             )
 
                                             Spacer(modifier = Modifier.height(4.dp))
@@ -118,7 +114,7 @@ internal fun WakeupSongCard(
                                                 modifier = Modifier.basicMarquee(),
                                                 text = wakeupSongs[page].channelTitle,
                                                 color = DodamTheme.colors.labelAlternative,
-                                                style = DodamTheme.typography.labelMedium()
+                                                style = DodamTheme.typography.labelMedium(),
                                             )
                                         }
                                     }

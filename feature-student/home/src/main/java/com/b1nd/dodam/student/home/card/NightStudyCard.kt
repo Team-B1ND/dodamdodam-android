@@ -14,11 +14,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
-import com.b1nd.dodam.designsystem.component.DodamCircularProgressIndicator
 import com.b1nd.dodam.designsystem.component.DodamLinerProgressIndicator
 import com.b1nd.dodam.designsystem.component.DodamLoadingDots
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
@@ -149,7 +145,7 @@ internal fun NightStudyCard(
                                                     color = DodamTheme.colors.labelNormal,
                                                 )
                                                 Spacer(modifier = Modifier.height(12.dp))
-                                                DodamLinerProgressIndicator(progress = progress,)
+                                                DodamLinerProgressIndicator(progress = progress)
 
                                                 Spacer(modifier = Modifier.height(4.dp))
 
@@ -160,7 +156,7 @@ internal fun NightStudyCard(
                                                         nightStudy.endAt.dayOfMonth,
                                                     ),
                                                     color = DodamTheme.colors.labelAlternative,
-                                                    style = DodamTheme.typography.labelRegular()
+                                                    style = DodamTheme.typography.labelRegular(),
                                                 )
                                             }
                                         }
@@ -192,13 +188,13 @@ internal fun NightStudyCard(
                                             Text(
                                                 text = "대기중",
                                                 color = DodamTheme.colors.labelNormal,
-                                                style = DodamTheme.typography.heading2Bold()
+                                                style = DodamTheme.typography.heading2Bold(),
                                             )
-                                            
+
                                             DodamLinerProgressIndicator(
                                                 modifier = Modifier.fillMaxWidth(),
                                                 progress = progress,
-                                                disabled = true
+                                                disabled = true,
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
                                             Text(
@@ -208,7 +204,7 @@ internal fun NightStudyCard(
                                                     nightStudy.endAt.dayOfMonth,
                                                 ),
                                                 color = DodamTheme.colors.labelAlternative,
-                                                style = DodamTheme.typography.labelRegular()
+                                                style = DodamTheme.typography.labelRegular(),
                                             )
                                         }
                                     }
