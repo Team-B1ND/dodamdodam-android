@@ -43,16 +43,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
-import com.b1nd.dodam.designsystem.component.ActionIcon
 import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDialog
-import com.b1nd.dodam.designsystem.component.DodamTextButton
-import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.student.home.card.BannerCard
 import com.b1nd.dodam.student.home.card.MealCard
@@ -247,7 +243,7 @@ private fun HomeScreen(
                         showShimmer = showShimmer,
                         onContentClick = navigateToMeal,
                         fetchMeal = fetchMeal,
-                        navigateToMeal = navigateToMeal
+                        navigateToMeal = navigateToMeal,
                     )
                 }
 
@@ -343,20 +339,20 @@ internal fun DefaultText(onClick: () -> Unit, label: String, body: String) {
             .clickable(
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberBounceIndication()
+                indication = rememberBounceIndication(),
             )
             .padding(6.dp),
     ) {
         Text(
             text = label,
             color = DodamTheme.colors.labelAlternative,
-            style = DodamTheme.typography.caption1Medium()
+            style = DodamTheme.typography.caption1Medium(),
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = body,
             color = DodamTheme.colors.primaryNormal,
-            style = DodamTheme.typography.body1Bold()
+            style = DodamTheme.typography.body1Bold(),
         )
     }
 }
@@ -418,7 +414,7 @@ internal fun DodamContainer(
             Text(
                 text = title,
                 color = DodamTheme.colors.labelStrong,
-                style = DodamTheme.typography.headlineBold()
+                style = DodamTheme.typography.headlineBold(),
             )
 
             Spacer(modifier = Modifier.weight(1f))

@@ -7,7 +7,6 @@ import com.b1nd.dodam.data.outing.model.Outing
 import com.b1nd.dodam.data.schedule.model.Schedule
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableMap
 
 data class HomeUiState(
     val showShimmer: Boolean = true,

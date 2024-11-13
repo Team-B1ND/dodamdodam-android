@@ -1,6 +1,5 @@
 package com.b1nd.dodam.student.home.card
 
-import android.util.Log
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -15,11 +14,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,7 +33,6 @@ import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.outing.model.OutType
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
-import com.b1nd.dodam.designsystem.component.DodamCircularProgressIndicator
 import com.b1nd.dodam.designsystem.component.DodamLinerProgressIndicator
 import com.b1nd.dodam.designsystem.component.DodamLoadingDots
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
@@ -72,13 +67,15 @@ internal fun OutCard(
                 when (uiState) {
                     is OutUiState.Success -> {
                         uiState.data?.let { out ->
-                            val outProgress = (ChronoUnit.SECONDS.between(
-                                out.startAt.toJavaLocalDateTime(),
-                                current,
-                            ).toFloat() / ChronoUnit.SECONDS.between(
-                                out.startAt.toJavaLocalDateTime(),
-                                out.endAt.toJavaLocalDateTime(),
-                            )).coerceAtLeast(0f)
+                            val outProgress = (
+                                ChronoUnit.SECONDS.between(
+                                    out.startAt.toJavaLocalDateTime(),
+                                    current,
+                                ).toFloat() / ChronoUnit.SECONDS.between(
+                                    out.startAt.toJavaLocalDateTime(),
+                                    out.endAt.toJavaLocalDateTime(),
+                                )
+                                ).coerceAtLeast(0f)
 
                             val progress by animateFloatAsState(
                                 targetValue = if (playOnlyOnce || isRefreshing) 0f else outProgress,
@@ -144,7 +141,7 @@ internal fun OutCard(
                                                         }
                                                         withStyle(
                                                             style = DodamTheme.typography.labelMedium().copy(
-                                                                color = DodamTheme.colors.labelAlternative
+                                                                color = DodamTheme.colors.labelAlternative,
                                                             ).toSpanStyle(),
                                                         ) {
                                                             append("남음")
@@ -171,7 +168,7 @@ internal fun OutCard(
                                                         )
                                                     },
                                                     color = DodamTheme.colors.labelAlternative,
-                                                    style = DodamTheme.typography.labelRegular()
+                                                    style = DodamTheme.typography.labelRegular(),
                                                 )
                                             }
                                         }
@@ -195,23 +192,22 @@ internal fun OutCard(
                                             .clickable(
                                                 onClick = navigateToOut,
                                                 interactionSource = remember { MutableInteractionSource() },
-                                                indication = rememberBounceIndication()
+                                                indication = rememberBounceIndication(),
                                             )
                                             .padding(6.dp),
                                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                                     ) {
-
                                         Column {
                                             Text(
                                                 text = "대기중",
                                                 color = DodamTheme.colors.labelNormal,
-                                                style = DodamTheme.typography.heading2Bold()
+                                                style = DodamTheme.typography.heading2Bold(),
                                             )
                                             Spacer(modifier = Modifier.height(12.dp))
                                             DodamLinerProgressIndicator(
                                                 modifier = Modifier.fillMaxWidth(),
                                                 progress = progress,
-                                                disabled = true
+                                                disabled = true,
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
                                             Text(
@@ -229,7 +225,7 @@ internal fun OutCard(
                                                     )
                                                 },
                                                 color = DodamTheme.colors.labelAlternative,
-                                                style = DodamTheme.typography.labelRegular()
+                                                style = DodamTheme.typography.labelRegular(),
                                             )
                                         }
                                     }

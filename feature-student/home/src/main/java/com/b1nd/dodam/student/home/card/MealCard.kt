@@ -16,7 +16,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,7 +36,6 @@ import com.b1nd.dodam.student.home.PagerIndicator
 import com.b1nd.dodam.student.home.model.MealUiState
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import java.time.LocalTime
-import kotlinx.collections.immutable.toImmutableList
 
 @ExperimentalFoundationApi
 @Composable
