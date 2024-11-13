@@ -3,6 +3,7 @@ package com.b1nd.dodam.student.home.card
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,10 +27,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.dds.animation.LoadingDotsIndicator
-import com.b1nd.dodam.dds.animation.bounceClick
-import com.b1nd.dodam.dds.foundation.DodamIcons
-import com.b1nd.dodam.dds.style.BodyMedium
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.DodamLoadingDots
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.student.home.DefaultText
 import com.b1nd.dodam.student.home.DodamContainer
 import com.b1nd.dodam.student.home.PagerIndicator
@@ -45,54 +47,34 @@ internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
     var isRefreshing by remember { mutableStateOf(false) }
 
-    var mealTitle by rememberSaveable { mutableStateOf("오늘의 급식") }
+    val mealTitle by rememberSaveable { mutableStateOf("오늘의 급식") }
 
     DodamContainer(
-        icon = DodamIcons.ForkAndKnife,
+        icon = DodamIcons.ForkAndKnife.value,
         title = mealTitle,
         content = {
             if (!showShimmer) {
                 when (uiState) {
                     is MealUiState.Success -> {
-                        val meals = remember { uiState.data.values.toImmutableList() }
-                        val mealPagerState = rememberPagerState { meals.size }
-                        if (uiState.data.keys.size != 0) {
-                            mealTitle = when {
-                                currentTime > LocalTime.of(19, 10) -> "내일의 "
-                                else -> "오늘의 "
-                            } + uiState.data.keys.toImmutableList()[mealPagerState.currentPage]
-                        }
+                        val mealPagerState = rememberPagerState { 3 }
+
                         LaunchedEffect(Unit) {
                             if (isRefreshing || playOnlyOnce) {
                                 when {
-                                    currentTime <= LocalTime.of(8, 10) -> { // 아침 식사 시간 전이라면
-                                        if (meals.isNotEmpty()) {
-                                            mealPagerState.animateScrollToPage(page = 0)
-                                        } // 아침 급식이 있다면
+                                    currentTime <= LocalTime.of(8, 10) -> { // 아침 식사 시간 전이라면{
+                                        mealPagerState.animateScrollToPage(page = 0)
                                     }
 
                                     currentTime <= LocalTime.of(13, 30) -> { // 점심 식사 시간 전이라면
-                                        if (meals.size > 1) {
-                                            mealPagerState.animateScrollToPage(1)
-                                        } else if (meals.isNotEmpty()) {
-                                            mealPagerState.animateScrollToPage(0)
-                                        }
+                                        mealPagerState.animateScrollToPage(1)
                                     }
 
                                     currentTime <= LocalTime.of(19, 10) -> { // 저녁 식사 시간 전이라면
-                                        if (meals.size > 2) {
-                                            mealPagerState.animateScrollToPage(2)
-                                        } else if (meals.size > 1) {
-                                            mealPagerState.animateScrollToPage(1)
-                                        } else if (meals.isNotEmpty()) {
-                                            mealPagerState.animateScrollToPage(0)
-                                        }
+                                        mealPagerState.animateScrollToPage(2)
                                     }
 
                                     else -> { // 저녁 식사 시간이 지났다면
-                                        if (meals.isNotEmpty()) {
-                                            mealPagerState.animateScrollToPage(page = 0)
-                                        } // 다음날 아침이 있다면
+                                        mealPagerState.animateScrollToPage(2)
                                     }
                                 }
                                 playOnlyOnce = false
@@ -100,43 +82,61 @@ internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick
                             }
                         }
 
-                        if (meals.isNotEmpty()) {
-                            mealTitle = when {
-                                currentTime > LocalTime.of(19, 10) -> "내일의 "
-                                else -> "오늘의 "
-                            } + uiState.data.keys.toImmutableList()[mealPagerState.currentPage]
+                        Column {
+                            HorizontalPager(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateContentSize()
+                                    .padding(horizontal = 10.dp)
+                                    .clickable(
+                                        indication = rememberBounceIndication(),
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        onClick = onContentClick,
+                                    )
+                                    .padding(6.dp),
+                                state = mealPagerState,
+                            ) { page ->
+                                val meals = when (page) {
+                                    0 -> uiState.data.breakfast
+                                    1 -> uiState.data.lunch
+                                    else -> uiState.data.dinner
+                                }?.details
 
-                            Column {
-                                HorizontalPager(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .animateContentSize()
-                                        .padding(horizontal = 10.dp)
-                                        .bounceClick(
-                                            interactionSource = remember { MutableInteractionSource() },
-                                            onClick = onContentClick,
-                                        )
-                                        .padding(6.dp),
-                                    state = mealPagerState,
-                                ) { page ->
-                                    BodyMedium(
-                                        text = meals[page],
-                                        color = MaterialTheme.colorScheme.onSurface,
+                                if (meals != null) {
+                                    Column {
+                                        for (i in meals.indices step 2) {
+                                            Row(
+                                                modifier = Modifier.fillMaxWidth(),
+                                            ) {
+                                                Text(
+                                                    modifier = Modifier.weight(1f),
+                                                    text = meals[i].name,
+                                                    style = DodamTheme.typography.body1Medium(),
+                                                    color = DodamTheme.colors.labelNormal,
+                                                )
+                                                Text(
+                                                    modifier = Modifier.weight(1f),
+                                                    text = meals.getOrNull(i + 1)?.name ?: "",
+                                                    style = DodamTheme.typography.body1Medium(),
+                                                    color = DodamTheme.colors.labelNormal,
+                                                )
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    DefaultText(
+                                        onClick = onContentClick,
+                                        label = "오늘은 급식이 없어요",
+                                        body = "내일 급식 보러가기",
                                     )
                                 }
-
-                                PagerIndicator(
-                                    modifier = Modifier
-                                        .align(Alignment.End)
-                                        .padding(end = 16.dp),
-                                    pagerState = mealPagerState,
-                                )
                             }
-                        } else {
-                            DefaultText(
-                                onClick = onContentClick,
-                                label = "오늘은 급식이 없어요",
-                                body = "내일 급식 보러가기",
+
+                            PagerIndicator(
+                                modifier = Modifier
+                                    .align(Alignment.End)
+                                    .padding(end = 16.dp),
+                                pagerState = mealPagerState,
                             )
                         }
                     }
@@ -148,7 +148,7 @@ internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, onContentClick
                                 .height(50.dp),
                             contentAlignment = Alignment.Center,
                         ) {
-                            LoadingDotsIndicator()
+                            DodamLoadingDots()
                         }
                         isRefreshing = true
                     }
