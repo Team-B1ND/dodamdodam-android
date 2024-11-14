@@ -1,11 +1,10 @@
 package com.b1nd.dodam.student.home.card
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,22 +18,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.b1nd.dodam.dds.animation.LoadingDotsIndicator
-import com.b1nd.dodam.dds.animation.bounceClick
-import com.b1nd.dodam.dds.foundation.DodamIcons
-import com.b1nd.dodam.dds.foundation.DodamShape
-import com.b1nd.dodam.dds.style.BodyMedium
-import com.b1nd.dodam.dds.style.LabelLarge
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.DodamLoadingDots
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.student.home.DefaultText
 import com.b1nd.dodam.student.home.DodamContainer
 import com.b1nd.dodam.student.home.PagerIndicator
@@ -51,8 +48,10 @@ internal fun WakeupSongCard(
     fetchWakeupSong: () -> Unit,
     context: Context,
 ) {
+    val urlHandler = LocalUriHandler.current
+
     DodamContainer(
-        icon = DodamIcons.Note,
+        icon = DodamIcons.Note.value,
         title = "오늘의 기상송",
         showNextButton = true,
         onNextClick = onNextClick,
@@ -75,16 +74,12 @@ internal fun WakeupSongCard(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(horizontal = 10.dp)
-                                        .bounceClick(
+                                        .clickable(
                                             onClick = {
-                                                context.startActivity(
-                                                    Intent(
-                                                        Intent.ACTION_VIEW,
-                                                        Uri.parse(wakeupSongs[wakeupSongPagerState.currentPage].videoUrl),
-                                                    ),
-                                                )
+                                                urlHandler.openUri(wakeupSongs[wakeupSongPagerState.currentPage].videoUrl)
                                             },
                                             interactionSource = remember { MutableInteractionSource() },
+                                            indication = rememberBounceIndication(),
                                         )
                                         .padding(6.dp),
                                     state = wakeupSongPagerState,
@@ -94,8 +89,8 @@ internal fun WakeupSongCard(
                                     ) {
                                         AsyncImage(
                                             modifier = Modifier
-                                                .size(width = 120.dp, height = 67.dp)
-                                                .clip(DodamShape.Small),
+                                                .size(100.dp)
+                                                .clip(DodamTheme.shapes.medium),
                                             model = wakeupSongs[page].thumbnail,
                                             contentDescription = null,
                                             contentScale = ContentScale.Crop,
@@ -106,19 +101,20 @@ internal fun WakeupSongCard(
                                         Column(
                                             modifier = Modifier.fillMaxWidth(),
                                         ) {
-                                            BodyMedium(
+                                            Text(
                                                 modifier = Modifier.basicMarquee(),
                                                 text = wakeupSongs[page].videoTitle,
-                                                color = MaterialTheme.colorScheme.onSurface,
+                                                color = DodamTheme.colors.labelNormal,
+                                                style = DodamTheme.typography.body1Medium(),
                                             )
 
                                             Spacer(modifier = Modifier.height(4.dp))
 
-                                            LabelLarge(
+                                            Text(
                                                 modifier = Modifier.basicMarquee(),
                                                 text = wakeupSongs[page].channelTitle,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                fontWeight = FontWeight.Normal,
+                                                color = DodamTheme.colors.labelAlternative,
+                                                style = DodamTheme.typography.labelMedium(),
                                             )
                                         }
                                     }
@@ -141,7 +137,7 @@ internal fun WakeupSongCard(
                                 .height(50.dp),
                             contentAlignment = Alignment.Center,
                         ) {
-                            LoadingDotsIndicator()
+                            DodamLoadingDots()
                         }
                     }
 
@@ -164,7 +160,7 @@ internal fun WakeupSongCard(
                             .size(100.dp)
                             .background(
                                 shimmerEffect(),
-                                DodamShape.Medium,
+                                DodamTheme.shapes.medium,
                             ),
                     )
 
