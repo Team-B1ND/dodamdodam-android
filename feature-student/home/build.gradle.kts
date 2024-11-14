@@ -12,7 +12,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.dodam.design.system)
+    implementation(libs.dodam.design.system.cmm)
     implementation(projects.data.meal)
     implementation(projects.data.wakeupSong)
     implementation(projects.data.outing)

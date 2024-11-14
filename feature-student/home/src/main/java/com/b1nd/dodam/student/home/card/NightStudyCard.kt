@@ -4,6 +4,7 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,11 +14,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,12 +30,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.data.core.model.Status
-import com.b1nd.dodam.dds.animation.LoadingDotsIndicator
-import com.b1nd.dodam.dds.animation.bounceClick
-import com.b1nd.dodam.dds.component.DodamCircularProgressIndicator
-import com.b1nd.dodam.dds.foundation.DodamIcons
-import com.b1nd.dodam.dds.style.BodyMedium
-import com.b1nd.dodam.dds.style.LabelLarge
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.DodamLinerProgressIndicator
+import com.b1nd.dodam.designsystem.component.DodamLoadingDots
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.student.home.DefaultText
 import com.b1nd.dodam.student.home.DodamContainer
 import com.b1nd.dodam.student.home.model.NightStudyUiState
@@ -62,7 +59,7 @@ internal fun NightStudyCard(
 
     DodamContainer(
         modifier = modifier,
-        icon = DodamIcons.MoonPlus,
+        icon = DodamIcons.MoonPlus.value,
         title = "심야 자습",
         content = {
             if (!showShimmer) {
@@ -104,18 +101,15 @@ internal fun NightStudyCard(
                                         Row(
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .padding(horizontal = 10.dp)
-                                                .bounceClick(
+                                                .clickable(
+                                                    indication = rememberBounceIndication(),
                                                     interactionSource = remember { MutableInteractionSource() },
                                                     onClick = navigateToNightStudy,
                                                 )
                                                 .padding(6.dp),
                                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                                         ) {
-                                            DodamCircularProgressIndicator(progress = progress)
-                                            Column(
-                                                verticalArrangement = Arrangement.spacedBy(4.dp),
-                                            ) {
+                                            Column {
                                                 Text(
                                                     text = buildAnnotatedString {
                                                         val day = ChronoUnit.DAYS.between(
@@ -142,24 +136,27 @@ internal fun NightStudyCard(
                                                             },
                                                         )
                                                         withStyle(
-                                                            style = MaterialTheme.typography.labelLarge.copy(
-                                                                MaterialTheme.colorScheme.onSurfaceVariant,
-                                                            ).toSpanStyle(),
+                                                            style = DodamTheme.typography.labelMedium().toSpanStyle(),
                                                         ) {
                                                             append("남음")
                                                         }
                                                     },
-                                                    style = MaterialTheme.typography.bodyMedium,
-                                                    color = MaterialTheme.colorScheme.onSurface,
+                                                    style = DodamTheme.typography.heading2Bold(),
+                                                    color = DodamTheme.colors.labelNormal,
                                                 )
+                                                Spacer(modifier = Modifier.height(12.dp))
+                                                DodamLinerProgressIndicator(progress = progress)
 
-                                                LabelLarge(
+                                                Spacer(modifier = Modifier.height(4.dp))
+
+                                                Text(
                                                     text = String.format(
                                                         "%02d.%02d 까지",
                                                         nightStudy.endAt.monthNumber,
                                                         nightStudy.endAt.dayOfMonth,
                                                     ),
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    color = DodamTheme.colors.labelAlternative,
+                                                    style = DodamTheme.typography.labelRegular(),
                                                 )
                                             }
                                         }
@@ -179,28 +176,35 @@ internal fun NightStudyCard(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(horizontal = 10.dp)
-                                            .bounceClick(
+                                            .clickable(
+                                                indication = rememberBounceIndication(),
                                                 interactionSource = remember { MutableInteractionSource() },
                                                 onClick = navigateToNightStudy,
                                             )
                                             .padding(6.dp),
                                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                                     ) {
-                                        DodamCircularProgressIndicator(progress = progress, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                        Column(
-                                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                                        ) {
-                                            BodyMedium(
+                                        Column {
+                                            Text(
                                                 text = "대기중",
-                                                color = MaterialTheme.colorScheme.onSurface,
+                                                color = DodamTheme.colors.labelNormal,
+                                                style = DodamTheme.typography.heading2Bold(),
                                             )
-                                            LabelLarge(
+
+                                            DodamLinerProgressIndicator(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                progress = progress,
+                                                disabled = true,
+                                            )
+                                            Spacer(modifier = Modifier.height(4.dp))
+                                            Text(
                                                 text = String.format(
-                                                    "%02d.%02d 시작",
-                                                    nightStudy.startAt.monthNumber,
-                                                    nightStudy.startAt.dayOfMonth,
+                                                    "%02d.%02d 까지",
+                                                    nightStudy.endAt.monthNumber,
+                                                    nightStudy.endAt.dayOfMonth,
                                                 ),
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                color = DodamTheme.colors.labelAlternative,
+                                                style = DodamTheme.typography.labelRegular(),
                                             )
                                         }
                                     }
@@ -222,7 +226,7 @@ internal fun NightStudyCard(
                                 .height(50.dp),
                             contentAlignment = Alignment.Center,
                         ) {
-                            LoadingDotsIndicator()
+                            DodamLoadingDots()
                         }
                         isRefreshing = true
                     }
@@ -236,50 +240,40 @@ internal fun NightStudyCard(
                     }
                 }
             } else {
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(6.dp),
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(70.dp)
+                            .fillMaxWidth(0.7f)
+                            .height(28.dp)
                             .background(
                                 shimmerEffect(),
                                 CircleShape,
                             ),
                     )
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Row(Modifier.fillMaxWidth()) {
-                            Box(
-                                modifier = Modifier
-                                    .weight(0.9f)
-                                    .height(20.dp)
-                                    .background(
-                                        shimmerEffect(),
-                                        RoundedCornerShape(4.dp),
-                                    ),
-                            )
-                            Spacer(modifier = Modifier.weight(0.1f))
-                        }
-
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        Box(
-                            modifier = Modifier
-                                .width(50.dp)
-                                .height(15.dp)
-                                .background(
-                                    shimmerEffect(),
-                                    RoundedCornerShape(4.dp),
-                                ),
-                        )
-                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(12.dp)
+                            .background(
+                                shimmerEffect(),
+                                CircleShape,
+                            ),
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Box(
+                        modifier = Modifier
+                            .width(91.dp)
+                            .height(20.dp)
+                            .background(
+                                shimmerEffect(),
+                                CircleShape,
+                            ),
+                    )
                 }
             }
         },
