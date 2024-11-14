@@ -1,17 +1,18 @@
 package com.b1nd.dodam.bus
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,16 +21,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.bus.model.Bus
-import com.b1nd.dodam.dds.component.DodamDialog
-import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
-import com.b1nd.dodam.dds.component.button.DodamCTAButton
-import com.b1nd.dodam.dds.component.button.DodamTextButton
-import com.b1nd.dodam.dds.style.BodyLarge
-import com.b1nd.dodam.dds.style.CheckmarkIcon
-import com.b1nd.dodam.dds.style.HeadlineSmall
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamDialog
+import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.component.TopAppBarType
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.InputField
 import org.koin.androidx.compose.koinViewModel
 
@@ -81,32 +82,26 @@ fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Uni
     }
 
     if (showDialog) {
-        DodamDialog(
+        Dialog(
             onDismissRequest = {
                 showDialog = false
                 popBackStack()
             },
-            confirmText = {
-                DodamTextButton(onClick = popBackStack) {
-                    Text(text = "확인")
-                }
-            },
-            title = {
-                Text(text = "버스 운행 날짜가 아니에요")
-            },
-        )
+        ) {
+            DodamDialog(
+                confirmButton = popBackStack,
+                title = "버스 운행 날짜가 아니에요",
+            )
+        }
     }
 
     Scaffold(
         topBar = {
-            DodamLargeTopAppBar(
-                title = {
-                    HeadlineSmall(text = "무슨 버스에\n탑승하실건가요?")
-                },
-                onNavigationIconClick = popBackStack,
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                ),
+            DodamTopAppBar(
+                modifier = Modifier.statusBarsPadding(),
+                title = "무슨 버스에\n탑승하실 건가요?",
+                onBackClick = popBackStack,
+                type = TopAppBarType.Medium,
             )
         },
     ) { paddingValues ->
@@ -130,7 +125,10 @@ fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Uni
                 }
             }
             Spacer(modifier = Modifier.weight(1.0f))
-            DodamCTAButton(
+            DodamButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
                 onClick = {
                     if (uiState.selectedBus == null) {
                         if (selectedIndex != null) {
@@ -147,11 +145,10 @@ fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Uni
                         }
                     }
                 },
+                text = if (uiState.selectedBus?.id == uiState.buses.getOrNull(selectedIndex ?: 0)?.id) "취소" else "신청",
                 enabled = !(uiState.selectedBus == null && selectedIndex == null),
-                isLoading = uiState.isLoading,
-            ) {
-                BodyLarge(text = "확인")
-            }
+                loading = uiState.isLoading,
+            )
         }
     }
 }
@@ -160,31 +157,31 @@ fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Uni
 fun BusCard(bus: Bus, isSelected: Boolean, onClick: () -> Unit) {
     InputField(
         onClick = onClick,
+        enabled = !isSelected,
         text = {
             Text(
                 text = bus.busName,
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontSize = 18.sp,
-                ),
-                color = MaterialTheme.colorScheme.onBackground,
+                style = DodamTheme.typography.headlineMedium(),
+                color = DodamTheme.colors.labelNormal,
             )
         },
         content = {
             Text(
                 text = "${bus.applyCount}/${bus.peopleLimit}",
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 18.sp),
-                color = if (bus.applyCount >= bus.peopleLimit) {
-                    MaterialTheme.colorScheme.error
-                } else {
-                    MaterialTheme.colorScheme.tertiary
+                style = DodamTheme.typography.headlineRegular(),
+                color = when {
+                    bus.applyCount >= bus.peopleLimit -> DodamTheme.colors.statusNegative
+                    isSelected -> DodamTheme.colors.primaryNormal
+                    else -> DodamTheme.colors.labelAlternative
                 },
             )
             Spacer(modifier = Modifier.width(16.dp))
             if (isSelected) {
-                CheckmarkIcon(
+                Image(
+                    imageVector = DodamIcons.Checkmark.value,
                     modifier = Modifier.size(20.dp),
                     contentDescription = "check",
-                    tint = MaterialTheme.colorScheme.primary,
+                    colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                 )
             } else {
                 Spacer(modifier = Modifier.width(20.dp))
