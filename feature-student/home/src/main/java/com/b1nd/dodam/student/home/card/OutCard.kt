@@ -157,7 +157,7 @@ internal fun OutCard(
                                                     style = DodamTheme.typography.heading2Bold(),
                                                     color = DodamTheme.colors.labelNormal,
                                                 )
-
+                                                Spacer(modifier = Modifier.height(12.dp))
                                                 DodamLinerProgressIndicator(progress = progress.coerceIn(0f, 1f))
                                                 Spacer(modifier = Modifier.height(4.dp))
                                                 Text(
