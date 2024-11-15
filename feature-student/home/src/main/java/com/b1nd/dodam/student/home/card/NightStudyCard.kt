@@ -229,7 +229,7 @@ internal fun NightStudyCard(
                             body = "다시 불러오기",
                         )
                     }
-                    else ->{}
+                    else -> {}
                 }
             } else {
                 Column(
