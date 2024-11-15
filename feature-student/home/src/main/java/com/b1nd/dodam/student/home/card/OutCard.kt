@@ -68,14 +68,14 @@ internal fun OutCard(
                     is OutUiState.Success -> {
                         uiState.data?.let { out ->
                             val outProgress = (
-                                ChronoUnit.SECONDS.between(
+                                1 - ChronoUnit.SECONDS.between(
                                     out.startAt.toJavaLocalDateTime(),
                                     current,
                                 ).toFloat() / ChronoUnit.SECONDS.between(
                                     out.startAt.toJavaLocalDateTime(),
                                     out.endAt.toJavaLocalDateTime(),
                                 )
-                                ).coerceAtLeast(0f)
+                                )
 
                             val progress by animateFloatAsState(
                                 targetValue = if (playOnlyOnce || isRefreshing) 0f else outProgress,
@@ -116,27 +116,32 @@ internal fun OutCard(
                                             Column {
                                                 Text(
                                                     text = buildAnnotatedString {
-                                                        val day = ChronoUnit.DAYS.between(
-                                                            current,
-                                                            out.endAt.toJavaLocalDateTime(),
-                                                        )
-                                                        val hour = ChronoUnit.HOURS.between(
-                                                            current,
-                                                            out.endAt.toJavaLocalDateTime(),
-                                                        )
-                                                        val minute =
-                                                            ChronoUnit.MINUTES.between(
-                                                                current,
-                                                                out.endAt.toJavaLocalDateTime(),
-                                                            )
+                                                        val totalMinutes = ChronoUnit.MINUTES.between(current, out.endAt.toJavaLocalDateTime())
+                                                        val day = totalMinutes / (24 * 60)
+                                                        val hour = (totalMinutes % (24 * 60)) / 60
+                                                        val minute = totalMinutes % 60
 
                                                         when (out.outType) {
                                                             OutType.OUTING -> {
-                                                                append("${hour}시간 ${minute}분 ")
+                                                                append(
+                                                                    if (hour > 0) {
+                                                                        "${hour}시간 "
+                                                                    } else {
+                                                                        "${minute}분 "
+                                                                    },
+                                                                )
                                                             }
 
                                                             OutType.SLEEPOVER -> {
-                                                                append("${day}일 ${hour}시간 ${minute}분 ")
+                                                                append(
+                                                                    if (day > 0) {
+                                                                        "${day}일 "
+                                                                    } else if (hour > 0) {
+                                                                        "${hour}시간 "
+                                                                    } else {
+                                                                        "${minute}분 "
+                                                                    },
+                                                                )
                                                             }
                                                         }
                                                         withStyle(
@@ -150,8 +155,8 @@ internal fun OutCard(
                                                     style = DodamTheme.typography.heading2Bold(),
                                                     color = DodamTheme.colors.labelNormal,
                                                 )
-
-                                                DodamLinerProgressIndicator(progress = progress)
+                                                Spacer(modifier = Modifier.height(12.dp))
+                                                DodamLinerProgressIndicator(progress = progress.coerceIn(0f, 1f))
                                                 Spacer(modifier = Modifier.height(4.dp))
                                                 Text(
                                                     text = when (out.outType) {
@@ -206,7 +211,7 @@ internal fun OutCard(
                                             Spacer(modifier = Modifier.height(12.dp))
                                             DodamLinerProgressIndicator(
                                                 modifier = Modifier.fillMaxWidth(),
-                                                progress = progress,
+                                                progress = progress.coerceIn(0f, 1f),
                                                 disabled = true,
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
