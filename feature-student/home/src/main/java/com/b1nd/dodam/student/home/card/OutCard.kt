@@ -121,7 +121,6 @@ internal fun OutCard(
                                                         val hour = (totalMinutes % (24 * 60)) / 60
                                                         val minute = totalMinutes % 60
 
-
                                                         when (out.outType) {
                                                             OutType.OUTING -> {
                                                                 append(
@@ -143,7 +142,6 @@ internal fun OutCard(
                                                                         "${minute}분 "
                                                                     },
                                                                 )
-
                                                             }
                                                         }
                                                         withStyle(
