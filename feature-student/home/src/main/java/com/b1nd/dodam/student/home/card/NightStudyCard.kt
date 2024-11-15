@@ -145,7 +145,7 @@ internal fun NightStudyCard(
                                                     color = DodamTheme.colors.labelNormal,
                                                 )
                                                 Spacer(modifier = Modifier.height(12.dp))
-                                                DodamLinerProgressIndicator(progress = progress)
+                                                DodamLinerProgressIndicator(progress = progress.coerceIn(0f, 1f))
 
                                                 Spacer(modifier = Modifier.height(4.dp))
 
@@ -193,7 +193,7 @@ internal fun NightStudyCard(
 
                                             DodamLinerProgressIndicator(
                                                 modifier = Modifier.fillMaxWidth(),
-                                                progress = progress,
+                                                progress = progress.coerceIn(0f, 1f),
                                                 disabled = true,
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
@@ -238,6 +238,7 @@ internal fun NightStudyCard(
                             body = "다시 불러오기",
                         )
                     }
+                    else ->{}
                 }
             } else {
                 Column(
