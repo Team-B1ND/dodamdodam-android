@@ -112,19 +112,10 @@ internal fun NightStudyCard(
                                             Column {
                                                 Text(
                                                     text = buildAnnotatedString {
-                                                        val day = ChronoUnit.DAYS.between(
-                                                            current,
-                                                            nightStudy.endAt.toJavaLocalDateTime(),
-                                                        )
-                                                        val hour = ChronoUnit.HOURS.between(
-                                                            current,
-                                                            nightStudy.endAt.toJavaLocalDateTime(),
-                                                        )
-                                                        val minute =
-                                                            ChronoUnit.MINUTES.between(
-                                                                current,
-                                                                nightStudy.endAt.toJavaLocalDateTime(),
-                                                            )
+                                                        val totalMinutes = ChronoUnit.MINUTES.between(current, nightStudy.endAt.toJavaLocalDateTime())
+                                                        val day = totalMinutes / (24 * 60)
+                                                        val hour = (totalMinutes % (24 * 60)) / 60
+                                                        val minute = totalMinutes % 60
 
                                                         append(
                                                             if (day > 0) {
