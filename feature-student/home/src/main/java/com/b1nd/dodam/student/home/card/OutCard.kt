@@ -121,13 +121,29 @@ internal fun OutCard(
                                                         val hour = (totalMinutes % (24 * 60)) / 60
                                                         val minute = totalMinutes % 60
 
+
                                                         when (out.outType) {
                                                             OutType.OUTING -> {
-                                                                append("${hour}시간 ${minute}분 ")
+                                                                append(
+                                                                    if (hour > 0) {
+                                                                        "${hour}시간 "
+                                                                    } else {
+                                                                        "${minute}분 "
+                                                                    },
+                                                                )
                                                             }
 
                                                             OutType.SLEEPOVER -> {
-                                                                append("${day}일 ${hour}시간 ${minute}분 ")
+                                                                append(
+                                                                    if (day > 0) {
+                                                                        "${day}일 "
+                                                                    } else if (hour > 0) {
+                                                                        "${hour}시간 "
+                                                                    } else {
+                                                                        "${minute}분 "
+                                                                    },
+                                                                )
+
                                                             }
                                                         }
                                                         withStyle(
