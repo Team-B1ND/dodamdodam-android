@@ -68,14 +68,14 @@ internal fun OutCard(
                     is OutUiState.Success -> {
                         uiState.data?.let { out ->
                             val outProgress = (
-                                ChronoUnit.SECONDS.between(
+                                1 - ChronoUnit.SECONDS.between(
                                     out.startAt.toJavaLocalDateTime(),
                                     current,
                                 ).toFloat() / ChronoUnit.SECONDS.between(
                                     out.startAt.toJavaLocalDateTime(),
                                     out.endAt.toJavaLocalDateTime(),
                                 )
-                                ).coerceAtLeast(0f)
+                                )
 
                             val progress by animateFloatAsState(
                                 targetValue = if (playOnlyOnce || isRefreshing) 0f else outProgress,
@@ -151,7 +151,7 @@ internal fun OutCard(
                                                     color = DodamTheme.colors.labelNormal,
                                                 )
 
-                                                DodamLinerProgressIndicator(progress = progress)
+                                                DodamLinerProgressIndicator(progress = progress.coerceIn(0f, 1f))
                                                 Spacer(modifier = Modifier.height(4.dp))
                                                 Text(
                                                     text = when (out.outType) {
@@ -206,7 +206,7 @@ internal fun OutCard(
                                             Spacer(modifier = Modifier.height(12.dp))
                                             DodamLinerProgressIndicator(
                                                 modifier = Modifier.fillMaxWidth(),
-                                                progress = progress,
+                                                progress = progress.coerceIn(0f, 1f),
                                                 disabled = true,
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
