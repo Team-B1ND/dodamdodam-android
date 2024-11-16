@@ -5,10 +5,8 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,7 +30,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -49,9 +46,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
@@ -72,14 +66,12 @@ import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
-import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import com.b1nd.dodam.ui.icons.SmileMoon
+import java.time.temporal.ChronoUnit
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import org.koin.androidx.compose.koinViewModel
-import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalFoundationApi
@@ -118,7 +110,7 @@ fun NightStudyScreen(
 
     if (showDialog) {
         Dialog(
-            onDismissRequest = { showDialog = false }
+            onDismissRequest = { showDialog = false },
         ) {
             DodamButtonDialog(
                 confirmButtonText = "삭제",
@@ -127,7 +119,7 @@ fun NightStudyScreen(
                 dismissButton = { showDialog = false },
                 dismissButtonRole = ButtonRole.Primary,
                 title = "정말 삭제하시겠어요?",
-                body = reason
+                body = reason,
             )
         }
     }
@@ -142,9 +134,9 @@ fun NightStudyScreen(
                     actionIcons = persistentListOf(
                         ActionIcon(
                             icon = DodamIcons.Plus,
-                            onClick = onAddClick
-                        )
-                    )
+                            onClick = onAddClick,
+                        ),
+                    ),
                 )
                 AnimatedVisibility(nightStudyScreenState.canScrollBackward) {
                     Box(
@@ -204,7 +196,7 @@ fun NightStudyScreen(
                                                     reason = nightStudy.content
                                                     showDialog = true
                                                 },
-                                                playOnlyOnce = playOnlyOnce
+                                                playOnlyOnce = playOnlyOnce,
                                             )
                                         }
                                         Status.ALLOWED -> {
@@ -219,18 +211,18 @@ fun NightStudyScreen(
                                                     reason = nightStudy.content
                                                     showDialog = true
                                                 },
-                                                playOnlyOnce = playOnlyOnce
+                                                playOnlyOnce = playOnlyOnce,
                                             )
                                         }
                                         Status.REJECTED -> {
                                             NightStudyApplyRejectCell(
                                                 reason = nightStudy.content,
-                                                rejectReason = nightStudy.rejectReason?: "",
+                                                rejectReason = nightStudy.rejectReason ?: "",
                                                 onTrashClick = {
                                                     id = nightStudy.id
                                                     reason = nightStudy.content
                                                     showDialog = true
-                                                }
+                                                },
                                             )
                                         }
                                     }
@@ -240,7 +232,7 @@ fun NightStudyScreen(
                                     DodamEmpty(
                                         onClick = onAddClick,
                                         title = "아직 신청한 심야 자습이 없어요.",
-                                        buttonText = "심야 자습 신청하기"
+                                        buttonText = "심야 자습 신청하기",
                                     )
                                 }
                             }
@@ -337,7 +329,6 @@ fun NightStudyScreen(
     }
 }
 
-
 @Composable
 private fun NightStudyApplyCell(
     modifier: Modifier = Modifier,
@@ -350,13 +341,15 @@ private fun NightStudyApplyCell(
     onTrashClick: () -> Unit,
     playOnlyOnce: Boolean,
 ) {
-    val nightStudyProgress = (ChronoUnit.SECONDS.between(
-        startAt.toJavaLocalDateTime(),
-        current.toJavaLocalDateTime(),
-    ).toFloat() / ChronoUnit.SECONDS.between(
-        startAt.toJavaLocalDateTime(),
-        endAt.toJavaLocalDateTime(),
-    )).coerceIn(0f, 1f)
+    val nightStudyProgress = (
+        ChronoUnit.SECONDS.between(
+            startAt.toJavaLocalDateTime(),
+            current.toJavaLocalDateTime(),
+        ).toFloat() / ChronoUnit.SECONDS.between(
+            startAt.toJavaLocalDateTime(),
+            endAt.toJavaLocalDateTime(),
+        )
+        ).coerceIn(0f, 1f)
 
     val progress by animateFloatAsState(
         targetValue = if (playOnlyOnce) 0f else nightStudyProgress,
@@ -371,23 +364,23 @@ private fun NightStudyApplyCell(
     Surface(
         modifier = modifier,
         shape = DodamTheme.shapes.large,
-        color = DodamTheme.colors.backgroundNormal
+        color = DodamTheme.colors.backgroundNormal,
     ) {
         Column(
             modifier = Modifier
                 .padding(
                     vertical = 16.dp,
-                    horizontal = 12.dp
+                    horizontal = 12.dp,
                 ),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 DodamTag(
                     text = if (tagType == TagType.Primary) "승인됨" else "대기 중",
-                    tagType = tagType
+                    tagType = tagType,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(
@@ -396,11 +389,11 @@ private fun NightStudyApplyCell(
                         .clickable(
                             indication = rememberBounceIndication(),
                             interactionSource = remember { MutableInteractionSource() },
-                            onClick = onTrashClick
+                            onClick = onTrashClick,
                         ),
                     imageVector = DodamIcons.Trash.value,
                     contentDescription = "쓰레기통",
-                    tint = DodamTheme.colors.lineNormal
+                    tint = DodamTheme.colors.lineNormal,
                 )
             }
 
@@ -408,11 +401,11 @@ private fun NightStudyApplyCell(
                 modifier = Modifier.fillMaxWidth(),
                 text = reason,
                 style = DodamTheme.typography.body1Medium(),
-                color = DodamTheme.colors.labelNormal
+                color = DodamTheme.colors.labelNormal,
             )
             DodamDivider(type = DividerType.Normal)
             Row(
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
             ) {
                 val day = ChronoUnit.DAYS.between(
                     current.toJavaLocalDateTime(),
@@ -421,27 +414,27 @@ private fun NightStudyApplyCell(
                 Text(
                     text = "${day}일",
                     style = DodamTheme.typography.heading2Bold(),
-                    color = DodamTheme.colors.labelNormal
+                    color = DodamTheme.colors.labelNormal,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "남음",
                     style = DodamTheme.typography.labelMedium(),
-                    color = DodamTheme.colors.labelAlternative
+                    color = DodamTheme.colors.labelAlternative,
                 )
             }
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 DodamLinerProgressIndicator(
                     progress = progress,
-                    disabled = tagType != TagType.Primary
+                    disabled = tagType != TagType.Primary,
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "시작",
@@ -480,7 +473,7 @@ private fun NightStudyApplyCell(
 
             if (phoneReason != null) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "휴대폰 사유",
@@ -500,32 +493,27 @@ private fun NightStudyApplyCell(
 }
 
 @Composable
-private fun NightStudyApplyRejectCell(
-    modifier: Modifier = Modifier,
-    reason: String,
-    rejectReason: String,
-    onTrashClick: () -> Unit
-) {
+private fun NightStudyApplyRejectCell(modifier: Modifier = Modifier, reason: String, rejectReason: String, onTrashClick: () -> Unit) {
     Surface(
         modifier = modifier,
         shape = DodamTheme.shapes.large,
-        color = DodamTheme.colors.backgroundNormal
+        color = DodamTheme.colors.backgroundNormal,
     ) {
         Column(
             modifier = Modifier
                 .padding(
                     vertical = 16.dp,
-                    horizontal = 12.dp
+                    horizontal = 12.dp,
                 ),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 DodamTag(
                     text = "거절됨",
-                    tagType = TagType.Negative
+                    tagType = TagType.Negative,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(
@@ -534,11 +522,11 @@ private fun NightStudyApplyRejectCell(
                         .clickable(
                             indication = rememberBounceIndication(),
                             interactionSource = remember { MutableInteractionSource() },
-                            onClick = onTrashClick
+                            onClick = onTrashClick,
                         ),
                     imageVector = DodamIcons.Trash.value,
                     contentDescription = "쓰레기통",
-                    tint = DodamTheme.colors.lineNormal
+                    tint = DodamTheme.colors.lineNormal,
                 )
             }
 
@@ -546,12 +534,12 @@ private fun NightStudyApplyRejectCell(
                 modifier = Modifier.fillMaxWidth(),
                 text = reason,
                 style = DodamTheme.typography.body1Medium(),
-                color = DodamTheme.colors.labelNormal
+                color = DodamTheme.colors.labelNormal,
             )
             DodamDivider(type = DividerType.Normal)
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "거절 사유",
