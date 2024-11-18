@@ -31,7 +31,6 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -263,8 +262,8 @@ fun NightStudyScreen(
                                                     .height(28.dp)
                                                     .background(
                                                         brush = shimmerEffect(),
-                                                        shape = CircleShape
-                                                    )
+                                                        shape = CircleShape,
+                                                    ),
                                             )
                                             Spacer(modifier = Modifier.weight(1f))
                                             Box(
@@ -272,8 +271,8 @@ fun NightStudyScreen(
                                                     .size(24.dp)
                                                     .background(
                                                         brush = shimmerEffect(),
-                                                        shape = RoundedCornerShape(4.dp)
-                                                    )
+                                                        shape = RoundedCornerShape(4.dp),
+                                                    ),
                                             )
                                         }
 
@@ -283,8 +282,8 @@ fun NightStudyScreen(
                                                 .height(24.dp)
                                                 .background(
                                                     brush = shimmerEffect(),
-                                                    shape = RoundedCornerShape(8.dp)
-                                                )
+                                                    shape = RoundedCornerShape(8.dp),
+                                                ),
                                         )
                                         DodamDivider(type = DividerType.Normal)
                                         Box(
@@ -293,8 +292,8 @@ fun NightStudyScreen(
                                                 .height(28.dp)
                                                 .background(
                                                     brush = shimmerEffect(),
-                                                    shape = RoundedCornerShape(8.dp)
-                                                )
+                                                    shape = RoundedCornerShape(8.dp),
+                                                ),
                                         )
 
                                         Column(
@@ -307,8 +306,8 @@ fun NightStudyScreen(
                                                     .height(14.dp)
                                                     .background(
                                                         brush = shimmerEffect(),
-                                                        shape = RoundedCornerShape(8.dp)
-                                                    )
+                                                        shape = RoundedCornerShape(8.dp),
+                                                    ),
                                             )
                                             Row(
                                                 modifier = Modifier.fillMaxWidth(),
@@ -320,8 +319,8 @@ fun NightStudyScreen(
                                                         .height(24.dp)
                                                         .background(
                                                             brush = shimmerEffect(),
-                                                            shape = CircleShape
-                                                        )
+                                                            shape = CircleShape,
+                                                        ),
                                                 )
 
                                                 Spacer(modifier = Modifier.weight(1f))
@@ -331,8 +330,8 @@ fun NightStudyScreen(
                                                         .height(24.dp)
                                                         .background(
                                                             brush = shimmerEffect(),
-                                                            shape = CircleShape
-                                                        )
+                                                            shape = CircleShape,
+                                                        ),
                                                 )
                                             }
                                         }

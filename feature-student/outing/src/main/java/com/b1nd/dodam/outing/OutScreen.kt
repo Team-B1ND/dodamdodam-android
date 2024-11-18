@@ -5,7 +5,6 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -25,15 +24,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -48,15 +45,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.outing.model.OutType
-import com.b1nd.dodam.data.outing.model.Outing
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
@@ -70,21 +64,19 @@ import com.b1nd.dodam.designsystem.component.DodamLinerProgressIndicator
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTag
-import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.outing.viewmodel.OutUiState
 import com.b1nd.dodam.outing.viewmodel.OutingViewModel
-import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ConvenienceStore
 import com.b1nd.dodam.ui.icons.Tent
+import java.time.temporal.ChronoUnit
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import org.koin.androidx.compose.koinViewModel
-import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalFoundationApi
@@ -125,7 +117,7 @@ fun OutingScreen(
         Dialog(
             onDismissRequest = {
                 showDialog = false
-            }
+            },
         ) {
             DodamButtonDialog(
                 confirmButtonText = "삭제",
@@ -143,7 +135,7 @@ fun OutingScreen(
                     showDialog = false
                 },
                 title = "정말 삭제하시겠어요?",
-                body = reason
+                body = reason,
             )
         }
     }
@@ -157,7 +149,7 @@ fun OutingScreen(
                         ActionIcon(
                             icon = DodamIcons.Plus,
                             onClick = onAddOutingClick,
-                        )
+                        ),
                     ),
                 )
                 AnimatedVisibility(outScreenState.canScrollBackward) {
@@ -194,9 +186,9 @@ fun OutingScreen(
                         DodamSegment(
                             selected = index == selectedIndex,
                             onClick = { selectedIndex = index },
-                            text = if (index == 0) "외출" else "외박"
+                            text = if (index == 0) "외출" else "외박",
                         )
-                    }.toImmutableList()
+                    }.toImmutableList(),
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -229,7 +221,7 @@ fun OutingScreen(
                                                     showDialog = true
                                                 },
                                                 playOnlyOnce = playOnlyOnce,
-                                                isOut = out.outType == OutType.OUTING
+                                                isOut = out.outType == OutType.OUTING,
                                             )
                                         }
                                         Status.ALLOWED -> {
@@ -250,12 +242,12 @@ fun OutingScreen(
                                         Status.REJECTED -> {
                                             OutApplyRejectCell(
                                                 reason = out.reason,
-                                                rejectReason = out.rejectReason?: "",
+                                                rejectReason = out.rejectReason ?: "",
                                                 onTrashClick = {
                                                     id = out.id
                                                     reason = out.reason
                                                     showDialog = true
-                                                }
+                                                },
                                             )
                                         }
                                     }
@@ -297,8 +289,8 @@ fun OutingScreen(
                                                     .height(28.dp)
                                                     .background(
                                                         brush = shimmerEffect(),
-                                                        shape = CircleShape
-                                                    )
+                                                        shape = CircleShape,
+                                                    ),
                                             )
                                             Spacer(modifier = Modifier.weight(1f))
                                             Box(
@@ -306,8 +298,8 @@ fun OutingScreen(
                                                     .size(24.dp)
                                                     .background(
                                                         brush = shimmerEffect(),
-                                                        shape = RoundedCornerShape(4.dp)
-                                                    )
+                                                        shape = RoundedCornerShape(4.dp),
+                                                    ),
                                             )
                                         }
 
@@ -317,8 +309,8 @@ fun OutingScreen(
                                                 .height(24.dp)
                                                 .background(
                                                     brush = shimmerEffect(),
-                                                    shape = RoundedCornerShape(8.dp)
-                                                )
+                                                    shape = RoundedCornerShape(8.dp),
+                                                ),
                                         )
                                         DodamDivider(type = DividerType.Normal)
                                         Box(
@@ -327,8 +319,8 @@ fun OutingScreen(
                                                 .height(28.dp)
                                                 .background(
                                                     brush = shimmerEffect(),
-                                                    shape = RoundedCornerShape(8.dp)
-                                                )
+                                                    shape = RoundedCornerShape(8.dp),
+                                                ),
                                         )
 
                                         Column(
@@ -341,8 +333,8 @@ fun OutingScreen(
                                                     .height(14.dp)
                                                     .background(
                                                         brush = shimmerEffect(),
-                                                        shape = RoundedCornerShape(8.dp)
-                                                    )
+                                                        shape = RoundedCornerShape(8.dp),
+                                                    ),
                                             )
                                             Row(
                                                 modifier = Modifier.fillMaxWidth(),
@@ -354,8 +346,8 @@ fun OutingScreen(
                                                         .height(24.dp)
                                                         .background(
                                                             brush = shimmerEffect(),
-                                                            shape = CircleShape
-                                                        )
+                                                            shape = CircleShape,
+                                                        ),
                                                 )
 
                                                 Spacer(modifier = Modifier.weight(1f))
@@ -365,8 +357,8 @@ fun OutingScreen(
                                                         .height(24.dp)
                                                         .background(
                                                             brush = shimmerEffect(),
-                                                            shape = CircleShape
-                                                        )
+                                                            shape = CircleShape,
+                                                        ),
                                                 )
                                             }
                                         }
@@ -405,7 +397,6 @@ fun OutingScreen(
     }
 }
 
-
 @Composable
 private fun OutApplyCell(
     modifier: Modifier = Modifier,
@@ -419,14 +410,14 @@ private fun OutApplyCell(
     playOnlyOnce: Boolean,
 ) {
     val nightStudyProgress = (
-            ChronoUnit.SECONDS.between(
-                startAt.toJavaLocalDateTime(),
-                current.toJavaLocalDateTime(),
-            ).toFloat() / ChronoUnit.SECONDS.between(
-                startAt.toJavaLocalDateTime(),
-                endAt.toJavaLocalDateTime(),
-            )
-            ).coerceIn(0f, 1f)
+        ChronoUnit.SECONDS.between(
+            startAt.toJavaLocalDateTime(),
+            current.toJavaLocalDateTime(),
+        ).toFloat() / ChronoUnit.SECONDS.between(
+            startAt.toJavaLocalDateTime(),
+            endAt.toJavaLocalDateTime(),
+        )
+        ).coerceIn(0f, 1f)
 
     val progress by animateFloatAsState(
         targetValue = if (playOnlyOnce) 0f else nightStudyProgress,
@@ -486,24 +477,25 @@ private fun OutApplyCell(
             ) {
                 val totalMinutes = ChronoUnit.MINUTES.between(
                     current.toJavaLocalDateTime(),
-                    endAt.toJavaLocalDateTime()
+                    endAt.toJavaLocalDateTime(),
                 )
                 val day = totalMinutes / (24 * 60)
                 val hour = (totalMinutes % (24 * 60)) / 60
                 val minute = totalMinutes % 60
 
-                val text = if (isOut)
+                val text = if (isOut) {
                     if (hour > 0) {
                         "${hour}시간 "
                     } else {
                         "${minute}분 "
-                    } else if (day > 0) {
-                        "${day+1}일 "
-                    } else if (hour > 0) {
-                        "${hour}시간 "
-                    } else {
-                        "${minute}분 "
                     }
+                } else if (day > 0) {
+                    "${day + 1}일 "
+                } else if (hour > 0) {
+                    "${hour}시간 "
+                } else {
+                    "${minute}분 "
+                }
                 Text(
                     text = text,
                     style = DodamTheme.typography.heading2Bold(),
@@ -536,16 +528,19 @@ private fun OutApplyCell(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = if (isOut)
+                        text = if (isOut) {
                             String.format(
                                 "%d시 %d분",
                                 startAt.hour,
                                 startAt.minute,
-                            ) else String.format(
+                            )
+                        } else {
+                            String.format(
                                 "%d월 %d일",
                                 startAt.monthNumber,
                                 startAt.dayOfMonth,
-                        ),
+                            )
+                        },
                         style = DodamTheme.typography.body1Medium(),
                         color = DodamTheme.colors.labelNeutral,
                     )
@@ -558,17 +553,19 @@ private fun OutApplyCell(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = if (isOut)
+                        text = if (isOut) {
                             String.format(
                                 "%d시 %d분",
                                 endAt.hour,
                                 endAt.minute,
-                            ) else
+                            )
+                        } else {
                             String.format(
                                 "%d월 %d일",
                                 endAt.monthNumber,
                                 endAt.dayOfMonth,
-                            ),
+                            )
+                        },
                         style = DodamTheme.typography.body1Medium(),
                         color = DodamTheme.colors.labelNeutral,
                     )
