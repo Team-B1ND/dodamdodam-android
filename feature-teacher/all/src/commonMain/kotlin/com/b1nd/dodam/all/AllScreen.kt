@@ -117,7 +117,7 @@ internal fun AllScreen(
                                 ),
                         )
                     } else {
-                        if (uiState.memberInfo.profileImage == null || uiState.memberInfo.profileImage == "") {
+                        if (uiState.memberInfo.profileImage.isNullOrEmpty()) {
                             Image(
                                 bitmap = DefaultProfile,
                                 contentDescription = "profile",
