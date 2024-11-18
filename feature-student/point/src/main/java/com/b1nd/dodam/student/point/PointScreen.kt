@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,7 +19,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,29 +29,35 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.data.point.model.ScoreType
-import com.b1nd.dodam.dds.component.DodamDialog
-import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
-import com.b1nd.dodam.dds.component.button.DodamSegment
-import com.b1nd.dodam.dds.component.button.DodamSegmentedButtonRow
-import com.b1nd.dodam.dds.component.button.DodamTextButton
-import com.b1nd.dodam.dds.style.BodyLarge
-import com.b1nd.dodam.dds.style.BodyMedium
-import com.b1nd.dodam.dds.style.HeadlineLarge
-import com.b1nd.dodam.dds.style.LabelLarge
-import com.b1nd.dodam.dds.style.TitleMedium
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.DodamDialog
+import com.b1nd.dodam.designsystem.component.DodamSegment
+import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
+import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import kotlinx.collections.immutable.toImmutableList
 import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
 internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackStack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
-    var selectedIndex by remember { mutableIntStateOf(0) }
 
     var showDialog by remember { mutableStateOf(false) }
+    var titleIndex by remember { mutableIntStateOf(0) }
+    val text = listOf(
+        "기숙사",
+        "학교",
+    )
+    val item = List(2) { index: Int ->
+        DodamSegment(
+            selected = titleIndex == index,
+            text = text[index],
+            onClick = { titleIndex = index },
+        )
+    }.toImmutableList()
 
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect {
@@ -65,33 +71,23 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
 
     if (showDialog) {
         DodamDialog(
-            onDismissRequest = {
+            title = "상벌점을 불러오지 못했어요",
+            text = "확인",
+            confirmButton = {
                 showDialog = false
-                popBackStack()
             },
-            confirmText = {
-                DodamTextButton(onClick = {
-                    showDialog = false
-                    popBackStack()
-                }) {
-                    Text(text = "확인")
-                }
-            },
-            title = { Text(text = "상벌점을 불러오지 못했어요") },
         )
     }
 
     Scaffold(
         topBar = {
-            DodamSmallTopAppBar(
-                title = { Text(text = "내 상벌점") },
-                onNavigationIconClick = popBackStack,
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                ),
+            DodamTopAppBar(
+                modifier = Modifier.statusBarsPadding(),
+                title = "내 상벌점",
+                onBackClick = popBackStack,
             )
         },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -100,15 +96,9 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                 .padding(end = 24.dp, start = 24.dp, top = 16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            DodamSegmentedButtonRow(selectedIndex = selectedIndex) {
-                DodamSegment(selected = selectedIndex == 0, onClick = { selectedIndex = 0 }) {
-                    Text(text = "기숙사")
-                }
-
-                DodamSegment(selected = selectedIndex == 1, onClick = { selectedIndex = 1 }) {
-                    Text(text = "학교")
-                }
-            }
+            DodamSegmentedButton(
+                segments = item,
+            )
 
             Row(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -117,22 +107,30 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    BodyMedium(text = "벌점", color = MaterialTheme.colorScheme.tertiary)
-                    HeadlineLarge(
-                        text = if (selectedIndex == 0) "${uiState.dormitoryPoint.first}점" else "${uiState.schoolPoint.first}점",
-                        color = MaterialTheme.colorScheme.error,
-                        fontWeight = FontWeight.Bold,
+                    Text(
+                        text = "상점",
+                        color = DodamTheme.colors.labelAssistive,
+                        style = DodamTheme.typography.body1Bold(),
+                    )
+                    Text(
+                        text = if (titleIndex == 0) "${uiState.dormitoryPoint.second}점" else "${uiState.schoolPoint.second}점",
+                        color = DodamTheme.colors.primaryNormal,
+                        style = DodamTheme.typography.title1Bold(),
                     )
                 }
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    BodyMedium(text = "상점", color = MaterialTheme.colorScheme.tertiary)
-                    HeadlineLarge(
-                        text = if (selectedIndex == 0) "${uiState.dormitoryPoint.second}점" else "${uiState.schoolPoint.second}점",
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold,
+                    Text(
+                        text = "벌점",
+                        color = DodamTheme.colors.labelAssistive,
+                        style = DodamTheme.typography.body1Bold(),
+                    )
+                    Text(
+                        text = if (titleIndex == 0) "${uiState.dormitoryPoint.first}점" else "${uiState.schoolPoint.first}점",
+                        color = DodamTheme.colors.statusNegative,
+                        style = DodamTheme.typography.title1Bold(),
                     )
                 }
             }
@@ -144,7 +142,11 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                     .background(MaterialTheme.colorScheme.outlineVariant),
             )
 
-            TitleMedium(text = "상벌점 발급 내역")
+            Text(
+                text = "상벌점 발급 내역",
+                color = DodamTheme.colors.labelNormal,
+                style = DodamTheme.typography.headlineBold(),
+            )
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -186,7 +188,7 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                     }
                 } else {
                     items(
-                        items = if (selectedIndex == 0) {
+                        items = if (titleIndex == 0) {
                             uiState.dormitoryPointReasons
                         } else {
                             uiState.schoolPointReasons
@@ -202,25 +204,28 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(2.dp),
                             ) {
-                                BodyLarge(
+                                Text(
                                     text = it.reason.reason,
-                                    color = MaterialTheme.colorScheme.onBackground,
+                                    color = DodamTheme.colors.labelNormal,
+                                    style = DodamTheme.typography.headlineBold(),
                                 )
-                                LabelLarge(
+                                Text(
                                     text = "${it.teacher.name} · ${it.issueAt}",
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    color = DodamTheme.colors.labelAssistive,
+                                    style = DodamTheme.typography.labelMedium(),
                                 )
                             }
 
                             Spacer(modifier = Modifier.weight(1f))
 
-                            BodyLarge(
+                            Text(
                                 text = "${it.reason.score}점",
                                 color = if (it.reason.scoreType == ScoreType.MINUS) {
-                                    MaterialTheme.colorScheme.error
+                                    DodamTheme.colors.statusNegative
                                 } else {
-                                    MaterialTheme.colorScheme.primary
+                                    DodamTheme.colors.primaryNormal
                                 },
+                                style = DodamTheme.typography.headlineBold(),
                             )
                         }
                     }
