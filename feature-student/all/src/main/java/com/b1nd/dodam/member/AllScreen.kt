@@ -130,7 +130,7 @@ fun AllScreen(
                 ) {
                     uiState.memberInfo?.let { myInfo ->
                         Box {
-                            if (myInfo.profileImage != null) {
+                            if (!myInfo.profileImage.isNullOrEmpty()) {
                                 AsyncImage(
                                     model = myInfo.profileImage,
                                     contentDescription = "profile",
