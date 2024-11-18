@@ -163,12 +163,12 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                     }
                 }
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(DodamTheme.colors.lineAlternative),
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(DodamTheme.colors.lineAlternative),
+            )
 
                 Text(
                     text = "상벌점 발급 내역",
