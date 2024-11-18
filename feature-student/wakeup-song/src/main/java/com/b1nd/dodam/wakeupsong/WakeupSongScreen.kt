@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -41,7 +40,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.data.core.model.Status
@@ -91,7 +89,8 @@ fun WakeupSongScreen(
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(DodamTheme.colors.backgroundNormal),
         topBar = {
             DodamTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
@@ -104,7 +103,7 @@ fun WakeupSongScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(16.dp)),
+                .background(DodamTheme.colors.backgroundNormal, RoundedCornerShape(16.dp)),
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -156,7 +155,7 @@ fun WakeupSongScreen(
                             selectedTabIndex = selectedTabIndex,
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            containerColor = MaterialTheme.colorScheme.background,
+                            containerColor = DodamTheme.colors.backgroundNormal,
                             indicator = { tabPositions ->
                                 if (selectedTabIndex < tabPositions.size) {
                                     TabRowDefaults.SecondaryIndicator(
@@ -164,7 +163,7 @@ fun WakeupSongScreen(
                                             .tabIndicatorOffset(tabPositions[selectedTabIndex])
                                             .padding(horizontal = 8.dp)
                                             .clip(CircleShape),
-                                        color = MaterialTheme.colorScheme.onSurface,
+                                        color = DodamTheme.colors.labelNormal,
                                     )
                                 }
                             },
@@ -174,8 +173,8 @@ fun WakeupSongScreen(
                                 onClick = {
                                     selectedTabIndex = 0
                                 },
-                                selectedContentColor = MaterialTheme.colorScheme.onSurface,
-                                unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                selectedContentColor = DodamTheme.colors.labelNormal,
+                                unselectedContentColor = DodamTheme.colors.labelAssistive,
                                 interactionSource = remember { NoInteractionSource() },
                             ) {
                                 Spacer(modifier = Modifier.height(16.dp))
@@ -188,8 +187,8 @@ fun WakeupSongScreen(
                                 onClick = {
                                     selectedTabIndex = 1
                                 },
-                                selectedContentColor = MaterialTheme.colorScheme.onSurface,
-                                unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                selectedContentColor = DodamTheme.colors.labelNormal,
+                                unselectedContentColor = DodamTheme.colors.labelAssistive,
                                 interactionSource = remember { NoInteractionSource() },
                             ) {
                                 Spacer(modifier = Modifier.height(16.dp))
@@ -326,10 +325,8 @@ fun WakeupSongCard(
                     index?.let {
                         Text(
                             text = index.toString(),
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                fontSize = 14.sp,
-                            ),
-                            color = MaterialTheme.colorScheme.primary,
+                            style = DodamTheme.typography.labelBold(),
+                            color = DodamTheme.colors.primaryNormal,
                             modifier = Modifier
                                 .align(Alignment.CenterVertically),
                         )
@@ -382,8 +379,8 @@ fun WakeupSongCard(
                             text = wakeupSong.channelTitle,
                             modifier = Modifier
                                 .basicMarquee(),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                            color = DodamTheme.colors.labelAlternative,
+                            style = DodamTheme.typography.caption1Medium(),
                         )
                     }
                 }
