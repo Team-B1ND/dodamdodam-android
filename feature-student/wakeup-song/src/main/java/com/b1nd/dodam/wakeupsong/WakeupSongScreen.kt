@@ -3,6 +3,8 @@ package com.b1nd.dodam.wakeupsong
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,12 +13,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -25,7 +27,6 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,23 +40,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.data.core.model.Status
-import com.b1nd.dodam.dds.animation.bounceClick
-import com.b1nd.dodam.dds.animation.bounceCombinedClick
-import com.b1nd.dodam.dds.component.DodamDialog
-import com.b1nd.dodam.dds.component.DodamSmallTopAppBar
-import com.b1nd.dodam.dds.component.button.DodamCTAButton
-import com.b1nd.dodam.dds.component.button.DodamLargeFilledButton
-import com.b1nd.dodam.dds.style.BodyLarge
-import com.b1nd.dodam.dds.style.BodyMedium
-import com.b1nd.dodam.dds.style.LabelLarge
-import com.b1nd.dodam.dds.style.TitleLarge
-import com.b1nd.dodam.dds.style.TitleMedium
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.ButtonRole
+import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamButtonDialog
+import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.NoInteractionSource
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
@@ -98,17 +93,12 @@ fun WakeupSongScreen(
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
-            DodamSmallTopAppBar(
-                title = {
-                    BodyLarge(text = "기상송")
-                },
-                onNavigationIconClick = popBackStack,
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                ),
+            DodamTopAppBar(
+                modifier = Modifier.statusBarsPadding(),
+                title = "기상송",
+                onBackClick = popBackStack,
             )
         },
-
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -122,11 +112,13 @@ fun WakeupSongScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 item {
-                    TitleMedium(
+                    Text(
                         text = "오늘의 기상송",
                         modifier = Modifier
                             .padding(start = 16.dp, end = 16.dp, top = 10.dp)
                             .fillMaxWidth(),
+                        style = DodamTheme.typography.headlineBold(),
+                        color = DodamTheme.colors.labelNormal,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -143,14 +135,19 @@ fun WakeupSongScreen(
                     }
                 } else {
                     item {
-                        LabelLarge(
-                            text = "승인된 기상송이 없어요.",
+                        Box(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 40.dp),
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.tertiary,
-                        )
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = "승인된 기상송이 없어요.",
+                                modifier = Modifier
+                                    .padding(vertical = 40.dp),
+                                style = DodamTheme.typography.headlineBold(),
+                                color = DodamTheme.colors.labelAssistive,
+                            )
+                        }
                     }
                 }
                 stickyHeader {
@@ -227,9 +224,10 @@ fun WakeupSongScreen(
                     } else {
                         item {
                             Spacer(modifier = Modifier.height(24.dp))
-                            LabelLarge(
+                            Text(
                                 text = if (selectedTabIndex == 0) "대기중인 기상송이 없어요" else "신청한 기상송이 없어요",
-                                color = MaterialTheme.colorScheme.tertiary,
+                                style = DodamTheme.typography.headlineBold(),
+                                color = DodamTheme.colors.labelAssistive,
                             )
                         }
                     }
@@ -246,13 +244,15 @@ fun WakeupSongScreen(
                 }
             }
 
-            DodamCTAButton(
+            DodamButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+                    .padding(horizontal = 16.dp)
+                    .align(Alignment.BottomCenter),
                 onClick = onClickAddWakeupSong,
-                showBackground = true,
-                backgroundColor = MaterialTheme.colorScheme.background,
-            ) {
-                BodyLarge(text = "기상송 신청하기")
-            }
+                text = "기상송 신청",
+            )
         }
     }
 }
@@ -274,50 +274,25 @@ fun WakeupSongCard(
     val uriHandler = LocalUriHandler.current
 
     if (showDialog && !isShimmer && selectedTabIndex != null && wakeupSong != null && isMine) {
-        DodamDialog(
+        Dialog(
             onDismissRequest = {
                 showDialog = false
             },
-            dismissButton = {
-                DodamLargeFilledButton(
-                    onClick = {
-                        showDialog = false
-                    },
-                    modifier = Modifier.weight(1.0f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    ),
-                ) {
-                    Text(text = "취소")
-                }
-            },
-            confirmButton = {
-                DodamLargeFilledButton(
-                    onClick = {
-                        viewModel.deleteWakeupSong(wakeupSong.id)
-                        showDialog = false
-                    },
-                    modifier = Modifier.weight(1.0f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = MaterialTheme.colorScheme.onError,
-                    ),
-                ) {
-                    Text(text = "삭제")
-                }
-            },
-            text = {
-                Text(
-                    text = wakeupSong.videoTitle,
-                    maxLines = 3,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.Medium,
-                    ),
-                )
-            },
-            title = { TitleLarge(text = "기상송을 삭제하시겠어요?") },
-        )
+        ) {
+            DodamButtonDialog(
+                confirmButton = {
+                    viewModel.deleteWakeupSong(wakeupSong.id)
+                    showDialog = false
+                },
+                dismissButton = {
+                    showDialog = false
+                },
+                confirmButtonRole = ButtonRole.Negative,
+                confirmButtonText = "삭제",
+                title = "기상송을 삭제하시겠요?",
+                body = wakeupSong.videoTitle,
+            )
+        }
     }
     if (wakeupSong != null && selectedTabIndex != null && !isShimmer) {
         Row(
@@ -326,7 +301,9 @@ fun WakeupSongCard(
                 .padding(horizontal = 8.dp)
                 .then(
                     if (isMine) {
-                        Modifier.bounceCombinedClick(
+                        Modifier.combinedClickable(
+                            indication = rememberBounceIndication(),
+                            interactionSource = remember { MutableInteractionSource() },
                             onClick = {
                                 uriHandler.openUri(wakeupSong.videoUrl)
                             },
@@ -335,7 +312,7 @@ fun WakeupSongCard(
                             },
                         )
                     } else {
-                        Modifier.bounceClick(onClick = {
+                        Modifier.combinedClickable(onClick = {
                             uriHandler.openUri(wakeupSong.videoUrl)
                         })
                     },
@@ -377,27 +354,28 @@ fun WakeupSongCard(
                                 when (wakeupSong.status) {
                                     Status.PENDING -> {}
                                     Status.ALLOWED -> {
-                                        BodyMedium(
+                                        Text(
                                             text = "(승인됨)",
-                                            color = MaterialTheme.colorScheme.primary,
+                                            style = DodamTheme.typography.body1Bold(),
+                                            color = DodamTheme.colors.primaryNormal,
                                         )
                                         Spacer(modifier = Modifier.width(3.dp))
                                     }
 
                                     Status.REJECTED -> {
-                                        BodyMedium(
+                                        Text(
                                             text = "(거절됨)",
-                                            color = MaterialTheme.colorScheme.error,
+                                            style = DodamTheme.typography.body1Bold(),
+                                            color = DodamTheme.colors.statusNegative,
                                         )
                                         Spacer(modifier = Modifier.width(3.dp))
                                     }
                                 }
                             }
-                            BodyMedium(
+                            Text(
                                 text = wakeupSong.videoTitle,
-                                modifier = Modifier
-                                    .basicMarquee(),
-                                color = MaterialTheme.colorScheme.onBackground,
+                                style = DodamTheme.typography.body1Bold(),
+                                color = DodamTheme.colors.labelNormal,
                             )
                         }
                         Text(
