@@ -139,7 +139,7 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant),
+                    .background(DodamTheme.colors.lineAlternative),
             )
 
             Text(
