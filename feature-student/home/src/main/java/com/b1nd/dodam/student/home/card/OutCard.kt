@@ -135,7 +135,7 @@ internal fun OutCard(
                                                             OutType.SLEEPOVER -> {
                                                                 append(
                                                                     if (day > 0) {
-                                                                        "${day}일 "
+                                                                        "${day+1}일 "
                                                                     } else if (hour > 0) {
                                                                         "${hour}시간 "
                                                                     } else {

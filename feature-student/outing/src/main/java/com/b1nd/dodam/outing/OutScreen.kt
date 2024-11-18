@@ -7,6 +7,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,11 +19,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -46,27 +51,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
+import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.data.core.model.Status
-import com.b1nd.dodam.dds.animation.bounceCombinedClick
-import com.b1nd.dodam.dds.component.DodamDialog
-import com.b1nd.dodam.dds.component.DodamLinearProgressIndicator
-import com.b1nd.dodam.dds.component.DodamTopAppBar
-import com.b1nd.dodam.dds.component.button.DodamIconButton
-import com.b1nd.dodam.dds.component.button.DodamLargeFilledButton
-import com.b1nd.dodam.dds.component.button.DodamSegment
-import com.b1nd.dodam.dds.component.button.DodamSegmentedButtonRow
-import com.b1nd.dodam.dds.style.BodyLarge
-import com.b1nd.dodam.dds.style.BodyMedium
-import com.b1nd.dodam.dds.style.LabelLarge
-import com.b1nd.dodam.dds.style.PlusIcon
+import com.b1nd.dodam.data.outing.model.OutType
+import com.b1nd.dodam.data.outing.model.Outing
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.ActionIcon
+import com.b1nd.dodam.designsystem.component.ButtonRole
+import com.b1nd.dodam.designsystem.component.DividerType
+import com.b1nd.dodam.designsystem.component.DodamButtonDialog
+import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
+import com.b1nd.dodam.designsystem.component.DodamDivider
+import com.b1nd.dodam.designsystem.component.DodamEmpty
+import com.b1nd.dodam.designsystem.component.DodamLinerProgressIndicator
+import com.b1nd.dodam.designsystem.component.DodamSegment
+import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
+import com.b1nd.dodam.designsystem.component.DodamTag
+import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.component.TagType
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.outing.viewmodel.OutUiState
 import com.b1nd.dodam.outing.viewmodel.OutingViewModel
 import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ConvenienceStore
 import com.b1nd.dodam.ui.icons.Tent
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toJavaLocalDateTime
 import org.koin.androidx.compose.koinViewModel
+import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalFoundationApi
@@ -97,8 +115,6 @@ fun OutingScreen(
         },
     )
 
-    val color = MaterialTheme.colorScheme
-
     DisposableEffect(Unit) {
         if (refresh()) viewModel.getMyOuting()
 
@@ -106,78 +122,60 @@ fun OutingScreen(
     }
 
     if (showDialog) {
-        DodamDialog(
-            onDismissRequest = { showDialog = false },
-            confirmButton = {
-                DodamLargeFilledButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        if (selectedIndex == 0) {
-                            viewModel.deleteOuting(id)
-                        } else {
-                            viewModel.deleteSleepover(id)
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = color.error,
-                        contentColor = color.onError,
-                    ),
-                ) {
-                    Text(text = "삭제")
-                }
-            },
-            dismissButton = {
-                DodamLargeFilledButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = { showDialog = false },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = color.secondaryContainer,
-                        contentColor = color.onSecondaryContainer,
-                    ),
-                ) {
-                    Text(text = "취소")
-                }
-            },
-            title = {
-                Text(text = "정말 삭제하시겠어요?")
-            },
-            text = {
-                Text(text = reason)
-            },
-        )
+        Dialog(
+            onDismissRequest = {
+                showDialog = false
+            }
+        ) {
+            DodamButtonDialog(
+                confirmButtonText = "삭제",
+                confirmButtonRole = ButtonRole.Negative,
+                confirmButton = {
+                    if (selectedIndex == 0) {
+                        viewModel.deleteOuting(id)
+                    } else {
+                        viewModel.deleteSleepover(id)
+                    }
+                },
+                dismissButtonText = "취소",
+                dismissButtonRole = ButtonRole.Primary,
+                dismissButton = {
+                    showDialog = false
+                },
+                title = "정말 삭제하시겠어요?",
+                body = reason
+            )
+        }
     }
 
     Scaffold(
         topBar = {
             Column {
-                DodamTopAppBar(
-                    modifier = Modifier
-                        .background(color.surface)
-                        .padding(horizontal = 4.dp),
-                    title = {
-                        Text(text = "외출/외박")
-                    },
-                    actions = {
-                        DodamIconButton(onClick = onAddOutingClick) {
-                            PlusIcon(modifier = Modifier.size(28.dp))
-                        }
-                    },
+                DodamDefaultTopAppBar(
+                    title = "외출/외박",
+                    actionIcons = persistentListOf(
+                        ActionIcon(
+                            icon = DodamIcons.Plus,
+                            onClick = onAddOutingClick,
+                        )
+                    ),
                 )
                 AnimatedVisibility(outScreenState.canScrollBackward) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(1.dp)
-                            .background(color.outlineVariant),
+                            .background(DodamTheme.colors.fillNeutral),
                     )
                 }
             }
         },
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color.surface)
+                .background(DodamTheme.colors.backgroundNeutral)
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
                 .pullRefresh(pullRefreshState),
@@ -190,17 +188,18 @@ fun OutingScreen(
                 state = pullRefreshState,
             )
             Column {
-                DodamSegmentedButtonRow(selectedIndex = selectedIndex) {
-                    DodamSegment(selected = selectedIndex == 0, onClick = { selectedIndex = 0 }) {
-                        Text(text = "외출")
-                    }
+                Spacer(modifier = Modifier.height(12.dp))
+                DodamSegmentedButton(
+                    segments = List(2) { index ->
+                        DodamSegment(
+                            selected = index == selectedIndex,
+                            onClick = { selectedIndex = index },
+                            text = if (index == 0) "외출" else "외박"
+                        )
+                    }.toImmutableList()
+                )
 
-                    DodamSegment(selected = selectedIndex == 1, onClick = { selectedIndex = 1 }) {
-                        Text(text = "외박")
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -213,265 +212,165 @@ fun OutingScreen(
                                     items = if (selectedIndex == 0) outUiState.outings else outUiState.sleepovers,
                                     key = { it.id },
                                 ) { out ->
-                                    val outingProgress =
-                                        outScreenState.getProgress(out.startAt, out.endAt)
-
-                                    val progress by animateFloatAsState(
-                                        targetValue = if (playOnlyOnce) 0f else outingProgress,
-                                        animationSpec = tween(
-                                            durationMillis = 500,
-                                            delayMillis = 0,
-                                            easing = FastOutLinearInEasing,
-                                        ),
-                                        label = "",
-                                    )
-
                                     LaunchedEffect(Unit) {
                                         playOnlyOnce = false
                                     }
 
-                                    DodamCard(
-                                        modifier = Modifier
-                                            .bounceCombinedClick(
-                                                onClick = {},
-                                                onLongClick = {
+                                    when (out.status) {
+                                        Status.PENDING -> {
+                                            OutApplyCell(
+                                                tagType = TagType.Secondary,
+                                                reason = out.reason,
+                                                startAt = out.startAt,
+                                                endAt = out.endAt,
+                                                onTrashClick = {
                                                     id = out.id
                                                     reason = out.reason
                                                     showDialog = true
                                                 },
-                                                interactionColor = Color.Transparent,
-                                            ),
-                                        statusText = when (out.status) {
-                                            Status.ALLOWED -> "승인됨"
-                                            Status.REJECTED -> "거절됨"
-                                            Status.PENDING -> "대기중"
-                                        },
-                                        statusColor = when (out.status) {
-                                            Status.ALLOWED -> MaterialTheme.colorScheme.primary
-                                            Status.REJECTED -> MaterialTheme.colorScheme.error
-                                            Status.PENDING -> MaterialTheme.colorScheme.onSurfaceVariant
-                                        },
-                                        labelText = String.format(
-                                            "%d월 %d일 (%s)",
-                                            out.startAt.monthNumber,
-                                            out.startAt.dayOfMonth,
-                                            listOf(
-                                                "월",
-                                                "화",
-                                                "수",
-                                                "목",
-                                                "금",
-                                                "토",
-                                                "일",
-                                            )[out.startAt.dayOfWeek.value - 1],
-                                        ),
-                                    ) {
-                                        BodyMedium(
-                                            text = out.reason,
-                                            fontWeight = FontWeight.Medium,
-                                        )
-
-                                        Box(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(1.dp)
-                                                .background(color.outlineVariant),
-                                        )
-
-                                        Column(
-                                            modifier = Modifier
-                                                .fillMaxWidth(),
-                                            verticalArrangement = Arrangement.spacedBy(6.dp),
-                                        ) {
-                                            Row(
-                                                verticalAlignment = Alignment.Bottom,
-                                            ) {
-                                                BodyLarge(
-                                                    modifier = Modifier.padding(end = 4.dp),
-                                                    text = if (selectedIndex == 0) {
-                                                        String.format(
-                                                            "%d시 %d분",
-                                                            out.startAt.hour,
-                                                            out.startAt.minute,
-                                                        )
-                                                    } else {
-                                                        String.format(
-                                                            "%d월 %d일",
-                                                            out.startAt.monthNumber,
-                                                            out.startAt.dayOfMonth,
-                                                        )
-                                                    },
-                                                    color = color.onSurface,
-                                                )
-                                                LabelLarge(
-                                                    text = if (selectedIndex == 0) "외출" else "외박",
-                                                    color = color.onSurfaceVariant,
-                                                )
-
-                                                Spacer(modifier = Modifier.weight(1f))
-
-                                                BodyLarge(
-                                                    modifier = Modifier.padding(end = 4.dp),
-                                                    text = if (selectedIndex == 0) {
-                                                        String.format(
-                                                            "%d시 %d분",
-                                                            out.endAt.hour,
-                                                            out.endAt.minute,
-                                                        )
-                                                    } else {
-                                                        String.format(
-                                                            "%d월 %d일",
-                                                            out.endAt.monthNumber,
-                                                            out.endAt.dayOfMonth,
-                                                        )
-                                                    },
-                                                    color = color.onSurface,
-                                                )
-                                                LabelLarge(
-                                                    text = "복귀",
-                                                    color = color.onSurfaceVariant,
-                                                )
-                                            }
-
-                                            if (out.status != Status.REJECTED) {
-                                                DodamLinearProgressIndicator(
-                                                    modifier = Modifier.fillMaxWidth(),
-                                                    progress = progress,
-                                                    color = if (out.status == Status.ALLOWED) {
-                                                        color.primary
-                                                    } else {
-                                                        color.onSurfaceVariant
-                                                    },
-                                                )
-                                            } else {
-                                                if (out.rejectReason != null) {
-                                                    Row(
-                                                        verticalAlignment = Alignment.CenterVertically,
-                                                        horizontalArrangement = Arrangement.spacedBy(
-                                                            8.dp,
-                                                        ),
-                                                    ) {
-                                                        LabelLarge(
-                                                            text = "거절 사유",
-                                                            color = color.onSurfaceVariant,
-                                                        )
-
-                                                        BodyMedium(
-                                                            text = out.rejectReason!!,
-                                                            color = color.onSurface,
-                                                            fontWeight = FontWeight.Medium,
-                                                        )
-                                                    }
+                                                playOnlyOnce = playOnlyOnce,
+                                                isOut = out.outType == OutType.OUTING
+                                            )
+                                        }
+                                        Status.ALLOWED -> {
+                                            OutApplyCell(
+                                                tagType = TagType.Primary,
+                                                reason = out.reason,
+                                                startAt = out.startAt,
+                                                endAt = out.endAt,
+                                                onTrashClick = {
+                                                    id = out.id
+                                                    reason = out.reason
+                                                    showDialog = true
+                                                },
+                                                playOnlyOnce = playOnlyOnce,
+                                                isOut = out.outType == OutType.OUTING,
+                                            )
+                                        }
+                                        Status.REJECTED -> {
+                                            OutApplyRejectCell(
+                                                reason = out.reason,
+                                                rejectReason = out.rejectReason?: "",
+                                                onTrashClick = {
+                                                    id = out.id
+                                                    reason = out.reason
+                                                    showDialog = true
                                                 }
-                                            }
+                                            )
                                         }
                                     }
                                 }
                             } else {
                                 item {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .background(
-                                                color.surfaceContainer,
-                                                MaterialTheme.shapes.large,
-                                            )
-                                            .padding(16.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                    ) {
-                                        Image(
-                                            modifier = Modifier.size(36.dp),
-                                            imageVector = if (selectedIndex == 0) ConvenienceStore else Tent,
-                                            contentDescription = null,
-                                        )
-
-                                        Spacer(modifier = Modifier.height(12.dp))
-
-                                        LabelLarge(
-                                            text = if (selectedIndex == 0) "아직 신청한 외출이 없어요." else "아직 신청한 외박이 없어요.",
-                                            color = color.tertiary,
-                                        )
-
-                                        Spacer(modifier = Modifier.height(24.dp))
-
-                                        DodamLargeFilledButton(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            onClick = onAddOutingClick,
-                                            colors = ButtonDefaults.buttonColors(
-                                                containerColor = color.secondaryContainer,
-                                                contentColor = color.onSecondaryContainer,
-                                            ),
-                                        ) {
-                                            Text(text = if (selectedIndex == 0) "외출 신청하기" else "외박 신청하기")
-                                        }
-                                    }
+                                    DodamEmpty(
+                                        onClick = onAddOutingClick,
+                                        title = if (selectedIndex == 0) "아직 신청한 외출이 없어요." else "아직 신청한 외박이 없어요.",
+                                        imageVector = if (selectedIndex == 0) ConvenienceStore else Tent,
+                                        buttonText = (if (selectedIndex == 0) "외출" else "외박") + " 신청하기",
+                                    )
                                 }
                             }
                         }
 
                         is OutUiState.Loading -> {
                             item {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .background(
-                                            MaterialTheme.colorScheme.surfaceContainer,
-                                            MaterialTheme.shapes.large,
-                                        )
-                                        .padding(16.dp),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                                Surface(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = DodamTheme.shapes.large,
+                                    color = DodamTheme.colors.backgroundNormal,
                                 ) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(52.dp, 27.dp)
-                                                .background(shimmerEffect(), CircleShape),
-                                        )
-
-                                        Spacer(modifier = Modifier.weight(1f))
-
-                                        Box(
-                                            modifier = Modifier
-                                                .size(52.dp, 20.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(4.dp),
-                                                ),
-                                        )
-                                    }
-
-                                    Box(
+                                    Column(
                                         modifier = Modifier
-                                            .height(20.dp)
-                                            .fillMaxWidth()
-                                            .background(shimmerEffect(), RoundedCornerShape(4.dp)),
-                                    )
+                                            .padding(
+                                                vertical = 16.dp,
+                                                horizontal = 12.dp,
+                                            ),
+                                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .width(66.dp)
+                                                    .height(28.dp)
+                                                    .background(
+                                                        brush = shimmerEffect(),
+                                                        shape = CircleShape
+                                                    )
+                                            )
+                                            Spacer(modifier = Modifier.weight(1f))
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(24.dp)
+                                                    .background(
+                                                        brush = shimmerEffect(),
+                                                        shape = RoundedCornerShape(4.dp)
+                                                    )
+                                            )
+                                        }
 
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
                                         Box(
                                             modifier = Modifier
-                                                .size(52.dp, 27.dp)
-                                                .background(shimmerEffect(), CircleShape),
-                                        )
-
-                                        Spacer(modifier = Modifier.weight(1f))
-
-                                        Box(
-                                            modifier = Modifier
-                                                .size(52.dp, 20.dp)
+                                                .fillMaxWidth()
+                                                .height(24.dp)
                                                 .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(4.dp),
-                                                ),
+                                                    brush = shimmerEffect(),
+                                                    shape = RoundedCornerShape(8.dp)
+                                                )
                                         )
-                                    }
+                                        DodamDivider(type = DividerType.Normal)
+                                        Box(
+                                            modifier = Modifier
+                                                .width(120.dp)
+                                                .height(28.dp)
+                                                .background(
+                                                    brush = shimmerEffect(),
+                                                    shape = RoundedCornerShape(8.dp)
+                                                )
+                                        )
 
-                                    Box(
-                                        modifier = Modifier
-                                            .height(20.dp)
-                                            .fillMaxWidth()
-                                            .background(shimmerEffect(), CircleShape),
-                                    )
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(14.dp)
+                                                    .background(
+                                                        brush = shimmerEffect(),
+                                                        shape = RoundedCornerShape(8.dp)
+                                                    )
+                                            )
+                                            Row(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                verticalAlignment = Alignment.CenterVertically,
+                                            ) {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .width(101.dp)
+                                                        .height(24.dp)
+                                                        .background(
+                                                            brush = shimmerEffect(),
+                                                            shape = CircleShape
+                                                        )
+                                                )
+
+                                                Spacer(modifier = Modifier.weight(1f))
+                                                Box(
+                                                    modifier = Modifier
+                                                        .width(101.dp)
+                                                        .height(24.dp)
+                                                        .background(
+                                                            brush = shimmerEffect(),
+                                                            shape = CircleShape
+                                                        )
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -501,6 +400,244 @@ fun OutingScreen(
                         Spacer(modifier = Modifier.height(80.dp))
                     }
                 }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun OutApplyCell(
+    modifier: Modifier = Modifier,
+    tagType: TagType,
+    reason: String,
+    startAt: LocalDateTime,
+    endAt: LocalDateTime,
+    isOut: Boolean,
+    current: LocalDateTime = DodamDate.now(),
+    onTrashClick: () -> Unit,
+    playOnlyOnce: Boolean,
+) {
+    val nightStudyProgress = (
+            ChronoUnit.SECONDS.between(
+                startAt.toJavaLocalDateTime(),
+                current.toJavaLocalDateTime(),
+            ).toFloat() / ChronoUnit.SECONDS.between(
+                startAt.toJavaLocalDateTime(),
+                endAt.toJavaLocalDateTime(),
+            )
+            ).coerceIn(0f, 1f)
+
+    val progress by animateFloatAsState(
+        targetValue = if (playOnlyOnce) 0f else nightStudyProgress,
+        animationSpec = tween(
+            durationMillis = 500,
+            delayMillis = 0,
+            easing = FastOutLinearInEasing,
+        ),
+        label = "",
+    )
+
+    Surface(
+        modifier = modifier,
+        shape = DodamTheme.shapes.large,
+        color = DodamTheme.colors.backgroundNormal,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(
+                    vertical = 16.dp,
+                    horizontal = 12.dp,
+                ),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                DodamTag(
+                    text = if (tagType == TagType.Primary) "승인됨" else "대기 중",
+                    tagType = tagType,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable(
+                            indication = rememberBounceIndication(),
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = onTrashClick,
+                        ),
+                    imageVector = DodamIcons.Trash.value,
+                    contentDescription = "쓰레기통",
+                    tint = DodamTheme.colors.lineNormal,
+                )
+            }
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = reason,
+                style = DodamTheme.typography.body1Medium(),
+                color = DodamTheme.colors.labelNormal,
+            )
+            DodamDivider(type = DividerType.Normal)
+            Row(
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                val totalMinutes = ChronoUnit.MINUTES.between(
+                    current.toJavaLocalDateTime(),
+                    endAt.toJavaLocalDateTime()
+                )
+                val day = totalMinutes / (24 * 60)
+                val hour = (totalMinutes % (24 * 60)) / 60
+                val minute = totalMinutes % 60
+
+                val text = if (isOut)
+                    if (hour > 0) {
+                        "${hour}시간 "
+                    } else {
+                        "${minute}분 "
+                    } else if (day > 0) {
+                        "${day+1}일 "
+                    } else if (hour > 0) {
+                        "${hour}시간 "
+                    } else {
+                        "${minute}분 "
+                    }
+                Text(
+                    text = text,
+                    style = DodamTheme.typography.heading2Bold(),
+                    color = DodamTheme.colors.labelNormal,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "남음",
+                    style = DodamTheme.typography.labelMedium(),
+                    color = DodamTheme.colors.labelAlternative,
+                )
+            }
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                DodamLinerProgressIndicator(
+                    progress = progress,
+                    disabled = tagType != TagType.Primary,
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = if (isOut) "외출" else "외박",
+                        style = DodamTheme.typography.labelMedium(),
+                        color = DodamTheme.colors.labelAlternative,
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = if (isOut)
+                            String.format(
+                                "%d시 %d분",
+                                startAt.hour,
+                                startAt.minute,
+                            ) else String.format(
+                                "%d월 %d일",
+                                startAt.monthNumber,
+                                startAt.dayOfMonth,
+                        ),
+                        style = DodamTheme.typography.body1Medium(),
+                        color = DodamTheme.colors.labelNeutral,
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "종료",
+                        style = DodamTheme.typography.labelMedium(),
+                        color = DodamTheme.colors.labelAlternative,
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = if (isOut)
+                            String.format(
+                                "%d시 %d분",
+                                endAt.hour,
+                                endAt.minute,
+                            ) else
+                            String.format(
+                                "%d월 %d일",
+                                endAt.monthNumber,
+                                endAt.dayOfMonth,
+                            ),
+                        style = DodamTheme.typography.body1Medium(),
+                        color = DodamTheme.colors.labelNeutral,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun OutApplyRejectCell(modifier: Modifier = Modifier, reason: String, rejectReason: String, onTrashClick: () -> Unit) {
+    Surface(
+        modifier = modifier,
+        shape = DodamTheme.shapes.large,
+        color = DodamTheme.colors.backgroundNormal,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(
+                    vertical = 16.dp,
+                    horizontal = 12.dp,
+                ),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                DodamTag(
+                    text = "거절됨",
+                    tagType = TagType.Negative,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable(
+                            indication = rememberBounceIndication(),
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = onTrashClick,
+                        ),
+                    imageVector = DodamIcons.Trash.value,
+                    contentDescription = "쓰레기통",
+                    tint = DodamTheme.colors.lineNormal,
+                )
+            }
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = reason,
+                style = DodamTheme.typography.body1Medium(),
+                color = DodamTheme.colors.labelNormal,
+            )
+            DodamDivider(type = DividerType.Normal)
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "거절 사유",
+                    style = DodamTheme.typography.labelMedium(),
+                    color = DodamTheme.colors.labelAlternative,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = rejectReason,
+                    style = DodamTheme.typography.body1Medium(),
+                    color = DodamTheme.colors.labelNeutral,
+                )
             }
         }
     }
