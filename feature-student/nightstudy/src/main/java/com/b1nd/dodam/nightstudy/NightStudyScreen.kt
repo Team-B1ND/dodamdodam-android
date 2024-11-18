@@ -240,67 +240,103 @@ fun NightStudyScreen(
 
                         is NightStudyUiState.Loading -> {
                             item {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .background(
-                                            MaterialTheme.colorScheme.surfaceContainer,
-                                            MaterialTheme.shapes.large,
-                                        )
-                                        .padding(16.dp),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                                androidx.compose.material3.Surface(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = DodamTheme.shapes.large,
+                                    color = DodamTheme.colors.backgroundNormal,
                                 ) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(52.dp, 27.dp)
-                                                .background(shimmerEffect(), CircleShape),
-                                        )
-
-                                        Spacer(modifier = Modifier.weight(1f))
-
-                                        Box(
-                                            modifier = Modifier
-                                                .size(52.dp, 20.dp)
-                                                .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(4.dp),
-                                                ),
-                                        )
-                                    }
-
-                                    Box(
+                                    Column(
                                         modifier = Modifier
-                                            .height(20.dp)
-                                            .fillMaxWidth()
-                                            .background(shimmerEffect(), RoundedCornerShape(4.dp)),
-                                    )
+                                            .padding(
+                                                vertical = 16.dp,
+                                                horizontal = 12.dp,
+                                            ),
+                                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .width(66.dp)
+                                                    .height(28.dp)
+                                                    .background(
+                                                        brush = shimmerEffect(),
+                                                        shape = CircleShape
+                                                    )
+                                            )
+                                            Spacer(modifier = Modifier.weight(1f))
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(24.dp)
+                                                    .background(
+                                                        brush = shimmerEffect(),
+                                                        shape = RoundedCornerShape(4.dp)
+                                                    )
+                                            )
+                                        }
 
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
                                         Box(
                                             modifier = Modifier
-                                                .size(52.dp, 27.dp)
-                                                .background(shimmerEffect(), CircleShape),
-                                        )
-
-                                        Spacer(modifier = Modifier.weight(1f))
-
-                                        Box(
-                                            modifier = Modifier
-                                                .size(52.dp, 20.dp)
+                                                .fillMaxWidth()
+                                                .height(24.dp)
                                                 .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(4.dp),
-                                                ),
+                                                    brush = shimmerEffect(),
+                                                    shape = RoundedCornerShape(8.dp)
+                                                )
                                         )
-                                    }
+                                        DodamDivider(type = DividerType.Normal)
+                                        Box(
+                                            modifier = Modifier
+                                                .width(120.dp)
+                                                .height(28.dp)
+                                                .background(
+                                                    brush = shimmerEffect(),
+                                                    shape = RoundedCornerShape(8.dp)
+                                                )
+                                        )
 
-                                    Box(
-                                        modifier = Modifier
-                                            .height(20.dp)
-                                            .fillMaxWidth()
-                                            .background(shimmerEffect(), CircleShape),
-                                    )
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(14.dp)
+                                                    .background(
+                                                        brush = shimmerEffect(),
+                                                        shape = RoundedCornerShape(8.dp)
+                                                    )
+                                            )
+                                            Row(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                verticalAlignment = Alignment.CenterVertically,
+                                            ) {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .width(101.dp)
+                                                        .height(24.dp)
+                                                        .background(
+                                                            brush = shimmerEffect(),
+                                                            shape = CircleShape
+                                                        )
+                                                )
+
+                                                Spacer(modifier = Modifier.weight(1f))
+                                                Box(
+                                                    modifier = Modifier
+                                                        .width(101.dp)
+                                                        .height(24.dp)
+                                                        .background(
+                                                            brush = shimmerEffect(),
+                                                            shape = CircleShape
+                                                        )
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
