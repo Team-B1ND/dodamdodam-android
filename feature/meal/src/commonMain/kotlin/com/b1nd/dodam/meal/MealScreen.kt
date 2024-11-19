@@ -80,7 +80,7 @@ internal fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
     val datePickerState = rememberDodamDatePickerState(
         year = nowDate.year,
         month = nowDate.monthNumber,
-        initialSelectDateMillis = nowDate.utcTimeMill
+        initialSelectDateMillis = nowDate.utcTimeMill,
     )
     val uiState by viewModel.mealUiState.collectAsState()
     var firstLoad by rememberSaveable { mutableStateOf(true) }
@@ -308,10 +308,14 @@ internal fun ExpandableCalendar(
 
     val animateHeight by animateDpAsState(targetValue = cellAllHeight + offsetY + (12.dp * scrollRatio), label = "")
 
-    var clickRowIndex by remember { mutableIntStateOf(getRowIndex(
-        dayOfMonth = datePickerState.selectedDate?.dayOfMonth?: 1,
-        daysFromStartOfWeekToFirstOfMonth = datePickerState.month.daysFromStartOfWeekToFirstOfMonth
-    )) }
+    var clickRowIndex by remember {
+        mutableIntStateOf(
+            getRowIndex(
+                dayOfMonth = datePickerState.selectedDate?.dayOfMonth ?: 1,
+                daysFromStartOfWeekToFirstOfMonth = datePickerState.month.daysFromStartOfWeekToFirstOfMonth,
+            ),
+        )
+    }
 
     LaunchedEffect(clickRowIndex) {
         KmLogging.debug("log", "clickRowIndex: $clickRowIndex")
@@ -492,10 +496,7 @@ internal fun ExpandableCalendar(
     }
 }
 
-private fun getRowIndex(
-    dayOfMonth: Int,
-    daysFromStartOfWeekToFirstOfMonth: Int
-): Int {
+private fun getRowIndex(dayOfMonth: Int, daysFromStartOfWeekToFirstOfMonth: Int): Int {
     val cellIndex = daysFromStartOfWeekToFirstOfMonth + dayOfMonth - 1
     return cellIndex / DAYS_IN_WEEK
 }
