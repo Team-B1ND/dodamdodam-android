@@ -36,6 +36,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +52,7 @@ import androidx.compose.ui.util.fastFilter
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastJoinToString
 import com.b1nd.dodam.common.date.DodamDate
+import com.b1nd.dodam.common.utiles.utcTimeMill
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.CalendarDate
@@ -62,6 +64,7 @@ import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTag
 import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.component.rememberDodamDatePickerState
+import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.meal.model.MealUiState
 import com.b1nd.dodam.meal.viewmodel.MealViewModel
 import com.b1nd.dodam.ui.effect.shimmerEffect
@@ -73,17 +76,18 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 internal fun MealScreen(viewModel: MealViewModel = koinViewModel()) {
-    val datePickerState = rememberDodamDatePickerState()
-    val uiState by viewModel.mealUiState.collectAsState()
     val nowDate = DodamDate.localDateNow()
+    val datePickerState = rememberDodamDatePickerState(
+        year = nowDate.year,
+        month = nowDate.monthNumber,
+        initialSelectDateMillis = nowDate.utcTimeMill
+    )
+    val uiState by viewModel.mealUiState.collectAsState()
+    var firstLoad by rememberSaveable { mutableStateOf(true) }
 
     LaunchedEffect(true) {
-        datePickerState.selectedDate = CalendarDate(
-            year = nowDate.year,
-            month = nowDate.monthNumber,
-            dayOfMonth = nowDate.dayOfMonth,
-            utcTimeMillis = datePickerState.getUtcTimeMillis(nowDate.year, nowDate.monthNumber, nowDate.dayOfMonth),
-        )
+        if (!firstLoad) return@LaunchedEffect
+        firstLoad = false
         viewModel.getMealOfMonth(nowDate.year, nowDate.monthNumber)
     }
 
@@ -304,7 +308,14 @@ internal fun ExpandableCalendar(
 
     val animateHeight by animateDpAsState(targetValue = cellAllHeight + offsetY + (12.dp * scrollRatio), label = "")
 
-    var clickRowIndex by remember { mutableIntStateOf(0) }
+    var clickRowIndex by remember { mutableIntStateOf(getRowIndex(
+        dayOfMonth = datePickerState.selectedDate?.dayOfMonth?: 1,
+        daysFromStartOfWeekToFirstOfMonth = datePickerState.month.daysFromStartOfWeekToFirstOfMonth
+    )) }
+
+    LaunchedEffect(clickRowIndex) {
+        KmLogging.debug("log", "clickRowIndex: $clickRowIndex")
+    }
 
     val baseOffSetPadding = when (cellCount) {
         4 -> 54.dp
@@ -479,6 +490,14 @@ internal fun ExpandableCalendar(
             }
         }
     }
+}
+
+private fun getRowIndex(
+    dayOfMonth: Int,
+    daysFromStartOfWeekToFirstOfMonth: Int
+): Int {
+    val cellIndex = daysFromStartOfWeekToFirstOfMonth + dayOfMonth - 1
+    return cellIndex / DAYS_IN_WEEK
 }
 
 internal const val MAX_CALENDAR_ROWS = 6
