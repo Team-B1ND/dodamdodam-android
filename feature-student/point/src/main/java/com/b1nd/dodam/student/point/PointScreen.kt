@@ -84,7 +84,7 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
         onRefresh = {
             viewModel.load()
             isRefreshing = false
-        }
+        },
     )
 
     if (showDialog) {
@@ -141,7 +141,15 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                             style = DodamTheme.typography.body1Bold(),
                         )
                         Text(
-                            text = if (uiState.isLoading) "0점" else if (titleIndex == 0) "${uiState.dormitoryPoint.second}점" else "${uiState.schoolPoint.second}점",
+                            text = if (uiState.isLoading) {
+                                "0점"
+                            } else {
+                                if (titleIndex == 0) {
+                                    "${uiState.dormitoryPoint.second}점"
+                                } else {
+                                    "${uiState.schoolPoint.second}점"
+                                }
+                            },
                             color = DodamTheme.colors.primaryNormal,
                             style = DodamTheme.typography.title1Bold(),
                         )
@@ -156,19 +164,27 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                             style = DodamTheme.typography.body1Bold(),
                         )
                         Text(
-                            text = if (uiState.isLoading) "0점" else if (titleIndex == 0) "${uiState.dormitoryPoint.first}점" else "${uiState.schoolPoint.first}점",
+                            text = if (uiState.isLoading) {
+                                "0점"
+                            } else {
+                                if (titleIndex == 0) {
+                                    "${uiState.dormitoryPoint.first}점"
+                                } else {
+                                    "${uiState.schoolPoint.first}점"
+                                }
+                            },
                             color = DodamTheme.colors.statusNegative,
                             style = DodamTheme.typography.title1Bold(),
                         )
                     }
                 }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(DodamTheme.colors.lineAlternative),
-            )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(DodamTheme.colors.lineAlternative),
+                )
 
                 Text(
                     text = "상벌점 발급 내역",
