@@ -43,7 +43,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(projects.feature.onboarding)
     implementation(projects.featureStudent.main)
-    implementation(projects.feature.register)
+    implementation(projects.featureStudent.register)
     implementation(projects.feature.login)
     implementation(projects.featureStudent.bus)
     implementation(projects.featureStudent.nightstudy)
