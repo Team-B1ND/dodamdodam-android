@@ -90,10 +90,12 @@ fun WakeupSongScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(DodamTheme.colors.backgroundNormal),
+            .background(DodamTheme.colors.backgroundNeutral),
         topBar = {
             DodamTopAppBar(
-                modifier = Modifier.statusBarsPadding(),
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .background(DodamTheme.colors.backgroundNeutral),
                 title = "기상송",
                 onBackClick = popBackStack,
             )
@@ -103,7 +105,7 @@ fun WakeupSongScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(DodamTheme.colors.backgroundNormal, RoundedCornerShape(16.dp)),
+                .background(DodamTheme.colors.backgroundNeutral, RoundedCornerShape(16.dp)),
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -155,7 +157,7 @@ fun WakeupSongScreen(
                             selectedTabIndex = selectedTabIndex,
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            containerColor = DodamTheme.colors.backgroundNormal,
+                            containerColor = DodamTheme.colors.backgroundNeutral,
                             indicator = { tabPositions ->
                                 if (selectedTabIndex < tabPositions.size) {
                                     TabRowDefaults.SecondaryIndicator(
@@ -352,7 +354,7 @@ fun WakeupSongCard(
                                     Status.PENDING -> {}
                                     Status.ALLOWED -> {
                                         Text(
-                                            text = "(승인됨)",
+                                            text = "(승인됨) ",
                                             style = DodamTheme.typography.body1Bold(),
                                             color = DodamTheme.colors.primaryNormal,
                                         )
@@ -361,7 +363,7 @@ fun WakeupSongCard(
 
                                     Status.REJECTED -> {
                                         Text(
-                                            text = "(거절됨)",
+                                            text = "(거절됨) ",
                                             style = DodamTheme.typography.body1Bold(),
                                             color = DodamTheme.colors.statusNegative,
                                         )
@@ -371,6 +373,8 @@ fun WakeupSongCard(
                             }
                             Text(
                                 text = wakeupSong.videoTitle,
+                                modifier = Modifier
+                                    .basicMarquee(),
                                 style = DodamTheme.typography.body1Bold(),
                                 color = DodamTheme.colors.labelNormal,
                             )
