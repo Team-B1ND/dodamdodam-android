@@ -33,24 +33,37 @@ jobs:
     - name: Test
       if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
       run: echo "test"
+
+    - name: Test Body Parsing
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
+      uses: Team-B1ND/string-parser@main
+      with:
+        body: "<Student>\n급식 버그를 수정하였습니다.\n기존에 있던 버그를 수정하였습니다."
+        split: "<Teacher>"
+        splitIndex: 0
+        envName: Student
+
+    - name: Print Test Body
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
+      run: echo ${{ env.TEST }}
 #    - name: Run Student spotless
-#      if: startsWith(env.TITLE, 'Student')
+#      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
 #      run: ./gradlew dodam-student:spotlessCheck
 #
 #    - name: Run Teacher spotless
-#      if: startsWith(env.TITLE, 'Teacher')
+#      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
 #      run: ./gradlew dodam-teacher-android:spotlessCheck
 #
 #    - name: Assemble Student Release Bundle
-#      if: startsWith(env.TITLE, 'Student')
+#      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
 #      run: ./gradlew dodam-student:bundleRelease
 #
 #    - name: Assemble Teacher Release Bundle
-#      if: startsWith(env.TITLE, 'Teacher')
+#      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
 #      run: ./gradlew dodam-teacher-android:bundleRelease
 #
 #    - name: Sign Student Release
-#      if: startsWith(env.TITLE, 'Student')
+#      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
 #      uses: r0adkll/sign-android-release@v1
 #      with:
 #        releaseDirectory: ./dodam-student/build/outputs/bundle/release
@@ -60,7 +73,7 @@ jobs:
 #        keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
 #
 #    - name: Sign Teacher Release
-#      if: startsWith(env.TITLE, 'Teacher')
+#      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
 #      uses: r0adkll/sign-android-release@v1
 #      with:
 #        releaseDirectory: ./dodam-teacher-android/build/outputs/bundle/release
@@ -78,7 +91,7 @@ jobs:
 #        echo "${{ github.event.release.body }}" > whatsNewDirectory/whatsnew-ko-KR
 #
 #    - name: Student Dodam Deploy to Production Channel
-#      if: startsWith(env.TITLE, 'Student')
+#      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
 #      uses: r0adkll/upload-google-play@v1
 #      with:
 #        serviceAccountJson: service_account.json
@@ -90,7 +103,7 @@ jobs:
 #        whatsNewDirectory: whatsNewDirectory/
 #
 #    - name: Teacher Dodam Deploy to Production Channel
-#      if: startsWith(env.TITLE, 'Teacher')
+#      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
 #      uses: r0adkll/upload-google-play@v1
 #      with:
 #        serviceAccountJson: service_account.json
