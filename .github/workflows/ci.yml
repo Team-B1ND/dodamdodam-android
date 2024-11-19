@@ -22,28 +22,41 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
+    - name: Validate Pull Request Title
+      id: validate-title
+      run: |
+        if [[ "${{ env.TITLE }}" == "[Student]"* ]]; then
+          echo "target=student" >> $GITHUB_ENV
+        elif [[ "${{ env.TITLE }}" == "[Teacher]"* ]]; then
+          echo "target=teacher" >> $GITHUB_ENV
+        elif [[ "${{ env.TITLE }}" == "[Core]"* ]]; then
+          echo "target=core" >> $GITHUB_ENV
+        else
+          echo "::error::Invalid PR title: '${{ env.TITLE }}'. Must start with [Student], [Teacher], or [Core]."
+          exit 1
+
     - name: Run Student spotless
-      if: startsWith(env.TITLE, '[Student]')
+      if: env.target == 'student'
       run: ./gradlew dodam-student:spotlessCheck
 
     - name: Android Student Build with Gradle
-      if: startsWith(env.TITLE, '[Student]')
+      if: env.target == 'student'
       run: ./gradlew dodam-student:clean assembleRelease --parallel
 
     - name: Run Teacher spotless
-      if: startsWith(env.TITLE, '[Teacher]')
+      if: env.target == 'teacher'
       run: ./gradlew dodam-teacher-android:spotlessCheck
     
     - name: Android Teacher Build with Gradle
-      if: startsWith(env.TITLE, '[Teacher]')
+      if: env.target == 'teacher'
       run: ./gradlew dodam-teacher-android:clean assembleRelease --parallel
 
     - name: Android Core Build with Gradle
-      if: startsWith(env.TITLE, '[Core]')
+      if: env.target == 'core'
       run: ./gradlew spotlessCheck
     
     - name: Android Core Build with Gradle
-      if: startsWith(env.TITLE, '[Core]')
+      if: env.target == 'core'
       run: |
         ./gradlew dodam-teacher-android:clean assembleRelease --parallel
         ./gradlew dodam-student:assembleRelease --parallel
