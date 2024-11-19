@@ -2,22 +2,22 @@ package com.b1nd.dodam.register
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
@@ -33,14 +34,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.dds.component.DodamDialog
-import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
-import com.b1nd.dodam.dds.component.DodamTextField
-import com.b1nd.dodam.dds.component.button.DodamCTAButton
-import com.b1nd.dodam.dds.component.button.DodamTextButton
-import com.b1nd.dodam.dds.style.EyeIcon
-import com.b1nd.dodam.dds.style.EyeSlashIcon
-import com.b1nd.dodam.dds.style.XMarkCircleIcon
+import androidx.compose.ui.window.Dialog
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.ButtonRole
+import com.b1nd.dodam.designsystem.component.ButtonSize
+import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamDialog
+import com.b1nd.dodam.designsystem.component.DodamTextField
+import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.register.viewmodel.Event
 import com.b1nd.dodam.register.viewmodel.RegisterViewModel
@@ -92,37 +94,38 @@ fun AuthScreen(
     }
 
     if (showDialog) {
-        DodamDialog(
-            onDismissRequest = { showDialog = false },
-            confirmText = {
-                DodamTextButton(onClick = { showDialog = false }) {
-                    Text(text = "확인")
-                }
+        Dialog(
+            onDismissRequest = {
+                showDialog = false
             },
-            title = { Text(text = uiState.error) },
-        )
+        ) {
+            DodamDialog(
+                confirmButton = {
+                    showDialog = false
+                },
+                text = "확인",
+                title = uiState.error,
+            )
+        }
     }
 
     Scaffold(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
-            .systemBarsPadding(),
+            .background(DodamTheme.colors.backgroundNeutral)
+            .systemBarsPadding()
+            .imePadding(),
         topBar = {
-            DodamLargeTopAppBar(
-                title = {
-                    Text(
-                        text = when {
-                            passwordState.isValid -> "비밀번호를\n확인해주세요"
-                            idState.isValid -> "비밀번호를\n입력해주세요"
-                            else -> "아이디를\n입력해주세요"
-                        },
-                    )
+            DodamTopAppBar(
+                title = when {
+                    passwordState.isValid -> "비밀번호를\n확인해주세요"
+                    idState.isValid -> "비밀번호를\n입력해주세요"
+                    else -> "아이디를\n입력해주세요"
                 },
-                onNavigationIconClick = onBackClick,
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+                onBackClick = onBackClick,
+                type = TopAppBarType.Medium,
             )
         },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -145,7 +148,9 @@ fun AuthScreen(
                 ),
         ) {
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 AnimatedVisibility(visible = passwordState.isValid && idState.isValid) {
@@ -166,41 +171,12 @@ fun AuthScreen(
                                     errorMessage = "",
                                 )
                         },
-                        label = { Text(text = "비밀번호 확인") },
-                        trailingIcon = {
-                            if (confirmPasswordState.focused) {
-                                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                                    if (showConfirmPassword) {
-                                        EyeIcon(
-                                            modifier = Modifier.clickable {
-                                                showConfirmPassword = false
-                                            },
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        )
-                                    } else {
-                                        EyeSlashIcon(
-                                            modifier = Modifier.clickable {
-                                                showConfirmPassword = true
-                                            },
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        )
-                                    }
-
-                                    XMarkCircleIcon(
-                                        modifier = Modifier.clickable {
-                                            confirmPasswordState = TextFieldState()
-                                        },
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
-                                }
-                            }
-                        },
+                        label = "비밀번호 확인",
                         isError = confirmPasswordState.isError,
-                        supportingText = if (confirmPasswordState.isError) {
-                            { Text(text = confirmPasswordState.errorMessage) }
-                        } else {
-                            null
+                        onClickRemoveRequest = {
+                            confirmPasswordState = confirmPasswordState.copy(value = "")
                         },
+                        supportText = if (confirmPasswordState.isError) confirmPasswordState.errorMessage else "",
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(onDone = {
                             confirmPasswordState =
@@ -229,41 +205,12 @@ fun AuthScreen(
                                     errorMessage = "",
                                 )
                         },
-                        label = { Text(text = "비밀번호") },
-                        trailingIcon = {
-                            if (passwordState.focused) {
-                                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                                    if (showPassword) {
-                                        EyeIcon(
-                                            modifier = Modifier.clickable {
-                                                showPassword = false
-                                            },
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        )
-                                    } else {
-                                        EyeSlashIcon(
-                                            modifier = Modifier.clickable {
-                                                showPassword = true
-                                            },
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        )
-                                    }
-
-                                    XMarkCircleIcon(
-                                        modifier = Modifier.clickable {
-                                            passwordState = TextFieldState()
-                                        },
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
-                                }
-                            }
-                        },
+                        label = "비밀번호",
                         isError = passwordState.isError,
-                        supportingText = if (passwordState.isError) {
-                            { Text(text = passwordState.errorMessage) }
-                        } else {
-                            null
+                        onClickRemoveRequest = {
+                            passwordState = passwordState.copy(value = "")
                         },
+                        supportText = if (passwordState.isError) passwordState.errorMessage else "",
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = {
                             passwordState = isPasswordValid(passwordState)
@@ -296,21 +243,12 @@ fun AuthScreen(
                             focusManager.clearFocus()
                         }
                     },
-                    trailingIcon = {
-                        if (idState.focused) {
-                            XMarkCircleIcon(
-                                modifier = Modifier.clickable {
-                                    idState = TextFieldState()
-                                },
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    },
-                    label = { Text(text = "아이디") },
+                    label = "아이디",
                     isError = idState.isError,
-                    supportingText = {
-                        Text(text = if (idState.isError) idState.errorMessage else "아이디는 영문과 숫자로 5~20글자 이내여야 해요.")
+                    onClickRemoveRequest = {
+                        idState = idState.copy(value = "")
                     },
+                    supportText = if (idState.isError) idState.errorMessage else "아이디는 영문과 숫자로 5~20글자 이내여야 해요.",
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     keyboardActions = KeyboardActions(onNext = {
                         idState = isIdValid(idState)
@@ -318,8 +256,15 @@ fun AuthScreen(
                     }),
                     singleLine = true,
                 )
+
+                Spacer(modifier = Modifier.height(150.dp))
             }
-            DodamCTAButton(
+            DodamButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 24.dp)
+                    .align(Alignment.BottomCenter),
                 enabled = idState.value.isNotBlank() &&
                     passwordState.value.isNotBlank() &&
                     confirmPasswordState.value.isNotBlank(),
@@ -335,10 +280,11 @@ fun AuthScreen(
                         room = room.toInt(),
                     )
                 },
-                isLoading = uiState.isLoading,
-            ) {
-                Text(text = "가입하기")
-            }
+                loading = uiState.isLoading,
+                buttonSize = ButtonSize.Large,
+                buttonRole = ButtonRole.Primary,
+                text = "가입하기",
+            )
         }
     }
 }
