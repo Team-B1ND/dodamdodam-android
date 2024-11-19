@@ -17,6 +17,5 @@ dependencies {
     implementation(projects.data.outing)
     implementation(libs.dodam.design.system.cmm)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.wheel.picker.compose)
     implementation(libs.bottomsheetdialog.compose)
 }
