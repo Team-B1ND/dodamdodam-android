@@ -34,6 +34,7 @@ jobs:
         else
           echo "::error::Invalid PR title: '${{ env.TITLE }}'. Must start with [Student], [Teacher], or [Core]."
           exit 1
+        fi
 
     - name: Run Student spotless
       if: env.target == 'student'
