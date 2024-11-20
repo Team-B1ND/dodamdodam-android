@@ -2,27 +2,30 @@ package com.b1nd.dodam.register
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
@@ -32,10 +35,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.b1nd.dodam.dds.component.DodamLargeTopAppBar
-import com.b1nd.dodam.dds.component.DodamTextField
-import com.b1nd.dodam.dds.component.button.DodamCTAButton
-import com.b1nd.dodam.dds.style.XMarkCircleIcon
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.ButtonRole
+import com.b1nd.dodam.designsystem.component.ButtonSize
+import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamTextField
+import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.ui.util.PhoneVisualTransformation
 import com.b1nd.dodam.ui.util.addFocusCleaner
@@ -79,9 +85,10 @@ fun InfoScreen(
     Scaffold(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-            .statusBarsPadding(),
+            .statusBarsPadding()
+            .imePadding(),
         topBar = {
-            DodamLargeTopAppBar(
+            DodamTopAppBar(
                 modifier = Modifier.addFocusCleaner(
                     focusManager = focusManager,
                     doOnClear = {
@@ -100,26 +107,22 @@ fun InfoScreen(
                         }
                     },
                 ),
-                title = {
-                    Text(
-                        text = when {
-                            setOf(
-                                nameState,
-                                emailState,
-                                classInfoState,
-                            ).all { it.isValid } -> "전화번호를\n입력해주세요"
+                title = when {
+                    setOf(
+                        nameState,
+                        emailState,
+                        classInfoState,
+                    ).all { it.isValid } -> "전화번호를\n입력해주세요"
 
-                            setOf(nameState, classInfoState).all { it.isValid } -> "이메일을\n입력해주세요"
-                            nameState.isValid -> "학반번호를\n입력해주세요"
-                            else -> "이름을\n입력해주세요"
-                        },
-                    )
+                    setOf(nameState, classInfoState).all { it.isValid } -> "이메일을\n입력해주세요"
+                    nameState.isValid -> "학반번호를\n입력해주세요"
+                    else -> "이름을\n입력해주세요"
                 },
-                onNavigationIconClick = onBackClick,
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+                onBackClick = onBackClick,
+                type = TopAppBarType.Medium,
             )
         },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -146,7 +149,8 @@ fun InfoScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 24.dp),
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 AnimatedVisibility(
@@ -178,27 +182,16 @@ fun InfoScreen(
                                 focusManager.clearFocus()
                             }
                         },
-                        trailingIcon = {
-                            if (phoneNumberState.focused) {
-                                XMarkCircleIcon(
-                                    modifier = Modifier.clickable {
-                                        phoneNumberState = TextFieldState()
-                                    },
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            }
-                        },
-                        label = { Text(text = "전화번호") },
+                        label = "전화번호",
                         visualTransformation = PhoneVisualTransformation(
                             "000-0000-0000",
                             '0',
                         ),
                         isError = phoneNumberState.isError,
-                        supportingText = if (phoneNumberState.isError) {
-                            { Text(text = phoneNumberState.errorMessage) }
-                        } else {
-                            null
+                        onClickRemoveRequest = {
+                            phoneNumberState = phoneNumberState.copy(value = "")
                         },
+                        supportText = if (phoneNumberState.isError) phoneNumberState.errorMessage else "",
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Done,
                             keyboardType = KeyboardType.Number,
@@ -227,22 +220,11 @@ fun InfoScreen(
                             )
                         },
                         isError = emailState.isError,
-                        supportingText = if (emailState.isError) {
-                            { Text(text = emailState.errorMessage) }
-                        } else {
-                            null
+                        onClickRemoveRequest = {
+                            emailState = emailState.copy(value = "")
                         },
-                        trailingIcon = {
-                            if (emailState.focused) {
-                                XMarkCircleIcon(
-                                    modifier = Modifier.clickable {
-                                        emailState = TextFieldState()
-                                    },
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            }
-                        },
-                        label = { Text(text = "이메일") },
+                        supportText = if (emailState.isError) emailState.errorMessage else "",
+                        label = "이메일",
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Email,
@@ -405,33 +387,12 @@ fun InfoScreen(
                                 }
                             }
                         },
-                        trailingIcon = {
-                            if (classInfoState.focused) {
-                                XMarkCircleIcon(
-                                    modifier = Modifier.clickable {
-                                        classInfoText = classInfoText.copy(
-                                            text = "",
-                                            selection = TextRange.Zero,
-                                        )
-                                        classInfoState = classInfoState.copy(
-                                            value = "",
-                                            isValid = classInfoState.isValid,
-                                            isError = false,
-                                            errorMessage = "",
-                                        )
-                                        focusManager.clearFocus()
-                                    },
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            }
-                        },
-                        label = { Text(text = "학반번호") },
+                        label = "학반번호",
                         isError = classInfoState.isError,
-                        supportingText = if (classInfoState.isError) {
-                            { Text(text = classInfoState.errorMessage) }
-                        } else {
-                            null
+                        onClickRemoveRequest = {
+                            classInfoState = classInfoState.copy(value = "")
                         },
+                        supportText = if (classInfoState.isError) classInfoState.errorMessage else "",
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Number,
@@ -460,23 +421,12 @@ fun InfoScreen(
                             errorMessage = "",
                         )
                     },
-                    trailingIcon = {
-                        if (nameState.focused) {
-                            XMarkCircleIcon(
-                                modifier = Modifier.clickable {
-                                    nameState = TextFieldState()
-                                },
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    },
-                    label = { Text(text = "이름") },
+                    label = "이름",
                     isError = nameState.isError,
-                    supportingText = if (nameState.isError) {
-                        { Text(text = nameState.errorMessage) }
-                    } else {
-                        null
+                    onClickRemoveRequest = {
+                        nameState = nameState.copy(value = "")
                     },
+                    supportText = if (nameState.isError) nameState.errorMessage else "",
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     keyboardActions = KeyboardActions(onNext = {
                         nameState = checkNameStateValid(nameState)
@@ -488,9 +438,16 @@ fun InfoScreen(
                     }),
                     singleLine = true,
                 )
+
+                Spacer(modifier = Modifier.height(150.dp))
             }
 
-            DodamCTAButton(
+            DodamButton(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 24.dp)
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
                 onClick = {
                     onNextClick(
                         nameState.value,
@@ -505,9 +462,10 @@ fun InfoScreen(
                     classInfoState.value.length == 4 &&
                     emailState.value.isNotBlank() &&
                     phoneNumberState.value.length == 11,
-            ) {
-                Text(text = "다음")
-            }
+                text = "다음",
+                buttonRole = ButtonRole.Primary,
+                buttonSize = ButtonSize.Large,
+            )
         }
     }
 }

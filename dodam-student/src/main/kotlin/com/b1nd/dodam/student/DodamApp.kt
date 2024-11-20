@@ -149,9 +149,6 @@ fun DodamApp(
                 navigateToAddBus = {
                     navController.navigateToBus()
                 },
-                navigateToSchedule = {
-                    TODO("navigate to schedule screen")
-                },
                 navigateToWakeUpSong = {
                     navController.navigateToWakeupSong()
                 },
@@ -177,7 +174,13 @@ fun DodamApp(
                 onBackClick = navController::popBackStack,
             )
             authScreen(
-                onRegisterClick = navController::navigateToOnboarding,
+                onRegisterClick = {
+                    navController.navigateToOnboarding()
+                    state = "SUCCESS"
+                    scope.launch {
+                        snackbarHostState.showSnackbar("회원가입에 성공했습니다.")
+                    }
+                },
                 onBackClick = navController::popBackStack,
             )
             loginScreen(

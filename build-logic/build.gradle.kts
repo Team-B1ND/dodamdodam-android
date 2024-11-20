@@ -23,6 +23,7 @@ java {
 dependencies {
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.android.gradle.plugin)
+    implementation(libs.kotlin.compose.compiler.plugin)
 }
 
 gradlePlugin {
