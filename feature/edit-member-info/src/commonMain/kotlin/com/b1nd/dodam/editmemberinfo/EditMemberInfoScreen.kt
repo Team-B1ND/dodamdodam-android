@@ -43,7 +43,6 @@ import com.b1nd.dodam.ui.util.addFocusCleaner
 import com.mohamedrejeb.calf.core.LocalPlatformContext
 import com.mohamedrejeb.calf.io.getName
 import com.mohamedrejeb.calf.io.getPath
-import com.mohamedrejeb.calf.io.isFile
 import com.mohamedrejeb.calf.io.readByteArray
 import com.mohamedrejeb.calf.picker.FilePickerFileType
 import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
@@ -82,7 +81,7 @@ internal fun EditMemberInfoScreen(
                 files.firstOrNull()?.let { file ->
                     byteArray = file.readByteArray(context)
                     platformSpecificFilePath = file.getPath(context) ?: ""
-                    fileName = file.getName(context)?:""
+                    fileName = file.getName(context) ?: ""
                     viewModel.setProfile(profileImage)
                     viewModel.fileUpload(
                         fileByteArray = byteArray,
