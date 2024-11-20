@@ -9,12 +9,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.b1nd.dodam.editmemberinfo.EditMemberInfoScreen
-import io.ktor.http.URLBuilder
-import io.ktor.http.Url
-import io.ktor.http.encodeURLParameter
-import io.ktor.util.decodeBase64String
-import io.ktor.util.encodeBase64
-import io.ktor.utils.io.core.toByteArray
 import net.thauvin.erik.urlencoder.UrlEncoderUtil
 
 const val EDIT_MEMBER_INFO_ROUTE = "edit_member_info"
@@ -28,9 +22,9 @@ fun NavController.navigationToEditMemberInfo(
         launchSingleTop = true
     },
 ) {
-    val image = if (profileImage.isNullOrEmpty()){
+    val image = if (profileImage.isNullOrEmpty()) {
         "default"
-    }else{
+    } else {
         UrlEncoderUtil.encode(profileImage)
     }
     navigate("$EDIT_MEMBER_INFO_ROUTE/$image/$name/$email/$phone", navOptions)
