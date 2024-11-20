@@ -143,12 +143,10 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                         Text(
                             text = if (uiState.isLoading) {
                                 "0점"
+                            } else if (titleIndex == 0) {
+                                "${uiState.dormitoryPoint.second}점"
                             } else {
-                                if (titleIndex == 0) {
-                                    "${uiState.dormitoryPoint.second}점"
-                                } else {
-                                    "${uiState.schoolPoint.second}점"
-                                }
+                                "${uiState.schoolPoint.second}점"
                             },
                             color = DodamTheme.colors.primaryNormal,
                             style = DodamTheme.typography.title1Bold(),
@@ -166,12 +164,10 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), popBackSta
                         Text(
                             text = if (uiState.isLoading) {
                                 "0점"
+                            } else if (titleIndex == 0) {
+                                "${uiState.dormitoryPoint.first}점"
                             } else {
-                                if (titleIndex == 0) {
-                                    "${uiState.dormitoryPoint.first}점"
-                                } else {
-                                    "${uiState.schoolPoint.first}점"
-                                }
+                                "${uiState.schoolPoint.first}점"
                             },
                             color = DodamTheme.colors.statusNegative,
                             style = DodamTheme.typography.title1Bold(),
