@@ -149,11 +149,14 @@ internal fun EditMemberInfoScreen(
                     Box(
                         modifier = Modifier
                             .size(32.dp)
+                            .align(Alignment.BottomEnd)
                             .background(
                                 color = DodamTheme.colors.primaryNormal,
                                 shape = CircleShape,
                             )
-                            .align(Alignment.BottomEnd),
+                            .clickable {
+                                pickerLauncher.launch()
+                            },
                     ) {
                         Image(
                             imageVector = DodamIcons.Plus.value,
@@ -161,10 +164,7 @@ internal fun EditMemberInfoScreen(
                             colorFilter = ColorFilter.tint(DodamTheme.colors.staticWhite),
                             modifier = Modifier
                                 .size(16.dp)
-                                .align(Alignment.Center)
-                                .clickable {
-                                    pickerLauncher.launch()
-                                },
+                                .align(Alignment.Center),
                         )
                     }
                 }
