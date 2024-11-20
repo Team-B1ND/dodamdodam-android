@@ -41,11 +41,13 @@ jobs:
         body: "<Student>\n급식 버그를 수정하였습니다.\n기존에 있던 버그를 수정하였습니다."
         split: "<Teacher>"
         splitIndex: 0
+        replaceBefore: "<Student>\n"
+        replaceAfter: ""
         envName: Student
 
     - name: Print Test Body
       if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
-      run: echo ${{ env.TEST }}
+      run: echo ${{ env.Student }}
 #    - name: Run Student spotless
 #      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
 #      run: ./gradlew dodam-student:spotlessCheck
