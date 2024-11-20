@@ -9,4 +9,5 @@ interface MemberRepository {
     suspend fun getMyInfo(): Flow<Result<MemberInfo>>
     suspend fun deactivation(): Flow<Result<Unit>>
     suspend fun getMemberActiveAll(): Flow<Result<ImmutableList<MemberInfo>>>
+    suspend fun editMemberInfo(name: String, email: String, phone: String, profileImage: String?): Flow<Result<Unit>>
 }

@@ -17,7 +17,9 @@ import com.b1nd.dodam.data.nightstudy.di.nightStudyRepositoryModule
 import com.b1nd.dodam.data.outing.di.outingRepositoryModule
 import com.b1nd.dodam.data.point.di.pointRepositoryModule
 import com.b1nd.dodam.data.schedule.di.scheduleRepositoryModule
+import com.b1nd.dodam.data.upload.di.uploadRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
+import com.b1nd.dodam.editmemberinfo.di.editMemberInfoViewModelModule
 import com.b1nd.dodam.keystore.keystoreManagerModule
 import com.b1nd.dodam.login.di.loginViewModelModule
 import com.b1nd.dodam.member.di.memberDataSourceModule
@@ -30,6 +32,7 @@ import com.b1nd.dodam.network.nightstudy.di.nightStudyDataSourceModule
 import com.b1nd.dodam.network.outing.di.outingDataSourceModule
 import com.b1nd.dodam.network.point.di.pointDataSourceModule
 import com.b1nd.dodam.network.schedule.di.scheduleDatasourceModule
+import com.b1nd.dodam.network.upload.di.uploadDatasourceModule
 import com.b1nd.dodam.nightstudy.di.nightStudyViewModelModule
 import com.b1nd.dodam.outing.di.outingViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
@@ -96,6 +99,9 @@ class DodamApplication : Application() {
                     outingViewModelModule,
                     bundleIdInfoRepositoryModule,
                     bundleIdInfoDataSourceModule,
+                    editMemberInfoViewModelModule,
+                    uploadDatasourceModule,
+                    uploadRepositoryModule,
                 ) + mainViewModelModules,
             )
         }

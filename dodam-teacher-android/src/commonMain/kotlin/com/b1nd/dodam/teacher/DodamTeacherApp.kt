@@ -50,6 +50,8 @@ import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.editmemberinfo.navigation.editMemberInfoScreen
+import com.b1nd.dodam.editmemberinfo.navigation.navigationToEditMemberInfo
 import com.b1nd.dodam.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.home.navigation.homeScreen
 import com.b1nd.dodam.home.navigation.navigateToHome
@@ -255,7 +257,19 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         settingScreen(
                             popBackStack = navHostController::popBackStack,
                             logout = exit,
-                            versionInfo = getPlatformName(),
+                            versionInfo = VERSION_INFO,
+                            navigationToEditMemberInfo = { profileImage, name, email, phone ->
+                                navHostController.navigationToEditMemberInfo(
+                                    profileImage = profileImage,
+                                    name = name,
+                                    email = email,
+                                    phone = phone,
+                                )
+                            },
+                        )
+
+                        editMemberInfoScreen(
+                            popBackStack = navHostController::popBackStack,
                         )
                     }
 
