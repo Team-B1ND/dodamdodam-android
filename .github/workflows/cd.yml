@@ -1,14 +1,14 @@
 name: Android Release CD
 
 on:
-  pull_request:
-    branches: [ "develop" ]
+  release:
+    types: [ published ]
 
 jobs:
   release:
     env:
-#      TITLE: ${{ github.event.release.name }}
-      TITLE: ${{ github.event.pull_request.title }}
+      TITLE: ${{ github.event.release.name }}
+      CONTENT: ${{ github.event.release.body }}
       KEYSTORE: ${{ secrets.DODAM_KEYSTORE }}
 
     runs-on: ubuntu-latest
@@ -30,91 +30,104 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Test
+    - name: Run Student spotless
       if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
-      run: echo "test"
+      run: ./gradlew dodam-student:spotlessCheck
 
-    - name: Test Body Parsing
+    - name: Run Teacher spotless
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
+      run: ./gradlew dodam-teacher-android:spotlessCheck
+
+    - name: Assemble Student Release Bundle
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
+      run: ./gradlew dodam-student:bundleRelease
+
+    - name: Assemble Teacher Release Bundle
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
+      run: ./gradlew dodam-teacher-android:bundleRelease
+
+    - name: Sign Student Release
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: ./dodam-student/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.DODAM_KEYSTORE }}
+        keyStorePassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
+        alias: ${{ secrets.DODAM_KEYSTORE_ALIAS }}
+        keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
+
+    - name: Sign Teacher Release
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: ./dodam-teacher-android/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.DODAM_KEYSTORE }}
+        keyStorePassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
+        alias: ${{ secrets.DODAM_KEYSTORE_ALIAS }}
+        keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
+
+    - name: Setup Authorization With Google Play Store
+      run: echo '${{ secrets.DODAM_GOOGLE_PLAY_API_AUTH }}' > service_account.json
+
+    - name: Student Patch Note Body Parsing
       if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
       uses: Team-B1ND/string-parser@main
       with:
-        body: "<Student>\n급식 버그를 수정하였습니다.\n기존에 있던 버그를 수정하였습니다."
+        body: ${{ env.CONTENT }}
         split: "<Teacher>"
         splitIndex: 0
         replaceBefore: "<Student>\n"
         replaceAfter: ""
         envName: Student
 
-    - name: Print Test Body
+    - name: Teacher Patch Note Body Parsing
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
+      uses: Team-B1ND/string-parser@main
+      with:
+        body: ${{ env.CONTENT }}
+        split: "<Teacher>"
+        splitIndex: 1
+        substringStart: 1
+        envName: Teacher
+
+    - name: Prepare Student Patch Notes
       if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
-      run: echo ${{ env.Student }}
-#    - name: Run Student spotless
-#      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
-#      run: ./gradlew dodam-student:spotlessCheck
-#
-#    - name: Run Teacher spotless
-#      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
-#      run: ./gradlew dodam-teacher-android:spotlessCheck
-#
-#    - name: Assemble Student Release Bundle
-#      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
-#      run: ./gradlew dodam-student:bundleRelease
-#
-#    - name: Assemble Teacher Release Bundle
-#      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
-#      run: ./gradlew dodam-teacher-android:bundleRelease
-#
-#    - name: Sign Student Release
-#      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
-#      uses: r0adkll/sign-android-release@v1
-#      with:
-#        releaseDirectory: ./dodam-student/build/outputs/bundle/release
-#        signingKeyBase64: ${{ secrets.DODAM_KEYSTORE }}
-#        keyStorePassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
-#        alias: ${{ secrets.DODAM_KEYSTORE_ALIAS }}
-#        keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
-#
-#    - name: Sign Teacher Release
-#      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
-#      uses: r0adkll/sign-android-release@v1
-#      with:
-#        releaseDirectory: ./dodam-teacher-android/build/outputs/bundle/release
-#        signingKeyBase64: ${{ secrets.DODAM_KEYSTORE }}
-#        keyStorePassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
-#        alias: ${{ secrets.DODAM_KEYSTORE_ALIAS }}
-#        keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
-#
-#    - name: Setup Authorization With Google Play Store
-#      run: echo '${{ secrets.DODAM_GOOGLE_PLAY_API_AUTH }}' > service_account.json
-#
-#    - name: Prepare Patch Notes
-#      run: |
-#        mkdir -p whatsNewDirectory
-#        echo "${{ github.event.release.body }}" > whatsNewDirectory/whatsnew-ko-KR
-#
-#    - name: Student Dodam Deploy to Production Channel
-#      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
-#      uses: r0adkll/upload-google-play@v1
-#      with:
-#        serviceAccountJson: service_account.json
-#        packageName: com.b1nd.dodam.student
-#        releaseFiles: ./dodam-student/build/outputs/bundle/release/dodam-student-release.aab
-#        track: production
-#        status: completed
-#        inAppUpdatePriority: 2
-#        whatsNewDirectory: whatsNewDirectory/
-#
-#    - name: Teacher Dodam Deploy to Production Channel
-#      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
-#      uses: r0adkll/upload-google-play@v1
-#      with:
-#        serviceAccountJson: service_account.json
-#        packageName: com.b1nd.dodam.teacher
-#        releaseFiles: ./dodam-teacher-android/build/outputs/bundle/release/dodam-teacher-android-release.aab
-#        track: production
-#        status: completed
-#        inAppUpdatePriority: 2
-#        whatsNewDirectory: whatsNewDirectory/
+      run: |
+        mkdir -p whatsNewDirectory
+        echo "create patch note: ${{ env.Student }}"
+        echo "${{ env.Student }}" > whatsNewDirectory/whatsnew-ko-KR
+    
+
+    - name: Student Dodam Deploy to Production Channel
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJson: service_account.json
+        packageName: com.b1nd.dodam.student
+        releaseFiles: ./dodam-student/build/outputs/bundle/release/dodam-student-release.aab
+        track: production
+        status: completed
+        inAppUpdatePriority: 2
+        whatsNewDirectory: whatsNewDirectory/
+
+    - name: Prepare Student Patch Notes
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
+      run: |
+        mkdir -p whatsNewDirectory
+        echo "create patch note: ${{ env.Teacher }}"
+        echo "${{ env.Teacher }}" > whatsNewDirectory/whatsnew-ko-KR
+
+    - name: Teacher Dodam Deploy to Production Channel
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJson: service_account.json
+        packageName: com.b1nd.dodam.teacher
+        releaseFiles: ./dodam-teacher-android/build/outputs/bundle/release/dodam-teacher-android-release.aab
+        track: production
+        status: completed
+        inAppUpdatePriority: 2
+        whatsNewDirectory: whatsNewDirectory/
 
 
 
