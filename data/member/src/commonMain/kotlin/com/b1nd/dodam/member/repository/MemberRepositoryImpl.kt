@@ -43,4 +43,12 @@ internal class MemberRepositoryImpl(
             .asResult()
             .flowOn(dispatcher)
     }
+
+    override suspend fun editMemberInfo(name: String, email: String, phone: String, profileImage: String?): Flow<Result<Unit>> {
+        return flow {
+            emit(network.editMemberInfo(name, email, phone, profileImage))
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
 }

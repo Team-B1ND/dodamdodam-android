@@ -24,25 +24,26 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
+import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DividerType
+import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.BarChart
 import com.b1nd.dodam.ui.icons.ColoredBus
@@ -64,6 +65,10 @@ fun AllScreen(
     navigateToAddWakeUpSong: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.getMyInfo()
+    }
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -130,36 +135,21 @@ fun AllScreen(
                 ) {
                     uiState.memberInfo?.let { myInfo ->
                         Box {
-                            if (!myInfo.profileImage.isNullOrEmpty()) {
-                                AsyncImage(
-                                    model = myInfo.profileImage,
-                                    contentDescription = "profile",
-                                    modifier = Modifier
-                                        .clip(shape = CircleShape)
-                                        .size(64.dp),
-                                    contentScale = ContentScale.Crop,
-                                )
-                            } else {
-                                Box(
-                                    modifier = Modifier
-                                        .clip(shape = CircleShape)
-                                        .size(64.dp)
-                                        .border(
+                            val borderColor = DodamTheme.colors.lineAlternative
+                            DodamAvatar(
+                                avatarSize = AvatarSize.ExtraLarge,
+                                contentDescription = "프로필 이미지",
+                                model = myInfo.profileImage,
+                                modifier = Modifier
+                                    .`if`(myInfo.profileImage.isNullOrEmpty()) {
+                                        border(
                                             width = 1.dp,
-                                            color = DodamTheme.colors.lineAlternative,
+                                            color = borderColor,
                                             shape = CircleShape,
-                                        ),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    Image(
-                                        imageVector = DodamIcons.Person.value,
-                                        contentDescription = "profile",
-                                        modifier = Modifier.size(40.dp),
-                                        contentScale = ContentScale.Crop,
-                                        colorFilter = ColorFilter.tint(DodamTheme.colors.fillAlternative),
-                                    )
-                                }
-                            }
+                                        )
+                                    },
+                                contentScale = ContentScale.Crop,
+                            )
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         val classInfo = myInfo.student

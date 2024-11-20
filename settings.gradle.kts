@@ -15,6 +15,11 @@ dependencyResolutionManagement {
         mavenCentral()
         maven("https://jitpack.io")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
+        maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+        maven("https://oss.sonatype.org/content/repositories/snapshots") {
+            name = "SonatypeSnapshots"
+            mavenContent { snapshotsOnly() }
+        }
     }
 }
 
@@ -81,3 +86,6 @@ include(":feature-teacher:approve-outing")
 include(":feature-teacher:approve-nightstudy")
 include(":network:bundleid-info")
 include(":data:bundleid-info")
+include(":feature:edit-member-info")
+include(":network:upload")
+include(":data:upload")

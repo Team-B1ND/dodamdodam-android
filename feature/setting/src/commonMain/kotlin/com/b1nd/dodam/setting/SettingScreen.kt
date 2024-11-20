@@ -2,6 +2,7 @@ package com.b1nd.dodam.setting
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -29,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -37,36 +38,44 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import coil3.compose.AsyncImage
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DividerType
+import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButtonDialog
-import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import com.b1nd.dodam.ui.icons.DefaultProfile
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versionInfo: String = "3.2.0", popBackStack: () -> Unit, logout: () -> Unit) {
+internal fun SettingScreen(
+    viewModel: SettingViewModel = koinViewModel(),
+    versionInfo: String = "3.2.0",
+    popBackStack: () -> Unit,
+    logout: () -> Unit,
+    navigationToEditMemberInfo: (profileImage: String?, name: String, email: String, phone: String) -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
     var showEasterEggDialog by remember { mutableStateOf(false) }
     var showDeactivationDialog by remember { mutableStateOf(false) }
 
     val uriHandler = LocalUriHandler.current
 
     var count by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.getMyInfo()
+    }
 
     LaunchedEffect(count) {
         if (count == 10) {
@@ -106,19 +115,6 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
                 dismissButtonText = "취소",
                 dismissButtonRole = ButtonRole.Assistive,
                 title = "정말 로그아웃하시겠어요?",
-            )
-        }
-    }
-
-    if (showDialog) {
-        Dialog(
-            onDismissRequest = { showDialog = false },
-        ) {
-            DodamDialog(
-                confirmButton = { showDialog = false },
-                text = "확인",
-                title = "아직 준비 중인 기능이에요!",
-                body = "정보를 수정하시려면 도담도담 웹사이트를 이용해 주세요.",
             )
         }
     }
@@ -164,9 +160,17 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
                     .padding(bottom = 8.dp)
                     .fillMaxWidth()
                     .clickable(
+                        enabled = uiState.name.isNotEmpty(),
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberBounceIndication(),
-                        onClick = { showDialog = true },
+                        onClick = {
+                            navigationToEditMemberInfo(
+                                uiState.profile,
+                                uiState.name,
+                                uiState.email,
+                                uiState.phone,
+                            )
+                        },
                     ),
             ) {
                 if (uiState.isLoading) {
@@ -176,10 +180,10 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(56.dp)
+                                .size(64.dp)
                                 .background(
                                     brush = shimmerEffect(),
-                                    shape = DodamTheme.shapes.medium,
+                                    shape = CircleShape,
                                 ),
                         )
 
@@ -208,25 +212,21 @@ internal fun SettingScreen(viewModel: SettingViewModel = koinViewModel(), versio
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        if (uiState.profile != null && uiState.profile != "") {
-                            AsyncImage(
-                                modifier = Modifier
-                                    .clip(DodamTheme.shapes.medium)
-                                    .size(56.dp),
-                                model = uiState.profile,
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                            )
-                        } else {
-                            Image(
-                                modifier = Modifier
-                                    .clip(DodamTheme.shapes.medium)
-                                    .size(56.dp),
-                                bitmap = DefaultProfile,
-                                contentDescription = "프로필 이미지",
-                                contentScale = ContentScale.Crop,
-                            )
-                        }
+                        val borderColor = DodamTheme.colors.lineAlternative
+                        DodamAvatar(
+                            avatarSize = AvatarSize.ExtraLarge,
+                            contentDescription = "프로필 이미지",
+                            model = if (uiState.profile.isNullOrEmpty()) null else uiState.profile,
+                            modifier = Modifier
+                                .`if`(uiState.profile.isNullOrEmpty()) {
+                                    border(
+                                        width = 1.dp,
+                                        color = borderColor,
+                                        shape = CircleShape,
+                                    )
+                                },
+                            contentScale = ContentScale.Crop,
+                        )
 
                         Column {
                             Text(
