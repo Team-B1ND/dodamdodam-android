@@ -45,7 +45,6 @@ import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButtonDialog
-import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
@@ -67,7 +66,6 @@ internal fun SettingScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
     var showEasterEggDialog by remember { mutableStateOf(false) }
     var showDeactivationDialog by remember { mutableStateOf(false) }
 
@@ -117,19 +115,6 @@ internal fun SettingScreen(
                 dismissButtonText = "취소",
                 dismissButtonRole = ButtonRole.Assistive,
                 title = "정말 로그아웃하시겠어요?",
-            )
-        }
-    }
-
-    if (showDialog) {
-        Dialog(
-            onDismissRequest = { showDialog = false },
-        ) {
-            DodamDialog(
-                confirmButton = { showDialog = false },
-                text = "확인",
-                title = "아직 준비 중인 기능이에요!",
-                body = "정보를 수정하시려면 도담도담 웹사이트를 이용해 주세요.",
             )
         }
     }
