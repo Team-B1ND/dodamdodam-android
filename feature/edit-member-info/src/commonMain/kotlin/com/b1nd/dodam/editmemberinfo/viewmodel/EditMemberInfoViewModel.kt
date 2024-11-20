@@ -45,14 +45,17 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
                 when (it) {
                     is Result.Success -> {
                         _sideEffect.emit(EditMemberInfoSideEffect.SuccessEditMemberInfo)
-                        println(it.data)
+                        _uiState.value = _uiState.value.copy(isLoading = false)
                     }
 
                     is Result.Error -> {
                         it.error.printStackTrace()
+                        _uiState.value = _uiState.value.copy(isLoading = false)
                     }
 
-                    is Result.Loading -> {}
+                    is Result.Loading -> {
+                        _uiState.value = _uiState.value.copy(isLoading = true)
+                    }
                 }
             }
         }

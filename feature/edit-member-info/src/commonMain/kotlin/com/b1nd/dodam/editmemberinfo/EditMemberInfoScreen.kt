@@ -212,12 +212,14 @@ internal fun EditMemberInfoScreen(
             }
             DodamButton(
                 onClick = {
-                    viewModel.editMember(
-                        email = email,
-                        name = name,
-                        phone = phone,
-                        profileImage = uiState.image,
-                    )
+                    if (!uiState.isLoading) {
+                        viewModel.editMember(
+                            email = email,
+                            name = name,
+                            phone = phone,
+                            profileImage = uiState.image,
+                        )
+                    }
                 },
                 text = "수정 완료",
                 modifier = Modifier

@@ -5,4 +5,5 @@ data class ProfileModel(
     val email: String = "",
     val phone: String = "",
     val image: String? = null,
+    val isLoading: Boolean = false,
 )
