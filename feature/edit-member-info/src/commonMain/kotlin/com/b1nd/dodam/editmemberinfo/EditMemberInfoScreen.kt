@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
@@ -35,10 +36,10 @@ import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.editmemberinfo.model.EditMemberInfoSideEffect
 import com.b1nd.dodam.editmemberinfo.viewmodel.EditMemberInfoViewModel
 import com.b1nd.dodam.ui.component.modifier.`if`
-import com.b1nd.dodam.ui.icons.Plus
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import com.mohamedrejeb.calf.core.LocalPlatformContext
 import com.mohamedrejeb.calf.io.getName
@@ -145,16 +146,27 @@ internal fun EditMemberInfoScreen(
                             },
                         contentScale = ContentScale.Crop,
                     )
-                    Image(
-                        imageVector = Plus,
-                        contentDescription = "image",
+                    Box(
                         modifier = Modifier
                             .size(32.dp)
-                            .align(Alignment.BottomEnd)
-                            .clickable {
-                                pickerLauncher.launch()
-                            },
-                    )
+                            .background(
+                                color = DodamTheme.colors.primaryNormal,
+                                shape = CircleShape,
+                            )
+                            .align(Alignment.BottomEnd),
+                    ) {
+                        Image(
+                            imageVector = DodamIcons.Plus.value,
+                            contentDescription = "plus",
+                            colorFilter = ColorFilter.tint(DodamTheme.colors.staticWhite),
+                            modifier = Modifier
+                                .size(16.dp)
+                                .align(Alignment.Center)
+                                .clickable {
+                                    pickerLauncher.launch()
+                                },
+                        )
+                    }
                 }
                 Column(
                     modifier = Modifier
