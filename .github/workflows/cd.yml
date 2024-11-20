@@ -2,12 +2,13 @@ name: Android Release CD
 
 on:
   release:
-    types: [published]
+    types: [ published ]
 
 jobs:
   release:
     env:
       TITLE: ${{ github.event.release.name }}
+      CONTENT: ${{ github.event.release.body }}
       KEYSTORE: ${{ secrets.DODAM_KEYSTORE }}
 
     runs-on: ubuntu-latest
@@ -30,23 +31,23 @@ jobs:
       run: chmod +x gradlew
 
     - name: Run Student spotless
-      if: startsWith(env.TITLE, 'Student')
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
       run: ./gradlew dodam-student:spotlessCheck
 
     - name: Run Teacher spotless
-      if: startsWith(env.TITLE, 'Teacher')
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
       run: ./gradlew dodam-teacher-android:spotlessCheck
 
     - name: Assemble Student Release Bundle
-      if: startsWith(env.TITLE, 'Student')
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
       run: ./gradlew dodam-student:bundleRelease
 
     - name: Assemble Teacher Release Bundle
-      if: startsWith(env.TITLE, 'Teacher')
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
       run: ./gradlew dodam-teacher-android:bundleRelease
 
     - name: Sign Student Release
-      if: startsWith(env.TITLE, 'Student')
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
       uses: r0adkll/sign-android-release@v1
       with:
         releaseDirectory: ./dodam-student/build/outputs/bundle/release
@@ -56,7 +57,7 @@ jobs:
         keyPassword: ${{ secrets.DODAM_KEYSTORE_PASSWORD }}
 
     - name: Sign Teacher Release
-      if: startsWith(env.TITLE, 'Teacher')
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
       uses: r0adkll/sign-android-release@v1
       with:
         releaseDirectory: ./dodam-teacher-android/build/outputs/bundle/release
@@ -68,13 +69,37 @@ jobs:
     - name: Setup Authorization With Google Play Store
       run: echo '${{ secrets.DODAM_GOOGLE_PLAY_API_AUTH }}' > service_account.json
 
-    - name: Prepare Patch Notes
+    - name: Student Patch Note Body Parsing
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
+      uses: Team-B1ND/string-parser@main
+      with:
+        body: ${{ env.CONTENT }}
+        split: "<Teacher>"
+        splitIndex: 0
+        replaceBefore: "<Student>\n"
+        replaceAfter: ""
+        envName: Student
+
+    - name: Teacher Patch Note Body Parsing
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
+      uses: Team-B1ND/string-parser@main
+      with:
+        body: ${{ env.CONTENT }}
+        split: "<Teacher>"
+        splitIndex: 1
+        substringStart: 1
+        envName: Teacher
+
+    - name: Prepare Student Patch Notes
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
       run: |
         mkdir -p whatsNewDirectory
-        echo "${{ github.event.release.body }}" > whatsNewDirectory/whatsnew-ko-KR   
+        echo "create patch note: ${{ env.Student }}"
+        echo "${{ env.Student }}" > whatsNewDirectory/whatsnew-ko-KR
+    
 
     - name: Student Dodam Deploy to Production Channel
-      if: startsWith(env.TITLE, 'Student')
+      if: ${{ startsWith(env.TITLE, 'Student') || startsWith(env.TITLE, 'Total')}}
       uses: r0adkll/upload-google-play@v1
       with:
         serviceAccountJson: service_account.json
@@ -85,8 +110,15 @@ jobs:
         inAppUpdatePriority: 2
         whatsNewDirectory: whatsNewDirectory/
 
+    - name: Prepare Student Patch Notes
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
+      run: |
+        mkdir -p whatsNewDirectory
+        echo "create patch note: ${{ env.Teacher }}"
+        echo "${{ env.Teacher }}" > whatsNewDirectory/whatsnew-ko-KR
+
     - name: Teacher Dodam Deploy to Production Channel
-      if: startsWith(env.TITLE, 'Teacher')
+      if: ${{ startsWith(env.TITLE, 'Teacher') || startsWith(env.TITLE, 'Total')}}
       uses: r0adkll/upload-google-play@v1
       with:
         serviceAccountJson: service_account.json
