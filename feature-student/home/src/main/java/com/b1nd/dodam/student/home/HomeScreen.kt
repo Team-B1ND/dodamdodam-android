@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -27,7 +29,6 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,17 +43,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.b1nd.dodam.dds.animation.bounceClick
-import com.b1nd.dodam.dds.component.DodamDialog
-import com.b1nd.dodam.dds.component.DodamTopAppBar
-import com.b1nd.dodam.dds.component.button.DodamTextButton
-import com.b1nd.dodam.dds.foundation.DodamIcons
-import com.b1nd.dodam.dds.foundation.DodamShape
-import com.b1nd.dodam.dds.style.BodyLarge
-import com.b1nd.dodam.dds.style.LabelLarge
-import com.b1nd.dodam.dds.style.TitleLarge
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
+import com.b1nd.dodam.designsystem.component.DodamDialog
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.student.home.card.BannerCard
 import com.b1nd.dodam.student.home.card.MealCard
 import com.b1nd.dodam.student.home.card.NightStudyCard
@@ -66,6 +63,7 @@ import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
 import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.ui.icons.DodamLogo
+import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
@@ -89,24 +87,19 @@ internal fun HomeScreen(
     }
 
     if (showDialog) {
-        DodamDialog(
+        Dialog(
             onDismissRequest = {
                 showDialog = false
             },
-            confirmText = {
-                DodamTextButton(onClick = {
+        ) {
+            DodamDialog(
+                confirmButton = {
                     showDialog = false
-                }) {
-                    BodyLarge(text = "확인")
-                }
-            },
-            title = {
-                Text(text = "아직 준비 중인 기능이에요!")
-            },
-            text = {
-                Text(text = "전체 일정을 조회하시려면 도담도담 웹사이트를 이용해 주세요.")
-            },
-        )
+                },
+                title = "아직 준비 중인 기능이에요!",
+                text = "전체 일정을 조회하시려면 도담도담 웹사이트를 이용해 주세요.",
+            )
+        }
     }
 
     HomeScreen(
@@ -186,31 +179,38 @@ private fun HomeScreen(
     Scaffold(
         topBar = {
             Column {
-                DodamTopAppBar(
+                DodamContentTopAppBar(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(horizontal = 4.dp),
-                    title = {
-                        Icon(
-                            modifier = Modifier.width(90.dp),
-                            imageVector = DodamLogo,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
+                        .background(DodamTheme.colors.backgroundNeutral)
+                        .statusBarsPadding(),
+                    content = {
+                        Column {
+                            Row {
+                                Spacer(Modifier.width(16.dp))
+                                Icon(
+                                    modifier = Modifier.width(90.dp),
+                                    imageVector = DodamLogo,
+                                    contentDescription = null,
+                                    tint = DodamTheme.colors.primaryNormal,
+                                )
+                            }
+                        }
                     },
-//                    TODO Alarm feature
-//                    actions = {
-//                        DodamIconButton(onClick = { /*TODO*/ }) {
-//                            BellIcon(modifier = Modifier.size(28.dp))
-//                        }
-//                    },
+                    actionIcons = persistentListOf(
+//                        TODO 알림 아이콘 활성화
+//                        ActionIcon(
+//                            icon = DodamIcons.Bell,
+//                            onClick = {},
+//                            enabled = false,
+//                        ),
+                    ),
                 )
                 AnimatedVisibility(scrollState.canScrollBackward) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(1.dp)
-                            .background(MaterialTheme.colorScheme.outlineVariant),
+                            .background(DodamTheme.colors.fillNeutral),
                     )
                 }
             }
@@ -225,7 +225,7 @@ private fun HomeScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surface)
+                    .background(DodamTheme.colors.backgroundNeutral)
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 state = scrollState,
@@ -243,6 +243,7 @@ private fun HomeScreen(
                         showShimmer = showShimmer,
                         onContentClick = navigateToMeal,
                         fetchMeal = fetchMeal,
+                        navigateToMeal = navigateToMeal,
                     )
                 }
 
@@ -312,9 +313,9 @@ internal fun PagerIndicator(modifier: Modifier = Modifier, pagerState: PagerStat
             repeat(pagerState.pageCount) { iteration ->
                 val color =
                     if (pagerState.currentPage == iteration) {
-                        MaterialTheme.colorScheme.primary
+                        DodamTheme.colors.primaryNormal
                     } else {
-                        MaterialTheme.colorScheme.secondary
+                        DodamTheme.colors.labelDisabled
                     }
 
                 Box(
@@ -335,15 +336,24 @@ internal fun DefaultText(onClick: () -> Unit, label: String, body: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
-            .bounceClick(
+            .clickable(
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
+                indication = rememberBounceIndication(),
             )
             .padding(6.dp),
     ) {
-        LabelLarge(text = label, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(
+            text = label,
+            color = DodamTheme.colors.labelAlternative,
+            style = DodamTheme.typography.caption1Medium(),
+        )
         Spacer(modifier = Modifier.height(4.dp))
-        BodyLarge(text = body, color = MaterialTheme.colorScheme.primary)
+        Text(
+            text = body,
+            color = DodamTheme.colors.primaryNormal,
+            style = DodamTheme.typography.body1Bold(),
+        )
     }
 }
 
@@ -361,8 +371,8 @@ internal fun DodamContainer(
             .fillMaxWidth()
             .animateContentSize()
             .background(
-                color = MaterialTheme.colorScheme.surfaceContainer,
-                shape = DodamShape.Large,
+                color = DodamTheme.colors.backgroundNormal,
+                shape = DodamTheme.shapes.large,
             ),
     ) {
         Row(
@@ -370,7 +380,8 @@ internal fun DodamContainer(
                 .fillMaxWidth()
                 .then(
                     if (showNextButton) {
-                        Modifier.bounceClick(
+                        Modifier.clickable(
+                            indication = rememberBounceIndication(),
                             interactionSource = remember { MutableInteractionSource() },
                             onClick = onNextClick!!,
                         )
@@ -384,26 +395,26 @@ internal fun DodamContainer(
             Box(
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.primary,
+                        color = DodamTheme.colors.primaryAlternative,
                         shape = RoundedCornerShape(100),
-                    )
-                    .padding(7.dp),
+                    ),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    modifier = Modifier.size(18.dp),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(16.dp),
                     imageVector = icon,
                     contentDescription = "icon",
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = DodamTheme.colors.staticWhite,
                 )
             }
 
             Spacer(modifier = Modifier.width(12.dp))
-
-            TitleLarge(
+            Text(
                 text = title,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 20.sp,
+                color = DodamTheme.colors.labelStrong,
+                style = DodamTheme.typography.headlineBold(),
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -412,9 +423,9 @@ internal fun DodamContainer(
                 Icon(
                     modifier = Modifier
                         .size(16.dp),
-                    imageVector = DodamIcons.ChevronRight,
+                    imageVector = DodamIcons.ChevronRight.value,
                     contentDescription = "next",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = DodamTheme.colors.labelNormal.copy(alpha = 0.5f),
                 )
             }
         }

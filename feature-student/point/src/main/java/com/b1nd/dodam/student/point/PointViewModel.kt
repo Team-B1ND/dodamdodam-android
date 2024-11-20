@@ -29,7 +29,7 @@ class PointViewModel : ViewModel(), KoinComponent {
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
 
-    init {
+    fun load() {
         viewModelScope.launch {
             pointRepository.getMyOut().collect { result ->
                 when (result) {

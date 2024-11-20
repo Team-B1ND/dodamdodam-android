@@ -22,6 +22,7 @@ fun InputField(
     onClick: () -> Unit,
     text: @Composable () -> Unit,
     content: @Composable () -> Unit,
+    enabled: Boolean = true,
     paddingValues: PaddingValues = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
 ) {
     Row(
@@ -32,6 +33,7 @@ fun InputField(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberBounceIndication(),
                 onClick = onClick,
+                enabled = enabled,
             )
             .padding(paddingValues),
         verticalAlignment = Alignment.CenterVertically,

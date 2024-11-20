@@ -31,7 +31,7 @@ include(
     ":feature:onboarding",
     ":feature:login",
     ":feature:meal",
-    ":feature:register",
+    ":feature-student:register",
     ":feature-student:main",
     ":feature-student:home",
     ":network:core",

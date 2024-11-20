@@ -21,9 +21,7 @@ fun NavGraphBuilder.allScreen(
     navigateToSetting: () -> Unit,
     navigateToMyPoint: () -> Unit,
     navigateToAddBus: () -> Unit,
-    navigateToAddNightStudy: () -> Unit,
-    navigateToAddOutingStudy: () -> Unit,
-    navigateToSchedule: () -> Unit,
+    navigateToOuting: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
 ) {
@@ -38,9 +36,7 @@ fun NavGraphBuilder.allScreen(
             navigateToSetting = navigateToSetting,
             navigateToMyPoint = navigateToMyPoint,
             navigateToAddBus = navigateToAddBus,
-            navigateToAddNightStudy = navigateToAddNightStudy,
-            navigateToAddOutingStudy = navigateToAddOutingStudy,
-            navigateToSchedule = navigateToSchedule,
+            navigateToOuting = navigateToOuting,
             navigateToWakeUpSong = navigateToWakeUpSong,
             navigateToAddWakeUpSong = navigateToAddWakeUpSong,
         )
