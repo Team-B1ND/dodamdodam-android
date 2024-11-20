@@ -2,6 +2,9 @@ package com.b1nd.dodam.member
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,27 +30,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
+import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DividerType
+import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.BarChart
 import com.b1nd.dodam.ui.icons.ColoredBus
 import com.b1nd.dodam.ui.icons.ColoredMegaphone
 import com.b1nd.dodam.ui.icons.ColoredMusicalNote
 import com.b1nd.dodam.ui.icons.ColoredTent
-import com.b1nd.dodam.ui.icons.DefaultProfile
+import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
