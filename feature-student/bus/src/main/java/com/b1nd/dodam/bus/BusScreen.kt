@@ -146,7 +146,7 @@ fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Uni
                     }
                 },
                 text = if (uiState.selectedBus?.id == uiState.buses.getOrNull(selectedIndex ?: 0)?.id) "취소" else "신청",
-                enabled = !(uiState.selectedBus == null && selectedIndex == null),
+                enabled = !(uiState.selectedBus == null && selectedIndex == null) && !uiState.isLoading,
                 loading = uiState.isLoading,
             )
         }

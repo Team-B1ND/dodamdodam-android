@@ -408,6 +408,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
                 },
                 enabled = (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading,
                 text = "신청",
+                loading = uiState.isLoading,
             )
         }
     }
