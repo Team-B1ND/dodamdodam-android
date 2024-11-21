@@ -113,10 +113,13 @@ fun NightStudyScreen(
         ) {
             DodamButtonDialog(
                 confirmButtonText = "삭제",
-                confirmButton = { viewModel.deleteNightStudy(id) },
+                confirmButton = {
+                    viewModel.deleteNightStudy(id)
+                    showDialog = false
+                },
                 confirmButtonRole = ButtonRole.Negative,
                 dismissButton = { showDialog = false },
-                dismissButtonRole = ButtonRole.Primary,
+                dismissButtonRole = ButtonRole.Assistive,
                 title = "정말 삭제하시겠어요?",
                 body = reason,
             )
