@@ -225,6 +225,8 @@ internal fun EditMemberInfoScreen(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth(),
+                enabled = !uiState.isLoading,
+                loading = uiState.isLoading
             )
         }
     }

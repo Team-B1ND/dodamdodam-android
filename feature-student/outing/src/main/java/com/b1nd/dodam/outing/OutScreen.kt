@@ -129,9 +129,10 @@ fun OutingScreen(
                     } else {
                         viewModel.deleteSleepover(id)
                     }
+                    showDialog = false
                 },
                 dismissButtonText = "취소",
-                dismissButtonRole = ButtonRole.Primary,
+                dismissButtonRole = ButtonRole.Assistive,
                 dismissButton = {
                     showDialog = false
                 },
