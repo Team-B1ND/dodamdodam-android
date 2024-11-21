@@ -44,7 +44,6 @@ import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.outing.model.OutPendingUiState
 import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
@@ -124,10 +123,6 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
     LaunchedEffect(key1 = true) {
         nowDateTime = DodamDate.now()
         viewModel.load()
-    }
-
-    LaunchedEffect(nowDateTime) {
-        KmLogging.debug("LOG", "${nowDateTime}")
     }
 
     Scaffold(
