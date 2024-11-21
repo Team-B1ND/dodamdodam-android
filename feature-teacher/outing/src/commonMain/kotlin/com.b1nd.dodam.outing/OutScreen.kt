@@ -44,6 +44,7 @@ import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
+import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.outing.model.OutPendingUiState
 import com.b1nd.dodam.outing.viewmodel.OutViewModel
 import com.b1nd.dodam.ui.component.DodamMember
@@ -62,6 +63,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (title: Int) -> Unit) {
+    var nowDateTime by remember { mutableStateOf(DodamDate.now()) }
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
         "전체",
@@ -113,11 +115,19 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefresh,
-        onRefresh = viewModel::refresh,
+        onRefresh = {
+            nowDateTime = DodamDate.now()
+            viewModel.refresh()
+        },
     )
 
     LaunchedEffect(key1 = true) {
+        nowDateTime = DodamDate.now()
         viewModel.load()
+    }
+
+    LaunchedEffect(nowDateTime) {
+        KmLogging.debug("LOG", "${nowDateTime}")
     }
 
     Scaffold(
@@ -320,7 +330,7 @@ fun OutScreen(viewModel: OutViewModel = koinViewModel(), navigateToApprove: (tit
                         }.filter { studentData ->
                             val minutesRemaining =
                                 remainingMinutes(studentData.endAt)
-                            return@filter minutesRemaining > 0
+                            return@filter minutesRemaining > 0 && studentData.startAt <= nowDateTime
                         }.toImmutableList()
 
                         Column(
