@@ -226,7 +226,7 @@ internal fun EditMemberInfoScreen(
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth(),
                 enabled = !uiState.isLoading,
-                loading = uiState.isLoading
+                loading = uiState.isLoading,
             )
         }
     }

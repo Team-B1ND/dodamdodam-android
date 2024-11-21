@@ -339,7 +339,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                     buttonRole = ButtonRole.Primary,
                     buttonSize = ButtonSize.Large,
                     enabled = !uiState.isLoading,
-                    loading = uiState.isLoading
+                    loading = uiState.isLoading,
                 )
             }
         }
