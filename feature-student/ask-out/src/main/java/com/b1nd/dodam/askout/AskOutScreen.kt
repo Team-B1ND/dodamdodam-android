@@ -185,6 +185,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
         ) {
             DodamButtonDialog(
                 confirmButton = {
+                    showMealPicker = false
                     viewModel.askOuting(
                         reason = outingReason,
                         startAt = LocalDateTime(outingDate, outingStartTime),
@@ -195,6 +196,7 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                 confirmButtonText = "네, 먹습니다",
                 confirmButtonRole = ButtonRole.Primary,
                 dismissButton = {
+                    showMealPicker = false
                     viewModel.askOuting(
                         reason = outingReason,
                         startAt = LocalDateTime(outingDate, outingStartTime),
@@ -336,6 +338,8 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                     text = "신청",
                     buttonRole = ButtonRole.Primary,
                     buttonSize = ButtonSize.Large,
+                    enabled = !uiState.isLoading,
+                    loading = uiState.isLoading,
                 )
             }
         }
