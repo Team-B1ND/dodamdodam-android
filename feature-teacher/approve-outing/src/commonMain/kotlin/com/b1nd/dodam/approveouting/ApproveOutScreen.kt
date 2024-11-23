@@ -241,7 +241,7 @@ fun ApproveOutScreen(
                                     buttonRole = ButtonRole.Assistive,
                                     modifier = Modifier.weight(2f),
                                     enabled = state.outPendingUiState != OutPendingUiState.Loading,
-                                    loading = state.outPendingUiState == OutPendingUiState.Loading
+                                    loading = state.outPendingUiState == OutPendingUiState.Loading,
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 DodamButton(

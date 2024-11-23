@@ -45,7 +45,6 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
-import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
@@ -264,7 +263,7 @@ fun ApproveNightStudyScreen(
                                     buttonRole = ButtonRole.Assistive,
                                     modifier = Modifier.weight(2f),
                                     enabled = state.nightStudyUiState != NightStudyUiState.Loading,
-                                    loading = state.nightStudyUiState == NightStudyUiState.Loading
+                                    loading = state.nightStudyUiState == NightStudyUiState.Loading,
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 DodamButton(
@@ -277,7 +276,7 @@ fun ApproveNightStudyScreen(
                                     buttonRole = ButtonRole.Primary,
                                     modifier = Modifier.weight(3f),
                                     enabled = state.nightStudyUiState != NightStudyUiState.Loading,
-                                    loading = state.nightStudyUiState == NightStudyUiState.Loading
+                                    loading = state.nightStudyUiState == NightStudyUiState.Loading,
                                 )
                             }
                         }
