@@ -45,6 +45,7 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamSegment
@@ -256,21 +257,27 @@ fun ApproveNightStudyScreen(
                                 DodamButton(
                                     onClick = {
                                         viewModel.reject(state.detailMember.id)
+                                        selectedItemIndex = -1
                                     },
                                     text = "거절하기",
                                     buttonSize = ButtonSize.Large,
-                                    buttonRole = ButtonRole.Negative,
-                                    modifier = Modifier.weight(1f),
+                                    buttonRole = ButtonRole.Assistive,
+                                    modifier = Modifier.weight(2f),
+                                    enabled = state.nightStudyUiState != NightStudyUiState.Loading,
+                                    loading = state.nightStudyUiState == NightStudyUiState.Loading
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 DodamButton(
                                     onClick = {
                                         viewModel.allow(state.detailMember.id)
+                                        selectedItemIndex = -1
                                     },
                                     text = "승인하기",
                                     buttonSize = ButtonSize.Large,
                                     buttonRole = ButtonRole.Primary,
-                                    modifier = Modifier.weight(1f),
+                                    modifier = Modifier.weight(3f),
+                                    enabled = state.nightStudyUiState != NightStudyUiState.Loading,
+                                    loading = state.nightStudyUiState == NightStudyUiState.Loading
                                 )
                             }
                         }

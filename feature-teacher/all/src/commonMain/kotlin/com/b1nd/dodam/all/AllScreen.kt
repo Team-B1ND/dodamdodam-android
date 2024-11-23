@@ -180,21 +180,21 @@ private fun AllCard(image: ImageVector, text: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .height(40.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberBounceIndication(),
                 onClick = onClick,
             )
-            .padding(8.dp),
+            .padding(
+                horizontal = 8.dp,
+                vertical = 4.dp
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             modifier = Modifier
-                .padding(
-                    start = 8.dp,
-                    top = 4.dp,
-                    bottom = 4.dp,
-                )
+                .size(32.dp)
                 .background(
                     color = DodamTheme.colors.fillAlternative,
                     shape = DodamTheme.shapes.extraSmall,
@@ -222,6 +222,5 @@ private fun AllCard(image: ImageVector, text: String, onClick: () -> Unit) {
             contentDescription = null,
             colorFilter = ColorFilter.tint(DodamTheme.colors.labelAssistive),
         )
-        Spacer(modifier = Modifier.width(4.dp))
     }
 }
