@@ -238,8 +238,10 @@ fun ApproveOutScreen(
                                     },
                                     text = "거절하기",
                                     buttonSize = ButtonSize.Large,
-                                    buttonRole = ButtonRole.Negative,
-                                    modifier = Modifier.weight(1f),
+                                    buttonRole = ButtonRole.Assistive,
+                                    modifier = Modifier.weight(2f),
+                                    enabled = state.outPendingUiState != OutPendingUiState.Loading,
+                                    loading = state.outPendingUiState == OutPendingUiState.Loading,
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 DodamButton(
@@ -254,7 +256,9 @@ fun ApproveOutScreen(
                                     text = "승인하기",
                                     buttonSize = ButtonSize.Large,
                                     buttonRole = ButtonRole.Primary,
-                                    modifier = Modifier.weight(1f),
+                                    modifier = Modifier.weight(3f),
+                                    enabled = state.outPendingUiState != OutPendingUiState.Loading,
+                                    loading = state.outPendingUiState == OutPendingUiState.Loading,
                                 )
                             }
                         }

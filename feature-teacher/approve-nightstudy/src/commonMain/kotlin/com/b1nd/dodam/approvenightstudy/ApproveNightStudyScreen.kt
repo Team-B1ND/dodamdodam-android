@@ -256,21 +256,27 @@ fun ApproveNightStudyScreen(
                                 DodamButton(
                                     onClick = {
                                         viewModel.reject(state.detailMember.id)
+                                        selectedItemIndex = -1
                                     },
                                     text = "거절하기",
                                     buttonSize = ButtonSize.Large,
-                                    buttonRole = ButtonRole.Negative,
-                                    modifier = Modifier.weight(1f),
+                                    buttonRole = ButtonRole.Assistive,
+                                    modifier = Modifier.weight(2f),
+                                    enabled = state.nightStudyUiState != NightStudyUiState.Loading,
+                                    loading = state.nightStudyUiState == NightStudyUiState.Loading,
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 DodamButton(
                                     onClick = {
                                         viewModel.allow(state.detailMember.id)
+                                        selectedItemIndex = -1
                                     },
                                     text = "승인하기",
                                     buttonSize = ButtonSize.Large,
                                     buttonRole = ButtonRole.Primary,
-                                    modifier = Modifier.weight(1f),
+                                    modifier = Modifier.weight(3f),
+                                    enabled = state.nightStudyUiState != NightStudyUiState.Loading,
+                                    loading = state.nightStudyUiState == NightStudyUiState.Loading,
                                 )
                             }
                         }
