@@ -77,6 +77,7 @@ internal fun PointScreen(viewModel: PointViewModel = koinViewModel(), showSnackb
         ) {
             GiveScreen(
                 uiState = uiState.uiState,
+                isNetworkLoading = uiState.isNetworkLoading,
                 onClickGivePoint = { students, reason ->
                     viewModel.givePoint(
                         students = students,

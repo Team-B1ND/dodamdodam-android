@@ -72,6 +72,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun GiveScreen(
     uiState: PointLoadingUiState,
+    isNetworkLoading: Boolean,
     onClickGivePoint: (ImmutableList<PointStudentModel>, PointReason) -> Unit,
     reload: () -> Unit,
     popBackStack: () -> Unit,
@@ -314,7 +315,7 @@ internal fun GiveScreen(
                 }
             }
         }
-        if (selectReason != null) {
+        if (selectReason != null && uiState is PointLoadingUiState.Success) {
             FakeBottomSheet(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 title = {
@@ -347,13 +348,13 @@ internal fun GiveScreen(
                         buttonRole = if (nowScoreType == ScoreType.BONUS) ButtonRole.Primary else ButtonRole.Negative,
                         buttonSize = ButtonSize.Large,
                         onClick = {
-                            if (uiState is PointLoadingUiState.Success) {
-                                onClickGivePoint(
-                                    uiState.students.filter { it.selected }.toImmutableList(),
-                                    selectReason!!,
-                                )
-                            }
+                            onClickGivePoint(
+                                uiState.students.filter { it.selected }.toImmutableList(),
+                                selectReason!!,
+                            )
                         },
+                        enabled = !isNetworkLoading,
+                        loading = isNetworkLoading,
                     )
                 },
                 space = 16.dp,

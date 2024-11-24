@@ -80,7 +80,6 @@ internal fun SelectScreen(
                         .fillMaxWidth(),
                     onClick = onClickNextPage,
                     text = "${selectUserCount}명 선택하기",
-                    enabled = selectUserCount > 0,
                     buttonRole = ButtonRole.Primary,
                     buttonSize = ButtonSize.Large,
                 )
