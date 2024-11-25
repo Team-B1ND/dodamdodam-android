@@ -313,7 +313,9 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                 Spacer(modifier = Modifier.weight(1f))
                 Spacer(modifier = Modifier.height(20.dp))
                 DodamButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp),
                     onClick = {
                         when {
                             selectedItem.isOut() && outingDate.dayOfWeek == java.time.DayOfWeek.WEDNESDAY -> {
@@ -338,7 +340,9 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                     text = "신청",
                     buttonRole = ButtonRole.Primary,
                     buttonSize = ButtonSize.Large,
-                    enabled = !uiState.isLoading,
+                    enabled = !uiState.isLoading &&
+                            ((selectedItem.isOut() && outingReason.length >= 5) ||
+                            (!selectedItem.isOut() && sleepoverReason.length >= 5)),
                     loading = uiState.isLoading,
                 )
             }
