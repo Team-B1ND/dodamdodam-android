@@ -47,7 +47,7 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
                         _sideEffect.emit(EditMemberInfoSideEffect.SuccessEditMemberInfo)
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -56,7 +56,7 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
                         it.error.printStackTrace()
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -64,7 +64,7 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }
@@ -84,7 +84,7 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
                     is Result.Error -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                         it.error.printStackTrace()
@@ -95,7 +95,7 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
                             println(it.data)
                             ui.copy(
                                 image = it.data.profileImage,
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -103,7 +103,7 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }
