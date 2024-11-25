@@ -100,6 +100,7 @@ fun WakeupSongScreen(
                 onBackClick = popBackStack,
             )
         },
+        containerColor = DodamTheme.colors.backgroundNeutral
     ) { paddingValues ->
         Box(
             modifier = Modifier
