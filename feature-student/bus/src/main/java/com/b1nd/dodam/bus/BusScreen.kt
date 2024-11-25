@@ -104,7 +104,7 @@ fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Uni
                 type = TopAppBarType.Medium,
             )
         },
-        containerColor = DodamTheme.colors.backgroundNeutral
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Column(
             modifier = Modifier
