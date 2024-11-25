@@ -84,7 +84,7 @@ import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-const val VERSION_INFO = "3.0.0"
+const val VERSION_INFO = "3.1.0"
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class, KoinExperimentalAPI::class)
 @Composable

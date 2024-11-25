@@ -104,6 +104,7 @@ fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Uni
                 type = TopAppBarType.Medium,
             )
         },
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -135,7 +136,7 @@ fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Uni
                             viewModel.applyBus(uiState.buses[selectedIndex!!].id)
                         }
                     } else {
-                        if (selectedIndex != null) {
+                        if (selectedIndex != null && uiState.selectedBus?.id != uiState.buses.getOrNull(selectedIndex ?: 0)?.id) {
                             viewModel.updateBus(
                                 uiState.buses[selectedIndex!!].id,
                                 selectedIndex!!,
