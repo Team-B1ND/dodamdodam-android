@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.upload.UploadRepository
 import com.b1nd.dodam.editmemberinfo.model.EditMemberInfoSideEffect
-import com.b1nd.dodam.editmemberinfo.model.ProfileModel
+import com.b1nd.dodam.editmemberinfo.model.EditMemberInfoUiState
 import com.b1nd.dodam.member.MemberRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
     private val memberRepository: MemberRepository by inject()
     private val uploadRepository: UploadRepository by inject()
 
-    private val _uiState = MutableStateFlow(ProfileModel())
+    private val _uiState = MutableStateFlow(EditMemberInfoUiState())
     val uiState = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<EditMemberInfoSideEffect>()
@@ -45,16 +45,28 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
                 when (it) {
                     is Result.Success -> {
                         _sideEffect.emit(EditMemberInfoSideEffect.SuccessEditMemberInfo)
-                        _uiState.value = _uiState.value.copy(isLoading = false)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
                     }
 
                     is Result.Error -> {
                         it.error.printStackTrace()
-                        _uiState.value = _uiState.value.copy(isLoading = false)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
                     }
 
                     is Result.Loading -> {
-                        _uiState.value = _uiState.value.copy(isLoading = true)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = true
+                            )
+                        }
                     }
                 }
             }
@@ -70,6 +82,11 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
             ).collect {
                 when (it) {
                     is Result.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
                         it.error.printStackTrace()
                     }
 
@@ -78,11 +95,18 @@ class EditMemberInfoViewModel : ViewModel(), KoinComponent {
                             println(it.data)
                             ui.copy(
                                 image = it.data.profileImage,
+                                isLoading = false
                             )
                         }
                     }
 
-                    is Result.Loading -> {}
+                    is Result.Loading -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = true
+                            )
+                        }
+                    }
                 }
             }
         }
