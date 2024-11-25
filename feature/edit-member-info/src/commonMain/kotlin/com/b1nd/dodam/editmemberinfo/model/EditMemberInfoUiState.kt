@@ -1,6 +1,6 @@
 package com.b1nd.dodam.editmemberinfo.model
 
-data class ProfileModel(
+data class EditMemberInfoUiState(
     val name: String = "",
     val email: String = "",
     val phone: String = "",
