@@ -26,6 +26,12 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
     val uiState = _uiState.asStateFlow()
 
     fun load() {
+        _uiState.update {
+            it.copy(
+                nightStudyUiState = NightStudyUiState.Loading,
+            )
+        }
+
         viewModelScope.launch {
             combineWhenAllComplete(
                 nightStudyRepository.getStudyingNightStudy(),
@@ -66,9 +72,19 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                 _uiState.update {
                     it.copy(
                         nightStudyUiState = uiState,
+                        isRefresh = false,
                     )
                 }
             }
         }
+    }
+
+    fun refresh() {
+        _uiState.update {
+            it.copy(
+                isRefresh = true,
+            )
+        }
+        load()
     }
 }

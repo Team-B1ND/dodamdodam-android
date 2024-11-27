@@ -34,6 +34,12 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
     val state = _state.asStateFlow()
 
     fun load() = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                outPendingUiState = OutPendingUiState.Loading,
+            )
+        }
+
         val date = DodamDate.localDateNow()
 
         combineWhenAllComplete(
@@ -77,6 +83,7 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
             _state.update {
                 it.copy(
                     outPendingUiState = state,
+                    isRefresh = false,
                 )
             }
         }
@@ -168,6 +175,15 @@ class ApproveOutViewModel : ViewModel(), KoinComponent {
                 )
             }
         }
+    }
+
+    fun refresh() {
+        _state.update {
+            it.copy(
+                isRefresh = true,
+            )
+        }
+        load()
     }
 
     private fun filterMember(id: Long, isOut: Boolean) {

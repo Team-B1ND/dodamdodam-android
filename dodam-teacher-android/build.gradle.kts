@@ -54,6 +54,11 @@ kotlin {
             implementation(projects.network.schedule)
             implementation(projects.network.member)
             implementation(projects.network.point)
+            implementation(projects.network.bundleidInfo)
+            implementation(projects.data.bundleidInfo)
+            implementation(projects.feature.editMemberInfo)
+            implementation(projects.network.upload)
+            implementation(projects.data.upload)
         }
 
         androidMain.dependencies {
@@ -61,6 +66,7 @@ kotlin {
             implementation(libs.androidx.compose.activity)
             implementation(libs.koin.android)
             implementation(projects.keystore)
+            implementation(libs.google.app.update)
         }
     }
 }
@@ -75,8 +81,8 @@ android {
         applicationId = "com.b1nd.dodam.teacher"
         minSdk = 28
         targetSdk = 34
-        versionCode = 1
-        versionName = "3.0.0"
+        versionCode = 3
+        versionName = "3.1.0"
 
     }
     compileOptions {

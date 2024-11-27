@@ -36,6 +36,8 @@ import com.b1nd.dodam.bus.navigation.navigateToBus
 import com.b1nd.dodam.dds.component.DodamErrorToast
 import com.b1nd.dodam.dds.component.DodamSuccessToast
 import com.b1nd.dodam.dds.component.DodamWarningToast
+import com.b1nd.dodam.editmemberinfo.navigation.editMemberInfoScreen
+import com.b1nd.dodam.editmemberinfo.navigation.navigationToEditMemberInfo
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
@@ -147,9 +149,6 @@ fun DodamApp(
                 navigateToAddBus = {
                     navController.navigateToBus()
                 },
-                navigateToSchedule = {
-                    TODO("navigate to schedule screen")
-                },
                 navigateToWakeUpSong = {
                     navController.navigateToWakeupSong()
                 },
@@ -175,7 +174,13 @@ fun DodamApp(
                 onBackClick = navController::popBackStack,
             )
             authScreen(
-                onRegisterClick = navController::navigateToOnboarding,
+                onRegisterClick = {
+                    navController.navigateToOnboarding()
+                    state = "SUCCESS"
+                    scope.launch {
+                        snackbarHostState.showSnackbar("회원가입에 성공했습니다.")
+                    }
+                },
                 onBackClick = navController::popBackStack,
             )
             loginScreen(
@@ -233,9 +238,17 @@ fun DodamApp(
                 },
             )
             settingScreen(
-                versionInfo = "3.2.0",
+                versionInfo = "3.4.0",
                 popBackStack = navController::popBackStack,
                 logout = logout,
+                navigationToEditMemberInfo = { profileImage, name, email, phone ->
+                    navController.navigationToEditMemberInfo(
+                        profileImage = profileImage,
+                        name = name,
+                        email = email,
+                        phone = phone,
+                    )
+                },
             )
             askWakeupSongScreen(
                 popBackStack = navController::popBackStack,
@@ -245,6 +258,9 @@ fun DodamApp(
                 },
             )
             pointScreen(
+                popBackStack = navController::popBackStack,
+            )
+            editMemberInfoScreen(
                 popBackStack = navController::popBackStack,
             )
         }

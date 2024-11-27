@@ -22,17 +22,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.b1nd.dodam.dds.component.DodamNavigationBar
-import com.b1nd.dodam.dds.component.DodamNavigationBarItem
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navOptions
+import com.b1nd.dodam.designsystem.component.DodamNavigationBar
+import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
+import com.b1nd.dodam.outing.nanigation.navigateToOuting
 import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.student.home.navigation.homeScreen
 import com.b1nd.dodam.student.main.navigation.MainDestination
+import kotlinx.collections.immutable.toImmutableList
 
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
@@ -45,7 +50,6 @@ internal fun MainScreen(
     navigateToSetting: () -> Unit,
     navigateToMyPoint: () -> Unit,
     navigateToAddBus: () -> Unit,
-    navigateToSchedule: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
     showToast: (String, String) -> Unit,
@@ -94,14 +98,22 @@ internal fun MainScreen(
                 dispose = dispose,
             )
             allScreen(
-                navigateToSetting,
-                navigateToMyPoint,
-                navigateToAddBus,
-                navigateToAskNightStudy,
-                navigateToAddOuting,
-                navigateToSchedule,
-                navigateToWakeUpSong,
-                navigateToAddWakeUpSong,
+                navigateToSetting = navigateToSetting,
+                navigateToMyPoint = navigateToMyPoint,
+                navigateToAddBus = navigateToAddBus,
+                navigateToOuting = {
+                    navController.navigateToOuting(
+                        navOptions = navOptions {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        },
+                    )
+                },
+                navigateToWakeUpSong = navigateToWakeUpSong,
+                navigateToAddWakeUpSong = navigateToAddWakeUpSong,
             )
         }
 
@@ -126,19 +138,20 @@ internal fun MainScreen(
                 .navigationBarsPadding()
                 .align(Alignment.BottomCenter),
         ) {
-            DodamNavigationBar(selectedIndex = selectedIndex) {
-                mainScreenState.mainDestinations.forEachIndexed { index, destination ->
+            val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
+            DodamNavigationBar(
+                items = mainScreenState.mainDestinations.map {
                     DodamNavigationBarItem(
-                        selected = index == selectedIndex,
+                        selected = currentRoute == it.route,
+                        icon = it.icon,
+                        enable = currentRoute != it.route,
                         onClick = {
-                            selectedIndex = index
-                            mainScreenState.navigateToMainDestination(destination)
+                            mainScreenState.navigateToMainDestination(it)
                         },
-                    ) {
-                        destination.icon()
-                    }
-                }
-            }
+                    )
+                }.toImmutableList(),
+            )
             Spacer(modifier = Modifier.height(8.dp))
         }
     }

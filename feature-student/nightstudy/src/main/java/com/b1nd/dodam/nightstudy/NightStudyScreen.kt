@@ -5,8 +5,9 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,17 +18,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.Surface
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,26 +45,31 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
+import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.data.core.model.Status
-import com.b1nd.dodam.dds.animation.bounceCombinedClick
-import com.b1nd.dodam.dds.component.DodamDialog
-import com.b1nd.dodam.dds.component.DodamLinearProgressIndicator
-import com.b1nd.dodam.dds.component.DodamTopAppBar
-import com.b1nd.dodam.dds.component.button.DodamIconButton
-import com.b1nd.dodam.dds.component.button.DodamLargeFilledButton
-import com.b1nd.dodam.dds.style.BodyLarge
-import com.b1nd.dodam.dds.style.BodyMedium
-import com.b1nd.dodam.dds.style.LabelLarge
-import com.b1nd.dodam.dds.style.PlusIcon
+import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.ActionIcon
+import com.b1nd.dodam.designsystem.component.ButtonRole
+import com.b1nd.dodam.designsystem.component.DividerType
+import com.b1nd.dodam.designsystem.component.DodamButtonDialog
+import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
+import com.b1nd.dodam.designsystem.component.DodamDivider
+import com.b1nd.dodam.designsystem.component.DodamEmpty
+import com.b1nd.dodam.designsystem.component.DodamLinerProgressIndicator
+import com.b1nd.dodam.designsystem.component.DodamTag
+import com.b1nd.dodam.designsystem.component.TagType
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
-import com.b1nd.dodam.ui.component.DodamCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import com.b1nd.dodam.ui.icons.SmileMoon
+import java.time.temporal.ChronoUnit
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toJavaLocalDateTime
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -93,8 +101,6 @@ fun NightStudyScreen(
         },
     )
 
-    val color = MaterialTheme.colorScheme
-
     DisposableEffect(Unit) {
         if (refresh()) viewModel.getMyNigthStudy()
 
@@ -102,63 +108,44 @@ fun NightStudyScreen(
     }
 
     if (showDialog) {
-        DodamDialog(
+        Dialog(
             onDismissRequest = { showDialog = false },
-            confirmButton = {
-                DodamLargeFilledButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = { viewModel.deleteNightStudy(id) },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = color.error,
-                        contentColor = color.onError,
-                    ),
-                ) {
-                    Text(text = "삭제")
-                }
-            },
-            dismissButton = {
-                DodamLargeFilledButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = { showDialog = false },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = color.secondaryContainer,
-                        contentColor = color.onSecondaryContainer,
-                    ),
-                ) {
-                    Text(text = "취소")
-                }
-            },
-            title = {
-                Text(text = "정말 삭제하시겠어요?")
-            },
-            text = {
-                Text(text = reason)
-            },
-        )
+        ) {
+            DodamButtonDialog(
+                confirmButtonText = "삭제",
+                confirmButton = {
+                    viewModel.deleteNightStudy(id)
+                    showDialog = false
+                },
+                confirmButtonRole = ButtonRole.Negative,
+                dismissButton = { showDialog = false },
+                dismissButtonRole = ButtonRole.Assistive,
+                title = "정말 삭제하시겠어요?",
+                body = reason,
+            )
+        }
     }
 
     Scaffold(
+        containerColor = DodamTheme.colors.backgroundNeutral,
         topBar = {
             Column {
-                DodamTopAppBar(
-                    modifier = Modifier
-                        .background(color.surface)
-                        .padding(horizontal = 4.dp),
-                    title = {
-                        Text(text = "심야 자습")
-                    },
-                    actions = {
-                        DodamIconButton(onClick = onAddClick) {
-                            PlusIcon(modifier = Modifier.size(28.dp))
-                        }
-                    },
+                DodamDefaultTopAppBar(
+                    modifier = Modifier.statusBarsPadding(),
+                    title = "심야 자습",
+                    actionIcons = persistentListOf(
+                        ActionIcon(
+                            icon = DodamIcons.Plus,
+                            onClick = onAddClick,
+                        ),
+                    ),
                 )
                 AnimatedVisibility(nightStudyScreenState.canScrollBackward) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(1.dp)
-                            .background(color.outlineVariant),
+                            .background(DodamTheme.colors.fillNeutral),
                     )
                 }
             }
@@ -167,7 +154,7 @@ fun NightStudyScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color.surface)
+                .background(DodamTheme.colors.backgroundNeutral)
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
                 .pullRefresh(pullRefreshState),
@@ -180,7 +167,7 @@ fun NightStudyScreen(
                 state = pullRefreshState,
             )
             Column {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -193,271 +180,165 @@ fun NightStudyScreen(
                                     items = nightStudyUiState.nightStudies,
                                     key = { it.id },
                                 ) { nightStudy ->
-                                    val outingProgress = nightStudyScreenState.getProgress(
-                                        nightStudy.startAt,
-                                        nightStudy.endAt,
-                                    )
-
-                                    val progress by animateFloatAsState(
-                                        targetValue = if (playOnlyOnce) 0f else outingProgress,
-                                        animationSpec = tween(
-                                            durationMillis = 500,
-                                            delayMillis = 0,
-                                            easing = FastOutLinearInEasing,
-                                        ),
-                                        label = "",
-                                    )
 
                                     LaunchedEffect(Unit) {
                                         playOnlyOnce = false
                                     }
 
-                                    DodamCard(
-                                        modifier = Modifier
-                                            .bounceCombinedClick(
-                                                onClick = {},
-                                                onLongClick = {
+                                    when (nightStudy.status) {
+                                        Status.PENDING -> {
+                                            NightStudyApplyCell(
+                                                tagType = TagType.Secondary,
+                                                reason = nightStudy.content,
+                                                startAt = nightStudy.startAt,
+                                                endAt = nightStudy.endAt,
+                                                phoneReason = nightStudy.reasonForPhone,
+                                                onTrashClick = {
                                                     id = nightStudy.id
                                                     reason = nightStudy.content
                                                     showDialog = true
                                                 },
-                                                interactionColor = Color.Transparent,
-                                            ),
-                                        statusText = when (nightStudy.status) {
-                                            Status.ALLOWED -> "승인됨"
-                                            Status.REJECTED -> "거절됨"
-                                            Status.PENDING -> "대기중"
-                                        },
-                                        statusColor = when (nightStudy.status) {
-                                            Status.ALLOWED -> MaterialTheme.colorScheme.primary
-                                            Status.REJECTED -> MaterialTheme.colorScheme.error
-                                            Status.PENDING -> MaterialTheme.colorScheme.onSurfaceVariant
-                                        },
-                                        labelText = String.format(
-                                            "%d월 %d일 (%s)",
-                                            nightStudy.startAt.monthNumber,
-                                            nightStudy.startAt.dayOfMonth,
-                                            listOf(
-                                                "월",
-                                                "화",
-                                                "수",
-                                                "목",
-                                                "금",
-                                                "토",
-                                                "일",
-                                            )[nightStudy.startAt.dayOfWeek.value - 1],
-                                        ),
-                                    ) {
-                                        BodyMedium(
-                                            text = nightStudy.content,
-                                            fontWeight = FontWeight.Medium,
-                                        )
-
-                                        Box(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(1.dp)
-                                                .background(color.outlineVariant),
-                                        )
-
-                                        Column(
-                                            modifier = Modifier
-                                                .fillMaxWidth(),
-                                            verticalArrangement = Arrangement.spacedBy(6.dp),
-                                        ) {
-                                            Row(
-                                                verticalAlignment = Alignment.Bottom,
-                                            ) {
-                                                BodyLarge(
-                                                    modifier = Modifier.padding(end = 4.dp),
-                                                    text = String.format(
-                                                        "%d월 %d일",
-                                                        nightStudy.startAt.monthNumber,
-                                                        nightStudy.startAt.dayOfMonth,
-                                                    ),
-                                                    color = color.onSurface,
-                                                )
-                                                LabelLarge(
-                                                    text = "시작",
-                                                    color = color.onSurfaceVariant,
-                                                )
-
-                                                Spacer(modifier = Modifier.weight(1f))
-
-                                                BodyLarge(
-                                                    modifier = Modifier.padding(end = 4.dp),
-                                                    text = String.format(
-                                                        "%d월 %d일",
-                                                        nightStudy.endAt.monthNumber,
-                                                        nightStudy.endAt.dayOfMonth,
-                                                    ),
-                                                    color = color.onSurface,
-                                                )
-                                                LabelLarge(
-                                                    text = "종료",
-                                                    color = color.onSurfaceVariant,
-                                                )
-                                            }
-
-                                            if (nightStudy.status != Status.REJECTED) {
-                                                DodamLinearProgressIndicator(
-                                                    modifier = Modifier.fillMaxWidth(),
-                                                    progress = progress,
-                                                    color = if (nightStudy.status == Status.ALLOWED) {
-                                                        color.primary
-                                                    } else {
-                                                        color.onSurfaceVariant
-                                                    },
-                                                )
-
-                                                if (nightStudy.doNeedPhone) {
-                                                    Row(
-                                                        verticalAlignment = Alignment.CenterVertically,
-                                                        horizontalArrangement = Arrangement.spacedBy(
-                                                            8.dp,
-                                                        ),
-                                                    ) {
-                                                        LabelLarge(
-                                                            text = "휴대폰 사유",
-                                                            color = color.onSurfaceVariant,
-                                                        )
-
-                                                        BodyMedium(
-                                                            text = nightStudy.reasonForPhone!!,
-                                                            color = color.onSurface,
-                                                            fontWeight = FontWeight.Medium,
-                                                        )
-                                                    }
-                                                }
-                                            } else {
-                                                if (nightStudy.rejectReason != null) {
-                                                    Row(
-                                                        verticalAlignment = Alignment.CenterVertically,
-                                                        horizontalArrangement = Arrangement.spacedBy(
-                                                            8.dp,
-                                                        ),
-                                                    ) {
-                                                        LabelLarge(
-                                                            text = "거절 사유",
-                                                            color = color.onSurfaceVariant,
-                                                        )
-
-                                                        BodyMedium(
-                                                            text = nightStudy.rejectReason!!,
-                                                            color = color.onSurface,
-                                                            fontWeight = FontWeight.Medium,
-                                                        )
-                                                    }
-                                                }
-                                            }
+                                                playOnlyOnce = playOnlyOnce,
+                                            )
+                                        }
+                                        Status.ALLOWED -> {
+                                            NightStudyApplyCell(
+                                                tagType = TagType.Primary,
+                                                reason = nightStudy.content,
+                                                startAt = nightStudy.startAt,
+                                                endAt = nightStudy.endAt,
+                                                phoneReason = nightStudy.reasonForPhone,
+                                                onTrashClick = {
+                                                    id = nightStudy.id
+                                                    reason = nightStudy.content
+                                                    showDialog = true
+                                                },
+                                                playOnlyOnce = playOnlyOnce,
+                                            )
+                                        }
+                                        Status.REJECTED -> {
+                                            NightStudyApplyRejectCell(
+                                                reason = nightStudy.content,
+                                                rejectReason = nightStudy.rejectReason ?: "",
+                                                onTrashClick = {
+                                                    id = nightStudy.id
+                                                    reason = nightStudy.content
+                                                    showDialog = true
+                                                },
+                                            )
                                         }
                                     }
                                 }
                             } else {
                                 item {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .background(
-                                                color.surfaceContainer,
-                                                MaterialTheme.shapes.large,
-                                            )
-                                            .padding(16.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                    ) {
-                                        Image(
-                                            modifier = Modifier.size(36.dp),
-                                            imageVector = SmileMoon,
-                                            contentDescription = null,
-                                        )
-
-                                        Spacer(modifier = Modifier.height(12.dp))
-
-                                        LabelLarge(
-                                            text = "아직 신청한 심야 자습이 없어요.",
-                                            color = color.tertiary,
-                                        )
-
-                                        Spacer(modifier = Modifier.height(24.dp))
-
-                                        DodamLargeFilledButton(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            onClick = onAddClick,
-                                            colors = ButtonDefaults.buttonColors(
-                                                containerColor = color.secondaryContainer,
-                                                contentColor = color.onSecondaryContainer,
-                                            ),
-                                        ) {
-                                            Text(text = "심야 자습 신청하기")
-                                        }
-                                    }
+                                    DodamEmpty(
+                                        onClick = onAddClick,
+                                        title = "아직 신청한 심야 자습이 없어요.",
+                                        buttonText = "심야 자습 신청하기",
+                                    )
                                 }
                             }
                         }
 
                         is NightStudyUiState.Loading -> {
                             item {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .background(
-                                            MaterialTheme.colorScheme.surfaceContainer,
-                                            MaterialTheme.shapes.large,
-                                        )
-                                        .padding(16.dp),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                                androidx.compose.material3.Surface(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = DodamTheme.shapes.large,
+                                    color = DodamTheme.colors.backgroundNormal,
                                 ) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(
+                                                vertical = 16.dp,
+                                                horizontal = 12.dp,
+                                            ),
+                                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .width(66.dp)
+                                                    .height(28.dp)
+                                                    .background(
+                                                        brush = shimmerEffect(),
+                                                        shape = CircleShape,
+                                                    ),
+                                            )
+                                            Spacer(modifier = Modifier.weight(1f))
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(24.dp)
+                                                    .background(
+                                                        brush = shimmerEffect(),
+                                                        shape = RoundedCornerShape(4.dp),
+                                                    ),
+                                            )
+                                        }
+
                                         Box(
                                             modifier = Modifier
-                                                .size(52.dp, 27.dp)
-                                                .background(shimmerEffect(), CircleShape),
-                                        )
-
-                                        Spacer(modifier = Modifier.weight(1f))
-
-                                        Box(
-                                            modifier = Modifier
-                                                .size(52.dp, 20.dp)
+                                                .fillMaxWidth()
+                                                .height(24.dp)
                                                 .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(4.dp),
+                                                    brush = shimmerEffect(),
+                                                    shape = RoundedCornerShape(8.dp),
                                                 ),
                                         )
-                                    }
-
-                                    Box(
-                                        modifier = Modifier
-                                            .height(20.dp)
-                                            .fillMaxWidth()
-                                            .background(shimmerEffect(), RoundedCornerShape(4.dp)),
-                                    )
-
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        DodamDivider(type = DividerType.Normal)
                                         Box(
                                             modifier = Modifier
-                                                .size(52.dp, 27.dp)
-                                                .background(shimmerEffect(), CircleShape),
-                                        )
-
-                                        Spacer(modifier = Modifier.weight(1f))
-
-                                        Box(
-                                            modifier = Modifier
-                                                .size(52.dp, 20.dp)
+                                                .width(120.dp)
+                                                .height(28.dp)
                                                 .background(
-                                                    shimmerEffect(),
-                                                    RoundedCornerShape(4.dp),
+                                                    brush = shimmerEffect(),
+                                                    shape = RoundedCornerShape(8.dp),
                                                 ),
                                         )
-                                    }
 
-                                    Box(
-                                        modifier = Modifier
-                                            .height(20.dp)
-                                            .fillMaxWidth()
-                                            .background(shimmerEffect(), CircleShape),
-                                    )
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(14.dp)
+                                                    .background(
+                                                        brush = shimmerEffect(),
+                                                        shape = RoundedCornerShape(8.dp),
+                                                    ),
+                                            )
+                                            Row(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                verticalAlignment = Alignment.CenterVertically,
+                                            ) {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .width(101.dp)
+                                                        .height(24.dp)
+                                                        .background(
+                                                            brush = shimmerEffect(),
+                                                            shape = CircleShape,
+                                                        ),
+                                                )
+
+                                                Spacer(modifier = Modifier.weight(1f))
+                                                Box(
+                                                    modifier = Modifier
+                                                        .width(101.dp)
+                                                        .height(24.dp)
+                                                        .background(
+                                                            brush = shimmerEffect(),
+                                                            shape = CircleShape,
+                                                        ),
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -481,6 +362,234 @@ fun NightStudyScreen(
                         Spacer(modifier = Modifier.height(80.dp))
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NightStudyApplyCell(
+    modifier: Modifier = Modifier,
+    tagType: TagType,
+    reason: String,
+    startAt: LocalDateTime,
+    endAt: LocalDateTime,
+    current: LocalDateTime = DodamDate.now(),
+    phoneReason: String? = null,
+    onTrashClick: () -> Unit,
+    playOnlyOnce: Boolean,
+) {
+    val nightStudyProgress = (
+        ChronoUnit.SECONDS.between(
+            startAt.toJavaLocalDateTime(),
+            current.toJavaLocalDateTime(),
+        ).toFloat() / ChronoUnit.SECONDS.between(
+            startAt.toJavaLocalDateTime(),
+            endAt.toJavaLocalDateTime(),
+        )
+        ).coerceIn(0f, 1f)
+
+    val progress by animateFloatAsState(
+        targetValue = if (playOnlyOnce) 0f else nightStudyProgress,
+        animationSpec = tween(
+            durationMillis = 500,
+            delayMillis = 0,
+            easing = FastOutLinearInEasing,
+        ),
+        label = "",
+    )
+
+    Surface(
+        modifier = modifier,
+        shape = DodamTheme.shapes.large,
+        color = DodamTheme.colors.backgroundNormal,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(
+                    vertical = 16.dp,
+                    horizontal = 12.dp,
+                ),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                DodamTag(
+                    text = if (tagType == TagType.Primary) "승인됨" else "대기 중",
+                    tagType = tagType,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable(
+                            indication = rememberBounceIndication(),
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = onTrashClick,
+                        ),
+                    imageVector = DodamIcons.Trash.value,
+                    contentDescription = "쓰레기통",
+                    tint = DodamTheme.colors.lineNormal,
+                )
+            }
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = reason,
+                style = DodamTheme.typography.body1Medium(),
+                color = DodamTheme.colors.labelNormal,
+            )
+            DodamDivider(type = DividerType.Normal)
+            Row(
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                val day = ChronoUnit.DAYS.between(
+                    current.toJavaLocalDateTime(),
+                    endAt.toJavaLocalDateTime(),
+                ) + 1
+                Text(
+                    text = "${day}일",
+                    style = DodamTheme.typography.heading2Bold(),
+                    color = DodamTheme.colors.labelNormal,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "남음",
+                    style = DodamTheme.typography.labelMedium(),
+                    color = DodamTheme.colors.labelAlternative,
+                )
+            }
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                DodamLinerProgressIndicator(
+                    progress = progress,
+                    disabled = tagType != TagType.Primary,
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "시작",
+                        style = DodamTheme.typography.labelMedium(),
+                        color = DodamTheme.colors.labelAlternative,
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = String.format(
+                            "%d월 %d일",
+                            startAt.monthNumber,
+                            startAt.dayOfMonth,
+                        ),
+                        style = DodamTheme.typography.body1Medium(),
+                        color = DodamTheme.colors.labelNeutral,
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "종료",
+                        style = DodamTheme.typography.labelMedium(),
+                        color = DodamTheme.colors.labelAlternative,
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = String.format(
+                            "%d월 %d일",
+                            endAt.monthNumber,
+                            endAt.dayOfMonth,
+                        ),
+                        style = DodamTheme.typography.body1Medium(),
+                        color = DodamTheme.colors.labelNeutral,
+                    )
+                }
+            }
+
+            if (phoneReason != null) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "휴대폰 사유",
+                        style = DodamTheme.typography.labelMedium(),
+                        color = DodamTheme.colors.labelAlternative,
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = phoneReason,
+                        style = DodamTheme.typography.body1Medium(),
+                        color = DodamTheme.colors.labelNeutral,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NightStudyApplyRejectCell(modifier: Modifier = Modifier, reason: String, rejectReason: String, onTrashClick: () -> Unit) {
+    Surface(
+        modifier = modifier,
+        shape = DodamTheme.shapes.large,
+        color = DodamTheme.colors.backgroundNormal,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(
+                    vertical = 16.dp,
+                    horizontal = 12.dp,
+                ),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                DodamTag(
+                    text = "거절됨",
+                    tagType = TagType.Negative,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable(
+                            indication = rememberBounceIndication(),
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = onTrashClick,
+                        ),
+                    imageVector = DodamIcons.Trash.value,
+                    contentDescription = "쓰레기통",
+                    tint = DodamTheme.colors.lineNormal,
+                )
+            }
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = reason,
+                style = DodamTheme.typography.body1Medium(),
+                color = DodamTheme.colors.labelNormal,
+            )
+            DodamDivider(type = DividerType.Normal)
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "거절 사유",
+                    style = DodamTheme.typography.labelMedium(),
+                    color = DodamTheme.colors.labelAlternative,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = rejectReason,
+                    style = DodamTheme.typography.body1Medium(),
+                    color = DodamTheme.colors.labelNeutral,
+                )
             }
         }
     }

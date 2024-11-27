@@ -14,7 +14,7 @@ android {
 dependencies {
     implementation(projects.common)
     implementation(projects.ui)
-    implementation(libs.dodam.design.system)
+    implementation(libs.dodam.design.system.cmm)
     implementation(projects.data.point)
     implementation(libs.kotlinx.datetime)
 }

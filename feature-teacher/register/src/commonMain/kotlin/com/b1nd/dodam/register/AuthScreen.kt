@@ -286,7 +286,8 @@ fun AuthScreen(
                     .align(Alignment.BottomCenter),
                 enabled = idState.value.isNotBlank() &&
                     passwordState.value.isNotBlank() &&
-                    confirmPasswordState.value.isNotBlank(),
+                    confirmPasswordState.value.isNotBlank() &&
+                    !uiState.isLoading,
                 onClick = {
                     viewModel.register(
                         email = email,

@@ -15,7 +15,7 @@ dependencies {
     implementation(projects.common)
     implementation(projects.ui)
     implementation(libs.coil.compose)
-    implementation(libs.dodam.design.system)
+    implementation(libs.dodam.design.system.cmm)
     implementation(projects.data.wakeupSong)
     implementation(libs.kotlinx.datetime)
 }
