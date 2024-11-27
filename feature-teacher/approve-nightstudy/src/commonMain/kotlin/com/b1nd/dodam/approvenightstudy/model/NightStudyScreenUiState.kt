@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class NightStudyScreenUiState(
     val nightStudyUiState: NightStudyUiState = NightStudyUiState.Loading,
     val detailMember: DetailMember = DetailMember(),
+    val isRefresh: Boolean = false,
 )
 
 sealed interface NightStudyUiState {

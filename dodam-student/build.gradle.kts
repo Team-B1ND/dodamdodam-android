@@ -43,7 +43,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(projects.feature.onboarding)
     implementation(projects.featureStudent.main)
-    implementation(projects.feature.register)
+    implementation(projects.featureStudent.register)
     implementation(projects.feature.login)
     implementation(projects.featureStudent.bus)
     implementation(projects.featureStudent.nightstudy)
@@ -86,4 +86,9 @@ dependencies {
     implementation(projects.network.member)
     implementation(projects.data.login)
     implementation(projects.network.login)
+    implementation(projects.network.bundleidInfo)
+    implementation(projects.data.bundleidInfo)
+    implementation(projects.feature.editMemberInfo)
+    implementation(projects.network.upload)
+    implementation(projects.data.upload)
 }

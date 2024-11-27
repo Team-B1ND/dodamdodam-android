@@ -21,7 +21,7 @@ class SettingViewModel : ViewModel(), KoinComponent {
     private val _uiState = MutableStateFlow(SettingUiState())
     val uiState = _uiState.asStateFlow()
 
-    init {
+    fun getMyInfo() {
         viewModelScope.launch {
             memberRepository.getMyInfo().collect { result ->
                 when (result) {
@@ -31,6 +31,8 @@ class SettingViewModel : ViewModel(), KoinComponent {
                                 isLoading = false,
                                 name = result.data.name,
                                 profile = result.data.profileImage,
+                                email = result.data.email,
+                                phone = result.data.phone,
                             )
                         }
                     }

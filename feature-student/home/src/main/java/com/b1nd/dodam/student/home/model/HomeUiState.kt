@@ -1,12 +1,12 @@
 package com.b1nd.dodam.student.home.model
 
 import com.b1nd.dodam.data.banner.model.Banner
+import com.b1nd.dodam.data.meal.model.Meal
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.outing.model.Outing
 import com.b1nd.dodam.data.schedule.model.Schedule
 import com.b1nd.dodam.wakeupsong.model.WakeupSong
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableMap
 
 data class HomeUiState(
     val showShimmer: Boolean = true,
@@ -24,7 +24,7 @@ sealed interface BannerUiState {
 }
 
 sealed interface MealUiState {
-    data class Success(val data: ImmutableMap<String, String>) : MealUiState
+    data class Success(val data: Meal) : MealUiState
     data object Loading : MealUiState
     data object Error : MealUiState
 }

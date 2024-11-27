@@ -6,4 +6,5 @@ interface MemberDataSource {
     suspend fun getMyInfo(): MemberInfoResponse
     suspend fun deactivation()
     suspend fun getMemberAll(status: String): List<MemberInfoResponse>
+    suspend fun editMemberInfo(name: String, email: String, phone: String, profileImage: String?)
 }

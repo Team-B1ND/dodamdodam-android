@@ -10,13 +10,16 @@ import com.b1nd.dodam.bus.di.busViewModelModule
 import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
 import com.b1nd.dodam.data.banner.di.bannerRepositoryModule
+import com.b1nd.dodam.data.bundleidinfo.di.bundleIdInfoRepositoryModule
 import com.b1nd.dodam.data.login.di.loginRepositoryModule
 import com.b1nd.dodam.data.meal.di.mealRepositoryModule
 import com.b1nd.dodam.data.nightstudy.di.nightStudyRepositoryModule
 import com.b1nd.dodam.data.outing.di.outingRepositoryModule
 import com.b1nd.dodam.data.point.di.pointRepositoryModule
 import com.b1nd.dodam.data.schedule.di.scheduleRepositoryModule
+import com.b1nd.dodam.data.upload.di.uploadRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
+import com.b1nd.dodam.editmemberinfo.di.editMemberInfoViewModelModule
 import com.b1nd.dodam.keystore.keystoreManagerModule
 import com.b1nd.dodam.login.di.loginViewModelModule
 import com.b1nd.dodam.member.di.memberDataSourceModule
@@ -29,6 +32,7 @@ import com.b1nd.dodam.network.nightstudy.di.nightStudyDataSourceModule
 import com.b1nd.dodam.network.outing.di.outingDataSourceModule
 import com.b1nd.dodam.network.point.di.pointDataSourceModule
 import com.b1nd.dodam.network.schedule.di.scheduleDatasourceModule
+import com.b1nd.dodam.network.upload.di.uploadDatasourceModule
 import com.b1nd.dodam.nightstudy.di.nightStudyViewModelModule
 import com.b1nd.dodam.outing.di.outingViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
@@ -40,6 +44,7 @@ import com.b1nd.dodam.student.point.di.pointViewModelModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongDataSourceModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongRepositoryModule
 import com.b1nd.dodam.wakeupsong.di.wakeupSongViewModelModule
+import com.seugi.network.bundleidinfo.di.bundleIdInfoDataSourceModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -92,6 +97,11 @@ class DodamApplication : Application() {
                     settingViewModelModule,
                     nightStudyViewModelModule,
                     outingViewModelModule,
+                    bundleIdInfoRepositoryModule,
+                    bundleIdInfoDataSourceModule,
+                    editMemberInfoViewModelModule,
+                    uploadDatasourceModule,
+                    uploadRepositoryModule,
                 ) + mainViewModelModules,
             )
         }

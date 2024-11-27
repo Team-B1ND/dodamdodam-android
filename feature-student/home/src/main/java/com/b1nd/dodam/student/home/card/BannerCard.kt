@@ -18,7 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.b1nd.dodam.dds.foundation.DodamShape
+import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.student.home.PagerIndicator
 import com.b1nd.dodam.student.home.model.BannerUiState
 
@@ -37,7 +37,7 @@ internal fun BannerCard(uiState: BannerUiState, context: Context) {
                         AsyncImage(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(DodamShape.Large)
+                                .clip(DodamTheme.shapes.large)
                                 .clickable {
                                     context.startActivity(
                                         Intent(

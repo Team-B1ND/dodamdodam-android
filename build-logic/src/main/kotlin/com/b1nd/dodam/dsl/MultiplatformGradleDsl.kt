@@ -3,6 +3,7 @@ package com.b1nd.dodam.dsl
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -10,6 +11,10 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 fun Project.kotlin(block: KotlinMultiplatformExtension.() -> Unit) {
     extensions.configure<KotlinMultiplatformExtension>(block)
+}
+
+fun Project.composeCompiler(block: ComposeCompilerGradlePluginExtension.() -> Unit) {
+    extensions.configure<ComposeCompilerGradlePluginExtension>(block)
 }
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)

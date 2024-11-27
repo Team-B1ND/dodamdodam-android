@@ -20,8 +20,6 @@ import com.b1nd.dodam.wakeupsong.WakeupSongRepository
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -65,13 +63,7 @@ class HomeViewModel : ViewModel(), KoinComponent {
                                 _uiState.update {
                                     it.copy(
                                         showShimmer = false,
-                                        mealUiState = MealUiState.Success(
-                                            persistentMapOf(
-                                                "아침" to (result.data.breakfast?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
-                                                "점심" to (result.data.lunch?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
-                                                "저녁" to (result.data.dinner?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
-                                            ).filterValues { meal -> meal.isNotBlank() }.toImmutableMap(),
-                                        ),
+                                        mealUiState = MealUiState.Success(result.data),
                                     )
                                 }
 
@@ -265,13 +257,7 @@ class HomeViewModel : ViewModel(), KoinComponent {
                     is Result.Success ->
                         _uiState.update {
                             it.copy(
-                                mealUiState = MealUiState.Success(
-                                    persistentMapOf(
-                                        "아침" to (result.data.breakfast?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
-                                        "점심" to (result.data.lunch?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
-                                        "저녁" to (result.data.dinner?.details?.joinToString(separator = ", ") { menu -> menu.name } ?: ""),
-                                    ).filterValues { meal -> meal.isNotBlank() }.toImmutableMap(),
-                                ),
+                                mealUiState = MealUiState.Success(result.data),
                             )
                         }
 

@@ -18,7 +18,7 @@ class AllViewModel : ViewModel(), KoinComponent {
     private val _uiState = MutableStateFlow(AllUiState())
     val uiState = _uiState.asStateFlow()
 
-    init {
+    fun getMyInfo() {
         viewModelScope.launch {
             memberRepository.getMyInfo().collect { result ->
                 _uiState.update { uiState ->
