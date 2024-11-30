@@ -30,8 +30,10 @@ import androidx.navigation.navOptions
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.meal.navigation.mealScreen
+import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
+import com.b1nd.dodam.notice.navigation.noticeScreen
 import com.b1nd.dodam.outing.nanigation.navigateToOuting
 import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
@@ -69,8 +71,7 @@ internal fun MainScreen(
             homeScreen(
                 navigateToAskNightStudy = navigateToAskNightStudy,
                 navigateToMeal = {
-                    selectedIndex = 1
-                    mainScreenState.navigateToMainDestination(MainDestination.MEAL)
+                    navController.navigateToMeal()
                 },
                 navigateToNightStudy = {
                     selectedIndex = 3
@@ -85,6 +86,7 @@ internal fun MainScreen(
                 navigateToAskWakeupSongScreen = navigateToAddWakeUpSong,
             )
             mealScreen()
+            noticeScreen()
             nightStudyScreen(
                 navigateToAskNightStudy,
                 showToast,

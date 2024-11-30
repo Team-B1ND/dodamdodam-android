@@ -7,9 +7,9 @@ import androidx.compose.ui.util.trace
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
-import com.b1nd.dodam.meal.navigation.navigationToMeal
 import com.b1nd.dodam.member.navigation.navigateToAllScreen
 import com.b1nd.dodam.nightstudy.navigation.navigateToNightStudy
+import com.b1nd.dodam.notice.navigation.navigateToNotice
 import com.b1nd.dodam.outing.nanigation.navigateToOuting
 import com.b1nd.dodam.student.home.navigation.navigateToHome
 import com.b1nd.dodam.student.main.navigation.MainDestination
@@ -39,7 +39,7 @@ internal class MainScreenState(
 
             when (mainDestination) {
                 MainDestination.HOME -> navController.navigateToHome(mainNavOptions)
-                MainDestination.MEAL -> navController.navigationToMeal(mainNavOptions)
+                MainDestination.NOTICE -> navController.navigateToNotice(mainNavOptions)
                 MainDestination.OUT -> navController.navigateToOuting(mainNavOptions)
                 MainDestination.NIGHT_STUDY -> navController.navigateToNightStudy(mainNavOptions)
                 MainDestination.ALL -> navController.navigateToAllScreen(mainNavOptions)
