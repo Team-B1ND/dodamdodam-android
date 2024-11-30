@@ -59,7 +59,7 @@ import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
-import com.b1nd.dodam.meal.navigation.navigationToMeal
+import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
@@ -200,7 +200,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
                         homeScreen(
                             navigateToMeal = {
-                                navHostController.navigationToMeal(
+                                navHostController.navigateToMeal(
                                     navOptions = navOptions {
                                         popUpTo(navHostController.graph.findStartDestination().route.toString()) {
                                             saveState = true

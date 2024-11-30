@@ -12,7 +12,7 @@ import com.b1nd.dodam.meal.MealScreen
 
 const val MEAL_ROUTE = "meal"
 
-fun NavController.navigationToMeal(
+fun NavController.navigateToMeal(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
         restoreState = true
