@@ -85,7 +85,7 @@ internal fun MainScreen(
             )
             noticeScreen(
                 isTeacher = false,
-                navigateToNoticeCreate = null
+                navigateToNoticeCreate = null,
             )
             nightStudyScreen(
                 navigateToAskNightStudy,

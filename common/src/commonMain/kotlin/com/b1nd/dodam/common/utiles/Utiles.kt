@@ -1,5 +1,9 @@
 package com.b1nd.dodam.common.utiles
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+import kotlin.experimental.ExperimentalTypeInference
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -12,10 +16,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
-import kotlin.experimental.ExperimentalTypeInference
 
 fun <T1, T2, R> combineWhenAllComplete(flow1: Flow<T1>, flow2: Flow<T2>, transform: suspend (T1, T2) -> R): Flow<R> = flow {
     var lastValue1: T1? = null
@@ -46,7 +46,6 @@ fun LocalTime.plusHour(hour: Int): LocalTime {
 }
 
 expect val LocalDate.utcTimeMill: Long
-
 
 @OptIn(ExperimentalTypeInference::class, ExperimentalContracts::class)
 inline fun <T> buildPersistentList(@BuilderInference builderAction: PersistentList.Builder<T>.() -> Unit): PersistentList<T> {

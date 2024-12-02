@@ -6,18 +6,14 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.b1nd.dodam.noticecreate.NoticeCreateScreen
 
-const val NOTICE_CREATE_ROUTE = "notice_create";
+const val NOTICE_CREATE_ROUTE = "notice_create"
 
-fun NavController.navigateToNoticeCreate(
-    navOptions: NavOptions? = null
-) = navigate(NOTICE_CREATE_ROUTE, navOptions)
+fun NavController.navigateToNoticeCreate(navOptions: NavOptions? = null) = navigate(NOTICE_CREATE_ROUTE, navOptions)
 
-fun NavGraphBuilder.noticeCreateScreen(
-    popBackStack: () -> Unit
-) {
+fun NavGraphBuilder.noticeCreateScreen(popBackStack: () -> Unit) {
     composable(NOTICE_CREATE_ROUTE) {
         NoticeCreateScreen(
-            popBackStack = popBackStack
+            popBackStack = popBackStack,
         )
     }
 }

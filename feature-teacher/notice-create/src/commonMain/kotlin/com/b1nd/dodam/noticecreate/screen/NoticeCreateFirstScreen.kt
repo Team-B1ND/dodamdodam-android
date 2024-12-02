@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
@@ -43,7 +42,6 @@ fun NoticeCreateFirstScreen(
     popBackStack: () -> Unit,
     onNextClick: () -> Unit,
 ) {
-
     val bodyFocusRequester = remember { FocusRequester() }
 
     Scaffold(
@@ -52,7 +50,7 @@ fun NoticeCreateFirstScreen(
             DodamTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = "공지 작성",
-                onBackClick = popBackStack
+                onBackClick = popBackStack,
             )
         },
         bottomBar = {
@@ -60,23 +58,23 @@ fun NoticeCreateFirstScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .navigationBarsPadding()
+                    .navigationBarsPadding(),
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
                 DodamDivider(
-                    type = DividerType.Normal
+                    type = DividerType.Normal,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     NoticeIconButton(
                         imageVector = DodamIcons.File.value,
-                        onClick = {}
+                        onClick = {},
                     )
                     NoticeIconButton(
                         imageVector = DodamIcons.Photo.value,
-                        onClick = {}
+                        onClick = {},
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     DodamTextButton(
@@ -87,15 +85,15 @@ fun NoticeCreateFirstScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
         },
-        containerColor = DodamTheme.colors.backgroundNormal
+        containerColor = DodamTheme.colors.backgroundNormal,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = 16.dp
+                    horizontal = 16.dp,
                 )
-                .padding(it)
+                .padding(it),
         ) {
             Spacer(Modifier.height(8.dp))
             DodamTextField(
@@ -107,7 +105,7 @@ fun NoticeCreateFirstScreen(
                 },
                 onClickRemoveRequest = {
                     onTitleValueChange("")
-                }
+                },
             )
             Spacer(Modifier.height(24.dp))
             DodamTextField(
@@ -118,7 +116,7 @@ fun NoticeCreateFirstScreen(
                         detectTapGestures(
                             onTap = {
                                 bodyFocusRequester.requestFocus()
-                            }
+                            },
                         )
                     },
                 value = body,
@@ -130,26 +128,22 @@ fun NoticeCreateFirstScreen(
                     onBodyValueChange("")
                 },
                 isShowDivider = false,
-                focusRequester = bodyFocusRequester
+                focusRequester = bodyFocusRequester,
             )
         }
     }
 }
 
 @Composable
-private fun NoticeIconButton(
-    modifier: Modifier = Modifier,
-    imageVector: ImageVector,
-    onClick: () -> Unit,
-) {
+private fun NoticeIconButton(modifier: Modifier = Modifier, imageVector: ImageVector, onClick: () -> Unit) {
     Box(
         modifier = modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberBounceIndication(),
-                onClick = onClick
+                onClick = onClick,
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Icon(
             modifier = Modifier
@@ -158,8 +152,8 @@ private fun NoticeIconButton(
             imageVector = imageVector,
             contentDescription = null,
             tint = DodamTheme.colors.labelNormal.copy(
-                alpha = 0.5f
-            )
+                alpha = 0.5f,
+            ),
         )
     }
 }

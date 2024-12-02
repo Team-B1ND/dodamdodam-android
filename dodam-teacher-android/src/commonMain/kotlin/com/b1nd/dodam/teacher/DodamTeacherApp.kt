@@ -57,7 +57,6 @@ import com.b1nd.dodam.home.navigation.homeScreen
 import com.b1nd.dodam.home.navigation.navigateToHome
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
-import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
@@ -228,7 +227,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
 
                         mealScreen(
-                            popBackStack = navHostController::popBackStack
+                            popBackStack = navHostController::popBackStack,
                         )
 
                         pointScreen(
@@ -277,16 +276,15 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         editMemberInfoScreen(
                             popBackStack = navHostController::popBackStack,
                         )
-23
+                        23
                         noticeScreen(
                             isTeacher = true,
-                            navigateToNoticeCreate = navHostController::navigateToNoticeCreate
+                            navigateToNoticeCreate = navHostController::navigateToNoticeCreate,
                         )
 
                         noticeCreateScreen(
-                            popBackStack = navHostController::popBackStack
+                            popBackStack = navHostController::popBackStack,
                         )
-
                     }
 
                     // Bottom Navigation

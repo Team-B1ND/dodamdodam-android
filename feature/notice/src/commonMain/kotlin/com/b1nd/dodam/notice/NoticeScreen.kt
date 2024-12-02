@@ -51,10 +51,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun NoticeScreen(
-    isTeacher: Boolean,
-    navigateToNoticeCreate: (() -> Unit)?
-) {
+internal fun NoticeScreen(isTeacher: Boolean, navigateToNoticeCreate: (() -> Unit)?) {
     val uriHandler = LocalUriHandler.current
     var selectCategory by remember { mutableStateOf("전체") }
 

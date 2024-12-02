@@ -3,10 +3,8 @@ package com.b1nd.dodam.noticecreate.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -28,9 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -38,7 +33,6 @@ import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTextButton
-import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
@@ -54,7 +48,6 @@ fun NoticeCreateSecondScreen(
     onClickCategory: (category: String) -> Unit,
     onClickSuccess: () -> Unit,
 ) {
-
     val bodyFocusRequester = remember { FocusRequester() }
 
     Scaffold(
@@ -72,11 +65,11 @@ fun NoticeCreateSecondScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .navigationBarsPadding()
+                    .navigationBarsPadding(),
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
                 DodamDivider(
-                    type = DividerType.Normal
+                    type = DividerType.Normal,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 DodamTextButton(
@@ -87,17 +80,17 @@ fun NoticeCreateSecondScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
         },
-        containerColor = DodamTheme.colors.backgroundNormal
+        containerColor = DodamTheme.colors.backgroundNormal,
     ) {
         FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = 16.dp
+                    horizontal = 16.dp,
                 )
                 .padding(it),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             categories.fastForEach {
                 NoticeCreateCategory(
@@ -105,56 +98,53 @@ fun NoticeCreateSecondScreen(
                     isSelect = it in selectCategory,
                     onClick = {
                         onClickCategory(it)
-                    }
+                    },
                 )
             }
         }
     }
 }
+
 @Composable
-private fun NoticeCreateCategory(
-    text: String,
-    isSelect: Boolean,
-    onClick: () -> Unit
-) {
+private fun NoticeCreateCategory(text: String, isSelect: Boolean, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberBounceIndication(
-                    radius = RoundedCornerShape(31.dp)
+                    radius = RoundedCornerShape(31.dp),
                 ),
-                onClick = onClick
+                onClick = onClick,
             )
             .background(
                 color = if (isSelect) DodamTheme.colors.primaryNormal else DodamTheme.colors.backgroundNormal,
-                shape = RoundedCornerShape(31.dp)
+                shape = RoundedCornerShape(31.dp),
             )
             .`if`(!isSelect) {
                 border(
                     width = 1.dp,
                     color = DodamTheme.colors.lineAlternative,
-                    shape = RoundedCornerShape(31.dp)
+                    shape = RoundedCornerShape(31.dp),
                 )
             }
             .padding(
                 vertical = 8.dp,
-                horizontal = 18.dp
+                horizontal = 18.dp,
             ),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             modifier = Modifier.size(14.dp),
             imageVector = if (isSelect) DodamIcons.Checkmark.value else DodamIcons.Plus.value,
             contentDescription = null,
-            tint = if (isSelect) DodamTheme.colors.staticWhite else DodamTheme.colors.labelAlternative
+            tint = if (isSelect) DodamTheme.colors.staticWhite else DodamTheme.colors.labelAlternative,
         )
 
         Text(
             text = text,
             style = DodamTheme.typography.labelMedium(),
-            color = if (isSelect) DodamTheme.colors.staticWhite else DodamTheme.colors.labelAlternative
+            color = if (isSelect) DodamTheme.colors.staticWhite else DodamTheme.colors.labelAlternative,
         )
     }
 }
