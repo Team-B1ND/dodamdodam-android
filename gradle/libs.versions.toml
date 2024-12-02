@@ -36,7 +36,7 @@ firebase-bom = "32.8.0"
 firebase-crashlytics = "2.9.9"
 google-services = "4.4.0"
 app-update = "2.1.0"
-
+firebase-messaging ="24.1.0"
 
 # third party
 spotless = "6.23.3"
@@ -111,6 +111,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 google-app-update = { group = "com.google.android.play", name = "app-update-ktx", version.ref = "app-update"}
+firebase-message = {group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging"}
 
 # third party
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
