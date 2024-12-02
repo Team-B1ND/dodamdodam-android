@@ -38,6 +38,8 @@ kotlin {
             implementation(projects.featureTeacher.point)
             implementation(projects.featureTeacher.all)
             implementation(projects.feature.setting)
+            implementation(projects.feature.notice)
+            implementation(projects.featureTeacher.noticeCreate)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)

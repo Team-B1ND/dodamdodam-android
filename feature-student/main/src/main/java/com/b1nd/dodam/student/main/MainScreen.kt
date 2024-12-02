@@ -83,7 +83,10 @@ internal fun MainScreen(
                 navigateToWakeupSongScreen = navigateToWakeUpSong,
                 navigateToAskWakeupSongScreen = navigateToAddWakeUpSong,
             )
-            noticeScreen()
+            noticeScreen(
+                isTeacher = false,
+                navigateToNoticeCreate = null
+            )
             nightStudyScreen(
                 navigateToAskNightStudy,
                 showToast,

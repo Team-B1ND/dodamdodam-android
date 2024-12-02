@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.util.fastForEach
 import coil3.compose.AsyncImage
+import com.b1nd.dodam.common.utiles.buildPersistentList
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
@@ -50,7 +51,10 @@ import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun NoticeScreen() {
+internal fun NoticeScreen(
+    isTeacher: Boolean,
+    navigateToNoticeCreate: (() -> Unit)?
+) {
     val uriHandler = LocalUriHandler.current
     var selectCategory by remember { mutableStateOf("전체") }
 
@@ -59,13 +63,29 @@ internal fun NoticeScreen() {
             DodamDefaultTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = "공지",
-                actionIcons = persistentListOf(
-                    ActionIcon(
-                        icon = DodamIcons.MagnifyingGlass,
-                        onClick = {},
-                        enabled = false,
-                    ),
-                ),
+                actionIcons = buildPersistentList {
+                    if (isTeacher) {
+                        add(
+                            ActionIcon(
+                                icon = DodamIcons.Plus,
+                                onClick = {
+                                    if (navigateToNoticeCreate == null) {
+                                        return@ActionIcon
+                                    }
+                                    navigateToNoticeCreate()
+                                },
+                                enabled = true,
+                            ),
+                        )
+                    }
+                    add(
+                        ActionIcon(
+                            icon = DodamIcons.MagnifyingGlass,
+                            onClick = {},
+                            enabled = false,
+                        ),
+                    )
+                },
             )
         },
         containerColor = DodamTheme.colors.backgroundNeutral,
