@@ -15,6 +15,7 @@ class DataStoreRepositoryImpl constructor(
     private val tokenKey = stringPreferencesKey("token")
     private val idKey = stringPreferencesKey("id")
     private val pwKey = stringPreferencesKey("pw")
+    private val pushTokenKey = stringPreferencesKey("pushToken")
 
     override val user = dataStore.data.map {
         User(
@@ -28,6 +29,10 @@ class DataStoreRepositoryImpl constructor(
         it[tokenKey] ?: ""
     }
 
+    override val pushToken = dataStore.data.map{
+        it[pushTokenKey] ?:""
+    }
+
     override suspend fun saveUser(id: String, pw: String, token: String) {
         dataStore.edit {
             it[idKey] = keyStoreManager.encrypt(id)
@@ -39,6 +44,12 @@ class DataStoreRepositoryImpl constructor(
     override suspend fun saveToken(token: String) {
         dataStore.edit {
             it[tokenKey] = token
+        }
+    }
+
+    override suspend fun savePushToken(pushToken: String) {
+        dataStore.edit {
+            it[pushTokenKey] = pushToken
         }
     }
 

@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 data class LoginRequest(
     val id: String,
     val pw: String,
+    val pushToken: String
 )
