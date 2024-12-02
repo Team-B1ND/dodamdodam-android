@@ -16,9 +16,7 @@ kotlin {
 
     sourceSets.commonMain.dependencies {
         implementation(projects.common)
-        implementation(projects.datastore)
         implementation(projects.ui)
-        implementation(projects.data.meal)
         implementation(libs.kotlinx.datetime)
         implementation(projects.logging)
 
