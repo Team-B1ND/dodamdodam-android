@@ -22,7 +22,7 @@ fun DodamAutoLinkText(
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
     linkColor: Color = DodamTheme.colors.primaryNormal,
-    onLinkClick: (String) -> Unit = {}
+    onLinkClick: (String) -> Unit = {},
 ) {
     val annotatedString = buildAnnotatedString {
         val urlRegex = Regex("(https?://[\\w\\-._~:/?#[\\\\]@!$&'()*+,;=%]+)")
@@ -58,7 +58,7 @@ fun DodamAutoLinkText(
         text = annotatedString,
         modifier = modifier,
         style = style.copy(
-            color = color
+            color = color,
         ),
         softWrap = softWrap,
         overflow = overflow,
@@ -68,6 +68,6 @@ fun DodamAutoLinkText(
                 .firstOrNull()?.let { annotation ->
                     onLinkClick(annotation.item) // URL 클릭 이벤트 전달
                 }
-        }
+        },
     )
 }

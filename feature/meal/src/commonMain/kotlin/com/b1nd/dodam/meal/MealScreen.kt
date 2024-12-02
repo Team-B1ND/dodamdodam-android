@@ -59,7 +59,6 @@ import com.b1nd.dodam.designsystem.component.CalendarDate
 import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamDatePickerDefaults
 import com.b1nd.dodam.designsystem.component.DodamDatePickerState
-import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTag
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
@@ -76,10 +75,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-internal fun MealScreen(
-    viewModel: MealViewModel = koinViewModel(),
-    popBackStack: () -> Unit
-) {
+internal fun MealScreen(viewModel: MealViewModel = koinViewModel(), popBackStack: () -> Unit) {
     val nowDate = DodamDate.localDateNow()
     val datePickerState = rememberDodamDatePickerState(
         year = nowDate.year,
@@ -100,7 +96,7 @@ internal fun MealScreen(
             DodamTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = "${nowDate.monthNumber}월 급식",
-                onBackClick = popBackStack
+                onBackClick = popBackStack,
             )
         },
         containerColor = DodamTheme.colors.backgroundNeutral,

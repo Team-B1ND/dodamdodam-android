@@ -164,7 +164,7 @@ fun DodamApp(
                 },
             )
             mealScreen(
-                popBackStack = navController::popBackStack
+                popBackStack = navController::popBackStack,
             )
             infoScreen(
                 onNextClick = { name, grade, room, number, email, phoneNumber ->

@@ -29,7 +29,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
-import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen

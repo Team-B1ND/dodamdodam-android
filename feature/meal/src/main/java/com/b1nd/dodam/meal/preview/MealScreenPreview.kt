@@ -10,7 +10,7 @@ import com.b1nd.dodam.meal.MealScreen
 fun MealScreenPreview() {
     DodamTheme {
         MealScreen(
-            popBackStack = {}
+            popBackStack = {},
         )
     }
 }

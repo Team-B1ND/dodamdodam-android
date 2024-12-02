@@ -12,14 +12,10 @@ import com.b1nd.dodam.meal.MealScreen
 
 const val MEAL_ROUTE = "meal"
 
-fun NavController.navigateToMeal(
-    navOptions: NavOptions? = null
-) = navigate(MEAL_ROUTE, navOptions)
+fun NavController.navigateToMeal(navOptions: NavOptions? = null) = navigate(MEAL_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.mealScreen(
-    popBackStack: () -> Unit
-) {
+fun NavGraphBuilder.mealScreen(popBackStack: () -> Unit) {
     composable(
         route = MEAL_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -28,7 +24,7 @@ fun NavGraphBuilder.mealScreen(
         popExitTransition = { ExitTransition.None },
     ) {
         MealScreen(
-            popBackStack = popBackStack
+            popBackStack = popBackStack,
         )
     }
 }
