@@ -6,7 +6,6 @@ import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -72,7 +71,7 @@ class FirebaseMessageService: FirebaseMessagingService() {
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setContentTitle(message.title)
             .setContentText(message.body)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_dodam_logo)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
 
