@@ -47,6 +47,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun MainScreen(
     navController: NavHostController,
+    navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
     navigateToSetting: () -> Unit,
@@ -70,9 +71,7 @@ internal fun MainScreen(
         ) {
             homeScreen(
                 navigateToAskNightStudy = navigateToAskNightStudy,
-                navigateToMeal = {
-                    navController.navigateToMeal()
-                },
+                navigateToMeal = navigateToMeal,
                 navigateToNightStudy = {
                     selectedIndex = 3
                     mainScreenState.navigateToMainDestination(MainDestination.NIGHT_STUDY)
@@ -85,7 +84,6 @@ internal fun MainScreen(
                 navigateToWakeupSongScreen = navigateToWakeUpSong,
                 navigateToAskWakeupSongScreen = navigateToAddWakeUpSong,
             )
-            mealScreen()
             noticeScreen()
             nightStudyScreen(
                 navigateToAskNightStudy,
