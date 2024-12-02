@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.feature.onboarding)
     implementation(projects.featureStudent.main)
     implementation(projects.featureStudent.register)
+    implementation(projects.feature.meal)
     implementation(projects.feature.login)
     implementation(projects.featureStudent.bus)
     implementation(projects.featureStudent.nightstudy)
