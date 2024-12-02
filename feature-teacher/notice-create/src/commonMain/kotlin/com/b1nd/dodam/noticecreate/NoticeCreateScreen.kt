@@ -13,7 +13,6 @@ import com.b1nd.dodam.noticecreate.screen.NoticeCreateSecondScreen
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableSet
 
 private enum class NoticeCreatePage {
     First,
@@ -21,10 +20,7 @@ private enum class NoticeCreatePage {
 }
 
 @Composable
-fun NoticeCreateScreen(
-    popBackStack: () -> Unit
-) {
-
+fun NoticeCreateScreen(popBackStack: () -> Unit) {
     var title by remember { mutableStateOf("") }
     var body by remember { mutableStateOf("") }
     var nowPage by remember { mutableStateOf(NoticeCreatePage.First) }
@@ -48,7 +44,7 @@ fun NoticeCreateScreen(
             popBackStack = popBackStack,
             onNextClick = {
                 nowPage = NoticeCreatePage.Second
-            }
+            },
         )
     }
 
@@ -67,7 +63,6 @@ fun NoticeCreateScreen(
             onClickCategory = {
                 selectCategories = selectCategories.toMutableList().apply {
                     if (selectCategories.contains(it)) {
-
                         if (selectCategories.size == 1 && it == "전체") {
                             return@apply
                         }
@@ -81,7 +76,7 @@ fun NoticeCreateScreen(
                         add(it)
                     }
                 }.toImmutableList()
-            }
+            },
         )
     }
 }

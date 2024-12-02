@@ -17,10 +17,7 @@ fun NavController.navigateToNotice(
     },
 ) = navigate(NOTICE_ROUTE, navOptions)
 
-fun NavGraphBuilder.noticeScreen(
-    isTeacher: Boolean,
-    navigateToNoticeCreate: (() -> Unit)?
-) {
+fun NavGraphBuilder.noticeScreen(isTeacher: Boolean, navigateToNoticeCreate: (() -> Unit)?) {
     composable(
         route = NOTICE_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -30,7 +27,7 @@ fun NavGraphBuilder.noticeScreen(
     ) {
         NoticeScreen(
             isTeacher = isTeacher,
-            navigateToNoticeCreate = navigateToNoticeCreate
+            navigateToNoticeCreate = navigateToNoticeCreate,
         )
     }
 }
