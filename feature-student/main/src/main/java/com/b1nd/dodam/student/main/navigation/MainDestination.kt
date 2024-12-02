@@ -1,7 +1,6 @@
 package com.b1nd.dodam.student.main.navigation
 
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
-import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.member.navigation.ALL_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.notice.navigation.NOTICE_ROUTE
