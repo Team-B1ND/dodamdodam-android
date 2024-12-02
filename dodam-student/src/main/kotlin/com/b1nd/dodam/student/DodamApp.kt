@@ -40,6 +40,8 @@ import com.b1nd.dodam.editmemberinfo.navigation.editMemberInfoScreen
 import com.b1nd.dodam.editmemberinfo.navigation.navigationToEditMemberInfo
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
+import com.b1nd.dodam.meal.navigation.mealScreen
+import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -142,6 +144,7 @@ fun DodamApp(
             )
             mainScreen(
                 navController = mainNavController,
+                navigateToMeal = navController::navigateToMeal,
                 navigateToAskNightStudy = navController::navigateToAskNightStudy,
                 navigateToAddOuting = navController::navigateToAskOut,
                 navigateToSetting = navController::navigateToSetting,
@@ -159,6 +162,9 @@ fun DodamApp(
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
                 },
+            )
+            mealScreen(
+                popBackStack = navController::popBackStack
             )
             infoScreen(
                 onNextClick = { name, grade, room, number, email, phoneNumber ->
