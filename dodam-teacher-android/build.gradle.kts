@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.dodam.multiplatform.kotlin)
     alias(libs.plugins.dodam.multiplatform.coil)
     alias(libs.plugins.dodam.multiplatform.koin)
+    alias(libs.plugins.google.services)
 }
 kotlin {
     setIOS("DodamTeacher", "com.b1nd.dodam.teacher")
@@ -18,7 +19,7 @@ kotlin {
             implementation(projects.common)
             implementation(projects.ui)
             implementation(projects.network.login)
-
+            api("io.github.mirzemehdi:kmpnotifier:1.3.0")
             implementation(projects.feature.onboarding)
             implementation(projects.featureTeacher.nightstudy)
             api(projects.feature.login)
@@ -68,7 +69,12 @@ kotlin {
             implementation(projects.keystore)
             implementation(libs.google.app.update)
         }
+        iosMain.dependencies {
+            implementation("io.github.mirzemehdi:kmpnotifier:1.3.0")
+        }
     }
+
+
 }
 
 android {

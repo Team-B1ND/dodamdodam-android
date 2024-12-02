@@ -1,5 +1,6 @@
 import SwiftUI
 import DodamTeacher
+import Firebase
 
 @main
 struct iOSApp: App {
@@ -8,6 +9,7 @@ struct iOSApp: App {
         KoinKt.doInitKoin { _ in
             
         }
+        FirebaseApp.configure()
     }
     var body: some Scene {
         WindowGroup {
