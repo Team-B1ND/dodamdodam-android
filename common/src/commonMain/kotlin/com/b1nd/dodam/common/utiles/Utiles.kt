@@ -1,5 +1,11 @@
 package com.b1nd.dodam.common.utiles
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+import kotlin.experimental.ExperimentalTypeInference
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -40,3 +46,9 @@ fun LocalTime.plusHour(hour: Int): LocalTime {
 }
 
 expect val LocalDate.utcTimeMill: Long
+
+@OptIn(ExperimentalTypeInference::class, ExperimentalContracts::class)
+inline fun <T> buildPersistentList(@BuilderInference builderAction: PersistentList.Builder<T>.() -> Unit): PersistentList<T> {
+    contract { callsInPlace(builderAction, InvocationKind.EXACTLY_ONCE) }
+    return persistentListOf<T>().builder().apply(builderAction).build()
+}
