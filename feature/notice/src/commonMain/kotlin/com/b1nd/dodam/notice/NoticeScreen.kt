@@ -97,7 +97,11 @@ internal fun NoticeScreen(isTeacher: Boolean, navigateToNoticeCreate: (() -> Uni
                         modifier = Modifier
                             .horizontalScroll(rememberScrollState())
                             .background(DodamTheme.colors.backgroundNeutral)
-                            .padding(start = 16.dp),
+                            .padding(
+                                start = 16.dp,
+                                top = 20.dp,
+                                bottom = 20.dp,
+                            ),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         persistentListOf("전체", "B1ND", "CNS", "DUCAMI", "삼디", "모디").fastForEach { category ->
