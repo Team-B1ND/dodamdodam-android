@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -43,9 +44,11 @@ import com.b1nd.dodam.designsystem.component.ActionIcon
 import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDivider
+import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.DodamAutoLinkText
 import com.b1nd.dodam.ui.component.modifier.`if`
+import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -53,37 +56,70 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun NoticeScreen(isTeacher: Boolean, navigateToNoticeCreate: (() -> Unit)?) {
     val uriHandler = LocalUriHandler.current
+    val focusManager = LocalFocusManager.current
+
     var selectCategory by remember { mutableStateOf("전체") }
+    var isSearchMode by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf("") }
 
     Scaffold(
+        modifier = Modifier.addFocusCleaner(
+            focusManager = focusManager,
+            doOnClear = {
+                isSearchMode = false
+            },
+        ),
         topBar = {
-            DodamDefaultTopAppBar(
-                modifier = Modifier.statusBarsPadding(),
-                title = "공지",
-                actionIcons = buildPersistentList {
-                    if (isTeacher) {
+            if (!isSearchMode) {
+                DodamDefaultTopAppBar(
+                    modifier = Modifier.statusBarsPadding(),
+                    title = "공지",
+                    actionIcons = buildPersistentList {
+                        if (isTeacher) {
+                            add(
+                                ActionIcon(
+                                    icon = DodamIcons.Plus,
+                                    onClick = {
+                                        if (navigateToNoticeCreate == null) {
+                                            return@ActionIcon
+                                        }
+                                        navigateToNoticeCreate()
+                                    },
+                                    enabled = true,
+                                ),
+                            )
+                        }
                         add(
                             ActionIcon(
-                                icon = DodamIcons.Plus,
+                                icon = DodamIcons.MagnifyingGlass,
                                 onClick = {
-                                    if (navigateToNoticeCreate == null) {
-                                        return@ActionIcon
-                                    }
-                                    navigateToNoticeCreate()
+                                    isSearchMode = true
                                 },
                                 enabled = true,
                             ),
                         )
-                    }
-                    add(
-                        ActionIcon(
-                            icon = DodamIcons.MagnifyingGlass,
-                            onClick = {},
-                            enabled = false,
-                        ),
+                    },
+                )
+            } else {
+                Row(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(horizontal = 16.dp),
+                ) {
+                    DodamTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = searchText,
+                        onValueChange = {
+                            searchText = it
+                        },
+                        onClickRemoveRequest = {
+                            searchText = ""
+                        },
                     )
-                },
-            )
+                }
+            }
         },
         containerColor = DodamTheme.colors.backgroundNeutral,
     ) {
