@@ -38,6 +38,7 @@ kotlin {
             implementation(projects.featureTeacher.point)
             implementation(projects.featureTeacher.all)
             implementation(projects.feature.setting)
+            implementation(projects.feature.featureGroupAlias)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)

@@ -89,3 +89,5 @@ include(":data:bundleid-info")
 include(":feature:edit-member-info")
 include(":network:upload")
 include(":data:upload")
+include(":feature:group")
+project(":feature:group").name = "feature-group-alias"

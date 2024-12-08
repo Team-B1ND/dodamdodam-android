@@ -52,6 +52,8 @@ import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.editmemberinfo.navigation.editMemberInfoScreen
 import com.b1nd.dodam.editmemberinfo.navigation.navigationToEditMemberInfo
+import com.b1nd.dodam.group.navigation.groupScreen
+import com.b1nd.dodam.group.navigation.navigateToGroup
 import com.b1nd.dodam.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.home.navigation.homeScreen
 import com.b1nd.dodam.home.navigation.navigateToHome
@@ -247,6 +249,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             navigateToOut = navHostController::navigateToApproveOuting,
                             navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                             navigateToPoint = navHostController::navigateToPoint,
+                            navigateToGroup = navHostController::navigateToGroup
                         )
 
                         approveNightStudyScreen(
@@ -270,6 +273,10 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 
                         editMemberInfoScreen(
                             popBackStack = navHostController::popBackStack,
+                        )
+
+                        groupScreen(
+                            popBackStack = navHostController::popBackStack
                         )
                     }
 
