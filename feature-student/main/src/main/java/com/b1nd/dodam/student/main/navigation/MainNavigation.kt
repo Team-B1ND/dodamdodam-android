@@ -24,6 +24,7 @@ fun NavController.navigateToMain(
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.mainScreen(
     navController: NavHostController,
+    navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
     navigateToSetting: () -> Unit,
@@ -35,6 +36,7 @@ fun NavGraphBuilder.mainScreen(
 ) {
     composable(route = MAIN_ROUTE) {
         MainScreen(
+            navigateToMeal = navigateToMeal,
             navController = navController,
             navigateToAskNightStudy = navigateToAskNightStudy,
             navigateToAddOuting = navigateToAddOuting,
