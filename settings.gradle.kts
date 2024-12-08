@@ -95,3 +95,6 @@ include(":feature-parent")
 include(":feature-parent:main")
 include(":feature-parent:home")
 include(":feature-parent:all")
+
+include(":feature:group")
+project(":feature:group").name = "feature-group-alias"
