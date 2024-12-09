@@ -57,11 +57,14 @@ import com.b1nd.dodam.home.navigation.homeScreen
 import com.b1nd.dodam.home.navigation.navigateToHome
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
-import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
-import com.b1nd.dodam.meal.navigation.navigationToMeal
+import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
+import com.b1nd.dodam.notice.navigation.NOTICE_ROUTE
+import com.b1nd.dodam.notice.navigation.noticeScreen
+import com.b1nd.dodam.noticecreate.navigation.navigateToNoticeCreate
+import com.b1nd.dodam.noticecreate.navigation.noticeCreateScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -200,7 +203,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
                         homeScreen(
                             navigateToMeal = {
-                                navHostController.navigationToMeal(
+                                navHostController.navigateToMeal(
                                     navOptions = navOptions {
                                         popUpTo(navHostController.graph.findStartDestination().route.toString()) {
                                             saveState = true
@@ -223,13 +226,15 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                         )
 
-                        mealScreen()
+                        mealScreen(
+                            popBackStack = navHostController::popBackStack,
+                        )
 
                         pointScreen(
                             showSnackbar = showSnackbar,
                             popBackStack = navHostController::popBackStack,
                         )
-                        mealScreen()
+
                         outingScreen(
                             navigateToApprove = { title ->
                                 navHostController.navigateToApproveOuting(
@@ -271,6 +276,15 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         editMemberInfoScreen(
                             popBackStack = navHostController::popBackStack,
                         )
+                        23
+                        noticeScreen(
+                            isTeacher = true,
+                            navigateToNoticeCreate = navHostController::navigateToNoticeCreate,
+                        )
+
+                        noticeCreateScreen(
+                            popBackStack = navHostController::popBackStack,
+                        )
                     }
 
                     // Bottom Navigation
@@ -310,7 +324,7 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
 
     if (route != null && route in listOf(
             HOME_ROUTE,
-            MEAL_ROUTE,
+            NOTICE_ROUTE,
             NIGHT_STUDY_ROUTE,
             ALL_ROUTE,
             OUTING_ROUTE,
@@ -328,12 +342,12 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     enable = route != HOME_ROUTE,
                 ),
                 DodamNavigationBarItem(
-                    selected = route == MEAL_ROUTE,
-                    icon = DodamIcons.ForkAndKnife,
+                    selected = route == NOTICE_ROUTE,
+                    icon = DodamIcons.Bell,
                     onClick = {
-                        onClick(MEAL_ROUTE)
+                        onClick(NOTICE_ROUTE)
                     },
-                    enable = route != MEAL_ROUTE,
+                    enable = route != NOTICE_ROUTE,
                 ),
                 DodamNavigationBarItem(
                     selected = route == OUTING_ROUTE,
