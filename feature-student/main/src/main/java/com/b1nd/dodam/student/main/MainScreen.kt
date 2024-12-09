@@ -29,9 +29,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
-import com.b1nd.dodam.meal.navigation.mealScreen
+import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
+import com.b1nd.dodam.notice.navigation.noticeScreen
 import com.b1nd.dodam.outing.nanigation.navigateToOuting
 import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
@@ -45,6 +46,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun MainScreen(
     navController: NavHostController,
+    navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
     navigateToSetting: () -> Unit,
@@ -68,10 +70,7 @@ internal fun MainScreen(
         ) {
             homeScreen(
                 navigateToAskNightStudy = navigateToAskNightStudy,
-                navigateToMeal = {
-                    selectedIndex = 1
-                    mainScreenState.navigateToMainDestination(MainDestination.MEAL)
-                },
+                navigateToMeal = navigateToMeal,
                 navigateToNightStudy = {
                     selectedIndex = 3
                     mainScreenState.navigateToMainDestination(MainDestination.NIGHT_STUDY)
@@ -84,7 +83,10 @@ internal fun MainScreen(
                 navigateToWakeupSongScreen = navigateToWakeUpSong,
                 navigateToAskWakeupSongScreen = navigateToAddWakeUpSong,
             )
-            mealScreen()
+            noticeScreen(
+                isTeacher = false,
+                navigateToNoticeCreate = null,
+            )
             nightStudyScreen(
                 navigateToAskNightStudy,
                 showToast,

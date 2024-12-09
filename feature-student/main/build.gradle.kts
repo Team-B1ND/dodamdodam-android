@@ -18,4 +18,5 @@ dependencies {
     implementation(projects.featureStudent.nightstudy)
     implementation(projects.featureStudent.outing)
     implementation(projects.featureStudent.all)
+    implementation(projects.feature.notice)
 }

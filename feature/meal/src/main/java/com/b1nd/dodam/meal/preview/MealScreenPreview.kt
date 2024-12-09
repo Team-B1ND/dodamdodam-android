@@ -9,6 +9,8 @@ import com.b1nd.dodam.meal.MealScreen
 @Composable
 fun MealScreenPreview() {
     DodamTheme {
-        MealScreen()
+        MealScreen(
+            popBackStack = {},
+        )
     }
 }
