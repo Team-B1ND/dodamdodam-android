@@ -1,6 +1,8 @@
 package com.b1nd.dodam.group
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamSegment
@@ -38,7 +41,8 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun GroupScreen(
-    popBackStack: () -> Unit,
+    popBackStack: () -> Unit,navigateToGroupDetail: () -> Unit
+
 ) {
     var selectedIndex by remember { mutableIntStateOf(0) }
     var searchText by remember { mutableStateOf("") }
@@ -48,9 +52,7 @@ internal fun GroupScreen(
             DodamTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = "그룹",
-                onBackClick = {
-
-                },
+                onBackClick = popBackStack,
                 actionIcons = persistentListOf(
                     ActionIcon(
                         icon = DodamIcons.Plus,
@@ -114,7 +116,12 @@ internal fun GroupScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp)
-                            .padding(horizontal = 16.dp),
+                            .padding(horizontal = 16.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberBounceIndication(),
+                                onClick = navigateToGroupDetail
+                            ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(

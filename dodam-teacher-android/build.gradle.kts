@@ -57,6 +57,7 @@ kotlin {
             implementation(projects.feature.notice)
             implementation(projects.featureTeacher.noticeCreate)
             implementation(projects.feature.featureGroupAlias)
+            implementation(projects.feature.groupDetail)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)
