@@ -81,6 +81,7 @@ include(
     ":feature-teacher:all",
     ":feature:notice",
     ":feature-teacher:notice-create",
+    ":feature:group-detail",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")
