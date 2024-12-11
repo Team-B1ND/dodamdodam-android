@@ -25,6 +25,7 @@ kotlin{
     sourceSets{
         commonMain.dependencies {
             implementation(projects.common)
+            implementation(projects.ui)
             implementation(projects.datastore)
             implementation(libs.dodam.design.system.cmm)
         }

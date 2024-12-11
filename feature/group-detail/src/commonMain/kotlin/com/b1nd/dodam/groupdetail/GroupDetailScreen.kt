@@ -24,6 +24,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,14 +48,17 @@ import com.b1nd.dodam.designsystem.component.DodamTag
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.ui.component.DodamFakeBottomSheet
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun GroupDetailScreen(
     popBackStack: () -> Unit
 ) {
 
-    val isJoin = false
+    val isJoin = true
     val isPermission = true
+    val isShowMemberBottomSheet by remember { mutableStateOf(true) }
 
     Scaffold(
         topBar = {
@@ -307,35 +312,80 @@ internal fun GroupDetailScreen(
                 }
             }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(144.dp)
-                    .align(Alignment.BottomCenter)
-                    .background(
-                        brush = Brush.linearGradient(
-                            colorStops = arrayOf(
-                                0f to DodamTheme.colors.staticWhite.copy(alpha = 0f),
-                                0.22f to DodamTheme.colors.staticWhite.copy(alpha = 0.22f),
-                                1f to DodamTheme.colors.staticWhite
+            if (!isJoin) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(144.dp)
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            brush = Brush.linearGradient(
+                                colorStops = arrayOf(
+                                    0f to DodamTheme.colors.staticWhite.copy(alpha = 0f),
+                                    0.22f to DodamTheme.colors.staticWhite.copy(alpha = 0.22f),
+                                    1f to DodamTheme.colors.staticWhite
+                                )
                             )
                         )
+                ) {
+                    DodamButton(
+                        modifier = Modifier
+                            .padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                bottom = 16.dp,
+                            )
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .align(Alignment.BottomCenter),
+                        text = "가입 신청",
+                        onClick = {},
+                        buttonSize = ButtonSize.Large,
+                        buttonRole = ButtonRole.Primary
                     )
-            ) {
-                DodamButton(
-                    modifier = Modifier
-                        .padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            bottom = 16.dp,
+                }
+            }
+
+            if (isShowMemberBottomSheet) {
+                DodamFakeBottomSheet(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    title = {},
+                    content = {
+                        Text(
+                            text = "박병준님의 정보",
+                            style = DodamTheme.typography.heading1Bold(),
+                            color = DodamTheme.colors.labelNormal
                         )
-                        .fillMaxWidth()
-                        .height(48.dp)
-                        .align(Alignment.BottomCenter),
-                    text = "가입 신청",
-                    onClick = {},
-                    buttonSize = ButtonSize.Large,
-                    buttonRole = ButtonRole.Primary
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "1학년 2반 13번",
+                            style = DodamTheme.typography.headlineMedium(),
+                            color = DodamTheme.colors.labelAssistive
+                        )
+
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Text(
+                            text = "권한 정보",
+                            style = DodamTheme.typography.heading1Bold(),
+                            color = DodamTheme.colors.labelNormal
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "멤버",
+                            style = DodamTheme.typography.headlineMedium(),
+                            color = DodamTheme.colors.labelAssistive
+                        )
+
+                        Spacer(modifier = Modifier.height(24.dp))
+                        DodamButton(
+                            text = "내보내기",
+                            onClick = {},
+                            buttonRole = ButtonRole.Assistive,
+                            buttonSize = ButtonSize.Medium
+                        )
+                    },
+                    space = 0.dp,
+                    navigationBarPadding = false
                 )
             }
         }
