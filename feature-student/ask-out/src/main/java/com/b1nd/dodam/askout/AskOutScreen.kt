@@ -50,6 +50,7 @@ import com.b1nd.dodam.designsystem.component.DodamTimePickerBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.rememberDodamDatePickerState
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import java.time.ZoneId
 import kotlinx.collections.immutable.persistentListOf
@@ -268,10 +269,14 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                             sleepoverReason = ""
                         }
                     },
+                    supportText = if (
+                            (selectedItem.isOut() && outingReason.length !in 5..250) ||
+                            (!selectedItem.isOut() && sleepoverReason.length !in 5..250)) "사유를 5자 이상 입력해주세요." else "",
                 )
 
                 if (selectedItem.isOut()) {
                     AskOutButton(
+                        modifier = Modifier.padding(top = 8.dp),
                         title = "외출 날짜",
                         description = outingDate.toDateString(),
                         onClick = {
@@ -283,6 +288,9 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                 }
 
                 AskOutButton(
+                    modifier = Modifier.`if`(!selectedItem.isOut()) {
+                        padding(top = 8.dp)
+                    },
                     title = "$selectedItem ${if (selectedItem.isOut()) "시간" else "날짜"}",
                     description = if (selectedItem.isOut()) outingStartTime.toHourMinString() else sleepoverStartDate.toDateString(),
                     onClick = {
