@@ -270,8 +270,13 @@ internal fun AskOutScreen(viewModel: AskOutViewModel = koinViewModel(), popBackS
                         }
                     },
                     supportText = if (
-                            (selectedItem.isOut() && outingReason.length !in 5..250) ||
-                            (!selectedItem.isOut() && sleepoverReason.length !in 5..250)) "사유를 5자 이상 입력해주세요." else "",
+                        (selectedItem.isOut() && outingReason.length !in 5..250) ||
+                        (!selectedItem.isOut() && sleepoverReason.length !in 5..250)
+                    ) {
+                        "사유를 5자 이상 입력해주세요."
+                    } else {
+                        ""
+                    },
                 )
 
                 if (selectedItem.isOut()) {
