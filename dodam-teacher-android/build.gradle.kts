@@ -58,6 +58,7 @@ kotlin {
             implementation(projects.featureTeacher.noticeCreate)
             implementation(projects.feature.featureGroupAlias)
             implementation(projects.feature.groupDetail)
+            implementation(projects.feature.groupWaiting)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)

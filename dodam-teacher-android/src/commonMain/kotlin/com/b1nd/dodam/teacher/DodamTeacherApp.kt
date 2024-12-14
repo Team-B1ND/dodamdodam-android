@@ -56,6 +56,8 @@ import com.b1nd.dodam.group.navigation.groupScreen
 import com.b1nd.dodam.group.navigation.navigateToGroup
 import com.b1nd.dodam.groupdetail.navigation.groupDetailScreen
 import com.b1nd.dodam.groupdetail.navigation.navigateToGroupDetail
+import com.b1nd.dodam.groupwaiting.navigation.groupWaitingScreen
+import com.b1nd.dodam.groupwaiting.navigation.navigateToGroupWaiting
 import com.b1nd.dodam.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.home.navigation.homeScreen
 import com.b1nd.dodam.home.navigation.navigateToHome
@@ -297,6 +299,11 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
 
                         groupDetailScreen(
+                            popBackStack = navHostController::popBackStack,
+                            navigateToGroupWaiting = navHostController::navigateToGroupWaiting
+                        )
+
+                        groupWaitingScreen(
                             popBackStack = navHostController::popBackStack
                         )
                     }
