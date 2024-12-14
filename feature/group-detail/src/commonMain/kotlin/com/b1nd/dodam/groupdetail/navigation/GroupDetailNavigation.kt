@@ -14,7 +14,8 @@ fun NavController.navigateToGroupDetail(
 ) = this.navigate(GROUP_DETAIL_ROUTE, navOptions)
 
 fun NavGraphBuilder.groupDetailScreen(
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
+    navigateToGroupWaiting: () -> Unit,
 ) {
     composable(
         route = GROUP_DETAIL_ROUTE,
@@ -23,7 +24,8 @@ fun NavGraphBuilder.groupDetailScreen(
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         GroupDetailScreen(
-            popBackStack = popBackStack
+            popBackStack = popBackStack,
+            navigateToGroupWaiting = navigateToGroupWaiting
         )
     }
 }

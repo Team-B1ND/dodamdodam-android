@@ -49,11 +49,13 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.DodamFakeBottomSheet
+import com.b1nd.dodam.ui.component.DodamGroupMemberCard
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun GroupDetailScreen(
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
+    navigateToGroupWaiting: () -> Unit,
 ) {
 
     val isJoin = true
@@ -197,9 +199,7 @@ internal fun GroupDetailScreen(
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = rememberBounceIndication(),
-                                    onClick = {
-
-                                    }
+                                    onClick = navigateToGroupWaiting
                                 ),
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically
@@ -207,7 +207,7 @@ internal fun GroupDetailScreen(
                             Text(
                                 text = "멤버 추가",
                                 style = DodamTheme.typography.headlineBold(),
-                                color = DodamTheme.colors.labelStrong
+                                color = DodamTheme.colors.labelStrong,
                             )
                         }
                     }
@@ -399,29 +399,15 @@ private fun GroupDetailMemberCard(
     name: String,
     role: String
 ) {
-    Row(
-        modifier = Modifier
-            .height(48.dp)
-            .fillMaxWidth()
-            .padding(start = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        DodamAvatar(
-            avatarSize = AvatarSize.Small,
-            model = image,
-        )
-        Text(
-            text = name,
-            style = DodamTheme.typography.body1Medium(),
-            color = DodamTheme.colors.labelNormal
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = role,
-            style = DodamTheme.typography.body2Medium(),
-            color = DodamTheme.colors.labelAlternative
-        )
-
-    }
+    DodamGroupMemberCard(
+        image = image,
+        name = name,
+        action = {
+            Text(
+                text = role,
+                style = DodamTheme.typography.body2Medium(),
+                color = DodamTheme.colors.labelAlternative
+            )
+        }
+    )
 }
