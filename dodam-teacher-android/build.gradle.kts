@@ -40,6 +40,7 @@ kotlin {
             implementation(projects.feature.setting)
             implementation(projects.feature.featureGroupAlias)
             implementation(projects.feature.groupDetail)
+            implementation(projects.feature.groupWaiting)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)

@@ -80,6 +80,7 @@ include(
     ":feature-teacher:point",
     ":feature-teacher:all",
     ":feature:group-detail",
+    ":feature:group-waiting",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")
