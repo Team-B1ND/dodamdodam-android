@@ -41,8 +41,9 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun GroupScreen(
-    popBackStack: () -> Unit,navigateToGroupDetail: () -> Unit
-
+    popBackStack: () -> Unit,
+    navigateToGroupCreate: () -> Unit,
+    navigateToGroupDetail: () -> Unit,
 ) {
     var selectedIndex by remember { mutableIntStateOf(0) }
     var searchText by remember { mutableStateOf("") }
@@ -56,7 +57,7 @@ internal fun GroupScreen(
                 actionIcons = persistentListOf(
                     ActionIcon(
                         icon = DodamIcons.Plus,
-                        onClick = {}
+                        onClick = navigateToGroupCreate
                     )
                 )
             )
