@@ -83,6 +83,7 @@ include(
     ":feature-teacher:notice-create",
     ":feature:group-detail",
     ":feature:group-waiting",
+    ":feature:group-create",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")
