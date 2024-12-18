@@ -84,6 +84,7 @@ include(
     ":feature:group-detail",
     ":feature:group-waiting",
     ":feature:group-create",
+    ":feature:group-add",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")

@@ -21,7 +21,7 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.ui.component.modifier.dropShadow
 import com.b1nd.dodam.ui.icons.Close
-import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
+import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircleFilled
 import com.b1nd.dodam.ui.icons.ColoredXMarkCircle
 
 @Composable
@@ -56,8 +56,8 @@ fun DodamSnackbar(state: SnackbarState, text: String, showDismissAction: Boolean
             Image(
                 modifier = Modifier.size(24.dp),
                 imageVector = when (state) {
-                    SnackbarState.SUCCESS -> ColoredCheckmarkCircle
-                    SnackbarState.WARRING -> ColoredCheckmarkCircle
+                    SnackbarState.SUCCESS -> ColoredCheckmarkCircleFilled
+                    SnackbarState.WARRING -> ColoredCheckmarkCircleFilled
                     else -> ColoredXMarkCircle
                 },
                 contentDescription = null,

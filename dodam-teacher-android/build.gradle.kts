@@ -60,6 +60,7 @@ kotlin {
             implementation(projects.feature.groupDetail)
             implementation(projects.feature.groupWaiting)
             implementation(projects.feature.groupCreate)
+            implementation(projects.feature.groupAdd)
 
             implementation(projects.data.login)
             implementation(projects.data.banner)
