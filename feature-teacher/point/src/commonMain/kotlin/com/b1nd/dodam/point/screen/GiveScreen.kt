@@ -62,7 +62,7 @@ import com.b1nd.dodam.ui.component.modifier.dropShadow
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ColoredBullseye
-import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
+import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircleFilled
 import com.b1nd.dodam.ui.icons.ColoredTrophy
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -235,7 +235,7 @@ internal fun GiveScreen(
                                             Spacer(modifier = Modifier.weight(1f))
                                             Image(
                                                 modifier = Modifier.size(24.dp),
-                                                imageVector = ColoredCheckmarkCircle,
+                                                imageVector = ColoredCheckmarkCircleFilled,
                                                 contentDescription = null,
                                                 colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                                             )
