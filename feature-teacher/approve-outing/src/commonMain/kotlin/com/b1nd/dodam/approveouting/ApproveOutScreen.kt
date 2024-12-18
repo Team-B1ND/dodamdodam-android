@@ -53,7 +53,7 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.DodamMemberLoadingCard
 import com.b1nd.dodam.ui.component.SnackbarState
-import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
+import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircleFilled
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
@@ -380,7 +380,7 @@ fun ApproveOutScreen(
                                                     modifier = Modifier
                                                         .align(Alignment.CenterVertically)
                                                         .size(24.dp),
-                                                    imageVector = ColoredCheckmarkCircle,
+                                                    imageVector = ColoredCheckmarkCircleFilled,
                                                     contentDescription = null,
                                                     colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                                                 )

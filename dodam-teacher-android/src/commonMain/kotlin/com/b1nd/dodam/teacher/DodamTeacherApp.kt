@@ -54,6 +54,8 @@ import com.b1nd.dodam.editmemberinfo.navigation.editMemberInfoScreen
 import com.b1nd.dodam.editmemberinfo.navigation.navigationToEditMemberInfo
 import com.b1nd.dodam.group.navigation.groupScreen
 import com.b1nd.dodam.group.navigation.navigateToGroup
+import com.b1nd.dodam.groupadd.navigation.groupAddScreen
+import com.b1nd.dodam.groupadd.navigation.navigateToGroupAdd
 import com.b1nd.dodam.groupcreate.navigation.groupCreateScreen
 import com.b1nd.dodam.groupcreate.navigation.navigateToGroupCreate
 import com.b1nd.dodam.groupdetail.navigation.groupDetailScreen
@@ -289,6 +291,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 
                         groupDetailScreen(
                             popBackStack = navHostController::popBackStack,
+                            navigateToGroupAdd = navHostController::navigateToGroupAdd,
                             navigateToGroupWaiting = navHostController::navigateToGroupWaiting
                         )
 
@@ -297,6 +300,10 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
 
                         groupCreateScreen(
+                            popBackStack = navHostController::popBackStack
+                        )
+
+                        groupAddScreen(
                             popBackStack = navHostController::popBackStack
                         )
                     }

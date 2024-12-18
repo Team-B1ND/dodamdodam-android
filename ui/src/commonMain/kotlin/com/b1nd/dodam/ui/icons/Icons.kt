@@ -8,6 +8,7 @@ import dodamdodam_android.ui.generated.resources.ic_close
 import dodamdodam_android.ui.generated.resources.ic_colored_bullseye
 import dodamdodam_android.ui.generated.resources.ic_colored_bus
 import dodamdodam_android.ui.generated.resources.ic_colored_calendar
+import dodamdodam_android.ui.generated.resources.ic_colored_checkmark_circle
 import dodamdodam_android.ui.generated.resources.ic_colored_checkmark_circle_filled
 import dodamdodam_android.ui.generated.resources.ic_colored_cookedrice
 import dodamdodam_android.ui.generated.resources.ic_colored_dgit
@@ -78,7 +79,7 @@ val ColoredBullseye
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_bullseye)
 
-val ColoredCheckmarkCircle
+val ColoredCheckmarkCircleFilled
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_checkmark_circle_filled)
 
@@ -109,3 +110,7 @@ val ColoredSmilingFaceEyes
 val ColoredSchool
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_school)
+
+val ColoredCheckmarkCircle
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_checkmark_circle)

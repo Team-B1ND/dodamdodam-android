@@ -39,7 +39,7 @@ import com.b1nd.dodam.point.model.PointLoadingUiState
 import com.b1nd.dodam.point.model.PointStudentModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.DodamMemberLoadingCard
-import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
+import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircleFilled
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -175,7 +175,7 @@ internal fun SelectScreen(
                                             modifier = Modifier
                                                 .align(Alignment.CenterVertically)
                                                 .size(24.dp),
-                                            imageVector = ColoredCheckmarkCircle,
+                                            imageVector = ColoredCheckmarkCircleFilled,
                                             contentDescription = null,
                                             colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                                         )

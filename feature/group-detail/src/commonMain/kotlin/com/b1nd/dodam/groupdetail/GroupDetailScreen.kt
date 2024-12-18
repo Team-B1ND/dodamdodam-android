@@ -55,6 +55,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun GroupDetailScreen(
     popBackStack: () -> Unit,
+    navigateToGroupAdd: () -> Unit,
     navigateToGroupWaiting: () -> Unit,
 ) {
 
@@ -164,9 +165,7 @@ internal fun GroupDetailScreen(
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = rememberBounceIndication(),
-                                    onClick = {
-
-                                    }
+                                    onClick = navigateToGroupWaiting
                                 ),
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically
@@ -199,7 +198,7 @@ internal fun GroupDetailScreen(
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = rememberBounceIndication(),
-                                    onClick = navigateToGroupWaiting
+                                    onClick = navigateToGroupAdd
                                 ),
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically
