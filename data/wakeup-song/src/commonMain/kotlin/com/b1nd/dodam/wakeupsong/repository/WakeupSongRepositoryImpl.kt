@@ -84,7 +84,7 @@ internal class WakeupSongRepositoryImpl constructor(
         return flow {
             emit(
                 network.postWakeupSongFromYoutubeUrl(
-                    url = url
+                    url = url,
                 ),
             )
         }

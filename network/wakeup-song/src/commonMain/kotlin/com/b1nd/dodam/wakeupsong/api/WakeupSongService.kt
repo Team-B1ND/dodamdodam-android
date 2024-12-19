@@ -77,7 +77,7 @@ internal class WakeupSongService(
                 contentType(ContentType.Application.Json)
                 setBody(
                     VideoUrlWakeupSongRequest(
-                        videoUrl = url
+                        videoUrl = url,
                     ),
                 )
             }.body<DefaultResponse>()
