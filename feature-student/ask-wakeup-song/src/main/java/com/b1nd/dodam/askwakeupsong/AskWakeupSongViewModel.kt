@@ -96,7 +96,7 @@ class AskWakeupSongViewModel : ViewModel(), KoinComponent {
     fun postWakeupSongFromYoutubeUrl(url: String) {
         viewModelScope.launch {
             wakeupSongRepository.postWakeupSongFromYoutubeUrl(
-                url = url
+                url = url,
             ).collect { result ->
 
                 when (result) {
