@@ -80,6 +80,18 @@ internal class WakeupSongRepositoryImpl constructor(
             .flowOn(dispatcher)
     }
 
+    override fun postWakeupSongFromYoutubeUrl(url: String): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                network.postWakeupSongFromYoutubeUrl(
+                    url = url,
+                ),
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
     override fun searchWakeupSong(keyWord: String): Flow<Result<ImmutableList<SearchWakeupSong>>> {
         return flow {
             emit(

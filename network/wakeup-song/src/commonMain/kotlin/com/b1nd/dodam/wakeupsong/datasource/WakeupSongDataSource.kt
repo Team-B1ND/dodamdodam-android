@@ -12,6 +12,7 @@ interface WakeupSongDataSource {
     suspend fun getPendingWakeupSongs(): ImmutableList<WakeupSongResponse>
     suspend fun deleteWakeupSong(id: Long)
     suspend fun postWakeupSong(artist: String, title: String)
+    suspend fun postWakeupSongFromYoutubeUrl(url: String)
 
     suspend fun searchWakeupSong(keyWord: String): ImmutableList<SearchWakeupSongResponse>
     suspend fun getMelonChart(): ImmutableList<MelonChartSongResponse>

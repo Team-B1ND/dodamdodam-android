@@ -115,8 +115,15 @@ fun AskWakeupSongScreen(viewModel: AskWakeupSongViewModel = koinViewModel(), pop
                     },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = {
-                        viewModel.searchWakeupSong(keyWord = keyWord)
+                        val youtubeUrlRegex = Regex(
+                            pattern = """^(https?://)?(www\.)?(youtube\.com|youtu\.be)/.*(watch\?v=|v/|embed/|shorts/|.+)$""",
+                        )
                         focusManager.clearFocus()
+                        if (youtubeUrlRegex.matches(keyWord)) {
+                            viewModel.postWakeupSongFromYoutubeUrl(url = keyWord)
+                        } else {
+                            viewModel.searchWakeupSong(keyWord = keyWord)
+                        }
                     }),
                 )
             }
