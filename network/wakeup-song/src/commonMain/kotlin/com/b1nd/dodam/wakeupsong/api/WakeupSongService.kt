@@ -9,6 +9,7 @@ import com.b1nd.dodam.wakeupsong.datasource.WakeupSongDataSource
 import com.b1nd.dodam.wakeupsong.model.MelonChartSongResponse
 import com.b1nd.dodam.wakeupsong.model.SearchWakeupSongRequest
 import com.b1nd.dodam.wakeupsong.model.SearchWakeupSongResponse
+import com.b1nd.dodam.wakeupsong.model.VideoUrlWakeupSongRequest
 import com.b1nd.dodam.wakeupsong.model.WakeupSongResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -64,6 +65,19 @@ internal class WakeupSongService(
                     SearchWakeupSongRequest(
                         artist = artist,
                         title = title,
+                    ),
+                )
+            }.body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun postWakeupSongFromYoutubeUrl(url: String) {
+        return defaultSafeRequest {
+            client.post(DodamUrl.WAKEUP_SONG) {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    VideoUrlWakeupSongRequest(
+                        videoUrl = url
                     ),
                 )
             }.body<DefaultResponse>()
