@@ -263,7 +263,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
                         onValueChange = { nightStudyReason = it },
                         label = "심야 자습 사유",
                         isError = nightStudyReason.length !in 10..250 && uiState.message.isNotBlank(),
-                        supportText = if (nightStudyReason.length !in 10..250 && uiState.message.isNotBlank()) "사유를 10자 이상 입력해주세요." else "",
+                        supportText = if (nightStudyReason.length !in 10..250) "사유를 10자 이상 입력해주세요." else "",
                     )
                 }
 
