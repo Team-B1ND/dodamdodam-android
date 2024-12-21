@@ -74,9 +74,9 @@ jobs:
       uses: Team-B1ND/string-parser@main
       with:
         body: ${{ env.CONTENT }}
-        split: "<Teacher>"
+        split: "[Teacher]"
         splitIndex: 0
-        replaceBefore: "<Student>\n"
+        replaceBefore: "[Student]\n"
         replaceAfter: ""
         envName: Student
 
@@ -85,7 +85,7 @@ jobs:
       uses: Team-B1ND/string-parser@main
       with:
         body: ${{ env.CONTENT }}
-        split: "<Teacher>"
+        split: "[Teacher]"
         splitIndex: 1
         substringStart: 1
         envName: Teacher
