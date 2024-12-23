@@ -85,6 +85,8 @@ include(
     ":feature:group-waiting",
     ":feature:group-create",
     ":feature:group-add",
+    ":data:division",
+    ":network:division",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")
