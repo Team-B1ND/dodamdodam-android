@@ -60,6 +60,7 @@ kotlin {
             implementation(projects.feature.editMemberInfo)
             implementation(projects.network.upload)
             implementation(projects.data.upload)
+            implementation(projects.logging)
         }
 
         androidMain.dependencies {
