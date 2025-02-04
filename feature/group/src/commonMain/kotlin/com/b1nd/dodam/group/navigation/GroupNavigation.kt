@@ -15,7 +15,7 @@ fun NavController.navigateToGroup(navOptions: NavOptions? = null) =
 fun NavGraphBuilder.groupScreen(
     popBackStack: () -> Unit,
     navigateToGroupCreate: () -> Unit,
-    navigateToGroupDetail: () -> Unit,
+    navigateToGroupDetail: (id: Int) -> Unit,
 ) {
     composable(
         route = GROUP_ROUTE,

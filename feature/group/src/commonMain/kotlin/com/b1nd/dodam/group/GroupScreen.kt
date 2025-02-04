@@ -14,10 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -37,16 +41,46 @@ import com.b1nd.dodam.designsystem.component.DodamTabRow
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.group.model.GroupSideEffect
+import com.b1nd.dodam.group.viewmodel.GroupViewModel
 import kotlinx.collections.immutable.persistentListOf
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun GroupScreen(
+    viewModel: GroupViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     navigateToGroupCreate: () -> Unit,
-    navigateToGroupDetail: () -> Unit,
+    navigateToGroupDetail: (id: Int) -> Unit,
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    val myGroupLazyListState = rememberLazyListState()
+    val allGroupLazyListState = rememberLazyListState()
     var selectedIndex by remember { mutableIntStateOf(0) }
     var searchText by remember { mutableStateOf("") }
+
+    LaunchedEffect(true) {
+        viewModel.sideEffect.collect {
+            when (it) {
+                GroupSideEffect.FailedLoad -> {
+                    // TODO 예외 처리할 것.
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(selectedIndex, myGroupLazyListState.canScrollForward) {
+        if (selectedIndex == 0 && !myGroupLazyListState.canScrollForward) {
+            viewModel.loadMyGroupNext()
+        }
+    }
+
+    LaunchedEffect(selectedIndex, allGroupLazyListState.canScrollForward) {
+        if (selectedIndex == 1 && !allGroupLazyListState.canScrollForward) {
+            viewModel.loadAllGroupNext()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -110,9 +144,21 @@ internal fun GroupScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+                state = if (selectedIndex == 0) myGroupLazyListState else allGroupLazyListState,
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(3) { index ->
+                items(
+                    items = (if (selectedIndex == 0) uiState.myGroups else uiState.allGroups)
+                        .filter { filterItem ->
+                            if (searchText.isEmpty()) {
+                                return@filter true
+                            }
+                            filterItem.name.contains(searchText)
+                        },
+                    key = {
+                        it.id
+                    }
+                ) { item ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -121,12 +167,12 @@ internal fun GroupScreen(
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = rememberBounceIndication(),
-                                onClick = navigateToGroupDetail
+                                onClick = { navigateToGroupDetail(item.id) }
                             ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "B1ND $index",
+                            text = item.name,
                             style = DodamTheme.typography.body1Medium(),
                             color = DodamTheme.colors.labelNormal
                         )
