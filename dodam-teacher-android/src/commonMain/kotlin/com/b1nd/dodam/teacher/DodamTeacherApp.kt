@@ -110,6 +110,8 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
         NotifierManager.addListener(object : NotifierManager.Listener {
             override fun onNewToken(token: String) {
                 viewModel.savePushToken(pushToken = token)
+                val notifier = NotifierManager.getLocalNotifier()
+                notifier.notify("1", "$token")
             }
         })
 

@@ -7,7 +7,6 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.bundleidinfo.BundleIdInfoRepository
 import com.b1nd.dodam.datastore.repository.DataStoreRepository
 import com.b1nd.dodam.teacher.model.BundleIdInfoModel
-import com.mmk.kmpnotifier.notification.NotifierManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -55,8 +54,6 @@ class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
                                 bundleId = it.data,
                             )
                         }
-                        val notifier = NotifierManager.getLocalNotifier()
-                        notifier.notify("1", "${dataStoreRepository.user.first().pushToken}")
                     }
                 }
             }

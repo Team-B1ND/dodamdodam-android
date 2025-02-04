@@ -41,12 +41,6 @@ class MainActivity : ComponentActivity() {
                 exit = this::finish,
             )
         }
-        NotifierManager.initialize(
-            configuration = NotificationPlatformConfiguration.Android(
-                notificationIconResId = R.drawable.ic_dodam_logo,
-                notificationIconColorResId = R.color.ic_launcher_background
-            )
-        )
     }
 
     override fun onResume() {
