@@ -22,6 +22,7 @@ class DataStoreRepositoryImpl constructor(
             id = keyStoreManager.decrypt(it[idKey] ?: ""),
             pw = keyStoreManager.decrypt(it[pwKey] ?: ""),
             token = it[tokenKey] ?: "",
+            pushToken = it[pushTokenKey] ?:""
         )
     }
 
@@ -33,11 +34,12 @@ class DataStoreRepositoryImpl constructor(
         it[pushTokenKey] ?:""
     }
 
-    override suspend fun saveUser(id: String, pw: String, token: String) {
+    override suspend fun saveUser(id: String, pw: String, token: String, pushToken: String) {
         dataStore.edit {
             it[idKey] = keyStoreManager.encrypt(id)
             it[pwKey] = keyStoreManager.encrypt(pw)
             it[tokenKey] = token
+            it[pushTokenKey] = pushToken
         }
     }
 
@@ -58,6 +60,7 @@ class DataStoreRepositoryImpl constructor(
             it[idKey] = ""
             it[pwKey] = ""
             it[tokenKey] = ""
+            it[pushTokenKey] = ""
         }
     }
 }

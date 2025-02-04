@@ -12,6 +12,7 @@ import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.mmk.kmpnotifier.notification.NotifierManager
+import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.mmk.kmpnotifier.permission.permissionUtil
 import kotlinx.coroutines.launch
 
@@ -40,11 +41,12 @@ class MainActivity : ComponentActivity() {
                 exit = this::finish,
             )
         }
-        NotifierManager.addListener(object : NotifierManager.Listener {
-            override fun onNewToken(token: String) {
-                Log.d("TAG", "onNewToken: $token") //Update user token in the server if needed
-            }
-        })
+        NotifierManager.initialize(
+            configuration = NotificationPlatformConfiguration.Android(
+                notificationIconResId = R.drawable.ic_dodam_logo,
+                notificationIconColorResId = R.color.ic_launcher_background
+            )
+        )
     }
 
     override fun onResume() {

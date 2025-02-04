@@ -11,7 +11,7 @@ interface DataStoreRepository {
 
     val pushToken: Flow<String>
 
-    suspend fun saveUser(id: String, pw: String, token: String)
+    suspend fun saveUser(id: String, pw: String, token: String, pushToken: String)
 
     suspend fun saveToken(token: String)
 

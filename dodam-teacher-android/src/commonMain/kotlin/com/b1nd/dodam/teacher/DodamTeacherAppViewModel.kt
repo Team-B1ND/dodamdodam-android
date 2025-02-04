@@ -7,6 +7,7 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.bundleidinfo.BundleIdInfoRepository
 import com.b1nd.dodam.datastore.repository.DataStoreRepository
 import com.b1nd.dodam.teacher.model.BundleIdInfoModel
+import com.mmk.kmpnotifier.notification.NotifierManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,6 +23,7 @@ class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
     private val dataStoreRepository: DataStoreRepository by inject()
     private val bundleIdInfoRepository: BundleIdInfoRepository by inject()
 
+
     private val _isLoginState = MutableStateFlow<Boolean?>(null)
     val isLoginState = _isLoginState.asStateFlow()
     private val _bundleModel = MutableStateFlow(BundleIdInfoModel())
@@ -31,6 +33,12 @@ class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
 
     fun loadToken() = viewModelScope.launch {
         _isLoginState.value = dataStoreRepository.token.first().isNotEmpty()
+    }
+
+    fun savePushToken(pushToken: String){
+        viewModelScope.launch(dispatcher) {
+            dataStoreRepository.savePushToken(pushToken)
+        }
     }
 
     fun getBundleId() {
@@ -47,6 +55,8 @@ class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
                                 bundleId = it.data,
                             )
                         }
+                        val notifier = NotifierManager.getLocalNotifier()
+                        notifier.notify("1", "${dataStoreRepository.user.first().pushToken}")
                     }
                 }
             }

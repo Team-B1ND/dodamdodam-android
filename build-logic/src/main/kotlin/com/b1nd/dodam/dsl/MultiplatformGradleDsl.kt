@@ -65,6 +65,7 @@ fun KotlinMultiplatformExtension.setIOS(
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
+            export("io.github.mirzemehdi:kmpnotifier:1.3.0")
             baseName = name
             isStatic = true
             if (bundleId != null) {

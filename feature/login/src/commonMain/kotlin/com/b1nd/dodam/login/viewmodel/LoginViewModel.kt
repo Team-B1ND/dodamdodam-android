@@ -47,7 +47,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                             id = id,
                             pw = pw,
                             token = result.data.accessToken,
-
+                            pushToken = pushToken
                         )
                         _event.emit(Event.NavigateToMain)
                     } else {
