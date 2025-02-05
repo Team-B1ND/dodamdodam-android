@@ -63,6 +63,7 @@ agp = "8.2.2"
 ksp = "2.0.10-1.0.24"
 appcompat = "1.7.0"
 coreKtx = "1.13.1"
+startupRuntime = "1.2.0"
 
 [libraries]
 # kotlin
@@ -151,6 +152,7 @@ ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref =
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-startup-runtime = { group = "androidx.startup", name = "startup-runtime", version.ref = "startupRuntime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

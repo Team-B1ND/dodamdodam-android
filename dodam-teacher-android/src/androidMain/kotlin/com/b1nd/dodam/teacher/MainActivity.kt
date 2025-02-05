@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
         checkApiLevel()
         checkAppUpdate()
         AppInitializer.onApplicationStart()
+        onAndroidApplicationStartPlatformSpecific()
         setContent {
             LaunchedEffect(Unit) {
                 launch {
