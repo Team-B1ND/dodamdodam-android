@@ -22,8 +22,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         checkApiLevel()
         checkAppUpdate()
-        AppInitializer.onApplicationStart()
         onAndroidApplicationStartPlatformSpecific()
+        AppInitializer.onApplicationStart()
         setContent {
             LaunchedEffect(Unit) {
                 launch {

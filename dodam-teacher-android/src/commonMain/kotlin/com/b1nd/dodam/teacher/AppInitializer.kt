@@ -8,18 +8,6 @@ import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfig
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-fun onIosApplicationStartPlatformSpecific() {
-    KmLogging.debug("TAG: ", "ios ")
-    NotifierManager.initialize(
-        NotificationPlatformConfiguration.Ios(
-            showPushNotification = true,
-            askNotificationPermissionOnStart = false,
-            notificationSoundName = "default"
-        )
-    )
-}
-
-
 object AppInitializer: KoinComponent {
 
     private val viewModel: DodamTeacherAppViewModel by inject()
@@ -52,37 +40,6 @@ object AppInitializer: KoinComponent {
         })
     }
 }
-
-
-
-//fun onApplicationStart() {
-//    onApplicationStartPlatformSpecific()
-//    KmLogging.debug("TAG: ", "qwerdfscvx ")
-//    NotifierManager.addListener(object : NotifierManager.Listener {
-//        override fun onNewToken(token: String) {
-//            KmLogging.debug("TAG: ", "new Token $token")
-//            println("token: $token")
-////            viewModel.savePushToken(pushToken = token)
-//            val notifier = NotifierManager.getLocalNotifier()
-//            notifier.notify("1", "$token")
-//        }
-//
-//        override fun onPushNotification(title: String?, body: String?) {
-//            super.onPushNotification(title, body)
-//            println("Push Notification notification type message is received: Title: $title and Body: $body")
-//        }
-//
-//        override fun onPayloadData(data: PayloadData) {
-//            super.onPayloadData(data)
-//            println("Push Notification payloadData: $data")
-//        }
-//
-//        override fun onNotificationClicked(data: PayloadData) {
-//            super.onNotificationClicked(data)
-//            println("Notification clicked, Notification payloadData: $data")
-//        }
-//    })
-//}
 
 
 

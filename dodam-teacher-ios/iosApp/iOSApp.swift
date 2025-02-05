@@ -8,7 +8,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
       FirebaseApp.configure()
       DodamTeacher.AppInitializer.shared.onApplicationStart()
-      AppInitializerKt.onIosApplicationStartPlatformSpecific()
+      AppInitializer_iosKt.onApplicationStartPlatformSpecific()
     
     return true
   }

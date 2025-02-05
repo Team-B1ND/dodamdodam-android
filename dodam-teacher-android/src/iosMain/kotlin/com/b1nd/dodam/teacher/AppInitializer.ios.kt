@@ -5,14 +5,12 @@ import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import platform.posix.printf
 
-//actual fun onApplicationStartPlatformSpecific() {
-//    printf("fasdvc")
-//    KmLogging.debug("TAG: ", "ios ")
-//    NotifierManager.initialize(
-//        NotificationPlatformConfiguration.Ios(
-//            showPushNotification = true,
-//            askNotificationPermissionOnStart = false,
-//            notificationSoundName = "default"
-//        )
-//    )
-//}
+fun onApplicationStartPlatformSpecific() {
+    NotifierManager.initialize(
+        NotificationPlatformConfiguration.Ios(
+            showPushNotification = true,
+            askNotificationPermissionOnStart = true,
+            notificationSoundName = "default"
+        )
+    )
+}
