@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">도담도담</string>
+    <string name="default_notification_channel_id">dodam_student_default_channle</string>
+    <string name="default_notification_channel_name">Dodam Student Default Channle</string>
 </resources>

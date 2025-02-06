@@ -31,7 +31,8 @@ render.experimental.xml
 *.keystore
 
 # Google Services (e.g. APIs or Firebase)
-google-services.json
+dodam-teacher-android/google-services.json
+GoogleService-Info.plist
 
 # Android Profiling
 *.hprof
