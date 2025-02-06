@@ -37,6 +37,22 @@ jobs:
           exit 1
         fi
 
+    - name: Set up Google Service Json
+      id: create-json-teacher
+      uses: jsdaniell/create-json@v1.2.2
+      with:
+        name: "google-services.json"
+        json: ${{ secrets.GOOGLE_SERVICES }}
+        dir: 'dodam-teacher-android'
+
+    - name: Set up Google Service Json
+      id: create-json0-student
+      uses: jsdaniell/create-json@v1.2.2
+      with:
+        name: "google-services.json"
+        json: ${{ secrets.GOOGLE_SERVICES }}
+        dir: 'dodam-student'
+
     - name: Run Student spotless
       if: env.target == 'student'
       run: ./gradlew dodam-student:spotlessCheck
@@ -63,18 +79,3 @@ jobs:
         ./gradlew dodam-teacher-android:clean assembleRelease --parallel
         ./gradlew dodam-student:assembleRelease --parallel
 
-    - name: Set up Google Service Json
-      id: create-json-teacher
-      uses: jsdaniell/create-json@v1.2.2
-      with:
-        name: "google-services.json"
-        json: ${{ secrets.GOOGLE_SERVICES }}
-        dir: 'dodam-teacher-android'
-
-    - name: Set up Google Service Json
-      id: create-json0-student
-      uses: jsdaniell/create-json@v1.2.2
-      with:
-        name: "google-services.json"
-        json: ${{ secrets.GOOGLE_SERVICES }}
-        dir: 'dodam-student'
