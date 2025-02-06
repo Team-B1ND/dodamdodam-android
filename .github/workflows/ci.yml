@@ -65,8 +65,7 @@ jobs:
         
 
     - name: Set up Google Service Json
-      if: env.target == 'teacher'
-      id: create-json
+      id: create-json-teacher
       uses: jsdaniell/create-json@v1.2.2
       with:
         name: "google-services.json"
@@ -74,8 +73,7 @@ jobs:
         dir: 'dodam-teacher-android'
 
     - name: Set up Google Service Json
-      if: env.target == 'student'
-      id: create-json
+      id: create-json0-student
       uses: jsdaniell/create-json@v1.2.2
       with:
         name: "google-services.json"
