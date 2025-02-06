@@ -6,7 +6,7 @@ import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfig
 fun onAndroidApplicationStartPlatformSpecific() {
     NotifierManager.initialize(
         configuration = NotificationPlatformConfiguration.Android(
-            notificationIconResId = R.drawable.ic_dodam_logo,
+            notificationIconResId = R.drawable.ic_launcher_foreground,
             notificationIconColorResId = R.color.ic_launcher_background,
         ),
     )
