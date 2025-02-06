@@ -129,5 +129,13 @@ jobs:
         inAppUpdatePriority: 2
         whatsNewDirectory: whatsNewDirectory/
 
+    - name: Create file
+      run: cat /home/runner/work/dodamdodam-android/dodamdodam-android/dodam-teacher-android/google-services.json
+
+    - name: Putting job
+      env:
+        DATA: ${{ serect.GOOGLE_SERVICES_JSON }}
+      run: echo $DATA > /home/runner/work/dodamdodam-android/dodamdodam-android/dodam-teacher-android/app/google-services.json
+
 
 
