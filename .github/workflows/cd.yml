@@ -135,5 +135,5 @@ jobs:
       with:
         name: "google-services.json"
         json: ${{ secrets.GOOGLE_SERVICES }}
-        dir: 'app/'
+        dir: 'app/dodam-teacher-android'
 
