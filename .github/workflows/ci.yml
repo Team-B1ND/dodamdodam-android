@@ -22,13 +22,6 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Set up Google Service Json
-      id: create-json
-      uses: jsdaniell/create-json@v1.2.2
-      with:
-        name: "google-services.json"
-        json: ${{ secrets.GOOGLE_SERVICES }}
-        dir: 'app'
 
     - name: Validate Pull Request Title
       id: validate-title
@@ -71,3 +64,10 @@ jobs:
         ./gradlew dodam-student:assembleRelease --parallel
         
 
+    - name: Set up Google Service Json
+      id: create-json
+      uses: jsdaniell/create-json@v1.2.2
+      with:
+        name: "google-services.json"
+        json: ${{ secrets.GOOGLE_SERVICES }}
+        dir: 'app'
