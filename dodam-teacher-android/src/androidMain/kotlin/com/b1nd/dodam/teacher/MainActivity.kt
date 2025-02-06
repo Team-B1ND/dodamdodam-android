@@ -1,7 +1,6 @@
 package com.b1nd.dodam.teacher
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -11,8 +10,6 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.mmk.kmpnotifier.notification.NotifierManager
-import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.mmk.kmpnotifier.permission.permissionUtil
 import kotlinx.coroutines.launch
 
@@ -78,8 +75,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
     }
-    private fun checkApiLevel(){
-        if (android.os.Build.VERSION.SDK_INT >= 13){
+    private fun checkApiLevel() {
+        if (android.os.Build.VERSION.SDK_INT >= 13) {
             val permissionUtil by permissionUtil()
             permissionUtil.askNotificationPermission()
         }

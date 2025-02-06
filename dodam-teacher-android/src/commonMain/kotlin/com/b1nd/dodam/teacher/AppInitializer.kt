@@ -1,14 +1,12 @@
 package com.b1nd.dodam.teacher
 
-import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.teacher.AppInitializer.viewModel
 import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.PayloadData
-import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object AppInitializer: KoinComponent {
+object AppInitializer : KoinComponent {
 
     private val viewModel: DodamTeacherAppViewModel by inject()
 
@@ -35,7 +33,3 @@ object AppInitializer: KoinComponent {
         })
     }
 }
-
-
-
-

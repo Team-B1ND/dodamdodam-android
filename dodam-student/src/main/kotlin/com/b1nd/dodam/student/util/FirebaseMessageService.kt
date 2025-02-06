@@ -17,20 +17,18 @@ import com.b1nd.dodam.student.MainActivity
 import com.b1nd.dodam.student.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.random.Random
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import kotlin.coroutines.EmptyCoroutineContext
-import kotlin.random.Random
-
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
-class FirebaseMessageService: FirebaseMessagingService() {
-
+class FirebaseMessageService : FirebaseMessagingService() {
 
     val datastore: DataStoreRepository by inject()
 
@@ -43,7 +41,6 @@ class FirebaseMessageService: FirebaseMessagingService() {
         }
         Log.d("TAG", "onNewToken: $token")
     }
-
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
@@ -89,6 +86,4 @@ class FirebaseMessageService: FirebaseMessagingService() {
         super.onDestroy()
         serviceScope.cancel()
     }
-
-
 }

@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -47,7 +46,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                             id = id,
                             pw = pw,
                             token = result.data.accessToken,
-                            pushToken = pushToken
+                            pushToken = pushToken,
                         )
                         _event.emit(Event.NavigateToMain)
                     } else {

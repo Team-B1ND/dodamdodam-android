@@ -22,7 +22,6 @@ class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
     private val dataStoreRepository: DataStoreRepository by inject()
     private val bundleIdInfoRepository: BundleIdInfoRepository by inject()
 
-
     private val _isLoginState = MutableStateFlow<Boolean?>(null)
     val isLoginState = _isLoginState.asStateFlow()
     private val _bundleModel = MutableStateFlow(BundleIdInfoModel())
@@ -34,7 +33,7 @@ class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
         _isLoginState.value = dataStoreRepository.token.first().isNotEmpty()
     }
 
-    fun savePushToken(pushToken: String){
+    fun savePushToken(pushToken: String) {
         viewModelScope.launch(dispatcher) {
             dataStoreRepository.savePushToken(pushToken)
         }

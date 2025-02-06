@@ -79,9 +79,7 @@ import com.b1nd.dodam.ui.component.DodamSnackbar
 import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.icons.B1NDLogo
 import com.b1nd.dodam.ui.icons.DodamLogo
-import com.mmk.kmpnotifier.notification.NotifierManager
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI

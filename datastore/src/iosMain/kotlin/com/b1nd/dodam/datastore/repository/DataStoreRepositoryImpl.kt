@@ -57,7 +57,7 @@ class DataStoreRepositoryImpl : DataStoreRepository {
             id = value("id") ?: "",
             pw = value("pw") ?: "",
             token = value("token") ?: "",
-            pushToken = value("pushToken") ?: ""
+            pushToken = value("pushToken") ?: "",
         ),
     )
     override val user: Flow<User>
@@ -67,7 +67,7 @@ class DataStoreRepositoryImpl : DataStoreRepository {
     override val token: Flow<String>
         get() = _token
 
-    private val _pushToken = MutableStateFlow(value("pushToken") ?:"")
+    private val _pushToken = MutableStateFlow(value("pushToken") ?: "")
     override val pushToken: Flow<String>
         get() = _pushToken
 
@@ -81,7 +81,7 @@ class DataStoreRepositoryImpl : DataStoreRepository {
                 id = id,
                 pw = pw,
                 token = token,
-                pushToken = pushToken
+                pushToken = pushToken,
             )
         _token.emit(token)
     }
