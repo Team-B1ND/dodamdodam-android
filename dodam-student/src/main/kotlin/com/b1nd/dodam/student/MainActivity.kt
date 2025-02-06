@@ -56,9 +56,9 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
         if (isGranted) {
-            Log.d("TAG", "권한 수락 ")
+
         } else {
-            Log.d("TAG", "권한 거절 ")
+
         }
     }
 

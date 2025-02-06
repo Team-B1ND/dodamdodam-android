@@ -39,7 +39,6 @@ class FirebaseMessageService : FirebaseMessagingService() {
         serviceScope.launch(Dispatchers.IO) {
             datastore.savePushToken(pushToken = token)
         }
-        Log.d("TAG", "onNewToken: $token")
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -47,9 +46,6 @@ class FirebaseMessageService : FirebaseMessagingService() {
         message.notification?.let { message ->
             sendNotification(message)
         }
-        Log.d("TAG", "Notification Title :: ${message.notification?.title}")
-        Log.d("TAG", "Notification Body :: ${message.notification?.body}")
-        Log.d("TAG", "Notification Data :: ${message.data}")
     }
 
     private fun sendNotification(message: RemoteMessage.Notification) {
