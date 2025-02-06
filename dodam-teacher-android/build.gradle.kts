@@ -11,7 +11,22 @@ plugins {
     alias(libs.plugins.google.services)
 }
 kotlin {
-    setIOS("DodamTeacher", "com.b1nd.dodam.teacher")
+    
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            export(libs.kmp.notification)
+            baseName = "DodamTeacher"
+            isStatic = true
+
+            binaryOptions["bundleId"] = "com.b1nd.dodam.teacher"
+
+        }
+        iosTarget.run({})
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -19,7 +34,7 @@ kotlin {
             implementation(projects.common)
             implementation(projects.ui)
             implementation(projects.network.login)
-            api("io.github.mirzemehdi:kmpnotifier:1.3.0")
+            api(libs.kmp.notification)
             implementation(projects.feature.onboarding)
             implementation(projects.featureTeacher.nightstudy)
             api(projects.feature.login)
@@ -60,7 +75,6 @@ kotlin {
             implementation(projects.feature.editMemberInfo)
             implementation(projects.network.upload)
             implementation(projects.data.upload)
-            implementation(projects.logging)
         }
 
         androidMain.dependencies {
@@ -69,9 +83,6 @@ kotlin {
             implementation(libs.koin.android)
             implementation(projects.keystore)
             implementation(libs.google.app.update)
-        }
-        iosMain.dependencies {
-            implementation("io.github.mirzemehdi:kmpnotifier:1.3.0")
         }
     }
 

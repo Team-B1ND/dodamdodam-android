@@ -13,14 +13,9 @@ object AppInitializer: KoinComponent {
     private val viewModel: DodamTeacherAppViewModel by inject()
 
     fun onApplicationStart() {
-        KmLogging.debug("TAG: ", "qwerdfscvx ")
         NotifierManager.addListener(object : NotifierManager.Listener {
             override fun onNewToken(token: String) {
-                KmLogging.debug("TAG: ", "new Token $token")
-                println("token: $token")
                 viewModel.savePushToken(pushToken = token)
-                val notifier = NotifierManager.getLocalNotifier()
-                notifier.notify("1", "$token")
             }
 
             override fun onPushNotification(title: String?, body: String?) {
