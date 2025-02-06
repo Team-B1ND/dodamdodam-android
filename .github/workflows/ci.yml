@@ -70,4 +70,12 @@ jobs:
       with:
         name: "google-services.json"
         json: ${{ secrets.GOOGLE_SERVICES }}
-        dir: 'app'
+        dir: 'dodam-teacher-android'
+
+    - name: Set up Google Service Json
+      id: create-json
+      uses: jsdaniell/create-json@v1.2.2
+      with:
+        name: "google-services.json"
+        json: ${{ secrets.GOOGLE_SERVICES }}
+        dir: 'dodam-student'
