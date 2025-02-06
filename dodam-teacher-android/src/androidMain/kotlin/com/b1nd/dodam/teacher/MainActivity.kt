@@ -10,13 +10,17 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.mmk.kmpnotifier.permission.permissionUtil
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        checkApiLevel()
         checkAppUpdate()
+        onAndroidApplicationStartPlatformSpecific()
+        AppInitializer.onApplicationStart()
         setContent {
             LaunchedEffect(Unit) {
                 launch {
@@ -70,5 +74,11 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+    }
+    private fun checkApiLevel() {
+        if (android.os.Build.VERSION.SDK_INT >= 13) {
+            val permissionUtil by permissionUtil()
+            permissionUtil.askNotificationPermission()
+        }
     }
 }

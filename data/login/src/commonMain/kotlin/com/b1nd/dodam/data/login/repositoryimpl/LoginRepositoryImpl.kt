@@ -18,10 +18,10 @@ internal class LoginRepositoryImpl(
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : LoginRepository {
 
-    override fun login(id: String, pw: String): Flow<Result<Member>> {
+    override fun login(id: String, pw: String, pushToken: String): Flow<Result<Member>> {
         return flow {
             emit(
-                loginDataSource.login(id, pw).toModel(),
+                loginDataSource.login(id, pw, pushToken).toModel(),
             )
         }.asResult().flowOn(dispatcher)
     }

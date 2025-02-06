@@ -5,7 +5,7 @@ plugins {
 //    alias(libs.plugins.dodam.android.hilt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firbase.crashlytics)
-    alias(libs.plugins.dodam.koin)
+    alias(libs.plugins.dodam.android.koin)
 }
 
 android {
@@ -36,6 +36,7 @@ android {
 dependencies {
     implementation(libs.dodam.design.system)
     implementation(libs.dodam.design.system.cmm)
+    implementation(libs.firebase.message)
     implementation(projects.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
@@ -60,6 +61,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.google.app.update)
+
 
     implementation(projects.keystore)
     implementation(projects.datastore)

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -30,7 +31,8 @@ class LoginViewModel : ViewModel(), KoinComponent {
     val event = _event.asSharedFlow()
 
     fun login(id: String, pw: String, role: String) = viewModelScope.launch {
-        loginRepository.login(id, pw).collect { result ->
+        val pushToken = datastoreRepository.pushToken.first()
+        loginRepository.login(id, pw, pushToken).collect { result ->
             when (result) {
                 is Result.Success -> {
                     if (result.data.role == role) {
@@ -44,7 +46,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                             id = id,
                             pw = pw,
                             token = result.data.accessToken,
-
+                            pushToken = pushToken,
                         )
                         _event.emit(Event.NavigateToMain)
                     } else {

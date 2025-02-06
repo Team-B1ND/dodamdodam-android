@@ -8,9 +8,25 @@ plugins {
     alias(libs.plugins.dodam.multiplatform.kotlin)
     alias(libs.plugins.dodam.multiplatform.coil)
     alias(libs.plugins.dodam.multiplatform.koin)
+    alias(libs.plugins.google.services)
 }
 kotlin {
-    setIOS("DodamTeacher", "com.b1nd.dodam.teacher")
+    
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            export(libs.kmp.notification)
+            baseName = "DodamTeacher"
+            isStatic = true
+
+            binaryOptions["bundleId"] = "com.b1nd.dodam.teacher"
+
+        }
+        iosTarget.run({})
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -18,7 +34,7 @@ kotlin {
             implementation(projects.common)
             implementation(projects.ui)
             implementation(projects.network.login)
-
+            api(libs.kmp.notification)
             implementation(projects.feature.onboarding)
             implementation(projects.featureTeacher.nightstudy)
             api(projects.feature.login)
@@ -71,6 +87,8 @@ kotlin {
             implementation(libs.google.app.update)
         }
     }
+
+
 }
 
 android {

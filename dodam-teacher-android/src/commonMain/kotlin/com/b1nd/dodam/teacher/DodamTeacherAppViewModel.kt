@@ -33,6 +33,12 @@ class DodamTeacherAppViewModel : ViewModel(), KoinComponent {
         _isLoginState.value = dataStoreRepository.token.first().isNotEmpty()
     }
 
+    fun savePushToken(pushToken: String) {
+        viewModelScope.launch(dispatcher) {
+            dataStoreRepository.savePushToken(pushToken)
+        }
+    }
+
     fun getBundleId() {
         viewModelScope.launch(dispatcher) {
             bundleIdInfoRepository.getBundleId().collect {
