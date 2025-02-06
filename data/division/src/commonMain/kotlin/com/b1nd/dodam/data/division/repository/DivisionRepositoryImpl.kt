@@ -2,7 +2,10 @@ package com.b1nd.dodam.data.division.repository
 
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
+import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.division.DivisionRepository
+import com.b1nd.dodam.data.division.model.DivisionInfo
+import com.b1nd.dodam.data.division.model.DivisionMember
 import com.b1nd.dodam.data.division.model.DivisionOverview
 import com.b1nd.dodam.data.division.model.toModel
 import com.b1nd.dodam.network.division.datasource.DivisionDataSource
@@ -45,6 +48,71 @@ internal class DivisionRepositoryImpl(
             )
                 .map { it.toModel() }
                 .toImmutableList()
+        )
+    }
+        .flowOn(dispatcher)
+        .asResult()
+
+    override suspend fun getDivision(id: Int): Flow<Result<DivisionInfo>> = flow {
+        emit(
+            divisionDataSource.getDivision(
+                id = id,
+            ).toModel()
+        )
+    }
+        .flowOn(dispatcher)
+        .asResult()
+
+    override suspend fun getDivisionMembers(id: Int, status: Status): Flow<Result<ImmutableList<DivisionMember>>> = flow {
+
+        emit(
+            divisionDataSource.getDivisionMembers(
+                id = id,
+                status = status.name,
+            )
+                .map {
+                    it.toModel()
+                }
+                .toImmutableList()
+        )
+    }
+        .flowOn(dispatcher)
+        .asResult()
+
+    override suspend fun getDivisionMembersCnt(
+        id: Int,
+        status: Status
+    ): Flow<Result<Int>> = flow {
+
+        emit(
+            divisionDataSource.getDivisionMembersCnt(
+                id = id,
+                status = status.name,
+            )
+        )
+    }
+        .flowOn(dispatcher)
+        .asResult()
+
+    override suspend fun deleteDivisionMembers(
+        divisionId: Int,
+        memberId: List<Int>
+    ): Flow<Result<Unit>> = flow {
+        emit(
+            divisionDataSource.deleteDivisionMembers(
+                divisionId = divisionId,
+                memberId = memberId,
+            )
+        )
+    }
+        .flowOn(dispatcher)
+        .asResult()
+
+    override suspend fun postDivisionApplyRequest(divisionId: Int): Flow<Result<Unit>> = flow {
+        emit(
+            divisionDataSource.postDivisionApplyRequest(
+                divisionId = divisionId
+            )
         )
     }
         .flowOn(dispatcher)

@@ -153,10 +153,10 @@ internal fun GroupScreen(
                             if (searchText.isEmpty()) {
                                 return@filter true
                             }
-                            filterItem.name.contains(searchText)
+                            filterItem.name.lowercase().contains(searchText.lowercase())
                         },
-                    key = {
-                        it.id
+                    key = { item ->
+                        item.id
                     }
                 ) { item ->
                     Row(

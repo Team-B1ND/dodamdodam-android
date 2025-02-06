@@ -300,8 +300,10 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         groupScreen(
                             popBackStack = navHostController::popBackStack,
                             navigateToGroupCreate = navHostController::navigateToGroupCreate,
-                            navigateToGroupDetail = { _ ->
-                                navHostController.navigateToGroupDetail()
+                            navigateToGroupDetail = { id ->
+                                navHostController.navigateToGroupDetail(
+                                    id = id,
+                                )
                             }
                         )
 

@@ -18,6 +18,7 @@ import com.b1nd.dodam.data.upload.di.uploadRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
 import com.b1nd.dodam.editmemberinfo.di.editMemberInfoViewModelModule
 import com.b1nd.dodam.group.di.groupViewModelModule
+import com.b1nd.dodam.groupdetail.di.groupDetailViewModelModule
 import com.b1nd.dodam.home.di.homeViewModelModule
 import com.b1nd.dodam.login.di.loginViewModelModule
 import com.b1nd.dodam.meal.di.mealViewModelModule
@@ -90,6 +91,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             divisionRepositoryModule,
             divisionDataSourceModule,
             groupViewModelModule,
+            groupDetailViewModelModule,
         )
         block()
     }
