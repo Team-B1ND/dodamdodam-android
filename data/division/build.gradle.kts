@@ -12,6 +12,7 @@ kotlin {
     setIOS("data.division")
 
     sourceSets.commonMain.dependencies {
+        api(projects.data.core)
         implementation(projects.common)
         implementation(projects.network.division)
 

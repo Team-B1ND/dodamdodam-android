@@ -6,6 +6,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -15,18 +17,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -35,6 +45,11 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import com.b1nd.dodam.data.core.model.getName
+import com.b1nd.dodam.data.division.model.DivisionMember
+import com.b1nd.dodam.data.division.model.DivisionPermission
+import com.b1nd.dodam.data.division.model.isAdmin
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.AvatarSize
@@ -43,25 +58,168 @@ import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamDivider
+import com.b1nd.dodam.designsystem.component.DodamIconButton
+import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamTag
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.groupdetail.viewmodel.GroupDetailViewModel
 import com.b1nd.dodam.ui.component.DodamFakeBottomSheet
 import com.b1nd.dodam.ui.component.DodamGroupMemberCard
+import com.b1nd.dodam.ui.component.DodamMenuDialog
+import com.b1nd.dodam.ui.component.DodamMenuItem
+import com.b1nd.dodam.ui.component.DodamMenuItemColor
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.viewmodel.koinViewModel
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GroupDetailScreen(
+    viewModel: GroupDetailViewModel = koinViewModel(),
+    id: Int,
     popBackStack: () -> Unit,
     navigateToGroupAdd: () -> Unit,
     navigateToGroupWaiting: () -> Unit,
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    val isJoin = uiState.divisionInfo?.myPermission != null || uiState.isLoading
+    val isPermission = uiState.divisionInfo?.myPermission?.isAdmin() ?: false
+    var bottomSheetUser: DivisionMember? by remember { mutableStateOf(null) }
+    var isShowMemberBottomSheet by remember { mutableStateOf(false) }
 
-    val isJoin = true
-    val isPermission = true
-    val isShowMemberBottomSheet by remember { mutableStateOf(true) }
+    var dialogMemberUser: DivisionMember? by remember { mutableStateOf(null) }
+    var isShowMemberDialog by remember { mutableStateOf(false) }
+
+    val onClickMember: (DivisionMember) -> Unit = {
+        bottomSheetUser = it
+        isShowMemberBottomSheet = true
+    }
+
+    LaunchedEffect(true) {
+        viewModel.load(id = id)
+    }
+
+    if (isShowMemberDialog && dialogMemberUser != null) {
+        BasicAlertDialog(
+            onDismissRequest = {
+                isShowMemberDialog = false
+                dialogMemberUser = null
+            },
+            content = {
+                DodamMenuDialog(
+                    items = persistentListOf(DodamMenuItem(
+                        item = "승격하기",
+                        color = DodamMenuItemColor.Normal,
+                        onClickItem = {},
+                    ), DodamMenuItem(
+                        item = "강등하기",
+                        color = DodamMenuItemColor.Negative,
+                        onClickItem = {},
+                    ),),
+                    onClickItem = { item ->
+
+                    }
+                )
+            }
+        )
+    }
+
+    if (isShowMemberBottomSheet && bottomSheetUser != null) {
+        DodamModalBottomSheet(
+            onDismissRequest = {
+                isShowMemberBottomSheet = false
+                bottomSheetUser = null
+            },
+            space = 0.dp,
+            shape = RoundedCornerShape(
+                topStart = 28.dp,
+                topEnd = 28.dp,
+            ),
+            title = {},
+            content = {
+                Text(
+                    text = "${bottomSheetUser!!.memberName}님의 정보",
+                    style = DodamTheme.typography.heading1Bold(),
+                    color = DodamTheme.colors.labelNormal
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "${bottomSheetUser!!.grade}학년 ${bottomSheetUser!!.room}반 ${bottomSheetUser!!.number}번",
+                    style = DodamTheme.typography.headlineMedium(),
+                    color = DodamTheme.colors.labelAssistive
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "권한 정보",
+                        style = DodamTheme.typography.heading1Bold(),
+                        color = DodamTheme.colors.labelNormal
+                    )
+                    if (isPermission) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Box(
+                            modifier = Modifier
+                                .size(34.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberBounceIndication(),
+                                    onClick = {
+                                        dialogMemberUser = bottomSheetUser!!
+                                        isShowMemberDialog = true
+                                    }
+                                ),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(18.dp),
+                                imageVector = DodamIcons.Menu.value,
+                                contentDescription = "menu button",
+                                tint = DodamTheme.colors.labelAssistive.copy(
+                                    alpha = 0.5f,
+                                ),
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = when (bottomSheetUser!!.permission) {
+                        DivisionPermission.ADMIN -> "관리자"
+                        DivisionPermission.WRITER -> "부관리자"
+                        DivisionPermission.READER -> "멤버"
+                    },
+                    style = DodamTheme.typography.headlineMedium(),
+                    color = DodamTheme.colors.labelAssistive
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+                if (isPermission) {
+                    DodamButton(
+                        text = "내보내기",
+                        onClick = {
+                            viewModel.kickMember(
+                                divisionId = id,
+                                memberId = bottomSheetUser!!.id,
+                            )
+                            isShowMemberBottomSheet = false
+                            bottomSheetUser = null
+                        },
+                        buttonRole = ButtonRole.Assistive,
+                        buttonSize = ButtonSize.Medium
+                    )
+                }
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -102,7 +260,7 @@ internal fun GroupDetailScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "B1ND",
+                            text = uiState.divisionInfo?.divisionName ?: "",
                             style = DodamTheme.typography.heading1Bold(),
                             color = DodamTheme.colors.labelNormal
                         )
@@ -131,7 +289,7 @@ internal fun GroupDetailScreen(
                     }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "바인드는 도담도담도 개발하구요 서버비도 받아야하구요 회식도 해야해구요 존댓말두 써야하구여 도맘도 개발하구요 CMM도 써야하구여",
+                        text = uiState.divisionInfo?.description?: "",
                         style = DodamTheme.typography.body1Medium(),
                         color = DodamTheme.colors.labelNeutral
                     )
@@ -175,11 +333,13 @@ internal fun GroupDetailScreen(
                                 style = DodamTheme.typography.headlineBold(),
                                 color = DodamTheme.colors.labelStrong
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            DodamTag(
-                                text = "12",
-                                tagType = TagType.Primary
-                            )
+                            if (uiState.divisionPendingCnt > 0) {
+                                Spacer(modifier = Modifier.width(8.dp))
+                                DodamTag(
+                                    text = "${uiState.divisionPendingCnt}",
+                                    tagType = TagType.Primary
+                                )
+                            }
                         }
                         Box(
                             modifier = Modifier
@@ -241,14 +401,13 @@ internal fun GroupDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                     }
-                    items(1) {
+                    items(uiState.divisionAdminMembers, key = { it.id },) {
                         GroupDetailMemberCard(
-                            image = null,
-                            name = "test $it",
-                            role = when (it % 3) {
-                                0 -> "학생"
-                                1 -> "선생님"
-                                else -> "학부모"
+                            image = it.profileImage,
+                            name = it.memberName,
+                            role = it.role.getName(),
+                            onClick = {
+                                onClickMember(it)
                             }
                         )
                     }
@@ -266,17 +425,17 @@ internal fun GroupDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                     }
-                    items(3) {
+                    items(uiState.divisionWriterMembers.size) { index ->
+                        val item = uiState.divisionWriterMembers[index]
                         GroupDetailMemberCard(
-                            image = null,
-                            name = "test $it",
-                            role = when (it % 3) {
-                                0 -> "학생"
-                                1 -> "선생님"
-                                else -> "학부모"
-                            }
+                            image = item.profileImage,
+                            name = item.memberName,
+                            role = item.role.getName(),
+                            onClick = {
+                                onClickMember(item)
+                            },
                         )
-                        if (it != 2) {
+                        if (index != uiState.divisionWriterMembers.lastIndex) {
                             Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
@@ -294,17 +453,17 @@ internal fun GroupDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                     }
-                    items(20) {
+                    items(uiState.divisionReaderMembers.size) { index ->
+                        val item = uiState.divisionReaderMembers[index]
                         GroupDetailMemberCard(
-                            image = null,
-                            name = "test $it",
-                            role = when (it % 3) {
-                                0 -> "학생"
-                                1 -> "선생님"
-                                else -> "학부모"
-                            }
+                            image = item.profileImage,
+                            name = item.memberName,
+                            role = item.role.getName(),
+                            onClick = {
+                                onClickMember(item)
+                            },
                         )
-                        if (it != 3) {
+                        if (index != uiState.divisionReaderMembers.lastIndex) {
                             Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
@@ -344,49 +503,6 @@ internal fun GroupDetailScreen(
                     )
                 }
             }
-
-            if (isShowMemberBottomSheet) {
-                DodamFakeBottomSheet(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    title = {},
-                    content = {
-                        Text(
-                            text = "박병준님의 정보",
-                            style = DodamTheme.typography.heading1Bold(),
-                            color = DodamTheme.colors.labelNormal
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "1학년 2반 13번",
-                            style = DodamTheme.typography.headlineMedium(),
-                            color = DodamTheme.colors.labelAssistive
-                        )
-
-                        Spacer(modifier = Modifier.height(24.dp))
-                        Text(
-                            text = "권한 정보",
-                            style = DodamTheme.typography.heading1Bold(),
-                            color = DodamTheme.colors.labelNormal
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "멤버",
-                            style = DodamTheme.typography.headlineMedium(),
-                            color = DodamTheme.colors.labelAssistive
-                        )
-
-                        Spacer(modifier = Modifier.height(24.dp))
-                        DodamButton(
-                            text = "내보내기",
-                            onClick = {},
-                            buttonRole = ButtonRole.Assistive,
-                            buttonSize = ButtonSize.Medium
-                        )
-                    },
-                    space = 0.dp,
-                    navigationBarPadding = false
-                )
-            }
         }
     }
 
@@ -396,9 +512,15 @@ internal fun GroupDetailScreen(
 private fun GroupDetailMemberCard(
     image: String?,
     name: String,
-    role: String
+    role: String,
+    onClick: () -> Unit,
 ) {
     DodamGroupMemberCard(
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = rememberBounceIndication(),
+            onClick = onClick
+        ),
         image = image,
         name = name,
         action = {
