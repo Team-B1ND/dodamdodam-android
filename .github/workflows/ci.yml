@@ -28,7 +28,7 @@ jobs:
       with:
         name: "google-services.json"
         json: ${{ secrets.GOOGLE_SERVICES }}
-        dir: 'dodamdodam-android'
+        dir: 'app'
 
     - name: Validate Pull Request Title
       id: validate-title
