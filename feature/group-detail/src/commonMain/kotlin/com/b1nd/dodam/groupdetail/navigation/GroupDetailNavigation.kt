@@ -19,7 +19,7 @@ fun NavController.navigateToGroupDetail(
 fun NavGraphBuilder.groupDetailScreen(
     popBackStack: () -> Unit,
     navigateToGroupAdd: () -> Unit,
-    navigateToGroupWaiting: () -> Unit,
+    navigateToGroupWaiting: (id: Int, name: String) -> Unit,
 ) {
     composable(
         route = "${GROUP_DETAIL_ROUTE}/{id}",

@@ -84,7 +84,7 @@ internal fun GroupDetailScreen(
     id: Int,
     popBackStack: () -> Unit,
     navigateToGroupAdd: () -> Unit,
-    navigateToGroupWaiting: () -> Unit,
+    navigateToGroupWaiting: (id: Int, name: String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val isJoin = uiState.divisionInfo?.myPermission != null || uiState.isLoading
@@ -232,276 +232,297 @@ internal fun GroupDetailScreen(
         containerColor = DodamTheme.colors.backgroundNeutral
     ) {
         Box(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
-            Column(
+            Box(
                 modifier = Modifier
+                    .padding(it)
                     .fillMaxSize()
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            top = 8.dp
-                        )
-                        .fillMaxWidth()
-                        .background(
-                            color = DodamTheme.colors.backgroundNormal,
-                            shape = DodamTheme.shapes.medium
-                        )
-                        .padding(horizontal = 16.dp)
+                        .fillMaxSize()
                 ) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = uiState.divisionInfo?.divisionName ?: "",
-                            style = DodamTheme.typography.heading1Bold(),
-                            color = DodamTheme.colors.labelNormal
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Box(
-                            modifier = Modifier.clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = rememberBounceIndication(),
-                                onClick = {
-
-                                }
-                            ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .size(18.dp),
-                                imageVector = DodamIcons.Menu.value,
-                                contentDescription = "메뉴 아이콘",
-                                tint = DodamTheme.colors.labelAssistive.copy(
-                                    alpha = 0.5f
-                                )
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = uiState.divisionInfo?.description?: "",
-                        style = DodamTheme.typography.body1Medium(),
-                        color = DodamTheme.colors.labelNeutral
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                if (isPermission) {
-                    Row(
-                        modifier = Modifier
-                            .padding(
-                                top = 12.dp,
-                                start = 16.dp,
-                                end = 16.dp
-                            )
-                            .fillMaxWidth()
-                            .height(60.dp)
-                            .background(
-                                color = DodamTheme.colors.backgroundNormal,
-                                shape = DodamTheme.shapes.medium
-                            )
-                            .padding(
-                                horizontal = 16.dp,
-                                vertical = 16.dp
-                            ),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = rememberBounceIndication(),
-                                    onClick = navigateToGroupWaiting
-                                ),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "가입 신청",
-                                style = DodamTheme.typography.headlineBold(),
-                                color = DodamTheme.colors.labelStrong
-                            )
-                            if (uiState.divisionPendingCnt > 0) {
-                                Spacer(modifier = Modifier.width(8.dp))
-                                DodamTag(
-                                    text = "${uiState.divisionPendingCnt}",
-                                    tagType = TagType.Primary
-                                )
-                            }
-                        }
-                        Box(
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .width(1.dp)
-                                .fillMaxHeight()
-                                .background(
-                                    color = DodamTheme.colors.lineAlternative,
-                                ),
-                        )
-
-                        Row(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = rememberBounceIndication(),
-                                    onClick = navigateToGroupAdd
-                                ),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "멤버 추가",
-                                style = DodamTheme.typography.headlineBold(),
-                                color = DodamTheme.colors.labelStrong,
-                            )
-                        }
-                    }
-                }
-
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            top = 12.dp
-                        )
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .background(
-                            color = DodamTheme.colors.backgroundNormal,
-                            shape = DodamTheme.shapes.medium
-                        )
-                        .padding(16.dp),
-                ) {
-                    item {
-                        Text(
-                            text = "멤버",
-                            style = DodamTheme.typography.headlineBold(),
-                            color = DodamTheme.colors.labelNormal,
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "관리자",
-                            style = DodamTheme.typography.body2Medium(),
-                            color = DodamTheme.colors.labelAlternative
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                    }
-                    items(uiState.divisionAdminMembers, key = { it.id },) {
-                        GroupDetailMemberCard(
-                            image = it.profileImage,
-                            name = it.memberName,
-                            role = it.role.getName(),
-                            onClick = {
-                                onClickMember(it)
-                            }
-                        )
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        DodamDivider(
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "부관리자",
-                            style = DodamTheme.typography.body2Medium(),
-                            color = DodamTheme.colors.labelAlternative
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                    }
-                    items(uiState.divisionWriterMembers.size) { index ->
-                        val item = uiState.divisionWriterMembers[index]
-                        GroupDetailMemberCard(
-                            image = item.profileImage,
-                            name = item.memberName,
-                            role = item.role.getName(),
-                            onClick = {
-                                onClickMember(item)
-                            },
-                        )
-                        if (index != uiState.divisionWriterMembers.lastIndex) {
-                            Spacer(modifier = Modifier.height(12.dp))
-                        }
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        DodamDivider(
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "멤버",
-                            style = DodamTheme.typography.body2Medium(),
-                            color = DodamTheme.colors.labelAlternative
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                    }
-                    items(uiState.divisionReaderMembers.size) { index ->
-                        val item = uiState.divisionReaderMembers[index]
-                        GroupDetailMemberCard(
-                            image = item.profileImage,
-                            name = item.memberName,
-                            role = item.role.getName(),
-                            onClick = {
-                                onClickMember(item)
-                            },
-                        )
-                        if (index != uiState.divisionReaderMembers.lastIndex) {
-                            Spacer(modifier = Modifier.height(12.dp))
-                        }
-                    }
-                }
-            }
-
-            if (!isJoin) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(144.dp)
-                        .align(Alignment.BottomCenter)
-                        .background(
-                            brush = Brush.linearGradient(
-                                colorStops = arrayOf(
-                                    0f to DodamTheme.colors.staticWhite.copy(alpha = 0f),
-                                    0.22f to DodamTheme.colors.staticWhite.copy(alpha = 0.22f),
-                                    1f to DodamTheme.colors.staticWhite
-                                )
-                            )
-                        )
-                ) {
-                    DodamButton(
+                    Column(
                         modifier = Modifier
                             .padding(
                                 start = 16.dp,
                                 end = 16.dp,
-                                bottom = 16.dp,
+                                top = 8.dp
                             )
                             .fillMaxWidth()
-                            .height(48.dp)
-                            .align(Alignment.BottomCenter),
-                        text = "가입 신청",
-                        onClick = {},
-                        buttonSize = ButtonSize.Large,
-                        buttonRole = ButtonRole.Primary
-                    )
+                            .background(
+                                color = DodamTheme.colors.backgroundNormal,
+                                shape = DodamTheme.shapes.medium
+                            )
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = uiState.divisionInfo?.divisionName ?: "",
+                                style = DodamTheme.typography.heading1Bold(),
+                                color = DodamTheme.colors.labelNormal
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            Box(
+                                modifier = Modifier.clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberBounceIndication(),
+                                    onClick = {
+
+                                    }
+                                ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .size(18.dp),
+                                    imageVector = DodamIcons.Menu.value,
+                                    contentDescription = "메뉴 아이콘",
+                                    tint = DodamTheme.colors.labelAssistive.copy(
+                                        alpha = 0.5f
+                                    )
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = uiState.divisionInfo?.description?: "",
+                            style = DodamTheme.typography.body1Medium(),
+                            color = DodamTheme.colors.labelNeutral
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    if (isPermission) {
+                        Row(
+                            modifier = Modifier
+                                .padding(
+                                    top = 12.dp,
+                                    start = 16.dp,
+                                    end = 16.dp
+                                )
+                                .fillMaxWidth()
+                                .height(60.dp)
+                                .background(
+                                    color = DodamTheme.colors.backgroundNormal,
+                                    shape = DodamTheme.shapes.medium
+                                )
+                                .padding(
+                                    horizontal = 16.dp,
+                                    vertical = 16.dp
+                                ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = rememberBounceIndication(),
+                                        onClick = {
+                                            navigateToGroupWaiting(id, uiState.divisionInfo!!.divisionName)
+                                        }
+                                    ),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "가입 신청",
+                                    style = DodamTheme.typography.headlineBold(),
+                                    color = DodamTheme.colors.labelStrong
+                                )
+                                if (uiState.divisionPendingCnt > 0) {
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    DodamTag(
+                                        text = "${uiState.divisionPendingCnt}",
+                                        tagType = TagType.Primary
+                                    )
+                                }
+                            }
+                            Box(
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .width(1.dp)
+                                    .fillMaxHeight()
+                                    .background(
+                                        color = DodamTheme.colors.lineAlternative,
+                                    ),
+                            )
+
+                            Row(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = rememberBounceIndication(),
+                                        onClick = navigateToGroupAdd
+                                    ),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "멤버 추가",
+                                    style = DodamTheme.typography.headlineBold(),
+                                    color = DodamTheme.colors.labelStrong,
+                                )
+                            }
+                        }
+                    }
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                top = 12.dp
+                            )
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .background(
+                                color = DodamTheme.colors.backgroundNormal,
+                                shape = DodamTheme.shapes.medium
+                            )
+                            .padding(16.dp),
+                    ) {
+                        item {
+                            Text(
+                                text = "멤버",
+                                style = DodamTheme.typography.headlineBold(),
+                                color = DodamTheme.colors.labelNormal,
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "관리자",
+                                style = DodamTheme.typography.body2Medium(),
+                                color = DodamTheme.colors.labelAlternative
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+                        items(uiState.divisionAdminMembers, key = { it.id },) {
+                            GroupDetailMemberCard(
+                                image = it.profileImage,
+                                name = it.memberName,
+                                role = it.role.getName(),
+                                onClick = {
+                                    onClickMember(it)
+                                }
+                            )
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            DodamDivider(
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "부관리자",
+                                style = DodamTheme.typography.body2Medium(),
+                                color = DodamTheme.colors.labelAlternative
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+                        items(uiState.divisionWriterMembers.size) { index ->
+                            val item = uiState.divisionWriterMembers[index]
+                            GroupDetailMemberCard(
+                                image = item.profileImage,
+                                name = item.memberName,
+                                role = item.role.getName(),
+                                onClick = {
+                                    onClickMember(item)
+                                },
+                            )
+                            if (index != uiState.divisionWriterMembers.lastIndex) {
+                                Spacer(modifier = Modifier.height(12.dp))
+                            }
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            DodamDivider(
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "멤버",
+                                style = DodamTheme.typography.body2Medium(),
+                                color = DodamTheme.colors.labelAlternative
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+                        items(uiState.divisionReaderMembers.size) { index ->
+                            val item = uiState.divisionReaderMembers[index]
+                            GroupDetailMemberCard(
+                                image = item.profileImage,
+                                name = item.memberName,
+                                role = item.role.getName(),
+                                onClick = {
+                                    onClickMember(item)
+                                },
+                            )
+                            if (index != uiState.divisionReaderMembers.lastIndex) {
+                                Spacer(modifier = Modifier.height(12.dp))
+                            }
+                        }
+                    }
                 }
+
+                if (!isJoin) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(144.dp)
+                            .align(Alignment.BottomCenter)
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colorStops = arrayOf(
+                                        0f to DodamTheme.colors.staticWhite.copy(alpha = 0f),
+                                        0.22f to DodamTheme.colors.staticWhite.copy(alpha = 0.22f),
+                                        1f to DodamTheme.colors.staticWhite
+                                    )
+                                )
+                            )
+                    ) {
+                        DodamButton(
+                            modifier = Modifier
+                                .padding(
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                    bottom = 16.dp,
+                                )
+                                .fillMaxWidth()
+                                .height(48.dp)
+                                .align(Alignment.BottomCenter),
+                            text = "가입 신청",
+                            onClick = {
+                                viewModel.requestJoinDivision(
+                                    id = id
+                                )
+                            },
+                            buttonSize = ButtonSize.Large,
+                            buttonRole = ButtonRole.Primary
+                        )
+                    }
+                }
+            }
+            if (uiState.requestLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            color = DodamTheme.colors.staticBlack.copy(
+                                alpha = 0.3f
+                            )
+                        )
+                )
             }
         }
     }

@@ -7,6 +7,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class GroupDetailUiState(
     val isLoading: Boolean = false,
+    val requestLoading: Boolean = false,
     val divisionInfo: DivisionInfo? = null,
     val divisionAdminMembers: ImmutableList<DivisionMember> = persistentListOf(),
     val divisionWriterMembers: ImmutableList<DivisionMember> = persistentListOf(),
