@@ -11,12 +11,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,15 +34,26 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
+import com.b1nd.dodam.groupwaiting.viewmodel.GroupWaitingViewModel
 import com.b1nd.dodam.ui.component.DodamGroupMemberCard
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, KoinExperimentalAPI::class)
 @Composable
 fun GroupWaitingScreen(
+    viewModel: GroupWaitingViewModel = koinViewModel(),
+    id: Int,
+    name: String,
     popBackStack: () -> Unit
 ) {
-
+    val uiState by viewModel.uiState.collectAsState()
     var showBottomSheet by remember { mutableStateOf(false) }
+
+    LaunchedEffect(true) {
+        viewModel.load(id)
+    }
+
     if (showBottomSheet) {
         DodamModalBottomSheet(
             onDismissRequest = {
@@ -93,7 +107,7 @@ fun GroupWaitingScreen(
         topBar = {
             DodamTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
-                title = "‘B1ND’ 그룹\n" +
+                title = "‘${name}’ 그룹\n" +
                         "가입 신청 대기 중인 멤버",
                 onBackClick = popBackStack,
                 type = TopAppBarType.Large
@@ -107,58 +121,140 @@ fun GroupWaitingScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            item {
-                Text(
-                    modifier = Modifier.padding(
-                        start = 16.dp
-                    ),
-                    text = "학생",
-                    style = DodamTheme.typography.body2Medium(),
-                    color = DodamTheme.colors.labelAlternative
-                )
-            }
-
-            items(2) {
-                DodamGroupMemberCard(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberBounceIndication(),
-                            onClick = {
-                                showBottomSheet = true
-                            }
+            if (uiState.students.isNotEmpty()) {
+                item {
+                    Text(
+                        modifier = Modifier.padding(
+                            start = 16.dp
                         ),
-                    image = null,
-                    name = "test $it"
-                )
+                        text = "학생",
+                        style = DodamTheme.typography.body2Medium(),
+                        color = DodamTheme.colors.labelAlternative
+                    )
+                }
+
+                items(
+                    uiState.parents,
+                    key = { key ->
+                        key.id
+                    }
+                ) {
+                    DodamGroupMemberCard(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberBounceIndication(),
+                                onClick = {
+                                    showBottomSheet = true
+                                }
+                            ),
+                        image = it.profileImage,
+                        name = it.memberName,
+                    )
+                }
             }
 
-            item {
-                Text(
-                    modifier = Modifier.padding(
-                        start = 16.dp
-                    ),
-                    text = "학부모",
-                    style = DodamTheme.typography.body2Medium(),
-                    color = DodamTheme.colors.labelAlternative
-                )
-            }
-
-            items(2) {
-                DodamGroupMemberCard(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberBounceIndication(),
-                            onClick = {
-                                showBottomSheet = true
-                            }
+            if (uiState.parents.isNotEmpty()) {
+                item {
+                    Text(
+                        modifier = Modifier.padding(
+                            start = 16.dp
                         ),
-                    image = null,
-                    name = "test $it"
-                )
+                        text = "학부모",
+                        style = DodamTheme.typography.body2Medium(),
+                        color = DodamTheme.colors.labelAlternative
+                    )
+                }
+
+                items(
+                    uiState.parents,
+                    key = { key ->
+                        key.id
+                    }
+                ) {
+                    DodamGroupMemberCard(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberBounceIndication(),
+                                onClick = {
+                                    showBottomSheet = true
+                                }
+                            ),
+                        image = it.profileImage,
+                        name = it.memberName,
+                    )
+                }
+            }
+
+            if (uiState.teachers.isNotEmpty()) {
+                item {
+                    Text(
+                        modifier = Modifier.padding(
+                            start = 16.dp
+                        ),
+                        text = "선생님",
+                        style = DodamTheme.typography.body2Medium(),
+                        color = DodamTheme.colors.labelAlternative
+                    )
+                }
+
+                items(
+                    uiState.teachers,
+                    key = { key ->
+                        key.id
+                    }
+                ) {
+                    DodamGroupMemberCard(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberBounceIndication(),
+                                onClick = {
+                                    showBottomSheet = true
+                                }
+                            ),
+                        image = it.profileImage,
+                        name = it.memberName,
+                    )
+                }
+            }
+
+            if (uiState.admins.isNotEmpty()) {
+                item {
+                    Text(
+                        modifier = Modifier.padding(
+                            start = 16.dp
+                        ),
+                        text = "관리자",
+                        style = DodamTheme.typography.body2Medium(),
+                        color = DodamTheme.colors.labelAlternative
+                    )
+                }
+
+                items(
+                    uiState.admins,
+                    key = { key ->
+                        key.id
+                    }
+                ) {
+                    DodamGroupMemberCard(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberBounceIndication(),
+                                onClick = {
+                                    showBottomSheet = true
+                                }
+                            ),
+                        image = it.profileImage,
+                        name = it.memberName,
+                    )
+                }
             }
         }
     }

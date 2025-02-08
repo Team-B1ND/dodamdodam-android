@@ -125,4 +125,31 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
             }
         }
     }
+
+    fun requestJoinDivision(id: Int) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    requestLoading = true
+                )
+            }
+            divisionRepository.postDivisionApplyRequest(
+                divisionId = id,
+            ).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                requestLoading = false
+                            )
+                        }
+                    }
+                    Result.Loading -> {}
+                    is Result.Error -> {
+                        result.error.printStackTrace()
+                    }
+                }
+            }
+        }
+    }
 }
