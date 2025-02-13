@@ -22,23 +22,27 @@ internal class DivisionService constructor(
 ): DivisionDataSource {
     override suspend fun getAllDivisions(
         lastId: Int,
-        limit: Int
+        limit: Int,
+        keyword: String,
     ): List<DivisionOverviewResponse> =
         safeRequest {
             httpClient.get(DodamUrl.DIVISION) {
                 parameter("lastId", lastId)
                 parameter("limit", limit)
+                parameter("keyword", keyword)
             }.body<Response<List<DivisionOverviewResponse>>>()
         }
 
     override suspend fun getMyDivisions(
         lastId: Int,
-        limit: Int
+        limit: Int,
+        keyword: String,
     ): List<DivisionOverviewResponse> =
         safeRequest {
             httpClient.get(DodamUrl.Division.MY) {
                 parameter("lastId", lastId)
                 parameter("limit", limit)
+                parameter("keyword", keyword)
             }.body<Response<List<DivisionOverviewResponse>>>()
         }
 

@@ -8,8 +8,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
 interface DivisionDataSource {
-    suspend fun getAllDivisions(lastId: Int, limit: Int): List<DivisionOverviewResponse>
-    suspend fun getMyDivisions(lastId: Int, limit: Int): List<DivisionOverviewResponse>
+    suspend fun getAllDivisions(lastId: Int, limit: Int, keyword: String): List<DivisionOverviewResponse>
+    suspend fun getMyDivisions(lastId: Int, limit: Int, keyword: String): List<DivisionOverviewResponse>
     suspend fun getDivision(id: Int): DivisionInfoResponse
     suspend fun getDivisionMembers(id: Int, status: String): List<DivisionMemberResponse>
     suspend fun getDivisionMembersCnt(id: Int, status: String): Int

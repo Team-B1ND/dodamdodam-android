@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface DivisionRepository {
-    suspend fun getAllDivisions(lastId: Int, limit: Int): Flow<Result<ImmutableList<DivisionOverview>>>
-    suspend fun getMyDivisions(lastId: Int, limit: Int): Flow<Result<ImmutableList<DivisionOverview>>>
+    suspend fun getAllDivisions(lastId: Int, limit: Int, keyword: String): Flow<Result<ImmutableList<DivisionOverview>>>
+    suspend fun getMyDivisions(lastId: Int, limit: Int, keyword: String): Flow<Result<ImmutableList<DivisionOverview>>>
     suspend fun getDivision(id: Int): Flow<Result<DivisionInfo>>
     suspend fun getDivisionMembers(id: Int, status: Status): Flow<Result<ImmutableList<DivisionMember>>>
     suspend fun getDivisionMembersCnt(id: Int, status: Status): Flow<Result<Int>>

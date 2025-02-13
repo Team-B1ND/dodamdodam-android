@@ -22,12 +22,14 @@ internal class DivisionRepositoryImpl(
 ): DivisionRepository {
     override suspend fun getAllDivisions(
         lastId: Int,
-        limit: Int
+        limit: Int,
+        keyword: String,
     ): Flow<Result<ImmutableList<DivisionOverview>>> = flow {
         emit(
             divisionDataSource.getAllDivisions(
                 lastId = lastId,
-                limit = limit
+                limit = limit,
+                keyword = keyword,
             )
                 .map { it.toModel() }
                 .toImmutableList()
@@ -39,12 +41,14 @@ internal class DivisionRepositoryImpl(
 
     override suspend fun getMyDivisions(
         lastId: Int,
-        limit: Int
+        limit: Int,
+        keyword: String,
     ): Flow<Result<ImmutableList<DivisionOverview>>> = flow {
         emit(
             divisionDataSource.getMyDivisions(
                 lastId = lastId,
-                limit = limit
+                limit = limit,
+                keyword = keyword,
             )
                 .map { it.toModel() }
                 .toImmutableList()
