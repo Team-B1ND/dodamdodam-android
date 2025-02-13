@@ -45,6 +45,7 @@ class GroupViewModel : ViewModel(), KoinComponent {
             }
             divisionRepository.getAllDivisions(
                 lastId = _uiState.value.allGroupLastId,
+                keyword = "",
                 limit = PAGE_SIZE
             ).collect {
                 when (it) {
@@ -86,7 +87,8 @@ class GroupViewModel : ViewModel(), KoinComponent {
             }
             divisionRepository.getMyDivisions(
                 lastId = _uiState.value.myGroupLastId,
-                limit = PAGE_SIZE
+                keyword = "",
+                limit = PAGE_SIZE,
             ).collect {
                 when (it) {
                     is Result.Success -> {
@@ -117,6 +119,7 @@ class GroupViewModel : ViewModel(), KoinComponent {
 
 
     companion object {
-        const val PAGE_SIZE = 20
+        // TODO 시간 관계상 페이징을 처리하지 않았습니다.
+        const val PAGE_SIZE = 9999
     }
 }
