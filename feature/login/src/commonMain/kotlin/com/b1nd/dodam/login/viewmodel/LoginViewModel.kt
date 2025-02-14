@@ -35,7 +35,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
         loginRepository.login(id, pw, pushToken).collect { result ->
             when (result) {
                 is Result.Success -> {
-                    if (result.data.role == role) {
+                    if (result.data.role == role || result.data.role == "PARENT") {
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
