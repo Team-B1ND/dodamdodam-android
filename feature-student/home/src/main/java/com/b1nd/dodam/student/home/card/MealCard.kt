@@ -39,7 +39,7 @@ import java.time.LocalTime
 
 @ExperimentalFoundationApi
 @Composable
-internal fun MealCard(uiState: MealUiState, showShimmer: Boolean, navigateToMeal: () -> Unit, onContentClick: () -> Unit, fetchMeal: () -> Unit) {
+fun MealCard(uiState: MealUiState, showShimmer: Boolean, navigateToMeal: () -> Unit, onContentClick: () -> Unit, fetchMeal: () -> Unit) {
     val currentTime = LocalTime.now()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }

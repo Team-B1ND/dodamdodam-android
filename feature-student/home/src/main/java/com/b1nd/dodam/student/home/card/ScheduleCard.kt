@@ -47,7 +47,7 @@ import kotlinx.datetime.toKotlinLocalDateTime
 
 @ExperimentalFoundationApi
 @Composable
-internal fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchSchedule: () -> Unit, onContentClick: () -> Unit, onNextClick: () -> Unit) {
+fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchSchedule: () -> Unit, onContentClick: () -> Unit, onNextClick: () -> Unit) {
     val current = LocalDateTime.now().toKotlinLocalDateTime().date
     val tomorrow = current.plus(DatePeriod(days = 1))
 

@@ -67,6 +67,7 @@ internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClic
         viewModel.event.collect { event ->
             when (event) {
                 is Event.NavigateToMain -> navigateToMain()
+                is Event.NavigateToParentMain ->{}
                 is Event.ShowDialog -> coroutineScope.launch {
                     showDialog = true
                 }
