@@ -24,7 +24,7 @@ import com.b1nd.dodam.student.home.model.BannerUiState
 
 @ExperimentalFoundationApi
 @Composable
-internal fun BannerCard(uiState: BannerUiState, context: Context) {
+fun BannerCard(uiState: BannerUiState, context: Context) {
     when (uiState) {
         is BannerUiState.Success -> {
             val banners = remember { uiState.data }

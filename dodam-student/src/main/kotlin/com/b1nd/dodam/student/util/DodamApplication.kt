@@ -35,6 +35,8 @@ import com.b1nd.dodam.network.schedule.di.scheduleDatasourceModule
 import com.b1nd.dodam.network.upload.di.uploadDatasourceModule
 import com.b1nd.dodam.nightstudy.di.nightStudyViewModelModule
 import com.b1nd.dodam.outing.di.outingViewModelModule
+import com.b1nd.dodam.parent.main.di.parentMainViewModelModules
+import com.b1nd.dodam.parnet.home.di.parentHomeViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
 import com.b1nd.dodam.register.di.registerRepositoryModule
 import com.b1nd.dodam.register.di.registerViewModelModule
@@ -102,7 +104,8 @@ class DodamApplication : Application() {
                     editMemberInfoViewModelModule,
                     uploadDatasourceModule,
                     uploadRepositoryModule,
-                ) + mainViewModelModules,
+                    parentHomeViewModelModule
+                ) + mainViewModelModules
             )
         }
     }
