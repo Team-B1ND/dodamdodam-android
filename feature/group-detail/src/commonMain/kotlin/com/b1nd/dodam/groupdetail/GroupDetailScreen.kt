@@ -83,7 +83,7 @@ internal fun GroupDetailScreen(
     viewModel: GroupDetailViewModel = koinViewModel(),
     id: Int,
     popBackStack: () -> Unit,
-    navigateToGroupAdd: () -> Unit,
+    navigateToGroupAdd: (id: Int) -> Unit,
     navigateToGroupWaiting: (id: Int, name: String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -363,7 +363,9 @@ internal fun GroupDetailScreen(
                                     .clickable(
                                         interactionSource = remember { MutableInteractionSource() },
                                         indication = rememberBounceIndication(),
-                                        onClick = navigateToGroupAdd
+                                        onClick = {
+                                            navigateToGroupAdd(id)
+                                        }
                                     ),
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically
