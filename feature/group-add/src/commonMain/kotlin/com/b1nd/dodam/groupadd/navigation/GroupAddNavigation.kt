@@ -26,6 +26,7 @@ fun NavGraphBuilder.groupAddScreen(
     ) {
         GroupAddScreen(
             id = it.arguments?.getInt("id") ?: 0,
+            showSnackbar = showSnackbar,
             popBackStack = popBackStack,
         )
     }

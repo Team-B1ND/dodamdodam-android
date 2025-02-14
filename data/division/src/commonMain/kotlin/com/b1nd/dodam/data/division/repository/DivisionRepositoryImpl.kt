@@ -140,7 +140,7 @@ internal class DivisionRepositoryImpl(
 
     override suspend fun postDivisionAddMembers(
         divisionId: Int,
-        memberId: List<Int>
+        memberId: List<String>
     ): Flow<Result<Unit>> = flow {
         emit(
             divisionDataSource.postDivisionAddMembers(

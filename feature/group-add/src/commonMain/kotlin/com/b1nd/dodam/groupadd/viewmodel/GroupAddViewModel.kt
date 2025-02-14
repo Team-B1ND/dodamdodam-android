@@ -117,7 +117,7 @@ class GroupAddViewModel: ViewModel(), KoinComponent {
 
     fun addDivisionMember(
         divisionId: Int,
-        memberIds: List<Int>,
+        memberIds: List<String>,
     ) {
         viewModelScope.launch {
             _uiState.update {

@@ -6,6 +6,7 @@ import com.b1nd.dodam.network.division.response.DivisionMemberResponse
 
 data class DivisionMember(
     val id: Int,
+    val memberId: String,
     val memberName: String,
     val profileImage: String?,
     val permission: DivisionPermission,
@@ -18,6 +19,7 @@ data class DivisionMember(
 internal fun DivisionMemberResponse.toModel() =
     DivisionMember(
         id = id,
+        memberId = memberId,
         memberName = memberName,
         profileImage = profileImage,
         permission = when (permission) {
