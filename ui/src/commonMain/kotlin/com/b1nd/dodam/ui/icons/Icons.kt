@@ -11,6 +11,7 @@ import dodamdodam_android.ui.generated.resources.ic_colored_calendar
 import dodamdodam_android.ui.generated.resources.ic_colored_checkmark_circle_filled
 import dodamdodam_android.ui.generated.resources.ic_colored_cookedrice
 import dodamdodam_android.ui.generated.resources.ic_colored_exclamationmark_circle
+import dodamdodam_android.ui.generated.resources.ic_colored_group
 import dodamdodam_android.ui.generated.resources.ic_colored_megaphone
 import dodamdodam_android.ui.generated.resources.ic_colored_musical_note
 import dodamdodam_android.ui.generated.resources.ic_colored_pencil
@@ -99,3 +100,7 @@ val ColoredCookedRice
 val ColoredSmailMan
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_smail_man)
+
+val ColoredGroup
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_group)
