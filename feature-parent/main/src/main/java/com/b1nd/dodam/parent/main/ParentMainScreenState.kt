@@ -7,6 +7,7 @@ import androidx.compose.ui.util.trace
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
+import com.b1nd.dodam.all.navigation.navigateToParentAllScreen
 import com.b1nd.dodam.notice.navigation.navigateToNotice
 import com.b1nd.dodam.parent.main.navigation.ParentMainDestination
 import com.b1nd.dodam.parnet.home.navigation.navigateToParentHome
@@ -37,6 +38,7 @@ internal class ParentMainScreenState(
             when (mainDestination) {
                 ParentMainDestination.HOME -> navController.navigateToParentHome(mainNavOptions)
                 ParentMainDestination.NOTICE -> navController.navigateToNotice(mainNavOptions)
+                ParentMainDestination.ALL -> navController.navigateToParentAllScreen(mainNavOptions)
             }
         }
     }

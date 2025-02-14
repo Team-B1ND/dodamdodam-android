@@ -96,4 +96,5 @@ dependencies {
     implementation(projects.data.upload)
     implementation(projects.featureParent.main)
     implementation(projects.featureParent.home)
+    implementation(projects.featureParent.all)
 }
