@@ -72,6 +72,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             var isLogin: Boolean? by remember { mutableStateOf(null) }
+            var role: String by remember { mutableStateOf("") }
 
             LaunchedEffect(Unit) {
                 launch {
@@ -88,6 +89,7 @@ class MainActivity : ComponentActivity() {
                 }
                 launch {
                     isLogin = datastoreRepository.token.first().isNotEmpty()
+                    role = datastoreRepository.user.first().role
                 }
             }
             com.b1nd.dodam.designsystem.DodamTheme {
@@ -103,6 +105,7 @@ class MainActivity : ComponentActivity() {
                             },
                             firebaseAnalytics = firebaseAnalytics,
                             firebaseCrashlytics = firebaseCrashlytics,
+                            role = role
                         )
                     } ?: run {
                         Box(

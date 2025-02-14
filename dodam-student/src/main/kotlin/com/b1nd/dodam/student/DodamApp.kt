@@ -2,6 +2,7 @@ package com.b1nd.dodam.student
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -77,7 +78,9 @@ fun DodamApp(
     firebaseAnalytics: FirebaseAnalytics,
     firebaseCrashlytics: FirebaseCrashlytics,
     scope: CoroutineScope = rememberCoroutineScope(),
+    role: String
 ) {
+    Log.d("TAG", "DodamApp: $role")
     navController.addOnDestinationChangedListener { _, destination, _ ->
         val params = Bundle().apply {
             putString(FirebaseAnalytics.Param.SCREEN_NAME, destination.route)
