@@ -152,4 +152,15 @@ internal class DivisionRepositoryImpl(
         .flowOn(dispatcher)
         .asResult()
 
+    override suspend fun postCreateDivision(name: String, description: String): Flow<Result<Unit>> = flow {
+        emit(
+            divisionDataSource.postCreateDivision(
+                name = name,
+                description = description,
+            )
+        )
+    }
+        .flowOn(dispatcher)
+        .asResult()
+
 }

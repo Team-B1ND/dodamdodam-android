@@ -19,6 +19,7 @@ import com.b1nd.dodam.datastore.di.dataStoreModule
 import com.b1nd.dodam.editmemberinfo.di.editMemberInfoViewModelModule
 import com.b1nd.dodam.group.di.groupViewModelModule
 import com.b1nd.dodam.groupadd.di.groupAddViewModelModule
+import com.b1nd.dodam.groupcreate.di.groupCreateViewModelModule
 import com.b1nd.dodam.groupdetail.di.groupDetailViewModelModule
 import com.b1nd.dodam.groupwaiting.di.groupWaitingViewModelModule
 import com.b1nd.dodam.home.di.homeViewModelModule
@@ -96,6 +97,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             groupDetailViewModelModule,
             groupWaitingViewModelModule,
             groupAddViewModelModule,
+            groupCreateViewModelModule,
         )
         block()
     }
