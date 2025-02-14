@@ -7,6 +7,7 @@ import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.network.core.util.safeRequest
 import com.b1nd.dodam.network.division.datasource.DivisionDataSource
+import com.b1nd.dodam.network.division.request.DivisionCreateRequest
 import com.b1nd.dodam.network.division.response.DivisionInfoResponse
 import com.b1nd.dodam.network.division.response.DivisionMemberCountResponse
 import com.b1nd.dodam.network.division.response.DivisionMemberResponse
@@ -18,6 +19,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 
 internal class DivisionService constructor(
     private val httpClient: HttpClient
@@ -92,6 +94,18 @@ internal class DivisionService constructor(
                 memberId.forEach {
                     parameter("memberIdList", it)
                 }
+            }.body<DefaultResponse>()
+        }
+
+    override suspend fun postCreateDivision(name: String, description: String) =
+        defaultSafeRequest {
+            httpClient.post(DodamUrl.DIVISION) {
+                setBody(
+                    DivisionCreateRequest(
+                        name = name,
+                        description = description,
+                    )
+                )
             }.body<DefaultResponse>()
         }
 
