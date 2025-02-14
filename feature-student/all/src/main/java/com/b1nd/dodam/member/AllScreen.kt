@@ -47,6 +47,7 @@ import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.BarChart
 import com.b1nd.dodam.ui.icons.ColoredBus
+import com.b1nd.dodam.ui.icons.ColoredGroup
 import com.b1nd.dodam.ui.icons.ColoredMegaphone
 import com.b1nd.dodam.ui.icons.ColoredMusicalNote
 import com.b1nd.dodam.ui.icons.ColoredSmailMan
@@ -214,6 +215,11 @@ fun AllScreen(
                         onClick = { },
                     )
                 }
+                AllCardView(
+                    imageVector = ColoredGroup,
+                    text = "그룹",
+                    onClick = { },
+                )
             }
         }
     }
