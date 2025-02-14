@@ -9,8 +9,8 @@ data class DivisionMemberResponse(
     val memberName: String,
     val profileImage: String?,
     val permission: String,
-    val grade: Int,
-    val room: Int,
-    val number: Int,
+    val grade: Int?,
+    val room: Int?,
+    val number: Int?,
     val role: MemberRoleResponse,
 )

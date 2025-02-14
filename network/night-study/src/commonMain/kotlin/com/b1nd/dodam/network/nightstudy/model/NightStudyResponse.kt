@@ -14,7 +14,6 @@ data class NightStudyResponse(
     val doNeedPhone: Boolean,
     val reasonForPhone: String?,
     val student: StudentResponse,
-    val place: String,
     val startAt: LocalDate,
     val endAt: LocalDate,
     val createdAt: LocalDateTime,

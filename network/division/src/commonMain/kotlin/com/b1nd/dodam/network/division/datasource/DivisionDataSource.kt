@@ -1,6 +1,7 @@
 package com.b1nd.dodam.network.division.datasource
 
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.network.core.model.NetworkStatus
 import com.b1nd.dodam.network.division.response.DivisionInfoResponse
 import com.b1nd.dodam.network.division.response.DivisionMemberResponse
 import com.b1nd.dodam.network.division.response.DivisionOverviewResponse
@@ -15,4 +16,5 @@ interface DivisionDataSource {
     suspend fun getDivisionMembersCnt(id: Int, status: String): Int
     suspend fun deleteDivisionMembers(divisionId: Int, memberId: List<Int>)
     suspend fun postDivisionApplyRequest(divisionId: Int)
+    suspend fun patchDivisionMembers(divisionId: Int, memberId: List<Int>, status: String)
 }

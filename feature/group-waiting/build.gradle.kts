@@ -26,6 +26,7 @@ kotlin{
         commonMain.dependencies {
             implementation(projects.common)
             implementation(projects.ui)
+            implementation(projects.logging)
             implementation(projects.data.division)
             implementation(libs.dodam.design.system.cmm)
         }

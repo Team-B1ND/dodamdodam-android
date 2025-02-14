@@ -122,4 +122,20 @@ internal class DivisionRepositoryImpl(
         .flowOn(dispatcher)
         .asResult()
 
+    override suspend fun patchDivisionMembers(
+        divisionId: Int,
+        memberId: List<Int>,
+        status: Status
+    ): Flow<Result<Unit>> = flow {
+        emit(
+            divisionDataSource.patchDivisionMembers(
+                divisionId = divisionId,
+                memberId = memberId,
+                status = status.name
+            )
+        )
+    }
+        .flowOn(dispatcher)
+        .asResult()
+
 }

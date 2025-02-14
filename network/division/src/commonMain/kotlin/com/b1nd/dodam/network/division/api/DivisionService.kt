@@ -2,6 +2,7 @@ package com.b1nd.dodam.network.division.api
 
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.DefaultResponse
+import com.b1nd.dodam.network.core.model.NetworkStatus
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.network.core.util.safeRequest
@@ -15,6 +16,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 
 internal class DivisionService constructor(
@@ -72,7 +74,9 @@ internal class DivisionService constructor(
     override suspend fun deleteDivisionMembers(divisionId: Int, memberId: List<Int>,) =
         defaultSafeRequest {
             httpClient.delete("${DodamUrl.DIVISION}/${divisionId}/members") {
-                parameter("idList", memberId)
+                memberId.forEach { id ->
+                    parameter("idList", id)
+                }
             }.body<DefaultResponse>()
         }
 
@@ -81,4 +85,17 @@ internal class DivisionService constructor(
             httpClient.post("${DodamUrl.DIVISION}/${divisionId}/members/apply")
                 .body<DefaultResponse>()
         }
+
+    override suspend fun patchDivisionMembers(
+        divisionId: Int,
+        memberId: List<Int>,
+        status: String
+    ) = defaultSafeRequest {
+        httpClient.patch("${DodamUrl.DIVISION}/${divisionId}/members") {
+            memberId.forEach { id ->
+                parameter("idList", id)
+            }
+            parameter("status", status)
+        }.body<DefaultResponse>()
+    }
 }

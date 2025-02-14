@@ -207,21 +207,6 @@ fun ApproveNightStudyScreen(
                                 modifier = Modifier.padding(bottom = 12.dp),
                             ) {
                                 Text(
-                                    text = "자습 장소",
-                                    style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelAssistive,
-                                )
-                                Spacer(modifier = Modifier.weight(1f))
-                                Text(
-                                    text = state.detailMember.place,
-                                    style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelNeutral,
-                                )
-                            }
-                            Row(
-                                modifier = Modifier.padding(bottom = 12.dp),
-                            ) {
-                                Text(
                                     text = "학습 계획",
                                     style = DodamTheme.typography.headlineMedium(),
                                     color = DodamTheme.colors.labelAssistive,
@@ -373,7 +358,6 @@ fun ApproveNightStudyScreen(
                                                     id = filterMemberData.id,
                                                     start = getDate(filterMemberData.startAt.date),
                                                     end = getDate(filterMemberData.endAt.date),
-                                                    place = filterMemberData.place,
                                                     doNeedPhone = filterMemberData.doNeedPhone,
                                                     reasonForPhone = filterMemberData.reasonForPhone,
                                                     reason = filterMemberData.content,

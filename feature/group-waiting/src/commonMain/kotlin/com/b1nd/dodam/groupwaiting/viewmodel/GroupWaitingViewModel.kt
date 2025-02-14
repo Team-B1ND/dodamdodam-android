@@ -8,6 +8,7 @@ import com.b1nd.dodam.data.core.model.MemberRole
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.division.DivisionRepository
 import com.b1nd.dodam.groupwaiting.model.GroupWaitingUiState
+import com.b1nd.dodam.logging.KmLogging
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,6 +61,57 @@ class GroupWaitingViewModel: ViewModel(), KoinComponent {
                     }
                 }
             }
+        }
+    }
+
+    fun rejectMember(divisionId: Int, memberId: Int) {
+        viewModelScope.launch {
+            divisionRepository.patchDivisionMembers(
+                divisionId = divisionId,
+                memberId = listOf(memberId),
+                status = Status.REJECTED
+            ).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        removeMember(memberId)
+                    }
+                    Result.Loading -> {}
+                    is Result.Error -> {
+                        result.error.printStackTrace()
+                    }
+                }
+            }
+        }
+    }
+
+    fun approveMember(divisionId: Int, memberId: Int) {
+        viewModelScope.launch {
+            divisionRepository.patchDivisionMembers(
+                divisionId = divisionId,
+                memberId = listOf(memberId),
+                status = Status.ALLOWED
+            ).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        removeMember(memberId)
+                    }
+                    Result.Loading -> {}
+                    is Result.Error -> {
+                        result.error.printStackTrace()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun removeMember(memberId: Int) {
+        _uiState.update {
+            it.copy(
+                students = it.students.filter { it.id != memberId }.toImmutableList(),
+                teachers = it.teachers.filter { it.id != memberId }.toImmutableList(),
+                parents = it.parents.filter { it.id != memberId }.toImmutableList(),
+                admins = it.admins.filter { it.id != memberId }.toImmutableList(),
+            )
         }
     }
 }
