@@ -7,13 +7,17 @@ import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.division.DivisionRepository
+import com.b1nd.dodam.data.division.model.DivisionMember
 import com.b1nd.dodam.data.division.model.DivisionPermission
 import com.b1nd.dodam.data.division.model.isAdmin
+import com.b1nd.dodam.groupdetail.model.GroupDetailSideEffect
 import com.b1nd.dodam.groupdetail.model.GroupDetailUiState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -28,6 +32,9 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
 
     private val _uiState = MutableStateFlow(GroupDetailUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _sideEffect = Channel<GroupDetailSideEffect>()
+    val sideEffect = _sideEffect.receiveAsFlow()
 
     fun load(id: Int) {
 
@@ -150,6 +157,146 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
                     }
                 }
             }
+        }
+    }
+
+    fun upperPermission(divisionId: Int, divisionMember: DivisionMember) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    requestLoading = true
+                )
+            }
+            val editPermission = when (divisionMember.permission) {
+                DivisionPermission.READER -> DivisionPermission.WRITER
+                DivisionPermission.WRITER -> DivisionPermission.ADMIN
+                DivisionPermission.ADMIN -> DivisionPermission.ADMIN
+            }
+            divisionRepository.patchDivisionMemberPermission(
+                divisionId = divisionId,
+                memberId = divisionMember.id,
+                permission = editPermission,
+            ).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        editStateMemberScreenPermission(
+                            divisionMember = divisionMember,
+                            beforePermission = divisionMember.permission,
+                            afterPermission = editPermission
+                        )
+                        _sideEffect.send(GroupDetailSideEffect.SuccessEditPermission)
+                    }
+                    Result.Loading -> {}
+                    is Result.Error -> {
+                        result.error.printStackTrace()
+                        _sideEffect.send(GroupDetailSideEffect.FailedEditPermission(result.error))
+                        _uiState.update {
+                            it.copy(
+                                requestLoading = false
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun lowerPermission(divisionId: Int, divisionMember: DivisionMember) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    requestLoading = true
+                )
+            }
+            val editPermission = when (divisionMember.permission) {
+                DivisionPermission.READER -> DivisionPermission.READER
+                DivisionPermission.WRITER -> DivisionPermission.READER
+                DivisionPermission.ADMIN -> DivisionPermission.WRITER
+            }
+            divisionRepository.patchDivisionMemberPermission(
+                divisionId = divisionId,
+                memberId = divisionMember.id,
+                permission = editPermission,
+            ).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        editStateMemberScreenPermission(
+                            divisionMember = divisionMember,
+                            beforePermission = divisionMember.permission,
+                            afterPermission = editPermission
+                        )
+                        _sideEffect.send(GroupDetailSideEffect.SuccessEditPermission)
+                    }
+                    Result.Loading -> {}
+                    is Result.Error -> {
+                        result.error.printStackTrace()
+                        _sideEffect.send(GroupDetailSideEffect.FailedEditPermission(result.error))
+                        _uiState.update {
+                            it.copy(
+                                requestLoading = false
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun editStateMemberScreenPermission(
+        divisionMember: DivisionMember,
+        beforePermission: DivisionPermission,
+        afterPermission: DivisionPermission,
+    ) {
+        val readers = _uiState.value.divisionReaderMembers.toMutableList()
+        val writers = _uiState.value.divisionWriterMembers.toMutableList()
+        val admins = _uiState.value.divisionAdminMembers.toMutableList()
+
+        when (beforePermission) {
+            DivisionPermission.READER -> {
+                readers.removeAll {
+                    it.memberId == divisionMember.memberId
+                }
+            }
+            DivisionPermission.WRITER -> {
+                writers.removeAll {
+                    it.memberId == divisionMember.memberId
+                }
+            }
+            DivisionPermission.ADMIN -> {
+                admins.removeAll {
+                    it.memberId == divisionMember.memberId
+                }
+            }
+        }
+
+        when (afterPermission) {
+            DivisionPermission.READER -> {
+                readers.add(divisionMember.copy(
+                    permission = afterPermission
+                ))
+            }
+
+            DivisionPermission.WRITER -> {
+                writers.add(divisionMember.copy(
+                    permission = afterPermission
+                ))
+            }
+
+            DivisionPermission.ADMIN -> {
+                admins.add(divisionMember.copy(
+                    permission = afterPermission
+                ))
+            }
+        }
+
+
+        _uiState.update {
+            it.copy(
+                requestLoading = false,
+                divisionAdminMembers = admins.toImmutableList(),
+                divisionWriterMembers = writers.toImmutableList(),
+                divisionReaderMembers = readers.toImmutableList(),
+            )
         }
     }
 }

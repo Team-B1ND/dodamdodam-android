@@ -66,12 +66,14 @@ import com.b1nd.dodam.designsystem.component.DodamTag
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.groupdetail.model.GroupDetailSideEffect
 import com.b1nd.dodam.groupdetail.viewmodel.GroupDetailViewModel
 import com.b1nd.dodam.ui.component.DodamFakeBottomSheet
 import com.b1nd.dodam.ui.component.DodamGroupMemberCard
 import com.b1nd.dodam.ui.component.DodamMenuDialog
 import com.b1nd.dodam.ui.component.DodamMenuItem
 import com.b1nd.dodam.ui.component.DodamMenuItemColor
+import com.b1nd.dodam.ui.component.SnackbarState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
@@ -82,6 +84,7 @@ import org.koin.compose.viewmodel.koinViewModel
 internal fun GroupDetailScreen(
     viewModel: GroupDetailViewModel = koinViewModel(),
     id: Int,
+    showSnackbar: (state: SnackbarState, message: String) -> Unit,
     popBackStack: () -> Unit,
     navigateToGroupAdd: (id: Int) -> Unit,
     navigateToGroupWaiting: (id: Int, name: String) -> Unit,
@@ -102,6 +105,16 @@ internal fun GroupDetailScreen(
 
     LaunchedEffect(true) {
         viewModel.load(id = id)
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is GroupDetailSideEffect.FailedEditPermission -> {
+                    showSnackbar(SnackbarState.ERROR, sideEffect.throwable.message?: "Error")
+                }
+                GroupDetailSideEffect.SuccessEditPermission -> {
+                    showSnackbar(SnackbarState.SUCCESS, "성공적으로 멤버의 권환을 수정했습니다!")
+                }
+            }
+        }
     }
 
     if (isShowMemberDialog && dialogMemberUser != null) {
@@ -111,19 +124,44 @@ internal fun GroupDetailScreen(
                 dialogMemberUser = null
             },
             content = {
-                DodamMenuDialog(
-                    items = persistentListOf(DodamMenuItem(
-                        item = "승격하기",
-                        color = DodamMenuItemColor.Normal,
-                        onClickItem = {},
-                    ), DodamMenuItem(
-                        item = "강등하기",
-                        color = DodamMenuItemColor.Negative,
-                        onClickItem = {},
-                    ),),
-                    onClickItem = { item ->
-
+                val dialogItems = mutableListOf<DodamMenuItem>().apply {
+                    if (dialogMemberUser!!.permission != DivisionPermission.ADMIN) {
+                        add(DodamMenuItem(
+                            item = "승격하기",
+                            color = DodamMenuItemColor.Normal,
+                            onClickItem = {
+                                viewModel.upperPermission(
+                                    divisionId = id,
+                                    divisionMember = dialogMemberUser!!,
+                                )
+                                isShowMemberDialog = false
+                                dialogMemberUser = null
+                                isShowMemberBottomSheet = false
+                                bottomSheetUser = null
+                            },
+                        )
+                        )
                     }
+
+                    if (dialogMemberUser!!.permission != DivisionPermission.READER) {
+                        add(DodamMenuItem(
+                            item = "강등하기",
+                            color = DodamMenuItemColor.Negative,
+                            onClickItem = {
+                                viewModel.lowerPermission(
+                                    divisionId = id,
+                                    divisionMember = dialogMemberUser!!,
+                                )
+                                isShowMemberDialog = false
+                                dialogMemberUser = null
+                                isShowMemberBottomSheet = false
+                                bottomSheetUser = null
+                            },
+                        ))
+                    }
+                }
+                DodamMenuDialog(
+                    items = dialogItems.toImmutableList(),
                 )
             }
         )
@@ -147,12 +185,15 @@ internal fun GroupDetailScreen(
                     style = DodamTheme.typography.heading1Bold(),
                     color = DodamTheme.colors.labelNormal
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "${bottomSheetUser!!.grade}학년 ${bottomSheetUser!!.room}반 ${bottomSheetUser!!.number}번",
-                    style = DodamTheme.typography.headlineMedium(),
-                    color = DodamTheme.colors.labelAssistive
-                )
+
+                if (bottomSheetUser!!.grade != null) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "${bottomSheetUser!!.grade}학년 ${bottomSheetUser!!.room}반 ${bottomSheetUser!!.number}번",
+                        style = DodamTheme.typography.headlineMedium(),
+                        color = DodamTheme.colors.labelAssistive
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
                 Row(
@@ -267,27 +308,29 @@ internal fun GroupDetailScreen(
                                 style = DodamTheme.typography.heading1Bold(),
                                 color = DodamTheme.colors.labelNormal
                             )
-                            Spacer(modifier = Modifier.weight(1f))
-                            Box(
-                                modifier = Modifier.clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = rememberBounceIndication(),
-                                    onClick = {
+                            if (isPermission) {
+                                Spacer(modifier = Modifier.weight(1f))
+                                Box(
+                                    modifier = Modifier.clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = rememberBounceIndication(),
+                                        onClick = {
 
-                                    }
-                                ),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .size(18.dp),
-                                    imageVector = DodamIcons.Menu.value,
-                                    contentDescription = "메뉴 아이콘",
-                                    tint = DodamTheme.colors.labelAssistive.copy(
-                                        alpha = 0.5f
+                                        }
+                                    ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .size(18.dp),
+                                        imageVector = DodamIcons.Menu.value,
+                                        contentDescription = "메뉴 아이콘",
+                                        tint = DodamTheme.colors.labelAssistive.copy(
+                                            alpha = 0.5f
+                                        )
                                     )
-                                )
+                                }
                             }
                         }
                         Spacer(modifier = Modifier.height(4.dp))

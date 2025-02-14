@@ -299,6 +299,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 
                         groupScreen(
                             popBackStack = navHostController::popBackStack,
+                            isTeacher = true,
                             navigateToGroupCreate = navHostController::navigateToGroupCreate,
                             navigateToGroupDetail = { id ->
                                 navHostController.navigateToGroupDetail(
@@ -308,6 +309,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
 
                         groupDetailScreen(
+                            showSnackbar = showSnackbar,
                             popBackStack = navHostController::popBackStack,
                             navigateToGroupAdd = navHostController::navigateToGroupAdd,
                             navigateToGroupWaiting = navHostController::navigateToGroupWaiting

@@ -19,4 +19,5 @@ interface DivisionDataSource {
     suspend fun postDivisionAddMembers(divisionId: Int, memberId: List<String>)
     suspend fun postCreateDivision(name: String, description: String)
     suspend fun patchDivisionMembers(divisionId: Int, memberId: List<Int>, status: String)
+    suspend fun patchDivisionMemberPermission(divisionId: Int, memberId: Int, permission: String)
 }

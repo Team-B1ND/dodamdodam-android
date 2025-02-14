@@ -5,6 +5,7 @@ import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.division.model.DivisionInfo
 import com.b1nd.dodam.data.division.model.DivisionMember
 import com.b1nd.dodam.data.division.model.DivisionOverview
+import com.b1nd.dodam.data.division.model.DivisionPermission
 import com.b1nd.dodam.network.core.model.NetworkStatus
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
@@ -21,4 +22,5 @@ interface DivisionRepository {
     suspend fun postDivisionAddMembers(divisionId: Int, memberId: List<String>): Flow<Result<Unit>>
     suspend fun postCreateDivision(name: String, description: String): Flow<Result<Unit>>
     suspend fun patchDivisionMembers(divisionId: Int, memberId: List<Int>, status: Status): Flow<Result<Unit>>
+    suspend fun patchDivisionMemberPermission(divisionId: Int, memberId: Int, permission: DivisionPermission): Flow<Result<Unit>>
 }

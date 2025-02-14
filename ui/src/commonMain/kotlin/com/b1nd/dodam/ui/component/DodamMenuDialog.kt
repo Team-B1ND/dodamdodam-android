@@ -36,7 +36,6 @@ data class DodamMenuItem(
 @Composable
 fun DodamMenuDialog(
     items: ImmutableList<DodamMenuItem>,
-    onClickItem: (DodamMenuItem) -> Unit,
 ) {
     Surface(
         modifier = Modifier
