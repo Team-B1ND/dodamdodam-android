@@ -49,6 +49,7 @@ import com.b1nd.dodam.ui.icons.BarChart
 import com.b1nd.dodam.ui.icons.ColoredBus
 import com.b1nd.dodam.ui.icons.ColoredMegaphone
 import com.b1nd.dodam.ui.icons.ColoredMusicalNote
+import com.b1nd.dodam.ui.icons.ColoredSmailMan
 import com.b1nd.dodam.ui.icons.ColoredTent
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
@@ -63,6 +64,7 @@ fun AllScreen(
     navigateToOuting: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
+    role: String
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -173,37 +175,45 @@ fun AllScreen(
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                AllCardView(
-                    imageVector = BarChart,
-                    text = "내 상벌점 보기",
-                    onClick = navigateToMyPoint,
-                )
+                if (role == "STUDENT") {
+                    AllCardView(
+                        imageVector = BarChart,
+                        text = "내 상벌점 보기",
+                        onClick = navigateToMyPoint,
+                    )
 
-                DodamDivider(type = DividerType.Normal)
+                    DodamDivider(type = DividerType.Normal)
 
-                AllCardView(
-                    imageVector = ColoredBus,
-                    text = "귀가 버스 신청하기",
-                    onClick = navigateToAddBus,
-                )
+                    AllCardView(
+                        imageVector = ColoredBus,
+                        text = "귀가 버스 신청하기",
+                        onClick = navigateToAddBus,
+                    )
 
-                AllCardView(
-                    imageVector = ColoredTent,
-                    text = "외출/외박 확인하기",
-                    onClick = navigateToOuting,
-                )
+                    AllCardView(
+                        imageVector = ColoredTent,
+                        text = "외출/외박 확인하기",
+                        onClick = navigateToOuting,
+                    )
 
-                AllCardView(
-                    imageVector = ColoredMegaphone,
-                    text = "기상송 확인하기",
-                    onClick = navigateToWakeUpSong,
-                )
+                    AllCardView(
+                        imageVector = ColoredMegaphone,
+                        text = "기상송 확인하기",
+                        onClick = navigateToWakeUpSong,
+                    )
 
-                AllCardView(
-                    imageVector = ColoredMusicalNote,
-                    text = "기상송 신청하기",
-                    onClick = navigateToAddWakeUpSong,
-                )
+                    AllCardView(
+                        imageVector = ColoredMusicalNote,
+                        text = "기상송 신청하기",
+                        onClick = navigateToAddWakeUpSong,
+                    )
+                }else{
+                    AllCardView(
+                        imageVector = ColoredSmailMan,
+                        text = "내 자녀 관리",
+                        onClick = { },
+                    )
+                }
             }
         }
     }

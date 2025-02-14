@@ -118,6 +118,7 @@ internal fun MainScreen(
                 },
                 navigateToWakeUpSong = navigateToWakeUpSong,
                 navigateToAddWakeUpSong = navigateToAddWakeUpSong,
+                role = role
             )
         }
 
