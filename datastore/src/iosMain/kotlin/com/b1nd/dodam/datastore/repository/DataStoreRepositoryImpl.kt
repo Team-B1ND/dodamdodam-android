@@ -71,7 +71,7 @@ class DataStoreRepositoryImpl : DataStoreRepository {
     override val pushToken: Flow<String>
         get() = _pushToken
 
-    override suspend fun saveUser(id: String, pw: String, token: String, pushToken: String) {
+    override suspend fun saveUser(id: String, pw: String, token: String, pushToken: String, role: String) {
         add("id", id)
         add("pw", pw)
         add("token", token)
