@@ -14,6 +14,7 @@ fun NavController.navigateToGroup(navOptions: NavOptions? = null) =
 
 fun NavGraphBuilder.groupScreen(
     popBackStack: () -> Unit,
+    isTeacher: Boolean,
     navigateToGroupCreate: () -> Unit,
     navigateToGroupDetail: (id: Int) -> Unit,
 ) {
@@ -24,6 +25,7 @@ fun NavGraphBuilder.groupScreen(
     ) {
         GroupScreen(
             popBackStack = popBackStack,
+            isTeacher = isTeacher,
             navigateToGroupCreate = navigateToGroupCreate,
             navigateToGroupDetail = navigateToGroupDetail
         )

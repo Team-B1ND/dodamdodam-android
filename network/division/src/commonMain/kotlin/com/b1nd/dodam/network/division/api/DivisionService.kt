@@ -121,4 +121,14 @@ internal class DivisionService constructor(
             parameter("status", status)
         }.body<DefaultResponse>()
     }
+
+    override suspend fun patchDivisionMemberPermission(
+        divisionId: Int,
+        memberId: Int,
+        permission: String
+    ) = defaultSafeRequest {
+        httpClient.patch("${DodamUrl.DIVISION}/${divisionId}/members/${memberId}/permission") {
+            parameter("permission", permission)
+        }.body<DefaultResponse>()
+    }
 }

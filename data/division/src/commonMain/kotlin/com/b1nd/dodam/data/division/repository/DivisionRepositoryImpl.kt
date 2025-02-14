@@ -7,6 +7,7 @@ import com.b1nd.dodam.data.division.DivisionRepository
 import com.b1nd.dodam.data.division.model.DivisionInfo
 import com.b1nd.dodam.data.division.model.DivisionMember
 import com.b1nd.dodam.data.division.model.DivisionOverview
+import com.b1nd.dodam.data.division.model.DivisionPermission
 import com.b1nd.dodam.data.division.model.toModel
 import com.b1nd.dodam.network.division.datasource.DivisionDataSource
 import kotlinx.collections.immutable.ImmutableList
@@ -132,6 +133,22 @@ internal class DivisionRepositoryImpl(
                 divisionId = divisionId,
                 memberId = memberId,
                 status = status.name
+            )
+        )
+    }
+        .flowOn(dispatcher)
+        .asResult()
+
+    override suspend fun patchDivisionMemberPermission(
+        divisionId: Int,
+        memberId: Int,
+        permission: DivisionPermission
+    ): Flow<Result<Unit>> = flow {
+        emit(
+            divisionDataSource.patchDivisionMemberPermission(
+                divisionId = divisionId,
+                memberId = memberId,
+                permission = permission.name
             )
         )
     }

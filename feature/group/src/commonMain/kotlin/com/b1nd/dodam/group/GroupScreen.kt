@@ -49,6 +49,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 internal fun GroupScreen(
     viewModel: GroupViewModel = koinViewModel(),
+    isTeacher: Boolean,
     popBackStack: () -> Unit,
     navigateToGroupCreate: () -> Unit,
     navigateToGroupDetail: (id: Int) -> Unit,
@@ -88,12 +89,10 @@ internal fun GroupScreen(
                 modifier = Modifier.statusBarsPadding(),
                 title = "그룹",
                 onBackClick = popBackStack,
-                actionIcons = persistentListOf(
-                    ActionIcon(
-                        icon = DodamIcons.Plus,
-                        onClick = navigateToGroupCreate
-                    )
-                )
+                actionIcons = if (isTeacher) persistentListOf(ActionIcon(
+                    icon = DodamIcons.Plus,
+                    onClick = navigateToGroupCreate
+                )) else persistentListOf()
             )
         },
         containerColor = DodamTheme.colors.backgroundNormal
