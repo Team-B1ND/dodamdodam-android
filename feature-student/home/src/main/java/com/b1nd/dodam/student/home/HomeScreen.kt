@@ -1,5 +1,6 @@
 package com.b1nd.dodam.student.home
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -79,7 +80,9 @@ internal fun HomeScreen(
     navigateToNightStudy: () -> Unit,
     navigateToOut: () -> Unit,
     navigateToWakeupSongScreen: () -> Unit,
+    role: String
 ) {
+    Log.d("TAG", "HomeScreen: $role")
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var showDialog by remember {
@@ -131,6 +134,7 @@ internal fun HomeScreen(
         navigateToMeal = navigateToMeal,
         navigateToNightStudy = navigateToNightStudy,
         navigateToOut = navigateToOut,
+        role = role
     )
 }
 
@@ -158,6 +162,7 @@ private fun HomeScreen(
     navigateToAskWakeupSong: () -> Unit,
     navigateToNightStudy: () -> Unit,
     navigateToOut: () -> Unit,
+    role: String
 ) {
     val scrollState = rememberLazyListState()
 
@@ -246,39 +251,40 @@ private fun HomeScreen(
                         navigateToMeal = navigateToMeal,
                     )
                 }
-
-                item {
-                    WakeupSongCard(
-                        uiState = wakeupSongUiState,
-                        onNextClick = navigateToWakeupSongScreen,
-                        navigateToWakeupSongApply = navigateToAskWakeupSong,
-                        showShimmer = showShimmer,
-                        fetchWakeupSong = fetchWakeupSong,
-                        context = context,
-                    )
-                }
-
-                item {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        OutCard(
-                            modifier = Modifier.weight(1f),
-                            uiState = outUiState,
+                if (role == "STUDENT"){
+                    item {
+                        WakeupSongCard(
+                            uiState = wakeupSongUiState,
+                            onNextClick = navigateToWakeupSongScreen,
+                            navigateToWakeupSongApply = navigateToAskWakeupSong,
                             showShimmer = showShimmer,
-                            navigateToOut = navigateToOut,
-                            navigateToOutApply = navigateToAskOut,
-                        ) {
-                        }
-
-                        Spacer(modifier = Modifier.width(12.dp))
-
-                        NightStudyCard(
-                            modifier = Modifier.weight(1f),
-                            uiState = nightStudyUiState,
-                            showShimmer = showShimmer,
-                            navigateToAskNightStudy = navigateToAskNightStudy,
-                            navigateToNightStudy = navigateToNightStudy,
-                            fetchNightStudy = fetchNightStudy,
+                            fetchWakeupSong = fetchWakeupSong,
+                            context = context,
                         )
+                    }
+
+                    item {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            OutCard(
+                                modifier = Modifier.weight(1f),
+                                uiState = outUiState,
+                                showShimmer = showShimmer,
+                                navigateToOut = navigateToOut,
+                                navigateToOutApply = navigateToAskOut,
+                            ) {
+                            }
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            NightStudyCard(
+                                modifier = Modifier.weight(1f),
+                                uiState = nightStudyUiState,
+                                showShimmer = showShimmer,
+                                navigateToAskNightStudy = navigateToAskNightStudy,
+                                navigateToNightStudy = navigateToNightStudy,
+                                fetchNightStudy = fetchNightStudy,
+                            )
+                        }
                     }
                 }
 

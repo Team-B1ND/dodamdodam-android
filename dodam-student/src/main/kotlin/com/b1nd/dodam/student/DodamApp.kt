@@ -165,6 +165,7 @@ fun DodamApp(
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
                 },
+                role = role
             )
             mealScreen(
                 popBackStack = navController::popBackStack,
