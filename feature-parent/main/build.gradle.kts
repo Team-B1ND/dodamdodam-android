@@ -16,4 +16,6 @@ dependencies {
     implementation(projects.feature.meal)
     implementation(projects.feature.notice)
     implementation(projects.featureParent.home)
+    implementation(projects.featureParent.all)
+    implementation(projects.feature.setting)
 }

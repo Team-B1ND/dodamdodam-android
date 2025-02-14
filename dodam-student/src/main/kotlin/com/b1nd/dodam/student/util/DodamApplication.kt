@@ -1,6 +1,7 @@
 package com.b1nd.dodam.student.util
 
 import android.app.Application
+import com.b1nd.dodam.all.di.parentAllViewModelModule
 import com.b1nd.dodam.asknightstudy.di.askNightStudyViewModelModule
 import com.b1nd.dodam.askout.di.askOutViewModelModule
 import com.b1nd.dodam.askwakeupsong.di.askWakeUpSongViewModelModule
@@ -35,7 +36,6 @@ import com.b1nd.dodam.network.schedule.di.scheduleDatasourceModule
 import com.b1nd.dodam.network.upload.di.uploadDatasourceModule
 import com.b1nd.dodam.nightstudy.di.nightStudyViewModelModule
 import com.b1nd.dodam.outing.di.outingViewModelModule
-import com.b1nd.dodam.parent.main.di.parentMainViewModelModules
 import com.b1nd.dodam.parnet.home.di.parentHomeViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
 import com.b1nd.dodam.register.di.registerRepositoryModule
@@ -104,7 +104,8 @@ class DodamApplication : Application() {
                     editMemberInfoViewModelModule,
                     uploadDatasourceModule,
                     uploadRepositoryModule,
-                    parentHomeViewModelModule
+                    parentHomeViewModelModule,
+                    parentAllViewModelModule
                 ) + mainViewModelModules
             )
         }
