@@ -26,6 +26,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.data.core.model.getName
+import com.b1nd.dodam.data.division.model.DivisionMember
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -49,26 +51,28 @@ fun GroupWaitingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var showBottomSheet by remember { mutableStateOf(false) }
+    var bottomSheetUser: DivisionMember? by remember { mutableStateOf(null) }
 
     LaunchedEffect(true) {
         viewModel.load(id)
     }
 
-    if (showBottomSheet) {
+    if (showBottomSheet && bottomSheetUser != null) {
         DodamModalBottomSheet(
             onDismissRequest = {
                 showBottomSheet = false
+                bottomSheetUser = null
             },
             title = {},
             content = {
                 Text(
-                    text = "박병춘(박병준)님 정보",
+                    text = "${bottomSheetUser!!.memberName}님 정보",
                     style = DodamTheme.typography.heading1Bold(),
                     color = DodamTheme.colors.labelNormal
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "직군 | 학부모",
+                    text = "직군 | ${bottomSheetUser!!.role.getName()}",
                     style = DodamTheme.typography.headlineMedium(),
                     color = DodamTheme.colors.labelAssistive
                 )
@@ -79,14 +83,28 @@ fun GroupWaitingScreen(
                 ) {
                     DodamButton(
                         modifier = Modifier.weight(2f),
-                        onClick = {},
+                        onClick = {
+                            viewModel.rejectMember(
+                                divisionId = id,
+                                memberId = bottomSheetUser!!.id
+                            )
+                            showBottomSheet = false
+                            bottomSheetUser = null
+                        },
                         text = "거절하기",
                         buttonSize = ButtonSize.Large,
                         buttonRole = ButtonRole.Assistive,
                     )
                     DodamButton(
                         modifier = Modifier.weight(3f),
-                        onClick = {},
+                        onClick = {
+                            viewModel.approveMember(
+                                divisionId = id,
+                                memberId = bottomSheetUser!!.id
+                            )
+                            showBottomSheet = false
+                            bottomSheetUser = null
+                        },
                         text = "승인하기",
                         buttonSize = ButtonSize.Large,
                         buttonRole = ButtonRole.Primary,
@@ -147,6 +165,7 @@ fun GroupWaitingScreen(
                                 indication = rememberBounceIndication(),
                                 onClick = {
                                     showBottomSheet = true
+                                    bottomSheetUser = it
                                 }
                             ),
                         image = it.profileImage,
@@ -181,6 +200,7 @@ fun GroupWaitingScreen(
                                 indication = rememberBounceIndication(),
                                 onClick = {
                                     showBottomSheet = true
+                                    bottomSheetUser = it
                                 }
                             ),
                         image = it.profileImage,
@@ -215,6 +235,7 @@ fun GroupWaitingScreen(
                                 indication = rememberBounceIndication(),
                                 onClick = {
                                     showBottomSheet = true
+                                    bottomSheetUser = it
                                 }
                             ),
                         image = it.profileImage,
@@ -249,6 +270,7 @@ fun GroupWaitingScreen(
                                 indication = rememberBounceIndication(),
                                 onClick = {
                                     showBottomSheet = true
+                                    bottomSheetUser = it
                                 }
                             ),
                         image = it.profileImage,

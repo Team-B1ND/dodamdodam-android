@@ -64,7 +64,7 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun detailMember(name: String, start: String, end: String, reason: String, id: Long, place: String, doNeedPhone: Boolean, reasonForPhone: String?) {
+    fun detailMember(name: String, start: String, end: String, reason: String, id: Long, doNeedPhone: Boolean, reasonForPhone: String?) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
@@ -73,7 +73,6 @@ class ApproveNightStudyViewModel : ViewModel(), KoinComponent {
                         name = name,
                         startDay = start,
                         endDay = end,
-                        place = place,
                         content = reason,
                         doNeedPhone = doNeedPhone,
                         reasonForPhone = reasonForPhone,
