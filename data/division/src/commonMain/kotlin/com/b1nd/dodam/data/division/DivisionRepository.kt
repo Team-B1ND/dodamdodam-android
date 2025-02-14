@@ -18,7 +18,7 @@ interface DivisionRepository {
     suspend fun getDivisionMembersCnt(id: Int, status: Status): Flow<Result<Int>>
     suspend fun deleteDivisionMembers(divisionId: Int, memberId: List<Int>): Flow<Result<Unit>>
     suspend fun postDivisionApplyRequest(divisionId: Int): Flow<Result<Unit>>
-    suspend fun postDivisionAddMembers(divisionId: Int, memberId: List<Int>): Flow<Result<Unit>>
+    suspend fun postDivisionAddMembers(divisionId: Int, memberId: List<String>): Flow<Result<Unit>>
     suspend fun postCreateDivision(name: String, description: String): Flow<Result<Unit>>
     suspend fun patchDivisionMembers(divisionId: Int, memberId: List<Int>, status: Status): Flow<Result<Unit>>
 }

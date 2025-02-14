@@ -46,6 +46,7 @@ import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.groupadd.model.GroupAddSideEffect
 import com.b1nd.dodam.groupadd.viewmodel.GroupAddViewModel
 import com.b1nd.dodam.ui.component.DodamGroupMemberCard
+import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircleFilled
 import com.b1nd.dodam.ui.util.addFocusCleaner
@@ -58,21 +59,24 @@ import org.koin.compose.viewmodel.koinViewModel
 internal fun GroupAddScreen(
     id: Int,
     viewModel: GroupAddViewModel = koinViewModel(),
-    popBackStack: () -> Unit
+    showSnackbar: (state: SnackbarState, message: String) -> Unit,
+    popBackStack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val lazyListState = rememberLazyListState()
     val focusManager = LocalFocusManager.current
-    var checkUsers: ImmutableList<Int> by remember { mutableStateOf(persistentListOf()) }
+    var checkUsers: ImmutableList<String> by remember { mutableStateOf(persistentListOf()) }
 
     LaunchedEffect(true) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 GroupAddSideEffect.FailedAddMember -> {
-
+                    showSnackbar(SnackbarState.ERROR, "멤버 추가에 실패했어요")
                 }
                 GroupAddSideEffect.SuccessAddMember -> {
                     checkUsers = persistentListOf()
+                    showSnackbar(SnackbarState.SUCCESS, "멤버 추가에 성공했어요")
+                    popBackStack()
                 }
             }
         }
@@ -128,7 +132,7 @@ internal fun GroupAddScreen(
                             },
                             onClickUserAll = {
                                 val userIds =
-                                    uiState.divisionMembers[item.id]?.map { it.id } ?: emptyList()
+                                    uiState.divisionMembers[item.id]?.map { it.memberId } ?: emptyList()
                                 val updatedSelection = checkUsers.toMutableList()
                                 if (checkUsers.containsAll(userIds)) {
                                     updatedSelection.removeAll(userIds)
@@ -143,10 +147,10 @@ internal fun GroupAddScreen(
                             },
                             onClickUser = { user ->
                                 val updatedSelection = checkUsers.toMutableList()
-                                if (checkUsers.contains(user.id)) {
-                                    updatedSelection.remove(user.id)
+                                if (checkUsers.contains(user.memberId)) {
+                                    updatedSelection.remove(user.memberId)
                                 } else {
-                                    updatedSelection.add(user.id)
+                                    updatedSelection.add(user.memberId)
                                 }
                                 checkUsers = updatedSelection.toImmutableList()
                             }
@@ -214,7 +218,7 @@ private fun GroupCard(
     title: String,
     isOpen: Boolean,
     users: ImmutableList<DivisionMember>,
-    checkUsers: ImmutableList<Int>,
+    checkUsers: ImmutableList<String>,
     onClickCard: () -> Unit,
     onClickUserAll: () -> Unit,
     onClickUser: (DivisionMember) -> Unit,
@@ -283,7 +287,7 @@ private fun GroupCard(
                                 bottom = 4.dp
                             )
                             .size(24.dp),
-                        imageVector = if (checkUsers.containsAll(users.map { it.id })) ColoredCheckmarkCircleFilled else ColoredCheckmarkCircle,
+                        imageVector = if (checkUsers.containsAll(users.map { it.memberId })) ColoredCheckmarkCircleFilled else ColoredCheckmarkCircle,
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                     )
@@ -307,7 +311,7 @@ private fun GroupCard(
                     image = null,
                     name = user.memberName,
                     action = {
-                        if (user.id in checkUsers) {
+                        if (user.memberId in checkUsers) {
                             Image(
                                 modifier = Modifier
                                     .size(24.dp),

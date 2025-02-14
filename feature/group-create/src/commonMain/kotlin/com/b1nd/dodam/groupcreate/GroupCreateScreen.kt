@@ -60,6 +60,7 @@ internal fun GroupCreateScreen(
                     showSnackbar(SnackbarState.ERROR, sideEffect.error.message?: "Error")
                 }
                 GroupCreateSideEffect.SuccessGroupCreate -> {
+                    showSnackbar(SnackbarState.SUCCESS, "새로운 그룹을 생성했어요!")
                     popBackStack()
                 }
             }

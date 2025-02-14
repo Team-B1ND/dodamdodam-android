@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DivisionMemberResponse(
     val id: Int,
+    val memberId: String,
     val memberName: String,
     val profileImage: String?,
     val permission: String,
