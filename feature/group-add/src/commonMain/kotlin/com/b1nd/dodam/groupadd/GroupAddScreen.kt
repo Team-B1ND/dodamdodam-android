@@ -16,10 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +34,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
+import com.b1nd.dodam.data.division.model.DivisionMember
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -39,6 +43,8 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.groupadd.model.GroupAddSideEffect
+import com.b1nd.dodam.groupadd.viewmodel.GroupAddViewModel
 import com.b1nd.dodam.ui.component.DodamGroupMemberCard
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircleFilled
@@ -46,135 +52,159 @@ import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-
-data class GroupItem(
-    val name: String,
-    val users: ImmutableList<String>,
-    val isOpen: Boolean,
-)
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun GroupAddScreen(
+    id: Int,
+    viewModel: GroupAddViewModel = koinViewModel(),
     popBackStack: () -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    val lazyListState = rememberLazyListState()
     val focusManager = LocalFocusManager.current
-    var checkUsers: ImmutableList<String> by remember { mutableStateOf(persistentListOf()) }
+    var checkUsers: ImmutableList<Int> by remember { mutableStateOf(persistentListOf()) }
 
-    var testGroup: ImmutableList<GroupItem> by remember { mutableStateOf(persistentListOf(
-        GroupItem("1학년 2반", persistentListOf("박병준", "박병준2"), false),
-        GroupItem("1학년 3반", persistentListOf("iOS", "iOS2", "iOS3"), false),
-        GroupItem("B1ND", persistentListOf("안드로이드", "안드로이드2"), false),
-        GroupItem("CNS", persistentListOf("박병춘", "박병춘2"), false),
-    ))}
+    LaunchedEffect(true) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                GroupAddSideEffect.FailedAddMember -> {
 
-    var memberSearchText by remember { mutableStateOf("") }
-
-    Scaffold(
-        modifier = Modifier.addFocusCleaner(focusManager),
-        containerColor = DodamTheme.colors.backgroundNeutral,
-        topBar = {
-            DodamTopAppBar(
-                modifier = Modifier.statusBarsPadding(),
-                title = "멤버 추가",
-                onBackClick = popBackStack,
-            )
-        },
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-        ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                item {
-                    DodamTextField(
-                        modifier = Modifier
-                            .padding(
-                                top = 8.dp,
-                                start = 16.dp,
-                                end = 16.dp
-                            )
-                            .fillMaxWidth(),
-                        value = memberSearchText,
-                        onValueChange = {
-                            memberSearchText = it
-                        },
-                        label = "멤버 검색"
-                    )
                 }
+                GroupAddSideEffect.SuccessAddMember -> {
+                    checkUsers = persistentListOf()
+                }
+            }
+        }
+    }
 
-                items(testGroup.size) {
-                    val item = testGroup[it]
-                    GroupCard(
-                        title = item.name,
-                        users = item.users,
-                        checkUsers = checkUsers,
-                        isOpen = item.isOpen,
-                        onClickCard = {
-                            testGroup = testGroup.toMutableList().apply {
-                                set(it, item.copy(isOpen = !item.isOpen))
-                            }.toImmutableList()
-                        },
-                        onClickUserAll = {
-                            val copyCheckUsers = checkUsers.toMutableList()
-                            if (checkUsers.containsAll(item.users)) {
-                                copyCheckUsers.removeAll(item.users)
-                            } else {
-                                copyCheckUsers.addAll(item.users)
-                            }
-                            checkUsers = copyCheckUsers.toImmutableList()
-                        },
-                        onClickUser = {
-                            checkUsers = checkUsers.toMutableList().apply {
-                                if (contains(it)) {
-                                    remove(it)
-                                } else {
-                                    add(it)
+    LaunchedEffect(lazyListState.canScrollForward) {
+        if (!lazyListState.canScrollForward) {
+            viewModel.loadNextGroupList()
+        }
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Scaffold(
+            modifier = Modifier.addFocusCleaner(focusManager),
+            containerColor = DodamTheme.colors.backgroundNeutral,
+            topBar = {
+                DodamTopAppBar(
+                    modifier = Modifier.statusBarsPadding(),
+                    title = "멤버 추가",
+                    onBackClick = popBackStack,
+                )
+            },
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    state = lazyListState,
+                ) {
+                    items(uiState.divisions.size) {
+                        val item = uiState.divisions[it]
+                        GroupCard(
+                            title = item.name,
+                            users = uiState.divisionMembers.getOrElse(
+                                item.id,
+                                defaultValue = { persistentListOf() }),
+                            checkUsers = checkUsers,
+                            isOpen = item.isOpen,
+                            onClickCard = {
+                                if (uiState.divisionMembers[item.id] == null) {
+                                    viewModel.loadDivisionMembers(
+                                        divisionId = item.id
+                                    )
                                 }
-                            }.toImmutableList()
-                        }
+                                viewModel.changeOpenState(divisionId = item.id)
+                            },
+                            onClickUserAll = {
+                                val userIds =
+                                    uiState.divisionMembers[item.id]?.map { it.id } ?: emptyList()
+                                val updatedSelection = checkUsers.toMutableList()
+                                if (checkUsers.containsAll(userIds)) {
+                                    updatedSelection.removeAll(userIds)
+                                } else {
+                                    updatedSelection.addAll(userIds.filterNot {
+                                        checkUsers.contains(
+                                            it
+                                        )
+                                    })
+                                }
+                                checkUsers = updatedSelection.toImmutableList()
+                            },
+                            onClickUser = { user ->
+                                val updatedSelection = checkUsers.toMutableList()
+                                if (checkUsers.contains(user.id)) {
+                                    updatedSelection.remove(user.id)
+                                } else {
+                                    updatedSelection.add(user.id)
+                                }
+                                checkUsers = updatedSelection.toImmutableList()
+                            }
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(80.dp))
+                    }
+
+                }
+
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .background(
+                            color = DodamTheme.colors.backgroundNeutral
+                        )
+                        .padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            bottom = 12.dp,
+                        ),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    DodamButton(
+                        modifier = Modifier.weight(2f),
+                        text = "전체 취소",
+                        onClick = {
+                            checkUsers = persistentListOf()
+                        },
+                        buttonSize = ButtonSize.Large,
+                        buttonRole = ButtonRole.Assistive
+                    )
+                    DodamButton(
+                        modifier = Modifier.weight(3f),
+                        text = "추가",
+                        onClick = {
+                            viewModel.addDivisionMember(
+                                divisionId = id,
+                                memberIds = checkUsers
+                            )
+                        },
+                        enabled = checkUsers.isNotEmpty(),
+                        buttonSize = ButtonSize.Large,
+                        buttonRole = ButtonRole.Primary
                     )
                 }
-
-                item {
-                    Spacer(modifier = Modifier.height(80.dp))
-                }
-
             }
+        }
 
-            Row(
+        if (uiState.addLoading) {
+            Box(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        bottom = 12.dp,
-                    )
-                    .background(
-                        color = DodamTheme.colors.backgroundNeutral
-                    ),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                DodamButton(
-                    modifier = Modifier.weight(2f),
-                    text = "전체 취소",
-                    onClick = {},
-                    buttonSize = ButtonSize.Large,
-                    buttonRole = ButtonRole.Assistive
-                )
-                DodamButton(
-                    modifier = Modifier.weight(3f),
-                    text = "추가",
-                    onClick = {},
-                    buttonSize = ButtonSize.Large,
-                    buttonRole = ButtonRole.Primary
-                )
-            }
+                    .fillMaxSize()
+                    .background(DodamTheme.colors.staticBlack.copy(alpha = 0.3f))
+            )
         }
     }
 }
@@ -183,11 +213,11 @@ internal fun GroupAddScreen(
 private fun GroupCard(
     title: String,
     isOpen: Boolean,
-    users: ImmutableList<String>,
-    checkUsers: ImmutableList<String>,
+    users: ImmutableList<DivisionMember>,
+    checkUsers: ImmutableList<Int>,
     onClickCard: () -> Unit,
     onClickUserAll: () -> Unit,
-    onClickUser: (String) -> Unit,
+    onClickUser: (DivisionMember) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -253,7 +283,7 @@ private fun GroupCard(
                                 bottom = 4.dp
                             )
                             .size(24.dp),
-                        imageVector = if (checkUsers.containsAll(users)) ColoredCheckmarkCircleFilled else ColoredCheckmarkCircle,
+                        imageVector = if (checkUsers.containsAll(users.map { it.id })) ColoredCheckmarkCircleFilled else ColoredCheckmarkCircle,
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                     )
@@ -275,9 +305,9 @@ private fun GroupCard(
                         }
                     ),
                     image = null,
-                    name = user,
+                    name = user.memberName,
                     action = {
-                        if (user in checkUsers) {
+                        if (user.id in checkUsers) {
                             Image(
                                 modifier = Modifier
                                     .size(24.dp),

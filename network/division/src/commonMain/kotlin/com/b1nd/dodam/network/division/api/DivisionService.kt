@@ -86,6 +86,15 @@ internal class DivisionService constructor(
                 .body<DefaultResponse>()
         }
 
+    override suspend fun postDivisionAddMembers(divisionId: Int, memberId: List<Int>) =
+        defaultSafeRequest {
+            httpClient.post("${DodamUrl.DIVISION}/${divisionId}/members") {
+                memberId.forEach {
+                    parameter("memberIdList", it)
+                }
+            }.body<DefaultResponse>()
+        }
+
     override suspend fun patchDivisionMembers(
         divisionId: Int,
         memberId: List<Int>,

@@ -18,7 +18,7 @@ fun NavController.navigateToGroupDetail(
 
 fun NavGraphBuilder.groupDetailScreen(
     popBackStack: () -> Unit,
-    navigateToGroupAdd: () -> Unit,
+    navigateToGroupAdd: (id: Int) -> Unit,
     navigateToGroupWaiting: (id: Int, name: String) -> Unit,
 ) {
     composable(
