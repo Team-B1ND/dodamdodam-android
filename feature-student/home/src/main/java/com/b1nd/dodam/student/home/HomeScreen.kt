@@ -82,7 +82,6 @@ internal fun HomeScreen(
     navigateToWakeupSongScreen: () -> Unit,
     role: String
 ) {
-    Log.d("TAG", "HomeScreen: $role")
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var showDialog by remember {

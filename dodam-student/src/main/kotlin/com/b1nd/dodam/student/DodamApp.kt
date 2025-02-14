@@ -80,7 +80,6 @@ fun DodamApp(
     scope: CoroutineScope = rememberCoroutineScope(),
     role: String
 ) {
-    Log.d("TAG", "DodamApp: $role")
     navController.addOnDestinationChangedListener { _, destination, _ ->
         val params = Bundle().apply {
             putString(FirebaseAnalytics.Param.SCREEN_NAME, destination.route)
