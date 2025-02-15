@@ -8,7 +8,6 @@ import com.b1nd.dodam.common.exception.UnauthorizedException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.login.repository.LoginRepository
 import com.b1nd.dodam.datastore.repository.DataStoreRepository
-import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.login.model.LoginUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,8 +35,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
         loginRepository.login(id, pw, pushToken).collect { result ->
             when (result) {
                 is Result.Success -> {
-                    if (result.data.role == "STUDENT") {
-                        KmLogging.debug("TAG", "STUDENT")
+                    if (result.data.role == role) {
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
@@ -53,7 +51,6 @@ class LoginViewModel : ViewModel(), KoinComponent {
                         )
                         _event.emit(Event.NavigateToMain)
                     } else if(result.data.role == "PARENT"){
-                        KmLogging.debug("TAG", "PARENT")
                         _uiState.update {
                             it.copy(
                                 isLoading = false,

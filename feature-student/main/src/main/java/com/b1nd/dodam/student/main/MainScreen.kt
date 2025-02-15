@@ -83,7 +83,6 @@ internal fun MainScreen(
                 navigateToAskOut = navigateToAddOuting,
                 navigateToWakeupSongScreen = navigateToWakeUpSong,
                 navigateToAskWakeupSongScreen = navigateToAddWakeUpSong,
-                role = role
             )
             noticeScreen(
                 isTeacher = false,

@@ -26,7 +26,6 @@ class ParentAllViewModel : ViewModel(), KoinComponent {
                 _uiState.update { uiState ->
                     when (result) {
                         is Result.Success -> {
-                            Log.d("AllViewModel", "myInfo ${uiState.memberInfo?.name}")
                             uiState.copy(
                                 isLoading = false,
                                 memberInfo = result.data,

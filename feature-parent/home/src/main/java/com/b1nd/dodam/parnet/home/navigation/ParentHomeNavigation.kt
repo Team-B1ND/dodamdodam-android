@@ -25,7 +25,6 @@ fun NavController.navigateToParentHome(
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.parentHomeScreen(
     navigateToMeal: () -> Unit,
-    role: String
 ) {
     composable(
         route = PARENT_HOME_ROUTE,
@@ -36,7 +35,6 @@ fun NavGraphBuilder.parentHomeScreen(
     ) {
         ParentHomeScreen(
             navigateToMeal = navigateToMeal,
-            role = role
         )
     }
 }

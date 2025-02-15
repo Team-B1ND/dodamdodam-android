@@ -28,7 +28,6 @@ kotlin{
             implementation(projects.datastore)
             api(projects.data.login)
             implementation(libs.dodam.design.system.cmm)
-            implementation(projects.logging)
         }
         androidMain.dependencies {
             implementation(libs.koin.android)

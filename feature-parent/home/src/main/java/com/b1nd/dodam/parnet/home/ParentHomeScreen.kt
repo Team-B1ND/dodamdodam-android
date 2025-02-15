@@ -68,7 +68,6 @@ import org.koin.androidx.compose.koinViewModel
 internal fun ParentHomeScreen(
     viewModel: ParentHomeViewModel = koinViewModel(),
     navigateToMeal: () -> Unit,
-    role: String
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -107,7 +106,6 @@ internal fun ParentHomeScreen(
             }
         },
         navigateToMeal = navigateToMeal,
-        role = role
     )
 }
 
@@ -124,7 +122,6 @@ private fun HomeScreen(
     fetchSchedule: () -> Unit,
     onRefresh: () -> Unit,
     navigateToMeal: () -> Unit,
-    role: String
 ) {
     val scrollState = rememberLazyListState()
 
