@@ -14,6 +14,7 @@ interface DivisionDataSource {
     suspend fun getDivision(id: Int): DivisionInfoResponse
     suspend fun getDivisionMembers(id: Int, status: String): List<DivisionMemberResponse>
     suspend fun getDivisionMembersCnt(id: Int, status: String): Int
+    suspend fun deleteDivision(divisionId: Int)
     suspend fun deleteDivisionMembers(divisionId: Int, memberId: List<Int>)
     suspend fun postDivisionApplyRequest(divisionId: Int)
     suspend fun postDivisionAddMembers(divisionId: Int, memberId: List<String>)

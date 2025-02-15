@@ -98,6 +98,8 @@ internal fun GroupDetailScreen(
     var dialogMemberUser: DivisionMember? by remember { mutableStateOf(null) }
     var isShowMemberDialog by remember { mutableStateOf(false) }
 
+    var isShowGroupDialog by remember { mutableStateOf(false) }
+
     val onClickMember: (DivisionMember) -> Unit = {
         bottomSheetUser = it
         isShowMemberBottomSheet = true
@@ -112,6 +114,15 @@ internal fun GroupDetailScreen(
                 }
                 GroupDetailSideEffect.SuccessEditPermission -> {
                     showSnackbar(SnackbarState.SUCCESS, "성공적으로 멤버의 권환을 수정했습니다!")
+                }
+
+                is GroupDetailSideEffect.FailedDeleteGroup -> {
+                    showSnackbar(SnackbarState.ERROR, sideEffect.throwable.message?: "Error")
+                }
+                GroupDetailSideEffect.SuccessDeleteGroup -> {
+                    showSnackbar(SnackbarState.SUCCESS, "성공적으로 그룹을 삭제했습니다.")
+                    popBackStack()
+
                 }
             }
         }
@@ -162,6 +173,28 @@ internal fun GroupDetailScreen(
                 }
                 DodamMenuDialog(
                     items = dialogItems.toImmutableList(),
+                )
+            }
+        )
+    }
+
+    if (isShowGroupDialog) {
+        Dialog(
+            onDismissRequest = {
+                isShowGroupDialog = false
+            },
+            content = {
+                DodamMenuDialog(
+                    items = persistentListOf(
+                        DodamMenuItem(
+                            item = "삭제하기",
+                            color = DodamMenuItemColor.Negative,
+                            onClickItem = {
+                                isShowGroupDialog = false
+                                viewModel.deleteDivision(divisionId = id)
+                            }
+                        )
+                    ),
                 )
             }
         )
@@ -315,7 +348,7 @@ internal fun GroupDetailScreen(
                                         interactionSource = remember { MutableInteractionSource() },
                                         indication = rememberBounceIndication(),
                                         onClick = {
-
+                                            isShowGroupDialog = true
                                         }
                                     ),
                                     contentAlignment = Alignment.Center

@@ -99,6 +99,16 @@ internal class DivisionRepositoryImpl(
         .flowOn(dispatcher)
         .asResult()
 
+    override suspend fun deleteDivision(divisionId: Int): Flow<Result<Unit>> = flow {
+        emit(
+            divisionDataSource.deleteDivision(
+                divisionId = divisionId
+            )
+        )
+    }
+        .flowOn(dispatcher)
+        .asResult()
+
     override suspend fun deleteDivisionMembers(
         divisionId: Int,
         memberId: List<Int>
