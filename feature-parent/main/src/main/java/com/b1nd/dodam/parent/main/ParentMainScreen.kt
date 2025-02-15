@@ -43,9 +43,6 @@ internal fun ParentMainScreen(
     navigateToMeal: () -> Unit,
     navigateToSetting: () -> Unit,
     showToast: (String, String) -> Unit,
-    refresh: () -> Boolean,
-    dispose: () -> Unit,
-    role: String
 ) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
     val mainScreenState = rememberParentMainScreenState(navController)
@@ -59,7 +56,6 @@ internal fun ParentMainScreen(
         ) {
             parentHomeScreen(
                 navigateToMeal = navigateToMeal,
-                role = ""
             )
             noticeScreen(
                 isTeacher = false,

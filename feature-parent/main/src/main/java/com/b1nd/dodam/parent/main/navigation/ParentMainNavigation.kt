@@ -26,7 +26,6 @@ fun NavGraphBuilder.parentMainScreen(
     navigateToMeal: () -> Unit,
     navigateToSetting: () -> Unit,
     showToast: (String, String) -> Unit,
-    role: String
 ) {
     composable(route = PARENT_MAIN_ROUTE) {
         ParentMainScreen(
@@ -34,9 +33,6 @@ fun NavGraphBuilder.parentMainScreen(
             navController = navController,
             navigateToSetting = navigateToSetting,
             showToast = showToast,
-            refresh = { it.savedStateHandle["refresh"] ?: false },
-            dispose = { it.savedStateHandle["refresh"] = false },
-            role = role
         )
     }
 }

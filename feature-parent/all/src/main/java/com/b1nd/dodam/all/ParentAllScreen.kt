@@ -150,18 +150,11 @@ fun ParentAllScreen(
                             )
                         }
                         Spacer(modifier = Modifier.width(16.dp))
-                        val classInfo = myInfo.student
                         Column(horizontalAlignment = Alignment.Start) {
                             Text(
                                 text = "환영합니다, " + myInfo.name + "님",
                                 style = DodamTheme.typography.headlineBold(),
                                 color = DodamTheme.colors.labelNormal,
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = "${classInfo?.grade ?: 0}학년 ${classInfo?.room ?: 0}반 ${classInfo?.number ?: 0}번",
-                                style = DodamTheme.typography.labelMedium(),
-                                color = DodamTheme.colors.labelAlternative,
                             )
                         }
                     }
