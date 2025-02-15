@@ -50,7 +50,6 @@ import com.b1nd.dodam.ui.icons.ColoredBus
 import com.b1nd.dodam.ui.icons.ColoredGroup
 import com.b1nd.dodam.ui.icons.ColoredMegaphone
 import com.b1nd.dodam.ui.icons.ColoredMusicalNote
-import com.b1nd.dodam.ui.icons.ColoredSmailMan
 import com.b1nd.dodam.ui.icons.ColoredTent
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
@@ -175,7 +174,6 @@ fun AllScreen(
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-
                 AllCardView(
                     imageVector = BarChart,
                     text = "내 상벌점 보기",
@@ -216,7 +214,6 @@ fun AllScreen(
         }
     }
 }
-
 
 @Composable
 fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
