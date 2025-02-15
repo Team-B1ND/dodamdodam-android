@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
                             },
                             firebaseAnalytics = firebaseAnalytics,
                             firebaseCrashlytics = firebaseCrashlytics,
-                            role = role
+                            role = role,
                         )
                     } ?: run {
                         Box(

@@ -105,8 +105,8 @@ class DodamApplication : Application() {
                     uploadDatasourceModule,
                     uploadRepositoryModule,
                     parentHomeViewModelModule,
-                    parentAllViewModelModule
-                ) + mainViewModelModules
+                    parentAllViewModelModule,
+                ) + mainViewModelModules,
             )
         }
     }

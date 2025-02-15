@@ -8,5 +8,5 @@ data class User(
     val pw: String = "",
     val token: String = "",
     val pushToken: String = "",
-    val role: String = ""
+    val role: String = "",
 )

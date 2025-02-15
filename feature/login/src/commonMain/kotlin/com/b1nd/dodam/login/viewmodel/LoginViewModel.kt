@@ -47,10 +47,10 @@ class LoginViewModel : ViewModel(), KoinComponent {
                             pw = pw,
                             token = result.data.accessToken,
                             pushToken = pushToken,
-                            role = result.data.role
+                            role = result.data.role,
                         )
                         _event.emit(Event.NavigateToMain)
-                    } else if(result.data.role == "PARENT"){
+                    } else if (result.data.role == "PARENT") {
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
@@ -61,7 +61,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                             pw = pw,
                             token = result.data.accessToken,
                             pushToken = pushToken,
-                            role = result.data.role
+                            role = result.data.role,
                         )
                         _event.emit(Event.NavigateToParentMain)
                     } else {
@@ -110,7 +110,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
 
 sealed interface Event {
     data object NavigateToMain : Event
-    data object NavigateToParentMain: Event
+    data object NavigateToParentMain : Event
     data object ShowDialog : Event
     data class ShowBodyDialog(val message: String) : Event
     data class CheckId(val message: String) : Event

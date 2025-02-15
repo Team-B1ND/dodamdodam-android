@@ -18,7 +18,7 @@ fun NavController.navigationToLogin(
 ) = navigate(LOGIN_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.loginScreen(onBackClick: () -> Unit, navigateToMain: () -> Unit,navigateToParentMain: () -> Unit, role: String) {
+fun NavGraphBuilder.loginScreen(onBackClick: () -> Unit, navigateToMain: () -> Unit, navigateToParentMain: () -> Unit, role: String) {
     composable(
         route = LOGIN_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },

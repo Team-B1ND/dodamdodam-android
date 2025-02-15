@@ -33,7 +33,7 @@ fun NavGraphBuilder.mainScreen(
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
     showToast: (String, String) -> Unit,
-    role: String
+    role: String,
 ) {
     composable(route = MAIN_ROUTE) {
         MainScreen(
@@ -49,7 +49,7 @@ fun NavGraphBuilder.mainScreen(
             showToast = showToast,
             refresh = { it.savedStateHandle["refresh"] ?: false },
             dispose = { it.savedStateHandle["refresh"] = false },
-            role = role
+            role = role,
         )
     }
 }

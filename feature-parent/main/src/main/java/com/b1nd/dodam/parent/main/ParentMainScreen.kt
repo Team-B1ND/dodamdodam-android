@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.b1nd.dodam.all.navigation.navigateToParentAllScreen
 import com.b1nd.dodam.all.navigation.parentAllScreen
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
@@ -62,7 +61,7 @@ internal fun ParentMainScreen(
                 navigateToNoticeCreate = null,
             )
             parentAllScreen(
-                navigateToSetting = navigateToSetting
+                navigateToSetting = navigateToSetting,
             )
         }
         Box(

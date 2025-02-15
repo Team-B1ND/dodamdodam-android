@@ -65,7 +65,7 @@ fun AllScreen(
     navigateToOuting: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
-    role: String
+    role: String,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -208,7 +208,7 @@ fun AllScreen(
                         text = "기상송 신청하기",
                         onClick = navigateToAddWakeUpSong,
                     )
-                }else if(role == "PARENT"){
+                } else if (role == "PARENT") {
                     AllCardView(
                         imageVector = ColoredSmailMan,
                         text = "내 자녀 관리",

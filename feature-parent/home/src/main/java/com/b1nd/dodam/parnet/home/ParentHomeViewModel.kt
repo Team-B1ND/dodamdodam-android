@@ -1,6 +1,5 @@
 package com.b1nd.dodam.parnet.home
 
-
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,10 +10,7 @@ import com.b1nd.dodam.data.schedule.ScheduleRepository
 import com.b1nd.dodam.student.home.model.BannerUiState
 import com.b1nd.dodam.student.home.model.HomeUiState
 import com.b1nd.dodam.student.home.model.MealUiState
-import com.b1nd.dodam.student.home.model.NightStudyUiState
-import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
-import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime

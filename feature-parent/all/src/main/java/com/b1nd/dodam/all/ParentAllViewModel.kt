@@ -1,7 +1,5 @@
 package com.b1nd.dodam.all
 
-
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
