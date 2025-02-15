@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -139,7 +140,7 @@ fun DodamApp(
     ) {
         NavHost(
             navController = navController,
-            startDestination = if (isLogin) PARENT_MAIN_ROUTE else ONBOARDING_ROUTE,
+            startDestination = if (isLogin) if (role == "STUDENT") MAIN_ROUTE else PARENT_MAIN_ROUTE else ONBOARDING_ROUTE,
             enterTransition = { fadeIn(initialAlpha = 100f) },
             exitTransition = { fadeOut(targetAlpha = 100f) },
         ) {
