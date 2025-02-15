@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 import com.b1nd.dodam.parnet.home.ParentHomeScreen
 
 
-const val PARENT_HOME_ROUTE = "home"
+const val PARENT_HOME_ROUTE = "parent_home"
 
 fun NavController.navigateToParentHome(
     navOptions: NavOptions? = androidx.navigation.navOptions {

@@ -47,6 +47,7 @@ import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
 import com.b1nd.dodam.parent.main.navigation.PARENT_MAIN_ROUTE
+import com.b1nd.dodam.parent.main.navigation.navigateToParentMain
 import com.b1nd.dodam.parent.main.navigation.parentMainScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
@@ -213,6 +214,15 @@ fun DodamApp(
                                 inclusive = true
                             }
                         },
+                    )
+                },
+                navigateToParentMain = {
+                    navController.navigateToParentMain(
+                        navOptions {
+                            popUpTo(ONBOARDING_ROUTE){
+                                inclusive = true
+                            }
+                        }
                     )
                 },
                 role = "STUDENT",

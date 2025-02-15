@@ -10,7 +10,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.b1nd.dodam.parent.main.ParentMainScreen
 
-const val PARENT_MAIN_ROUTE = "main"
+const val PARENT_MAIN_ROUTE = "parent_main"
 
 fun NavController.navigateToParentMain(
     navOptions: NavOptions? = androidx.navigation.navOptions {

@@ -50,7 +50,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit, role: String) {
+internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClick: () -> Unit, navigateToMain: () -> Unit, navigateToParentMain: () -> Unit, role: String) {
     val uiState by viewModel.uiState.collectAsState()
 
     var idError by remember { mutableStateOf("") }
@@ -67,7 +67,7 @@ internal fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onBackClic
         viewModel.event.collect { event ->
             when (event) {
                 is Event.NavigateToMain -> navigateToMain()
-                is Event.NavigateToParentMain ->{}
+                is Event.NavigateToParentMain -> navigateToParentMain()
                 is Event.ShowDialog -> coroutineScope.launch {
                     showDialog = true
                 }
