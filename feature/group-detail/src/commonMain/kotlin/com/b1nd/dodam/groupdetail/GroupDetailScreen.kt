@@ -106,6 +106,9 @@ internal fun GroupDetailScreen(
                     showSnackbar(SnackbarState.SUCCESS, "성공적으로 그룹을 삭제했습니다.")
                     popBackStack()
                 }
+                is GroupDetailSideEffect.FailedKickMember -> {
+                    showSnackbar(SnackbarState.ERROR, sideEffect.throwable.message ?: "멤버 추방을 실패했습니다.")
+                }
             }
         }
     }
