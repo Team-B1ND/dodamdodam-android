@@ -195,6 +195,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         loginScreen(
                             onBackClick = navHostController::popBackStack,
                             navigateToMain = navHostController::navigateToHome,
+                            navigateToParentMain = {},
                             role = "TEACHER",
                         )
 
