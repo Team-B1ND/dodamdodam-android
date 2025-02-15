@@ -81,6 +81,12 @@ include(
     ":feature-teacher:all",
     ":feature:notice",
     ":feature-teacher:notice-create",
+    ":feature:group-detail",
+    ":feature:group-waiting",
+    ":feature:group-create",
+    ":feature:group-add",
+    ":data:division",
+    ":network:division",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")
@@ -95,3 +101,6 @@ include(":feature-parent")
 include(":feature-parent:main")
 include(":feature-parent:home")
 include(":feature-parent:all")
+
+include(":feature:group")
+project(":feature:group").name = "feature-group-alias"

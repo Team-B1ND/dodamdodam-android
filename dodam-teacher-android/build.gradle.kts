@@ -56,6 +56,13 @@ kotlin {
             implementation(projects.feature.setting)
             implementation(projects.feature.notice)
             implementation(projects.featureTeacher.noticeCreate)
+            implementation(projects.feature.featureGroupAlias)
+            implementation(projects.feature.groupDetail)
+            implementation(projects.feature.groupWaiting)
+            implementation(projects.feature.groupCreate)
+            implementation(projects.feature.groupAdd)
+            implementation(projects.feature.editMemberInfo)
+
 
             implementation(projects.data.login)
             implementation(projects.data.banner)
@@ -65,6 +72,10 @@ kotlin {
             implementation(projects.data.schedule)
             implementation(projects.data.member)
             implementation(projects.data.point)
+            implementation(projects.data.upload)
+            implementation(projects.data.bundleidInfo)
+            implementation(projects.data.division)
+
             implementation(projects.network.banner)
             implementation(projects.network.meal)
             implementation(projects.network.outing)
@@ -73,18 +84,16 @@ kotlin {
             implementation(projects.network.member)
             implementation(projects.network.point)
             implementation(projects.network.bundleidInfo)
-            implementation(projects.data.bundleidInfo)
-            implementation(projects.feature.editMemberInfo)
             implementation(projects.network.upload)
-            implementation(projects.data.upload)
-        }
+            implementation(projects.network.division)
 
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.compose.activity)
-            implementation(libs.koin.android)
-            implementation(projects.keystore)
-            implementation(libs.google.app.update)
+            androidMain.dependencies {
+                implementation(compose.preview)
+                implementation(libs.androidx.compose.activity)
+                implementation(libs.koin.android)
+                implementation(projects.keystore)
+                implementation(libs.google.app.update)
+            }
         }
     }
 

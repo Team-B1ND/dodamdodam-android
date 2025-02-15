@@ -20,7 +20,6 @@ data class DetailMember(
     val name: String = "",
     val startDay: String = "",
     val endDay: String = "",
-    val place: String = "",
     val content: String = "",
     val doNeedPhone: Boolean = false,
     val reasonForPhone: String? = "",
