@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            var isLogin: Boolean? by remember { mutableStateOf(null) }
+            var role: String? by remember { mutableStateOf(null) }
 
             LaunchedEffect(Unit) {
                 launch {
@@ -87,14 +87,13 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 launch {
-                    isLogin = datastoreRepository.token.first().isNotEmpty()
+                    role = datastoreRepository.user.first().role
                 }
             }
             com.b1nd.dodam.designsystem.DodamTheme {
                 DodamTheme {
-                    isLogin?.let {
+                    role?.let {
                         DodamApp(
-                            isLogin = it,
                             logout = {
                                 lifecycleScope.launch {
                                     datastoreRepository.deleteUser()
@@ -103,6 +102,7 @@ class MainActivity : ComponentActivity() {
                             },
                             firebaseAnalytics = firebaseAnalytics,
                             firebaseCrashlytics = firebaseCrashlytics,
+                            role = it,
                         )
                     } ?: run {
                         Box(

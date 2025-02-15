@@ -45,6 +45,9 @@ import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
+import com.b1nd.dodam.parent.main.navigation.PARENT_MAIN_ROUTE
+import com.b1nd.dodam.parent.main.navigation.navigateToParentMain
+import com.b1nd.dodam.parent.main.navigation.parentMainScreen
 import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
@@ -69,7 +72,6 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterial3Api
 @Composable
 fun DodamApp(
-    isLogin: Boolean,
     logout: () -> Unit,
     navController: NavHostController = rememberNavController(),
     mainNavController: NavHostController = rememberNavController(),
@@ -77,6 +79,7 @@ fun DodamApp(
     firebaseAnalytics: FirebaseAnalytics,
     firebaseCrashlytics: FirebaseCrashlytics,
     scope: CoroutineScope = rememberCoroutineScope(),
+    role: String,
 ) {
     navController.addOnDestinationChangedListener { _, destination, _ ->
         val params = Bundle().apply {
@@ -134,7 +137,11 @@ fun DodamApp(
     ) {
         NavHost(
             navController = navController,
-            startDestination = if (isLogin) MAIN_ROUTE else ONBOARDING_ROUTE,
+            startDestination = when {
+                role == "STUDENT" -> MAIN_ROUTE
+                role == "PARENT" -> PARENT_MAIN_ROUTE
+                else -> ONBOARDING_ROUTE
+            },
             enterTransition = { fadeIn(initialAlpha = 100f) },
             exitTransition = { fadeOut(targetAlpha = 100f) },
         ) {
@@ -158,6 +165,16 @@ fun DodamApp(
                 navigateToAddWakeUpSong = {
                     navController.navigateToAskWakeupSong()
                 },
+                showToast = { status, text ->
+                    state = status
+                    scope.launch { snackbarHostState.showSnackbar(text) }
+                },
+                role = role,
+            )
+            parentMainScreen(
+                navController = mainNavController,
+                navigateToMeal = navController::navigateToMeal,
+                navigateToSetting = navController::navigateToSetting,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
@@ -193,6 +210,15 @@ fun DodamApp(
                 onBackClick = navController::popBackStack,
                 navigateToMain = {
                     navController.navigateToMain(
+                        navOptions {
+                            popUpTo(ONBOARDING_ROUTE) {
+                                inclusive = true
+                            }
+                        },
+                    )
+                },
+                navigateToParentMain = {
+                    navController.navigateToParentMain(
                         navOptions {
                             popUpTo(ONBOARDING_ROUTE) {
                                 inclusive = true
