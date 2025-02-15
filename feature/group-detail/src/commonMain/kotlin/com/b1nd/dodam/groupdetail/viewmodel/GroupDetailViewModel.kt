@@ -299,4 +299,37 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
             )
         }
     }
+
+    fun deleteDivision(divisionId: Int) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    requestLoading = true
+                )
+            }
+            divisionRepository.deleteDivision(
+                divisionId = divisionId
+            ).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                requestLoading = false
+                            )
+                        }
+                        _sideEffect.send(GroupDetailSideEffect.SuccessDeleteGroup)
+                    }
+                    Result.Loading -> {}
+                    is Result.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                requestLoading = false
+                            )
+                        }
+                        _sideEffect.send(GroupDetailSideEffect.FailedDeleteGroup(result.error))
+                    }
+                }
+            }
+        }
+    }
 }

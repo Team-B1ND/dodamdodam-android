@@ -73,6 +73,11 @@ internal class DivisionService constructor(
             }.body<Response<DivisionMemberCountResponse>>()
         }.count
 
+    override suspend fun deleteDivision(divisionId: Int) =
+        defaultSafeRequest {
+            httpClient.delete("${DodamUrl.DIVISION}/${divisionId}").body<DefaultResponse>()
+        }
+
     override suspend fun deleteDivisionMembers(divisionId: Int, memberId: List<Int>,) =
         defaultSafeRequest {
             httpClient.delete("${DodamUrl.DIVISION}/${divisionId}/members") {
