@@ -57,6 +57,7 @@ internal fun MainScreen(
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,
+    role: String,
 ) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
     val mainScreenState = rememberMainScreenState(navController)

@@ -105,7 +105,7 @@ internal fun AllScreen(
                                 .size(64.dp)
                                 .background(
                                     brush = shimmerEffect(),
-                                    shape = DodamTheme.shapes.extraSmall,
+                                    shape = CircleShape,
                                 ),
                         )
                         Spacer(modifier = Modifier.width(16.dp))

@@ -94,4 +94,7 @@ dependencies {
     implementation(projects.feature.editMemberInfo)
     implementation(projects.network.upload)
     implementation(projects.data.upload)
+    implementation(projects.featureParent.main)
+    implementation(projects.featureParent.home)
+    implementation(projects.featureParent.all)
 }
