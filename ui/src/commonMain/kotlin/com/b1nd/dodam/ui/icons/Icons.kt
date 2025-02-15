@@ -17,8 +17,8 @@ import dodamdodam_android.ui.generated.resources.ic_colored_group
 import dodamdodam_android.ui.generated.resources.ic_colored_megaphone
 import dodamdodam_android.ui.generated.resources.ic_colored_musical_note
 import dodamdodam_android.ui.generated.resources.ic_colored_pencil
-import dodamdodam_android.ui.generated.resources.ic_colored_smail_man
 import dodamdodam_android.ui.generated.resources.ic_colored_school
+import dodamdodam_android.ui.generated.resources.ic_colored_smail_man
 import dodamdodam_android.ui.generated.resources.ic_colored_smiling_eyes
 import dodamdodam_android.ui.generated.resources.ic_colored_tent
 import dodamdodam_android.ui.generated.resources.ic_colored_trophy
