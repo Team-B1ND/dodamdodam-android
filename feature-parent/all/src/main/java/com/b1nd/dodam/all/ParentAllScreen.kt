@@ -55,6 +55,7 @@ fun ParentAllScreen(viewModel: ParentAllViewModel = koinViewModel(), navigateToS
     LaunchedEffect(key1 = true) {
         viewModel.getMyInfo()
     }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
