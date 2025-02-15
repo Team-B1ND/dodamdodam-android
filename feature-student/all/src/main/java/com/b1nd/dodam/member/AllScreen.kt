@@ -65,7 +65,6 @@ fun AllScreen(
     navigateToOuting: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
-    role: String,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -176,54 +175,48 @@ fun AllScreen(
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                if (role == "STUDENT") {
-                    AllCardView(
-                        imageVector = BarChart,
-                        text = "내 상벌점 보기",
-                        onClick = navigateToMyPoint,
-                    )
 
-                    DodamDivider(type = DividerType.Normal)
-
-                    AllCardView(
-                        imageVector = ColoredBus,
-                        text = "귀가 버스 신청하기",
-                        onClick = navigateToAddBus,
-                    )
-
-                    AllCardView(
-                        imageVector = ColoredTent,
-                        text = "외출/외박 확인하기",
-                        onClick = navigateToOuting,
-                    )
-
-                    AllCardView(
-                        imageVector = ColoredMegaphone,
-                        text = "기상송 확인하기",
-                        onClick = navigateToWakeUpSong,
-                    )
-
-                    AllCardView(
-                        imageVector = ColoredMusicalNote,
-                        text = "기상송 신청하기",
-                        onClick = navigateToAddWakeUpSong,
-                    )
-                } else if (role == "PARENT") {
-                    AllCardView(
-                        imageVector = ColoredSmailMan,
-                        text = "내 자녀 관리",
-                        onClick = { },
-                    )
-                }
                 AllCardView(
-                    imageVector = ColoredGroup,
-                    text = "그룹",
-                    onClick = { },
+                    imageVector = BarChart,
+                    text = "내 상벌점 보기",
+                    onClick = navigateToMyPoint,
+                )
+
+                DodamDivider(type = DividerType.Normal)
+
+                AllCardView(
+                    imageVector = ColoredBus,
+                    text = "귀가 버스 신청하기",
+                    onClick = navigateToAddBus,
+                )
+
+                AllCardView(
+                    imageVector = ColoredTent,
+                    text = "외출/외박 확인하기",
+                    onClick = navigateToOuting,
+                )
+
+                AllCardView(
+                    imageVector = ColoredMegaphone,
+                    text = "기상송 확인하기",
+                    onClick = navigateToWakeUpSong,
+                )
+
+                AllCardView(
+                    imageVector = ColoredMusicalNote,
+                    text = "기상송 신청하기",
+                    onClick = navigateToAddWakeUpSong,
                 )
             }
+            AllCardView(
+                imageVector = ColoredGroup,
+                text = "그룹",
+                onClick = { },
+            )
         }
     }
 }
+
 
 @Composable
 fun AllCardView(imageVector: ImageVector, text: String, onClick: () -> Unit) {
