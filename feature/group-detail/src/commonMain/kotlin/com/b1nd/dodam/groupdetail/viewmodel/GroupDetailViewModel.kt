@@ -126,7 +126,10 @@ class GroupDetailViewModel : ViewModel(), KoinComponent {
                         }
                     }
                     Result.Loading -> {}
-                    is Result.Error -> {}
+                    is Result.Error -> {
+                        result.error.printStackTrace()
+                        _sideEffect.send(GroupDetailSideEffect.FailedKickMember(result.error))
+                    }
                 }
             }
         }
