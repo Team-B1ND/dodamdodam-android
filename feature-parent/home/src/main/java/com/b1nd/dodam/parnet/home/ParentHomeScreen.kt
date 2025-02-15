@@ -1,11 +1,8 @@
 package com.b1nd.dodam.parnet.home
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,14 +12,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -30,7 +23,6 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,17 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.b1nd.dodam.designsystem.DodamTheme
-import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDialog
-import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.student.home.card.BannerCard
 import com.b1nd.dodam.student.home.card.MealCard
 import com.b1nd.dodam.student.home.card.ScheduleCard
@@ -225,136 +213,5 @@ private fun HomeScreen(
                 state = pullRefreshState,
             )
         }
-    }
-}
-
-@ExperimentalFoundationApi
-@Composable
-internal fun PagerIndicator(modifier: Modifier = Modifier, pagerState: PagerState) {
-    if (pagerState.pageCount > 1) {
-        Row(modifier = modifier) {
-            repeat(pagerState.pageCount) { iteration ->
-                val color =
-                    if (pagerState.currentPage == iteration) {
-                        DodamTheme.colors.primaryNormal
-                    } else {
-                        DodamTheme.colors.labelDisabled
-                    }
-
-                Box(
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .clip(CircleShape)
-                        .background(color)
-                        .size(5.dp),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-internal fun DefaultText(onClick: () -> Unit, label: String, body: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp)
-            .clickable(
-                onClick = onClick,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberBounceIndication(),
-            )
-            .padding(6.dp),
-    ) {
-        Text(
-            text = label,
-            color = DodamTheme.colors.labelAlternative,
-            style = DodamTheme.typography.caption1Medium(),
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = body,
-            color = DodamTheme.colors.primaryNormal,
-            style = DodamTheme.typography.body1Bold(),
-        )
-    }
-}
-
-@Composable
-internal fun DodamContainer(
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    title: String,
-    showNextButton: Boolean = false,
-    onNextClick: (() -> Unit)? = null,
-    content: @Composable () -> Unit,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .animateContentSize()
-            .background(
-                color = DodamTheme.colors.backgroundNormal,
-                shape = DodamTheme.shapes.large,
-            ),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .then(
-                    if (showNextButton) {
-                        Modifier.clickable(
-                            indication = rememberBounceIndication(),
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = onNextClick!!,
-                        )
-                    } else {
-                        Modifier
-                    },
-                )
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = DodamTheme.colors.primaryAlternative,
-                        shape = RoundedCornerShape(100),
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(16.dp),
-                    imageVector = icon,
-                    contentDescription = "icon",
-                    tint = DodamTheme.colors.staticWhite,
-                )
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = title,
-                color = DodamTheme.colors.labelStrong,
-                style = DodamTheme.typography.headlineBold(),
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            if (showNextButton) {
-                Icon(
-                    modifier = Modifier
-                        .size(16.dp),
-                    imageVector = DodamIcons.ChevronRight.value,
-                    contentDescription = "next",
-                    tint = DodamTheme.colors.labelNormal.copy(alpha = 0.5f),
-                )
-            }
-        }
-
-        content()
-
-        Spacer(modifier = Modifier.height(10.dp))
     }
 }
