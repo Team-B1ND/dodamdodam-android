@@ -8,7 +8,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.b1nd.dodam.all.ParentAllScreen
 
-const val PARENT_ALL_ROUTE = "all"
+const val PARENT_ALL_ROUTE = "parent_all"
 
 fun NavController.navigateToParentAllScreen(
     navOptions: NavOptions? = androidx.navigation.navOptions {

@@ -250,42 +250,41 @@ private fun HomeScreen(
                         navigateToMeal = navigateToMeal,
                     )
                 }
-                if (role == "STUDENT"){
-                    item {
-                        WakeupSongCard(
-                            uiState = wakeupSongUiState,
-                            onNextClick = navigateToWakeupSongScreen,
-                            navigateToWakeupSongApply = navigateToAskWakeupSong,
+                item {
+                    WakeupSongCard(
+                        uiState = wakeupSongUiState,
+                        onNextClick = navigateToWakeupSongScreen,
+                        navigateToWakeupSongApply = navigateToAskWakeupSong,
+                        showShimmer = showShimmer,
+                        fetchWakeupSong = fetchWakeupSong,
+                        context = context,
+                    )
+                }
+
+                item {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        OutCard(
+                            modifier = Modifier.weight(1f),
+                            uiState = outUiState,
                             showShimmer = showShimmer,
-                            fetchWakeupSong = fetchWakeupSong,
-                            context = context,
+                            navigateToOut = navigateToOut,
+                            navigateToOutApply = navigateToAskOut,
+                        ) {
+                        }
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        NightStudyCard(
+                            modifier = Modifier.weight(1f),
+                            uiState = nightStudyUiState,
+                            showShimmer = showShimmer,
+                            navigateToAskNightStudy = navigateToAskNightStudy,
+                            navigateToNightStudy = navigateToNightStudy,
+                            fetchNightStudy = fetchNightStudy,
                         )
                     }
-
-                    item {
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            OutCard(
-                                modifier = Modifier.weight(1f),
-                                uiState = outUiState,
-                                showShimmer = showShimmer,
-                                navigateToOut = navigateToOut,
-                                navigateToOutApply = navigateToAskOut,
-                            ) {
-                            }
-
-                            Spacer(modifier = Modifier.width(12.dp))
-
-                            NightStudyCard(
-                                modifier = Modifier.weight(1f),
-                                uiState = nightStudyUiState,
-                                showShimmer = showShimmer,
-                                navigateToAskNightStudy = navigateToAskNightStudy,
-                                navigateToNightStudy = navigateToNightStudy,
-                                fetchNightStudy = fetchNightStudy,
-                            )
-                        }
-                    }
                 }
+
 
                 item {
                     ScheduleCard(
