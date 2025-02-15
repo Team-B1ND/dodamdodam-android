@@ -52,6 +52,16 @@ import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.editmemberinfo.navigation.editMemberInfoScreen
 import com.b1nd.dodam.editmemberinfo.navigation.navigationToEditMemberInfo
+import com.b1nd.dodam.group.navigation.groupScreen
+import com.b1nd.dodam.group.navigation.navigateToGroup
+import com.b1nd.dodam.groupadd.navigation.groupAddScreen
+import com.b1nd.dodam.groupadd.navigation.navigateToGroupAdd
+import com.b1nd.dodam.groupcreate.navigation.groupCreateScreen
+import com.b1nd.dodam.groupcreate.navigation.navigateToGroupCreate
+import com.b1nd.dodam.groupdetail.navigation.groupDetailScreen
+import com.b1nd.dodam.groupdetail.navigation.navigateToGroupDetail
+import com.b1nd.dodam.groupwaiting.navigation.groupWaitingScreen
+import com.b1nd.dodam.groupwaiting.navigation.navigateToGroupWaiting
 import com.b1nd.dodam.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.home.navigation.homeScreen
 import com.b1nd.dodam.home.navigation.navigateToHome
@@ -253,6 +263,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             navigateToOut = navHostController::navigateToApproveOuting,
                             navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                             navigateToPoint = navHostController::navigateToPoint,
+                            navigateToGroup = navHostController::navigateToGroup,
                         )
 
                         approveNightStudyScreen(
@@ -277,13 +288,44 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         editMemberInfoScreen(
                             popBackStack = navHostController::popBackStack,
                         )
-                        23
                         noticeScreen(
                             isTeacher = true,
                             navigateToNoticeCreate = navHostController::navigateToNoticeCreate,
                         )
 
                         noticeCreateScreen(
+                            popBackStack = navHostController::popBackStack,
+                        )
+
+                        groupScreen(
+                            popBackStack = navHostController::popBackStack,
+                            isTeacher = true,
+                            navigateToGroupCreate = navHostController::navigateToGroupCreate,
+                            navigateToGroupDetail = { id ->
+                                navHostController.navigateToGroupDetail(
+                                    id = id,
+                                )
+                            },
+                        )
+
+                        groupDetailScreen(
+                            showSnackbar = showSnackbar,
+                            popBackStack = navHostController::popBackStack,
+                            navigateToGroupAdd = navHostController::navigateToGroupAdd,
+                            navigateToGroupWaiting = navHostController::navigateToGroupWaiting,
+                        )
+
+                        groupWaitingScreen(
+                            popBackStack = navHostController::popBackStack,
+                        )
+
+                        groupCreateScreen(
+                            popBackStack = navHostController::popBackStack,
+                            showSnackbar = showSnackbar,
+                        )
+
+                        groupAddScreen(
+                            showSnackbar = showSnackbar,
                             popBackStack = navHostController::popBackStack,
                         )
                     }
