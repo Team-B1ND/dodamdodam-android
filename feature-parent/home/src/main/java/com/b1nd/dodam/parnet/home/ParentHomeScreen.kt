@@ -56,7 +56,6 @@ import com.b1nd.dodam.student.home.card.ScheduleCard
 import com.b1nd.dodam.student.home.model.BannerUiState
 import com.b1nd.dodam.student.home.model.MealUiState
 import com.b1nd.dodam.student.home.model.ScheduleUiState
-import com.b1nd.dodam.student.home.model.WakeupSongUiState
 import com.b1nd.dodam.ui.icons.DodamLogo
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
@@ -65,10 +64,7 @@ import org.koin.androidx.compose.koinViewModel
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-internal fun ParentHomeScreen(
-    viewModel: ParentHomeViewModel = koinViewModel(),
-    navigateToMeal: () -> Unit,
-) {
+internal fun ParentHomeScreen(viewModel: ParentHomeViewModel = koinViewModel(), navigateToMeal: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var showDialog by remember {

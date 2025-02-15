@@ -11,7 +11,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.b1nd.dodam.parnet.home.ParentHomeScreen
 
-
 const val PARENT_HOME_ROUTE = "parent_home"
 
 fun NavController.navigateToParentHome(
@@ -23,9 +22,7 @@ fun NavController.navigateToParentHome(
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.parentHomeScreen(
-    navigateToMeal: () -> Unit,
-) {
+fun NavGraphBuilder.parentHomeScreen(navigateToMeal: () -> Unit) {
     composable(
         route = PARENT_HOME_ROUTE,
         enterTransition = { EnterTransition.None },

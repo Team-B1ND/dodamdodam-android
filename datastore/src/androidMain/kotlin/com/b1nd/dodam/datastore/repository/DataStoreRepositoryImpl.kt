@@ -24,7 +24,7 @@ class DataStoreRepositoryImpl constructor(
             pw = keyStoreManager.decrypt(it[pwKey] ?: ""),
             token = it[tokenKey] ?: "",
             pushToken = it[pushTokenKey] ?: "",
-            role = it[roleKey] ?: ""
+            role = it[roleKey] ?: "",
         )
     }
 
@@ -35,7 +35,6 @@ class DataStoreRepositoryImpl constructor(
     override val pushToken = dataStore.data.map {
         it[pushTokenKey] ?: ""
     }
-
 
     override suspend fun saveUser(id: String, pw: String, token: String, pushToken: String, role: String) {
         dataStore.edit {

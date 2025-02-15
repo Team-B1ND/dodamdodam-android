@@ -1,6 +1,5 @@
 package com.b1nd.dodam.student.home
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -281,7 +280,6 @@ private fun HomeScreen(
                         )
                     }
                 }
-
 
                 item {
                     ScheduleCard(

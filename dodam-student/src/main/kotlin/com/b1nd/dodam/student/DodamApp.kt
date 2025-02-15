@@ -2,7 +2,6 @@ package com.b1nd.dodam.student
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -15,7 +14,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -82,7 +80,7 @@ fun DodamApp(
     firebaseAnalytics: FirebaseAnalytics,
     firebaseCrashlytics: FirebaseCrashlytics,
     scope: CoroutineScope = rememberCoroutineScope(),
-    role: String
+    role: String,
 ) {
     navController.addOnDestinationChangedListener { _, destination, _ ->
         val params = Bundle().apply {
@@ -168,7 +166,7 @@ fun DodamApp(
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
                 },
-                role = role
+                role = role,
             )
             parentMainScreen(
                 navController = mainNavController,
@@ -177,7 +175,7 @@ fun DodamApp(
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
-                }
+                },
             )
             mealScreen(
                 popBackStack = navController::popBackStack,
@@ -219,10 +217,10 @@ fun DodamApp(
                 navigateToParentMain = {
                     navController.navigateToParentMain(
                         navOptions {
-                            popUpTo(ONBOARDING_ROUTE){
+                            popUpTo(ONBOARDING_ROUTE) {
                                 inclusive = true
                             }
-                        }
+                        },
                     )
                 },
                 role = "STUDENT",
