@@ -16,19 +16,14 @@ import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
 
 @Composable
-fun DodamGroupMemberCard(
-    modifier: Modifier = Modifier,
-    image: String?,
-    name: String,
-    action: @Composable () -> Unit = {},
-) {
+fun DodamGroupMemberCard(modifier: Modifier = Modifier, image: String?, name: String, action: @Composable () -> Unit = {}) {
     Row(
         modifier = modifier
             .height(48.dp)
             .fillMaxWidth()
             .padding(start = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         DodamAvatar(
             avatarSize = AvatarSize.Small,
@@ -37,7 +32,7 @@ fun DodamGroupMemberCard(
         Text(
             text = name,
             style = DodamTheme.typography.body1Medium(),
-            color = DodamTheme.colors.labelNormal
+            color = DodamTheme.colors.labelNormal,
         )
         Spacer(modifier = Modifier.weight(1f))
         action()

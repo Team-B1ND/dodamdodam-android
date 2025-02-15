@@ -4,11 +4,10 @@ import com.b1nd.dodam.network.division.response.DivisionOverviewResponse
 
 data class DivisionOverview(
     val id: Int,
-    val name: String
+    val name: String,
 )
 
-internal fun DivisionOverviewResponse.toModel() =
-    DivisionOverview(
-        id = id,
-        name = name,
-    )
+internal fun DivisionOverviewResponse.toModel() = DivisionOverview(
+    id = id,
+    name = name,
+)

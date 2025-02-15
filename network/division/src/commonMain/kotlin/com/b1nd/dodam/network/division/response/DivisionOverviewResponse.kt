@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DivisionOverviewResponse(
     val id: Int,
-    val name: String
+    val name: String,
 )

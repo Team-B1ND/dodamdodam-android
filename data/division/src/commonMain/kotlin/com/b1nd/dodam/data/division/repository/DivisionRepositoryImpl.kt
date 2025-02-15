@@ -20,12 +20,8 @@ import kotlinx.coroutines.flow.flowOn
 internal class DivisionRepositoryImpl(
     private val divisionDataSource: DivisionDataSource,
     private val dispatcher: CoroutineDispatcher,
-): DivisionRepository {
-    override suspend fun getAllDivisions(
-        lastId: Int,
-        limit: Int,
-        keyword: String,
-    ): Flow<Result<ImmutableList<DivisionOverview>>> = flow {
+) : DivisionRepository {
+    override suspend fun getAllDivisions(lastId: Int, limit: Int, keyword: String): Flow<Result<ImmutableList<DivisionOverview>>> = flow {
         emit(
             divisionDataSource.getAllDivisions(
                 lastId = lastId,
@@ -33,18 +29,13 @@ internal class DivisionRepositoryImpl(
                 keyword = keyword,
             )
                 .map { it.toModel() }
-                .toImmutableList()
+                .toImmutableList(),
         )
     }
         .flowOn(dispatcher)
         .asResult()
 
-
-    override suspend fun getMyDivisions(
-        lastId: Int,
-        limit: Int,
-        keyword: String,
-    ): Flow<Result<ImmutableList<DivisionOverview>>> = flow {
+    override suspend fun getMyDivisions(lastId: Int, limit: Int, keyword: String): Flow<Result<ImmutableList<DivisionOverview>>> = flow {
         emit(
             divisionDataSource.getMyDivisions(
                 lastId = lastId,
@@ -52,7 +43,7 @@ internal class DivisionRepositoryImpl(
                 keyword = keyword,
             )
                 .map { it.toModel() }
-                .toImmutableList()
+                .toImmutableList(),
         )
     }
         .flowOn(dispatcher)
@@ -62,14 +53,13 @@ internal class DivisionRepositoryImpl(
         emit(
             divisionDataSource.getDivision(
                 id = id,
-            ).toModel()
+            ).toModel(),
         )
     }
         .flowOn(dispatcher)
         .asResult()
 
     override suspend fun getDivisionMembers(id: Int, status: Status): Flow<Result<ImmutableList<DivisionMember>>> = flow {
-
         emit(
             divisionDataSource.getDivisionMembers(
                 id = id,
@@ -78,22 +68,18 @@ internal class DivisionRepositoryImpl(
                 .map {
                     it.toModel()
                 }
-                .toImmutableList()
+                .toImmutableList(),
         )
     }
         .flowOn(dispatcher)
         .asResult()
 
-    override suspend fun getDivisionMembersCnt(
-        id: Int,
-        status: Status
-    ): Flow<Result<Int>> = flow {
-
+    override suspend fun getDivisionMembersCnt(id: Int, status: Status): Flow<Result<Int>> = flow {
         emit(
             divisionDataSource.getDivisionMembersCnt(
                 id = id,
                 status = status.name,
-            )
+            ),
         )
     }
         .flowOn(dispatcher)
@@ -102,22 +88,19 @@ internal class DivisionRepositoryImpl(
     override suspend fun deleteDivision(divisionId: Int): Flow<Result<Unit>> = flow {
         emit(
             divisionDataSource.deleteDivision(
-                divisionId = divisionId
-            )
+                divisionId = divisionId,
+            ),
         )
     }
         .flowOn(dispatcher)
         .asResult()
 
-    override suspend fun deleteDivisionMembers(
-        divisionId: Int,
-        memberId: List<Int>
-    ): Flow<Result<Unit>> = flow {
+    override suspend fun deleteDivisionMembers(divisionId: Int, memberId: List<Int>): Flow<Result<Unit>> = flow {
         emit(
             divisionDataSource.deleteDivisionMembers(
                 divisionId = divisionId,
                 memberId = memberId,
-            )
+            ),
         )
     }
         .flowOn(dispatcher)
@@ -126,54 +109,43 @@ internal class DivisionRepositoryImpl(
     override suspend fun postDivisionApplyRequest(divisionId: Int): Flow<Result<Unit>> = flow {
         emit(
             divisionDataSource.postDivisionApplyRequest(
-                divisionId = divisionId
-            )
+                divisionId = divisionId,
+            ),
         )
     }
         .flowOn(dispatcher)
         .asResult()
 
-    override suspend fun patchDivisionMembers(
-        divisionId: Int,
-        memberId: List<Int>,
-        status: Status
-    ): Flow<Result<Unit>> = flow {
+    override suspend fun patchDivisionMembers(divisionId: Int, memberId: List<Int>, status: Status): Flow<Result<Unit>> = flow {
         emit(
             divisionDataSource.patchDivisionMembers(
                 divisionId = divisionId,
                 memberId = memberId,
-                status = status.name
-            )
+                status = status.name,
+            ),
         )
     }
         .flowOn(dispatcher)
         .asResult()
 
-    override suspend fun patchDivisionMemberPermission(
-        divisionId: Int,
-        memberId: Int,
-        permission: DivisionPermission
-    ): Flow<Result<Unit>> = flow {
+    override suspend fun patchDivisionMemberPermission(divisionId: Int, memberId: Int, permission: DivisionPermission): Flow<Result<Unit>> = flow {
         emit(
             divisionDataSource.patchDivisionMemberPermission(
                 divisionId = divisionId,
                 memberId = memberId,
-                permission = permission.name
-            )
+                permission = permission.name,
+            ),
         )
     }
         .flowOn(dispatcher)
         .asResult()
 
-    override suspend fun postDivisionAddMembers(
-        divisionId: Int,
-        memberId: List<String>
-    ): Flow<Result<Unit>> = flow {
+    override suspend fun postDivisionAddMembers(divisionId: Int, memberId: List<String>): Flow<Result<Unit>> = flow {
         emit(
             divisionDataSource.postDivisionAddMembers(
                 divisionId = divisionId,
                 memberId = memberId,
-            )
+            ),
         )
     }
         .flowOn(dispatcher)
@@ -184,10 +156,9 @@ internal class DivisionRepositoryImpl(
             divisionDataSource.postCreateDivision(
                 name = name,
                 description = description,
-            )
+            ),
         )
     }
         .flowOn(dispatcher)
         .asResult()
-
 }

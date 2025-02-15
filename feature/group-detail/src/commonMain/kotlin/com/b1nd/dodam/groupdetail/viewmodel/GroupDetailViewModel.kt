@@ -24,7 +24,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 
-class GroupDetailViewModel: ViewModel(), KoinComponent {
+class GroupDetailViewModel : ViewModel(), KoinComponent {
 
     @Dispatcher(DispatcherType.IO)
     private val dispatcher: CoroutineDispatcher by inject(named(DispatcherType.IO))
@@ -37,7 +37,6 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
     val sideEffect = _sideEffect.receiveAsFlow()
 
     fun load(id: Int) {
-
         viewModelScope.launch(dispatcher) {
             launch {
                 _uiState.update {
@@ -46,7 +45,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
                     )
                 }
                 divisionRepository.getDivision(
-                    id = id
+                    id = id,
                 ).collect { result ->
                     when (result) {
                         is Result.Success -> {
@@ -137,7 +136,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    requestLoading = true
+                    requestLoading = true,
                 )
             }
             divisionRepository.postDivisionApplyRequest(
@@ -147,7 +146,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(
-                                requestLoading = false
+                                requestLoading = false,
                             )
                         }
                     }
@@ -164,7 +163,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    requestLoading = true
+                    requestLoading = true,
                 )
             }
             val editPermission = when (divisionMember.permission) {
@@ -182,7 +181,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
                         editStateMemberScreenPermission(
                             divisionMember = divisionMember,
                             beforePermission = divisionMember.permission,
-                            afterPermission = editPermission
+                            afterPermission = editPermission,
                         )
                         _sideEffect.send(GroupDetailSideEffect.SuccessEditPermission)
                     }
@@ -192,7 +191,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
                         _sideEffect.send(GroupDetailSideEffect.FailedEditPermission(result.error))
                         _uiState.update {
                             it.copy(
-                                requestLoading = false
+                                requestLoading = false,
                             )
                         }
                     }
@@ -205,7 +204,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    requestLoading = true
+                    requestLoading = true,
                 )
             }
             val editPermission = when (divisionMember.permission) {
@@ -223,7 +222,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
                         editStateMemberScreenPermission(
                             divisionMember = divisionMember,
                             beforePermission = divisionMember.permission,
-                            afterPermission = editPermission
+                            afterPermission = editPermission,
                         )
                         _sideEffect.send(GroupDetailSideEffect.SuccessEditPermission)
                     }
@@ -233,7 +232,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
                         _sideEffect.send(GroupDetailSideEffect.FailedEditPermission(result.error))
                         _uiState.update {
                             it.copy(
-                                requestLoading = false
+                                requestLoading = false,
                             )
                         }
                     }
@@ -242,11 +241,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
         }
     }
 
-    private fun editStateMemberScreenPermission(
-        divisionMember: DivisionMember,
-        beforePermission: DivisionPermission,
-        afterPermission: DivisionPermission,
-    ) {
+    private fun editStateMemberScreenPermission(divisionMember: DivisionMember, beforePermission: DivisionPermission, afterPermission: DivisionPermission) {
         val readers = _uiState.value.divisionReaderMembers.toMutableList()
         val writers = _uiState.value.divisionWriterMembers.toMutableList()
         val admins = _uiState.value.divisionAdminMembers.toMutableList()
@@ -271,24 +266,29 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
 
         when (afterPermission) {
             DivisionPermission.READER -> {
-                readers.add(divisionMember.copy(
-                    permission = afterPermission
-                ))
+                readers.add(
+                    divisionMember.copy(
+                        permission = afterPermission,
+                    ),
+                )
             }
 
             DivisionPermission.WRITER -> {
-                writers.add(divisionMember.copy(
-                    permission = afterPermission
-                ))
+                writers.add(
+                    divisionMember.copy(
+                        permission = afterPermission,
+                    ),
+                )
             }
 
             DivisionPermission.ADMIN -> {
-                admins.add(divisionMember.copy(
-                    permission = afterPermission
-                ))
+                admins.add(
+                    divisionMember.copy(
+                        permission = afterPermission,
+                    ),
+                )
             }
         }
-
 
         _uiState.update {
             it.copy(
@@ -304,17 +304,17 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    requestLoading = true
+                    requestLoading = true,
                 )
             }
             divisionRepository.deleteDivision(
-                divisionId = divisionId
+                divisionId = divisionId,
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(
-                                requestLoading = false
+                                requestLoading = false,
                             )
                         }
                         _sideEffect.send(GroupDetailSideEffect.SuccessDeleteGroup)
@@ -323,7 +323,7 @@ class GroupDetailViewModel: ViewModel(), KoinComponent {
                     is Result.Error -> {
                         _uiState.update {
                             it.copy(
-                                requestLoading = false
+                                requestLoading = false,
                             )
                         }
                         _sideEffect.send(GroupDetailSideEffect.FailedDeleteGroup(result.error))

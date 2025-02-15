@@ -1,6 +1,5 @@
 package com.b1nd.dodam.group
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -33,9 +32,6 @@ import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
-import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
-import com.b1nd.dodam.designsystem.component.DodamSegment
-import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTab
 import com.b1nd.dodam.designsystem.component.DodamTabRow
 import com.b1nd.dodam.designsystem.component.DodamTextField
@@ -89,20 +85,26 @@ internal fun GroupScreen(
                 modifier = Modifier.statusBarsPadding(),
                 title = "그룹",
                 onBackClick = popBackStack,
-                actionIcons = if (isTeacher) persistentListOf(ActionIcon(
-                    icon = DodamIcons.Plus,
-                    onClick = navigateToGroupCreate
-                )) else persistentListOf()
+                actionIcons = if (isTeacher) {
+                    persistentListOf(
+                        ActionIcon(
+                            icon = DodamIcons.Plus,
+                            onClick = navigateToGroupCreate,
+                        ),
+                    )
+                } else {
+                    persistentListOf()
+                },
             )
         },
-        containerColor = DodamTheme.colors.backgroundNormal
+        containerColor = DodamTheme.colors.backgroundNormal,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
                 .padding(top = 4.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             DodamTextField(
                 modifier = Modifier
@@ -127,16 +129,16 @@ internal fun GroupScreen(
                         label = "내 그룹",
                         onClick = {
                             selectedIndex = 0
-                        }
+                        },
                     ),
                     DodamTab(
                         selected = selectedIndex == 1,
                         label = "전체",
                         onClick = {
                             selectedIndex = 1
-                        }
+                        },
                     ),
-                )
+                ),
             )
             Spacer(modifier = Modifier.height(8.dp))
             LazyColumn(
@@ -144,7 +146,7 @@ internal fun GroupScreen(
                     .fillMaxWidth()
                     .weight(1f),
                 state = if (selectedIndex == 0) myGroupLazyListState else allGroupLazyListState,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 items(
                     items = (if (selectedIndex == 0) uiState.myGroups else uiState.allGroups)
@@ -156,7 +158,7 @@ internal fun GroupScreen(
                         },
                     key = { item ->
                         item.id
-                    }
+                    },
                 ) { item ->
                     Row(
                         modifier = Modifier
@@ -166,21 +168,21 @@ internal fun GroupScreen(
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = rememberBounceIndication(),
-                                onClick = { navigateToGroupDetail(item.id) }
+                                onClick = { navigateToGroupDetail(item.id) },
                             ),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = item.name,
                             style = DodamTheme.typography.body1Medium(),
-                            color = DodamTheme.colors.labelNormal
+                            color = DodamTheme.colors.labelNormal,
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(
                             modifier = Modifier.size(16.dp),
                             imageVector = DodamIcons.ChevronRight.value,
                             contentDescription = null,
-                            tint = DodamTheme.colors.labelAssistive
+                            tint = DodamTheme.colors.labelAssistive,
                         )
                     }
                 }

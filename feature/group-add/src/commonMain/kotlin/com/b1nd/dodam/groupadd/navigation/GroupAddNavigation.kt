@@ -11,18 +11,14 @@ import com.b1nd.dodam.ui.component.SnackbarState
 
 const val GROUP_ADD_ROUTE = "group_add"
 
-fun NavController.navigateToGroupAdd(id: Int ,navOptions: NavOptions? = null) =
-    navigate("${GROUP_ADD_ROUTE}/${id}", navOptions)
+fun NavController.navigateToGroupAdd(id: Int, navOptions: NavOptions? = null) = navigate("${GROUP_ADD_ROUTE}/$id", navOptions)
 
-fun NavGraphBuilder.groupAddScreen(
-    showSnackbar: (state: SnackbarState, message: String) -> Unit,
-    popBackStack: () -> Unit
-) {
+fun NavGraphBuilder.groupAddScreen(showSnackbar: (state: SnackbarState, message: String) -> Unit, popBackStack: () -> Unit) {
     composable(
         route = "${GROUP_ADD_ROUTE}/{id}",
         arguments = listOf(
-            navArgument("id", { type = NavType.IntType })
-        )
+            navArgument("id", { type = NavType.IntType }),
+        ),
     ) {
         GroupAddScreen(
             id = it.arguments?.getInt("id") ?: 0,

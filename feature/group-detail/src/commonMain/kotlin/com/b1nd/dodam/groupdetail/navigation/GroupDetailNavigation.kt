@@ -12,10 +12,7 @@ import com.b1nd.dodam.ui.component.SnackbarState
 
 const val GROUP_DETAIL_ROUTE = "group_detail"
 
-fun NavController.navigateToGroupDetail(
-    id: Int,
-    navOptions: NavOptions? = null
-) = this.navigate("${GROUP_DETAIL_ROUTE}/${id}", navOptions)
+fun NavController.navigateToGroupDetail(id: Int, navOptions: NavOptions? = null) = this.navigate("${GROUP_DETAIL_ROUTE}/$id", navOptions)
 
 fun NavGraphBuilder.groupDetailScreen(
     showSnackbar: (state: SnackbarState, message: String) -> Unit,
@@ -28,7 +25,7 @@ fun NavGraphBuilder.groupDetailScreen(
         arguments = listOf(
             navArgument("id", {
                 type = NavType.IntType
-            })
+            }),
         ),
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
@@ -38,7 +35,7 @@ fun NavGraphBuilder.groupDetailScreen(
             showSnackbar = showSnackbar,
             popBackStack = popBackStack,
             navigateToGroupAdd = navigateToGroupAdd,
-            navigateToGroupWaiting = navigateToGroupWaiting
+            navigateToGroupWaiting = navigateToGroupWaiting,
         )
     }
 }

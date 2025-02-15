@@ -4,5 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class MemberRoleResponse {
-    STUDENT, PARENT, TEACHER, ADMIN
+    STUDENT,
+    PARENT,
+    TEACHER,
+    ADMIN,
 }

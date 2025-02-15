@@ -10,14 +10,13 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class GroupCreateViewModel: ViewModel(), KoinComponent {
+class GroupCreateViewModel : ViewModel(), KoinComponent {
 
     private val divisionRepository: DivisionRepository by inject()
 
@@ -27,14 +26,11 @@ class GroupCreateViewModel: ViewModel(), KoinComponent {
     private val _sideEffect = Channel<GroupCreateSideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
 
-    fun createGroup(
-        name: String,
-        description: String,
-    ) {
+    fun createGroup(name: String, description: String) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    isLoading = true
+                    isLoading = true,
                 )
             }
             divisionRepository.postCreateDivision(
@@ -45,7 +41,7 @@ class GroupCreateViewModel: ViewModel(), KoinComponent {
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                         _sideEffect.send(GroupCreateSideEffect.SuccessGroupCreate)
@@ -54,7 +50,7 @@ class GroupCreateViewModel: ViewModel(), KoinComponent {
                     is Result.Error -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                         result.error.printStackTrace()

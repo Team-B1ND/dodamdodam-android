@@ -57,7 +57,7 @@ internal fun GroupCreateScreen(
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is GroupCreateSideEffect.FailedGroupCreate -> {
-                    showSnackbar(SnackbarState.ERROR, sideEffect.error.message?: "Error")
+                    showSnackbar(SnackbarState.ERROR, sideEffect.error.message ?: "Error")
                 }
                 GroupCreateSideEffect.SuccessGroupCreate -> {
                     showSnackbar(SnackbarState.SUCCESS, "새로운 그룹을 생성했어요!")
@@ -68,7 +68,7 @@ internal fun GroupCreateScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Scaffold(
             modifier = Modifier
@@ -79,9 +79,9 @@ internal fun GroupCreateScreen(
                 DodamTopAppBar(
                     modifier = Modifier.statusBarsPadding(),
                     title = "새 그룹 만들기",
-                    onBackClick = popBackStack
+                    onBackClick = popBackStack,
                 )
-            }
+            },
         ) { paddingValues ->
             Column(
                 modifier = Modifier
@@ -90,10 +90,10 @@ internal fun GroupCreateScreen(
                     .padding(
                         top = 8.dp,
                         start = 16.dp,
-                        end = 16.dp
+                        end = 16.dp,
                     )
                     .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 DodamTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -113,22 +113,22 @@ internal fun GroupCreateScreen(
                         if (it.length > 300) return@DodamTextField
                         groupDescriptionText = it
                     },
-                    label = "그룹 설명"
+                    label = "그룹 설명",
                 )
                 Text(
                     modifier = Modifier.align(Alignment.End),
                     text = buildAnnotatedString {
                         withStyle(
                             DodamTheme.typography.body1Medium().copy(
-                                color = if (groupDescriptionText.length == 300) DodamTheme.colors.statusNegative else DodamTheme.colors.primaryNormal
-                            ).toSpanStyle()
+                                color = if (groupDescriptionText.length == 300) DodamTheme.colors.statusNegative else DodamTheme.colors.primaryNormal,
+                            ).toSpanStyle(),
                         ) {
                             this.append("${groupDescriptionText.length}")
                         }
                         append("/300")
                     },
                     style = DodamTheme.typography.body1Medium(),
-                    color = if (groupDescriptionText.length == 300) DodamTheme.colors.statusNegative else DodamTheme.colors.labelAssistive
+                    color = if (groupDescriptionText.length == 300) DodamTheme.colors.statusNegative else DodamTheme.colors.labelAssistive,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 DodamButton(
@@ -136,13 +136,13 @@ internal fun GroupCreateScreen(
                     onClick = {
                         viewModel.createGroup(
                             name = groupNameText,
-                            description = groupDescriptionText
+                            description = groupDescriptionText,
                         )
                     },
                     text = "만들기",
                     enabled = groupNameText.isNotEmpty() && groupDescriptionText.isNotEmpty(),
                     buttonRole = ButtonRole.Primary,
-                    buttonSize = ButtonSize.Large
+                    buttonSize = ButtonSize.Large,
                 )
             }
         }
@@ -150,7 +150,7 @@ internal fun GroupCreateScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(DodamTheme.colors.staticBlack.copy(alpha = 0.3f))
+                    .background(DodamTheme.colors.staticBlack.copy(alpha = 0.3f)),
             )
         }
     }
