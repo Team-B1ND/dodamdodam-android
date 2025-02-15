@@ -72,7 +72,6 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterial3Api
 @Composable
 fun DodamApp(
-    isLogin: Boolean,
     logout: () -> Unit,
     navController: NavHostController = rememberNavController(),
     mainNavController: NavHostController = rememberNavController(),
@@ -138,7 +137,11 @@ fun DodamApp(
     ) {
         NavHost(
             navController = navController,
-            startDestination = if (isLogin) if (role == "STUDENT") MAIN_ROUTE else PARENT_MAIN_ROUTE else ONBOARDING_ROUTE,
+            startDestination = when {
+                role == "STUDENT" -> MAIN_ROUTE
+                role == "PARENT" -> PARENT_MAIN_ROUTE
+                else -> ONBOARDING_ROUTE
+            },
             enterTransition = { fadeIn(initialAlpha = 100f) },
             exitTransition = { fadeOut(targetAlpha = 100f) },
         ) {
