@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class GroupAddViewModel: ViewModel(), KoinComponent {
+class GroupAddViewModel : ViewModel(), KoinComponent {
 
     private val divisionRepository: DivisionRepository by inject()
 
@@ -33,7 +33,7 @@ class GroupAddViewModel: ViewModel(), KoinComponent {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    isLoading = true
+                    isLoading = true,
                 )
             }
             divisionRepository.getAllDivisions(
@@ -45,15 +45,17 @@ class GroupAddViewModel: ViewModel(), KoinComponent {
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(
-                                lastLoadId = result.data.lastOrNull()?.id?: it.lastLoadId,
-                                divisions =  it.divisions.toMutableList().apply {
-                                    addAll(result.data.map {
-                                        GroupAddDivisionOverview(
-                                            id = it.id,
-                                            name = it.name,
-                                            isOpen = false,
-                                        )
-                                    })
+                                lastLoadId = result.data.lastOrNull()?.id ?: it.lastLoadId,
+                                divisions = it.divisions.toMutableList().apply {
+                                    addAll(
+                                        result.data.map {
+                                            GroupAddDivisionOverview(
+                                                id = it.id,
+                                                name = it.name,
+                                                isOpen = false,
+                                            )
+                                        },
+                                    )
                                 }.toImmutableList(),
                                 isLoading = false,
                             )
@@ -64,7 +66,7 @@ class GroupAddViewModel: ViewModel(), KoinComponent {
                         result.error.printStackTrace()
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -77,7 +79,7 @@ class GroupAddViewModel: ViewModel(), KoinComponent {
         viewModelScope.launch {
             divisionRepository.getDivisionMembers(
                 id = divisionId,
-                status = Status.ALLOWED
+                status = Status.ALLOWED,
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {
@@ -85,7 +87,7 @@ class GroupAddViewModel: ViewModel(), KoinComponent {
                             it.copy(
                                 divisionMembers = it.divisionMembers.toMutableMap().apply {
                                     this[divisionId] = result.data
-                                }.toImmutableMap()
+                                }.toImmutableMap(),
                             )
                         }
                     }
@@ -98,9 +100,7 @@ class GroupAddViewModel: ViewModel(), KoinComponent {
         }
     }
 
-    fun changeOpenState(
-        divisionId: Int
-    ) {
+    fun changeOpenState(divisionId: Int) {
         _uiState.update {
             it.copy(
                 divisions = it.divisions.map {
@@ -108,32 +108,29 @@ class GroupAddViewModel: ViewModel(), KoinComponent {
                         return@map it
                     }
                     return@map it.copy(
-                        isOpen = !it.isOpen
+                        isOpen = !it.isOpen,
                     )
-                }.toImmutableList()
+                }.toImmutableList(),
             )
         }
     }
 
-    fun addDivisionMember(
-        divisionId: Int,
-        memberIds: List<String>,
-    ) {
+    fun addDivisionMember(divisionId: Int, memberIds: List<String>) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    addLoading = true
+                    addLoading = true,
                 )
             }
             divisionRepository.postDivisionAddMembers(
                 divisionId = divisionId,
-                memberId = memberIds
+                memberId = memberIds,
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(
-                                addLoading = false
+                                addLoading = false,
                             )
                         }
                         _sideEffect.send(GroupAddSideEffect.SuccessAddMember)
@@ -142,7 +139,7 @@ class GroupAddViewModel: ViewModel(), KoinComponent {
                     is Result.Error -> {
                         _uiState.update {
                             it.copy(
-                                addLoading = false
+                                addLoading = false,
                             )
                         }
                         _sideEffect.send(GroupAddSideEffect.FailedAddMember)

@@ -9,15 +9,14 @@ data class DivisionInfo(
     val myPermission: DivisionPermission?,
 )
 
-internal fun DivisionInfoResponse.toModel() =
-    DivisionInfo(
-        id = id,
-        divisionName = divisionName,
-        description = description,
-        myPermission = when (myPermission) {
-            "READER" -> DivisionPermission.READER
-            "WRITER" -> DivisionPermission.WRITER
-                "ADMIN" -> DivisionPermission.ADMIN
-                else -> null
-        }
-    )
+internal fun DivisionInfoResponse.toModel() = DivisionInfo(
+    id = id,
+    divisionName = divisionName,
+    description = description,
+    myPermission = when (myPermission) {
+        "READER" -> DivisionPermission.READER
+        "WRITER" -> DivisionPermission.WRITER
+        "ADMIN" -> DivisionPermission.ADMIN
+        else -> null
+    },
+)

@@ -263,7 +263,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             navigateToOut = navHostController::navigateToApproveOuting,
                             navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                             navigateToPoint = navHostController::navigateToPoint,
-                            navigateToGroup = navHostController::navigateToGroup
+                            navigateToGroup = navHostController::navigateToGroup,
                         )
 
                         approveNightStudyScreen(
@@ -305,28 +305,28 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                                 navHostController.navigateToGroupDetail(
                                     id = id,
                                 )
-                            }
+                            },
                         )
 
                         groupDetailScreen(
                             showSnackbar = showSnackbar,
                             popBackStack = navHostController::popBackStack,
                             navigateToGroupAdd = navHostController::navigateToGroupAdd,
-                            navigateToGroupWaiting = navHostController::navigateToGroupWaiting
+                            navigateToGroupWaiting = navHostController::navigateToGroupWaiting,
                         )
 
                         groupWaitingScreen(
-                            popBackStack = navHostController::popBackStack
+                            popBackStack = navHostController::popBackStack,
                         )
 
                         groupCreateScreen(
                             popBackStack = navHostController::popBackStack,
-                            showSnackbar = showSnackbar
+                            showSnackbar = showSnackbar,
                         )
 
                         groupAddScreen(
                             showSnackbar = showSnackbar,
-                            popBackStack = navHostController::popBackStack
+                            popBackStack = navHostController::popBackStack,
                         )
                     }
 

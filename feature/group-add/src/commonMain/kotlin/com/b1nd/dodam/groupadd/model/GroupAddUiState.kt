@@ -1,7 +1,6 @@
 package com.b1nd.dodam.groupadd.model
 
 import com.b1nd.dodam.data.division.model.DivisionMember
-import com.b1nd.dodam.data.division.model.DivisionOverview
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf

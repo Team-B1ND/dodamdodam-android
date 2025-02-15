@@ -16,19 +16,18 @@ data class DivisionMember(
     val role: MemberRole,
 )
 
-internal fun DivisionMemberResponse.toModel() =
-    DivisionMember(
-        id = id,
-        memberId = memberId,
-        memberName = memberName,
-        profileImage = profileImage,
-        permission = when (permission) {
-            "ADMIN" -> DivisionPermission.ADMIN
-            "WRITER" -> DivisionPermission.WRITER
-            else -> DivisionPermission.READER
-        },
-        grade = grade,
-        room = room,
-        number = number,
-        role = role.toModel(),
-    )
+internal fun DivisionMemberResponse.toModel() = DivisionMember(
+    id = id,
+    memberId = memberId,
+    memberName = memberName,
+    profileImage = profileImage,
+    permission = when (permission) {
+        "ADMIN" -> DivisionPermission.ADMIN
+        "WRITER" -> DivisionPermission.WRITER
+        else -> DivisionPermission.READER
+    },
+    grade = grade,
+    room = room,
+    number = number,
+    role = role.toModel(),
+)

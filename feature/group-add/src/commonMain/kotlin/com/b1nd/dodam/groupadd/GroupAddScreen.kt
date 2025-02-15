@@ -40,7 +40,6 @@ import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
-import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.groupadd.model.GroupAddSideEffect
@@ -89,7 +88,7 @@ internal fun GroupAddScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Scaffold(
             modifier = Modifier.addFocusCleaner(focusManager),
@@ -119,13 +118,14 @@ internal fun GroupAddScreen(
                             title = item.name,
                             users = uiState.divisionMembers.getOrElse(
                                 item.id,
-                                defaultValue = { persistentListOf() }),
+                                defaultValue = { persistentListOf() },
+                            ),
                             checkUsers = checkUsers,
                             isOpen = item.isOpen,
                             onClickCard = {
                                 if (uiState.divisionMembers[item.id] == null) {
                                     viewModel.loadDivisionMembers(
-                                        divisionId = item.id
+                                        divisionId = item.id,
                                     )
                                 }
                                 viewModel.changeOpenState(divisionId = item.id)
@@ -137,11 +137,13 @@ internal fun GroupAddScreen(
                                 if (checkUsers.containsAll(userIds)) {
                                     updatedSelection.removeAll(userIds)
                                 } else {
-                                    updatedSelection.addAll(userIds.filterNot {
-                                        checkUsers.contains(
-                                            it
-                                        )
-                                    })
+                                    updatedSelection.addAll(
+                                        userIds.filterNot {
+                                            checkUsers.contains(
+                                                it,
+                                            )
+                                        },
+                                    )
                                 }
                                 checkUsers = updatedSelection.toImmutableList()
                             },
@@ -153,14 +155,13 @@ internal fun GroupAddScreen(
                                     updatedSelection.add(user.memberId)
                                 }
                                 checkUsers = updatedSelection.toImmutableList()
-                            }
+                            },
                         )
                     }
 
                     item {
                         Spacer(modifier = Modifier.height(80.dp))
                     }
-
                 }
 
                 Row(
@@ -168,14 +169,14 @@ internal fun GroupAddScreen(
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .background(
-                            color = DodamTheme.colors.backgroundNeutral
+                            color = DodamTheme.colors.backgroundNeutral,
                         )
                         .padding(
                             start = 16.dp,
                             end = 16.dp,
                             bottom = 12.dp,
                         ),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     DodamButton(
                         modifier = Modifier.weight(2f),
@@ -184,7 +185,7 @@ internal fun GroupAddScreen(
                             checkUsers = persistentListOf()
                         },
                         buttonSize = ButtonSize.Large,
-                        buttonRole = ButtonRole.Assistive
+                        buttonRole = ButtonRole.Assistive,
                     )
                     DodamButton(
                         modifier = Modifier.weight(3f),
@@ -192,12 +193,12 @@ internal fun GroupAddScreen(
                         onClick = {
                             viewModel.addDivisionMember(
                                 divisionId = id,
-                                memberIds = checkUsers
+                                memberIds = checkUsers,
                             )
                         },
                         enabled = checkUsers.isNotEmpty(),
                         buttonSize = ButtonSize.Large,
-                        buttonRole = ButtonRole.Primary
+                        buttonRole = ButtonRole.Primary,
                     )
                 }
             }
@@ -207,7 +208,7 @@ internal fun GroupAddScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(DodamTheme.colors.staticBlack.copy(alpha = 0.3f))
+                    .background(DodamTheme.colors.staticBlack.copy(alpha = 0.3f)),
             )
         }
     }
@@ -230,29 +231,29 @@ private fun GroupCard(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberBounceIndication(
-                    radius = DodamTheme.shapes.medium
+                    radius = DodamTheme.shapes.medium,
                 ),
-                onClick = onClickCard
+                onClick = onClickCard,
             )
             .background(
                 color = DodamTheme.colors.backgroundNormal,
-                shape = DodamTheme.shapes.medium
+                shape = DodamTheme.shapes.medium,
             )
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = title,
                 style = DodamTheme.typography.headlineBold(),
-                color = DodamTheme.colors.labelNormal
+                color = DodamTheme.colors.labelNormal,
             )
             Spacer(modifier = Modifier.weight(1f))
             Box(
                 modifier = Modifier.size(24.dp),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     modifier = Modifier
@@ -260,7 +261,7 @@ private fun GroupCard(
                         .rotate(if (isOpen) 90f else -90f),
                     imageVector = DodamIcons.ChevronRight.value,
                     contentDescription = null,
-                    tint = DodamTheme.colors.labelAssistive
+                    tint = DodamTheme.colors.labelAssistive,
                 )
             }
         }
@@ -273,10 +274,9 @@ private fun GroupCard(
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberBounceIndication(),
-                            onClick = onClickUserAll
-                        )
-                    ,
-                    verticalAlignment = Alignment.CenterVertically
+                            onClick = onClickUserAll,
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Image(
                         modifier = Modifier
@@ -284,7 +284,7 @@ private fun GroupCard(
                                 start = 4.dp,
                                 end = 8.dp,
                                 top = 4.dp,
-                                bottom = 4.dp
+                                bottom = 4.dp,
                             )
                             .size(24.dp),
                         imageVector = if (checkUsers.containsAll(users.map { it.memberId })) ColoredCheckmarkCircleFilled else ColoredCheckmarkCircle,
@@ -294,7 +294,7 @@ private fun GroupCard(
                     Text(
                         text = "전체",
                         style = DodamTheme.typography.body1Bold(),
-                        color = DodamTheme.colors.labelNormal
+                        color = DodamTheme.colors.labelNormal,
                     )
                 }
                 Spacer(modifier = Modifier.height(12.dp))
@@ -306,7 +306,7 @@ private fun GroupCard(
                         indication = rememberBounceIndication(),
                         onClick = {
                             onClickUser(user)
-                        }
+                        },
                     ),
                     image = null,
                     name = user.memberName,
@@ -320,7 +320,7 @@ private fun GroupCard(
                                 colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                             )
                         }
-                    }
+                    },
                 )
                 if (index != users.lastIndex) {
                     Spacer(modifier = Modifier.height(12.dp))

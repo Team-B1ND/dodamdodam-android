@@ -43,12 +43,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(ExperimentalMaterial3Api::class, KoinExperimentalAPI::class)
 @Composable
-fun GroupWaitingScreen(
-    viewModel: GroupWaitingViewModel = koinViewModel(),
-    id: Int,
-    name: String,
-    popBackStack: () -> Unit
-) {
+fun GroupWaitingScreen(viewModel: GroupWaitingViewModel = koinViewModel(), id: Int, name: String, popBackStack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     var showBottomSheet by remember { mutableStateOf(false) }
     var bottomSheetUser: DivisionMember? by remember { mutableStateOf(null) }
@@ -68,25 +63,25 @@ fun GroupWaitingScreen(
                 Text(
                     text = "${bottomSheetUser!!.memberName}님 정보",
                     style = DodamTheme.typography.heading1Bold(),
-                    color = DodamTheme.colors.labelNormal
+                    color = DodamTheme.colors.labelNormal,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "직군 | ${bottomSheetUser!!.role.getName()}",
                     style = DodamTheme.typography.headlineMedium(),
-                    color = DodamTheme.colors.labelAssistive
+                    color = DodamTheme.colors.labelAssistive,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     DodamButton(
                         modifier = Modifier.weight(2f),
                         onClick = {
                             viewModel.rejectMember(
                                 divisionId = id,
-                                memberId = bottomSheetUser!!.id
+                                memberId = bottomSheetUser!!.id,
                             )
                             showBottomSheet = false
                             bottomSheetUser = null
@@ -100,7 +95,7 @@ fun GroupWaitingScreen(
                         onClick = {
                             viewModel.approveMember(
                                 divisionId = id,
-                                memberId = bottomSheetUser!!.id
+                                memberId = bottomSheetUser!!.id,
                             )
                             showBottomSheet = false
                             bottomSheetUser = null
@@ -117,7 +112,7 @@ fun GroupWaitingScreen(
                 topEnd = DodamTheme.shapes.extraLarge.topEnd,
                 bottomEnd = CornerSize(0f),
                 bottomStart = CornerSize(0f),
-            )
+            ),
         )
     }
 
@@ -125,29 +120,29 @@ fun GroupWaitingScreen(
         topBar = {
             DodamTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
-                title = "‘${name}’ 그룹\n" +
-                        "가입 신청 대기 중인 멤버",
+                title = "‘$name’ 그룹\n" +
+                    "가입 신청 대기 중인 멤버",
                 onBackClick = popBackStack,
-                type = TopAppBarType.Large
+                type = TopAppBarType.Large,
             )
         },
-        containerColor = DodamTheme.colors.backgroundNormal
+        containerColor = DodamTheme.colors.backgroundNormal,
     ) {
         LazyColumn(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             if (uiState.students.isNotEmpty()) {
                 item {
                     Text(
                         modifier = Modifier.padding(
-                            start = 16.dp
+                            start = 16.dp,
                         ),
                         text = "학생",
                         style = DodamTheme.typography.body2Medium(),
-                        color = DodamTheme.colors.labelAlternative
+                        color = DodamTheme.colors.labelAlternative,
                     )
                 }
 
@@ -155,7 +150,7 @@ fun GroupWaitingScreen(
                     uiState.parents,
                     key = { key ->
                         key.id
-                    }
+                    },
                 ) {
                     DodamGroupMemberCard(
                         modifier = Modifier
@@ -166,7 +161,7 @@ fun GroupWaitingScreen(
                                 onClick = {
                                     showBottomSheet = true
                                     bottomSheetUser = it
-                                }
+                                },
                             ),
                         image = it.profileImage,
                         name = it.memberName,
@@ -178,11 +173,11 @@ fun GroupWaitingScreen(
                 item {
                     Text(
                         modifier = Modifier.padding(
-                            start = 16.dp
+                            start = 16.dp,
                         ),
                         text = "학부모",
                         style = DodamTheme.typography.body2Medium(),
-                        color = DodamTheme.colors.labelAlternative
+                        color = DodamTheme.colors.labelAlternative,
                     )
                 }
 
@@ -190,7 +185,7 @@ fun GroupWaitingScreen(
                     uiState.parents,
                     key = { key ->
                         key.id
-                    }
+                    },
                 ) {
                     DodamGroupMemberCard(
                         modifier = Modifier
@@ -201,7 +196,7 @@ fun GroupWaitingScreen(
                                 onClick = {
                                     showBottomSheet = true
                                     bottomSheetUser = it
-                                }
+                                },
                             ),
                         image = it.profileImage,
                         name = it.memberName,
@@ -213,11 +208,11 @@ fun GroupWaitingScreen(
                 item {
                     Text(
                         modifier = Modifier.padding(
-                            start = 16.dp
+                            start = 16.dp,
                         ),
                         text = "선생님",
                         style = DodamTheme.typography.body2Medium(),
-                        color = DodamTheme.colors.labelAlternative
+                        color = DodamTheme.colors.labelAlternative,
                     )
                 }
 
@@ -225,7 +220,7 @@ fun GroupWaitingScreen(
                     uiState.teachers,
                     key = { key ->
                         key.id
-                    }
+                    },
                 ) {
                     DodamGroupMemberCard(
                         modifier = Modifier
@@ -236,7 +231,7 @@ fun GroupWaitingScreen(
                                 onClick = {
                                     showBottomSheet = true
                                     bottomSheetUser = it
-                                }
+                                },
                             ),
                         image = it.profileImage,
                         name = it.memberName,
@@ -248,11 +243,11 @@ fun GroupWaitingScreen(
                 item {
                     Text(
                         modifier = Modifier.padding(
-                            start = 16.dp
+                            start = 16.dp,
                         ),
                         text = "관리자",
                         style = DodamTheme.typography.body2Medium(),
-                        color = DodamTheme.colors.labelAlternative
+                        color = DodamTheme.colors.labelAlternative,
                     )
                 }
 
@@ -260,7 +255,7 @@ fun GroupWaitingScreen(
                     uiState.admins,
                     key = { key ->
                         key.id
-                    }
+                    },
                 ) {
                     DodamGroupMemberCard(
                         modifier = Modifier
@@ -271,7 +266,7 @@ fun GroupWaitingScreen(
                                 onClick = {
                                     showBottomSheet = true
                                     bottomSheetUser = it
-                                }
+                                },
                             ),
                         image = it.profileImage,
                         name = it.memberName,

@@ -24,19 +24,18 @@ import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import kotlinx.collections.immutable.ImmutableList
 
 enum class DodamMenuItemColor {
-    Negative, Normal
+    Negative,
+    Normal,
 }
 
 data class DodamMenuItem(
     val item: String,
     val color: DodamMenuItemColor,
-    val onClickItem: () -> Unit
+    val onClickItem: () -> Unit,
 )
 
 @Composable
-fun DodamMenuDialog(
-    items: ImmutableList<DodamMenuItem>,
-) {
+fun DodamMenuDialog(items: ImmutableList<DodamMenuItem>) {
     Surface(
         modifier = Modifier
             .sizeIn(minWidth = 280.dp, maxWidth = 360.dp)
@@ -46,7 +45,7 @@ fun DodamMenuDialog(
     ) {
         Column(
             modifier = Modifier.padding(PaddingValues(18.dp)),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items.fastForEach {
                 Box(
@@ -56,12 +55,12 @@ fun DodamMenuDialog(
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberBounceIndication(),
-                            onClick = it.onClickItem
+                            onClick = it.onClickItem,
                         )
                         .padding(
-                            horizontal = 8.dp
+                            horizontal = 8.dp,
                         ),
-                    contentAlignment = Alignment.CenterStart
+                    contentAlignment = Alignment.CenterStart,
                 ) {
                     Text(
                         text = it.item,

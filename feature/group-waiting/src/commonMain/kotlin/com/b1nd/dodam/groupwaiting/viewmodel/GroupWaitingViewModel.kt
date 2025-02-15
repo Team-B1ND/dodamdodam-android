@@ -8,7 +8,6 @@ import com.b1nd.dodam.data.core.model.MemberRole
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.division.DivisionRepository
 import com.b1nd.dodam.groupwaiting.model.GroupWaitingUiState
-import com.b1nd.dodam.logging.KmLogging
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +18,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 
-class GroupWaitingViewModel: ViewModel(), KoinComponent {
+class GroupWaitingViewModel : ViewModel(), KoinComponent {
 
     private val dispatcher: CoroutineDispatcher by inject(named(DispatcherType.IO))
     private val divisionRepository: DivisionRepository by inject()
@@ -69,7 +68,7 @@ class GroupWaitingViewModel: ViewModel(), KoinComponent {
             divisionRepository.patchDivisionMembers(
                 divisionId = divisionId,
                 memberId = listOf(memberId),
-                status = Status.REJECTED
+                status = Status.REJECTED,
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {
@@ -89,7 +88,7 @@ class GroupWaitingViewModel: ViewModel(), KoinComponent {
             divisionRepository.patchDivisionMembers(
                 divisionId = divisionId,
                 memberId = listOf(memberId),
-                status = Status.ALLOWED
+                status = Status.ALLOWED,
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {

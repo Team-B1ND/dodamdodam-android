@@ -9,15 +9,9 @@ import com.b1nd.dodam.group.GroupScreen
 
 const val GROUP_ROUTE = "group"
 
-fun NavController.navigateToGroup(navOptions: NavOptions? = null) =
-    navigate(GROUP_ROUTE, navOptions)
+fun NavController.navigateToGroup(navOptions: NavOptions? = null) = navigate(GROUP_ROUTE, navOptions)
 
-fun NavGraphBuilder.groupScreen(
-    popBackStack: () -> Unit,
-    isTeacher: Boolean,
-    navigateToGroupCreate: () -> Unit,
-    navigateToGroupDetail: (id: Int) -> Unit,
-) {
+fun NavGraphBuilder.groupScreen(popBackStack: () -> Unit, isTeacher: Boolean, navigateToGroupCreate: () -> Unit, navigateToGroupDetail: (id: Int) -> Unit) {
     composable(
         route = GROUP_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -27,7 +21,7 @@ fun NavGraphBuilder.groupScreen(
             popBackStack = popBackStack,
             isTeacher = isTeacher,
             navigateToGroupCreate = navigateToGroupCreate,
-            navigateToGroupDetail = navigateToGroupDetail
+            navigateToGroupDetail = navigateToGroupDetail,
         )
     }
 }

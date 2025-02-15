@@ -6,10 +6,8 @@ import com.b1nd.dodam.data.division.model.DivisionInfo
 import com.b1nd.dodam.data.division.model.DivisionMember
 import com.b1nd.dodam.data.division.model.DivisionOverview
 import com.b1nd.dodam.data.division.model.DivisionPermission
-import com.b1nd.dodam.network.core.model.NetworkStatus
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
-
 
 interface DivisionRepository {
     suspend fun getAllDivisions(lastId: Int, limit: Int, keyword: String): Flow<Result<ImmutableList<DivisionOverview>>>

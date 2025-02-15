@@ -1,19 +1,12 @@
 package com.b1nd.dodam.group.viewmodel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.b1nd.dodam.common.result.Result
-import com.b1nd.dodam.common.utiles.combineWhenAllComplete
 import com.b1nd.dodam.data.division.DivisionRepository
-import com.b1nd.dodam.data.division.model.DivisionOverview
 import com.b1nd.dodam.group.model.GroupSideEffect
 import com.b1nd.dodam.group.model.GroupUiState
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -40,13 +33,13 @@ class GroupViewModel : ViewModel(), KoinComponent {
             }
             _uiState.update {
                 it.copy(
-                    isAllLoading = true
+                    isAllLoading = true,
                 )
             }
             divisionRepository.getAllDivisions(
                 lastId = _uiState.value.allGroupLastId,
                 keyword = "",
-                limit = PAGE_SIZE
+                limit = PAGE_SIZE,
             ).collect {
                 when (it) {
                     is Result.Success -> {
@@ -55,8 +48,8 @@ class GroupViewModel : ViewModel(), KoinComponent {
                                 allGroups = uiState.allGroups.toMutableList().apply {
                                     addAll(it.data)
                                 }.toImmutableList(),
-                                allGroupLastId = it.data.lastOrNull()?.id?: uiState.allGroups.lastOrNull()?.id ?: 0,
-                                isAllLoading = false
+                                allGroupLastId = it.data.lastOrNull()?.id ?: uiState.allGroups.lastOrNull()?.id ?: 0,
+                                isAllLoading = false,
                             )
                         }
                     }
@@ -66,7 +59,7 @@ class GroupViewModel : ViewModel(), KoinComponent {
                         _sideEffect.emit(GroupSideEffect.FailedLoad)
                         _uiState.update {
                             it.copy(
-                                isAllLoading = false
+                                isAllLoading = false,
                             )
                         }
                     }
@@ -82,7 +75,7 @@ class GroupViewModel : ViewModel(), KoinComponent {
             }
             _uiState.update {
                 it.copy(
-                    isMyLoading = true
+                    isMyLoading = true,
                 )
             }
             divisionRepository.getMyDivisions(
@@ -97,8 +90,8 @@ class GroupViewModel : ViewModel(), KoinComponent {
                                 myGroups = uiState.myGroups.toMutableList().apply {
                                     addAll(it.data)
                                 }.toImmutableList(),
-                                myGroupLastId = it.data.lastOrNull()?.id?: uiState.myGroups.lastOrNull()?.id ?: 0,
-                                isMyLoading = false
+                                myGroupLastId = it.data.lastOrNull()?.id ?: uiState.myGroups.lastOrNull()?.id ?: 0,
+                                isMyLoading = false,
                             )
                         }
                     }
@@ -108,7 +101,7 @@ class GroupViewModel : ViewModel(), KoinComponent {
                         _sideEffect.emit(GroupSideEffect.FailedLoad)
                         _uiState.update {
                             it.copy(
-                                isMyLoading = false
+                                isMyLoading = false,
                             )
                         }
                     }
@@ -116,7 +109,6 @@ class GroupViewModel : ViewModel(), KoinComponent {
             }
         }
     }
-
 
     companion object {
         // TODO 시간 관계상 페이징을 처리하지 않았습니다.
