@@ -9,5 +9,5 @@ data class Member(
 
 internal fun LoginResponse.toModel(): Member = Member(
     accessToken = accessToken,
-    role = member.role,
+    role = member.role.name,
 )
