@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -15,21 +16,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Surface
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalUriHandler
@@ -38,37 +51,95 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.util.fastForEach
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.common.utiles.buildPersistentList
+import com.b1nd.dodam.common.utiles.formatLocalDateTime
+import com.b1nd.dodam.data.division.model.DivisionOverview
+import com.b1nd.dodam.data.notice.model.NoticeFileType
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
 import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDivider
+import com.b1nd.dodam.designsystem.component.DodamTextButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
+import com.b1nd.dodam.designsystem.component.TextButtonSize
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.notice.viewmodel.NoticeViewModel
 import com.b1nd.dodam.ui.component.DodamAutoLinkText
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, KoinExperimentalAPI::class)
 @Composable
-internal fun NoticeScreen(isTeacher: Boolean, navigateToNoticeCreate: (() -> Unit)?) {
+internal fun NoticeScreen(
+    viewModel: NoticeViewModel = koinViewModel(),
+    isTeacher: Boolean,
+    changeBottomNavVisible: (visible: Boolean) -> Unit,
+    navigateToNoticeCreate: (() -> Unit)?,
+) {
+    val uiState by viewModel.uiState.collectAsState()
     val uriHandler = LocalUriHandler.current
-    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+    val coroutineScope = rememberCoroutineScope()
 
-    var selectCategory by remember { mutableStateOf("전체") }
+    var selectCategory by remember { mutableStateOf(DivisionOverview(id = 0, name = "전체")) }
     var isSearchMode by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
 
+    val searchLazyListState = rememberLazyListState()
+    val lazyListState = rememberLazyListState()
+
+    LaunchedEffect(true) {
+        viewModel.loadDivision()
+    }
+
+    LaunchedEffect(lazyListState.canScrollForward, selectCategory) {
+        if (isSearchMode || lazyListState.canScrollForward) {
+            return@LaunchedEffect
+        }
+        viewModel.loadNextNoticeWithCategory(
+            categoryId = selectCategory.id
+        )
+        lazyListState.scrollToItem(0)
+    }
+
+    LaunchedEffect(searchLazyListState.canScrollForward, isSearchMode) {
+        if (!isSearchMode && searchLazyListState.canScrollForward) {
+            return@LaunchedEffect
+        }
+        viewModel.loadNextNoticeWithKeyword(
+            keyword = searchText
+        )
+    }
+
+    LaunchedEffect(searchText) {
+        if (isSearchMode) {
+            delay(200)
+            viewModel.loadNextNoticeWithKeyword(
+                keyword = searchText
+            )
+        }
+    }
+
+    LaunchedEffect(isSearchMode) {
+        changeBottomNavVisible(!isSearchMode)
+    }
+
+    DisposableEffect(true) {
+        onDispose {
+            changeBottomNavVisible(true)
+        }
+    }
+
     Scaffold(
-        modifier = Modifier.addFocusCleaner(
-            focusManager = focusManager,
-            doOnClear = {
-                isSearchMode = false
-            },
-        ),
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             if (!isSearchMode) {
                 DodamDefaultTopAppBar(
@@ -94,6 +165,10 @@ internal fun NoticeScreen(isTeacher: Boolean, navigateToNoticeCreate: (() -> Uni
                                 icon = DodamIcons.MagnifyingGlass,
                                 onClick = {
                                     isSearchMode = true
+                                    coroutineScope.launch {
+                                        delay(100)
+                                        focusRequester.requestFocus()
+                                    }
                                 },
                                 enabled = true,
                             ),
@@ -101,23 +176,80 @@ internal fun NoticeScreen(isTeacher: Boolean, navigateToNoticeCreate: (() -> Uni
                     },
                 )
             } else {
-                Row(
+                Column(
                     modifier = Modifier
-                        .statusBarsPadding()
                         .fillMaxWidth()
-                        .height(60.dp)
-                        .padding(horizontal = 16.dp),
                 ) {
-                    DodamTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = searchText,
-                        onValueChange = {
-                            searchText = it
-                        },
-                        onClickRemoveRequest = {
-                            searchText = ""
-                        },
+                    Row(
+                        modifier = Modifier
+                            .statusBarsPadding()
+                            .fillMaxWidth()
+                            .height(60.dp)
+                            .padding(8.dp)
+                    ) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Row(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(44.dp)
+                                .background(
+                                    color = DodamTheme.colors.fillNeutral,
+                                    shape = DodamTheme.shapes.extraSmall,
+                                )
+                                .padding(4.dp)
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(20.dp),
+                                imageVector = DodamIcons.MagnifyingGlass.value,
+                                contentDescription = "검색 아이콘",
+                                tint = DodamTheme.colors.labelAlternative,
+                            )
+                            BasicTextField(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(36.dp)
+                                    .focusRequester(focusRequester),
+                                value = searchText,
+                                onValueChange = {
+                                    searchText = it
+                                },
+                                textStyle = DodamTheme.typography.body1Bold().copy(
+                                    color = DodamTheme.colors.labelNormal
+                                ),
+                                maxLines = 1,
+                                decorationBox = { innerTextField ->
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        contentAlignment = Alignment.CenterStart
+                                    ) {
+                                        if (searchText == "") {
+                                            Text(
+                                                text = "검색",
+                                                style = DodamTheme.typography.body1Bold(),
+                                                color = DodamTheme.colors.labelAssistive,
+                                            )
+                                        }
+                                        innerTextField()
+                                    }
+                                }
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        DodamTextButton(
+                            onClick = {
+                                isSearchMode = false
+                            },
+                            text = "닫기",
+                            size = TextButtonSize.Large
+                        )
+                    }
+                    DodamDivider(
+                        type = DividerType.Normal,
                     )
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
         },
@@ -126,88 +258,80 @@ internal fun NoticeScreen(isTeacher: Boolean, navigateToNoticeCreate: (() -> Uni
         LazyColumn(
             modifier = Modifier.padding(it),
             verticalArrangement = Arrangement.spacedBy(12.dp),
+            state = if (isSearchMode) searchLazyListState else lazyListState
         ) {
-            stickyHeader {
-                Column {
-                    Row(
-                        modifier = Modifier
-                            .horizontalScroll(rememberScrollState())
-                            .background(DodamTheme.colors.backgroundNeutral)
-                            .padding(
-                                start = 16.dp,
-                                top = 20.dp,
-                                bottom = 20.dp,
-                            ),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        persistentListOf("전체", "B1ND", "CNS", "DUCAMI", "삼디", "모디").fastForEach { category ->
-                            NoticeCategoryCard(
-                                text = category,
-                                isChecked = category == selectCategory,
-                                onClick = {
-                                    selectCategory = category
-                                },
-                            )
+            if (!isSearchMode) {
+                stickyHeader {
+                    Column {
+                        LazyRow(
+                            modifier = Modifier
+                                .background(DodamTheme.colors.backgroundNeutral)
+                                .padding(
+                                    start = 16.dp,
+                                    top = 20.dp,
+                                    bottom = 20.dp,
+                                ),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            items(uiState.divisionList.size) { index ->
+                                val item = uiState.divisionList[index]
+                                NoticeCategoryCard(
+                                    text = item.name,
+                                    isChecked = item == selectCategory,
+                                    onClick = {
+                                        selectCategory = item
+                                        viewModel.loadNextNoticeWithCategory(
+                                            categoryId = item.id
+                                        )
+                                    },
+                                )
+                            }
                         }
+                        DodamDivider(
+                            type = DividerType.Normal,
+                        )
                     }
-                    DodamDivider(
-                        type = DividerType.Normal,
+                }
+
+                items(uiState.noticeList.size) { index ->
+                    val item = uiState.noticeList[index]
+                    NoticeCard(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        author = item.memberInfoRes.name,
+                        date = formatLocalDateTime(item.createdAt),
+                        title = item.title,
+                        content = item.content,
+                        images = item.noticeFileRes
+                            .filter { it.fileType == NoticeFileType.IMAGE }
+                            .map {
+                                it.fileUrl
+                            }.toImmutableList(),
+                        onLinkClick = { url ->
+                            uriHandler.openUri(url)
+                        },
+                    )
+                }
+            } else {
+                items(uiState.searchNoticeList.size) { index ->
+                    val item = uiState.searchNoticeList[index]
+                    NoticeCard(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        author = item.memberInfoRes.name,
+                        date = formatLocalDateTime(item.createdAt),
+                        title = item.title,
+                        content = item.content,
+                        images = item.noticeFileRes
+                            .filter { it.fileType == NoticeFileType.IMAGE }
+                            .map {
+                                it.fileUrl
+                            }.toImmutableList(),
+                        onLinkClick = { url ->
+                            uriHandler.openUri(url)
+                        },
                     )
                 }
             }
 
-            items(3) { index ->
-                when (index) {
-                    0 -> {
-                        NoticeCard(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            author = "테스트",
-                            date = "5월 4일 수요일",
-                            title = "취업합시다",
-                            content = "얼른",
-                            images = persistentListOf(),
-                            onLinkClick = { url ->
-                                uriHandler.openUri(url)
-                            },
-                        )
-                    }
-                    1 -> {
-                        NoticeCard(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            author = "정진",
-                            date = "5월 4일 수요일",
-                            title = "[겨울방학 전공역량 강화과정 1차 수요조사]",
-                            content = "-본 수요조사 결과를 토대로 신청이 적은 강의는 폐강되며, 2차 조사가 실시됩니다.\n" +
-                                "-프로젝트 코스 신청은 추후에 설문 예정입니다.\n" +
-                                "-설문대상: 강의코스, 반반코스 희망 학생\n" +
-                                "-설문기간: 10/30(수) 13시까지\n" +
-                                "\n" +
-                                "https://forms.gle/wfp1fRNNfcr11RcHA",
-                            images = persistentListOf(),
-                            onLinkClick = { url ->
-                                uriHandler.openUri(url)
-                            },
-                        )
-                    }
-                    2 -> {
-                        NoticeCard(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            author = "문주호",
-                            date = "10월 28일 월요일",
-                            title = "엑스코 앞에 동대구역 직행 버스가 있어요",
-                            content = "타지역분들 참고해주세요",
-                            images = persistentListOf(
-                                "https://cdn.cvinfo.com/news/photo/202301/24433_27847_5741.jpg",
-                                "https://cdn.cvinfo.com/news/photo/202301/24433_27847_5741.jpg",
-                                "https://cdn.cvinfo.com/news/photo/202301/24433_27847_5741.jpg",
-                            ),
-                            onLinkClick = { url ->
-                                uriHandler.openUri(url)
-                            },
-                        )
-                    }
-                }
-            }
             item {
                 Spacer(Modifier.height(80.dp))
             }

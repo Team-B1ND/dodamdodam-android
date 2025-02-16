@@ -114,6 +114,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
     var snackbarState: SnackbarState = remember { SnackbarState.SUCCESS }
     var showVersionDialog by remember { mutableStateOf(false) }
+    var showBottomNavVisible by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         viewModel.loadToken()
@@ -291,6 +292,9 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         noticeScreen(
                             isTeacher = true,
                             navigateToNoticeCreate = navHostController::navigateToNoticeCreate,
+                            changeBottomNavVisible = { visible ->
+                                showBottomNavVisible = visible
+                            }
                         )
 
                         noticeCreateScreen(
@@ -340,6 +344,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                                 end = 16.dp,
                                 bottom = 8.dp,
                             ),
+                        visible = showBottomNavVisible,
                         backStackEntry = backStackEntry,
                         onClick = { destination ->
                             navHostController.navigate(
@@ -362,10 +367,10 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 expect fun getPlatformName(): String
 
 @Composable
-private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
+private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, visible: Boolean, onClick: (destination: String) -> Unit) {
     val route = backStackEntry?.destination?.route
 
-    if (route != null && route in listOf(
+    if (visible && route != null && route in listOf(
             HOME_ROUTE,
             NOTICE_ROUTE,
             NIGHT_STUDY_ROUTE,

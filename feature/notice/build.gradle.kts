@@ -22,6 +22,8 @@ kotlin {
 
         implementation(libs.dodam.design.system.cmm)
         implementation(libs.multiplatform.compose.material)
+        implementation(projects.data.notice)
+        implementation(projects.data.division)
     }
 }
 
