@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class NoticeFileTypeResponse {
-    IMAGE, FILE
+    IMAGE,
+    FILE,
 }

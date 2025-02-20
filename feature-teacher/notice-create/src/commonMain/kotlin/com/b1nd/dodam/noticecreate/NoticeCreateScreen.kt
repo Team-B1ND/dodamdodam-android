@@ -32,19 +32,23 @@ private enum class NoticeCreatePage {
 fun NoticeCreateScreen(
     viewModel: NoticeCreateViewModel = koinViewModel(),
     showSnackbar: (state: SnackbarState, message: String) -> Unit,
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var nowPage by remember { mutableStateOf(NoticeCreatePage.First) }
-    var selectCategories: ImmutableList<DivisionOverview> by remember { mutableStateOf(persistentListOf(
-        DivisionOverview(
-            id = 0,
-            name = "전체"
+    var selectCategories: ImmutableList<DivisionOverview> by remember {
+        mutableStateOf(
+            persistentListOf(
+                DivisionOverview(
+                    id = 0,
+                    name = "전체",
+                ),
+            ),
         )
-    )) }
+    }
 
     LaunchedEffect(true) {
         viewModel.loadDivisions()
@@ -101,7 +105,7 @@ fun NoticeCreateScreen(
                     title = title,
                     content = content,
                     files = uiState.files + uiState.images,
-                    divisions = if (selectCategories.size == 1 && selectCategories.first().id == 0) uiState.divisions else selectCategories
+                    divisions = if (selectCategories.size == 1 && selectCategories.first().id == 0) uiState.divisions else selectCategories,
                 )
             },
             onClickCategory = {

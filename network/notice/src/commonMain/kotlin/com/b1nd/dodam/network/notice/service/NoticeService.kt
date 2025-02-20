@@ -15,29 +15,22 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.http.contentType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 class NoticeService(
     private val httpClient: HttpClient,
-): NoticeDataSource {
-    override suspend fun getNotice(keyword: String?, lastId: Int?, limit: Int, status: String): ImmutableList<NoticeResponse>
-    = safeRequest {
+) : NoticeDataSource {
+    override suspend fun getNotice(keyword: String?, lastId: Int?, limit: Int, status: String): ImmutableList<NoticeResponse> = safeRequest {
         httpClient.get(DodamUrl.NOTICE) {
-            parameter("keyword", keyword?: "")
+            parameter("keyword", keyword ?: "")
             parameter("lastId", lastId)
             parameter("limit", limit)
             parameter("status", status)
         }.body<Response<List<NoticeResponse>>>()
     }.toImmutableList()
 
-    override suspend fun getNoticeWithCategory(
-        id: Int,
-        lastId: Int?,
-        limit: Int,
-    ): ImmutableList<NoticeResponse>
-    = safeRequest {
+    override suspend fun getNoticeWithCategory(id: Int, lastId: Int?, limit: Int): ImmutableList<NoticeResponse> = safeRequest {
         httpClient.get("${DodamUrl.NOTICE}/division") {
             parameter("id", id)
             parameter("lastId", lastId)
@@ -45,20 +38,15 @@ class NoticeService(
         }.body<Response<List<NoticeResponse>>>()
     }.toImmutableList()
 
-    override suspend fun postNoticeCreate(
-        title: String,
-        content: String,
-        files: List<NoticeFileRequest>,
-        divisions: List<Int>?
-    ) = defaultSafeRequest {
+    override suspend fun postNoticeCreate(title: String, content: String, files: List<NoticeFileRequest>, divisions: List<Int>?) = defaultSafeRequest {
         httpClient.post(DodamUrl.NOTICE) {
             setBody(
                 NoticeRequest(
                     title = title,
                     content = content,
                     files = files,
-                    divisions = divisions
-                )
+                    divisions = divisions,
+                ),
             )
         }.body<DefaultResponse>()
     }

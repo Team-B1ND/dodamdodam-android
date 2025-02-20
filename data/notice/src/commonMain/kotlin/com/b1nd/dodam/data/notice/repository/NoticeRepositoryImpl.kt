@@ -19,13 +19,8 @@ import kotlinx.coroutines.flow.flowOn
 class NoticeRepositoryImpl(
     private val noticeDataSource: NoticeDataSource,
     private val dispatcher: CoroutineDispatcher,
-): NoticeRepository {
-    override suspend fun getNotice(
-        keyword: String?,
-        lastId: Int?,
-        limit: Int,
-        status: NoticeStatus
-    ): Flow<Result<ImmutableList<Notice>>> = flow {
+) : NoticeRepository {
+    override suspend fun getNotice(keyword: String?, lastId: Int?, limit: Int, status: NoticeStatus): Flow<Result<ImmutableList<Notice>>> = flow {
         emit(
             noticeDataSource.getNotice(
                 keyword = keyword,
@@ -35,17 +30,13 @@ class NoticeRepositoryImpl(
             ).map {
                 it.toModel()
             }
-                .toImmutableList()
+                .toImmutableList(),
         )
     }
         .flowOn(dispatcher)
         .asResult()
 
-    override suspend fun getNoticeWithCategory(
-        id: Int,
-        lastId: Int?,
-        limit: Int
-    ): Flow<Result<ImmutableList<Notice>>> = flow {
+    override suspend fun getNoticeWithCategory(id: Int, lastId: Int?, limit: Int): Flow<Result<ImmutableList<Notice>>> = flow {
         emit(
             noticeDataSource.getNoticeWithCategory(
                 id = id,
@@ -54,18 +45,13 @@ class NoticeRepositoryImpl(
             ).map {
                 it.toModel()
             }
-                .toImmutableList()
+                .toImmutableList(),
         )
     }
         .flowOn(dispatcher)
         .asResult()
 
-    override suspend fun postNoticeCreate(
-        title: String,
-        content: String,
-        files: List<NoticeFile>,
-        divisions: List<Int>?
-    ): Flow<Result<Unit>> = flow {
+    override suspend fun postNoticeCreate(title: String, content: String, files: List<NoticeFile>, divisions: List<Int>?): Flow<Result<Unit>> = flow {
         emit(
             noticeDataSource.postNoticeCreate(
                 title = title,
@@ -74,11 +60,11 @@ class NoticeRepositoryImpl(
                     NoticeFileRequest(
                         url = it.fileUrl,
                         name = it.fileName,
-                        fileType = it.fileType.name
+                        fileType = it.fileType.name,
                     )
                 },
                 divisions = divisions,
-            )
+            ),
         )
     }
         .flowOn(dispatcher)

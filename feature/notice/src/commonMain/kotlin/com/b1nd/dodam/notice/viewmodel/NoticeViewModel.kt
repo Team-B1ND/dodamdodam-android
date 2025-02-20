@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class NoticeViewModel: ViewModel(), KoinComponent {
+class NoticeViewModel : ViewModel(), KoinComponent {
 
     private val divisionRepository: DivisionRepository by inject()
     private val noticeRepository: NoticeRepository by inject()
@@ -36,7 +36,7 @@ class NoticeViewModel: ViewModel(), KoinComponent {
             divisionRepository.getMyDivisions(
                 lastId = 0,
                 limit = 9999,
-                keyword = ""
+                keyword = "",
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {
@@ -57,9 +57,7 @@ class NoticeViewModel: ViewModel(), KoinComponent {
         }
     }
 
-    fun loadNextNoticeWithCategory(
-        categoryId: Int,
-    ) {
+    fun loadNextNoticeWithCategory(categoryId: Int) {
         // 1. 같은 카테고리로 페이징 -> 중복된 로드를 막기 위해, isLoading을 통해 막아야함.
         // 2. 중간에 카테고리 변경으로 새로 갱신
 
@@ -69,7 +67,7 @@ class NoticeViewModel: ViewModel(), KoinComponent {
         loadCategoryJob = viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    isLoading = true
+                    isLoading = true,
                 )
             }
             if (categoryId != _uiState.value.noticeLastCategoryId) {
@@ -77,23 +75,27 @@ class NoticeViewModel: ViewModel(), KoinComponent {
                     it.copy(
                         noticeLastId = null,
                         noticeLastCategoryId = categoryId,
-                        noticeList = persistentListOf()
+                        noticeList = persistentListOf(),
                     )
                 }
             }
 
-            (if (categoryId == 0)
-                noticeRepository.getNotice(
-                    keyword = null,
-                    lastId = _uiState.value.noticeLastId,
-                    limit = PAGE_SIZE,
-                    status = NoticeStatus.CREATED
-                )
-            else noticeRepository.getNoticeWithCategory(
-                id = categoryId,
-                lastId = _uiState.value.noticeLastId,
-                limit = PAGE_SIZE,
-            )).collect { result ->
+            (
+                if (categoryId == 0) {
+                    noticeRepository.getNotice(
+                        keyword = null,
+                        lastId = _uiState.value.noticeLastId,
+                        limit = PAGE_SIZE,
+                        status = NoticeStatus.CREATED,
+                    )
+                } else {
+                    noticeRepository.getNoticeWithCategory(
+                        id = categoryId,
+                        lastId = _uiState.value.noticeLastId,
+                        limit = PAGE_SIZE,
+                    )
+                }
+                ).collect { result ->
                 when (result) {
                     is Result.Success -> {
                         _uiState.update {
@@ -118,9 +120,7 @@ class NoticeViewModel: ViewModel(), KoinComponent {
         }
     }
 
-    fun loadNextNoticeWithKeyword(
-        keyword: String
-    ) {
+    fun loadNextNoticeWithKeyword(keyword: String) {
         if (keyword == _uiState.value.searchNoticeLastText && _uiState.value.isSearchLoading) {
             return
         }
@@ -130,7 +130,7 @@ class NoticeViewModel: ViewModel(), KoinComponent {
                 it.copy(
                     searchNoticeLastText = keyword,
                     searchNoticeLastId = null,
-                    searchNoticeList = persistentListOf()
+                    searchNoticeList = persistentListOf(),
                 )
             }
         }
@@ -143,7 +143,7 @@ class NoticeViewModel: ViewModel(), KoinComponent {
                 keyword = keyword,
                 lastId = _uiState.value.searchNoticeLastId,
                 limit = PAGE_SIZE,
-                status = NoticeStatus.CREATED
+                status = NoticeStatus.CREATED,
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {

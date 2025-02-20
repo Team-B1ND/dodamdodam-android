@@ -10,7 +10,7 @@ val noticeRepositoryModule = module {
     single<NoticeRepository> {
         NoticeRepositoryImpl(
             noticeDataSource = get(),
-            dispatcher = get(named(DispatcherType.IO))
+            dispatcher = get(named(DispatcherType.IO)),
         )
     }
 }

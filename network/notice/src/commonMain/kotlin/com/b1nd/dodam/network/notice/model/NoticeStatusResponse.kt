@@ -4,5 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class NoticeStatusResponse {
-    CREATED, DRAFT, DELETED
+    CREATED,
+    DRAFT,
+    DELETED,
 }

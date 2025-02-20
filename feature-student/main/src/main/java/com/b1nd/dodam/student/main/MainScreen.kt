@@ -92,7 +92,7 @@ internal fun MainScreen(
                 navigateToNoticeCreate = null,
                 changeBottomNavVisible = { visible ->
                     bottomNavVisible = visible
-                }
+                },
             )
             nightStudyScreen(
                 navigateToAskNightStudy,

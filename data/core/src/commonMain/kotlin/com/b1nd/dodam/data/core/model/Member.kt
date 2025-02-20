@@ -15,15 +15,14 @@ data class Member(
     val modifiedAt: LocalDateTime,
 )
 
-fun MemberResponse.toModel() =
-    Member(
-        id = id,
-        name = name,
-        email = email,
-        role = role.toModel(),
-        status = status,
-        profileImage = profileImage,
-        phone = phone,
-        createdAt = createdAt,
-        modifiedAt = modifiedAt
-    )
+fun MemberResponse.toModel() = Member(
+    id = id,
+    name = name,
+    email = email,
+    role = role.toModel(),
+    status = status,
+    profileImage = profileImage,
+    phone = phone,
+    createdAt = createdAt,
+    modifiedAt = modifiedAt,
+)
