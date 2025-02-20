@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -24,10 +27,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.zIndex
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
+import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
@@ -38,7 +44,6 @@ internal fun ChildrenManageScreen(
     popBackStack: () -> Unit,
     changeBottomNavVisible: (visible: Boolean) -> Unit
 ) {
-
     LaunchedEffect(true) {
         changeBottomNavVisible(false)
     }
@@ -48,22 +53,81 @@ internal fun ChildrenManageScreen(
             changeBottomNavVisible(true)
         }
     }
+
     Scaffold(
         topBar = {
             DodamTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
-                title = "학생코드로\n" +
-                        "자녀를 등록해주세요",
+                title = "학생코드로\n자녀를 등록해주세요",
                 onBackClick = popBackStack,
                 type = TopAppBarType.Large,
             )
         },
         containerColor = DodamTheme.colors.backgroundNeutral
-    ) {
+    ) { it ->
         Box(
-            modifier = Modifier.padding(it)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
         ) {
+            val children = listOf(
+                "한" to "ㅁㄴ",
+                "이" to "ㄴㅇ",
+                "박" to "ㅇㄹ",
+                "김" to "ㄹㅂ",
+                "최" to "ㅂㅁ",
+            )
 
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                items(children.chunked(2)) { rowItems ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        rowItems.fastForEach { (name, relation) ->
+                            ChildrenCard(
+                                name = name,
+                                relation = relation,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        if (rowItems.size == 1 && rowItems.first() == children.last()) {
+                            AddChildrenButton(
+                                modifier = Modifier.weight(1f),
+                                onClick = {}
+                            )
+                        }
+                    }
+                }
+                if (children.size % 2 != 1) {
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            AddChildrenButton(modifier = Modifier.weight(1f)) { }
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+                item {
+                    Spacer(Modifier.height(150.dp))
+                }
+            }
+            DodamButton(
+                onClick = {},
+                text = "완료",
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp)
+                    .padding(horizontal = 16.dp)
+            )
         }
     }
 }
