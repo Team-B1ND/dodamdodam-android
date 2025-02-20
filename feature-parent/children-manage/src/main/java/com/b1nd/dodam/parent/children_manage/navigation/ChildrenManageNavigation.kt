@@ -17,7 +17,8 @@ fun NavController.navigateToChildrenManageScreen(
 ) = navigate(CHILDREN_MANAGE_ROUTE, navOptions)
 
 fun NavGraphBuilder.childrenManageScreen(
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
+    changeBottomNavVisible: (visible: Boolean) -> Unit
 ) {
     composable(
         route = CHILDREN_MANAGE_ROUTE,
@@ -27,7 +28,8 @@ fun NavGraphBuilder.childrenManageScreen(
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         ChildrenManageScreen(
-            popBackStack = popBackStack
+            popBackStack = popBackStack,
+            changeBottomNavVisible = changeBottomNavVisible
         )
     }
 }
