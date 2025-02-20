@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.dodam.multiplatform.feature)
     alias(libs.plugins.dodam.multiplatform.koin)
     alias(libs.plugins.dodam.multiplatform.kotlin.serialization)
+    alias(libs.plugins.dodam.multiplatform.coil)
 }
 
 
@@ -24,9 +25,17 @@ kotlin{
 
     sourceSets{
         commonMain.dependencies {
+            implementation(projects.logging)
             implementation(projects.common)
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.ui)
+            implementation(projects.data.upload)
+            implementation(projects.data.notice)
+            implementation(projects.data.division)
+
+            implementation(libs.calf.file.picker)
+            implementation(libs.calf.permissions)
+            implementation(libs.urlencoder.lib)
         }
     }
 }
