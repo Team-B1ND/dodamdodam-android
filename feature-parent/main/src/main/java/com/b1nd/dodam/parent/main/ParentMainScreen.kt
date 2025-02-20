@@ -16,6 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -47,6 +49,7 @@ internal fun ParentMainScreen(
 ) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
     val mainScreenState = rememberParentMainScreenState(navController)
+    var bottomNavVisible by remember { mutableStateOf(true) }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -61,6 +64,9 @@ internal fun ParentMainScreen(
             noticeScreen(
                 isTeacher = false,
                 navigateToNoticeCreate = null,
+                changeBottomNavVisible = { visible ->
+                    bottomNavVisible = visible
+                },
             )
             parentAllScreen(
                 navigateToSetting = navigateToSetting,
@@ -85,27 +91,30 @@ internal fun ParentMainScreen(
                 ),
         )
 
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .navigationBarsPadding()
-                .align(Alignment.BottomCenter),
-        ) {
-            val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+        if (bottomNavVisible) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .navigationBarsPadding()
+                    .align(Alignment.BottomCenter),
+            ) {
+                val currentRoute =
+                    navController.currentBackStackEntryAsState().value?.destination?.route
 
-            DodamNavigationBar(
-                items = mainScreenState.mainDestinations.map {
-                    DodamNavigationBarItem(
-                        selected = currentRoute == it.route,
-                        icon = it.icon,
-                        enable = currentRoute != it.route,
-                        onClick = {
-                            mainScreenState.navigateToMainDestination(it)
-                        },
-                    )
-                }.toImmutableList(),
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+                DodamNavigationBar(
+                    items = mainScreenState.mainDestinations.map {
+                        DodamNavigationBarItem(
+                            selected = currentRoute == it.route,
+                            icon = it.icon,
+                            enable = currentRoute != it.route,
+                            onClick = {
+                                mainScreenState.navigateToMainDestination(it)
+                            },
+                        )
+                    }.toImmutableList(),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 }

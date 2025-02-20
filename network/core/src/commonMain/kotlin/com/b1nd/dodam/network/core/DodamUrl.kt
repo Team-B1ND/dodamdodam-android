@@ -17,6 +17,7 @@ object DodamUrl {
     const val GET_BUNDLE_ID = "https://itunes.apple.com/lookup?bundleId=com.b1nd.dodam.teacher&country=br"
     const val UPLOAD = "$BASE_URL/upload"
     const val DIVISION = "$BASE_URL/divisions"
+    const val NOTICE = "$BASE_URL/notice"
 
     object Meal {
         const val MONTH = "$MEAL/month"
