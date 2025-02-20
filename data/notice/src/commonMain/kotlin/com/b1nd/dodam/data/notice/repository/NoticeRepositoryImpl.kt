@@ -4,9 +4,11 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.data.notice.NoticeRepository
 import com.b1nd.dodam.data.notice.model.Notice
+import com.b1nd.dodam.data.notice.model.NoticeFile
 import com.b1nd.dodam.data.notice.model.NoticeStatus
 import com.b1nd.dodam.data.notice.model.toModel
 import com.b1nd.dodam.network.notice.datasource.NoticeDataSource
+import com.b1nd.dodam.network.notice.model.NoticeFileRequest
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,7 +22,7 @@ class NoticeRepositoryImpl(
 ): NoticeRepository {
     override suspend fun getNotice(
         keyword: String?,
-        lastId: Int,
+        lastId: Int?,
         limit: Int,
         status: NoticeStatus
     ): Flow<Result<ImmutableList<Notice>>> = flow {
@@ -41,7 +43,7 @@ class NoticeRepositoryImpl(
 
     override suspend fun getNoticeWithCategory(
         id: Int,
-        lastId: Int,
+        lastId: Int?,
         limit: Int
     ): Flow<Result<ImmutableList<Notice>>> = flow {
         emit(
@@ -53,6 +55,30 @@ class NoticeRepositoryImpl(
                 it.toModel()
             }
                 .toImmutableList()
+        )
+    }
+        .flowOn(dispatcher)
+        .asResult()
+
+    override suspend fun postNoticeCreate(
+        title: String,
+        content: String,
+        files: List<NoticeFile>,
+        divisions: List<Int>?
+    ): Flow<Result<Unit>> = flow {
+        emit(
+            noticeDataSource.postNoticeCreate(
+                title = title,
+                content = content,
+                files = files.map {
+                    NoticeFileRequest(
+                        url = it.fileUrl,
+                        name = it.fileName,
+                        fileType = it.fileType.name
+                    )
+                },
+                divisions = divisions,
+            )
         )
     }
         .flowOn(dispatcher)

@@ -11,10 +11,10 @@ data class NoticeUiState(
         DivisionOverview(id = 0, name = "전체")
     ),
     val noticeLastCategoryId: Int = 0,
-    val noticeLastId: Int = 0,
+    val noticeLastId: Int? = null,
     val noticeList: ImmutableList<Notice> = persistentListOf(),
     val isSearchLoading: Boolean = false,
     val searchNoticeLastText: String = "",
-    val searchNoticeLastId: Int = 0,
+    val searchNoticeLastId: Int? = null,
     val searchNoticeList: ImmutableList<Notice> = persistentListOf(),
 )
