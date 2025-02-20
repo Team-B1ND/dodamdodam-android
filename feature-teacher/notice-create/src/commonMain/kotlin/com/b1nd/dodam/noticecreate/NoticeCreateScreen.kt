@@ -29,7 +29,7 @@ private enum class NoticeCreatePage {
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-fun NoticeCreateScreen(
+internal fun NoticeCreateScreen(
     viewModel: NoticeCreateViewModel = koinViewModel(),
     showSnackbar: (state: SnackbarState, message: String) -> Unit,
     popBackStack: () -> Unit,
