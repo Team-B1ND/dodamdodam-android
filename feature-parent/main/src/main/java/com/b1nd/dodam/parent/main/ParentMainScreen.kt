@@ -66,7 +66,9 @@ internal fun ParentMainScreen(
                 navigateToSetting = navigateToSetting,
                 navigateToChildrenManage = navController::navigateToChildrenManageScreen
             )
-            childrenManageScreen()
+            childrenManageScreen(
+                popBackStack = navController::popBackStack
+            )
         }
         Box(
             modifier = Modifier
