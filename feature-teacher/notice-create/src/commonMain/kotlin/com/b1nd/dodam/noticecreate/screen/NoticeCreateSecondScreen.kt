@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -25,9 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import com.b1nd.dodam.data.division.model.DivisionOverview
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.DividerType
@@ -36,71 +37,83 @@ import com.b1nd.dodam.designsystem.component.DodamTextButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.noticecreate.model.NoticeCreateUiState
+import com.b1nd.dodam.noticecreate.viewmodel.NoticeCreateViewModel
 import com.b1nd.dodam.ui.component.modifier.`if`
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NoticeCreateSecondScreen(
-    selectCategory: ImmutableList<String>,
-    categories: ImmutableList<String>,
+    isLoading: Boolean,
+    selectDivisions: ImmutableList<DivisionOverview>,
+    divisions: ImmutableList<DivisionOverview>,
     popBackStack: () -> Unit,
-    onClickCategory: (category: String) -> Unit,
+    onClickCategory: (division: DivisionOverview) -> Unit,
     onClickSuccess: () -> Unit,
 ) {
-    val bodyFocusRequester = remember { FocusRequester() }
-
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            DodamTopAppBar(
-                modifier = Modifier.statusBarsPadding(),
-                title = "공지를 보낼\n카테고리를 선택해 주세요",
-                type = TopAppBarType.Medium,
-                onBackClick = popBackStack,
-            )
-        },
-        bottomBar = {
-            Column(
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                DodamTopAppBar(
+                    modifier = Modifier.statusBarsPadding(),
+                    title = "공지를 보낼\n그룹을 선택해 주세요",
+                    type = TopAppBarType.Medium,
+                    onBackClick = popBackStack,
+                )
+            },
+            bottomBar = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .navigationBarsPadding(),
+                ) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    DodamDivider(
+                        type = DividerType.Normal,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    DodamTextButton(
+                        modifier = Modifier.align(Alignment.End),
+                        onClick = onClickSuccess,
+                        text = "완료",
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            },
+            containerColor = DodamTheme.colors.backgroundNormal,
+        ) {
+            FlowRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .navigationBarsPadding(),
+                    .padding(
+                        horizontal = 16.dp,
+                    )
+                    .padding(it),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Spacer(modifier = Modifier.height(8.dp))
-                DodamDivider(
-                    type = DividerType.Normal,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                DodamTextButton(
-                    modifier = Modifier.align(Alignment.End),
-                    onClick = onClickSuccess,
-                    text = "완료",
-                )
-                Spacer(modifier = Modifier.height(8.dp))
+                divisions.fastForEach {
+                    NoticeCreateCategory(
+                        text = it.name,
+                        isSelect = it in selectDivisions,
+                        onClick = {
+                            onClickCategory(it)
+                        },
+                    )
+                }
             }
-        },
-        containerColor = DodamTheme.colors.backgroundNormal,
-    ) {
-        FlowRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = 16.dp,
-                )
-                .padding(it),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            categories.fastForEach {
-                NoticeCreateCategory(
-                    text = it,
-                    isSelect = it in selectCategory,
-                    onClick = {
-                        onClickCategory(it)
-                    },
-                )
-            }
+        }
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(DodamTheme.colors.staticBlack.copy(alpha = 0.3f))
+            )
         }
     }
 }

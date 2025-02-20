@@ -75,7 +75,7 @@ class NoticeViewModel: ViewModel(), KoinComponent {
             if (categoryId != _uiState.value.noticeLastCategoryId) {
                 _uiState.update {
                     it.copy(
-                        noticeLastId = 0,
+                        noticeLastId = null,
                         noticeLastCategoryId = categoryId,
                         noticeList = persistentListOf()
                     )
@@ -102,7 +102,7 @@ class NoticeViewModel: ViewModel(), KoinComponent {
                                 addAll(result.data)
                             }
                             it.copy(
-                                noticeLastId = newData.lastOrNull()?.id?: 0,
+                                noticeLastId = newData.lastOrNull()?.id,
                                 noticeList = newData.toImmutableList(),
                                 isLoading = false,
                             )
@@ -129,7 +129,7 @@ class NoticeViewModel: ViewModel(), KoinComponent {
             _uiState.update {
                 it.copy(
                     searchNoticeLastText = keyword,
-                    searchNoticeLastId = 0,
+                    searchNoticeLastId = null,
                     searchNoticeList = persistentListOf()
                 )
             }
@@ -153,7 +153,7 @@ class NoticeViewModel: ViewModel(), KoinComponent {
                                 addAll(result.data)
                             }
                             it.copy(
-                                searchNoticeLastId = newData.lastOrNull()?.id?: 0,
+                                searchNoticeLastId = newData.lastOrNull()?.id,
                                 searchNoticeList = newData.toImmutableList(),
                                 isSearchLoading = false,
                             )

@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NoticeFileResponse(
+    val fileName: String,
     val fileUrl: String,
     val fileType: NoticeFileTypeResponse
 )

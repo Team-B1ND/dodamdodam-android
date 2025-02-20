@@ -299,6 +299,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 
                         noticeCreateScreen(
                             popBackStack = navHostController::popBackStack,
+                            showSnackbar = showSnackbar,
                         )
 
                         groupScreen(
