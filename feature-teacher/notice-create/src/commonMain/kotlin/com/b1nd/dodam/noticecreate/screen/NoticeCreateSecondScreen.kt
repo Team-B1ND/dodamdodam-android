@@ -42,7 +42,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun NoticeCreateSecondScreen(
+internal fun NoticeCreateSecondScreen(
     isLoading: Boolean,
     selectDivisions: ImmutableList<DivisionOverview>,
     divisions: ImmutableList<DivisionOverview>,

@@ -65,7 +65,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun NoticeCreateFirstScreen(
+internal fun NoticeCreateFirstScreen(
     viewModel: NoticeCreateViewModel,
     uiState: NoticeCreateUiState,
     title: String,
