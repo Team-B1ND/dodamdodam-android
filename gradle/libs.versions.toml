@@ -1,9 +1,11 @@
 [versions]
+calfFilePicker = "0.5.5"
 coilVersion = "2.7.0"
 compileSdk = "34"
 minSdk = "28"
 targetSdk = "34"
 appVersion = "3.4.2"
+urlencoderLib = "1.6.0"
 versionCode = "11"
 
 # kotlin
@@ -70,6 +72,8 @@ startupRuntime = "1.2.0"
 
 [libraries]
 # kotlin
+calf-file-picker = { module = "com.mohamedrejeb.calf:calf-file-picker", version.ref = "calfFilePicker" }
+calf-permissions = { module = "com.mohamedrejeb.calf:calf-permissions", version.ref = "calfFilePicker" }
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -140,6 +144,7 @@ coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp"
 coil = { group = "io.coil-kt.coil3", name = "coil" , version.ref = "coil"}
 
 dodam-design-system = { group = "com.github.Team-B1ND", name = "dds-android", version.ref = "dds" }
+urlencoder-lib = { module = "net.thauvin.erik.urlencoder:urlencoder-lib", version.ref = "urlencoderLib" }
 wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "wheel-picker" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }

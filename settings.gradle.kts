@@ -87,6 +87,8 @@ include(
     ":feature:group-add",
     ":data:division",
     ":network:division",
+    ":data:notice",
+    ":network:notice",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")

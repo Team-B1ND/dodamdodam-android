@@ -75,6 +75,7 @@ kotlin {
             implementation(projects.data.upload)
             implementation(projects.data.bundleidInfo)
             implementation(projects.data.division)
+            implementation(projects.data.notice)
 
             implementation(projects.network.banner)
             implementation(projects.network.meal)
@@ -86,6 +87,7 @@ kotlin {
             implementation(projects.network.bundleidInfo)
             implementation(projects.network.upload)
             implementation(projects.network.division)
+            implementation(projects.network.notice)
 
             androidMain.dependencies {
                 implementation(compose.preview)
