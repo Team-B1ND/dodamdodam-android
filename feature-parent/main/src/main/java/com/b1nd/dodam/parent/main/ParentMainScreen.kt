@@ -29,6 +29,8 @@ import com.b1nd.dodam.all.navigation.parentAllScreen
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.notice.navigation.noticeScreen
+import com.b1nd.dodam.parent.children_manage.navigation.childrenManageScreen
+import com.b1nd.dodam.parent.children_manage.navigation.navigateToChildrenManageScreen
 import com.b1nd.dodam.parnet.home.navigation.PARENT_HOME_ROUTE
 import com.b1nd.dodam.parnet.home.navigation.parentHomeScreen
 import kotlinx.collections.immutable.toImmutableList
@@ -62,7 +64,9 @@ internal fun ParentMainScreen(
             )
             parentAllScreen(
                 navigateToSetting = navigateToSetting,
+                navigateToChildrenManage = navController::navigateToChildrenManageScreen
             )
+            childrenManageScreen()
         }
         Box(
             modifier = Modifier
