@@ -64,7 +64,7 @@ internal fun ParentMainScreen(
                 navigateToNoticeCreate = null,
                 changeBottomNavVisible = { visible ->
                     bottomNavVisible = visible
-                }
+                },
             )
             parentAllScreen(
                 navigateToSetting = navigateToSetting,
