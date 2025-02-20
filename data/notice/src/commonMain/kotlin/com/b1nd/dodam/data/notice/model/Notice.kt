@@ -2,7 +2,6 @@ package com.b1nd.dodam.data.notice.model
 
 import com.b1nd.dodam.data.core.model.Member
 import com.b1nd.dodam.data.core.model.toModel
-import com.b1nd.dodam.network.core.model.MemberResponse
 import com.b1nd.dodam.network.notice.model.NoticeResponse
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -19,16 +18,15 @@ data class Notice(
     val modifiedAt: LocalDateTime,
 )
 
-internal fun NoticeResponse.toModel() =
-    Notice(
-        id = id,
-        title = title,
-        content = content,
-        noticeFileRes = noticeFileRes.map {
-            it.toModel()
-        }.toImmutableList(),
-        noticeStatus = noticeStatus.toModel(),
-        memberInfoRes = memberInfoRes.toModel(),
-        createdAt = createdAt,
-        modifiedAt = modifiedAt,
-    )
+internal fun NoticeResponse.toModel() = Notice(
+    id = id,
+    title = title,
+    content = content,
+    noticeFileRes = noticeFileRes.map {
+        it.toModel()
+    }.toImmutableList(),
+    noticeStatus = noticeStatus.toModel(),
+    memberInfoRes = memberInfoRes.toModel(),
+    createdAt = createdAt,
+    modifiedAt = modifiedAt,
+)

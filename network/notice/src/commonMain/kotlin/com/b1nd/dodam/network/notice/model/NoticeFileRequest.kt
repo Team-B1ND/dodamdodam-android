@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class NoticeFileRequest(
     val url: String,
     val name: String,
-    val fileType: String
+    val fileType: String,
 )

@@ -11,10 +11,7 @@ const val NOTICE_CREATE_ROUTE = "notice_create"
 
 fun NavController.navigateToNoticeCreate(navOptions: NavOptions? = null) = navigate(NOTICE_CREATE_ROUTE, navOptions)
 
-fun NavGraphBuilder.noticeCreateScreen(
-    popBackStack: () -> Unit,
-    showSnackbar: (state: SnackbarState, message: String) -> Unit,
-) {
+fun NavGraphBuilder.noticeCreateScreen(popBackStack: () -> Unit, showSnackbar: (state: SnackbarState, message: String) -> Unit) {
     composable(NOTICE_CREATE_ROUTE) {
         NoticeCreateScreen(
             popBackStack = popBackStack,

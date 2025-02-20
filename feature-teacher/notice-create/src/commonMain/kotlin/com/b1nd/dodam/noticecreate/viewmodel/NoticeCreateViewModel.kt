@@ -9,7 +9,6 @@ import com.b1nd.dodam.data.notice.NoticeRepository
 import com.b1nd.dodam.data.notice.model.NoticeFile
 import com.b1nd.dodam.data.notice.model.NoticeFileType
 import com.b1nd.dodam.data.upload.UploadRepository
-import com.b1nd.dodam.data.upload.model.UploadModel
 import com.b1nd.dodam.noticecreate.model.NoticeCreateSideEffect
 import com.b1nd.dodam.noticecreate.model.NoticeCreateUiState
 import kotlinx.collections.immutable.toImmutableList
@@ -22,7 +21,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class NoticeCreateViewModel: ViewModel(), KoinComponent {
+class NoticeCreateViewModel : ViewModel(), KoinComponent {
 
     private val noticeRepository: NoticeRepository by inject()
     private val uploadRepository: UploadRepository by inject()
@@ -39,19 +38,21 @@ class NoticeCreateViewModel: ViewModel(), KoinComponent {
             divisionRepository.getMyDivisions(
                 lastId = 0,
                 limit = 9999,
-                keyword = ""
+                keyword = "",
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(
                                 divisions = result.data.toMutableList().apply {
-                                    add(0, DivisionOverview(
-                                        id = 0,
-                                        name = "전체"
+                                    add(
+                                        0,
+                                        DivisionOverview(
+                                            id = 0,
+                                            name = "전체",
+                                        ),
                                     )
-                                    )
-                                }.toImmutableList()
+                                }.toImmutableList(),
                             )
                         }
                     }
@@ -64,80 +65,70 @@ class NoticeCreateViewModel: ViewModel(), KoinComponent {
         }
     }
 
-    fun uploadFile(
-        fileByteArray: ByteArray,
-        fileMimeType: String,
-        fileName: String,
-        noticeFileType: NoticeFileType,
-    ) {
+    fun uploadFile(fileByteArray: ByteArray, fileMimeType: String, fileName: String, noticeFileType: NoticeFileType) {
         viewModelScope.launch {
             _uiState.update { it.copy(isUploadLoading = true) }
 
             uploadRepository.upload(fileName, fileMimeType, fileByteArray)
-            .collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        val resolvedType = if (fileMimeType.lowercase() in listOf("jpg", "jpeg", "png", "gif", "bmp", "webp")) {
-                            NoticeFileType.IMAGE
-                        } else {
-                            noticeFileType
-                        }
+                .collect { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            val resolvedType = if (fileMimeType.lowercase() in listOf("jpg", "jpeg", "png", "gif", "bmp", "webp")) {
+                                NoticeFileType.IMAGE
+                            } else {
+                                noticeFileType
+                            }
 
-                        val noticeFile = NoticeFile(
-                            fileName = "$fileName.$fileMimeType",
-                            fileUrl = result.data.profileImage,
-                            fileType = resolvedType,
-                        )
+                            val noticeFile = NoticeFile(
+                                fileName = "$fileName.$fileMimeType",
+                                fileUrl = result.data.profileImage,
+                                fileType = resolvedType,
+                            )
 
-                        _uiState.update { currentState ->
-                            when (resolvedType) {
-                                NoticeFileType.IMAGE -> currentState.copy(
-                                    isUploadLoading = false,
-                                    images = currentState.images.toMutableList().apply {
-                                        add(noticeFile)
-                                    }.toImmutableList()
-                                )
+                            _uiState.update { currentState ->
+                                when (resolvedType) {
+                                    NoticeFileType.IMAGE -> currentState.copy(
+                                        isUploadLoading = false,
+                                        images = currentState.images.toMutableList().apply {
+                                            add(noticeFile)
+                                        }.toImmutableList(),
+                                    )
 
-                                NoticeFileType.FILE -> currentState.copy(
-                                    isUploadLoading = false,
-                                    files = currentState.files.toMutableList().apply {
-                                        add(noticeFile)
-                                    }.toImmutableList()
-                                )
+                                    NoticeFileType.FILE -> currentState.copy(
+                                        isUploadLoading = false,
+                                        files = currentState.files.toMutableList().apply {
+                                            add(noticeFile)
+                                        }.toImmutableList(),
+                                    )
+                                }
                             }
                         }
+                        Result.Loading -> {}
+                        is Result.Error -> {}
                     }
-                    Result.Loading -> {}
-                    is Result.Error -> {}
                 }
-            }
         }
     }
 
-    fun createNotice(
-        title: String,
-        content: String,
-        files: List<NoticeFile>,
-        divisions: List<DivisionOverview>
-    ) {
+    fun createNotice(title: String, content: String, files: List<NoticeFile>, divisions: List<DivisionOverview>) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    isUploadLoading = true
+                    isUploadLoading = true,
                 )
             }
             noticeRepository.postNoticeCreate(
                 title = title,
                 content = content,
                 files = files,
-                divisions = divisions.map { it.id }
+                divisions = divisions.map { it.id },
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {
                         _sideEffect.send(NoticeCreateSideEffect.SuccessCreate)
                         _uiState.update {
                             it.copy(
-                                isUploadLoading = false
+                                isUploadLoading = false,
                             )
                         }
                     }
@@ -146,7 +137,7 @@ class NoticeCreateViewModel: ViewModel(), KoinComponent {
                         _sideEffect.send(NoticeCreateSideEffect.FailedCreate(result.error))
                         _uiState.update {
                             it.copy(
-                                isUploadLoading = false
+                                isUploadLoading = false,
                             )
                         }
                     }

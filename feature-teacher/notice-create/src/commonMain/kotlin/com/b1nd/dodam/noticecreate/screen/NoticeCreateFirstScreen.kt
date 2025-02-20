@@ -94,7 +94,7 @@ fun NoticeCreateFirstScreen(
                         fileByteArray = file.readByteArray(context),
                         fileMimeType = fileMimeType,
                         fileName = fileName,
-                        noticeFileType = NoticeFileType.IMAGE
+                        noticeFileType = NoticeFileType.IMAGE,
                     )
                 }
             }
@@ -113,7 +113,7 @@ fun NoticeCreateFirstScreen(
                         fileByteArray = file.readByteArray(context),
                         fileMimeType = fileMimeType,
                         fileName = fileName,
-                        noticeFileType = NoticeFileType.FILE
+                        noticeFileType = NoticeFileType.FILE,
                     )
                 }
             }
@@ -123,7 +123,7 @@ fun NoticeCreateFirstScreen(
     val bodyFocusRequester = remember { FocusRequester() }
 
     Box(
-        Modifier.fillMaxSize()
+        Modifier.fillMaxSize(),
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -221,7 +221,7 @@ fun NoticeCreateFirstScreen(
                         DodamTextButton(
                             onClick = onNextClick,
                             size = TextButtonSize.Large,
-                            text = "다음"
+                            text = "다음",
                         )
                     }
 
@@ -233,7 +233,7 @@ fun NoticeCreateFirstScreen(
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Row(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
                             NoticeTextButton(
                                 text = "앨범",
@@ -241,7 +241,7 @@ fun NoticeCreateFirstScreen(
                                 isSelected = selectTab == NoticeFileType.IMAGE,
                                 onClick = {
                                     selectTab = NoticeFileType.IMAGE
-                                }
+                                },
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             NoticeTextButton(
@@ -250,7 +250,7 @@ fun NoticeCreateFirstScreen(
                                 isSelected = selectTab == NoticeFileType.FILE,
                                 onClick = {
                                     selectTab = NoticeFileType.FILE
-                                }
+                                },
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             DodamTextButton(
@@ -273,7 +273,7 @@ fun NoticeCreateFirstScreen(
                                     .fillMaxWidth()
                                     .weight(1f),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
                             ) {
                                 uiState.images.fastForEach { item ->
                                     AsyncImage(
@@ -287,7 +287,7 @@ fun NoticeCreateFirstScreen(
                                                 color = DodamTheme.colors.lineAlternative,
                                             )
                                             .clip(DodamTheme.shapes.extraSmall),
-                                        contentScale = ContentScale.Crop
+                                        contentScale = ContentScale.Crop,
                                     )
                                 }
                             }
@@ -297,7 +297,7 @@ fun NoticeCreateFirstScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .weight(1f),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
                             ) {
                                 items(uiState.files.size) { index ->
                                     val item = uiState.files[index]
@@ -311,9 +311,9 @@ fun NoticeCreateFirstScreen(
                                             )
                                             .padding(
                                                 horizontal = 10.dp,
-                                                vertical = 16.dp
+                                                vertical = 16.dp,
                                             ),
-                                        verticalAlignment = Alignment.CenterVertically
+                                        verticalAlignment = Alignment.CenterVertically,
                                     ) {
                                         Text(
                                             modifier = Modifier.weight(1f),
@@ -328,13 +328,13 @@ fun NoticeCreateFirstScreen(
                                                     color = DodamTheme.colors.primaryNormal,
                                                     shape = CircleShape,
                                                 ),
-                                            contentAlignment = Alignment.Center
+                                            contentAlignment = Alignment.Center,
                                         ) {
                                             Icon(
                                                 modifier = Modifier.size(24.dp),
                                                 imageVector = DodamIcons.File.value,
                                                 contentDescription = "파일 아이콘",
-                                                tint = DodamTheme.colors.staticWhite
+                                                tint = DodamTheme.colors.staticWhite,
                                             )
                                         }
                                     }
@@ -349,19 +349,14 @@ fun NoticeCreateFirstScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(DodamTheme.colors.staticBlack.copy(alpha = 0.3f))
+                    .background(DodamTheme.colors.staticBlack.copy(alpha = 0.3f)),
             )
         }
     }
 }
 
 @Composable
-private fun NoticeTextButton(
-    text: String,
-    count: String?,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
+private fun NoticeTextButton(text: String, count: String?, isSelected: Boolean, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .`if`(isSelected) {
@@ -375,26 +370,26 @@ private fun NoticeTextButton(
             }
             .padding(
                 horizontal = 10.dp,
-                vertical = 6.dp
+                vertical = 6.dp,
             )
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberBounceIndication(),
                 onClick = onClick,
-                enabled = !isSelected
+                enabled = !isSelected,
             ),
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Text(
             text = text,
             style = DodamTheme.typography.body2Medium(),
-            color = DodamTheme.colors.labelNormal
+            color = DodamTheme.colors.labelNormal,
         )
         if (count != null) {
             Text(
                 text = count,
                 style = DodamTheme.typography.body2Medium(),
-                color = DodamTheme.colors.primaryNormal
+                color = DodamTheme.colors.primaryNormal,
             )
         }
     }

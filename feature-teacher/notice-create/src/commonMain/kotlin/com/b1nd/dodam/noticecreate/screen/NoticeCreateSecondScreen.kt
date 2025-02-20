@@ -37,8 +37,6 @@ import com.b1nd.dodam.designsystem.component.DodamTextButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
-import com.b1nd.dodam.noticecreate.model.NoticeCreateUiState
-import com.b1nd.dodam.noticecreate.viewmodel.NoticeCreateViewModel
 import com.b1nd.dodam.ui.component.modifier.`if`
 import kotlinx.collections.immutable.ImmutableList
 
@@ -53,7 +51,7 @@ fun NoticeCreateSecondScreen(
     onClickSuccess: () -> Unit,
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -112,7 +110,7 @@ fun NoticeCreateSecondScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(DodamTheme.colors.staticBlack.copy(alpha = 0.3f))
+                    .background(DodamTheme.colors.staticBlack.copy(alpha = 0.3f)),
             )
         }
     }

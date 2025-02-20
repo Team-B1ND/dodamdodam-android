@@ -4,8 +4,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +20,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Surface
@@ -44,11 +41,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import androidx.compose.ui.util.fastForEach
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.common.utiles.buildPersistentList
 import com.b1nd.dodam.common.utiles.formatLocalDateTime
@@ -61,15 +56,12 @@ import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTextButton
-import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.TextButtonSize
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.notice.viewmodel.NoticeViewModel
 import com.b1nd.dodam.ui.component.DodamAutoLinkText
 import com.b1nd.dodam.ui.component.modifier.`if`
-import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -105,7 +97,7 @@ internal fun NoticeScreen(
             return@LaunchedEffect
         }
         viewModel.loadNextNoticeWithCategory(
-            categoryId = selectCategory.id
+            categoryId = selectCategory.id,
         )
         lazyListState.scrollToItem(0)
     }
@@ -115,7 +107,7 @@ internal fun NoticeScreen(
             return@LaunchedEffect
         }
         viewModel.loadNextNoticeWithKeyword(
-            keyword = searchText
+            keyword = searchText,
         )
     }
 
@@ -123,7 +115,7 @@ internal fun NoticeScreen(
         if (isSearchMode) {
             delay(200)
             viewModel.loadNextNoticeWithKeyword(
-                keyword = searchText
+                keyword = searchText,
             )
         }
     }
@@ -178,14 +170,14 @@ internal fun NoticeScreen(
             } else {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Row(
                         modifier = Modifier
                             .statusBarsPadding()
                             .fillMaxWidth()
                             .height(60.dp)
-                            .padding(8.dp)
+                            .padding(8.dp),
                     ) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Row(
@@ -196,7 +188,7 @@ internal fun NoticeScreen(
                                     color = DodamTheme.colors.fillNeutral,
                                     shape = DodamTheme.shapes.extraSmall,
                                 )
-                                .padding(4.dp)
+                                .padding(4.dp),
                         ) {
                             Icon(
                                 modifier = Modifier
@@ -216,14 +208,14 @@ internal fun NoticeScreen(
                                     searchText = it
                                 },
                                 textStyle = DodamTheme.typography.body1Bold().copy(
-                                    color = DodamTheme.colors.labelNormal
+                                    color = DodamTheme.colors.labelNormal,
                                 ),
                                 maxLines = 1,
                                 decorationBox = { innerTextField ->
                                     Box(
                                         modifier = Modifier
                                             .fillMaxWidth(),
-                                        contentAlignment = Alignment.CenterStart
+                                        contentAlignment = Alignment.CenterStart,
                                     ) {
                                         if (searchText == "") {
                                             Text(
@@ -234,7 +226,7 @@ internal fun NoticeScreen(
                                         }
                                         innerTextField()
                                     }
-                                }
+                                },
                             )
                         }
                         Spacer(modifier = Modifier.width(8.dp))
@@ -243,7 +235,7 @@ internal fun NoticeScreen(
                                 isSearchMode = false
                             },
                             text = "닫기",
-                            size = TextButtonSize.Large
+                            size = TextButtonSize.Large,
                         )
                     }
                     DodamDivider(
@@ -258,7 +250,7 @@ internal fun NoticeScreen(
         LazyColumn(
             modifier = Modifier.padding(it),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            state = if (isSearchMode) searchLazyListState else lazyListState
+            state = if (isSearchMode) searchLazyListState else lazyListState,
         ) {
             if (!isSearchMode) {
                 stickyHeader {
@@ -281,7 +273,7 @@ internal fun NoticeScreen(
                                     onClick = {
                                         selectCategory = item
                                         viewModel.loadNextNoticeWithCategory(
-                                            categoryId = item.id
+                                            categoryId = item.id,
                                         )
                                     },
                                 )

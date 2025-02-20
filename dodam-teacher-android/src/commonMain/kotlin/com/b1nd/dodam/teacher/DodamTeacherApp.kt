@@ -294,7 +294,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             navigateToNoticeCreate = navHostController::navigateToNoticeCreate,
                             changeBottomNavVisible = { visible ->
                                 showBottomNavVisible = visible
-                            }
+                            },
                         )
 
                         noticeCreateScreen(
@@ -368,7 +368,12 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 expect fun getPlatformName(): String
 
 @Composable
-private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, visible: Boolean, onClick: (destination: String) -> Unit) {
+private fun DodamTeacherBottomNavigation(
+    modifier: Modifier = Modifier,
+    backStackEntry: NavBackStackEntry?,
+    visible: Boolean,
+    onClick: (destination: String) -> Unit,
+) {
     val route = backStackEntry?.destination?.route
 
     if (visible && route != null && route in listOf(

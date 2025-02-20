@@ -2,7 +2,6 @@ package com.b1nd.dodam.noticecreate.model
 
 import com.b1nd.dodam.data.division.model.DivisionOverview
 import com.b1nd.dodam.data.notice.model.NoticeFile
-import com.b1nd.dodam.data.upload.model.UploadModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
