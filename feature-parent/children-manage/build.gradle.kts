@@ -15,6 +15,7 @@ dependencies {
     implementation(projects.common)
     implementation(projects.datastore)
     implementation(libs.dodam.design.system.cmm)
+    implementation(libs.dodam.design.system)
     implementation(projects.data.member)
     implementation(projects.ui)
     implementation(libs.coil.compose)

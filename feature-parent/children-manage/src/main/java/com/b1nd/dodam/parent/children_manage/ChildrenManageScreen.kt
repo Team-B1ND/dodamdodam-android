@@ -1,8 +1,6 @@
 package com.b1nd.dodam.parent.children_manage
 
-import android.inputmethodservice.Keyboard
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,9 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,12 +24,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
-import com.b1nd.dodam.ui.component.modifier.`if`
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 
 
 @Composable
@@ -131,12 +131,52 @@ fun ChildrenCard(
     }
 }
 
+@Composable
+fun AddChildrenButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Box(
+        modifier = modifier
+            .background(
+                color = DodamTheme.colors.backgroundNormal,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .fillMaxWidth()
+            .height(144.dp)
+            .bounceClick(
+                onClick,
+                interactionColor = DodamTheme.colors.lineNormal
+            )
+    ){
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .align(Alignment.Center)
+        ){
+            Icon(
+                imageVector = DodamIcons.Plus.value,
+                contentDescription = null,
+                tint = DodamTheme.colors.labelAssistive,
+                modifier = Modifier.size(24.dp),
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(text = "자녀 추가 등록", color = DodamTheme.colors.labelAssistive, style = DodamTheme.typography.labelBold())
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun Preview() {
-    ChildrenCard(
-        name = "한준혁",
-        relation = "본좌",
-        profile = "https://dodamdodam-storage.s3.ap-northeast-2.amazonaws.com/dodamdodam-storage/431b87b3-ff1b-4079-b070-d4a6b44665d8IMG_0007"
-    )
+
+    Column {
+        ChildrenCard(
+            name = "한준혁",
+            relation = "본좌",
+            profile = "https://dodamdodam-storage.s3.ap-northeast-2.amazonaws.com/dodamdodam-storage/431b87b3-ff1b-4079-b070-d4a6b44665d8IMG_0007"
+        )
+        Spacer(Modifier.height(16.dp))
+        AddChildrenButton(
+            onClick = {}
+        )
+    }
+
 }
