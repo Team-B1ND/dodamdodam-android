@@ -1,6 +1,5 @@
 package com.b1nd.dodam.parent.childrenmanage
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
@@ -40,7 +39,6 @@ class ChildrenManageViewModel : ViewModel(), KoinComponent {
                     }
 
                     is Result.Error -> {
-                        Log.d("TAG", "getChview: ")
                         _sideEffect.emit(ChildrenSideEffect.Failed(it.error ?: Throwable()))
                         it.error.printStackTrace()
                     }

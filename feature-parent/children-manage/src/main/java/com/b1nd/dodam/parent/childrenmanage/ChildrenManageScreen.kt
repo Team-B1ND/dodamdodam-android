@@ -1,6 +1,5 @@
 package com.b1nd.dodam.parent.childrenmanage
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -120,7 +119,6 @@ internal fun ChildrenManageScreen(
                     .fillMaxSize()
                     .pointerInput(Unit) {
                         detectTapGestures(onTap = {
-                            Log.d("TAG", "1: ")
                             focusManager.clearFocus()
                         })
                     },
