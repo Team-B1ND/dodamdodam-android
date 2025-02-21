@@ -1,14 +1,12 @@
-package com.b1nd.dodam.parent.children_manage
+package com.b1nd.dodam.parent.childrenmanage
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.member.MemberRepository
-import com.b1nd.dodam.parent.children_manage.model.ChildrenModel
-import com.b1nd.dodam.parent.children_manage.model.ChildrenSideEffect
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.immutableListOf
+import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
+import com.b1nd.dodam.parent.childrenmanage.model.ChildrenSideEffect
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,13 +28,12 @@ class ChildrenManageViewModel : ViewModel(), KoinComponent {
 
     fun getChildren(code: String) {
         viewModelScope.launch {
-
             memberRepository.getChildren(code = code).collect {
                 when (it) {
                     is Result.Success -> {
                         val newChild = ChildrenModel(
                             childrenName = it.data.name,
-                            relation = it.data.email
+                            relation = it.data.email,
                         )
                         _uiState.update { it.add(newChild) }
                         _sideEffect.emit(ChildrenSideEffect.SuccessGetChildren)

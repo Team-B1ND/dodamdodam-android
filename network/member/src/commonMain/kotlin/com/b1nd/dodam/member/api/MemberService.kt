@@ -56,9 +56,7 @@ internal class MemberService(
         }
     }
     override suspend fun getChildren(code: String): MemberResponse = safeRequest {
-        client.get("${DodamUrl.Member.CODE}/$code"){
-
+        client.get("${DodamUrl.Member.CODE}/$code") {
         }.body<Response<MemberResponse>>()
     }
-
 }

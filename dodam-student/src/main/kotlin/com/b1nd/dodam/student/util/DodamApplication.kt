@@ -41,7 +41,7 @@ import com.b1nd.dodam.network.upload.di.uploadDatasourceModule
 import com.b1nd.dodam.nightstudy.di.nightStudyViewModelModule
 import com.b1nd.dodam.notice.di.noticeViewModelModule
 import com.b1nd.dodam.outing.di.outingViewModelModule
-import com.b1nd.dodam.parent.children_manage.di.childrenManageViewModelModule
+import com.b1nd.dodam.parent.childrenmanage.di.childrenManageViewModelModule
 import com.b1nd.dodam.parnet.home.di.parentHomeViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
 import com.b1nd.dodam.register.di.registerRepositoryModule
@@ -117,7 +117,7 @@ class DodamApplication : Application() {
                     groupCreateViewModelModule,
                     groupDetailViewModelModule,
                     groupWaitingViewModelModule,
-                    childrenManageViewModelModule
+                    childrenManageViewModelModule,
                 ) + mainViewModelModules,
             )
         }
