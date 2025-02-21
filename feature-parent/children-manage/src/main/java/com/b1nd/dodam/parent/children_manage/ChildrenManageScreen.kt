@@ -12,12 +12,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.waterfall
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextOverflow
@@ -75,6 +81,10 @@ internal fun ChildrenManageScreen(
     var code by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+    val bottomSheetMaxHeight = screenHeight * 0.8f
     val relations = listOf("부", "모", "조부", "조모", "기타")
     var selectedRelation by remember { mutableStateOf<String?>(null) }
 
@@ -89,23 +99,21 @@ internal fun ChildrenManageScreen(
     }
     if (showBottomSheet) {
         ModalBottomSheet(
+            sheetState = bottomSheetState,
+            windowInsets = WindowInsets.ime,
             onDismissRequest = {
                 showBottomSheet = false
             },
             modifier = Modifier
-                .navigationBarsPadding(),
+                .navigationBarsPadding()
+                .heightIn(max = bottomSheetMaxHeight),
             containerColor = DodamTheme.colors.backgroundNormal,
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = {
-                            focusManager.clearFocus()
-                            keyboardController?.hide()
-                        })
-                    }
-            ){
+                    .addFocusCleaner(focusManager)
+            ) {
                 Column(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
@@ -126,9 +134,16 @@ internal fun ChildrenManageScreen(
                                 color = DodamTheme.colors.labelNormal,
                                 style = DodamTheme.typography.heading2Bold()
                             )
-                            DodamTextButton(onClick = {}, text = "등록", type = TextButtonType.Primary)
+                            DodamTextButton(
+                                onClick = {  },
+                                text = "등록",
+                                type = TextButtonType.Primary)
                         }
-                        Text("자녀의 앱에서 '전체 > 내 학생 코드 보기' 탭에서 확인할 수 있어요", color = DodamTheme.colors.labelAlternative, style = DodamTheme.typography.body1Medium())
+                        Text(
+                            "자녀의 앱에서 '전체 > 내 학생 코드 보기' 탭에서 확인할 수 있어요",
+                            color = DodamTheme.colors.labelAlternative,
+                            style = DodamTheme.typography.body1Medium()
+                        )
                     }
                     DodamTextField(
                         value = code,
@@ -143,7 +158,11 @@ internal fun ChildrenManageScreen(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Text("학생과의 관계", color = DodamTheme.colors.labelAssistive, style = DodamTheme.typography.labelMedium())
+                        Text(
+                            "학생과의 관계",
+                            color = DodamTheme.colors.labelAssistive,
+                            style = DodamTheme.typography.labelMedium()
+                        )
                         relations.forEach { relation ->
                             Row(
                                 modifier = Modifier
@@ -159,7 +178,8 @@ internal fun ChildrenManageScreen(
                                 DodamCheckBox(
                                     modifier = Modifier.padding(8.dp),
                                     onClick = {
-                                        selectedRelation = if (selectedRelation == relation) null else relation
+                                        selectedRelation =
+                                            if (selectedRelation == relation) null else relation
                                     },
                                     checked = selectedRelation == relation
                                 )
@@ -173,7 +193,6 @@ internal fun ChildrenManageScreen(
     }
 
     Scaffold(
-        modifier = Modifier.addFocusCleaner(focusManager),
         topBar = {
             DodamTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
