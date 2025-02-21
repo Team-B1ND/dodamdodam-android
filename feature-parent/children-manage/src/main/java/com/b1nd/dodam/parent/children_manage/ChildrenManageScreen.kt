@@ -1,31 +1,49 @@
 package com.b1nd.dodam.parent.children_manage
 
+import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.waterfall
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text2.input.TextFieldState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,16 +54,30 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamCheckBox
+import com.b1nd.dodam.designsystem.component.DodamTextButton
+import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.component.TextButtonType
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.ui.util.addFocusCleaner
 
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun ChildrenManageScreen(
     popBackStack: () -> Unit,
     changeBottomNavVisible: (visible: Boolean) -> Unit
 ) {
+
+    var showBottomSheet by remember { mutableStateOf(true) }
+    var code by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val relations = listOf("부", "모", "조부", "조모", "기타")
+    var selectedRelation by remember { mutableStateOf<String?>(null) }
+
     LaunchedEffect(true) {
         changeBottomNavVisible(false)
     }
@@ -55,8 +87,93 @@ internal fun ChildrenManageScreen(
             changeBottomNavVisible(true)
         }
     }
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showBottomSheet = false
+            },
+            modifier = Modifier
+                .navigationBarsPadding(),
+            containerColor = DodamTheme.colors.backgroundNormal,
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectTapGestures(onTap = {
+                            focusManager.clearFocus()
+                            keyboardController?.hide()
+                        })
+                    }
+            ){
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(horizontal = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                "자녀 등록하기",
+                                color = DodamTheme.colors.labelNormal,
+                                style = DodamTheme.typography.heading2Bold()
+                            )
+                            DodamTextButton(onClick = {}, text = "등록", type = TextButtonType.Primary)
+                        }
+                        Text("자녀의 앱에서 '전체 > 내 학생 코드 보기' 탭에서 확인할 수 있어요", color = DodamTheme.colors.labelAlternative, style = DodamTheme.typography.body1Medium())
+                    }
+                    DodamTextField(
+                        value = code,
+                        onValueChange = {
+                            code = it
+                        },
+                        label = "학생 코드",
+                        onClickRemoveRequest = {
+                            code = ""
+                        },
+                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text("학생과의 관계", color = DodamTheme.colors.labelAssistive, style = DodamTheme.typography.labelMedium())
+                        relations.forEach { relation ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = relation,
+                                    color = DodamTheme.colors.labelAlternative,
+                                    style = DodamTheme.typography.headlineMedium()
+                                )
+                                DodamCheckBox(
+                                    modifier = Modifier.padding(8.dp),
+                                    onClick = {
+                                        selectedRelation = if (selectedRelation == relation) null else relation
+                                    },
+                                    checked = selectedRelation == relation
+                                )
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
 
     Scaffold(
+        modifier = Modifier.addFocusCleaner(focusManager),
         topBar = {
             DodamTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
@@ -101,7 +218,9 @@ internal fun ChildrenManageScreen(
                         if (rowItems.size == 1 && rowItems.first() == children.last()) {
                             AddChildrenButton(
                                 modifier = Modifier.weight(1f),
-                                onClick = {}
+                                onClick = {
+                                    showBottomSheet = true
+                                }
                             )
                         }
                     }
@@ -112,7 +231,12 @@ internal fun ChildrenManageScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            AddChildrenButton(modifier = Modifier.weight(1f)) { }
+                            AddChildrenButton(
+                                modifier = Modifier.weight(1f),
+                                onClick = {
+                                    showBottomSheet = true
+                                }
+                            )
                             Spacer(modifier = Modifier.weight(1f))
                         }
                     }
@@ -208,15 +332,15 @@ fun AddChildrenButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
             .fillMaxWidth()
             .height(144.dp)
             .bounceClick(
-                onClick,
+                onClick = onClick,
                 interactionColor = DodamTheme.colors.lineNormal
             )
-    ){
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .align(Alignment.Center)
-        ){
+        ) {
             Icon(
                 imageVector = DodamIcons.Plus.value,
                 contentDescription = null,
@@ -224,7 +348,11 @@ fun AddChildrenButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
                 modifier = Modifier.size(24.dp),
             )
             Spacer(Modifier.height(8.dp))
-            Text(text = "자녀 추가 등록", color = DodamTheme.colors.labelAssistive, style = DodamTheme.typography.labelBold())
+            Text(
+                text = "자녀 추가 등록",
+                color = DodamTheme.colors.labelAssistive,
+                style = DodamTheme.typography.labelBold()
+            )
         }
     }
 }
