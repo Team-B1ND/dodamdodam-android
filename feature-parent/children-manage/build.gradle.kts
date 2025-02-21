@@ -20,4 +20,5 @@ dependencies {
     implementation(projects.ui)
     implementation(libs.coil.compose)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.bottomsheetdialog.compose)
 }
