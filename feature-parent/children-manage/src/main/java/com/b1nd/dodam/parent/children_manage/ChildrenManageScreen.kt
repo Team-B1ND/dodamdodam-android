@@ -68,11 +68,13 @@ import com.b1nd.dodam.designsystem.component.TextButtonType
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import org.koin.androidx.compose.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun ChildrenManageScreen(
+    viewModel: ChildrenManageViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     changeBottomNavVisible: (visible: Boolean) -> Unit
 ) {
@@ -140,7 +142,13 @@ internal fun ChildrenManageScreen(
                                 style = DodamTheme.typography.heading2Bold()
                             )
                             DodamTextButton(
-                                onClick = { },
+                                onClick = {
+                                    if (selectedRelation != null &&
+                                        (selectedRelation != "기타" || etcRelation.isNotBlank())
+                                    ) {
+                                        viewModel.getChildren(code = "9E10098C")
+                                    }
+                                },
                                 text = "등록",
                                 type = TextButtonType.Primary
                             )

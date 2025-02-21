@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.dodam.design.system.cmm)
     implementation(libs.dodam.design.system)
     implementation(projects.data.member)
+    implementation(projects.data.core)
     implementation(projects.ui)
     implementation(libs.coil.compose)
     implementation(libs.kotlinx.datetime)

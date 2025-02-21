@@ -4,6 +4,8 @@ import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
+import com.b1nd.dodam.data.core.model.Member
+import com.b1nd.dodam.data.core.model.toModel
 import com.b1nd.dodam.member.MemberRepository
 import com.b1nd.dodam.member.datasource.MemberDataSource
 import com.b1nd.dodam.member.model.ActiveStatus
@@ -50,5 +52,14 @@ internal class MemberRepositoryImpl(
         }
             .asResult()
             .flowOn(dispatcher)
+    }
+
+
+    override suspend fun getChildren(code: String): Flow<Result<Member>> {
+        return flow {
+            emit(
+                network.getChildren(code).toModel()
+            )
+        }.asResult().flowOn(dispatcher)
     }
 }
