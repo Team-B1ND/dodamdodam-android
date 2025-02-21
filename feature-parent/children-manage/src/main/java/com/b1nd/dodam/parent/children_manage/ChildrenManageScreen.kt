@@ -77,10 +77,10 @@ internal fun ChildrenManageScreen(
     changeBottomNavVisible: (visible: Boolean) -> Unit
 ) {
 
-    var showBottomSheet by remember { mutableStateOf(true) }
+    var showBottomSheet by remember { mutableStateOf(false) }
     var code by remember { mutableStateOf("") }
+    var etcRelation by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
@@ -112,7 +112,12 @@ internal fun ChildrenManageScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .addFocusCleaner(focusManager)
+                    .pointerInput(Unit) {
+                        detectTapGestures(onTap = {
+                            Log.d("TAG", "1: ")
+                            focusManager.clearFocus()
+                        })
+                    }
             ) {
                 Column(
                     modifier = Modifier
@@ -121,7 +126,7 @@ internal fun ChildrenManageScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Row(
                             modifier = Modifier
@@ -135,9 +140,10 @@ internal fun ChildrenManageScreen(
                                 style = DodamTheme.typography.heading2Bold()
                             )
                             DodamTextButton(
-                                onClick = {  },
+                                onClick = { },
                                 text = "등록",
-                                type = TextButtonType.Primary)
+                                type = TextButtonType.Primary
+                            )
                         }
                         Text(
                             "자녀의 앱에서 '전체 > 내 학생 코드 보기' 탭에서 확인할 수 있어요",
@@ -155,33 +161,47 @@ internal fun ChildrenManageScreen(
                             code = ""
                         },
                     )
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            "학생과의 관계",
-                            color = DodamTheme.colors.labelAssistive,
-                            style = DodamTheme.typography.labelMedium()
-                        )
-                        relations.forEach { relation ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = relation,
-                                    color = DodamTheme.colors.labelAlternative,
-                                    style = DodamTheme.typography.headlineMedium()
-                                )
-                                DodamCheckBox(
-                                    modifier = Modifier.padding(8.dp),
-                                    onClick = {
-                                        selectedRelation =
-                                            if (selectedRelation == relation) null else relation
+                    Column {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Text(
+                                "학생과의 관계",
+                                color = DodamTheme.colors.labelAssistive,
+                                style = DodamTheme.typography.labelMedium()
+                            )
+                            relations.forEach { relation ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = relation,
+                                        color = DodamTheme.colors.labelAlternative,
+                                        style = DodamTheme.typography.headlineMedium()
+                                    )
+                                    DodamCheckBox(
+                                        modifier = Modifier.padding(8.dp),
+                                        onClick = {
+                                            selectedRelation =
+                                                if (selectedRelation == relation) null else relation
+                                        },
+                                        checked = selectedRelation == relation
+                                    )
+                                }
+                            }
+                            if (selectedRelation == "기타") {
+                                DodamTextField(
+                                    value = etcRelation,
+                                    onValueChange = {
+                                        etcRelation = it
                                     },
-                                    checked = selectedRelation == relation
+                                    label = "",
+                                    onClickRemoveRequest = {
+                                        etcRelation = ""
+                                    }
                                 )
                             }
                         }
