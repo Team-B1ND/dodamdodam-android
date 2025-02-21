@@ -17,5 +17,6 @@ dependencies {
     implementation(projects.feature.notice)
     implementation(projects.featureParent.home)
     implementation(projects.featureParent.all)
+    implementation(projects.featureParent.childrenManage)
     implementation(projects.feature.setting)
 }

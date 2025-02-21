@@ -49,7 +49,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ParentAllScreen(viewModel: ParentAllViewModel = koinViewModel(), navigateToSetting: () -> Unit) {
+internal fun ParentAllScreen(viewModel: ParentAllViewModel = koinViewModel(), navigateToSetting: () -> Unit, navigateToChildrenManage: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = true) {
@@ -156,12 +156,12 @@ fun ParentAllScreen(viewModel: ParentAllViewModel = koinViewModel(), navigateToS
                 AllCardView(
                     imageVector = ColoredSmailMan,
                     text = "내 자녀 관리",
-                    onClick = { },
+                    onClick = navigateToChildrenManage,
                 )
                 AllCardView(
                     imageVector = ColoredGroup,
                     text = "그룹",
-                    onClick = { },
+                    onClick = {},
                 )
             }
         }
