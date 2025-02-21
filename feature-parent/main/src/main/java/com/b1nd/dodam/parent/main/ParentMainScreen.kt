@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -28,6 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.b1nd.dodam.all.navigation.parentAllScreen
+import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.notice.navigation.noticeScreen
@@ -88,8 +88,8 @@ internal fun ParentMainScreen(
                     .background(
                         Brush.verticalGradient(
                             listOf(
-                                MaterialTheme.colorScheme.surface.copy(alpha = 0f),
-                                MaterialTheme.colorScheme.surface,
+                                DodamTheme.colors.staticWhite.copy(alpha = 0f),
+                                DodamTheme.colors.staticWhite,
                             ),
                         ),
                     ),
