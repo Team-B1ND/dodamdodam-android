@@ -1,4 +1,4 @@
-package com.b1nd.dodam.parent.children_manage.model
+package com.b1nd.dodam.parent.childrenmanage.model
 
 interface ChildrenSideEffect {
     data object SuccessGetChildren : ChildrenSideEffect

@@ -49,11 +49,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ParentAllScreen(
-    viewModel: ParentAllViewModel = koinViewModel(),
-    navigateToSetting: () -> Unit,
-    navigateToChildrenManage: () -> Unit
-) {
+internal fun ParentAllScreen(viewModel: ParentAllViewModel = koinViewModel(), navigateToSetting: () -> Unit, navigateToChildrenManage: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = true) {

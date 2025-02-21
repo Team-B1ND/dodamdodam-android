@@ -1,6 +1,5 @@
 package com.b1nd.dodam.parent.main
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,8 +31,8 @@ import com.b1nd.dodam.all.navigation.parentAllScreen
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.notice.navigation.noticeScreen
-import com.b1nd.dodam.parent.children_manage.navigation.childrenManageScreen
-import com.b1nd.dodam.parent.children_manage.navigation.navigateToChildrenManageScreen
+import com.b1nd.dodam.parent.childrenmanage.navigation.childrenManageScreen
+import com.b1nd.dodam.parent.childrenmanage.navigation.navigateToChildrenManageScreen
 import com.b1nd.dodam.parnet.home.navigation.PARENT_HOME_ROUTE
 import com.b1nd.dodam.parnet.home.navigation.parentHomeScreen
 import kotlinx.collections.immutable.toImmutableList
@@ -71,13 +70,13 @@ internal fun ParentMainScreen(
             )
             parentAllScreen(
                 navigateToSetting = navigateToSetting,
-                navigateToChildrenManage = navController::navigateToChildrenManageScreen
+                navigateToChildrenManage = navController::navigateToChildrenManageScreen,
             )
             childrenManageScreen(
                 popBackStack = navController::popBackStack,
-                changeBottomNavVisible = {visible ->
+                changeBottomNavVisible = { visible ->
                     bottomNavVisible = visible
-                }
+                },
             )
         }
         if (bottomNavVisible) {

@@ -54,11 +54,10 @@ internal class MemberRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-
     override suspend fun getChildren(code: String): Flow<Result<Member>> {
         return flow {
             emit(
-                network.getChildren(code).toModel()
+                network.getChildren(code).toModel(),
             )
         }.asResult().flowOn(dispatcher)
     }

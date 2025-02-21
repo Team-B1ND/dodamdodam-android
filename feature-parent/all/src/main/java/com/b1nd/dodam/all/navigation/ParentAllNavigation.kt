@@ -26,7 +26,7 @@ fun NavGraphBuilder.parentAllScreen(navigateToSetting: () -> Unit, navigateToChi
     ) {
         ParentAllScreen(
             navigateToSetting = navigateToSetting,
-            navigateToChildrenManage = navigateToChildrenManage
+            navigateToChildrenManage = navigateToChildrenManage,
         )
     }
 }
