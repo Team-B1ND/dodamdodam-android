@@ -38,6 +38,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,6 +68,8 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TextButtonType
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.parent.children_manage.model.ChildrenSideEffect
+import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import org.koin.androidx.compose.koinViewModel
 
@@ -89,6 +92,8 @@ internal fun ChildrenManageScreen(
     val bottomSheetMaxHeight = screenHeight * 0.8f
     val relations = listOf("부", "모", "조부", "조모", "기타")
     var selectedRelation by remember { mutableStateOf<String?>(null) }
+    val uiState by viewModel.uiState.collectAsState()
+    var showError by remember { mutableStateOf(false)  }
 
     LaunchedEffect(true) {
         changeBottomNavVisible(false)
@@ -97,6 +102,19 @@ internal fun ChildrenManageScreen(
     DisposableEffect(true) {
         onDispose {
             changeBottomNavVisible(true)
+        }
+    }
+    LaunchedEffect(true) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is ChildrenSideEffect.SuccessGetChildren ->{
+                    showBottomSheet = false
+                    showError = false
+                }
+                is ChildrenSideEffect.Failed ->{
+                    showError = true
+                }
+            }
         }
     }
     if (showBottomSheet) {
@@ -146,7 +164,7 @@ internal fun ChildrenManageScreen(
                                     if (selectedRelation != null &&
                                         (selectedRelation != "기타" || etcRelation.isNotBlank())
                                     ) {
-                                        viewModel.getChildren(code = "9E10098C")
+                                        viewModel.getChildren(code = code)
                                     }
                                 },
                                 text = "등록",
@@ -168,7 +186,10 @@ internal fun ChildrenManageScreen(
                         onClickRemoveRequest = {
                             code = ""
                         },
+                        isError = showError,
+                        supportText = if (showError) "학생을 찾을 수 없습니다." else ""
                     )
+                    Spacer(Modifier.height(12.dp))
                     Column {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -236,13 +257,6 @@ internal fun ChildrenManageScreen(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            val children = listOf(
-                "한" to "ㅁㄴ",
-                "이" to "ㄴㅇ",
-                "박" to "ㅇㄹ",
-                "김" to "ㄹㅂ",
-                "최" to "ㅂㅁ",
-            )
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -250,7 +264,7 @@ internal fun ChildrenManageScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
-                items(children.chunked(2)) { rowItems ->
+                items(uiState.chunked(2)) { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -262,7 +276,7 @@ internal fun ChildrenManageScreen(
                                 modifier = Modifier.weight(1f)
                             )
                         }
-                        if (rowItems.size == 1 && rowItems.first() == children.last()) {
+                        if (rowItems.size == 1 && rowItems.first() == uiState.last()) {
                             AddChildrenButton(
                                 modifier = Modifier.weight(1f),
                                 onClick = {
@@ -272,7 +286,7 @@ internal fun ChildrenManageScreen(
                         }
                     }
                 }
-                if (children.size % 2 != 1) {
+                if (uiState.size % 2 != 1) {
                     item {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
