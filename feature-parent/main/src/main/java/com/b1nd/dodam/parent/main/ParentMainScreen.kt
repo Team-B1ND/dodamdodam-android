@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -28,9 +27,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.b1nd.dodam.all.navigation.parentAllScreen
+import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.notice.navigation.noticeScreen
+import com.b1nd.dodam.parent.childrenmanage.navigation.childrenManageScreen
+import com.b1nd.dodam.parent.childrenmanage.navigation.navigateToChildrenManageScreen
 import com.b1nd.dodam.parnet.home.navigation.PARENT_HOME_ROUTE
 import com.b1nd.dodam.parnet.home.navigation.parentHomeScreen
 import kotlinx.collections.immutable.toImmutableList
@@ -68,24 +70,30 @@ internal fun ParentMainScreen(
             )
             parentAllScreen(
                 navigateToSetting = navigateToSetting,
+                navigateToChildrenManage = navController::navigateToChildrenManageScreen,
+            )
+            childrenManageScreen(
+                popBackStack = navController::popBackStack,
+                changeBottomNavVisible = { visible ->
+                    bottomNavVisible = visible
+                },
             )
         }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .align(Alignment.BottomCenter)
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            MaterialTheme.colorScheme.surface.copy(alpha = 0f),
-                            MaterialTheme.colorScheme.surface,
+        if (bottomNavVisible) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .align(Alignment.BottomCenter)
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                DodamTheme.colors.staticWhite.copy(alpha = 0f),
+                                DodamTheme.colors.staticWhite,
+                            ),
                         ),
                     ),
-                ),
-        )
-
-        if (bottomNavVisible) {
+            )
             Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
