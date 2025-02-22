@@ -38,6 +38,7 @@ object DodamUrl {
         const val DEACTIVATION = "$MEMBER/deactivate"
         const val STATUS = "$MEMBER/status"
         const val EDIT = "$MEMBER/info"
+        const val CODE = "$MEMBER/code"
     }
 
     object WakeupSong {

@@ -97,4 +97,10 @@ dependencies {
     implementation(projects.featureParent.main)
     implementation(projects.featureParent.home)
     implementation(projects.featureParent.all)
+    implementation(projects.featureParent.childrenManage)
+    implementation(projects.feature.notice)
+    implementation(projects.feature.groupAdd)
+    implementation(projects.feature.groupDetail)
+    implementation(projects.feature.groupCreate)
+    implementation(projects.feature.groupWaiting)
 }

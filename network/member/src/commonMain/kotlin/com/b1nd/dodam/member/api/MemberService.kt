@@ -5,6 +5,7 @@ import com.b1nd.dodam.member.model.EditMemberInfoRequest
 import com.b1nd.dodam.member.model.MemberInfoResponse
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.DefaultResponse
+import com.b1nd.dodam.network.core.model.MemberResponse
 import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.network.core.util.safeRequest
@@ -53,5 +54,9 @@ internal class MemberService(
                 )
             }.body<DefaultResponse>()
         }
+    }
+    override suspend fun getChildren(code: String): MemberResponse = safeRequest {
+        client.get("${DodamUrl.Member.CODE}/$code") {
+        }.body<Response<MemberResponse>>()
     }
 }
