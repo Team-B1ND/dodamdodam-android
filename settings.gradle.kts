@@ -89,6 +89,7 @@ include(
     ":network:division",
     ":data:notice",
     ":network:notice",
+    ":feature-student:bus-apply",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")

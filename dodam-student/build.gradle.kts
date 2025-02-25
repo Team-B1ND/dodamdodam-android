@@ -103,4 +103,5 @@ dependencies {
     implementation(projects.feature.groupDetail)
     implementation(projects.feature.groupCreate)
     implementation(projects.feature.groupWaiting)
+    implementation(projects.featureStudent.busApply)
 }
