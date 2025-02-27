@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -66,81 +68,84 @@ fun BusApplyScreen(viewModel: BusApplyViewModel = koinViewModel(), popBackStack:
         },
         containerColor = DodamTheme.colors.backgroundNormal,
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            contentAlignment = Alignment.CenterStart,
         ) {
-            LazyColumn(
+            Column(
                 modifier = Modifier
-                    .width(272.dp)
-                    .drawBehind {
-                        drawRoundRect(
-                            color = lineNormal,
-                            cornerRadius = CornerRadius(9.dp.toPx()),
-                            size = Size(
-                                width = 12.dp.toPx(),
-                                height = 108.dp.toPx(),
-                            ),
-                            topLeft = Offset(
-                                x = -7.dp.toPx(),
-                                y = 48.dp.toPx(),
-                            ),
-                        )
-                        drawRoundRect(
-                            color = lineNormal,
-                            cornerRadius = CornerRadius(9.dp.toPx()),
-                            size = Size(
-                                width = 12.dp.toPx(),
-                                height = 108.dp.toPx(),
-                            ),
-                            topLeft = Offset(
-                                x = size.width - 5.dp.toPx(),
-                                y = 48.dp.toPx(),
-                            ),
-                        )
-
-                        drawRoundRect(
-                            color = lineNormal,
-                            cornerRadius = CornerRadius(9.dp.toPx()),
-                            size = Size(
-                                width = 12.dp.toPx(),
-                                height = 108.dp.toPx(),
-                            ),
-                            topLeft = Offset(
-                                x = -7.dp.toPx(),
-                                y = size.height - 156.dp.toPx(),
-                            ),
-                        )
-                        drawRoundRect(
-                            color = lineNormal,
-                            cornerRadius = CornerRadius(9.dp.toPx()),
-                            size = Size(
-                                width = 12.dp.toPx(),
-                                height = 108.dp.toPx(),
-                            ),
-                            topLeft = Offset(
-                                x = size.width - 5.dp.toPx(),
-                                y = size.height - 156.dp.toPx(),
-                            ),
-                        )
-                    }
-                    .background(
-                        color = DodamTheme.colors.backgroundNeutral,
-                        shape = DodamTheme.shapes.large,
-                    ),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
+                    .align(Alignment.TopCenter)
+                    .verticalScroll(rememberScrollState()),
             ) {
-                item {
-                    Spacer(modifier = Modifier.height(4.dp))
+                Column(
+                    modifier = Modifier
+                        .drawBehind {
+                            drawRoundRect(
+                                color = lineNormal,
+                                cornerRadius = CornerRadius(9.dp.toPx()),
+                                size = Size(
+                                    width = 12.dp.toPx(),
+                                    height = 108.dp.toPx()
+                                ),
+                                topLeft = Offset(
+                                    x = -7.dp.toPx(),
+                                    y = 48.dp.toPx()
+                                )
+                            )
+                            drawRoundRect(
+                                color = lineNormal,
+                                cornerRadius = CornerRadius(9.dp.toPx()),
+                                size = Size(
+                                    width = 12.dp.toPx(),
+                                    height = 108.dp.toPx()
+                                ),
+                                topLeft = Offset(
+                                    x = size.width - 5.dp.toPx(),
+                                    y = 48.dp.toPx()
+                                )
+                            )
+                            drawRoundRect(
+                                color = lineNormal,
+                                cornerRadius = CornerRadius(9.dp.toPx()),
+                                size = Size(
+                                    width = 12.dp.toPx(),
+                                    height = 108.dp.toPx()
+                                ),
+                                topLeft = Offset(
+                                    x = -7.dp.toPx(),
+                                    y = size.height - 156.dp.toPx()
+                                )
+                            )
+                            drawRoundRect(
+                                color = lineNormal,
+                                cornerRadius = CornerRadius(9.dp.toPx()),
+                                size = Size(
+                                    width = 12.dp.toPx(),
+                                    height = 108.dp.toPx()
+                                ),
+                                topLeft = Offset(
+                                    x = size.width - 5.dp.toPx(),
+                                    y = size.height - 156.dp.toPx()
+                                )
+                            )
+                        }
+                        .background(
+                            color = DodamTheme.colors.backgroundNeutral,
+                            shape = DodamTheme.shapes.large
+                        )
+                        .padding(horizontal = 18.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    // 첫 번째 아이템
                     Box(
                         modifier = Modifier
                             .height(58.dp)
-                            .fillMaxWidth()
+                            .align(Alignment.End)
                             .padding(
-                                horizontal = 18.dp,
+                                top = 4.dp,
                             ),
                         contentAlignment = Alignment.CenterEnd
                     ) {
@@ -151,56 +156,52 @@ fun BusApplyScreen(viewModel: BusApplyViewModel = koinViewModel(), popBackStack:
                             tint = DodamTheme.colors.labelAssistive
                         )
                     }
-                }
-                items(11) { rowIndex ->
-                    if (rowIndex < 10) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Spacer(modifier = Modifier.width(12.dp))
-                            BusSeat(
-                                text = "${rowIndex * 4 + 1}",
-                                selected = false
-                            )
-                            BusSeat(
-                                text = "${rowIndex * 4 + 2}",
-                                selected = false
-                            )
-                            Spacer(modifier = Modifier.size(44.dp))
-                            BusSeat(
-                                text = "${rowIndex * 4 + 3}",
-                                selected = false
-                            )
-                            BusSeat(
-                                text = "${rowIndex * 4 + 4}",
-                                selected = false
-                            )
-                        }
-                    } else {
-                        Row(
-                            modifier = Modifier.padding(
-                                bottom = 18.dp,
-                            ),
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Spacer(modifier = Modifier.width(12.dp))
-                            for (i in 0 until 5) {
+
+                    for (rowIndex in 0 until 11) {
+                        if (rowIndex < 10) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
                                 BusSeat(
-                                    text = "${40 + i + 1}",
+                                    text = "${rowIndex * 4 + 1}",
                                     selected = false
                                 )
+                                BusSeat(
+                                    text = "${rowIndex * 4 + 2}",
+                                    selected = false
+                                )
+                                Spacer(modifier = Modifier.size(44.dp))
+                                BusSeat(
+                                    text = "${rowIndex * 4 + 3}",
+                                    selected = false
+                                )
+                                BusSeat(
+                                    text = "${rowIndex * 4 + 4}",
+                                    selected = false
+                                )
+                            }
+                        } else {
+                            Row(
+                                modifier = Modifier.padding(bottom = 18.dp),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                for (i in 0 until 5) {
+                                    BusSeat(
+                                        text = "${40 + i + 1}",
+                                        selected = false
+                                    )
+                                }
                             }
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(80.dp))
             }
-            Spacer(
-                modifier = Modifier
-                    .heightIn(min = 8.dp)
-                    .weight(1f)
-            )
             DodamButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 12.dp)
+                    .fillMaxWidth(),
                 onClick = {},
                 text = "신청",
                 buttonRole = ButtonRole.Primary,
