@@ -16,6 +16,7 @@ fun NavController.navigateToAll(navOptions: NavOptions? = null) = this.navigate(
 )
 
 fun NavGraphBuilder.allScreen(
+    navigateToBusManagement: () -> Unit,
     navigateToSetting: () -> Unit,
     navigateToOut: () -> Unit,
     navigateToNightStudy: () -> Unit,
@@ -30,6 +31,7 @@ fun NavGraphBuilder.allScreen(
         popExitTransition = { ExitTransition.None },
     ) {
         AllScreen(
+            navigateToBusManagement = navigateToBusManagement,
             navigateToSetting = navigateToSetting,
             navigateToOut = navigateToOut,
             navigateToNightStudy = navigateToNightStudy,

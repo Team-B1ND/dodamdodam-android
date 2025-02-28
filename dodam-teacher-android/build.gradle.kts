@@ -62,6 +62,7 @@ kotlin {
             implementation(projects.feature.groupCreate)
             implementation(projects.feature.groupAdd)
             implementation(projects.feature.editMemberInfo)
+            implementation(projects.featureTeacher.busManagement)
 
 
             implementation(projects.data.login)

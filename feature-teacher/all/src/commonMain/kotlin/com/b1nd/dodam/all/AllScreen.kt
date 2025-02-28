@@ -42,6 +42,7 @@ import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import com.b1nd.dodam.ui.icons.ColoredBus
 import com.b1nd.dodam.ui.icons.ColoredPencil
 import com.b1nd.dodam.ui.icons.ColoredSmilingFaceEyes
 import com.b1nd.dodam.ui.icons.ColoredTrophy
@@ -54,6 +55,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @Composable
 internal fun AllScreen(
     viewModel: AllViewModel = koinViewModel(),
+    navigateToBusManagement: () -> Unit,
     navigateToSetting: () -> Unit,
     navigateToOut: () -> Unit,
     navigateToNightStudy: () -> Unit,
@@ -148,6 +150,14 @@ internal fun AllScreen(
 
             item {
                 DodamDivider(type = DividerType.Normal)
+            }
+
+            item {
+                AllCard(
+                    image = ColoredBus,
+                    text = "귀가 버스 관리하기",
+                    onClick = navigateToBusManagement,
+                )
             }
 
             item {
