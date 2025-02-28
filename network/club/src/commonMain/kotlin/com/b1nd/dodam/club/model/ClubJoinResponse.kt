@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ClubJoinResponse(
     val id: Int,
-    val clubPermission: ClubPermissionResponse,
-    val status: ClubStateResponse,
+    val clubPermission: String,
+    val status: String,
     val club: ClubResponse
 )
