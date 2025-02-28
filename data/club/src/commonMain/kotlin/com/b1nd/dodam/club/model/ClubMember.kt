@@ -15,7 +15,7 @@ data class ClubMember(
 internal fun ClubMemberResponse.toModel(): ClubMember = ClubMember(
     id = id,
     status = status.toClubState(),
-    permissions = permissions.toClubPermission(),
+    permissions = permission.toClubPermission(),
     studentId = studentId,
     name = name,
     grade = grade,

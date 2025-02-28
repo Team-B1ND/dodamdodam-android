@@ -1,5 +1,6 @@
 package com.b1nd.dodam.club.model
 
+import com.b1nd.dodam.network.core.model.TeacherResponse
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,7 +10,8 @@ data class ClubResponse(
     val shortDescription: String,
     val description: String,
     val subject: String,
+    val image: String? = null,
     val type: String,
-    val teacher: Int,
+    val teacher: TeacherResponse,
     val state: String
 )
