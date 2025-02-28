@@ -9,7 +9,7 @@ data class ClubResponse(
     val shortDescription: String,
     val description: String,
     val subject: String,
-    val type: ClubTypeResponse,
+    val type: String,
     val teacher: Int,
-    val state: ClubStateResponse
+    val state: String
 )
