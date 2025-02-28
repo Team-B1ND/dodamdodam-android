@@ -322,7 +322,63 @@ class ClubServiceTest {
         val response = clubService.getClubAllowMember(1)
 
         assertEquals(
+            ClubMemberResponse(
+                id = 39,
+                status = "ALLOWED",
+                permission = "CLUB_LEADER",
+                studentId = 2,
+                name = "김하나",
+                grade = 2,
+                room = 2,
+                number = 8,
+                profileImage = "https://avatars.githubusercontent.com/u/93782306?s=280&v=4"
+            ),
+            response.first()
+        )
+    }
 
+
+
+    @Test
+    fun 모든_멤버_가져오기() = runTest(testDispatcher) {
+        val response = clubService.getClubAllMember(1)
+
+        assertEquals(
+            ClubMemberResponse(
+                id = 48,
+                status = "WAITING",
+                permission = "CLUB_MEMBER",
+                studentId = 5,
+                name = "박재민",
+                grade = 2,
+                room = 2,
+                number = 8,
+                profileImage = null
+            ),
+            response.first()
+        )
+    }
+
+    @Test
+    fun 동아리_가져오기() = runTest(testDispatcher) {
+        val response = clubService.getClubList()
+        assertEquals(
+            ClubResponse(
+                id = 1,
+                name = "B1ND",
+                shortDescription = "바인드는 짱입니다.",
+                description = "어서 빨리 지원하세요",
+                subject = "what is subject?",
+                image = "https://avatars.githubusercontent.com/u/93782306?s=280&v=4",
+                type = "CREATIVE_ACTIVITY_CLUB",
+                teacher = TeacherResponse(
+                    name = "제프 딘",
+                    position = "구글",
+                    tel = "010-1234-5678"
+                ),
+                state = "ALLOWED"
+            ),
+            response.first()
         )
     }
 
