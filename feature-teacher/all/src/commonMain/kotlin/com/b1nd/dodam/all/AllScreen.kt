@@ -59,6 +59,7 @@ internal fun AllScreen(
     navigateToNightStudy: () -> Unit,
     navigateToPoint: () -> Unit,
     navigateToGroup: () -> Unit,
+    navigateToClub: () -> Unit,
 ) {
     val uiState by viewModel.state.collectAsState()
 
@@ -179,6 +180,14 @@ internal fun AllScreen(
                     image = ColoredSmilingFaceEyes,
                     text = "그룹",
                     onClick = navigateToGroup,
+                )
+            }
+
+            item {
+                AllCard(
+                    image = ColoredSmilingFaceEyes,
+                    text = "동아리",
+                    onClick = navigateToClub,
                 )
             }
         }

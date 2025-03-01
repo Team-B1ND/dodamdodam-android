@@ -9,7 +9,7 @@ data class ClubMember(
     val grade: Int,
     val room: Int,
     val number: Int,
-    val profileImage: String?
+    val profileImage: String?,
 )
 
 internal fun ClubMemberResponse.toModel(): ClubMember = ClubMember(
@@ -21,5 +21,5 @@ internal fun ClubMemberResponse.toModel(): ClubMember = ClubMember(
     grade = grade,
     room = room,
     number = number,
-    profileImage = profileImage
+    profileImage = profileImage,
 )
