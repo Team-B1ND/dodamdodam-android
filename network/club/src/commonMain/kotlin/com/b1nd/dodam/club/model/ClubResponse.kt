@@ -12,6 +12,6 @@ data class ClubResponse(
     val subject: String,
     val image: String? = null,
     val type: String,
-    val teacher: TeacherResponse,
+    val teacher: TeacherResponse?,
     val state: String
 )
