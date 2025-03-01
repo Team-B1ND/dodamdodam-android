@@ -4,7 +4,7 @@ data class ClubJoin(
     val id: Int,
     val clubPermission: ClubPermission,
     val status: ClubState,
-    val club: ClubInfo
+    val club: Club
 )
 
 internal fun ClubJoinResponse.toModel(): ClubJoin = ClubJoin(

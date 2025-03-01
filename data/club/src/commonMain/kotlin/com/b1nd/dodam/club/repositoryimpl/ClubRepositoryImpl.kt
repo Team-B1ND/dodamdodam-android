@@ -1,7 +1,7 @@
 package com.b1nd.dodam.club.repositoryimpl
 
 import com.b1nd.dodam.club.datasource.ClubDataSource
-import com.b1nd.dodam.club.model.ClubInfo
+import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
 import com.b1nd.dodam.club.model.ClubMember
 import com.b1nd.dodam.club.model.toModel
@@ -37,7 +37,7 @@ internal class ClubRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun getDetailClub(id: Int): Flow<Result<ClubInfo>> {
+    override suspend fun getDetailClub(id: Int): Flow<Result<Club>> {
         return flow {
             emit(
                 network.getDetailClub(id).toModel(),
@@ -87,7 +87,7 @@ internal class ClubRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun getClubList(): Flow<Result<ImmutableList<ClubInfo>>> {
+    override suspend fun getClubList(): Flow<Result<ImmutableList<Club>>> {
         return flow {
             emit(
                 network.getClubList().map { it.toModel() }.toImmutableList(),
