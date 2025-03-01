@@ -52,6 +52,10 @@ import com.b1nd.dodam.teacher.di.DodamTeacherAppViewModelModule
 import com.seugi.network.bundleidinfo.di.bundleIdInfoDataSourceModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
+import com.b1nd.dodam.club.di.clubViewModelModule
+import com.b1nd.dodam.club.di.clubDataSourceModule
+import com.b1nd.dodam.club.di.clubRepositoryModule
+
 
 fun initKoin(block: KoinApplication.() -> Unit = {}) {
     startKoin {
@@ -106,6 +110,9 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             noticeDatasourceModule,
             noticeViewModelModule,
             noticeCreateViewModelModule,
+            clubDataSourceModule,
+            clubViewModelModule,
+            clubRepositoryModule
         )
         block()
     }

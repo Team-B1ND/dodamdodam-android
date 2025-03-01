@@ -8,14 +8,14 @@ import com.b1nd.dodam.club.model.toModel
 import com.b1nd.dodam.club.repository.ClubRepository
 import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
+import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import com.b1nd.dodam.common.result.Result
-import kotlinx.collections.immutable.toImmutableList
 
 internal class ClubRepositoryImpl(
     private val network: ClubDataSource,
@@ -96,5 +96,4 @@ internal class ClubRepositoryImpl(
             .asResult()
             .flowOn(dispatcher)
     }
-
 }

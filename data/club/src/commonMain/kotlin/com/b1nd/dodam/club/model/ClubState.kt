@@ -1,10 +1,14 @@
 package com.b1nd.dodam.club.model
 
 enum class ClubState {
-    ALLOWED,PENDING, REJECTED, WAITING,DELETED
+    ALLOWED,
+    PENDING,
+    REJECTED,
+    WAITING,
+    DELETED,
 }
 
-internal fun String.toClubState() = when (this){
+internal fun String.toClubState() = when (this) {
     "ALLOWED" -> ClubState.ALLOWED
     "PENDING" -> ClubState.PENDING
     "REJECTED" -> ClubState.REJECTED

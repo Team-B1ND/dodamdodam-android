@@ -12,7 +12,7 @@ data class Club(
     val type: ClubType,
     val image: String?,
     val teacher: Teacher?,
-    val state: ClubState
+    val state: ClubState,
 )
 
 internal fun ClubResponse.toModel(): Club = Club(
@@ -24,5 +24,5 @@ internal fun ClubResponse.toModel(): Club = Club(
     image = image,
     teacher = teacher?.toModel(),
     type = type.toClubType(),
-    state = state.toClubState()
+    state = state.toClubState(),
 )
