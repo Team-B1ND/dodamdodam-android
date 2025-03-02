@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import dodamdodam_android.ui.generated.resources.Res
 import dodamdodam_android.ui.generated.resources.ic_b1ndlogo
 import dodamdodam_android.ui.generated.resources.ic_bar_chart
+import dodamdodam_android.ui.generated.resources.ic_checkmark
 import dodamdodam_android.ui.generated.resources.ic_close
 import dodamdodam_android.ui.generated.resources.ic_colored_bullseye
 import dodamdodam_android.ui.generated.resources.ic_colored_bus
@@ -26,6 +27,8 @@ import dodamdodam_android.ui.generated.resources.ic_colored_xmark_circle
 import dodamdodam_android.ui.generated.resources.ic_default_profile
 import dodamdodam_android.ui.generated.resources.ic_default_user
 import dodamdodam_android.ui.generated.resources.ic_dodamlogo
+import dodamdodam_android.ui.generated.resources.img_parent
+import dodamdodam_android.ui.generated.resources.img_student
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -124,3 +127,15 @@ val ColoredSchool
 val ColoredCheckmarkCircle
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_checkmark_circle)
+
+val Checkmark
+    @Composable
+    get() = vectorResource(Res.drawable.ic_checkmark)
+
+val StudentImage
+    @Composable
+    get() = imageResource(Res.drawable.img_student)
+
+val ParentImage
+    @Composable
+    get() = imageResource(Res.drawable.img_parent)
