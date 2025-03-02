@@ -47,7 +47,9 @@ import com.b1nd.dodam.ui.icons.StudentImage
 
 
 @Composable
-internal fun SelectRoleScreen() {
+internal fun SelectRoleScreen(
+    onBackClick: () -> Unit
+) {
     var selectedIndex by remember { mutableStateOf(0) }
 
     Scaffold(
@@ -57,7 +59,7 @@ internal fun SelectRoleScreen() {
         topBar = {
             DodamTopAppBar(
                 title = "해당하는 곳을\n선택해 주세요",
-                onBackClick = {},
+                onBackClick = onBackClick,
                 type = TopAppBarType.Medium
             )
         }
@@ -136,5 +138,7 @@ internal fun SelectRoleScreen() {
 @Preview
 @Composable
 private fun Preview() {
-    SelectRoleScreen()
+    SelectRoleScreen(
+        onBackClick = {}
+    )
 }

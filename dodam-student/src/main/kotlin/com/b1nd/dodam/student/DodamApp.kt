@@ -52,6 +52,8 @@ import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
 import com.b1nd.dodam.register.navigation.navigateToInfo
+import com.b1nd.dodam.register.navigation.navigateToSelectRole
+import com.b1nd.dodam.register.navigation.selectRoleScreen
 import com.b1nd.dodam.setting.navigation.navigateToSetting
 import com.b1nd.dodam.setting.navigation.settingScreen
 import com.b1nd.dodam.student.main.navigation.MAIN_ROUTE
@@ -146,7 +148,7 @@ fun DodamApp(
             exitTransition = { fadeOut(targetAlpha = 100f) },
         ) {
             onboardingScreen(
-                onRegisterClick = navController::navigateToInfo,
+                onRegisterClick = navController::navigateToSelectRole,
                 onLoginClick = navController::navigationToLogin,
             )
             mainScreen(
@@ -182,6 +184,9 @@ fun DodamApp(
             )
             mealScreen(
                 popBackStack = navController::popBackStack,
+            )
+            selectRoleScreen(
+                onBackClick = navController::popBackStack
             )
             infoScreen(
                 onNextClick = { name, grade, room, number, email, phoneNumber ->
