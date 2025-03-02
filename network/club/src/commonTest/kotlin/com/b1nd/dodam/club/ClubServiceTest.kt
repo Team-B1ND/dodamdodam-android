@@ -55,6 +55,16 @@ class ClubServiceTest {
                                 """.trimIndent()
                             )
                         }
+                        DodamUrl.Club.JOIN_REQUEST == path && method == "GET" -> {
+                            makeOkRespond(
+                                content = """
+                                    {
+                                      "message": "동아리 입부 신청 성공",
+                                      "status": 200
+                                    }
+                                """.trimIndent()
+                            )
+                        }
 
                         DodamUrl.Club.JOIN_REQUEST + "/1" == path && method == "DELETE" -> {
                             makeOkRespond(
@@ -221,6 +231,55 @@ class ClubServiceTest {
                                 """.trimIndent()
                             )
                         }
+                        DodamUrl.CLUB + "/joined" == path && method == "GET" -> {
+                            makeOkRespond(
+                                content = """
+                                    {
+                                        "status": 200,
+                                        "message": "나의 동아리 불러오기 성공",
+                                        "data": [
+                                            {
+                                                "id": 5,
+                                                "name": "B1ND",
+                                                "shortDescription": "설명",
+                                                "description": "설명22",
+                                                "subject": "전공",
+                                                "image": "이미지",
+                                                "type": "CREATIVE_ACTIVITY_CLUB",
+                                                "teacher": null,
+                                                "state": "ALLOWED"
+                                            }
+                                        ]
+                                    }
+                                """.trimIndent()
+                            )
+                        }
+
+                        DodamUrl.CLUB + "/my" == path && method == "GET" -> {
+                            makeOkRespond(
+                                content = """
+                                        {
+                                            "status": 200,
+                                            "message": "사용자의 동아리 상태 불러오기 성공",
+                                            "data": [
+                                                {
+                                                    "createdAt": "2025-03-01T02:27:07.942185",
+                                                    "modifiedAt": "2025-03-01T02:27:07.942185",
+                                                    "id": 8,
+                                                    "name": "B4ND",
+                                                    "shortDescription": "설명55555",
+                                                    "description": "설명666666",
+                                                    "image": "이미지",
+                                                    "subject": "전공",
+                                                    "type": "CREATIVE_ACTIVITY_CLUB",
+                                                    "teacher": null,
+                                                    "state": "PENDING"
+                                                }
+                                            ]
+                                        }
+                                """.trimIndent()
+                            )
+                        }
 
                         else -> error("Unhandled $path")
                     }
@@ -234,7 +293,16 @@ class ClubServiceTest {
 
     @Test
     fun 동아리_부원_제안_수락() = runTest(testDispatcher) {
-        val response = clubService.postClubJoinRequests(1)
+        val response = clubService.postClubJoinRequestsAllow(1)
+        assertEquals(
+            Unit,
+            response,
+        )
+    }
+
+    @Test
+    fun 동아리_입부_신청() = runTest(testDispatcher) {
+        val response = clubService.postClubJoinRequests(clubId = 5, clubPriority = "CREATIVE_ACTIVITY_CLUB_1", introduce = "열심히 하겠습니다.")
         assertEquals(
             Unit,
             response,
@@ -243,7 +311,7 @@ class ClubServiceTest {
 
     @Test
     fun 동아리_부원_제안_거절() = runTest(testDispatcher) {
-        val response = clubService.deleteClubJoinRequest(1)
+        val response = clubService.deleteClubJoinRequests(1)
         assertEquals(
             Unit,
             response,
@@ -382,4 +450,43 @@ class ClubServiceTest {
         )
     }
 
+    @Test
+    fun 입부한_동아리_가져오기() = runTest(testDispatcher) {
+        val response = clubService.getClubJoined()
+        assertEquals(
+            ClubResponse(
+                id = 5,
+                name = "B1ND",
+                shortDescription = "설명",
+                description = "설명22",
+                subject = "전공",
+                image = "이미지",
+                type = "CREATIVE_ACTIVITY_CLUB",
+                teacher = null,
+                state = "ALLOWED"
+            ),
+            response.first()
+        )
+    }
+
+    @Test
+    fun 사용자가_개설_신청한_동아리_상태_가져오기() = runTest(testDispatcher) {
+        val response = clubService.getClubMyCreated()
+        assertEquals(
+            ClubResponse(
+                createdAt = "2025-03-01T02:27:07.942185",
+                modifiedAt = "2025-03-01T02:27:07.942185",
+                id = 8,
+                name = "B4ND",
+                shortDescription = "설명55555",
+                description = "설명666666",
+                subject = "전공",
+                image = "이미지",
+                type = "CREATIVE_ACTIVITY_CLUB",
+                teacher = null,
+                state = "PENDING"
+            ),
+            response.first()
+        )
+    }
 }

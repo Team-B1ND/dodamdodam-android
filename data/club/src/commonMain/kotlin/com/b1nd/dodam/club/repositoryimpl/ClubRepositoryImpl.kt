@@ -4,6 +4,8 @@ import com.b1nd.dodam.club.datasource.ClubDataSource
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
 import com.b1nd.dodam.club.model.ClubMember
+import com.b1nd.dodam.club.model.ClubState
+import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.toModel
 import com.b1nd.dodam.club.repository.ClubRepository
 import com.b1nd.dodam.common.Dispatcher
@@ -21,9 +23,27 @@ internal class ClubRepositoryImpl(
     private val network: ClubDataSource,
     @Dispatcher(DispatcherType.IO) private val dispatcher: CoroutineDispatcher,
 ) : ClubRepository {
-    override suspend fun postClubJoinRequests(id: Int): Flow<Result<Unit>> {
+    override suspend fun postClubJoinRequestsAllow(id: Int): Flow<Result<Unit>> {
         return flow {
-            emit(network.postClubJoinRequests(id))
+            emit(network.postClubJoinRequestsAllow(id))
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override suspend fun postClubJoinRequests(
+        clubId: Int,
+        clubPriority: String,
+        introduce: String,
+    ): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                network.postClubJoinRequests(
+                    clubId = clubId,
+                    clubPriority = clubPriority,
+                    introduce = introduce
+                )
+            )
         }
             .asResult()
             .flowOn(dispatcher)
@@ -31,7 +51,7 @@ internal class ClubRepositoryImpl(
 
     override suspend fun deleteClubJoinRequest(id: Int): Flow<Result<Unit>> {
         return flow {
-            emit(network.deleteClubJoinRequest(id))
+            emit(network.deleteClubJoinRequests(id))
         }
             .asResult()
             .flowOn(dispatcher)
@@ -91,6 +111,38 @@ internal class ClubRepositoryImpl(
         return flow {
             emit(
                 network.getClubList().map { it.toModel() }.toImmutableList(),
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override suspend fun getClubJoined(): Flow<Result<ImmutableList<Club>>> {
+        return flow {
+            emit(network.getClubJoined().map { it.toModel() }.toImmutableList())
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override suspend fun getClubMyCreated(): Flow<Result<ImmutableList<Club>>> {
+        return flow {
+            emit(network.getClubMyCreated().map { it.toModel() }.toImmutableList())
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override suspend fun postClubState(
+        clubIds: ImmutableList<Int>,
+        status: ClubState,
+    ): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                network.postClubState(
+                    clubIds = clubIds,
+                    status = status.toString()
+                )
             )
         }
             .asResult()

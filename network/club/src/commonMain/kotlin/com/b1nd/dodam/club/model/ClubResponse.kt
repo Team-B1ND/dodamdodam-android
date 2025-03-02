@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClubResponse(
+    val createdAt: String? = null,
+    val modifiedAt: String? = null,
     val id: Int,
     val name: String,
     val shortDescription: String,
@@ -13,5 +15,5 @@ data class ClubResponse(
     val image: String? = null,
     val type: String,
     val teacher: TeacherResponse?,
-    val state: String
+    val state: String,
 )

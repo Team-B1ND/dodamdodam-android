@@ -6,12 +6,16 @@ import com.b1nd.dodam.club.model.ClubResponse
 import kotlinx.collections.immutable.ImmutableList
 
 interface ClubDataSource {
-    suspend fun postClubJoinRequests(id: Int)
-    suspend fun deleteClubJoinRequest(id: Int)
+    suspend fun postClubJoinRequestsAllow(id: Int)
+    suspend fun postClubJoinRequests(clubId: Int, clubPriority: String, introduce: String)
+    suspend fun deleteClubJoinRequests(id: Int)
     suspend fun getDetailClub(id: Int): ClubResponse
     suspend fun getClubJoinRequestReceived(): ImmutableList<ClubJoinResponse>
     suspend fun getClubLeader(id: Int): ClubMemberResponse
     suspend fun getClubAllowMember(id: Int): ImmutableList<ClubMemberResponse>
     suspend fun getClubAllMember(id: Int): ImmutableList<ClubMemberResponse>
-    suspend fun getClubList() : ImmutableList<ClubResponse>
+    suspend fun getClubList(): ImmutableList<ClubResponse>
+    suspend fun getClubJoined(): ImmutableList<ClubResponse>
+    suspend fun getClubMyCreated(): ImmutableList<ClubResponse>
+    suspend fun postClubState(clubIds: ImmutableList<Int>, status: String)
 }
