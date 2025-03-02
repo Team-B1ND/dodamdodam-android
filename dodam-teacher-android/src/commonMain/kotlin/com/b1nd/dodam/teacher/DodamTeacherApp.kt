@@ -337,7 +337,10 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             popBackStack = navHostController::popBackStack,
                         )
 
-                        clubScreen(popBackStack = navHostController::popBackStack)
+                        clubScreen(
+                            showSnackbar = showSnackbar,
+                            popBackStack = navHostController::popBackStack
+                        )
                     }
 
                     // Bottom Navigation

@@ -19,6 +19,7 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.collections.immutable.toImmutableList
 
@@ -38,6 +39,7 @@ class ClubService(
     ) {
         defaultSafeRequest {
             client.post(DodamUrl.Club.JOIN_REQUEST) {
+                contentType(ContentType.Application.Json)
                 setBody(
                     ClubJoinRequest(
                         clubId = clubId,
@@ -106,9 +108,10 @@ class ClubService(
         }.toImmutableList()
     }
 
-    override suspend fun postClubState(clubIds: ImmutableList<Int>, status: String) {
+    override suspend fun patchClubState(clubIds: ImmutableList<Int>, status: String) {
         defaultSafeRequest {
             client.patch(DodamUrl.CLUB + "/state") {
+                contentType(ContentType.Application.Json)
                 setBody(
                     ClubStateRequest(
                         clubIds = clubIds,
