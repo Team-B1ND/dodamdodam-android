@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 data class ClubStateRequest(
     val clubIds: List<Int>,
     val status: String,
+    val reason: String?
 )

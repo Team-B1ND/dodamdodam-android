@@ -108,14 +108,19 @@ class ClubService(
         }.toImmutableList()
     }
 
-    override suspend fun patchClubState(clubIds: ImmutableList<Int>, status: String) {
+    override suspend fun patchClubState(
+        clubIds: ImmutableList<Int>,
+        status: String,
+        reason: String?,
+    ) {
         defaultSafeRequest {
             client.patch(DodamUrl.CLUB + "/state") {
                 contentType(ContentType.Application.Json)
                 setBody(
                     ClubStateRequest(
                         clubIds = clubIds,
-                        status = status
+                        status = status,
+                        reason = reason
                     )
                 )
             }.body<DefaultResponse>()

@@ -1,3 +1,5 @@
+@file:Suppress("UNREACHABLE_CODE")
+
 package com.b1nd.dodam.club.screen
 
 import androidx.compose.animation.AnimatedVisibility
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,10 +36,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubPendingUiState
@@ -47,10 +52,12 @@ import com.b1nd.dodam.club.model.DetailClub
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
+import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamLoadingDots
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextButton
+import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TextButtonSize
 import com.b1nd.dodam.designsystem.component.TextButtonType
@@ -62,14 +69,13 @@ import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.KoinExperimentalAPI
 
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 internal fun ClubListScreen(
     state: ClubUiState,
     popBackStack: () -> Unit,
     selectClubList: (Long, String, ClubType, String) -> Unit,
     selectDetailClub: (Long, Club) -> Unit,
-    selectAllowButton: (Long, ClubState) -> Unit,
+    selectAllowButton: (Long, ClubState, String?) -> Unit,
 ) {
     var clubTypeIndex by remember { mutableIntStateOf(0) }
     val clubTypeList = listOf(
@@ -83,6 +89,9 @@ internal fun ClubListScreen(
             onClick = { clubTypeIndex = index })
     }.toImmutableList()
 
+
+    var selectedReject by remember { mutableStateOf(false) }
+    var rejectReason by remember { mutableStateOf("") }
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(), topBar = {
@@ -271,9 +280,7 @@ internal fun ClubListScreen(
                                     text = "거절하기",
                                     buttonRole = ButtonRole.Assistive,
                                     onClick = {
-                                        selectAllowButton(
-                                            state.detailClub.id, ClubState.REJECTED
-                                        )
+                                        selectedReject = true
                                     })
                                 Spacer(modifier = Modifier.width(8.dp))
                                 DodamButton(
@@ -281,7 +288,7 @@ internal fun ClubListScreen(
                                     text = "승인하기",
                                     onClick = {
                                         selectAllowButton(
-                                            state.detailClub.id, ClubState.ALLOWED
+                                            state.detailClub.id, ClubState.ALLOWED, null
                                         )
                                     })
                             }
@@ -291,8 +298,64 @@ internal fun ClubListScreen(
                 space = 16.dp,
             )
         }
-    }
 
+        if (selectedReject) {
+            Box(
+                modifier = Modifier.fillMaxSize().alpha(0.3f).background(
+                    color = DodamTheme.colors.staticBlack
+                ).clickable {
+                    selectedReject = false
+                    rejectReason = ""
+                }
+            )
+            Column(
+                modifier = Modifier.align(Alignment.Center).fillMaxWidth(0.8f).height(200.dp)
+                    .background(
+                        shape = RoundedCornerShape(16.dp),
+                        color = DodamTheme.colors.backgroundNormal
+                    ).padding(horizontal = 24.dp, vertical = 26.dp)
+            ) {
+                Text(
+                    text = "거절 사유를 입력해주세요.",
+                    style = DodamTheme.typography.heading1Bold(),
+                    color = DodamTheme.colors.labelNormal
+                )
+                DodamTextField(
+                    value = rejectReason,
+                    onValueChange = {
+                        rejectReason = it
+                    },
+                    singleLine = true,
+                    onClickRemoveRequest = { rejectReason = "" }
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Row {
+                    DodamButton(
+                        modifier = Modifier.weight(1f),
+                        buttonRole = ButtonRole.Assistive,
+                        onClick = {
+                            selectedReject = false
+                            rejectReason = ""
+                        },
+                        text = "취소"
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    DodamButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            selectAllowButton(
+                                state.detailClub.id, ClubState.REJECTED, rejectReason
+                            )
+                            selectedReject = false
+                            rejectReason = ""
+                        },
+                        text = "확인"
+                    )
+                }
+
+            }
+        }
+    }
 }
 
 // TODO : 컴포넌트로 뺄 예정입니다.
