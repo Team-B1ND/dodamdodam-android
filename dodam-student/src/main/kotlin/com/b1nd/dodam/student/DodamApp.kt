@@ -45,6 +45,8 @@ import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
+import com.b1nd.dodam.parent.childrenmanage.navigation.childrenManageScreen
+import com.b1nd.dodam.parent.childrenmanage.navigation.navigateToChildrenManageScreen
 import com.b1nd.dodam.parent.main.navigation.PARENT_MAIN_ROUTE
 import com.b1nd.dodam.parent.main.navigation.navigateToParentMain
 import com.b1nd.dodam.parent.main.navigation.parentMainScreen
@@ -186,7 +188,9 @@ fun DodamApp(
                 popBackStack = navController::popBackStack,
             )
             selectRoleScreen(
-                onBackClick = navController::popBackStack
+                onBackClick = navController::popBackStack,
+                navigateToChildrenManage = navController::navigateToChildrenManageScreen,
+                navigateToInfo = navController::navigateToInfo
             )
             infoScreen(
                 onNextClick = { name, grade, room, number, email, phoneNumber ->
@@ -299,6 +303,12 @@ fun DodamApp(
             )
             editMemberInfoScreen(
                 popBackStack = navController::popBackStack,
+            )
+            childrenManageScreen(
+                popBackStack = navController::popBackStack,
+                changeBottomNavVisible = {_->
+
+                }
             )
         }
     }
