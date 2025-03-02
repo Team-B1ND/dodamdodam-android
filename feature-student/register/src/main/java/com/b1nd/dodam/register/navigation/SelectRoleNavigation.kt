@@ -19,7 +19,7 @@ fun NavController.navigateToSelectRole(
 ) = navigate(SELECT_ROLE_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.selectRoleScreen(onBackClick: () -> Unit) {
+fun NavGraphBuilder.selectRoleScreen(onBackClick: () -> Unit, navigateToChildrenManage: () -> Unit, navigateToInfo: () -> Unit) {
     composable(
         route = SELECT_ROLE_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -29,6 +29,8 @@ fun NavGraphBuilder.selectRoleScreen(onBackClick: () -> Unit) {
     ) {
         SelectRoleScreen(
             onBackClick = onBackClick,
+            navigateToChildrenManage = navigateToChildrenManage,
+            navigateToInfo = navigateToInfo
         )
     }
 }

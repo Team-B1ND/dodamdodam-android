@@ -48,7 +48,9 @@ import com.b1nd.dodam.ui.icons.StudentImage
 
 @Composable
 internal fun SelectRoleScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    navigateToChildrenManage : () -> Unit,
+    navigateToInfo : () -> Unit
 ) {
     var selectedIndex by remember { mutableStateOf(0) }
 
@@ -126,7 +128,13 @@ internal fun SelectRoleScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
-                onClick = {  },
+                onClick = {
+                    if (selectedIndex == 0) {
+                        navigateToInfo()
+                    } else {
+                        navigateToChildrenManage()
+                    }
+                },
                 text = "다음",
                 buttonRole = ButtonRole.Primary,
                 buttonSize = ButtonSize.Large,
@@ -139,6 +147,8 @@ internal fun SelectRoleScreen(
 @Composable
 private fun Preview() {
     SelectRoleScreen(
-        onBackClick = {}
+        onBackClick = {},
+        navigateToChildrenManage = {},
+        navigateToInfo = {}
     )
 }
