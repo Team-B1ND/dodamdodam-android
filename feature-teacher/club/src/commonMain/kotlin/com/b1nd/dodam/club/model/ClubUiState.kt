@@ -2,6 +2,10 @@ package com.b1nd.dodam.club.model
 
 import kotlinx.collections.immutable.ImmutableList
 
+enum class ClubPage {
+    LIST,
+    DETAIL
+}
 data class ClubUiState(
     val clubPendingUiState: ClubPendingUiState = ClubPendingUiState.Loading,
     val detailClub: DetailClub = DetailClub(),
@@ -28,10 +32,11 @@ data class DetailClubAndMember(
 
 data class DetailClub(
     val id: Long,
+    val isLoading: Boolean,
     val name: String,
     val type: ClubType,
-    val leader: String,
+    val leader: String?,
     val shortDescription: String,
 ) {
-    constructor(): this(0,"",ClubType.CREATIVE_ACTIVITY_CLUB,"","")
+    constructor(): this(0,true,"",ClubType.CREATIVE_ACTIVITY_CLUB,"","")
 }

@@ -5,7 +5,6 @@ import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
 import com.b1nd.dodam.club.model.ClubMember
 import com.b1nd.dodam.club.model.ClubState
-import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.toModel
 import com.b1nd.dodam.club.repository.ClubRepository
 import com.b1nd.dodam.common.Dispatcher
@@ -133,13 +132,13 @@ internal class ClubRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun postClubState(
+    override suspend fun patchClubState(
         clubIds: ImmutableList<Int>,
         status: ClubState,
     ): Flow<Result<Unit>> {
         return flow {
             emit(
-                network.postClubState(
+                network.patchClubState(
                     clubIds = clubIds,
                     status = status.toString()
                 )

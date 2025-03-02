@@ -74,11 +74,12 @@ class ClubViewModel : ViewModel(), KoinComponent {
             )
         )
     )
+
     init {
-        loadClub()
+        loadClubList()
     }
 
-    fun loadClub() = viewModelScope.launch {
+    fun loadClubList() = viewModelScope.launch {
         _state.update {
             it.copy(
                 clubPendingUiState = ClubPendingUiState.Loading,
@@ -97,9 +98,11 @@ class ClubViewModel : ViewModel(), KoinComponent {
                     }
                     return@collect
                 }
+
                 Result.Loading -> {
 
                 }
+
                 is Result.Success -> {
                     creativeClubs =
                         club.data.filter { it.state == ClubState.PENDING && it.type == ClubType.CREATIVE_ACTIVITY_CLUB }
@@ -123,11 +126,61 @@ class ClubViewModel : ViewModel(), KoinComponent {
                 }
             }
         }
+    }
 
+    fun loadDetailClub(id: Long, club: Club) = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                clubPendingUiState = ClubPendingUiState.Loading,
+            )
+        }
+        clubRepository.getClubAllowMember(id.toInt()).collect { member ->
+            when (member) {
+                is Result.Error -> {
+                    member.error.printStackTrace()
+                    _state.update {
+                        it.copy(
+                            clubPendingUiState = ClubPendingUiState.Error
+                        )
+                    }
+                }
+
+                Result.Loading -> {}
+                is Result.Success -> {
+                    _state.update {
+                        it.copy(
+                            clubPendingUiState = ClubPendingUiState.Success(
+                                clubPendingList = ClubPendingList(
+                                    creativeClubs = persistentListOf(),
+                                    selfClubs = persistentListOf()
+                                ),
+                                detailClubMember = DetailClubAndMember(
+                                    club = club,
+                                    clubMember = member.data
+                                )
+                            )
+                        )
+                    }
+                    return@collect
+                }
+            }
+        }
     }
 
     fun detailMember(id: Long, name: String, type: ClubType, shortDescription: String) {
         viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    detailClub = DetailClub(
+                        id = id,
+                        name = name,
+                        type = type,
+                        isLoading = true,
+                        leader = "",
+                        shortDescription = shortDescription
+                    ),
+                )
+            }
             val leader = loadLeaderName(id)
             _state.update {
                 it.copy(
@@ -135,6 +188,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
                         id = id,
                         name = name,
                         type = type,
+                        isLoading = false,
                         leader = leader,
                         shortDescription = shortDescription
                     ),
@@ -142,6 +196,24 @@ class ClubViewModel : ViewModel(), KoinComponent {
             }
         }
     }
+
+    fun postClubState(id: Int, state: ClubState) {
+        viewModelScope.launch {
+            clubRepository.patchClubState(clubIds = persistentListOf(id), status = state).collect {
+                when (it) {
+                    is Result.Error -> {
+                        _sideEffect.emit(ClubSideEffect.Failed(it.error))
+                        it.error.printStackTrace()
+                    }
+                    Result.Loading -> {}
+                    is Result.Success -> {
+                        _sideEffect.emit(ClubSideEffect.SuccessReject)
+                    }
+                }
+            }
+        }
+    }
+
 
     private suspend fun loadLeaderName(id: Long): String = clubRepository.getClubLeader(id.toInt())
         .filterIsInstance<Result.Success<ClubMember>>()
