@@ -135,12 +135,14 @@ internal class ClubRepositoryImpl(
     override suspend fun patchClubState(
         clubIds: ImmutableList<Int>,
         status: ClubState,
+        reason: String?
     ): Flow<Result<Unit>> {
         return flow {
             emit(
                 network.patchClubState(
                     clubIds = clubIds,
-                    status = status.toString()
+                    status = status.toString(),
+                    reason = reason
                 )
             )
         }

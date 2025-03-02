@@ -17,5 +17,5 @@ interface ClubDataSource {
     suspend fun getClubList(): ImmutableList<ClubResponse>
     suspend fun getClubJoined(): ImmutableList<ClubResponse>
     suspend fun getClubMyCreated(): ImmutableList<ClubResponse>
-    suspend fun patchClubState(clubIds: ImmutableList<Int>, status: String)
+    suspend fun patchClubState(clubIds: ImmutableList<Int>, status: String, reason: String?)
 }

@@ -197,9 +197,9 @@ class ClubViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun postClubState(id: Int, state: ClubState) {
+    fun postClubState(id: Int, state: ClubState, reason: String?) {
         viewModelScope.launch {
-            clubRepository.patchClubState(clubIds = persistentListOf(id), status = state).collect {
+            clubRepository.patchClubState(clubIds = persistentListOf(id), status = state, reason = reason).collect {
                 when (it) {
                     is Result.Error -> {
                         _sideEffect.emit(ClubSideEffect.Failed(it.error))

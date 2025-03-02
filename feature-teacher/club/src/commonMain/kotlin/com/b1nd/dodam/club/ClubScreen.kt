@@ -42,10 +42,12 @@ internal fun ClubScreen(
                 }
 
                 is ClubSideEffect.SuccessApprove -> {
+                    viewModel.loadClubList()
                     showSnackbar(SnackbarState.SUCCESS, "동아리 개설을 승인했습니다.")
                 }
 
                 is ClubSideEffect.SuccessReject -> {
+                    viewModel.loadClubList()
                     showSnackbar(SnackbarState.SUCCESS, "동아리 개설을 거절했습니다..")
                 }
             }
@@ -70,8 +72,8 @@ internal fun ClubScreen(
                     nowPage = ClubPage.DETAIL
                     viewModel.loadDetailClub(id, club)
                 },
-                selectAllowButton = {id, state ->
-                    viewModel.postClubState(id.toInt(),state)
+                selectAllowButton = {id, state,reason ->
+                    viewModel.postClubState(id.toInt(),state, reason)
                 }
             )
         }
