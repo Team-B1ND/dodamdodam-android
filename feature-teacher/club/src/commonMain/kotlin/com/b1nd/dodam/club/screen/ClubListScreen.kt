@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -267,6 +268,8 @@ internal fun ClubListScreen(
                                 Text(
                                     state.detailClub.shortDescription,
                                     style = DodamTheme.typography.headlineMedium(),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                     color = DodamTheme.colors.labelNeutral
                                 )
                             }
@@ -391,7 +394,7 @@ private fun DodamClub(
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(
-                text = club.type.type,
+                text = club.subject,
                 style = DodamTheme.typography.caption1Medium(),
                 color = DodamTheme.colors.labelAlternative
             )
@@ -412,6 +415,8 @@ private fun DodamClub(
             Text(
                 text = club.description,
                 style = DodamTheme.typography.body2Medium(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 color = DodamTheme.colors.labelNormal
             )
         }
