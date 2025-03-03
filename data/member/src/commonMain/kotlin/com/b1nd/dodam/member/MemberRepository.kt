@@ -13,4 +13,5 @@ interface MemberRepository {
     suspend fun editMemberInfo(name: String, email: String, phone: String, profileImage: String?): Flow<Result<Unit>>
     suspend fun getChildren(code: String): Flow<Result<Member>>
     suspend fun getAuthCode(type: String, identifier: String): Flow<Result<Unit>>
+    suspend fun verifyAuthCode(type: String, identifier: String, authCode: String, userAgent: String): Flow<Result<Unit>>
 }
