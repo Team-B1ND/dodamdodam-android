@@ -1,12 +1,13 @@
 package com.b1nd.dodam.student.util
 
 import android.app.Application
+import com.b1nd.dodam.club.di.clubViewModelModule
 import com.b1nd.dodam.all.di.parentAllViewModelModule
 import com.b1nd.dodam.asknightstudy.di.askNightStudyViewModelModule
 import com.b1nd.dodam.askout.di.askOutViewModelModule
 import com.b1nd.dodam.askwakeupsong.di.askWakeUpSongViewModelModule
-import com.b1nd.dodam.bus.di.busDataSourceModule
-import com.b1nd.dodam.bus.di.busRepositoryModule
+import com.b1nd.dodam.club.di.busDataSourceModule
+import com.b1nd.dodam.club.di.busRepositoryModule
 import com.b1nd.dodam.bus.di.busViewModelModule
 import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
@@ -118,6 +119,7 @@ class DodamApplication : Application() {
                     groupDetailViewModelModule,
                     groupWaitingViewModelModule,
                     childrenManageViewModelModule,
+                    clubViewModelModule
                 ) + mainViewModelModules,
             )
         }

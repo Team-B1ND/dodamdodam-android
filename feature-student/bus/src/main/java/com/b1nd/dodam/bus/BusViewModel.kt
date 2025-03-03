@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.bus.model.BusUiState
-import com.b1nd.dodam.bus.repository.BusRepository
+import com.b1nd.dodam.club.repository.BusRepository
 import com.b1nd.dodam.common.exception.DataNotFoundException
 import com.b1nd.dodam.common.result.Result
 import kotlinx.coroutines.flow.MutableSharedFlow

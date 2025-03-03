@@ -72,6 +72,8 @@ include(
     ":network:point",
     ":data:point",
     ":feature-student:point",
+    ":feature-student:club",
+    ":feature-student:join-club",
     ":feature-student:ask-wakeup-song",
     ":logging",
     ":dodam-teacher-android",
@@ -107,3 +109,4 @@ include(":feature-parent:all")
 include(":feature:group")
 project(":feature:group").name = "feature-group-alias"
 include(":feature-parent:children-manage")
+include(":feature-student:join-club")
