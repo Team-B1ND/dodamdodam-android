@@ -25,14 +25,14 @@ class ChildrenManageViewModel : ViewModel(), KoinComponent {
     private val _sideEffect = MutableSharedFlow<ChildrenSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
-    fun getChildren(code: String) {
+    fun getChildren(code: String, relation: String) {
         viewModelScope.launch {
             memberRepository.getChildren(code = code).collect {
                 when (it) {
                     is Result.Success -> {
                         val newChild = ChildrenModel(
                             childrenName = it.data.name,
-                            relation = it.data.email,
+                            relation = relation,
                         )
                         _uiState.update { it.add(newChild) }
                         _sideEffect.emit(ChildrenSideEffect.SuccessGetChildren)

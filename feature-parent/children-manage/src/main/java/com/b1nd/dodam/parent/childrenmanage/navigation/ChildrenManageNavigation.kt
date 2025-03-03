@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.b1nd.dodam.parent.childrenmanage.ChildrenManageScreen
+import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
 
 const val CHILDREN_MANAGE_ROUTE = "children_manage"
 
@@ -16,7 +17,7 @@ fun NavController.navigateToChildrenManageScreen(
     },
 ) = navigate(CHILDREN_MANAGE_ROUTE, navOptions)
 
-fun NavGraphBuilder.childrenManageScreen(popBackStack: () -> Unit, changeBottomNavVisible: (visible: Boolean) -> Unit) {
+fun NavGraphBuilder.childrenManageScreen(popBackStack: () -> Unit, changeBottomNavVisible: (visible: Boolean) -> Unit, navigateToInfo: (list: List<ChildrenModel>) -> Unit) {
     composable(
         route = CHILDREN_MANAGE_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -27,6 +28,7 @@ fun NavGraphBuilder.childrenManageScreen(popBackStack: () -> Unit, changeBottomN
         ChildrenManageScreen(
             popBackStack = popBackStack,
             changeBottomNavVisible = changeBottomNavVisible,
+            navigateToInfo = navigateToInfo
         )
     }
 }
