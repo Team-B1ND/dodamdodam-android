@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
@@ -71,6 +72,7 @@ internal fun InfoScreen(
 ) {
     var nameState by remember { mutableStateOf(TextFieldState()) }
     var phoneNumberState by remember { mutableStateOf(TextFieldState()) }
+    var phoneCodeState by remember { mutableStateOf(TextFieldState()) }
     var emailState by remember { mutableStateOf(TextFieldState()) }
     var classInfoState by remember { mutableStateOf(TextFieldState()) }
     var classInfoText by remember { mutableStateOf(TextFieldValue()) }
@@ -79,6 +81,9 @@ internal fun InfoScreen(
     var role by remember { mutableStateOf("STUDENT") }
     var buttonText by remember { mutableStateOf("전화번호 인증코드 전송") }
     var authType by remember { mutableStateOf("PHONE") }
+
+    var showPhoneCodeTextField by remember { mutableStateOf(false) }
+    var buttonEnabled by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
         viewModel.sideEffect.collect {
             when(it){
@@ -94,6 +99,7 @@ internal fun InfoScreen(
                 }
                 is InfoSideEffect.SuccessGetAuthPhoneCode ->{
                     buttonText = "인증"
+                    showPhoneCodeTextField = true
                 }
                 is InfoSideEffect.SuccessGetAuthEmailCode ->{
                     buttonText = "인증"
@@ -122,6 +128,12 @@ internal fun InfoScreen(
             focusManager.moveFocus(FocusDirection.Up)
         }
     }
+    LaunchedEffect(phoneCodeState.value) {
+        if (phoneCodeState.value.length == 6){
+
+        }
+    }
+
     LaunchedEffect(true) {
         role = if (childrenList.isNotEmpty()) "PARENT" else "STUDENT"
     }
@@ -204,10 +216,83 @@ internal fun InfoScreen(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
+                AnimatedVisibility(visible = setOf(
+                    nameState,
+                    phoneCodeState,
+                    classInfoState,
+                ).all { it.isValid } && role == "STUDENT") {
+                    DodamTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged {
+                                emailState = emailState.copy(focused = it.isFocused)
+                            },
+                        value = emailState.value,
+                        onValueChange = {
+                            emailState = emailState.copy(
+                                value = it,
+                                isValid = emailState.isValid,
+                                isError = false,
+                                errorMessage = "",
+                            )
+                        },
+                        isError = emailState.isError,
+                        onClickRemoveRequest = {
+                            emailState = emailState.copy(value = "")
+                        },
+                        supportText = if (emailState.isError) emailState.errorMessage else "",
+                        label = "이메일",
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Email,
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            emailState = checkEmailStateValid(emailState)
+                            if (emailState.isValid) {
+                                focusManager.moveFocus(FocusDirection.Up)
+                            } else {
+                                focusManager.clearFocus()
+                            }
+                        }),
+                        singleLine = true,
+                    )
+                }
+
+                AnimatedVisibility(
+                    visible = showPhoneCodeTextField
+                ) {
+                    DodamTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged {
+                                phoneCodeState = phoneCodeState.copy(focused = it.isFocused)
+                            },
+                        value = phoneCodeState.value,
+                        onValueChange = { text ->
+                            phoneCodeState = phoneCodeState.copy(
+                                value = text,
+                                isValid = phoneCodeState.isValid,
+                                isError = false,
+                                errorMessage = "",
+                            )
+                        },
+                        label = "전화번호 인증코드",
+                        isError = phoneCodeState.isError,
+                        onClickRemoveRequest = {
+                            phoneCodeState = phoneCodeState.copy(value = "")
+                        },
+                        supportText = if (phoneCodeState.isError) phoneCodeState.errorMessage else "",
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.clearFocus()
+                        }),
+                        singleLine = true,
+                    )
+                }
+
                 AnimatedVisibility(
                     visible = setOf(
                         nameState,
-                        emailState,
                         classInfoState,
                     ).all { it.isValid } || role == "PARENT" && nameState.isValid,
                 ) {
@@ -254,43 +339,7 @@ internal fun InfoScreen(
                         singleLine = true,
                     )
                 }
-                AnimatedVisibility(visible = nameState.isValid && classInfoState.isValid && role == "STUDENT") {
-                    DodamTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onFocusChanged {
-                                emailState = emailState.copy(focused = it.isFocused)
-                            },
-                        value = emailState.value,
-                        onValueChange = {
-                            emailState = emailState.copy(
-                                value = it,
-                                isValid = emailState.isValid,
-                                isError = false,
-                                errorMessage = "",
-                            )
-                        },
-                        isError = emailState.isError,
-                        onClickRemoveRequest = {
-                            emailState = emailState.copy(value = "")
-                        },
-                        supportText = if (emailState.isError) emailState.errorMessage else "",
-                        label = "이메일",
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.Email,
-                        ),
-                        keyboardActions = KeyboardActions(onNext = {
-                            emailState = checkEmailStateValid(emailState)
-                            if (emailState.isValid) {
-                                focusManager.moveFocus(FocusDirection.Up)
-                            } else {
-                                focusManager.clearFocus()
-                            }
-                        }),
-                        singleLine = true,
-                    )
-                }
+
                 AnimatedVisibility(visible = nameState.isValid && role == "STUDENT") {
                     DodamTextField(
                         modifier = Modifier
@@ -506,6 +555,9 @@ internal fun InfoScreen(
                     },
                     enabled =
                     when {
+                        buttonText == "인증" ->{
+                            buttonEnabled
+                        }
                         role == "STUDENT" -> {
                             nameState.value.length in 2..4 &&
                                     classInfoState.value.length == 4 &&
