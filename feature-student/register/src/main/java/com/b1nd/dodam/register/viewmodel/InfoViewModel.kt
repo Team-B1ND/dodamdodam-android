@@ -8,9 +8,15 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.register.state.InfoSideEffect
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 class InfoViewModel: ViewModel(), KoinComponent {
     private val memberRepository: MemberRepository by inject()
+
+    private val _sideEffect = MutableSharedFlow<InfoSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
     fun getAuthCode(type: String, identifier: String){
         Log.d("TAG", "getAuthCode: $identifier")
@@ -19,6 +25,11 @@ class InfoViewModel: ViewModel(), KoinComponent {
                 when(it){
                     is Result.Success -> {
                         Log.d("TAG", "성공: ${it.data}")
+                        if (type == "PHONE"){
+                            _sideEffect.emit(InfoSideEffect.SuccessGetAuthPhoneCode)
+                        }else if(type == "EMAIL"){
+                            _sideEffect.emit(InfoSideEffect.SuccessGetAuthEmailCode)
+                        }
                     }
                     is Result.Error -> {
                         it.error.printStackTrace()

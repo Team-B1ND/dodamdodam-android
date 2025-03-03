@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,8 +46,10 @@ import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
+import com.b1nd.dodam.register.state.InfoSideEffect
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.register.viewmodel.InfoViewModel
+import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.util.PhoneVisualTransformation
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import org.koin.androidx.compose.koinViewModel
@@ -72,8 +75,38 @@ internal fun InfoScreen(
     var classInfoState by remember { mutableStateOf(TextFieldState()) }
     var classInfoText by remember { mutableStateOf(TextFieldValue()) }
     val focusManager = LocalFocusManager.current
+
     var role by remember { mutableStateOf("STUDENT") }
-    var buttonText by remember { mutableStateOf("") }
+    var buttonText by remember { mutableStateOf("전화번호 인증코드 전송") }
+    var authType by remember { mutableStateOf("PHONE") }
+    LaunchedEffect(true) {
+        viewModel.sideEffect.collect {
+            when(it){
+                is InfoSideEffect.NavigateToAuth ->{
+                    onNextClick(
+                        nameState.value,
+                        classInfoState.value[0].toString(),
+                        classInfoState.value[1].toString(),
+                        classInfoState.value[2].toString() + classInfoState.value[3].toString(),
+                        emailState.value,
+                        phoneNumberState.value,
+                    )
+                }
+                is InfoSideEffect.SuccessGetAuthPhoneCode ->{
+                    buttonText = "인증"
+                }
+                is InfoSideEffect.SuccessGetAuthEmailCode ->{
+                    buttonText = "인증"
+                }
+                is InfoSideEffect.SuccessVerifyAuthPhoneCode ->{
+                    buttonText = "이메일 인증코드 전송"
+                }
+                is InfoSideEffect.SuccessVerifyAuthEmilCode ->{
+
+                }
+            }
+        }
+    }
     LaunchedEffect(classInfoState.isValid) {
         if (classInfoState.isValid) {
             focusManager.moveFocus(FocusDirection.Up)
@@ -91,7 +124,6 @@ internal fun InfoScreen(
     }
     LaunchedEffect(true) {
         role = if (childrenList.isNotEmpty()) "PARENT" else "STUDENT"
-        buttonText = if (childrenList.isNotEmpty()) "전화번호 인증코드 전송" else "이메일 인증코드 전송"
     }
 
     Scaffold(
@@ -466,15 +498,11 @@ internal fun InfoScreen(
                         .padding(top = 24.dp)
                         .fillMaxWidth(),
                     onClick = {
-                        viewModel.getAuthCode(type = "PHONE", identifier = phoneNumberState.value)
-//                        onNextClick(
-//                            nameState.value,
-//                            classInfoState.value[0].toString(),
-//                            classInfoState.value[1].toString(),
-//                            classInfoState.value[2].toString() + classInfoState.value[3].toString(),
-//                            emailState.value,
-//                            phoneNumberState.value,
-//                        )
+                        if (buttonText == "인증"){
+
+                        }else{
+                            viewModel.getAuthCode(type = authType, identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value)
+                        }
                     },
                     enabled =
                     when {
