@@ -38,6 +38,7 @@ import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ColoredTrophy
 
@@ -237,7 +238,7 @@ private fun DodamClubMember(
                     // DDS 에 Crown 추가하면 아이콘 Crown 으로 바꿀 예정입니다.
                     Image(
                         modifier = Modifier.size(16.dp),
-                        imageVector = ColoredTrophy,
+                        imageVector = DodamIcons.Crown.value,
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(DodamTheme.colors.statusCautionary),
                     )
