@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.dodam.design.system.cmm)
     implementation(libs.firebase.message)
     implementation(projects.ui)
+    implementation(project(":feature-student:club"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)

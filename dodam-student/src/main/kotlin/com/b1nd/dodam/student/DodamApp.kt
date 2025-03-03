@@ -25,6 +25,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.b1nd.dodam.club.navigation.clubScreen
 import com.b1nd.dodam.asknightstudy.navigation.askNightStudyScreen
 import com.b1nd.dodam.asknightstudy.navigation.navigateToAskNightStudy
 import com.b1nd.dodam.askout.navigation.askOutScreen
@@ -59,6 +60,7 @@ import com.b1nd.dodam.student.main.navigation.mainScreen
 import com.b1nd.dodam.student.main.navigation.navigateToMain
 import com.b1nd.dodam.student.point.navigation.navigateToPoint
 import com.b1nd.dodam.student.point.navigation.pointScreen
+import com.b1nd.dodam.club.navigation.navigateToClub
 import com.b1nd.dodam.wakeupsong.navigation.navigateToWakeupSong
 import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -156,6 +158,7 @@ fun DodamApp(
                 navigateToAddOuting = navController::navigateToAskOut,
                 navigateToSetting = navController::navigateToSetting,
                 navigateToMyPoint = navController::navigateToPoint,
+                navigateToClub = navController::navigateToClub,
                 navigateToAddBus = {
                     navController.navigateToBus()
                 },
@@ -268,6 +271,13 @@ fun DodamApp(
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
                 },
+            )
+            clubScreen(
+                popBackStack = navController::popBackStack,
+                showToast = { status, text ->
+                    state = status
+                    scope.launch { snackbarHostState.showSnackbar(text) }
+                }
             )
             settingScreen(
                 versionInfo = "3.4.2",
