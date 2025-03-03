@@ -1,5 +1,6 @@
 package com.b1nd.dodam.register
 
+import android.icu.text.IDNA.Info
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -45,12 +46,15 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
 import com.b1nd.dodam.register.state.TextFieldState
+import com.b1nd.dodam.register.viewmodel.InfoViewModel
 import com.b1nd.dodam.ui.util.PhoneVisualTransformation
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-fun InfoScreen(
+internal fun InfoScreen(
+    viewModel: InfoViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     onNextClick: (
         name: String,
@@ -462,14 +466,15 @@ fun InfoScreen(
                         .padding(top = 24.dp)
                         .fillMaxWidth(),
                     onClick = {
-                        onNextClick(
-                            nameState.value,
-                            classInfoState.value[0].toString(),
-                            classInfoState.value[1].toString(),
-                            classInfoState.value[2].toString() + classInfoState.value[3].toString(),
-                            emailState.value,
-                            phoneNumberState.value,
-                        )
+                        viewModel.getAuthCode(type = "PHONE", identifier = phoneNumberState.value)
+//                        onNextClick(
+//                            nameState.value,
+//                            classInfoState.value[0].toString(),
+//                            classInfoState.value[1].toString(),
+//                            classInfoState.value[2].toString() + classInfoState.value[3].toString(),
+//                            emailState.value,
+//                            phoneNumberState.value,
+//                        )
                     },
                     enabled =
                     when {

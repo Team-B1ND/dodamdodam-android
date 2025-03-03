@@ -43,6 +43,7 @@ import com.b1nd.dodam.notice.di.noticeViewModelModule
 import com.b1nd.dodam.outing.di.outingViewModelModule
 import com.b1nd.dodam.parent.childrenmanage.di.childrenManageViewModelModule
 import com.b1nd.dodam.parnet.home.di.parentHomeViewModelModule
+import com.b1nd.dodam.register.di.infoViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
 import com.b1nd.dodam.register.di.registerRepositoryModule
 import com.b1nd.dodam.register.di.registerViewModelModule
@@ -69,7 +70,7 @@ class DodamApplication : Application() {
                 listOf(
                     keystoreManagerModule,
                     networkCoreModule,
-                    dataStoreModule,
+                     dataStoreModule,
                     dispatchersModule,
                     coroutineScopeModule,
                     mealRepositoryModule,
@@ -118,6 +119,7 @@ class DodamApplication : Application() {
                     groupDetailViewModelModule,
                     groupWaitingViewModelModule,
                     childrenManageViewModelModule,
+                    infoViewModelModule
                 ) + mainViewModelModules,
             )
         }

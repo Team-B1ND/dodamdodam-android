@@ -61,4 +61,11 @@ internal class MemberRepositoryImpl(
             )
         }.asResult().flowOn(dispatcher)
     }
+    override suspend fun getAuthCode(type: String, identifier: String): Flow<Result<Unit>> {
+        return flow {
+            emit(network.getAuthCode(type = type, identifier = identifier))
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
 }

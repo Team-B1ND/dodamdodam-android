@@ -1,6 +1,7 @@
 package com.b1nd.dodam.member.api
 
 import com.b1nd.dodam.member.datasource.MemberDataSource
+import com.b1nd.dodam.member.model.AuthCodeRequest
 import com.b1nd.dodam.member.model.EditMemberInfoRequest
 import com.b1nd.dodam.member.model.MemberInfoResponse
 import com.b1nd.dodam.network.core.DodamUrl
@@ -14,6 +15,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.patch
+import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
 internal class MemberService(
@@ -58,5 +60,15 @@ internal class MemberService(
     override suspend fun getChildren(code: String): MemberResponse = safeRequest {
         client.get("${DodamUrl.Member.CODE}/$code") {
         }.body<Response<MemberResponse>>()
+    }
+
+    override suspend fun getAuthCode(type: String, identifier: String) {
+        return defaultSafeRequest {
+            client.post("${DodamUrl.Member.AUTH_CODE}/$type"){
+                setBody(
+                    AuthCodeRequest(identifier)
+                )
+            }.body<DefaultResponse>()
+        }
     }
 }
