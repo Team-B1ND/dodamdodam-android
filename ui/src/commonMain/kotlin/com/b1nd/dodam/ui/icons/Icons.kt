@@ -23,9 +23,11 @@ import dodamdodam_android.ui.generated.resources.ic_colored_smiling_eyes
 import dodamdodam_android.ui.generated.resources.ic_colored_tent
 import dodamdodam_android.ui.generated.resources.ic_colored_trophy
 import dodamdodam_android.ui.generated.resources.ic_colored_xmark_circle
+import dodamdodam_android.ui.generated.resources.ic_crown
 import dodamdodam_android.ui.generated.resources.ic_default_profile
 import dodamdodam_android.ui.generated.resources.ic_default_user
 import dodamdodam_android.ui.generated.resources.ic_dodamlogo
+import dodamdodam_android.ui.generated.resources.ic_silhouette
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -124,3 +126,11 @@ val ColoredSchool
 val ColoredCheckmarkCircle
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_checkmark_circle)
+
+val Crown
+    @Composable
+    get() = vectorResource(Res.drawable.ic_crown)
+
+val Silhouette
+    @Composable
+    get() = vectorResource(Res.drawable.ic_silhouette)
