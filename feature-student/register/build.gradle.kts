@@ -16,6 +16,7 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.12.1")
     implementation(projects.featureParent.childrenManage)
     implementation(projects.data.register)
+    implementation(projects.data.member)
     implementation(libs.bottomsheetdialog.compose)
     implementation(projects.common)
     implementation(projects.ui)
