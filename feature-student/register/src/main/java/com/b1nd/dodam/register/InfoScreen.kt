@@ -1,6 +1,7 @@
 package com.b1nd.dodam.register
 
 import android.icu.text.IDNA.Info
+import android.os.Build
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -130,7 +131,7 @@ internal fun InfoScreen(
     }
     LaunchedEffect(phoneCodeState.value) {
         if (phoneCodeState.value.length == 6){
-
+            buttonEnabled = true
         }
     }
 
@@ -548,7 +549,8 @@ internal fun InfoScreen(
                         .fillMaxWidth(),
                     onClick = {
                         if (buttonText == "인증"){
-
+                            Log.d("TAG", "InfoScreen: ${Build.PRODUCT}, ${Build.MODEL}")
+                            viewModel.verifyAuthCode(type = authType, identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value, authCode = phoneCodeState.value, userAgent = Build.PRODUCT)
                         }else{
                             viewModel.getAuthCode(type = authType, identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value)
                         }

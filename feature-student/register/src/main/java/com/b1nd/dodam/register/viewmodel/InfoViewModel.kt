@@ -39,4 +39,19 @@ class InfoViewModel: ViewModel(), KoinComponent {
             }
         }
     }
+    fun verifyAuthCode(type: String, identifier: String, authCode: String, userAgent: String){
+        viewModelScope.launch {
+            memberRepository.verifyAuthCode(type, identifier, authCode, userAgent).collect{
+                when(it){
+                    is Result.Success -> {
+                        Log.d("TAG", "verifyAuthCode: ${it.data}")
+                    }
+                    is Result.Error -> {
+                        it.error.printStackTrace()
+                    }
+                    is Result.Loading -> {}
+                }
+            }
+        }
+    }
 }
