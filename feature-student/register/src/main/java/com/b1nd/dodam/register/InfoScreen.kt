@@ -67,8 +67,8 @@ fun InfoScreen(
     var emailState by remember { mutableStateOf(TextFieldState()) }
     var classInfoState by remember { mutableStateOf(TextFieldState()) }
     var classInfoText by remember { mutableStateOf(TextFieldValue()) }
-
     val focusManager = LocalFocusManager.current
+    var role by remember { mutableStateOf("STUDENT") }
     LaunchedEffect(classInfoState.isValid) {
         if (classInfoState.isValid) {
             focusManager.moveFocus(FocusDirection.Up)
@@ -85,12 +85,12 @@ fun InfoScreen(
         }
     }
     LaunchedEffect(true) {
-        Log.d("TAG", "InfoScreen: $childrenList")
+        role = if (childrenList.isNotEmpty()) "PARENT" else "STUDENT"
     }
 
     Scaffold(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
+            .background(DodamTheme.colors.backgroundNeutral)
             .statusBarsPadding()
             .imePadding(),
         topBar = {
@@ -114,15 +114,16 @@ fun InfoScreen(
                     },
                 ),
                 title = when {
-                    setOf(
-                        nameState,
-                        emailState,
-                        classInfoState,
-                    ).all { it.isValid } -> "전화번호를\n입력해주세요"
-
-                    setOf(nameState, classInfoState).all { it.isValid } -> "이메일을\n입력해주세요"
-                    nameState.isValid -> "학반번호를\n입력해주세요"
-                    else -> "이름을\n입력해주세요"
+                    role == "PARENT" -> when {
+                        nameState.isValid -> "전화번호를\n입력해주세요"
+                        else -> "이름을\n입력해주세요"
+                    }
+                    else -> when {
+                        setOf(nameState, emailState, classInfoState).all { it.isValid } -> "전화번호를\n입력해주세요"
+                        setOf(nameState, classInfoState).all { it.isValid } -> "이메일을\n입력해주세요"
+                        nameState.isValid -> "학반번호를\n입력해주세요"
+                        else -> "이름을\n입력해주세요"
+                    }
                 },
                 onBackClick = onBackClick,
                 type = TopAppBarType.Medium,
@@ -164,7 +165,7 @@ fun InfoScreen(
                         nameState,
                         emailState,
                         classInfoState,
-                    ).all { it.isValid },
+                    ).all { it.isValid } || role == "PARENT" && nameState.isValid,
                 ) {
                     DodamTextField(
                         modifier = Modifier
@@ -209,7 +210,7 @@ fun InfoScreen(
                         singleLine = true,
                     )
                 }
-                AnimatedVisibility(visible = nameState.isValid && classInfoState.isValid) {
+                AnimatedVisibility(visible = nameState.isValid && classInfoState.isValid && role == "STUDENT") {
                     DodamTextField(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -246,7 +247,7 @@ fun InfoScreen(
                         singleLine = true,
                     )
                 }
-                AnimatedVisibility(visible = nameState.isValid) {
+                AnimatedVisibility(visible = nameState.isValid && role == "STUDENT") {
                     DodamTextField(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -412,6 +413,9 @@ fun InfoScreen(
                         singleLine = true,
                     )
                 }
+
+
+
                 DodamTextField(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -465,9 +469,9 @@ fun InfoScreen(
                     )
                 },
                 enabled = nameState.value.length in 2..4 &&
-                    classInfoState.value.length == 4 &&
-                    emailState.value.isNotBlank() &&
-                    phoneNumberState.value.length == 11,
+                        classInfoState.value.length == 4 &&
+                        emailState.value.isNotBlank() &&
+                        phoneNumberState.value.length == 11,
                 text = "다음",
                 buttonRole = ButtonRole.Primary,
                 buttonSize = ButtonSize.Large,
@@ -534,9 +538,9 @@ private fun checkClassInfoStateValid(classInfoState: TextFieldState): TextFieldS
                 }
             } else { // 학번을 4글자로 입력했다면
                 if ((
-                        classInfoState.value[2].toString() +
-                            classInfoState.value[3].toString()
-                        )
+                            classInfoState.value[2].toString() +
+                                    classInfoState.value[3].toString()
+                            )
                         .toInt() in 1..25
                 ) { // 학번이 1~25 사이인가
                     TextFieldState(
