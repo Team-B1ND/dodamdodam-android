@@ -1,5 +1,6 @@
 package com.b1nd.dodam.parent.childrenmanage
 
+import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -57,6 +58,7 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TextButtonType
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
 import com.b1nd.dodam.parent.childrenmanage.model.ChildrenSideEffect
 import org.koin.androidx.compose.koinViewModel
 
@@ -66,6 +68,7 @@ internal fun ChildrenManageScreen(
     viewModel: ChildrenManageViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     changeBottomNavVisible: (visible: Boolean) -> Unit,
+    navigateToInfo: (list: List<ChildrenModel>)->Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     var code by remember { mutableStateOf("") }
@@ -145,10 +148,9 @@ internal fun ChildrenManageScreen(
                             )
                             DodamTextButton(
                                 onClick = {
-                                    if (selectedRelation != null &&
-                                        (selectedRelation != "기타" || etcRelation.isNotBlank())
-                                    ) {
-                                        viewModel.getChildren(code = code)
+                                    if (selectedRelation != null && (selectedRelation != "기타" || etcRelation.isNotBlank())) {
+                                        val relationToSend = if (selectedRelation == "기타") etcRelation else selectedRelation
+                                        viewModel.getChildren(code = code, relation = relationToSend ?: "")
                                     }
                                 },
                                 text = "등록",
@@ -288,8 +290,13 @@ internal fun ChildrenManageScreen(
                     Spacer(Modifier.height(150.dp))
                 }
             }
+
             DodamButton(
-                onClick = {},
+                onClick = {
+                    navigateToInfo(
+                        uiState
+                    )
+                },
                 text = "완료",
                 modifier = Modifier
                     .align(Alignment.BottomCenter)

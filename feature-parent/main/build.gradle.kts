@@ -18,5 +18,6 @@ dependencies {
     implementation(projects.featureParent.home)
     implementation(projects.featureParent.all)
     implementation(projects.featureParent.childrenManage)
+    implementation(projects.featureStudent.register)
     implementation(projects.feature.setting)
 }

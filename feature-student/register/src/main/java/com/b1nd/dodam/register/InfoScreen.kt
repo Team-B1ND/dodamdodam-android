@@ -1,5 +1,6 @@
 package com.b1nd.dodam.register
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +43,7 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
+import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.ui.util.PhoneVisualTransformation
 import com.b1nd.dodam.ui.util.addFocusCleaner
@@ -58,6 +60,7 @@ fun InfoScreen(
         email: String,
         phoneNumber: String,
     ) -> Unit,
+    childrenList: List<ChildrenModel>
 ) {
     var nameState by remember { mutableStateOf(TextFieldState()) }
     var phoneNumberState by remember { mutableStateOf(TextFieldState()) }
@@ -80,6 +83,9 @@ fun InfoScreen(
         if (nameState.isValid) {
             focusManager.moveFocus(FocusDirection.Up)
         }
+    }
+    LaunchedEffect(true) {
+        Log.d("TAG", "InfoScreen: $childrenList")
     }
 
     Scaffold(
