@@ -69,6 +69,7 @@ fun InfoScreen(
     var classInfoText by remember { mutableStateOf(TextFieldValue()) }
     val focusManager = LocalFocusManager.current
     var role by remember { mutableStateOf("STUDENT") }
+    var buttonText by remember { mutableStateOf("") }
     LaunchedEffect(classInfoState.isValid) {
         if (classInfoState.isValid) {
             focusManager.moveFocus(FocusDirection.Up)
@@ -86,6 +87,7 @@ fun InfoScreen(
     }
     LaunchedEffect(true) {
         role = if (childrenList.isNotEmpty()) "PARENT" else "STUDENT"
+        buttonText = if (childrenList.isNotEmpty()) "전화번호 인증코드 전송" else "이메일 인증코드 전송"
     }
 
     Scaffold(
@@ -118,8 +120,14 @@ fun InfoScreen(
                         nameState.isValid -> "전화번호를\n입력해주세요"
                         else -> "이름을\n입력해주세요"
                     }
+
                     else -> when {
-                        setOf(nameState, emailState, classInfoState).all { it.isValid } -> "전화번호를\n입력해주세요"
+                        setOf(
+                            nameState,
+                            emailState,
+                            classInfoState
+                        ).all { it.isValid } -> "전화번호를\n입력해주세요"
+
                         setOf(nameState, classInfoState).all { it.isValid } -> "이메일을\n입력해주세요"
                         nameState.isValid -> "학반번호를\n입력해주세요"
                         else -> "이름을\n입력해주세요"
@@ -449,33 +457,39 @@ fun InfoScreen(
                     singleLine = true,
                 )
 
-                Spacer(modifier = Modifier.height(150.dp))
+                DodamButton(
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        onNextClick(
+                            nameState.value,
+                            classInfoState.value[0].toString(),
+                            classInfoState.value[1].toString(),
+                            classInfoState.value[2].toString() + classInfoState.value[3].toString(),
+                            emailState.value,
+                            phoneNumberState.value,
+                        )
+                    },
+                    enabled =
+                    when {
+                        role == "STUDENT" -> {
+                            nameState.value.length in 2..4 &&
+                                    classInfoState.value.length == 4 &&
+                                    emailState.value.isNotBlank() &&
+                                    phoneNumberState.value.length == 11
+                        }
+                        else -> {
+                            nameState.value.length in 2..4 && phoneNumberState.value.length == 11
+                        }
+                    },
+                    text = buttonText,
+                    buttonRole = ButtonRole.Primary,
+                    buttonSize = ButtonSize.Large,
+                )
             }
 
-            DodamButton(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 24.dp)
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                onClick = {
-                    onNextClick(
-                        nameState.value,
-                        classInfoState.value[0].toString(),
-                        classInfoState.value[1].toString(),
-                        classInfoState.value[2].toString() + classInfoState.value[3].toString(),
-                        emailState.value,
-                        phoneNumberState.value,
-                    )
-                },
-                enabled = nameState.value.length in 2..4 &&
-                        classInfoState.value.length == 4 &&
-                        emailState.value.isNotBlank() &&
-                        phoneNumberState.value.length == 11,
-                text = "다음",
-                buttonRole = ButtonRole.Primary,
-                buttonSize = ButtonSize.Large,
-            )
+
         }
     }
 }
