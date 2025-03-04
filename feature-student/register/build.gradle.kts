@@ -13,7 +13,7 @@ android {
 dependencies {
     implementation(libs.dodam.design.system.cmm)
     implementation(libs.dodam.design.system)
-    implementation ("com.google.code.gson:gson:2.12.1")
+    implementation(libs.google.gson)
     implementation(projects.featureParent.childrenManage)
     implementation(projects.data.register)
     implementation(projects.data.member)
