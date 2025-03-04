@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
@@ -58,7 +59,6 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TextButtonType
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
-import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
 import com.b1nd.dodam.parent.childrenmanage.model.ChildrenSideEffect
 import org.koin.androidx.compose.koinViewModel
 
@@ -68,7 +68,7 @@ internal fun ChildrenManageScreen(
     viewModel: ChildrenManageViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     changeBottomNavVisible: (visible: Boolean) -> Unit,
-    navigateToInfo: (list: List<ChildrenModel>)->Unit
+    navigateToInfo: (list: List<Children>)->Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     var code by remember { mutableStateOf("") }

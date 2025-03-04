@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
@@ -47,7 +48,6 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
-import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
 import com.b1nd.dodam.register.state.InfoSideEffect
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.register.viewmodel.InfoViewModel
@@ -68,9 +68,9 @@ internal fun InfoScreen(
         number: String,
         email: String,
         phoneNumber: String,
-        childrenList: List<ChildrenModel>
+        childrenList: List<Children>
     ) -> Unit,
-    childrenList: List<ChildrenModel>
+    childrenList: List<Children>
 ) {
     var nameState by remember { mutableStateOf(TextFieldState()) }
     var phoneNumberState by remember { mutableStateOf(TextFieldState()) }
@@ -86,7 +86,7 @@ internal fun InfoScreen(
 
     var showPhoneCodeTextField by remember { mutableStateOf(false) }
     var buttonEnabled by remember { mutableStateOf(false) }
-    LaunchedEffect(true) {
+    LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collect {
             when (it) {
                 is InfoSideEffect.NavigateToAuth -> {

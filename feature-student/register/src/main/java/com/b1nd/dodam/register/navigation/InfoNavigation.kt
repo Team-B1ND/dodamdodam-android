@@ -10,7 +10,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navOptions
-import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
+import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.register.InfoScreen
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -18,7 +18,7 @@ import com.google.gson.reflect.TypeToken
 const val INFO_ROUTE = "info"
 
 fun NavController.navigateToInfo(
-    childrenList: List<ChildrenModel>? = null,
+    childrenList: List<Children>? = null,
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
     },
@@ -34,7 +34,7 @@ fun NavController.navigateToInfo(
 }
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, String, String, childrenList: List<ChildrenModel>) -> Unit, onBackClick: () -> Unit) {
+fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, String, String, childrenList: List<Children>) -> Unit, onBackClick: () -> Unit) {
     composable(
         route = "$INFO_ROUTE?childrenList={childrenList}",
         arguments = listOf(
@@ -50,8 +50,8 @@ fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, Str
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) { backStackEntry: NavBackStackEntry ->
         val jsonList = backStackEntry.arguments?.getString("childrenList")
-        val childrenList: List<ChildrenModel> = if (jsonList != null) {
-            Gson().fromJson(jsonList, Array<ChildrenModel>::class.java).toList()
+        val childrenList: List<Children> = if (jsonList != null) {
+            Gson().fromJson(jsonList, Array<Children>::class.java).toList()
         } else {
             emptyList()
         }
