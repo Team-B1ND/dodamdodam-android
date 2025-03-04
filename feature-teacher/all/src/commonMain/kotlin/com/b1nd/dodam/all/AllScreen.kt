@@ -45,6 +45,7 @@ import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ColoredPencil
 import com.b1nd.dodam.ui.icons.ColoredSmilingFaceEyes
 import com.b1nd.dodam.ui.icons.ColoredTrophy
+import com.b1nd.dodam.ui.icons.Silhouette
 import com.b1nd.dodam.ui.icons.Tent
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.viewmodel.koinViewModel
@@ -59,6 +60,7 @@ internal fun AllScreen(
     navigateToNightStudy: () -> Unit,
     navigateToPoint: () -> Unit,
     navigateToGroup: () -> Unit,
+    navigateToClub: () -> Unit,
 ) {
     val uiState by viewModel.state.collectAsState()
 
@@ -179,6 +181,14 @@ internal fun AllScreen(
                     image = ColoredSmilingFaceEyes,
                     text = "그룹",
                     onClick = navigateToGroup,
+                )
+            }
+
+            item {
+                AllCard(
+                    image = Silhouette,
+                    text = "동아리 개설 관리하기",
+                    onClick = navigateToClub,
                 )
             }
         }

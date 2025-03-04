@@ -3,6 +3,9 @@ package com.b1nd.dodam.teacher
 import com.b1nd.dodam.all.di.allViewModelModule
 import com.b1nd.dodam.approvenightstudy.approveNightStudyViewModelModule
 import com.b1nd.dodam.approveouting.approveOutingViewModelModule
+import com.b1nd.dodam.club.di.clubDataSourceModule
+import com.b1nd.dodam.club.di.clubRepositoryModule
+import com.b1nd.dodam.club.di.clubViewModelModule
 import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
 import com.b1nd.dodam.data.banner.di.bannerRepositoryModule
@@ -106,6 +109,9 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             noticeDatasourceModule,
             noticeViewModelModule,
             noticeCreateViewModelModule,
+            clubDataSourceModule,
+            clubViewModelModule,
+            clubRepositoryModule,
         )
         block()
     }
