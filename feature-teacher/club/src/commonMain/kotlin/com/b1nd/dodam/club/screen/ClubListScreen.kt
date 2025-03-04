@@ -279,7 +279,7 @@ internal fun ClubListScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 DodamButton(
-                                    modifier = Modifier.weight(0.33333f),
+                                    modifier = Modifier.weight(0.35f),
                                     text = "거절하기",
                                     buttonRole = ButtonRole.Assistive,
                                     onClick = {
