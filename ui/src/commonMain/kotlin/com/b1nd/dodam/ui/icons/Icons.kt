@@ -28,9 +28,9 @@ import dodamdodam_android.ui.generated.resources.ic_crown
 import dodamdodam_android.ui.generated.resources.ic_default_profile
 import dodamdodam_android.ui.generated.resources.ic_default_user
 import dodamdodam_android.ui.generated.resources.ic_dodamlogo
+import dodamdodam_android.ui.generated.resources.ic_silhouette
 import dodamdodam_android.ui.generated.resources.img_parent
 import dodamdodam_android.ui.generated.resources.img_student
-import dodamdodam_android.ui.generated.resources.ic_silhouette
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.vectorResource
 
