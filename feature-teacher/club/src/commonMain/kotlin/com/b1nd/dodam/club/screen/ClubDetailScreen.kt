@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.club.model.ClubPendingUiState
-import com.b1nd.dodam.club.model.ClubPermission
 import com.b1nd.dodam.club.model.ClubUiState
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
@@ -237,14 +236,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
 }
 
 @Composable
-private fun DodamClubMember(
-    modifier: Modifier = Modifier,
-    image: String? = "",
-    permission: String = "",
-    name: String,
-    grade: Int,
-    room: Int,
-) {
+private fun DodamClubMember(modifier: Modifier = Modifier, image: String? = "", permission: String = "", name: String, grade: Int, room: Int) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,

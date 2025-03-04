@@ -29,7 +29,7 @@ internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), showSnackbar
     val state by viewModel.state.collectAsState()
     var nowPage by remember { mutableStateOf(ClubPage.LIST) }
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         viewModel.loadClubList()
     }
     LaunchedEffect(true) {
