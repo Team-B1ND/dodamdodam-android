@@ -30,18 +30,14 @@ internal class ClubRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun postClubJoinRequests(
-        clubId: Int,
-        clubPriority: String,
-        introduce: String,
-    ): Flow<Result<Unit>> {
+    override suspend fun postClubJoinRequests(clubId: Int, clubPriority: String, introduce: String): Flow<Result<Unit>> {
         return flow {
             emit(
                 network.postClubJoinRequests(
                     clubId = clubId,
                     clubPriority = clubPriority,
-                    introduce = introduce
-                )
+                    introduce = introduce,
+                ),
             )
         }
             .asResult()
@@ -132,18 +128,14 @@ internal class ClubRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun patchClubState(
-        clubIds: ImmutableList<Int>,
-        status: ClubState,
-        reason: String?
-    ): Flow<Result<Unit>> {
+    override suspend fun patchClubState(clubIds: ImmutableList<Int>, status: ClubState, reason: String?): Flow<Result<Unit>> {
         return flow {
             emit(
                 network.patchClubState(
                     clubIds = clubIds,
                     status = status.toString(),
-                    reason = reason
-                )
+                    reason = reason,
+                ),
             )
         }
             .asResult()
