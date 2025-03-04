@@ -75,8 +75,6 @@ class ClubViewModel : ViewModel(), KoinComponent {
         ),
     )
 
-
-
     fun loadClubList() = viewModelScope.launch {
         _state.update {
             it.copy(
