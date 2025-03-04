@@ -18,6 +18,7 @@ object DodamUrl {
     const val UPLOAD = "$BASE_URL/upload"
     const val DIVISION = "$BASE_URL/divisions"
     const val NOTICE = "$BASE_URL/notice"
+    const val CLUB = "$BASE_URL/clubs"
 
     object Meal {
         const val MONTH = "$MEAL/month"
@@ -80,5 +81,9 @@ object DodamUrl {
 
     object Division {
         const val MY = "$DIVISION/my"
+    }
+
+    object Club {
+        const val JOIN_REQUEST = "$CLUB/join-requests"
     }
 }

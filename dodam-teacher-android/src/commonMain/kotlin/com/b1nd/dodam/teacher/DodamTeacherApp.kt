@@ -45,6 +45,8 @@ import com.b1nd.dodam.approvenightstudy.navigation.approveNightStudyScreen
 import com.b1nd.dodam.approvenightstudy.navigation.navigateToApproveNightStudy
 import com.b1nd.dodam.approveouting.approveOutingScreen
 import com.b1nd.dodam.approveouting.navigateToApproveOuting
+import com.b1nd.dodam.club.navigation.clubScreen
+import com.b1nd.dodam.club.navigation.navigateToClub
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
@@ -265,6 +267,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                             navigateToPoint = navHostController::navigateToPoint,
                             navigateToGroup = navHostController::navigateToGroup,
+                            navigateToClub = navHostController::navigateToClub,
                         )
 
                         approveNightStudyScreen(
@@ -330,6 +333,11 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
 
                         groupAddScreen(
+                            showSnackbar = showSnackbar,
+                            popBackStack = navHostController::popBackStack,
+                        )
+
+                        clubScreen(
                             showSnackbar = showSnackbar,
                             popBackStack = navHostController::popBackStack,
                         )
