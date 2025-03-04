@@ -1,7 +1,7 @@
 package com.b1nd.dodam.network.core
 
 object DodamUrl {
-    private const val BASE_URL = "https://dodamapi.b1nd.com"
+    private const val BASE_URL = "http://10.80.161.170:8080"
 
     const val MEAL = "$BASE_URL/meal"
     const val AUTH = "$BASE_URL/auth"

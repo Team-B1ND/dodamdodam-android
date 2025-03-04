@@ -48,7 +48,7 @@ internal fun ClubScreen(
 
                 is ClubSideEffect.SuccessReject -> {
                     viewModel.loadClubList()
-                    showSnackbar(SnackbarState.SUCCESS, "동아리 개설을 거절했습니다..")
+                    showSnackbar(SnackbarState.SUCCESS, "동아리 개설을 거절했습니다.")
                 }
             }
         }

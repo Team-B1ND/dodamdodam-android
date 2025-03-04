@@ -293,6 +293,7 @@ internal fun ClubListScreen(
                                         selectAllowButton(
                                             state.detailClub.id, ClubState.ALLOWED, null
                                         )
+                                        selectedItemIndex = -1
                                     })
                             }
                         }
@@ -349,6 +350,7 @@ internal fun ClubListScreen(
                             selectAllowButton(
                                 state.detailClub.id, ClubState.REJECTED, rejectReason
                             )
+                            selectedItemIndex = -1
                             selectedReject = false
                             rejectReason = ""
                         },
