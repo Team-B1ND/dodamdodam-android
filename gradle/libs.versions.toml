@@ -3,6 +3,7 @@ calfFilePicker = "0.5.5"
 coilVersion = "2.7.0"
 compileSdk = "34"
 minSdk = "28"
+multiplatformMarkdownRenderer = "0.22.0"
 targetSdk = "34"
 appVersion = "3.4.2"
 urlencoderLib = "1.6.0"
@@ -144,6 +145,8 @@ coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp"
 coil = { group = "io.coil-kt.coil3", name = "coil" , version.ref = "coil"}
 
 dodam-design-system = { group = "com.github.Team-B1ND", name = "dds-android", version.ref = "dds" }
+multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "multiplatformMarkdownRenderer" }
+multiplatform-markdown-renderer-coil3 = { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "multiplatformMarkdownRenderer" }
 urlencoder-lib = { module = "net.thauvin.erik.urlencoder:urlencoder-lib", version.ref = "urlencoderLib" }
 wheel-picker-compose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "wheel-picker" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
