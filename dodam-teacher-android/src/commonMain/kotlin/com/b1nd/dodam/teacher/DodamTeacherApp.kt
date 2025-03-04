@@ -267,7 +267,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                             navigateToPoint = navHostController::navigateToPoint,
                             navigateToGroup = navHostController::navigateToGroup,
-                            navigateToClub = navHostController::navigateToClub
+                            navigateToClub = navHostController::navigateToClub,
                         )
 
                         approveNightStudyScreen(
@@ -339,7 +339,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 
                         clubScreen(
                             showSnackbar = showSnackbar,
-                            popBackStack = navHostController::popBackStack
+                            popBackStack = navHostController::popBackStack,
                         )
                     }
 
