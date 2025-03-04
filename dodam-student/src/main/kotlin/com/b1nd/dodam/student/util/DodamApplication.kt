@@ -8,6 +8,8 @@ import com.b1nd.dodam.askwakeupsong.di.askWakeUpSongViewModelModule
 import com.b1nd.dodam.bus.di.busDataSourceModule
 import com.b1nd.dodam.bus.di.busRepositoryModule
 import com.b1nd.dodam.bus.di.busViewModelModule
+import com.b1nd.dodam.club.di.clubDataSourceModule
+import com.b1nd.dodam.club.di.clubRepositoryModule
 import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
 import com.b1nd.dodam.data.banner.di.bannerRepositoryModule
@@ -120,6 +122,8 @@ class DodamApplication : Application() {
                     groupWaitingViewModelModule,
                     childrenManageViewModelModule,
                     infoViewModelModule,
+                    clubDataSourceModule,
+                    clubRepositoryModule,
                 ) + mainViewModelModules,
             )
         }

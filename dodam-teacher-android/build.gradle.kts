@@ -62,6 +62,7 @@ kotlin {
             implementation(projects.feature.groupCreate)
             implementation(projects.feature.groupAdd)
             implementation(projects.feature.editMemberInfo)
+            implementation(projects.featureTeacher.club)
 
 
             implementation(projects.data.login)
@@ -76,6 +77,7 @@ kotlin {
             implementation(projects.data.bundleidInfo)
             implementation(projects.data.division)
             implementation(projects.data.notice)
+            implementation(projects.data.club)
 
             implementation(projects.network.banner)
             implementation(projects.network.meal)
@@ -88,6 +90,7 @@ kotlin {
             implementation(projects.network.upload)
             implementation(projects.network.division)
             implementation(projects.network.notice)
+            implementation(projects.network.club)
 
             androidMain.dependencies {
                 implementation(compose.preview)
