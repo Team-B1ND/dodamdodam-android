@@ -43,6 +43,7 @@ import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
+import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.register.viewmodel.Event
 import com.b1nd.dodam.register.viewmodel.RegisterViewModel
@@ -58,6 +59,7 @@ fun AuthScreen(
     number: String,
     email: String,
     phoneNumber: String,
+    childrenList: List<ChildrenModel>,
     viewModel: RegisterViewModel = koinViewModel(),
     navigateToMain: () -> Unit,
     onBackClick: () -> Unit,

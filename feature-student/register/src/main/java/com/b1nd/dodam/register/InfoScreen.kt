@@ -68,6 +68,7 @@ internal fun InfoScreen(
         number: String,
         email: String,
         phoneNumber: String,
+        childrenList: List<ChildrenModel>
     ) -> Unit,
     childrenList: List<ChildrenModel>
 ) {
@@ -87,29 +88,57 @@ internal fun InfoScreen(
     var buttonEnabled by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
         viewModel.sideEffect.collect {
-            when(it){
-                is InfoSideEffect.NavigateToAuth ->{
-                    onNextClick(
-                        nameState.value,
-                        classInfoState.value[0].toString(),
-                        classInfoState.value[1].toString(),
-                        classInfoState.value[2].toString() + classInfoState.value[3].toString(),
-                        emailState.value,
-                        phoneNumberState.value,
-                    )
+            when (it) {
+                is InfoSideEffect.NavigateToAuth -> {
+                    if(role == "PARENT"){
+                        onNextClick(
+                            nameState.value,
+                            "",
+                            "",
+                            "",
+                            "",
+                            phoneNumberState.value,
+                            childrenList
+                        )
+                    }else{
+                        onNextClick(
+                            nameState.value,
+                            classInfoState.value[0].toString(),
+                            classInfoState.value[1].toString(),
+                            classInfoState.value[2].toString() + classInfoState.value[3].toString(),
+                            emailState.value,
+                            phoneNumberState.value,
+                            childrenList
+                        )
+                    }
                 }
-                is InfoSideEffect.SuccessGetAuthPhoneCode ->{
+
+                is InfoSideEffect.SuccessGetAuthPhoneCode -> {
                     buttonText = "인증"
                     showPhoneCodeTextField = true
                 }
-                is InfoSideEffect.SuccessGetAuthEmailCode ->{
+
+                is InfoSideEffect.SuccessGetAuthEmailCode -> {
                     buttonText = "인증"
                 }
-                is InfoSideEffect.SuccessVerifyAuthPhoneCode ->{
+
+                is InfoSideEffect.SuccessVerifyAuthPhoneCode -> {
                     buttonText = "이메일 인증코드 전송"
                 }
-                is InfoSideEffect.SuccessVerifyAuthEmilCode ->{
 
+                is InfoSideEffect.SuccessVerifyAuthEmilCode -> {
+
+                }
+
+                is InfoSideEffect.FiledVerifyAuthCode -> {
+                    if (it.type == "PHONE"){
+                        phoneCodeState = TextFieldState(
+                            value = phoneCodeState.value,
+                            isValid = false,
+                            isError = true,
+                            errorMessage = "인증번호가 틀렸습니다."
+                        )
+                    }
                 }
             }
         }
@@ -130,7 +159,7 @@ internal fun InfoScreen(
         }
     }
     LaunchedEffect(phoneCodeState.value) {
-        if (phoneCodeState.value.length == 6){
+        if (phoneCodeState.value.length == 6) {
             buttonEnabled = true
         }
     }
@@ -548,24 +577,34 @@ internal fun InfoScreen(
                         .padding(top = 24.dp)
                         .fillMaxWidth(),
                     onClick = {
-                        if (buttonText == "인증"){
+                        if (buttonText == "인증") {
                             Log.d("TAG", "InfoScreen: ${Build.PRODUCT}, ${Build.MODEL}")
-                            viewModel.verifyAuthCode(type = authType, identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value, authCode = phoneCodeState.value, userAgent = Build.PRODUCT)
-                        }else{
-                            viewModel.getAuthCode(type = authType, identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value)
+                            viewModel.verifyAuthCode(
+                                type = authType,
+                                identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value,
+                                authCode = phoneCodeState.value,
+                                userAgent = Build.PRODUCT
+                            )
+                        } else {
+                            viewModel.getAuthCode(
+                                type = authType,
+                                identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value
+                            )
                         }
                     },
                     enabled =
                     when {
-                        buttonText == "인증" ->{
+                        buttonText == "인증" -> {
                             buttonEnabled
                         }
+
                         role == "STUDENT" -> {
                             nameState.value.length in 2..4 &&
                                     classInfoState.value.length == 4 &&
                                     emailState.value.isNotBlank() &&
                                     phoneNumberState.value.length == 11
                         }
+
                         else -> {
                             nameState.value.length in 2..4 && phoneNumberState.value.length == 11
                         }
