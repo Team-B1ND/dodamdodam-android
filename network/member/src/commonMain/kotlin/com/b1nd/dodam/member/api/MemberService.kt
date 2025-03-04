@@ -1,8 +1,8 @@
 package com.b1nd.dodam.member.api
 
 import com.b1nd.dodam.member.datasource.MemberDataSource
-import com.b1nd.dodam.member.model.GetAuthCodeRequest
 import com.b1nd.dodam.member.model.EditMemberInfoRequest
+import com.b1nd.dodam.member.model.GetAuthCodeRequest
 import com.b1nd.dodam.member.model.MemberInfoResponse
 import com.b1nd.dodam.member.model.VerifyAuthCodeRequest
 import com.b1nd.dodam.network.core.DodamUrl
@@ -14,7 +14,6 @@ import com.b1nd.dodam.network.core.util.safeRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
@@ -67,9 +66,9 @@ internal class MemberService(
 
     override suspend fun getAuthCode(type: String, identifier: String) {
         return defaultSafeRequest {
-            client.post("${DodamUrl.Member.AUTH_CODE}/$type"){
+            client.post("${DodamUrl.Member.AUTH_CODE}/$type") {
                 setBody(
-                    GetAuthCodeRequest(identifier)
+                    GetAuthCodeRequest(identifier),
                 )
             }.body<DefaultResponse>()
         }
@@ -77,12 +76,12 @@ internal class MemberService(
 
     override suspend fun verifyAuthCode(type: String, identifier: String, authCode: String, userAgent: String) {
         return defaultSafeRequest {
-            client.post("${DodamUrl.Member.AUTH_CODE}/$type/verify"){
-                headers{
+            client.post("${DodamUrl.Member.AUTH_CODE}/$type/verify") {
+                headers {
                     append("User-Agent", userAgent)
                 }
                 setBody(
-                    VerifyAuthCodeRequest(identifier, authCode)
+                    VerifyAuthCodeRequest(identifier, authCode),
                 )
             }.body<DefaultResponse>()
         }

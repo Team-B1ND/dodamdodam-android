@@ -1,6 +1,5 @@
 package com.b1nd.dodam.parent.childrenmanage
 
-import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -68,7 +67,7 @@ internal fun ChildrenManageScreen(
     viewModel: ChildrenManageViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     changeBottomNavVisible: (visible: Boolean) -> Unit,
-    navigateToInfo: (list: List<Children>)->Unit
+    navigateToInfo: (list: List<Children>) -> Unit,
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     var code by remember { mutableStateOf("") }
@@ -294,7 +293,7 @@ internal fun ChildrenManageScreen(
             DodamButton(
                 onClick = {
                     navigateToInfo(
-                        uiState
+                        uiState,
                     )
                 },
                 text = "완료",

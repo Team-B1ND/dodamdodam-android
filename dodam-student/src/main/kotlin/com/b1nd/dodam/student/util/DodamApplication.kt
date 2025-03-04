@@ -70,7 +70,7 @@ class DodamApplication : Application() {
                 listOf(
                     keystoreManagerModule,
                     networkCoreModule,
-                     dataStoreModule,
+                    dataStoreModule,
                     dispatchersModule,
                     coroutineScopeModule,
                     mealRepositoryModule,
@@ -119,7 +119,7 @@ class DodamApplication : Application() {
                     groupDetailViewModelModule,
                     groupWaitingViewModelModule,
                     childrenManageViewModelModule,
-                    infoViewModelModule
+                    infoViewModelModule,
                 ) + mainViewModelModules,
             )
         }

@@ -80,7 +80,7 @@ internal fun ParentMainScreen(
                 },
                 navigateToInfo = {
                     navController.navigateToInfo()
-                }
+                },
             )
         }
         if (bottomNavVisible) {

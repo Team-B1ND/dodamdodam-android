@@ -1,6 +1,5 @@
 package com.b1nd.dodam.register.navigation
 
-import android.util.Log
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
@@ -26,7 +25,7 @@ fun NavController.navigateToAuth(
     number: String,
     email: String,
     phoneNumber: String,
-    childrenList: List<Children>
+    childrenList: List<Children>,
 ) {
     val route = if (childrenList.isNotEmpty()) {
         val jsonList = Gson().toJson(childrenList)
@@ -63,7 +62,7 @@ fun NavGraphBuilder.authScreen(onRegisterClick: () -> Unit, onBackClick: () -> U
             phoneNumber = it.arguments?.getString("phoneNumber") ?: "",
             childrenList = emptyList(),
             navigateToMain = onRegisterClick,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
         )
     }
 
@@ -73,7 +72,7 @@ fun NavGraphBuilder.authScreen(onRegisterClick: () -> Unit, onBackClick: () -> U
             navArgument("name") { type = NavType.StringType },
             navArgument("phoneNumber") { type = NavType.StringType },
             navArgument("childrenList") { type = NavType.StringType },
-        )
+        ),
     ) {
         val jsonList = it.arguments?.getString("childrenList")
         val childrenList = Gson().fromJson(jsonList, Array<Children>::class.java).toList()

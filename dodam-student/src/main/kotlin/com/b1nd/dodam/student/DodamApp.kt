@@ -190,7 +190,7 @@ fun DodamApp(
             selectRoleScreen(
                 onBackClick = navController::popBackStack,
                 navigateToChildrenManage = navController::navigateToChildrenManageScreen,
-                navigateToInfo = { navController.navigateToInfo() }
+                navigateToInfo = { navController.navigateToInfo() },
             )
             infoScreen(
                 onNextClick = { name, grade, room, number, email, phoneNumber, childrenList ->
@@ -201,7 +201,7 @@ fun DodamApp(
                         number = number,
                         email = email,
                         phoneNumber = phoneNumber,
-                        childrenList = childrenList
+                        childrenList = childrenList,
                     )
                 },
                 onBackClick = navController::popBackStack,
@@ -307,14 +307,13 @@ fun DodamApp(
             )
             childrenManageScreen(
                 popBackStack = navController::popBackStack,
-                changeBottomNavVisible = {_->
-
+                changeBottomNavVisible = { _ ->
                 },
-                navigateToInfo = {childrenList ->
+                navigateToInfo = { childrenList ->
                     navController.navigateToInfo(
-                        childrenList
+                        childrenList,
                     )
-                }
+                },
             )
         }
     }
