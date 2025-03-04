@@ -32,6 +32,8 @@ kotlin{
             implementation(projects.network.club)
             implementation(projects.data.club)
             implementation(libs.multiplatform.compose.material)
+            implementation(libs.multiplatform.markdown.renderer)
+            implementation(libs.multiplatform.markdown.renderer.coil3)
         }
     }
 }

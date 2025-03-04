@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -26,9 +28,12 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.club.model.ClubPendingUiState
 import com.b1nd.dodam.club.model.ClubPermission
@@ -40,7 +45,9 @@ import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import com.b1nd.dodam.ui.icons.ColoredTrophy
+import com.mikepenz.markdown.compose.Markdown
+import com.mikepenz.markdown.model.DefaultMarkdownColors
+import com.mikepenz.markdown.model.DefaultMarkdownTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +61,7 @@ internal fun ClubDetailScreen(
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState
     )
-
+    val columnScrollState = rememberScrollState()
     Scaffold(
         modifier = Modifier.fillMaxSize(), topBar = {
             DodamTopAppBar(
@@ -95,6 +102,7 @@ internal fun ClubDetailScreen(
                                             grade = data.detailClubMember.clubMember[index].grade,
                                             room = data.detailClubMember.clubMember[index].room
                                         )
+                                        Spacer(modifier = Modifier.height(4.dp))
                                     }
                                 }
                             }
@@ -167,7 +175,9 @@ internal fun ClubDetailScreen(
 
                         is ClubPendingUiState.Success -> {
                             Box {
-                                Column {
+                                Column(
+                                    modifier = Modifier.verticalScroll(columnScrollState)
+                                ) {
                                     Text(
                                         text = "${data.detailClubMember.club.type.type} • ${data.detailClubMember.club.subject}",
                                         style = DodamTheme.typography.labelMedium(),
@@ -192,12 +202,34 @@ internal fun ClubDetailScreen(
                                         color = DodamTheme.colors.labelNormal
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
-
-                                    Text(
-                                        text = data.detailClubMember.club.description,
-                                        style = DodamTheme.typography.body1Medium(),
-                                        color = DodamTheme.colors.labelNeutral
+                                    Markdown(
+                                        content = data.detailClubMember.club.description,
+                                        colors = DefaultMarkdownColors(
+                                            text = DodamTheme.colors.labelNeutral,
+                                            codeText = DodamTheme.colors.labelNeutral,
+                                            inlineCodeText = DodamTheme.colors.labelNeutral,
+                                            linkText = DodamTheme.colors.labelNeutral,
+                                            codeBackground = DodamTheme.colors.labelNeutral,
+                                            inlineCodeBackground = DodamTheme.colors.labelNeutral,
+                                            dividerColor = DodamTheme.colors.labelNeutral,
+                                        ),
+                                        typography = DefaultMarkdownTypography(
+                                            h1 = DodamTheme.typography.title1Bold(),
+                                            h2 = DodamTheme.typography.title2Bold(),
+                                            h3 = DodamTheme.typography.title3Bold(),
+                                            h4 = DodamTheme.typography.heading1Bold(),
+                                            h5 = DodamTheme.typography.heading2Bold(),
+                                            h6 = DodamTheme.typography.headlineBold(),
+                                            text = DodamTheme.typography.body1Medium(),
+                                            code = DodamTheme.typography.body1Medium(),
+                                            quote = DodamTheme.typography.body1Medium(),
+                                            paragraph = DodamTheme.typography.body1Medium(),
+                                            ordered = DodamTheme.typography.body1Medium(),
+                                            bullet = DodamTheme.typography.body1Medium(),
+                                            list = DodamTheme.typography.body1Medium(),
+                                        )
                                     )
+                                    Spacer(modifier = Modifier.height(400.dp))
                                 }
                             }
                         }
