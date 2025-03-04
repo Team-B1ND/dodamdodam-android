@@ -193,7 +193,7 @@ fun DodamApp(
                 navigateToInfo = { navController.navigateToInfo() }
             )
             infoScreen(
-                onNextClick = { name, grade, room, number, email, phoneNumber ->
+                onNextClick = { name, grade, room, number, email, phoneNumber, childrenList ->
                     navController.navigateToAuth(
                         name = name,
                         grade = grade,
@@ -201,6 +201,7 @@ fun DodamApp(
                         number = number,
                         email = email,
                         phoneNumber = phoneNumber,
+                        childrenList = childrenList
                     )
                 },
                 onBackClick = navController::popBackStack,

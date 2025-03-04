@@ -6,4 +6,5 @@ interface InfoSideEffect {
     data object SuccessGetAuthEmailCode : InfoSideEffect
     data object SuccessVerifyAuthPhoneCode : InfoSideEffect
     data object SuccessVerifyAuthEmilCode : InfoSideEffect
+    data class FiledVerifyAuthCode(val type: String): InfoSideEffect
 }

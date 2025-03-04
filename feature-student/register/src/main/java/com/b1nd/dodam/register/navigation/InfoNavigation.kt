@@ -34,7 +34,7 @@ fun NavController.navigateToInfo(
 }
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, String, String) -> Unit, onBackClick: () -> Unit) {
+fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, String, String, childrenList: List<ChildrenModel>) -> Unit, onBackClick: () -> Unit) {
     composable(
         route = "$INFO_ROUTE?childrenList={childrenList}",
         arguments = listOf(

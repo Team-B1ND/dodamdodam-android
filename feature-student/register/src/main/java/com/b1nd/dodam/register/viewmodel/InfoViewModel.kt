@@ -41,17 +41,27 @@ class InfoViewModel: ViewModel(), KoinComponent {
     }
     fun verifyAuthCode(type: String, identifier: String, authCode: String, userAgent: String){
         viewModelScope.launch {
-            memberRepository.verifyAuthCode(type, identifier, authCode, userAgent).collect{
-                when(it){
-                    is Result.Success -> {
-                        Log.d("TAG", "verifyAuthCode: ${it.data}")
-                    }
-                    is Result.Error -> {
-                        it.error.printStackTrace()
-                    }
-                    is Result.Loading -> {}
-                }
-            }
+            _sideEffect.emit(InfoSideEffect.NavigateToAuth)
+//            memberRepository.verifyAuthCode(type, identifier, authCode, userAgent).collect{
+//                when(it){
+//                    is Result.Success -> {
+//                        Log.d("TAG", "verifyAuthCode: ${it.data}")
+//                        if (type == "PHONE"){
+//                            _sideEffect.emit(InfoSideEffect.NavigateToAuth)
+//                        }else if(type == "EMAIL"){
+//                            _sideEffect.emit(InfoSideEffect.SuccessGetAuthEmailCode)
+//                        }
+//                    }
+//                    is Result.Error -> {
+//                        Log.d("TAG", "verifyAuthCode: ${it.error.message}")
+//                        if (it.error.message?.substringBefore(":") == "인증코드가 일치하지 않음"){
+//                            _sideEffect.emit(InfoSideEffect.FiledVerifyAuthCode(type))
+//                        }
+//                        it.error.printStackTrace()
+//                    }
+//                    is Result.Loading -> {}
+//                }
+//            }
         }
     }
 }
