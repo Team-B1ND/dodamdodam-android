@@ -12,5 +12,5 @@ data class ClubMemberResponse(
     val grade: Int,
     val room: Int,
     val number: Int,
-    val profileImage: String?
+    val profileImage: String?,
 )

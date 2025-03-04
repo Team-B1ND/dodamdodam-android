@@ -25,15 +25,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.club.model.ClubPendingUiState
 import com.b1nd.dodam.club.model.ClubPermission
@@ -51,23 +47,24 @@ import com.mikepenz.markdown.model.DefaultMarkdownTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ClubDetailScreen(
-    state: ClubUiState,
-    popBackStack: () -> Unit,
-) {
+internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
     val bottomSheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.PartiallyExpanded,
     )
     val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState
+        bottomSheetState,
     )
     val columnScrollState = rememberScrollState()
     Scaffold(
-        modifier = Modifier.fillMaxSize(), topBar = {
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
             DodamTopAppBar(
-                title = "", modifier = Modifier.statusBarsPadding(), onBackClick = popBackStack
+                title = "",
+                modifier = Modifier.statusBarsPadding(),
+                onBackClick = popBackStack,
             )
-        }, containerColor = DodamTheme.colors.backgroundNeutral
+        },
+        containerColor = DodamTheme.colors.backgroundNeutral,
     ) {
         Box(modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 16.dp)) {
             BottomSheetScaffold(
@@ -90,7 +87,7 @@ internal fun ClubDetailScreen(
                                         Text(
                                             text = "멤버현황",
                                             style = DodamTheme.typography.headlineBold(),
-                                            color = DodamTheme.colors.labelNormal
+                                            color = DodamTheme.colors.labelNormal,
                                         )
                                         Spacer(modifier = Modifier.height(6.dp))
                                     }
@@ -100,7 +97,7 @@ internal fun ClubDetailScreen(
                                             permission = data.detailClubMember.clubMember[index].permissions,
                                             name = data.detailClubMember.clubMember[index].name,
                                             grade = data.detailClubMember.clubMember[index].grade,
-                                            room = data.detailClubMember.clubMember[index].room
+                                            room = data.detailClubMember.clubMember[index].room,
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                     }
@@ -108,7 +105,6 @@ internal fun ClubDetailScreen(
                             }
                         }
                     }
-
                 },
                 modifier = Modifier.fillMaxSize(),
                 scaffoldState = scaffoldState,
@@ -134,7 +130,7 @@ internal fun ClubDetailScreen(
                             Text(
                                 text = "에러",
                                 style = DodamTheme.typography.heading1Bold(),
-                                color = DodamTheme.colors.labelNormal
+                                color = DodamTheme.colors.labelNormal,
                             )
                         }
 
@@ -142,33 +138,33 @@ internal fun ClubDetailScreen(
                             Column {
                                 Box(
                                     modifier = Modifier.width(160.dp).height(14.dp)
-                                        .background(brush = shimmerEffect())
+                                        .background(brush = shimmerEffect()),
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(
                                     modifier = Modifier.width(280.dp).height(22.dp)
-                                        .background(brush = shimmerEffect())
+                                        .background(brush = shimmerEffect()),
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(
                                     modifier = Modifier.width(200.dp).height(16.dp)
-                                        .background(brush = shimmerEffect())
+                                        .background(brush = shimmerEffect()),
                                 )
                                 DodamDivider(modifier = Modifier.padding(vertical = 20.dp))
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(
                                     modifier = Modifier.width(160.dp).height(20.dp)
-                                        .background(brush = shimmerEffect())
+                                        .background(brush = shimmerEffect()),
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(
                                     modifier = Modifier.fillMaxWidth().height(18.dp)
-                                        .background(brush = shimmerEffect())
+                                        .background(brush = shimmerEffect()),
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(
                                     modifier = Modifier.width(200.dp).height(18.dp)
-                                        .background(brush = shimmerEffect())
+                                        .background(brush = shimmerEffect()),
                                 )
                             }
                         }
@@ -176,30 +172,30 @@ internal fun ClubDetailScreen(
                         is ClubPendingUiState.Success -> {
                             Box {
                                 Column(
-                                    modifier = Modifier.verticalScroll(columnScrollState)
+                                    modifier = Modifier.verticalScroll(columnScrollState),
                                 ) {
                                     Text(
                                         text = "${data.detailClubMember.club.type.type} • ${data.detailClubMember.club.subject}",
                                         style = DodamTheme.typography.labelMedium(),
-                                        color = DodamTheme.colors.labelAlternative
+                                        color = DodamTheme.colors.labelAlternative,
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text(
                                         text = data.detailClubMember.club.name,
                                         style = DodamTheme.typography.heading1Bold(),
-                                        color = DodamTheme.colors.labelNormal
+                                        color = DodamTheme.colors.labelNormal,
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text(
                                         text = data.detailClubMember.club.description,
                                         style = DodamTheme.typography.body1Medium(),
-                                        color = DodamTheme.colors.labelNormal
+                                        color = DodamTheme.colors.labelNormal,
                                     )
                                     DodamDivider(modifier = Modifier.padding(vertical = 20.dp))
                                     Text(
                                         text = "설명",
                                         style = DodamTheme.typography.headlineBold(),
-                                        color = DodamTheme.colors.labelNormal
+                                        color = DodamTheme.colors.labelNormal,
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Markdown(
@@ -227,7 +223,7 @@ internal fun ClubDetailScreen(
                                             ordered = DodamTheme.typography.body1Medium(),
                                             bullet = DodamTheme.typography.body1Medium(),
                                             list = DodamTheme.typography.body1Medium(),
-                                        )
+                                        ),
                                     )
                                     Spacer(modifier = Modifier.height(400.dp))
                                 }
@@ -251,11 +247,11 @@ private fun DodamClubMember(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         DodamAvatar(
             model = image,
-            avatarSize = AvatarSize.Large
+            avatarSize = AvatarSize.Large,
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
@@ -263,7 +259,7 @@ private fun DodamClubMember(
                 Text(
                     text = name,
                     style = DodamTheme.typography.body1Medium(),
-                    color = DodamTheme.colors.labelNormal
+                    color = DodamTheme.colors.labelNormal,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 if (permission == ClubPermission.CLUB_LEADER) {
@@ -280,38 +276,34 @@ private fun DodamClubMember(
             Text(
                 text = "$grade-$room",
                 style = DodamTheme.typography.body2Medium(),
-                color = DodamTheme.colors.labelAlternative
+                color = DodamTheme.colors.labelAlternative,
             )
         }
     }
 }
 
-
 @Composable
-private fun DodamLoadingClubMember(
-    modifier: Modifier = Modifier,
-    isFirst: Boolean = false,
-) {
+private fun DodamLoadingClubMember(modifier: Modifier = Modifier, isFirst: Boolean = false) {
     Row(
         modifier = modifier.fillMaxWidth().padding(vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             modifier = Modifier.size(34.5.dp)
-                .background(shape = CircleShape, brush = shimmerEffect())
+                .background(shape = CircleShape, brush = shimmerEffect()),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier.width(52.dp).height(20.dp)
-                        .background(brush = shimmerEffect())
+                        .background(brush = shimmerEffect()),
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 if (isFirst) {
                     Box(
                         modifier = Modifier.size(20.dp)
-                            .background(shape = CircleShape, brush = shimmerEffect())
+                            .background(shape = CircleShape, brush = shimmerEffect()),
                     )
                 }
             }

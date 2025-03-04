@@ -2,7 +2,6 @@
 
 package com.b1nd.dodam.club.screen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,7 +26,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -42,18 +39,15 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubPendingUiState
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.ClubUiState
-import com.b1nd.dodam.club.model.DetailClub
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
-import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamLoadingDots
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
@@ -62,13 +56,10 @@ import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TextButtonSize
 import com.b1nd.dodam.designsystem.component.TextButtonType
-import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.component.modifier.dropShadow
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircleFilled
 import kotlinx.collections.immutable.toImmutableList
-import org.koin.core.annotation.KoinExperimentalAPI
-
 
 @Composable
 internal fun ClubListScreen(
@@ -80,53 +71,57 @@ internal fun ClubListScreen(
 ) {
     var clubTypeIndex by remember { mutableIntStateOf(0) }
     val clubTypeList = listOf(
-        "창체", "자율"
+        "창체",
+        "자율",
     )
     var selectedItemIndex by remember { mutableStateOf(-1) }
     val clubTypeItem = List(2) { index ->
         DodamSegment(
             selected = clubTypeIndex == index,
             text = clubTypeList[index],
-            onClick = { clubTypeIndex = index })
+            onClick = { clubTypeIndex = index },
+        )
     }.toImmutableList()
-
 
     var selectedReject by remember { mutableStateOf(false) }
     var rejectReason by remember { mutableStateOf("") }
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
-            modifier = Modifier.fillMaxSize(), topBar = {
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
                 DodamTopAppBar(
                     title = "동아리",
                     modifier = Modifier.statusBarsPadding(),
-                    onBackClick = popBackStack
+                    onBackClick = popBackStack,
                 )
-            }, containerColor = DodamTheme.colors.backgroundNeutral
+            },
+            containerColor = DodamTheme.colors.backgroundNeutral,
         ) {
             Box(
-                modifier = Modifier.fillMaxSize().padding(it)
+                modifier = Modifier.fillMaxSize().padding(it),
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
+                    modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
                 ) {
                     Text(text = "동아리 개설 승인 관리", style = DodamTheme.typography.title2Bold())
                     DodamSegmentedButton(
-                        segments = clubTypeItem, modifier = Modifier.padding(top = 16.dp)
+                        segments = clubTypeItem,
+                        modifier = Modifier.padding(top = 16.dp),
                     )
                     when (val data = state.clubPendingUiState) {
                         ClubPendingUiState.Error -> {
                             Box(
                                 modifier = Modifier.fillMaxWidth().padding(top = 20.dp).background(
                                     color = DodamTheme.colors.backgroundNormal,
-                                    shape = RoundedCornerShape(12.dp)
-                                )
+                                    shape = RoundedCornerShape(12.dp),
+                                ),
                             ) {
                                 Text(
                                     modifier = Modifier.align(Alignment.Center)
                                         .padding(vertical = 16.dp),
                                     text = "아직 등록된 동아리가 없어요.",
                                     style = DodamTheme.typography.labelMedium(),
-                                    color = DodamTheme.colors.labelAlternative
+                                    color = DodamTheme.colors.labelAlternative,
                                 )
                             }
                         }
@@ -151,15 +146,15 @@ internal fun ClubListScreen(
                                     modifier = Modifier.fillMaxWidth().padding(top = 20.dp)
                                         .background(
                                             color = DodamTheme.colors.backgroundNormal,
-                                            shape = RoundedCornerShape(12.dp)
-                                        )
+                                            shape = RoundedCornerShape(12.dp),
+                                        ),
                                 ) {
                                     Text(
                                         modifier = Modifier.align(Alignment.Center)
                                             .padding(vertical = 16.dp),
                                         text = "아직 등록된 동아리가 없어요.",
                                         style = DodamTheme.typography.labelMedium(),
-                                        color = DodamTheme.colors.labelAlternative
+                                        color = DodamTheme.colors.labelAlternative,
                                     )
                                 }
                             } else {
@@ -176,14 +171,15 @@ internal fun ClubListScreen(
                                                     clubs[index].id.toLong(),
                                                     clubs[index].name,
                                                     clubs[index].type,
-                                                    clubs[index].shortDescription
+                                                    clubs[index].shortDescription,
                                                 )
                                             },
                                             club = clubs[index],
                                             isSelected = index == selectedItemIndex,
                                             onDetailButtonClick = {
                                                 selectDetailClub(
-                                                    clubs[index].id.toLong(), Club(
+                                                    clubs[index].id.toLong(),
+                                                    Club(
                                                         id = clubs[index].id,
                                                         name = clubs[index].name,
                                                         shortDescription = clubs[index].shortDescription,
@@ -192,17 +188,16 @@ internal fun ClubListScreen(
                                                         type = clubs[index].type,
                                                         image = clubs[index].image,
                                                         teacher = clubs[index].teacher,
-                                                        state = clubs[index].state
-                                                    )
+                                                        state = clubs[index].state,
+                                                    ),
                                                 )
-                                            }
+                                            },
                                         )
                                     }
                                 }
                             }
                         }
                     }
-
                 }
             }
         }
@@ -220,7 +215,7 @@ internal fun ClubListScreen(
                     if (state.detailClub.isLoading) {
                         Box(
                             modifier = Modifier.fillMaxWidth().height(134.dp),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             DodamLoadingDots()
                         }
@@ -228,55 +223,55 @@ internal fun ClubListScreen(
                         Column {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
                                 Text(
                                     "주제",
                                     style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelAssistive
+                                    color = DodamTheme.colors.labelAssistive,
                                 )
                                 Text(
                                     state.detailClub.type.type,
                                     style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelNeutral
+                                    color = DodamTheme.colors.labelNeutral,
                                 )
                             }
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
                                 Text(
                                     "부장",
                                     style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelAssistive
+                                    color = DodamTheme.colors.labelAssistive,
                                 )
                                 Text(
                                     state.detailClub.leader ?: "없음",
                                     style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelNeutral
+                                    color = DodamTheme.colors.labelNeutral,
                                 )
                             }
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
                                 Text(
                                     "간략 소개",
                                     style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelAssistive
+                                    color = DodamTheme.colors.labelAssistive,
                                 )
                                 Text(
                                     state.detailClub.shortDescription,
                                     style = DodamTheme.typography.headlineMedium(),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    color = DodamTheme.colors.labelNeutral
+                                    color = DodamTheme.colors.labelNeutral,
                                 )
                             }
                             Spacer(modifier = Modifier.height(16.dp))
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
                                 DodamButton(
                                     modifier = Modifier.weight(0.35f),
@@ -284,17 +279,21 @@ internal fun ClubListScreen(
                                     buttonRole = ButtonRole.Assistive,
                                     onClick = {
                                         selectedReject = true
-                                    })
+                                    },
+                                )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 DodamButton(
                                     modifier = Modifier.weight(0.666667f),
                                     text = "승인하기",
                                     onClick = {
                                         selectAllowButton(
-                                            state.detailClub.id, ClubState.ALLOWED, null
+                                            state.detailClub.id,
+                                            ClubState.ALLOWED,
+                                            null,
                                         )
                                         selectedItemIndex = -1
-                                    })
+                                    },
+                                )
                             }
                         }
                     }
@@ -306,23 +305,23 @@ internal fun ClubListScreen(
         if (selectedReject) {
             Box(
                 modifier = Modifier.fillMaxSize().alpha(0.3f).background(
-                    color = DodamTheme.colors.staticBlack
+                    color = DodamTheme.colors.staticBlack,
                 ).clickable {
                     selectedReject = false
                     rejectReason = ""
-                }
+                },
             )
             Column(
                 modifier = Modifier.align(Alignment.Center).fillMaxWidth(0.8f).height(200.dp)
                     .background(
                         shape = RoundedCornerShape(16.dp),
-                        color = DodamTheme.colors.backgroundNormal
-                    ).padding(horizontal = 24.dp, vertical = 26.dp)
+                        color = DodamTheme.colors.backgroundNormal,
+                    ).padding(horizontal = 24.dp, vertical = 26.dp),
             ) {
                 Text(
                     text = "거절 사유를 입력해주세요.",
                     style = DodamTheme.typography.heading1Bold(),
-                    color = DodamTheme.colors.labelNormal
+                    color = DodamTheme.colors.labelNormal,
                 )
                 DodamTextField(
                     value = rejectReason,
@@ -330,7 +329,7 @@ internal fun ClubListScreen(
                         rejectReason = it
                     },
                     singleLine = true,
-                    onClickRemoveRequest = { rejectReason = "" }
+                    onClickRemoveRequest = { rejectReason = "" },
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Row {
@@ -341,23 +340,24 @@ internal fun ClubListScreen(
                             selectedReject = false
                             rejectReason = ""
                         },
-                        text = "취소"
+                        text = "취소",
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     DodamButton(
                         modifier = Modifier.weight(1f),
                         onClick = {
                             selectAllowButton(
-                                state.detailClub.id, ClubState.REJECTED, rejectReason
+                                state.detailClub.id,
+                                ClubState.REJECTED,
+                                rejectReason,
                             )
                             selectedItemIndex = -1
                             selectedReject = false
                             rejectReason = ""
                         },
-                        text = "확인"
+                        text = "확인",
                     )
                 }
-
             }
         }
     }
@@ -365,32 +365,27 @@ internal fun ClubListScreen(
 
 // TODO : 컴포넌트로 뺄 예정입니다.
 @Composable
-private fun DodamClub(
-    modifier: Modifier = Modifier,
-    club: Club,
-    isSelected: Boolean,
-    onDetailButtonClick: () -> Unit,
-) {
+private fun DodamClub(modifier: Modifier = Modifier, club: Club, isSelected: Boolean, onDetailButtonClick: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(86.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         if (club.image.isNullOrEmpty()) {
             Box(
                 modifier = Modifier.width(83.dp).height(86.dp)
                     .background(
                         brush = shimmerEffect(),
-                        shape = RoundedCornerShape(8.dp)
-                    )
+                        shape = RoundedCornerShape(8.dp),
+                    ),
             )
         } else {
             AsyncImage(
                 modifier = Modifier.clip(shape = RoundedCornerShape(8.dp)).width(83.dp)
                     .height(86.dp),
                 model = club.image,
-                contentDescription = "동아리"
+                contentDescription = "동아리",
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
@@ -398,20 +393,20 @@ private fun DodamClub(
             Text(
                 text = club.subject,
                 style = DodamTheme.typography.caption1Medium(),
-                color = DodamTheme.colors.labelAlternative
+                color = DodamTheme.colors.labelAlternative,
             )
             Row {
                 Text(
                     text = club.name,
                     style = DodamTheme.typography.headlineBold(),
-                    color = DodamTheme.colors.labelNormal
+                    color = DodamTheme.colors.labelNormal,
                 )
                 DodamTextButton(
                     onClick = onDetailButtonClick,
                     text = "자세히보기",
                     size = TextButtonSize.Small,
                     type = TextButtonType.Primary,
-                    showUnderline = false
+                    showUnderline = false,
                 )
             }
             Text(
@@ -419,7 +414,7 @@ private fun DodamClub(
                 style = DodamTheme.typography.body2Medium(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = DodamTheme.colors.labelNormal
+                color = DodamTheme.colors.labelNormal,
             )
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -434,24 +429,20 @@ private fun DodamClub(
     }
 }
 
-
 @Composable
-private fun DodamLoadingClub(
-    modifier: Modifier = Modifier,
-) {
+private fun DodamLoadingClub(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(86.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
         Box(
             modifier = Modifier.width(83.dp).height(86.dp)
                 .background(
                     brush = shimmerEffect(),
                     shape = RoundedCornerShape(8.dp),
-                )
+                ),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -461,7 +452,7 @@ private fun DodamLoadingClub(
                     .background(
                         brush = shimmerEffect(),
                         shape = RoundedCornerShape(4.dp),
-                    )
+                    ),
             )
             Spacer(modifier = Modifier.height(1.dp))
             Row {
@@ -470,7 +461,7 @@ private fun DodamLoadingClub(
                         .background(
                             brush = shimmerEffect(),
                             shape = RoundedCornerShape(4.dp),
-                        )
+                        ),
                 )
             }
             Spacer(modifier = Modifier.height(1.dp))
@@ -479,12 +470,11 @@ private fun DodamLoadingClub(
                     .background(
                         brush = shimmerEffect(),
                         shape = RoundedCornerShape(4.dp),
-                    )
+                    ),
             )
         }
     }
 }
-
 
 @Composable
 private fun FakeBottomSheet(
@@ -534,4 +524,3 @@ private fun FakeBottomSheet(
         }
     }
 }
-

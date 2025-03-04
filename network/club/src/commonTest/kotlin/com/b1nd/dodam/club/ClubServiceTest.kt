@@ -17,11 +17,11 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 
 class ClubServiceTest {
     private lateinit var clubService: ClubService
@@ -38,12 +38,11 @@ class ClubServiceTest {
                     val path = "https://" + request.url.host + request.url.fullPath
                     val method = request.method.value
 
-                    fun MockRequestHandleScope.makeOkRespond(content: String): HttpResponseData =
-                        respond(
-                            content = content,
-                            status = HttpStatusCode.OK,
-                            headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                        )
+                    fun MockRequestHandleScope.makeOkRespond(content: String): HttpResponseData = respond(
+                        content = content,
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
                     when {
                         DodamUrl.Club.JOIN_REQUEST + "/1" == path && method == "POST" -> {
                             makeOkRespond(
@@ -52,7 +51,7 @@ class ClubServiceTest {
                                       "message": "성공적인 해결",
                                       "status": 200
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.Club.JOIN_REQUEST == path && method == "GET" -> {
@@ -62,7 +61,7 @@ class ClubServiceTest {
                                       "message": "동아리 입부 신청 성공",
                                       "status": 200
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
 
@@ -73,7 +72,7 @@ class ClubServiceTest {
                                       "message": "성공적인 거절",
                                       "status": 200
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
 
@@ -98,7 +97,7 @@ class ClubServiceTest {
                                             "state": "ALLOWED"
                                         }
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
 
@@ -130,7 +129,7 @@ class ClubServiceTest {
                                             }
                                         ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
 
@@ -152,7 +151,7 @@ class ClubServiceTest {
                                             "profileImage": "https://avatars.githubusercontent.com/u/93782306?s=280&v=4"
                                          }
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
 
@@ -176,7 +175,7 @@ class ClubServiceTest {
                                             }
                                         ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
 
@@ -200,7 +199,7 @@ class ClubServiceTest {
                                             }
                                         ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
 
@@ -228,7 +227,7 @@ class ClubServiceTest {
                                             }
                                         ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                         DodamUrl.CLUB + "/joined" == path && method == "GET" -> {
@@ -251,7 +250,7 @@ class ClubServiceTest {
                                             }
                                         ]
                                     }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
 
@@ -277,14 +276,12 @@ class ClubServiceTest {
                                                 }
                                             ]
                                         }
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
 
                         else -> error("Unhandled $path")
                     }
-
-
                 }
             }
         }
@@ -332,11 +329,11 @@ class ClubServiceTest {
                 teacher = TeacherResponse(
                     name = "제프 딘",
                     position = "구글",
-                    tel = "010-1234-5678"
+                    tel = "010-1234-5678",
                 ),
-                state = "ALLOWED"
+                state = "ALLOWED",
             ),
-            response
+            response,
         )
     }
 
@@ -358,12 +355,12 @@ class ClubServiceTest {
                     teacher = TeacherResponse(
                         name = "제프 딘",
                         position = "구글",
-                        tel = "010-1234-5678"
+                        tel = "010-1234-5678",
                     ),
-                    state = "ALLOWED"
-                )
+                    state = "ALLOWED",
+                ),
             ),
-            response.first()
+            response.first(),
         )
     }
 
@@ -380,8 +377,9 @@ class ClubServiceTest {
                 grade = 2,
                 room = 2,
                 number = 8,
-                profileImage = "https://avatars.githubusercontent.com/u/93782306?s=280&v=4"
-            ), response
+                profileImage = "https://avatars.githubusercontent.com/u/93782306?s=280&v=4",
+            ),
+            response,
         )
     }
 
@@ -399,13 +397,11 @@ class ClubServiceTest {
                 grade = 2,
                 room = 2,
                 number = 8,
-                profileImage = "https://avatars.githubusercontent.com/u/93782306?s=280&v=4"
+                profileImage = "https://avatars.githubusercontent.com/u/93782306?s=280&v=4",
             ),
-            response.first()
+            response.first(),
         )
     }
-
-
 
     @Test
     fun 모든_멤버_가져오기() = runTest(testDispatcher) {
@@ -421,9 +417,9 @@ class ClubServiceTest {
                 grade = 2,
                 room = 2,
                 number = 8,
-                profileImage = null
+                profileImage = null,
             ),
-            response.first()
+            response.first(),
         )
     }
 
@@ -442,11 +438,11 @@ class ClubServiceTest {
                 teacher = TeacherResponse(
                     name = "제프 딘",
                     position = "구글",
-                    tel = "010-1234-5678"
+                    tel = "010-1234-5678",
                 ),
-                state = "ALLOWED"
+                state = "ALLOWED",
             ),
-            response.first()
+            response.first(),
         )
     }
 
@@ -463,9 +459,9 @@ class ClubServiceTest {
                 image = "이미지",
                 type = "CREATIVE_ACTIVITY_CLUB",
                 teacher = null,
-                state = "ALLOWED"
+                state = "ALLOWED",
             ),
-            response.first()
+            response.first(),
         )
     }
 
@@ -484,9 +480,9 @@ class ClubServiceTest {
                 image = "이미지",
                 type = "CREATIVE_ACTIVITY_CLUB",
                 teacher = null,
-                state = "PENDING"
+                state = "PENDING",
             ),
-            response.first()
+            response.first(),
         )
     }
 }

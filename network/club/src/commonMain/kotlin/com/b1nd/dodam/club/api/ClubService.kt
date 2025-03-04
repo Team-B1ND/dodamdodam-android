@@ -8,19 +8,19 @@ import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import com.b1nd.dodam.club.model.request.ClubStateRequest
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.DefaultResponse
+import com.b1nd.dodam.network.core.model.Response
+import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.network.core.util.safeRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import kotlinx.collections.immutable.ImmutableList
-import io.ktor.client.request.get
-import com.b1nd.dodam.network.core.model.Response
-import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import io.ktor.client.request.delete
+import io.ktor.client.request.get
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 class ClubService(
@@ -32,11 +32,7 @@ class ClubService(
         }
     }
 
-    override suspend fun postClubJoinRequests(
-        clubId: Int,
-        clubPriority: String,
-        introduce: String,
-    ) {
+    override suspend fun postClubJoinRequests(clubId: Int, clubPriority: String, introduce: String) {
         defaultSafeRequest {
             client.post(DodamUrl.Club.JOIN_REQUEST) {
                 contentType(ContentType.Application.Json)
@@ -44,8 +40,8 @@ class ClubService(
                     ClubJoinRequest(
                         clubId = clubId,
                         clubPriority = clubPriority,
-                        introduction = introduce
-                    )
+                        introduction = introduce,
+                    ),
                 )
             }.body<DefaultResponse>()
         }
@@ -69,7 +65,6 @@ class ClubService(
                 .body<Response<List<ClubJoinResponse>>>()
         }.toImmutableList()
     }
-
 
     override suspend fun getClubLeader(id: Int): ClubMemberResponse {
         return safeRequest {
@@ -108,11 +103,7 @@ class ClubService(
         }.toImmutableList()
     }
 
-    override suspend fun patchClubState(
-        clubIds: ImmutableList<Int>,
-        status: String,
-        reason: String?,
-    ) {
+    override suspend fun patchClubState(clubIds: ImmutableList<Int>, status: String, reason: String?) {
         defaultSafeRequest {
             client.patch(DodamUrl.CLUB + "/state") {
                 contentType(ContentType.Application.Json)
@@ -120,8 +111,8 @@ class ClubService(
                     ClubStateRequest(
                         clubIds = clubIds,
                         status = status,
-                        reason = reason
-                    )
+                        reason = reason,
+                    ),
                 )
             }.body<DefaultResponse>()
         }
