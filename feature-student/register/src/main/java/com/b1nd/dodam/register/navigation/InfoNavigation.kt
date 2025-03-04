@@ -51,8 +51,7 @@ fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, Str
     ) { backStackEntry: NavBackStackEntry ->
         val jsonList = backStackEntry.arguments?.getString("childrenList")
         val childrenList: List<ChildrenModel> = if (jsonList != null) {
-            val type = object : TypeToken<List<ChildrenModel>>() {}.type
-            Gson().fromJson(jsonList, type)
+            Gson().fromJson(jsonList, Array<ChildrenModel>::class.java).toList()
         } else {
             emptyList()
         }
