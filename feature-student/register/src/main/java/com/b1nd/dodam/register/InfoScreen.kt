@@ -1,17 +1,13 @@
 package com.b1nd.dodam.register
 
-import android.icu.text.IDNA.Info
 import android.os.Build
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -20,16 +16,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
@@ -39,7 +32,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -51,7 +43,6 @@ import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.register.state.InfoSideEffect
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.register.viewmodel.InfoViewModel
-import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.util.PhoneVisualTransformation
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import org.koin.androidx.compose.koinViewModel
@@ -68,9 +59,9 @@ internal fun InfoScreen(
         number: String,
         email: String,
         phoneNumber: String,
-        childrenList: List<Children>
+        childrenList: List<Children>,
     ) -> Unit,
-    childrenList: List<Children>
+    childrenList: List<Children>,
 ) {
     var nameState by remember { mutableStateOf(TextFieldState()) }
     var phoneNumberState by remember { mutableStateOf(TextFieldState()) }
@@ -93,7 +84,7 @@ internal fun InfoScreen(
         viewModel.sideEffect.collect {
             when (it) {
                 is InfoSideEffect.NavigateToAuth -> {
-                    if(role == "PARENT"){
+                    if (role == "PARENT") {
                         onNextClick(
                             nameState.value,
                             "",
@@ -101,9 +92,9 @@ internal fun InfoScreen(
                             "",
                             "",
                             phoneNumberState.value,
-                            childrenList
+                            childrenList,
                         )
-                    }else{
+                    } else {
                         onNextClick(
                             nameState.value,
                             classInfoState.value[0].toString(),
@@ -111,7 +102,7 @@ internal fun InfoScreen(
                             classInfoState.value[2].toString() + classInfoState.value[3].toString(),
                             emailState.value,
                             phoneNumberState.value,
-                            childrenList
+                            childrenList,
                         )
                     }
                 }
@@ -133,19 +124,19 @@ internal fun InfoScreen(
                 }
 
                 is InfoSideEffect.FiledVerifyAuthCode -> {
-                    if (it.type == "PHONE"){
+                    if (it.type == "PHONE") {
                         phoneCodeState = TextFieldState(
                             value = phoneCodeState.value,
                             isValid = false,
                             isError = true,
-                            errorMessage = "인증번호가 틀렸습니다."
+                            errorMessage = "인증번호가 틀렸습니다.",
                         )
-                    }else if(it.type == "EMAIL"){
+                    } else if (it.type == "EMAIL") {
                         emailCodeState = TextFieldState(
                             value = emailCodeState.value,
                             isValid = false,
                             isError = true,
-                            errorMessage = "인증번호가 틀렸습니다."
+                            errorMessage = "인증번호가 틀렸습니다.",
                         )
                     }
                 }
@@ -217,7 +208,7 @@ internal fun InfoScreen(
                         setOf(
                             nameState,
                             emailState,
-                            classInfoState
+                            classInfoState,
                         ).all { it.isValid } -> "전화번호를\n입력해주세요"
 
                         setOf(nameState, classInfoState).all { it.isValid } -> "이메일을\n입력해주세요"
@@ -260,9 +251,8 @@ internal fun InfoScreen(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
-
                 AnimatedVisibility(
-                    visible = showEmailCodeTextField
+                    visible = showEmailCodeTextField,
                 ) {
                     DodamTextField(
                         modifier = Modifier
@@ -332,7 +322,7 @@ internal fun InfoScreen(
                 }
 
                 AnimatedVisibility(
-                    visible = showPhoneCodeTextField
+                    visible = showPhoneCodeTextField,
                 ) {
                     DodamTextField(
                         modifier = Modifier
@@ -580,8 +570,6 @@ internal fun InfoScreen(
                     )
                 }
 
-
-
                 DodamTextField(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -626,12 +614,12 @@ internal fun InfoScreen(
                                 identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value,
                                 authCode = phoneCodeState.value,
                                 userAgent = Build.PRODUCT,
-                                role = role
+                                role = role,
                             )
                         } else {
                             viewModel.getAuthCode(
                                 type = authType,
-                                identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value
+                                identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value,
                             )
                         }
                     },
@@ -643,8 +631,8 @@ internal fun InfoScreen(
 
                         role == "STUDENT" -> {
                             nameState.value.length in 2..4 &&
-                                    classInfoState.value.length == 4 &&
-                                    phoneNumberState.value.length == 11
+                                classInfoState.value.length == 4 &&
+                                phoneNumberState.value.length == 11
                         }
                         else -> {
                             nameState.value.length in 2..4 && phoneNumberState.value.length == 11
@@ -655,8 +643,6 @@ internal fun InfoScreen(
                     buttonSize = ButtonSize.Large,
                 )
             }
-
-
         }
     }
 }
@@ -719,9 +705,9 @@ private fun checkClassInfoStateValid(classInfoState: TextFieldState): TextFieldS
                 }
             } else { // 학번을 4글자로 입력했다면
                 if ((
-                            classInfoState.value[2].toString() +
-                                    classInfoState.value[3].toString()
-                            )
+                        classInfoState.value[2].toString() +
+                            classInfoState.value[3].toString()
+                        )
                         .toInt() in 1..25
                 ) { // 학번이 1~25 사이인가
                     TextFieldState(

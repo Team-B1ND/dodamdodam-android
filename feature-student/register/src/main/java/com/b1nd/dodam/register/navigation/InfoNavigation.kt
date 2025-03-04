@@ -13,7 +13,6 @@ import androidx.navigation.navOptions
 import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.register.InfoScreen
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 const val INFO_ROUTE = "info"
 
@@ -22,7 +21,7 @@ fun NavController.navigateToInfo(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
     },
-){
+) {
     val route = if (childrenList != null) {
         val jsonList = Gson().toJson(childrenList)
         "$INFO_ROUTE?childrenList=$jsonList"
@@ -42,7 +41,7 @@ fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, Str
                 type = NavType.StringType
                 nullable = true
                 defaultValue = null
-            }
+            },
         ),
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left) },
@@ -59,7 +58,7 @@ fun NavGraphBuilder.infoScreen(onNextClick: (String, String, String, String, Str
         InfoScreen(
             onNextClick = onNextClick,
             onBackClick = onBackClick,
-            childrenList = childrenList
+            childrenList = childrenList,
         )
     }
 }

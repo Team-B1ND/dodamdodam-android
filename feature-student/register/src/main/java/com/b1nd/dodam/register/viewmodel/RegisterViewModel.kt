@@ -66,22 +66,16 @@ class RegisterViewModel : ViewModel(), KoinComponent {
             }
         }
     }
-    fun parentRegister(
-        id: String,
-        pw: String,
-        name: String,
-        childrenList: List<Children>,
-        phone: String
-    ){
+    fun parentRegister(id: String, pw: String, name: String, childrenList: List<Children>, phone: String) {
         viewModelScope.launch {
             registerRepository.registerParent(
                 id = id,
                 pw = pw,
                 name = name,
                 childrenList = childrenList,
-                phone = phone
-            ).collect{result->
-                when(result){
+                phone = phone,
+            ).collect { result ->
+                when (result) {
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(

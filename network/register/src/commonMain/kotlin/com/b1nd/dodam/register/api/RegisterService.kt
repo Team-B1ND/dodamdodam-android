@@ -19,16 +19,7 @@ internal class RegisterService(
     private val client: HttpClient,
 ) : RegisterDataSource {
 
-    override suspend fun register(
-        email: String,
-        grade: Int,
-        id: String,
-        name: String,
-        number: Int,
-        phone: String,
-        pw: String,
-        room: Int
-    ) {
+    override suspend fun register(email: String, grade: Int, id: String, name: String, number: Int, phone: String, pw: String, room: Int) {
         return defaultSafeRequest {
             client.post(DodamUrl.Member.REGISTER) {
                 contentType(ContentType.Application.Json)
@@ -48,15 +39,7 @@ internal class RegisterService(
         }
     }
 
-    override suspend fun registerTeacher(
-        id: String,
-        email: String,
-        name: String,
-        phone: String,
-        pw: String,
-        position: String,
-        tel: String
-    ) =
+    override suspend fun registerTeacher(id: String, email: String, name: String, phone: String, pw: String, position: String, tel: String) =
         defaultSafeRequest {
             client.post(DodamUrl.Member.REGISTER_TEACHER) {
                 contentType(ContentType.Application.Json)
@@ -74,13 +57,7 @@ internal class RegisterService(
             }.body<DefaultResponse>()
         }
 
-    override suspend fun registerParent(
-        id: String,
-        pw: String,
-        name: String,
-        childrenList: List<ChildrenRequest>,
-        phone: String
-    ) {
+    override suspend fun registerParent(id: String, pw: String, name: String, childrenList: List<ChildrenRequest>, phone: String) {
         defaultSafeRequest {
             client.post(DodamUrl.Member.REGISTER_PARENT) {
                 setBody(
@@ -89,8 +66,8 @@ internal class RegisterService(
                         pw = pw,
                         name = name,
                         relationInfo = childrenList,
-                        phone = phone
-                    )
+                        phone = phone,
+                    ),
                 )
             }.body<DefaultResponse>()
         }

@@ -7,7 +7,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
-import com.b1nd.dodam.register.InfoScreen
 import com.b1nd.dodam.register.SelectRoleScreen
 
 const val SELECT_ROLE_ROUTE = "select_role"
@@ -30,7 +29,7 @@ fun NavGraphBuilder.selectRoleScreen(onBackClick: () -> Unit, navigateToChildren
         SelectRoleScreen(
             onBackClick = onBackClick,
             navigateToChildrenManage = navigateToChildrenManage,
-            navigateToInfo = navigateToInfo
+            navigateToInfo = navigateToInfo,
         )
     }
 }

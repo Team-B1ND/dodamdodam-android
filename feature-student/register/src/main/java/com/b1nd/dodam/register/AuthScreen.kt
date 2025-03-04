@@ -276,7 +276,7 @@ fun AuthScreen(
                     passwordState.value.isNotBlank() &&
                     confirmPasswordState.value.isNotBlank(),
                 onClick = {
-                    if (role == "STUDENT"){
+                    if (role == "STUDENT") {
                         viewModel.register(
                             email = email,
                             grade = grade.toInt(),
@@ -287,14 +287,14 @@ fun AuthScreen(
                             pw = passwordState.value,
                             room = room.toInt(),
                         )
-                    }else{
+                    } else {
                         Log.d("TAG", "parent ${idState.value}\n${passwordState.value}\n$name\n$childrenList\n$phoneNumber ")
                         viewModel.parentRegister(
                             id = idState.value,
                             pw = passwordState.value,
                             name = name,
                             childrenList = childrenList,
-                            phone = phoneNumber
+                            phone = phoneNumber,
                         )
                     }
                 },

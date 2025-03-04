@@ -59,13 +59,7 @@ internal class RegisterRepositoryImpl constructor(
         .asResult()
         .flowOn(dispatcher)
 
-    override suspend fun registerParent(
-        id: String,
-        pw: String,
-        name: String,
-        childrenList: List<Children>,
-        phone: String
-    ): Flow<Result<Unit>> = flow {
+    override suspend fun registerParent(id: String, pw: String, name: String, childrenList: List<Children>, phone: String): Flow<Result<Unit>> = flow {
         emit(
             registerDataSource.registerParent(
                 id = id,
@@ -74,11 +68,11 @@ internal class RegisterRepositoryImpl constructor(
                 childrenList = childrenList.map {
                     ChildrenRequest(
                         name = it.childrenName,
-                        relation = it.relation
+                        relation = it.relation,
                     )
                 },
-                phone = phone
-            )
+                phone = phone,
+            ),
         )
     }.asResult().flowOn(dispatcher)
 }
