@@ -23,14 +23,9 @@ import com.b1nd.dodam.ui.component.SnackbarState
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-internal fun ClubScreen(
-    viewModel: ClubViewModel = koinViewModel(),
-    showSnackbar: (state: SnackbarState, message: String) -> Unit,
-    popBackStack: () -> Unit,
-) {
+internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), showSnackbar: (state: SnackbarState, message: String) -> Unit, popBackStack: () -> Unit) {
     val state by viewModel.state.collectAsState()
     var nowPage by remember { mutableStateOf(ClubPage.LIST) }
 
@@ -72,9 +67,9 @@ internal fun ClubScreen(
                     nowPage = ClubPage.DETAIL
                     viewModel.loadDetailClub(id, club)
                 },
-                selectAllowButton = {id, state,reason ->
-                    viewModel.postClubState(id.toInt(),state, reason)
-                }
+                selectAllowButton = { id, state, reason ->
+                    viewModel.postClubState(id.toInt(), state, reason)
+                },
             )
         }
         AnimatedVisibility(
@@ -87,7 +82,7 @@ internal fun ClubScreen(
                 popBackStack = {
                     viewModel.loadClubList()
                     nowPage = ClubPage.LIST
-                }
+                },
             )
         }
     }

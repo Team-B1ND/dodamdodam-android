@@ -56,9 +56,9 @@ class ClubViewModel : ViewModel(), KoinComponent {
             teacher = Teacher(
                 name = "",
                 position = "",
-                tel = ""
+                tel = "",
             ),
-            state = ClubState.PENDING
+            state = ClubState.PENDING,
         ),
         clubMember = persistentListOf(
             ClubMember(
@@ -70,9 +70,9 @@ class ClubViewModel : ViewModel(), KoinComponent {
                 grade = -1,
                 room = -1,
                 number = -1,
-                profileImage = ""
-            )
-        )
+                profileImage = "",
+            ),
+        ),
     )
 
     init {
@@ -93,14 +93,13 @@ class ClubViewModel : ViewModel(), KoinComponent {
                     club.error.printStackTrace()
                     _state.update {
                         it.copy(
-                            clubPendingUiState = ClubPendingUiState.Error
+                            clubPendingUiState = ClubPendingUiState.Error,
                         )
                     }
                     return@collect
                 }
 
                 Result.Loading -> {
-
                 }
 
                 is Result.Success -> {
@@ -116,10 +115,10 @@ class ClubViewModel : ViewModel(), KoinComponent {
                             clubPendingUiState = ClubPendingUiState.Success(
                                 clubPendingList = ClubPendingList(
                                     creativeClubs = creativeClubs,
-                                    selfClubs = selfClubs
+                                    selfClubs = selfClubs,
                                 ),
                                 detailClubMember = defaultDetailClubMember,
-                            )
+                            ),
                         )
                     }
                     return@collect
@@ -140,7 +139,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
                     member.error.printStackTrace()
                     _state.update {
                         it.copy(
-                            clubPendingUiState = ClubPendingUiState.Error
+                            clubPendingUiState = ClubPendingUiState.Error,
                         )
                     }
                 }
@@ -152,13 +151,13 @@ class ClubViewModel : ViewModel(), KoinComponent {
                             clubPendingUiState = ClubPendingUiState.Success(
                                 clubPendingList = ClubPendingList(
                                     creativeClubs = persistentListOf(),
-                                    selfClubs = persistentListOf()
+                                    selfClubs = persistentListOf(),
                                 ),
                                 detailClubMember = DetailClubAndMember(
                                     club = club,
-                                    clubMember = member.data
-                                )
-                            )
+                                    clubMember = member.data,
+                                ),
+                            ),
                         )
                     }
                     return@collect
@@ -177,7 +176,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
                         type = type,
                         isLoading = true,
                         leader = "",
-                        shortDescription = shortDescription
+                        shortDescription = shortDescription,
                     ),
                 )
             }
@@ -190,7 +189,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
                         type = type,
                         isLoading = false,
                         leader = leader,
-                        shortDescription = shortDescription
+                        shortDescription = shortDescription,
                     ),
                 )
             }
@@ -202,7 +201,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
             clubRepository.patchClubState(
                 clubIds = persistentListOf(id),
                 status = state,
-                reason = reason
+                reason = reason,
             ).collect {
                 when (it) {
                     is Result.Error -> {
@@ -223,10 +222,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
         }
     }
 
-
     private suspend fun loadLeaderName(id: Long): String = clubRepository.getClubLeader(id.toInt())
         .filterIsInstance<Result.Success<ClubMember>>()
         .map { it.data.name }.firstOrNull() ?: "알 수 없음"
-
-
 }

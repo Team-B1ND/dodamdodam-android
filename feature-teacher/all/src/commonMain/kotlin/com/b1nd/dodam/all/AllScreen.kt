@@ -42,12 +42,9 @@ import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import com.b1nd.dodam.ui.icons.ColoredExclamationMarkCircle
 import com.b1nd.dodam.ui.icons.ColoredPencil
-import com.b1nd.dodam.ui.icons.ColoredSchool
 import com.b1nd.dodam.ui.icons.ColoredSmilingFaceEyes
 import com.b1nd.dodam.ui.icons.ColoredTrophy
-import com.b1nd.dodam.ui.icons.Crown
 import com.b1nd.dodam.ui.icons.Silhouette
 import com.b1nd.dodam.ui.icons.Tent
 import kotlinx.collections.immutable.persistentListOf
