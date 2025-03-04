@@ -199,15 +199,24 @@ class ClubViewModel : ViewModel(), KoinComponent {
 
     fun postClubState(id: Int, state: ClubState, reason: String?) {
         viewModelScope.launch {
-            clubRepository.patchClubState(clubIds = persistentListOf(id), status = state, reason = reason).collect {
+            clubRepository.patchClubState(
+                clubIds = persistentListOf(id),
+                status = state,
+                reason = reason
+            ).collect {
                 when (it) {
                     is Result.Error -> {
                         _sideEffect.emit(ClubSideEffect.Failed(it.error))
                         it.error.printStackTrace()
                     }
+
                     Result.Loading -> {}
                     is Result.Success -> {
-                        _sideEffect.emit(ClubSideEffect.SuccessReject)
+                        if (state == ClubState.ALLOWED) {
+                            _sideEffect.emit(ClubSideEffect.SuccessApprove)
+                        } else {
+                            _sideEffect.emit(ClubSideEffect.SuccessReject)
+                        }
                     }
                 }
             }
