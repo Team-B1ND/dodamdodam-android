@@ -4,7 +4,9 @@ import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
+import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.register.datasource.RegisterDataSource
+import com.b1nd.dodam.register.model.ChildrenRequest
 import com.b1nd.dodam.register.repository.RegisterRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -56,4 +58,27 @@ internal class RegisterRepositoryImpl constructor(
     }
         .asResult()
         .flowOn(dispatcher)
+
+    override suspend fun registerParent(
+        id: String,
+        pw: String,
+        name: String,
+        childrenList: List<Children>,
+        phone: String
+    ): Flow<Result<Unit>> = flow {
+        emit(
+            registerDataSource.registerParent(
+                id = id,
+                pw = pw,
+                name = name,
+                childrenList = childrenList.map {
+                    ChildrenRequest(
+                        name = it.childrenName,
+                        relation = it.relation
+                    )
+                },
+                phone = phone
+            )
+        )
+    }.asResult().flowOn(dispatcher)
 }

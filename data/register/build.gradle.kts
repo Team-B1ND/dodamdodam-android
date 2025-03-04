@@ -14,7 +14,7 @@ kotlin {
     sourceSets.commonMain.dependencies {
         implementation(projects.common)
         implementation(projects.network.register)
-
+        implementation(projects.data.core)
     }
 }
 

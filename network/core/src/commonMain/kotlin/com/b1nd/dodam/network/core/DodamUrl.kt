@@ -34,6 +34,7 @@ object DodamUrl {
     object Member {
         const val REGISTER = "$MEMBER/join-student"
         const val REGISTER_TEACHER = "$MEMBER/join-teacher"
+        const val REGISTER_PARENT = "$MEMBER/join-parent"
         const val MY = "$MEMBER/my"
         const val DEACTIVATION = "$MEMBER/deactivate"
         const val STATUS = "$MEMBER/status"

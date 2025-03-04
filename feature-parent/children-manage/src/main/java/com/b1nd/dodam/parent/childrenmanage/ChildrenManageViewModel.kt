@@ -3,8 +3,8 @@ package com.b1nd.dodam.parent.childrenmanage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.member.MemberRepository
-import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
 import com.b1nd.dodam.parent.childrenmanage.model.ChildrenSideEffect
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +19,7 @@ import org.koin.core.component.inject
 class ChildrenManageViewModel : ViewModel(), KoinComponent {
     private val memberRepository: MemberRepository by inject()
 
-    private val _uiState = MutableStateFlow(persistentListOf<ChildrenModel>())
+    private val _uiState = MutableStateFlow(persistentListOf<Children>())
     val uiState = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<ChildrenSideEffect>()
@@ -30,7 +30,7 @@ class ChildrenManageViewModel : ViewModel(), KoinComponent {
             memberRepository.getChildren(code = code).collect {
                 when (it) {
                     is Result.Success -> {
-                        val newChild = ChildrenModel(
+                        val newChild = Children(
                             childrenName = it.data.name,
                             relation = relation,
                         )

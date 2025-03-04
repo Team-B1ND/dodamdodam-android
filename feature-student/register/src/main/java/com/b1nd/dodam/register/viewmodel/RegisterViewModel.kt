@@ -3,6 +3,7 @@ package com.b1nd.dodam.register.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.register.repository.RegisterRepository
 import com.b1nd.dodam.register.state.RegisterUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -60,6 +61,50 @@ class RegisterViewModel : ViewModel(), KoinComponent {
                         it.copy(
                             isLoading = true,
                         )
+                    }
+                }
+            }
+        }
+    }
+    fun parentRegister(
+        id: String,
+        pw: String,
+        name: String,
+        childrenList: List<Children>,
+        phone: String
+    ){
+        viewModelScope.launch {
+            registerRepository.registerParent(
+                id = id,
+                pw = pw,
+                name = name,
+                childrenList = childrenList,
+                phone = phone
+            ).collect{result->
+                when(result){
+                    is Result.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                            )
+                        }
+                        _event.emit(Event.NavigateToMain)
+                    }
+                    is Result.Error -> {
+                        _event.emit(Event.ShowDialog)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                error = result.error.message.toString(),
+                            )
+                        }
+                    }
+                    is Result.Loading -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = true,
+                            )
+                        }
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.b1nd.dodam.register
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
@@ -43,7 +45,6 @@ import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.component.TopAppBarType
-import com.b1nd.dodam.parent.childrenmanage.model.ChildrenModel
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.register.viewmodel.Event
 import com.b1nd.dodam.register.viewmodel.RegisterViewModel
@@ -59,7 +60,7 @@ fun AuthScreen(
     number: String,
     email: String,
     phoneNumber: String,
-    childrenList: List<ChildrenModel>,
+    childrenList: List<Children>,
     viewModel: RegisterViewModel = koinViewModel(),
     navigateToMain: () -> Unit,
     onBackClick: () -> Unit,
@@ -73,6 +74,7 @@ fun AuthScreen(
 
     var showPassword by remember { mutableStateOf(false) }
     var showConfirmPassword by remember { mutableStateOf(false) }
+    var role by remember { mutableStateOf("") }
 
     var showDialog by remember { mutableStateOf(false) }
 
@@ -93,6 +95,9 @@ fun AuthScreen(
                 is Event.ShowDialog -> showDialog = true
             }
         }
+    }
+    LaunchedEffect(true) {
+        role = if (childrenList.isNotEmpty()) "PARENT" else "STUDENT"
     }
 
     if (showDialog) {
@@ -271,16 +276,27 @@ fun AuthScreen(
                     passwordState.value.isNotBlank() &&
                     confirmPasswordState.value.isNotBlank(),
                 onClick = {
-                    viewModel.register(
-                        email = email,
-                        grade = grade.toInt(),
-                        id = idState.value,
-                        name = name,
-                        number = number.toInt(),
-                        phone = phoneNumber,
-                        pw = passwordState.value,
-                        room = room.toInt(),
-                    )
+                    if (role == "STUDENT"){
+                        viewModel.register(
+                            email = email,
+                            grade = grade.toInt(),
+                            name = name,
+                            id = idState.value,
+                            number = number.toInt(),
+                            phone = phoneNumber,
+                            pw = passwordState.value,
+                            room = room.toInt(),
+                        )
+                    }else{
+                        Log.d("TAG", "parent ${idState.value}\n${passwordState.value}\n$name\n$childrenList\n$phoneNumber ")
+                        viewModel.parentRegister(
+                            id = idState.value,
+                            pw = passwordState.value,
+                            name = name,
+                            childrenList = childrenList,
+                            phone = phoneNumber
+                        )
+                    }
                 },
                 loading = uiState.isLoading,
                 buttonSize = ButtonSize.Large,
