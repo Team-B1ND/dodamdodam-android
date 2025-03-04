@@ -76,6 +76,7 @@ internal fun InfoScreen(
     var phoneNumberState by remember { mutableStateOf(TextFieldState()) }
     var phoneCodeState by remember { mutableStateOf(TextFieldState()) }
     var emailState by remember { mutableStateOf(TextFieldState()) }
+    var emailCodeState by remember { mutableStateOf(TextFieldState()) }
     var classInfoState by remember { mutableStateOf(TextFieldState()) }
     var classInfoText by remember { mutableStateOf(TextFieldValue()) }
     val focusManager = LocalFocusManager.current
@@ -85,6 +86,8 @@ internal fun InfoScreen(
     var authType by remember { mutableStateOf("PHONE") }
 
     var showPhoneCodeTextField by remember { mutableStateOf(false) }
+    var showEmailCodeTextField by remember { mutableStateOf(false) }
+    var showEmailTextField by remember { mutableStateOf(false) }
     var buttonEnabled by remember { mutableStateOf(false) }
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collect {
@@ -120,20 +123,26 @@ internal fun InfoScreen(
 
                 is InfoSideEffect.SuccessGetAuthEmailCode -> {
                     buttonText = "인증"
+                    showEmailCodeTextField = true
                 }
 
                 is InfoSideEffect.SuccessVerifyAuthPhoneCode -> {
                     buttonText = "이메일 인증코드 전송"
-                }
-
-                is InfoSideEffect.SuccessVerifyAuthEmilCode -> {
-
+                    showEmailTextField = true
+                    authType = "EMAIL"
                 }
 
                 is InfoSideEffect.FiledVerifyAuthCode -> {
                     if (it.type == "PHONE"){
                         phoneCodeState = TextFieldState(
                             value = phoneCodeState.value,
+                            isValid = false,
+                            isError = true,
+                            errorMessage = "인증번호가 틀렸습니다."
+                        )
+                    }else if(it.type == "EMAIL"){
+                        emailCodeState = TextFieldState(
+                            value = emailCodeState.value,
                             isValid = false,
                             isError = true,
                             errorMessage = "인증번호가 틀렸습니다."
@@ -160,6 +169,11 @@ internal fun InfoScreen(
     }
     LaunchedEffect(phoneCodeState.value) {
         if (phoneCodeState.value.length == 6) {
+            buttonEnabled = true
+        }
+    }
+    LaunchedEffect(emailCodeState.value) {
+        if (emailCodeState.value.length == 6) {
             buttonEnabled = true
         }
     }
@@ -246,11 +260,40 @@ internal fun InfoScreen(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
-                AnimatedVisibility(visible = setOf(
-                    nameState,
-                    phoneCodeState,
-                    classInfoState,
-                ).all { it.isValid } && role == "STUDENT") {
+
+                AnimatedVisibility(
+                    visible = showEmailCodeTextField
+                ) {
+                    DodamTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged {
+                                emailCodeState = emailCodeState.copy(focused = it.isFocused)
+                            },
+                        value = emailCodeState.value,
+                        onValueChange = { text ->
+                            emailCodeState = emailCodeState.copy(
+                                value = text,
+                                isValid = emailCodeState.isValid,
+                                isError = false,
+                                errorMessage = "",
+                            )
+                        },
+                        label = "이메일 인증코드",
+                        isError = emailCodeState.isError,
+                        onClickRemoveRequest = {
+                            emailCodeState = emailCodeState.copy(value = "")
+                        },
+                        supportText = if (emailCodeState.isError) emailCodeState.errorMessage else "",
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.clearFocus()
+                        }),
+                        singleLine = true,
+                    )
+                }
+
+                AnimatedVisibility(visible = showEmailTextField) {
                     DodamTextField(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -578,12 +621,12 @@ internal fun InfoScreen(
                         .fillMaxWidth(),
                     onClick = {
                         if (buttonText == "인증") {
-                            Log.d("TAG", "InfoScreen: ${Build.PRODUCT}, ${Build.MODEL}")
                             viewModel.verifyAuthCode(
                                 type = authType,
                                 identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value,
                                 authCode = phoneCodeState.value,
-                                userAgent = Build.PRODUCT
+                                userAgent = Build.PRODUCT,
+                                role = role
                             )
                         } else {
                             viewModel.getAuthCode(
@@ -601,10 +644,8 @@ internal fun InfoScreen(
                         role == "STUDENT" -> {
                             nameState.value.length in 2..4 &&
                                     classInfoState.value.length == 4 &&
-                                    emailState.value.isNotBlank() &&
                                     phoneNumberState.value.length == 11
                         }
-
                         else -> {
                             nameState.value.length in 2..4 && phoneNumberState.value.length == 11
                         }

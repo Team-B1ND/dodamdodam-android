@@ -19,12 +19,10 @@ class InfoViewModel: ViewModel(), KoinComponent {
     val sideEffect = _sideEffect.asSharedFlow()
 
     fun getAuthCode(type: String, identifier: String){
-        Log.d("TAG", "getAuthCode: $identifier")
         viewModelScope.launch {
             memberRepository.getAuthCode(type, identifier).collect{
                 when(it){
                     is Result.Success -> {
-                        Log.d("TAG", "성공: ${it.data}")
                         if (type == "PHONE"){
                             _sideEffect.emit(InfoSideEffect.SuccessGetAuthPhoneCode)
                         }else if(type == "EMAIL"){
@@ -39,29 +37,30 @@ class InfoViewModel: ViewModel(), KoinComponent {
             }
         }
     }
-    fun verifyAuthCode(type: String, identifier: String, authCode: String, userAgent: String){
+    fun verifyAuthCode(type: String, identifier: String, authCode: String, userAgent: String, role: String){
         viewModelScope.launch {
-            _sideEffect.emit(InfoSideEffect.NavigateToAuth)
-//            memberRepository.verifyAuthCode(type, identifier, authCode, userAgent).collect{
-//                when(it){
-//                    is Result.Success -> {
-//                        Log.d("TAG", "verifyAuthCode: ${it.data}")
-//                        if (type == "PHONE"){
-//                            _sideEffect.emit(InfoSideEffect.NavigateToAuth)
-//                        }else if(type == "EMAIL"){
-//                            _sideEffect.emit(InfoSideEffect.SuccessGetAuthEmailCode)
-//                        }
-//                    }
-//                    is Result.Error -> {
-//                        Log.d("TAG", "verifyAuthCode: ${it.error.message}")
-//                        if (it.error.message?.substringBefore(":") == "인증코드가 일치하지 않음"){
-//                            _sideEffect.emit(InfoSideEffect.FiledVerifyAuthCode(type))
-//                        }
-//                        it.error.printStackTrace()
-//                    }
-//                    is Result.Loading -> {}
-//                }
-//            }
+            memberRepository.verifyAuthCode(type, identifier, authCode, userAgent).collect{
+                when(it){
+                    is Result.Success -> {
+                        if (type == "PHONE"){
+                            if (role == "PARENT") {
+                                _sideEffect.emit(InfoSideEffect.NavigateToAuth)
+                            }else if (role =="STUDENT"){
+                                _sideEffect.emit(InfoSideEffect.SuccessVerifyAuthPhoneCode)
+                            }
+                        }else if(type == "EMAIL"){
+                            _sideEffect.emit(InfoSideEffect.NavigateToAuth)
+                        }
+                    }
+                    is Result.Error -> {
+                        if (it.error.message?.substringBefore(":") == "인증코드가 일치하지 않음"){
+                            _sideEffect.emit(InfoSideEffect.FiledVerifyAuthCode(type))
+                        }
+                        it.error.printStackTrace()
+                    }
+                    is Result.Loading -> {}
+                }
+            }
         }
     }
 }
