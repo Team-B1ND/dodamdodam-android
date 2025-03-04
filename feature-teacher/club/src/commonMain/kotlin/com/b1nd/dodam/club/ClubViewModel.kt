@@ -75,9 +75,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
         ),
     )
 
-    init {
-        loadClubList()
-    }
+
 
     fun loadClubList() = viewModelScope.launch {
         _state.update {

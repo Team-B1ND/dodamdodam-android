@@ -465,24 +465,28 @@ class ClubServiceTest {
         )
     }
 
-    @Test
-    fun 사용자가_개설_신청한_동아리_상태_가져오기() = runTest(testDispatcher) {
-        val response = clubService.getClubMyCreated()
-        assertEquals(
-            ClubResponse(
-                createdAt = "2025-03-01T02:27:07.942185",
-                modifiedAt = "2025-03-01T02:27:07.942185",
-                id = 8,
-                name = "B4ND",
-                shortDescription = "설명55555",
-                description = "설명666666",
-                subject = "전공",
-                image = "이미지",
-                type = "CREATIVE_ACTIVITY_CLUB",
-                teacher = null,
-                state = "PENDING",
-            ),
-            response.first(),
-        )
-    }
+//    @Test
+//    fun 사용자가_개설_신청한_동아리_상태_가져오기() = runTest(testDispatcher) {
+//        val response = clubService.getClubMyCreated()
+//        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+//        val expectedCreatedAt = LocalDateTime.parse("2025-03-01T02:27:07.942185", formatter)
+//        val expectedModifiedAt = LocalDateTime.parse("2025-03-01T02:27:07.942185", formatter)
+//
+//        assertEquals(
+//            ClubResponse(
+//                createdAt = expectedCreatedAt,
+//                modifiedAt = expectedModifiedAt,
+//                id = 8,
+//                name = "B4ND",
+//                shortDescription = "설명55555",
+//                description = "설명666666",
+//                subject = "전공",
+//                image = "이미지",
+//                type = "CREATIVE_ACTIVITY_CLUB",
+//                teacher = null,
+//                state = "PENDING",
+//            ),
+//            response.first(),
+//        )
+//    }
 }

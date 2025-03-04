@@ -29,6 +29,9 @@ internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), showSnackbar
     val state by viewModel.state.collectAsState()
     var nowPage by remember { mutableStateOf(ClubPage.LIST) }
 
+    LaunchedEffect(Unit){
+        viewModel.loadClubList()
+    }
     LaunchedEffect(true) {
         viewModel.sideEffect.collect {
             when (it) {

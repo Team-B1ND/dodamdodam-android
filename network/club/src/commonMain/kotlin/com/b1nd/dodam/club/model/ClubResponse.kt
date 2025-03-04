@@ -1,12 +1,13 @@
 package com.b1nd.dodam.club.model
 
 import com.b1nd.dodam.network.core.model.TeacherResponse
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClubResponse(
-    val createdAt: String? = null,
-    val modifiedAt: String? = null,
+    val createdAt: LocalDateTime? = null,
+    val modifiedAt: LocalDateTime? = null,
     val id: Int,
     val name: String,
     val shortDescription: String,

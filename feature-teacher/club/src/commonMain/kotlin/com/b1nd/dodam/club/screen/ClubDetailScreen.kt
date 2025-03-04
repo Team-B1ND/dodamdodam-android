@@ -94,7 +94,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                     items(data.detailClubMember.clubMember.size) { index ->
                                         DodamClubMember(
                                             image = data.detailClubMember.clubMember[index].profileImage,
-                                            permission = data.detailClubMember.clubMember[index].permissions,
+                                            permission = data.detailClubMember.clubMember[index].permissions.toString(),
                                             name = data.detailClubMember.clubMember[index].name,
                                             grade = data.detailClubMember.clubMember[index].grade,
                                             room = data.detailClubMember.clubMember[index].room,
@@ -240,7 +240,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
 private fun DodamClubMember(
     modifier: Modifier = Modifier,
     image: String? = "",
-    permission: ClubPermission = ClubPermission.CLUB_MEMBER,
+    permission: String = "",
     name: String,
     grade: Int,
     room: Int,
@@ -262,7 +262,7 @@ private fun DodamClubMember(
                     color = DodamTheme.colors.labelNormal,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                if (permission == ClubPermission.CLUB_LEADER) {
+                if (permission == "CLUB_LEADER") {
                     // DDS 에 Crown 추가하면 아이콘 Crown 으로 바꿀 예정입니다.
                     Image(
                         modifier = Modifier.size(16.dp),

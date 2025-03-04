@@ -26,10 +26,8 @@ kotlin{
     sourceSets{
         commonMain.dependencies {
             implementation(projects.common)
-            api(projects.network.core)
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.ui)
-            implementation(projects.network.club)
             implementation(projects.data.club)
             implementation(libs.multiplatform.compose.material)
             implementation(libs.multiplatform.markdown.renderer)
