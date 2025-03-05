@@ -52,7 +52,7 @@ internal fun SelectRoleScreen(onBackClick: () -> Unit, navigateToChildrenManage:
                 type = TopAppBarType.Medium,
             )
         },
-        backgroundColor = DodamTheme.colors.backgroundNormal
+        backgroundColor = DodamTheme.colors.backgroundNormal,
     ) { paddingValues ->
         Column(
             modifier = Modifier
