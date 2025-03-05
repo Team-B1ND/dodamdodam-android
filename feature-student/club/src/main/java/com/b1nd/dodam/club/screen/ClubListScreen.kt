@@ -103,24 +103,18 @@ internal fun ClubListScreen(
                     )
                     when (val data = state.clubPendingUiState) {
                         ClubPendingUiState.Error -> {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 20.dp)
-                                    .background(
-                                        color = DodamTheme.colors.backgroundNormal,
-                                        shape = RoundedCornerShape(12.dp),
-                                    ),
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .align(Alignment.Center)
-                                        .padding(vertical = 16.dp),
-                                    text = "아직 등록된 동아리가 없어요.",
-                                    style = DodamTheme.typography.labelMedium(),
-                                    color = DodamTheme.colors.labelAlternative,
-                                )
-                            }
+                            Spacer(modifier = Modifier.height(20.dp))
+                            DodamEmpty(
+                                onClick = {
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        "https://dodam.b1nd.com/".toUri(),
+                                    )
+                                    context.startActivity(intent)
+                                },
+                                title = "아직 등록된 동아리가 없어요",
+                                buttonText = "동아리 생성하기",
+                            )
                         }
 
                         ClubPendingUiState.Loading -> {
