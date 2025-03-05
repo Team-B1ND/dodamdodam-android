@@ -44,7 +44,6 @@ internal fun SelectRoleScreen(onBackClick: () -> Unit, navigateToChildrenManage:
 
     Scaffold(
         modifier = Modifier
-            .background(DodamTheme.colors.backgroundNormal)
             .statusBarsPadding(),
         topBar = {
             DodamTopAppBar(
@@ -53,6 +52,7 @@ internal fun SelectRoleScreen(onBackClick: () -> Unit, navigateToChildrenManage:
                 type = TopAppBarType.Medium,
             )
         },
+        backgroundColor = DodamTheme.colors.backgroundNormal
     ) { paddingValues ->
         Column(
             modifier = Modifier
