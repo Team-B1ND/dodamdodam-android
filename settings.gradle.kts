@@ -108,5 +108,6 @@ include(":feature:group")
 project(":feature:group").name = "feature-group-alias"
 include(":data:club")
 include(":feature-parent:children-manage")
+include(":feature-student:club")
 include(":feature-teacher:club")
 include(":network:club")

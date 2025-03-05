@@ -17,6 +17,8 @@ import com.b1nd.dodam.club.repository.ClubRepository
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.core.model.Teacher
+import com.b1nd.dodam.member.MemberRepository
+import com.b1nd.dodam.member.model.MemberInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -36,6 +38,8 @@ import org.koin.core.qualifier.named
 
 class ClubViewModel : ViewModel(), KoinComponent {
     private val clubRepository: ClubRepository by inject()
+    private val memberRepository: MemberRepository by inject()
+
     private val dispatcher: CoroutineDispatcher by inject(named(DispatcherType.IO))
 
     private val _sideEffect = MutableSharedFlow<ClubSideEffect>()
@@ -100,10 +104,10 @@ class ClubViewModel : ViewModel(), KoinComponent {
 
                 is Result.Success -> {
                     creativeClubs =
-                        club.data.filter { it.state == ClubState.PENDING && it.type == ClubType.CREATIVE_ACTIVITY_CLUB }
+                        club.data.filter { it.state != ClubState.DELETED && it.state != ClubState.WAITING && it.type == ClubType.CREATIVE_ACTIVITY_CLUB }
                             .toImmutableList()
                     selfClubs =
-                        club.data.filter { it.state == ClubState.PENDING && it.type == ClubType.SELF_DIRECT_ACTIVITY_CLUB }
+                        club.data.filter { it.state != ClubState.DELETED && it.state != ClubState.WAITING && it.type == ClubType.SELF_DIRECT_ACTIVITY_CLUB }
                             .toImmutableList()
 
                     _state.update {
@@ -123,12 +127,14 @@ class ClubViewModel : ViewModel(), KoinComponent {
         }
     }
 
+
     fun loadDetailClub(id: Long, club: Club) = viewModelScope.launch {
         _state.update {
             it.copy(
                 clubPendingUiState = ClubPendingUiState.Loading,
             )
         }
+
         clubRepository.getClubMember(id.toInt()).collect { member ->
             when (member) {
                 is Result.Error -> {
@@ -139,7 +145,6 @@ class ClubViewModel : ViewModel(), KoinComponent {
                         )
                     }
                 }
-
                 Result.Loading -> {}
                 is Result.Success -> {
                     _state.update {
@@ -192,31 +197,11 @@ class ClubViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun postClubState(id: Int, state: ClubState, reason: String?) {
-        viewModelScope.launch {
-            clubRepository.patchClubState(
-                clubIds = persistentListOf(id),
-                status = state,
-                reason = reason,
-            ).collect {
-                when (it) {
-                    is Result.Error -> {
-                        _sideEffect.emit(ClubSideEffect.Failed(it.error))
-                        it.error.printStackTrace()
-                    }
+//    suspend fun checkMyClub(id: Long) = loadMyName() == loadLeaderName(id)
 
-                    Result.Loading -> {}
-                    is Result.Success -> {
-                        if (state == ClubState.ALLOWED) {
-                            _sideEffect.emit(ClubSideEffect.SuccessApprove)
-                        } else {
-                            _sideEffect.emit(ClubSideEffect.SuccessReject)
-                        }
-                    }
-                }
-            }
-        }
-    }
+    private suspend fun loadMyName(): String =
+        memberRepository.getMyInfo().filterIsInstance<Result.Success<MemberInfo>>()
+            .map { it.data.name }.firstOrNull() ?: "이름을 부를 수 없음"
 
     private suspend fun loadLeaderName(id: Long): String = clubRepository.getClubLeader(id.toInt())
         .filterIsInstance<Result.Success<ClubMember>>()
