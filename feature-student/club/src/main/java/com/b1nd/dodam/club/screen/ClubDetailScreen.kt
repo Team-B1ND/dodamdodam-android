@@ -259,7 +259,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                         ),
                                         imageTransformer = Coil3ImageTransformerImpl,
 
-                                    )
+                                        )
                                     Spacer(modifier = Modifier.height(400.dp))
                                 }
                             }
@@ -312,35 +312,35 @@ private fun DodamClubMember(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if (isMyClub) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    color = when (state) {
-                                        ClubState.ALLOWED -> DodamTheme.colors.primaryNormal
-                                        ClubState.PENDING -> DodamTheme.colors.lineNormal
-                                        ClubState.REJECTED -> DodamTheme.colors.statusNegative
-                                        ClubState.WAITING -> DodamTheme.colors.lineNormal
-                                        ClubState.DELETED -> DodamTheme.colors.lineNormal
-                                    },
-                                    shape = RoundedCornerShape(28.dp),
-                                )
-                                .padding(vertical = 4.dp, horizontal = 8.dp),
-                        ) {
-                            Text(
-                                modifier = Modifier.align(Alignment.Center),
-                                text = when (state) {
-                                    ClubState.ALLOWED -> "승인됨"
-                                    ClubState.PENDING -> "대기중"
-                                    ClubState.REJECTED -> "거절됨"
-                                    ClubState.WAITING -> "대기중"
-                                    ClubState.DELETED -> "삭제됨"
+//                    if (isMyClub) {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = when (state) {
+                                    ClubState.ALLOWED -> DodamTheme.colors.primaryNormal
+                                    ClubState.PENDING -> DodamTheme.colors.lineNormal
+                                    ClubState.REJECTED -> DodamTheme.colors.statusNegative
+                                    ClubState.WAITING -> DodamTheme.colors.lineNormal
+                                    ClubState.DELETED -> DodamTheme.colors.lineNormal
                                 },
-                                style = DodamTheme.typography.caption2Bold(),
-                                color = DodamTheme.colors.staticWhite,
+                                shape = RoundedCornerShape(28.dp),
                             )
-                        }
+                            .padding(vertical = 4.dp, horizontal = 8.dp),
+                    ) {
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = when (state) {
+                                ClubState.ALLOWED -> "승인됨"
+                                ClubState.PENDING -> "대기중"
+                                ClubState.REJECTED -> "거절됨"
+                                ClubState.WAITING -> "대기중"
+                                ClubState.DELETED -> "삭제됨"
+                            },
+                            style = DodamTheme.typography.caption2Bold(),
+                            color = DodamTheme.colors.staticWhite,
+                        )
                     }
+//                    }
                 }
             }
         }
@@ -391,6 +391,22 @@ private fun DodamLoadingClubMember(modifier: Modifier = Modifier, isFirst: Boole
                     .height(18.dp)
                     .background(brush = shimmerEffect()),
             )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Row(
+            modifier = Modifier.align(Alignment.CenterVertically),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(
+                        brush = shimmerEffect(),
+                        shape = RoundedCornerShape(28.dp),
+                    )
+                    .width(38.dp)
+                    .height(22.dp)
+            ) {
+            }
         }
     }
 }
