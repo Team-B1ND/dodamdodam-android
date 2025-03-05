@@ -32,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -70,8 +72,7 @@ internal fun ClubListScreen(
         )
     }.toImmutableList()
 
-    val context = LocalContext.current
-
+    val uriHandler = LocalUriHandler.current
     var selectedReject by remember { mutableStateOf(false) }
     var rejectReason by remember { mutableStateOf("") }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -106,11 +107,7 @@ internal fun ClubListScreen(
                             Spacer(modifier = Modifier.height(20.dp))
                             DodamEmpty(
                                 onClick = {
-                                    val intent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        "https://dodam.b1nd.com/".toUri(),
-                                    )
-                                    context.startActivity(intent)
+                                    uriHandler.openUri("https://dodam.b1nd.com/clubs/create")
                                 },
                                 title = "아직 등록된 동아리가 없어요",
                                 buttonText = "동아리 생성하기",
@@ -136,11 +133,7 @@ internal fun ClubListScreen(
                                 Spacer(modifier = Modifier.height(20.dp))
                                 DodamEmpty(
                                     onClick = {
-                                        val intent = Intent(
-                                            Intent.ACTION_VIEW,
-                                            "https://dodam.b1nd.com/".toUri(),
-                                        )
-                                        context.startActivity(intent)
+                                        uriHandler.openUri("https://dodam.b1nd.com/clubs/create")
                                     },
                                     title = "아직 등록된 동아리가 없어요",
                                     buttonText = "동아리 생성하기",
