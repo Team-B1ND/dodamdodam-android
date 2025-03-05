@@ -196,8 +196,6 @@ class ClubViewModel : ViewModel(), KoinComponent {
         }
     }
 
-//    suspend fun checkMyClub(id: Long) = loadMyName() == loadLeaderName(id)
-
     private suspend fun loadMyName(): String = memberRepository.getMyInfo().filterIsInstance<Result.Success<MemberInfo>>()
         .map { it.data.name }.firstOrNull() ?: "이름을 부를 수 없음"
 

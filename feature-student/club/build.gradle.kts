@@ -16,7 +16,6 @@ dependencies {
     implementation(libs.dodam.design.system.cmm)
     implementation(projects.ui)
     implementation(projects.data.club)
-    implementation(projects.data.member)
     implementation(libs.kotlinx.datetime)
     implementation(libs.multiplatform.markdown.renderer.coil3)
     implementation(libs.multiplatform.markdown.renderer)
