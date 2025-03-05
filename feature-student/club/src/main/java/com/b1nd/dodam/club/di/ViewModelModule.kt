@@ -1,4 +1,4 @@
- package com.b1nd.dodam.club.di
+package com.b1nd.dodam.club.di
 
 import com.b1nd.dodam.club.ClubViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
