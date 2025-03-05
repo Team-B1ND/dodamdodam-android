@@ -136,8 +136,8 @@ internal fun MainScreen(
                 .background(
                     Brush.verticalGradient(
                         listOf(
-                            DodamTheme.colors.staticWhite.copy(alpha = 0f),
-                            DodamTheme.colors.staticWhite,
+                            DodamTheme.colors.backgroundNormal.copy(alpha = 0f),
+                            DodamTheme.colors.backgroundNormal,
                         ),
                     ),
                 ),
