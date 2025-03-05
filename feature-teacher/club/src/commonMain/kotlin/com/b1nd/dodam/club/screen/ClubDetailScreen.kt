@@ -40,6 +40,7 @@ import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import com.mikepenz.markdown.coil3.Coil3ImageTransformerImpl
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.model.DefaultMarkdownColors
 import com.mikepenz.markdown.model.DefaultMarkdownTypography
@@ -223,6 +224,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                             bullet = DodamTheme.typography.body1Medium(),
                                             list = DodamTheme.typography.body1Medium(),
                                         ),
+                                        imageTransformer = Coil3ImageTransformerImpl,
                                     )
                                     Spacer(modifier = Modifier.height(400.dp))
                                 }
