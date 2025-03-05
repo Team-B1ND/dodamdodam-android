@@ -45,6 +45,8 @@ import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
+import com.b1nd.dodam.parent.childrenmanage.navigation.childrenManageScreen
+import com.b1nd.dodam.parent.childrenmanage.navigation.navigateToChildrenManageScreen
 import com.b1nd.dodam.parent.main.navigation.PARENT_MAIN_ROUTE
 import com.b1nd.dodam.parent.main.navigation.navigateToParentMain
 import com.b1nd.dodam.parent.main.navigation.parentMainScreen
@@ -52,6 +54,8 @@ import com.b1nd.dodam.register.navigation.authScreen
 import com.b1nd.dodam.register.navigation.infoScreen
 import com.b1nd.dodam.register.navigation.navigateToAuth
 import com.b1nd.dodam.register.navigation.navigateToInfo
+import com.b1nd.dodam.register.navigation.navigateToSelectRole
+import com.b1nd.dodam.register.navigation.selectRoleScreen
 import com.b1nd.dodam.setting.navigation.navigateToSetting
 import com.b1nd.dodam.setting.navigation.settingScreen
 import com.b1nd.dodam.student.main.navigation.MAIN_ROUTE
@@ -146,7 +150,7 @@ fun DodamApp(
             exitTransition = { fadeOut(targetAlpha = 100f) },
         ) {
             onboardingScreen(
-                onRegisterClick = navController::navigateToInfo,
+                onRegisterClick = navController::navigateToSelectRole,
                 onLoginClick = navController::navigationToLogin,
             )
             mainScreen(
@@ -183,8 +187,13 @@ fun DodamApp(
             mealScreen(
                 popBackStack = navController::popBackStack,
             )
+            selectRoleScreen(
+                onBackClick = navController::popBackStack,
+                navigateToChildrenManage = navController::navigateToChildrenManageScreen,
+                navigateToInfo = { navController.navigateToInfo() },
+            )
             infoScreen(
-                onNextClick = { name, grade, room, number, email, phoneNumber ->
+                onNextClick = { name, grade, room, number, email, phoneNumber, childrenList ->
                     navController.navigateToAuth(
                         name = name,
                         grade = grade,
@@ -192,6 +201,7 @@ fun DodamApp(
                         number = number,
                         email = email,
                         phoneNumber = phoneNumber,
+                        childrenList = childrenList,
                     )
                 },
                 onBackClick = navController::popBackStack,
@@ -294,6 +304,16 @@ fun DodamApp(
             )
             editMemberInfoScreen(
                 popBackStack = navController::popBackStack,
+            )
+            childrenManageScreen(
+                popBackStack = navController::popBackStack,
+                changeBottomNavVisible = { _ ->
+                },
+                navigateToInfo = { childrenList ->
+                    navController.navigateToInfo(
+                        childrenList,
+                    )
+                },
             )
         }
     }
