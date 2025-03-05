@@ -35,6 +35,7 @@ import com.b1nd.dodam.parent.childrenmanage.navigation.childrenManageScreen
 import com.b1nd.dodam.parent.childrenmanage.navigation.navigateToChildrenManageScreen
 import com.b1nd.dodam.parnet.home.navigation.PARENT_HOME_ROUTE
 import com.b1nd.dodam.parnet.home.navigation.parentHomeScreen
+import com.b1nd.dodam.register.navigation.navigateToInfo
 import kotlinx.collections.immutable.toImmutableList
 
 @ExperimentalMaterial3Api
@@ -76,6 +77,9 @@ internal fun ParentMainScreen(
                 popBackStack = navController::popBackStack,
                 changeBottomNavVisible = { visible ->
                     bottomNavVisible = visible
+                },
+                navigateToInfo = {
+                    navController.navigateToInfo()
                 },
             )
         }

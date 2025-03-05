@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
@@ -58,6 +59,7 @@ fun AuthScreen(
     number: String,
     email: String,
     phoneNumber: String,
+    childrenList: List<Children>,
     viewModel: RegisterViewModel = koinViewModel(),
     navigateToMain: () -> Unit,
     onBackClick: () -> Unit,
@@ -71,6 +73,7 @@ fun AuthScreen(
 
     var showPassword by remember { mutableStateOf(false) }
     var showConfirmPassword by remember { mutableStateOf(false) }
+    var role by remember { mutableStateOf("") }
 
     var showDialog by remember { mutableStateOf(false) }
 
@@ -91,6 +94,9 @@ fun AuthScreen(
                 is Event.ShowDialog -> showDialog = true
             }
         }
+    }
+    LaunchedEffect(true) {
+        role = if (childrenList.isNotEmpty()) "PARENT" else "STUDENT"
     }
 
     if (showDialog) {
@@ -269,16 +275,26 @@ fun AuthScreen(
                     passwordState.value.isNotBlank() &&
                     confirmPasswordState.value.isNotBlank(),
                 onClick = {
-                    viewModel.register(
-                        email = email,
-                        grade = grade.toInt(),
-                        id = idState.value,
-                        name = name,
-                        number = number.toInt(),
-                        phone = phoneNumber,
-                        pw = passwordState.value,
-                        room = room.toInt(),
-                    )
+                    if (role == "STUDENT") {
+                        viewModel.register(
+                            email = email,
+                            grade = grade.toInt(),
+                            name = name,
+                            id = idState.value,
+                            number = number.toInt(),
+                            phone = phoneNumber,
+                            pw = passwordState.value,
+                            room = room.toInt(),
+                        )
+                    } else {
+                        viewModel.parentRegister(
+                            id = idState.value,
+                            pw = passwordState.value,
+                            name = name,
+                            childrenList = childrenList,
+                            phone = phoneNumber,
+                        )
+                    }
                 },
                 loading = uiState.isLoading,
                 buttonSize = ButtonSize.Large,
