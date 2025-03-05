@@ -288,7 +288,6 @@ fun AuthScreen(
                             room = room.toInt(),
                         )
                     } else {
-                        Log.d("TAG", "parent ${idState.value}\n${passwordState.value}\n$name\n$childrenList\n$phoneNumber ")
                         viewModel.parentRegister(
                             id = idState.value,
                             pw = passwordState.value,
