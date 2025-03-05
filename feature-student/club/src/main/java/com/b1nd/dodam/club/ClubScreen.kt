@@ -16,10 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.b1nd.dodam.club.model.ClubPage
-import com.b1nd.dodam.club.model.ClubSideEffect
 import com.b1nd.dodam.club.screen.ClubDetailScreen
 import com.b1nd.dodam.club.screen.ClubListScreen
-import com.b1nd.dodam.ui.component.SnackbarState
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 

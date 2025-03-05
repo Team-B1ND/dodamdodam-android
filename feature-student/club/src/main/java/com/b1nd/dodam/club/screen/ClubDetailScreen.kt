@@ -71,7 +71,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
         ) {
             BottomSheetScaffold(
                 sheetContent = {
@@ -79,7 +79,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(0.666f)
+                                .fillMaxHeight(0.666f),
                         ) {
                             when (val data = state.clubPendingUiState) {
                                 ClubPendingUiState.Error -> {}
@@ -90,7 +90,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                                 .padding(top = 2.dp)
                                                 .width(50.dp)
                                                 .height(20.dp)
-                                                .background(brush = shimmerEffect())
+                                                .background(brush = shimmerEffect()),
                                         )
                                         DodamLoadingClubMember(isFirst = true)
                                         DodamLoadingClubMember()
@@ -310,7 +310,7 @@ private fun DodamClubMember(
                 Spacer(modifier = Modifier.weight(1f))
                 Row(
                     modifier = Modifier.align(Alignment.CenterVertically),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (isMyClub) {
                         Box(
@@ -322,9 +322,10 @@ private fun DodamClubMember(
                                         ClubState.REJECTED -> DodamTheme.colors.statusNegative
                                         ClubState.WAITING -> DodamTheme.colors.lineNormal
                                         ClubState.DELETED -> DodamTheme.colors.lineNormal
-                                    }, shape = RoundedCornerShape(28.dp)
+                                    },
+                                    shape = RoundedCornerShape(28.dp),
                                 )
-                                .padding(vertical = 4.dp, horizontal = 8.dp)
+                                .padding(vertical = 4.dp, horizontal = 8.dp),
                         ) {
                             Text(
                                 modifier = Modifier.align(Alignment.Center),
@@ -336,7 +337,7 @@ private fun DodamClubMember(
                                     ClubState.DELETED -> "삭제됨"
                                 },
                                 style = DodamTheme.typography.caption2Bold(),
-                                color = DodamTheme.colors.staticWhite
+                                color = DodamTheme.colors.staticWhite,
                             )
                         }
                     }
@@ -388,7 +389,7 @@ private fun DodamLoadingClubMember(modifier: Modifier = Modifier, isFirst: Boole
                 modifier = Modifier
                     .width(32.dp)
                     .height(18.dp)
-                    .background(brush = shimmerEffect())
+                    .background(brush = shimmerEffect()),
             )
         }
     }

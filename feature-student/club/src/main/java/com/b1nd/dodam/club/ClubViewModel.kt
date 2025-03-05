@@ -127,7 +127,6 @@ class ClubViewModel : ViewModel(), KoinComponent {
         }
     }
 
-
     fun loadDetailClub(id: Long, club: Club) = viewModelScope.launch {
         _state.update {
             it.copy(
@@ -199,9 +198,8 @@ class ClubViewModel : ViewModel(), KoinComponent {
 
 //    suspend fun checkMyClub(id: Long) = loadMyName() == loadLeaderName(id)
 
-    private suspend fun loadMyName(): String =
-        memberRepository.getMyInfo().filterIsInstance<Result.Success<MemberInfo>>()
-            .map { it.data.name }.firstOrNull() ?: "이름을 부를 수 없음"
+    private suspend fun loadMyName(): String = memberRepository.getMyInfo().filterIsInstance<Result.Success<MemberInfo>>()
+        .map { it.data.name }.firstOrNull() ?: "이름을 부를 수 없음"
 
     private suspend fun loadLeaderName(id: Long): String = clubRepository.getClubLeader(id.toInt())
         .filterIsInstance<Result.Success<ClubMember>>()

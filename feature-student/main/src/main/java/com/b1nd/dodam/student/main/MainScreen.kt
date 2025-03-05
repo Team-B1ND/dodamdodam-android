@@ -124,7 +124,7 @@ internal fun MainScreen(
                 },
                 navigateToWakeUpSong = navigateToWakeUpSong,
                 navigateToAddWakeUpSong = navigateToAddWakeUpSong,
-                navigateToClub = navigateToClub
+                navigateToClub = navigateToClub,
             )
         }
 

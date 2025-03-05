@@ -6,7 +6,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.b1nd.dodam.club.ClubScreen
-import com.b1nd.dodam.ui.component.SnackbarState
 
 const val CLUB_ROUTE = "club"
 
