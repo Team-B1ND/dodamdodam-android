@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.dodam.design.system.cmm)
     implementation(libs.firebase.message)
     implementation(projects.ui)
+    implementation(project(":feature-student:club"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
@@ -103,6 +104,11 @@ dependencies {
     implementation(projects.feature.groupDetail)
     implementation(projects.feature.groupCreate)
     implementation(projects.feature.groupWaiting)
+<<<<<<< HEAD
     implementation(projects.network.club)
     implementation(projects.data.club)
+=======
+    implementation(projects.featureStudent.joinClub)
+
+>>>>>>> feature/s/291-create-new-club-scren
 }

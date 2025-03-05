@@ -25,6 +25,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.b1nd.dodam.club.navigation.clubScreen
 import com.b1nd.dodam.asknightstudy.navigation.askNightStudyScreen
 import com.b1nd.dodam.asknightstudy.navigation.navigateToAskNightStudy
 import com.b1nd.dodam.askout.navigation.askOutScreen
@@ -33,6 +34,7 @@ import com.b1nd.dodam.askwakeupsong.navigation.askWakeupSongScreen
 import com.b1nd.dodam.askwakeupsong.navigation.navigateToAskWakeupSong
 import com.b1nd.dodam.bus.navigation.busScreen
 import com.b1nd.dodam.bus.navigation.navigateToBus
+import com.b1nd.dodam.club.navigation.CLUB_ROUTE
 import com.b1nd.dodam.dds.component.DodamErrorToast
 import com.b1nd.dodam.dds.component.DodamSuccessToast
 import com.b1nd.dodam.dds.component.DodamWarningToast
@@ -59,6 +61,9 @@ import com.b1nd.dodam.student.main.navigation.mainScreen
 import com.b1nd.dodam.student.main.navigation.navigateToMain
 import com.b1nd.dodam.student.point.navigation.navigateToPoint
 import com.b1nd.dodam.student.point.navigation.pointScreen
+import com.b1nd.dodam.club.navigation.navigateToClub
+import com.b1nd.dodam.join_club.navigation.joinClubScreen
+import com.b1nd.dodam.join_club.navigation.navigateToJoinClub
 import com.b1nd.dodam.wakeupsong.navigation.navigateToWakeupSong
 import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -156,6 +161,7 @@ fun DodamApp(
                 navigateToAddOuting = navController::navigateToAskOut,
                 navigateToSetting = navController::navigateToSetting,
                 navigateToMyPoint = navController::navigateToPoint,
+                navigateToClub = navController::navigateToClub,
                 navigateToAddBus = {
                     navController.navigateToBus()
                 },
@@ -170,6 +176,15 @@ fun DodamApp(
                     scope.launch { snackbarHostState.showSnackbar(text) }
                 },
                 role = role,
+                navigateToJoinClub = navController::navigateToJoinClub
+            )
+            clubScreen(
+                popBackStack = navController::popBackStack,
+                showToast = { status, text ->
+                    state = status
+                    scope.launch { snackbarHostState.showSnackbar(text) }
+                },
+                navigateToJoinClub = navController::navigateToJoinClub
             )
             parentMainScreen(
                 navController = mainNavController,
@@ -182,6 +197,9 @@ fun DodamApp(
             )
             mealScreen(
                 popBackStack = navController::popBackStack,
+            )
+            joinClubScreen(
+                popBackStack = navController::popBackStack
             )
             infoScreen(
                 onNextClick = { name, grade, room, number, email, phoneNumber ->

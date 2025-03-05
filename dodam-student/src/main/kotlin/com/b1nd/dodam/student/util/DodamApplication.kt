@@ -1,6 +1,7 @@
 package com.b1nd.dodam.student.util
 
 import android.app.Application
+import com.b1nd.dodam.club.di.clubViewModelModule
 import com.b1nd.dodam.all.di.parentAllViewModelModule
 import com.b1nd.dodam.asknightstudy.di.askNightStudyViewModelModule
 import com.b1nd.dodam.askout.di.askOutViewModelModule
@@ -27,6 +28,7 @@ import com.b1nd.dodam.groupadd.di.groupAddViewModelModule
 import com.b1nd.dodam.groupcreate.di.groupCreateViewModelModule
 import com.b1nd.dodam.groupdetail.di.groupDetailViewModelModule
 import com.b1nd.dodam.groupwaiting.di.groupWaitingViewModelModule
+import com.b1nd.dodam.join_club.di.joinClubViewModelModule
 import com.b1nd.dodam.keystore.keystoreManagerModule
 import com.b1nd.dodam.login.di.loginViewModelModule
 import com.b1nd.dodam.member.di.memberDataSourceModule
@@ -120,8 +122,13 @@ class DodamApplication : Application() {
                     groupDetailViewModelModule,
                     groupWaitingViewModelModule,
                     childrenManageViewModelModule,
+<<<<<<< HEAD
                     clubDataSourceModule,
                     clubRepositoryModule,
+=======
+                    clubViewModelModule,
+                    joinClubViewModelModule
+>>>>>>> feature/s/291-create-new-club-scren
                 ) + mainViewModelModules,
             )
         }

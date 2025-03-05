@@ -72,6 +72,8 @@ include(
     ":network:point",
     ":data:point",
     ":feature-student:point",
+    ":feature-student:club",
+    ":feature-student:join-club",
     ":feature-student:ask-wakeup-song",
     ":logging",
     ":dodam-teacher-android",
