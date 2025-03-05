@@ -224,7 +224,7 @@ class OutingServiceTest {
 
         assertEquals(
             Unit,
-            response,
+            response,;
         )
     }
 

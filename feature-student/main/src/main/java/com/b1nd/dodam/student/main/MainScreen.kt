@@ -31,7 +31,6 @@ import androidx.navigation.navOptions
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
-import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
 import com.b1nd.dodam.notice.navigation.noticeScreen
@@ -56,6 +55,8 @@ internal fun MainScreen(
     navigateToAddBus: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
+    navigateToClub: () -> Unit,
+    navigateToJoinClub: () -> Unit,
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,
@@ -123,6 +124,7 @@ internal fun MainScreen(
                 },
                 navigateToWakeUpSong = navigateToWakeUpSong,
                 navigateToAddWakeUpSong = navigateToAddWakeUpSong,
+                navigateToClub = navigateToClub
             )
         }
 
