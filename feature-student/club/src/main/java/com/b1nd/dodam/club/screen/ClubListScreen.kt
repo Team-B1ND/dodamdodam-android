@@ -2,7 +2,6 @@
 
 package com.b1nd.dodam.club.screen
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -31,12 +31,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubPendingUiState
@@ -50,6 +47,7 @@ import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.delay
 
 @Composable
 internal fun ClubListScreen(
@@ -63,6 +61,13 @@ internal fun ClubListScreen(
         "창체",
         "자율",
     )
+
+    var isLoading by remember { mutableStateOf(true) } // 초기 로딩 상태
+
+    LaunchedEffect(Unit) {
+        delay(2000L) // 2초 동안 대기
+        isLoading = false // 2초 후 로딩 종료
+    }
 
     val clubTypeItem = List(2) { index ->
         DodamSegment(
@@ -130,14 +135,26 @@ internal fun ClubListScreen(
                             val clubs =
                                 if (clubTypeIndex == 0) data.clubPendingList.creativeClubs else data.clubPendingList.selfClubs
                             if (clubs.isEmpty()) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                                DodamEmpty(
-                                    onClick = {
-                                        uriHandler.openUri("https://dodam.b1nd.com/clubs/create")
-                                    },
-                                    title = "아직 등록된 동아리가 없어요",
-                                    buttonText = "동아리 생성하기",
-                                )
+                                if (isLoading) {
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(top = 20.dp)
+                                            .fillMaxWidth(),
+                                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                                    ) {
+                                        DodamLoadingClub()
+                                        DodamLoadingClub()
+                                    }
+                                } else {
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                    DodamEmpty(
+                                        onClick = {
+                                            uriHandler.openUri("https://dodam.b1nd.com/clubs/create")
+                                        },
+                                        title = "아직 등록된 동아리가 없어요",
+                                        buttonText = "동아리 생성하기",
+                                    )
+                                }
                             } else {
                                 LazyColumn(modifier = Modifier.padding(top = 20.dp)) {
                                     items(clubs.size) { index ->
