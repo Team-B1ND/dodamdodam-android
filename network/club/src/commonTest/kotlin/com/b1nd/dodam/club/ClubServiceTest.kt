@@ -385,7 +385,7 @@ class ClubServiceTest {
 
     @Test
     fun 멤버_가져오기() = runTest(testDispatcher) {
-        val response = clubService.getClubAllowMember(1)
+        val response = clubService.getClubMember(1)
 
         assertEquals(
             ClubMemberResponse(
@@ -398,26 +398,6 @@ class ClubServiceTest {
                 room = 2,
                 number = 8,
                 profileImage = "https://avatars.githubusercontent.com/u/93782306?s=280&v=4",
-            ),
-            response.first(),
-        )
-    }
-
-    @Test
-    fun 모든_멤버_가져오기() = runTest(testDispatcher) {
-        val response = clubService.getClubAllMember(1)
-
-        assertEquals(
-            ClubMemberResponse(
-                id = 48,
-                status = "WAITING",
-                permission = "CLUB_MEMBER",
-                studentId = 5,
-                name = "박재민",
-                grade = 2,
-                room = 2,
-                number = 8,
-                profileImage = null,
             ),
             response.first(),
         )

@@ -12,8 +12,7 @@ interface ClubDataSource {
     suspend fun getDetailClub(id: Int): ClubResponse
     suspend fun getClubJoinRequestReceived(): ImmutableList<ClubJoinResponse>
     suspend fun getClubLeader(id: Int): ClubMemberResponse
-    suspend fun getClubAllowMember(id: Int): ImmutableList<ClubMemberResponse>
-    suspend fun getClubAllMember(id: Int): ImmutableList<ClubMemberResponse>
+    suspend fun getClubMember(id: Int): ImmutableList<ClubMemberResponse>
     suspend fun getClubList(): ImmutableList<ClubResponse>
     suspend fun getClubJoined(): ImmutableList<ClubResponse>
     suspend fun getClubMyCreated(): ImmutableList<ClubResponse>

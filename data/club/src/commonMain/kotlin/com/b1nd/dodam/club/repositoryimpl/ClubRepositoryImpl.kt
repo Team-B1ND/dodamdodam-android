@@ -82,20 +82,10 @@ internal class ClubRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun getClubAllowMember(id: Int): Flow<Result<ImmutableList<ClubMember>>> {
+    override suspend fun getClubMember(id: Int): Flow<Result<ImmutableList<ClubMember>>> {
         return flow {
             emit(
-                network.getClubAllowMember(id).map { it.toModel() }.toImmutableList(),
-            )
-        }
-            .asResult()
-            .flowOn(dispatcher)
-    }
-
-    override suspend fun getClubAllMember(id: Int): Flow<Result<ImmutableList<ClubMember>>> {
-        return flow {
-            emit(
-                network.getClubAllMember(id).map { it.toModel() }.toImmutableList(),
+                network.getClubMember(id).map { it.toModel() }.toImmutableList(),
             )
         }
             .asResult()
