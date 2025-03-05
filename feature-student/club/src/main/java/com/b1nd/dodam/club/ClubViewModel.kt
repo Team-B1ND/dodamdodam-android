@@ -17,8 +17,6 @@ import com.b1nd.dodam.club.repository.ClubRepository
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.core.model.Teacher
-import com.b1nd.dodam.member.MemberRepository
-import com.b1nd.dodam.member.model.MemberInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -38,7 +36,6 @@ import org.koin.core.qualifier.named
 
 class ClubViewModel : ViewModel(), KoinComponent {
     private val clubRepository: ClubRepository by inject()
-    private val memberRepository: MemberRepository by inject()
 
     private val dispatcher: CoroutineDispatcher by inject(named(DispatcherType.IO))
 
@@ -196,8 +193,6 @@ class ClubViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    private suspend fun loadMyName(): String = memberRepository.getMyInfo().filterIsInstance<Result.Success<MemberInfo>>()
-        .map { it.data.name }.firstOrNull() ?: "이름을 부를 수 없음"
 
     private suspend fun loadLeaderName(id: Long): String = clubRepository.getClubLeader(id.toInt())
         .filterIsInstance<Result.Success<ClubMember>>()
