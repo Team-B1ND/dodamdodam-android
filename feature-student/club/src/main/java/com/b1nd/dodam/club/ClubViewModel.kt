@@ -159,7 +159,22 @@ class ClubViewModel : ViewModel(), KoinComponent {
                                 ),
                                 detailClubMember = DetailClubAndMember(
                                     club = club,
-                                    clubMember = member.data,
+                                    clubMember = ClubMember(
+                                        isLeader = member.data.isLeader,
+                                        students = member.data.students.map { ww ->
+                                            ClubMemberStudent(
+                                                id = ww.id,
+                                                status = ww.status,
+                                                permissions = ww.permissions,
+                                                studentId = ww.studentId,
+                                                name = ww.name,
+                                                grade = ww.grade,
+                                                room = ww.room,
+                                                number = ww.number,
+                                                profileImage = ww.profileImage
+                                            )
+                                        }.toImmutableList()
+                                    ),
                                 ),
                             ),
                         )
@@ -202,6 +217,6 @@ class ClubViewModel : ViewModel(), KoinComponent {
 
 
     private suspend fun loadLeaderName(id: Long): String = clubRepository.getClubLeader(id.toInt())
-        .filterIsInstance<Result.Success<ClubMember>>()
-        .map { it.data.students.name }.firstOrNull() ?: "알 수 없음"
+        .filterIsInstance<Result.Success<ClubMemberStudent>>()
+        .map { it.data.name }.firstOrNull() ?: "알 수 없음"
 }
