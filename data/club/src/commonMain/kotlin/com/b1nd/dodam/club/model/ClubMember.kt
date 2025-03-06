@@ -1,6 +1,14 @@
 package com.b1nd.dodam.club.model
 
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
+
 data class ClubMember(
+    val isLeader: Boolean?,
+    val students: ImmutableList<ClubMemberStudent>,
+)
+
+data class ClubMemberStudent(
     val id: Int,
     val status: ClubState,
     val permissions: ClubPermission,
@@ -13,13 +21,19 @@ data class ClubMember(
 )
 
 internal fun ClubMemberResponse.toModel(): ClubMember = ClubMember(
-    id = id,
-    status = status.toClubState(),
-    permissions = permission.toClubPermission(),
-    studentId = studentId,
-    name = name,
-    grade = grade,
-    room = room,
-    number = number,
-    profileImage = profileImage,
+    isLeader = isLeader,
+    students =  students.map {
+        ClubMemberStudent(
+            id = it.id,
+            status = it.status.toClubState(),
+            permissions = it.permission.toClubPermission(),
+            studentId = it.studentId,
+            name = it.name,
+            grade = it.grade,
+            room = it.room,
+            number = it.number,
+            profileImage = it.profileImage,
+        )
+    }.toImmutableList()
+
 )
