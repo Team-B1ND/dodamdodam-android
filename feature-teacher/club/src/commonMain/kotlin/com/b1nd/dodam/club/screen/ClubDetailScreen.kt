@@ -37,6 +37,7 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamDivider
+import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.effect.shimmerEffect
@@ -127,11 +128,14 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                 content = {
                     when (val data = state.clubPendingUiState) {
                         ClubPendingUiState.Error -> {
-                            Text(
-                                text = "에러",
-                                style = DodamTheme.typography.heading1Bold(),
-                                color = DodamTheme.colors.labelNormal,
-                            )
+                            Box(modifier = Modifier.fillMaxSize()){
+                                DodamEmpty(
+                                    modifier = Modifier.align(Alignment.TopCenter).padding(top = 16.dp),
+                                    onClick = popBackStack,
+                                    title = "에러가 발생했어요!",
+                                    buttonText = "뒤로가기"
+                                )
+                            }
                         }
 
                         ClubPendingUiState.Loading -> {
