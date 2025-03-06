@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubMember
+import com.b1nd.dodam.club.model.ClubMemberStudent
 import com.b1nd.dodam.club.model.ClubPendingList
 import com.b1nd.dodam.club.model.ClubPendingUiState
 import com.b1nd.dodam.club.model.ClubPermission
@@ -60,19 +61,23 @@ class ClubViewModel : ViewModel(), KoinComponent {
             ),
             state = ClubState.PENDING,
         ),
-        clubMember = persistentListOf(
+        clubMember =
             ClubMember(
-                id = -1,
-                status = ClubState.PENDING,
-                permissions = ClubPermission.CLUB_MEMBER,
-                studentId = -1,
-                name = "",
-                grade = -1,
-                room = -1,
-                number = -1,
-                profileImage = "",
+                isLeader = false,
+                students = persistentListOf(
+                    ClubMemberStudent(
+                        id = -1,
+                        status = ClubState.PENDING,
+                        permissions = ClubPermission.CLUB_MEMBER,
+                        studentId = -1,
+                        name = "",
+                        grade = -1,
+                        room = -1,
+                        number = -1,
+                        profileImage = "",
+                    ),
+                )
             ),
-        ),
     )
 
     fun loadClubList() = viewModelScope.launch {
@@ -151,7 +156,22 @@ class ClubViewModel : ViewModel(), KoinComponent {
                                 ),
                                 detailClubMember = DetailClubAndMember(
                                     club = club,
-                                    clubMember = member.data,
+                                    clubMember = ClubMember(
+                                        isLeader = member.data.isLeader,
+                                        students = member.data.students.map { ww ->
+                                            ClubMemberStudent(
+                                                id = ww.id,
+                                                status = ww.status,
+                                                permissions = ww.permissions,
+                                                studentId = ww.studentId,
+                                                name = ww.name,
+                                                grade = ww.grade,
+                                                room = ww.room,
+                                                number = ww.number,
+                                                profileImage = ww.profileImage
+                                            )
+                                        }.toImmutableList()
+                                    ),
                                 ),
                             ),
                         )
@@ -219,6 +239,6 @@ class ClubViewModel : ViewModel(), KoinComponent {
     }
 
     private suspend fun loadLeaderName(id: Long): String = clubRepository.getClubLeader(id.toInt())
-        .filterIsInstance<Result.Success<ClubMember>>()
+        .filterIsInstance<Result.Success<ClubMemberStudent>>()
         .map { it.data.name }.firstOrNull() ?: "알 수 없음"
 }
