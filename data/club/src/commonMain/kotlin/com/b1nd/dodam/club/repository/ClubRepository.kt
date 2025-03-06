@@ -3,6 +3,7 @@ package com.b1nd.dodam.club.repository
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
 import com.b1nd.dodam.club.model.ClubMember
+import com.b1nd.dodam.club.model.ClubMemberStudent
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.common.result.Result
 import kotlinx.collections.immutable.ImmutableList
@@ -14,8 +15,8 @@ interface ClubRepository {
     suspend fun deleteClubJoinRequest(id: Int): Flow<Result<Unit>>
     suspend fun getDetailClub(id: Int): Flow<Result<Club>>
     suspend fun getClubJoinRequestReceived(): Flow<Result<ImmutableList<ClubJoin>>>
-    suspend fun getClubLeader(id: Int): Flow<Result<ClubMember>>
-    suspend fun getClubMember(id: Int): Flow<Result<ImmutableList<ClubMember>>>
+    suspend fun getClubLeader(id: Int): Flow<Result<ClubMemberStudent>>
+    suspend fun getClubMember(id: Int): Flow<Result<ClubMember>>
     suspend fun getClubList(): Flow<Result<ImmutableList<Club>>>
     suspend fun getClubJoined(): Flow<Result<ImmutableList<Club>>>
     suspend fun getClubMyCreated(): Flow<Result<ImmutableList<Club>>>

@@ -12,3 +12,15 @@ data class ClubMemberStudent(
     val number: Int,
     val profileImage: String?,
 )
+
+internal fun ClubMemberStudentResponse.toModel(): ClubMemberStudent = ClubMemberStudent(
+    id = id,
+    status = status.toClubState(),
+    permissions = permission.toClubPermission(),
+    studentId = studentId,
+    name = name,
+    grade = grade,
+    room = room,
+    number = number,
+    profileImage = profileImage,
+)
