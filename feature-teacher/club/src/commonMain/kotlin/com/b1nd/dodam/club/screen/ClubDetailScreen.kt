@@ -76,12 +76,26 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                 ClubPendingUiState.Error -> {}
                                 ClubPendingUiState.Loading -> {
                                     item {
-                                        Box(modifier = Modifier.padding(top = 2.dp).width(50.dp).height(20.dp).background(brush = shimmerEffect()))
+                                        Row {
+                                            Box(
+                                                modifier = Modifier.padding(top = 2.dp).width(50.dp)
+                                                    .height(20.dp)
+                                                    .background(brush = shimmerEffect())
+                                            )
+                                            Spacer(modifier = Modifier.weight(1f))
+                                            Box(
+                                                modifier = Modifier.padding(top = 2.dp).width(40.dp)
+                                                    .height(20.dp)
+                                                    .background(brush = shimmerEffect())
+                                            )
+                                        }
+
                                         DodamLoadingClubMember(isFirst = true)
                                         DodamLoadingClubMember()
                                         DodamLoadingClubMember()
                                     }
                                 }
+
                                 is ClubPendingUiState.Success -> {
                                     item {
                                         Spacer(modifier = Modifier.height(2.dp))
@@ -93,7 +107,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                             )
                                             Spacer(modifier = Modifier.weight(1f))
                                             Text(
-                                                text = "멤버 수 : ${data.detailClubMember.clubMember.size}",
+                                                text = "${data.detailClubMember.clubMember.students.size}명",
                                                 style = DodamTheme.typography.headlineBold(),
                                                 color = DodamTheme.colors.labelNormal,
                                             )
@@ -136,9 +150,10 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                 content = {
                     when (val data = state.clubPendingUiState) {
                         ClubPendingUiState.Error -> {
-                            Box(modifier = Modifier.fillMaxSize()){
+                            Box(modifier = Modifier.fillMaxSize()) {
                                 DodamEmpty(
-                                    modifier = Modifier.align(Alignment.TopCenter).padding(top = 16.dp),
+                                    modifier = Modifier.align(Alignment.TopCenter)
+                                        .padding(top = 16.dp),
                                     onClick = popBackStack,
                                     title = "에러가 발생했어요!",
                                     buttonText = "뒤로가기"
@@ -250,7 +265,14 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
 }
 
 @Composable
-private fun DodamClubMember(modifier: Modifier = Modifier, image: String? = "", permission: String = "", name: String, grade: Int, room: Int) {
+private fun DodamClubMember(
+    modifier: Modifier = Modifier,
+    image: String? = "",
+    permission: String = "",
+    name: String,
+    grade: Int,
+    room: Int,
+) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,

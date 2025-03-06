@@ -37,6 +37,7 @@ import com.b1nd.dodam.club.model.ClubUiState
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
+import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
@@ -49,7 +50,10 @@ import com.mikepenz.markdown.model.DefaultMarkdownTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
+internal fun ClubDetailScreen(
+    state: ClubUiState,
+    popBackStack: () -> Unit,
+) {
     val bottomSheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.PartiallyExpanded,
     )
@@ -76,63 +80,76 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
         ) {
             BottomSheetScaffold(
                 sheetContent = {
-                    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight(0.666f),
-                        ) {
-                            when (val data = state.clubPendingUiState) {
-                                ClubPendingUiState.Error -> {}
-                                ClubPendingUiState.Loading -> {
-                                    item {
-                                        Box(
-                                            modifier = Modifier
-                                                .padding(top = 2.dp)
-                                                .width(50.dp)
-                                                .height(20.dp)
-                                                .background(brush = shimmerEffect()),
-                                        )
-                                        DodamLoadingClubMember(isFirst = true)
-                                        DodamLoadingClubMember()
-                                        DodamLoadingClubMember()
-                                    }
-                                }
-
-                                is ClubPendingUiState.Success -> {
-                                    item {
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                        Row {
-                                            Text(
-                                                text = "멤버현황",
-                                                style = DodamTheme.typography.headlineBold(),
-                                                color = DodamTheme.colors.labelNormal,
-                                            )
-                                            Spacer(modifier = Modifier.weight(1f))
-                                            Text(
-                                                text = "멤버 수 : ${data.detailClubMember.clubMember.size}",
-                                                style = DodamTheme.typography.headlineBold(),
-                                                color = DodamTheme.colors.labelNormal,
-                                            )
+                    Box {
+                        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight(0.666f),
+                            ) {
+                                when (val data = state.clubPendingUiState) {
+                                    ClubPendingUiState.Error -> {}
+                                    ClubPendingUiState.Loading -> {
+                                        item {
+                                            Row {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .padding(top = 2.dp)
+                                                        .width(50.dp)
+                                                        .height(20.dp)
+                                                        .background(brush = shimmerEffect())
+                                                )
+                                                Spacer(modifier = Modifier.weight(1f))
+                                                Box(
+                                                    modifier = Modifier
+                                                        .padding(top = 2.dp)
+                                                        .width(40.dp)
+                                                        .height(20.dp)
+                                                        .background(brush = shimmerEffect())
+                                                )
+                                            }
+                                            DodamLoadingClubMember(isFirst = true)
+                                            DodamLoadingClubMember()
+                                            DodamLoadingClubMember()
                                         }
-
-                                        Spacer(modifier = Modifier.height(6.dp))
                                     }
-                                    items(data.detailClubMember.clubMember.students.size) { index ->
-                                        DodamClubMember(
-                                            image = data.detailClubMember.clubMember.students[index].profileImage,
-                                            permission = data.detailClubMember.clubMember.students[index].permissions.toString(),
-                                            name = data.detailClubMember.clubMember.students[index].name,
-                                            grade = data.detailClubMember.clubMember.students[index].grade,
-                                            room = data.detailClubMember.clubMember.students[index].room,
-                                            state = data.detailClubMember.clubMember.students[index].status,
-                                        )
-                                        Spacer(modifier = Modifier.height(4.dp))
+
+                                    is ClubPendingUiState.Success -> {
+                                        item {
+                                            Spacer(modifier = Modifier.height(2.dp))
+                                            Row {
+                                                Text(
+                                                    text = "멤버현황",
+                                                    style = DodamTheme.typography.headlineBold(),
+                                                    color = DodamTheme.colors.labelNormal,
+                                                )
+                                                Spacer(modifier = Modifier.weight(1f))
+                                                Text(
+                                                    text = "${data.detailClubMember.clubMember.students.size}명",
+                                                    style = DodamTheme.typography.headlineBold(),
+                                                    color = DodamTheme.colors.labelNormal,
+                                                )
+                                            }
+
+                                            Spacer(modifier = Modifier.height(6.dp))
+                                        }
+                                        items(data.detailClubMember.clubMember.students.size) { index ->
+                                            DodamClubMember(
+                                                image = data.detailClubMember.clubMember.students[index].profileImage,
+                                                permission = data.detailClubMember.clubMember.students[index].permissions.toString(),
+                                                name = data.detailClubMember.clubMember.students[index].name,
+                                                grade = data.detailClubMember.clubMember.students[index].grade,
+                                                room = data.detailClubMember.clubMember.students[index].room,
+                                                state = data.detailClubMember.clubMember.students[index].status,
+                                            )
+                                            Spacer(modifier = Modifier.height(4.dp))
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+
                 },
                 modifier = Modifier.fillMaxSize(),
                 scaffoldState = scaffoldState,
@@ -158,9 +175,11 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                 content = {
                     when (val data = state.clubPendingUiState) {
                         ClubPendingUiState.Error -> {
-                            Box(modifier = Modifier.fillMaxSize()){
+                            Box(modifier = Modifier.fillMaxSize()) {
                                 DodamEmpty(
-                                    modifier = Modifier.align(Alignment.TopCenter).padding(top = 16.dp),
+                                    modifier = Modifier
+                                        .align(Alignment.TopCenter)
+                                        .padding(top = 16.dp),
                                     onClick = popBackStack,
                                     title = "에러가 발생했어요!",
                                     buttonText = "뒤로가기"
@@ -280,6 +299,31 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                     }
                 },
             )
+            when (val data = state.clubPendingUiState) {
+                ClubPendingUiState.Error -> {}
+                ClubPendingUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .height(80.dp)
+                            .padding(vertical = 12.dp, horizontal = 4.dp)
+                            .background(shape = RoundedCornerShape(16.dp), brush = shimmerEffect()),
+                    )
+                }
+
+                is ClubPendingUiState.Success -> {
+                    DodamButton(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .padding(vertical = 12.dp, horizontal = 4.dp),
+                        onClick = { },
+                        text = "가입 신청"
+                    )
+                }
+            }
+
         }
     }
 }
