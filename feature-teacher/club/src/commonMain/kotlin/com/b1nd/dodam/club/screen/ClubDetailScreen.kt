@@ -85,11 +85,19 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                 is ClubPendingUiState.Success -> {
                                     item {
                                         Spacer(modifier = Modifier.height(2.dp))
-                                        Text(
-                                            text = "멤버현황",
-                                            style = DodamTheme.typography.headlineBold(),
-                                            color = DodamTheme.colors.labelNormal,
-                                        )
+                                        Row {
+                                            Text(
+                                                text = "멤버현황",
+                                                style = DodamTheme.typography.headlineBold(),
+                                                color = DodamTheme.colors.labelNormal,
+                                            )
+                                            Spacer(modifier = Modifier.weight(1f))
+                                            Text(
+                                                text = "멤버 수 : ${data.detailClubMember.clubMember.size}",
+                                                style = DodamTheme.typography.headlineBold(),
+                                                color = DodamTheme.colors.labelNormal,
+                                            )
+                                        }
                                         Spacer(modifier = Modifier.height(6.dp))
                                     }
                                     items(data.detailClubMember.clubMember.size) { index ->
