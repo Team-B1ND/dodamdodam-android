@@ -72,16 +72,9 @@ class ClubService(
         }
     }
 
-    override suspend fun getClubAllowMember(id: Int): ImmutableList<ClubMemberResponse> {
+    override suspend fun getClubMember(id: Int): ImmutableList<ClubMemberResponse> {
         return safeRequest {
             client.get(DodamUrl.CLUB + "/$id/members").body<Response<List<ClubMemberResponse>>>()
-        }.toImmutableList()
-    }
-
-    override suspend fun getClubAllMember(id: Int): ImmutableList<ClubMemberResponse> {
-        return safeRequest {
-            client.get(DodamUrl.CLUB + "/$id/all-members")
-                .body<Response<List<ClubMemberResponse>>>()
         }.toImmutableList()
     }
 

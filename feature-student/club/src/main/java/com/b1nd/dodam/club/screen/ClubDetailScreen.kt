@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.club.model.ClubPendingUiState
+import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.ClubUiState
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
@@ -66,21 +67,37 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
         },
         containerColor = DodamTheme.colors.backgroundNeutral,
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 16.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+                .padding(horizontal = 16.dp),
+        ) {
             BottomSheetScaffold(
                 sheetContent = {
                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        LazyColumn(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.666f)) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(0.666f),
+                        ) {
                             when (val data = state.clubPendingUiState) {
                                 ClubPendingUiState.Error -> {}
                                 ClubPendingUiState.Loading -> {
                                     item {
-                                        Box(modifier = Modifier.padding(top = 2.dp).width(50.dp).height(20.dp).background(brush = shimmerEffect()))
+                                        Box(
+                                            modifier = Modifier
+                                                .padding(top = 2.dp)
+                                                .width(50.dp)
+                                                .height(20.dp)
+                                                .background(brush = shimmerEffect()),
+                                        )
                                         DodamLoadingClubMember(isFirst = true)
                                         DodamLoadingClubMember()
                                         DodamLoadingClubMember()
                                     }
                                 }
+
                                 is ClubPendingUiState.Success -> {
                                     item {
                                         Spacer(modifier = Modifier.height(2.dp))
@@ -98,6 +115,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                             name = data.detailClubMember.clubMember[index].name,
                                             grade = data.detailClubMember.clubMember[index].grade,
                                             room = data.detailClubMember.clubMember[index].room,
+                                            state = data.detailClubMember.clubMember[index].status,
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                     }
@@ -115,7 +133,10 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                 sheetShadowElevation = 0.dp,
                 sheetDragHandle = {
                     Box(
-                        modifier = Modifier.padding(top = 16.dp).width(64.dp).height(6.dp)
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .width(64.dp)
+                            .height(6.dp)
                             .background(
                                 color = DodamTheme.colors.fillAlternative,
                                 shape = DodamTheme.shapes.extraSmall,
@@ -137,33 +158,45 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                         ClubPendingUiState.Loading -> {
                             Column {
                                 Box(
-                                    modifier = Modifier.width(160.dp).height(14.dp)
+                                    modifier = Modifier
+                                        .width(160.dp)
+                                        .height(14.dp)
                                         .background(brush = shimmerEffect()),
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(
-                                    modifier = Modifier.width(280.dp).height(22.dp)
+                                    modifier = Modifier
+                                        .width(280.dp)
+                                        .height(22.dp)
                                         .background(brush = shimmerEffect()),
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(
-                                    modifier = Modifier.width(200.dp).height(16.dp)
+                                    modifier = Modifier
+                                        .width(200.dp)
+                                        .height(16.dp)
                                         .background(brush = shimmerEffect()),
                                 )
                                 DodamDivider(modifier = Modifier.padding(vertical = 20.dp))
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(
-                                    modifier = Modifier.width(160.dp).height(20.dp)
+                                    modifier = Modifier
+                                        .width(160.dp)
+                                        .height(20.dp)
                                         .background(brush = shimmerEffect()),
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(
-                                    modifier = Modifier.fillMaxWidth().height(18.dp)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(18.dp)
                                         .background(brush = shimmerEffect()),
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(
-                                    modifier = Modifier.width(200.dp).height(18.dp)
+                                    modifier = Modifier
+                                        .width(200.dp)
+                                        .height(18.dp)
                                         .background(brush = shimmerEffect()),
                                 )
                             }
@@ -187,7 +220,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text(
-                                        text = data.detailClubMember.club.description,
+                                        text = data.detailClubMember.club.shortDescription,
                                         style = DodamTheme.typography.body1Medium(),
                                         color = DodamTheme.colors.labelNormal,
                                     )
@@ -225,7 +258,8 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                             list = DodamTheme.typography.body1Medium(),
                                         ),
                                         imageTransformer = Coil3ImageTransformerImpl,
-                                    )
+
+                                        )
                                     Spacer(modifier = Modifier.height(400.dp))
                                 }
                             }
@@ -238,7 +272,16 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
 }
 
 @Composable
-private fun DodamClubMember(modifier: Modifier = Modifier, image: String? = "", permission: String = "", name: String, grade: Int, room: Int) {
+private fun DodamClubMember(
+    modifier: Modifier = Modifier,
+    image: String? = "",
+    permission: String = "",
+    name: String,
+    grade: Int,
+    room: Int,
+    state: ClubState,
+    isMyClub: Boolean = false,
+) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -257,7 +300,6 @@ private fun DodamClubMember(modifier: Modifier = Modifier, image: String? = "", 
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 if (permission == "CLUB_LEADER") {
-                    // DDS 에 Crown 추가하면 아이콘 Crown 으로 바꿀 예정입니다.
                     Image(
                         modifier = Modifier.size(16.dp),
                         imageVector = DodamIcons.Crown.value,
@@ -265,44 +307,106 @@ private fun DodamClubMember(modifier: Modifier = Modifier, image: String? = "", 
                         colorFilter = ColorFilter.tint(DodamTheme.colors.statusCautionary),
                     )
                 }
+                Spacer(modifier = Modifier.weight(1f))
+                Row(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+//                    if (isMyClub) {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = when (state) {
+                                    ClubState.ALLOWED -> DodamTheme.colors.primaryNormal
+                                    ClubState.PENDING -> DodamTheme.colors.lineNormal
+                                    ClubState.REJECTED -> DodamTheme.colors.statusNegative
+                                    ClubState.WAITING -> DodamTheme.colors.lineNormal
+                                    ClubState.DELETED -> DodamTheme.colors.lineNormal
+                                },
+                                shape = RoundedCornerShape(28.dp),
+                            )
+                            .padding(vertical = 4.dp, horizontal = 8.dp),
+                    ) {
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = when (state) {
+                                ClubState.ALLOWED -> "승인됨"
+                                ClubState.PENDING -> "대기중"
+                                ClubState.REJECTED -> "거절됨"
+                                ClubState.WAITING -> "대기중"
+                                ClubState.DELETED -> "삭제됨"
+                            },
+                            style = DodamTheme.typography.caption2Bold(),
+                            color = DodamTheme.colors.staticWhite,
+                        )
+                    }
+//                    }
+                }
             }
-
-            Text(
-                text = "$grade-$room",
-                style = DodamTheme.typography.body2Medium(),
-                color = DodamTheme.colors.labelAlternative,
-            )
         }
+
+        Text(
+            text = "$grade-$room",
+            style = DodamTheme.typography.body2Medium(),
+            color = DodamTheme.colors.labelAlternative,
+        )
     }
 }
 
 @Composable
 private fun DodamLoadingClubMember(modifier: Modifier = Modifier, isFirst: Boolean = false) {
     Row(
-        modifier = modifier.fillMaxWidth().padding(vertical = 4.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier.size(34.5.dp)
+            modifier = Modifier
+                .size(34.5.dp)
                 .background(shape = CircleShape, brush = shimmerEffect()),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
-                    modifier = Modifier.width(52.dp).height(20.dp)
+                    modifier = Modifier
+                        .width(52.dp)
+                        .height(20.dp)
                         .background(brush = shimmerEffect()),
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 if (isFirst) {
                     Box(
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier
+                            .size(20.dp)
                             .background(shape = CircleShape, brush = shimmerEffect()),
                     )
                 }
             }
             Spacer(modifier = Modifier.height(2.dp))
-            Box(modifier = Modifier.width(32.dp).height(18.dp).background(brush = shimmerEffect()))
+            Box(
+                modifier = Modifier
+                    .width(32.dp)
+                    .height(18.dp)
+                    .background(brush = shimmerEffect()),
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Row(
+            modifier = Modifier.align(Alignment.CenterVertically),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(
+                        brush = shimmerEffect(),
+                        shape = RoundedCornerShape(28.dp),
+                    )
+                    .width(38.dp)
+                    .height(22.dp)
+            ) {
+            }
         }
     }
 }
