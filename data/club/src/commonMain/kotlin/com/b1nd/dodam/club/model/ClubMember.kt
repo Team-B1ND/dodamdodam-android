@@ -8,17 +8,6 @@ data class ClubMember(
     val students: ImmutableList<ClubMemberStudent>,
 )
 
-data class ClubMemberStudent(
-    val id: Int,
-    val status: ClubState,
-    val permissions: ClubPermission,
-    val studentId: Int,
-    val name: String,
-    val grade: Int,
-    val room: Int,
-    val number: Int,
-    val profileImage: String?,
-)
 
 internal fun ClubMemberResponse.toModel(): ClubMember = ClubMember(
     isLeader = isLeader,
