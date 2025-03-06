@@ -110,12 +110,12 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                     }
                                     items(data.detailClubMember.clubMember.size) { index ->
                                         DodamClubMember(
-                                            image = data.detailClubMember.clubMember[index].profileImage,
-                                            permission = data.detailClubMember.clubMember[index].permissions.toString(),
-                                            name = data.detailClubMember.clubMember[index].name,
-                                            grade = data.detailClubMember.clubMember[index].grade,
-                                            room = data.detailClubMember.clubMember[index].room,
-                                            state = data.detailClubMember.clubMember[index].status,
+                                            image = data.detailClubMember.clubMember[index].students.profileImage,
+                                            permission = data.detailClubMember.clubMember[index].students.permissions.toString(),
+                                            name = data.detailClubMember.clubMember[index].students.name,
+                                            grade = data.detailClubMember.clubMember[index].students.grade,
+                                            room = data.detailClubMember.clubMember[index].students.room,
+                                            state = data.detailClubMember.clubMember[index].students.status,
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                     }
