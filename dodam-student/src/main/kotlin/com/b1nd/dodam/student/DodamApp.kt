@@ -33,6 +33,8 @@ import com.b1nd.dodam.askwakeupsong.navigation.askWakeupSongScreen
 import com.b1nd.dodam.askwakeupsong.navigation.navigateToAskWakeupSong
 import com.b1nd.dodam.bus.navigation.busScreen
 import com.b1nd.dodam.bus.navigation.navigateToBus
+import com.b1nd.dodam.club.navigation.clubScreen
+import com.b1nd.dodam.club.navigation.navigateToClub
 import com.b1nd.dodam.dds.component.DodamErrorToast
 import com.b1nd.dodam.dds.component.DodamSuccessToast
 import com.b1nd.dodam.dds.component.DodamWarningToast
@@ -169,6 +171,7 @@ fun DodamApp(
                 navigateToAddWakeUpSong = {
                     navController.navigateToAskWakeupSong()
                 },
+                navigateToClub = navController::navigateToClub,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
@@ -303,6 +306,9 @@ fun DodamApp(
                 popBackStack = navController::popBackStack,
             )
             editMemberInfoScreen(
+                popBackStack = navController::popBackStack,
+            )
+            clubScreen(
                 popBackStack = navController::popBackStack,
             )
             childrenManageScreen(

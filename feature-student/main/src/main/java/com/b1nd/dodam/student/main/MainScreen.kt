@@ -56,6 +56,7 @@ internal fun MainScreen(
     navigateToAddBus: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
+    navigateToClub: () -> Unit,
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,
@@ -123,6 +124,7 @@ internal fun MainScreen(
                 },
                 navigateToWakeUpSong = navigateToWakeUpSong,
                 navigateToAddWakeUpSong = navigateToAddWakeUpSong,
+                navigateToClub = navigateToClub,
             )
         }
 
@@ -134,8 +136,8 @@ internal fun MainScreen(
                 .background(
                     Brush.verticalGradient(
                         listOf(
-                            DodamTheme.colors.staticWhite.copy(alpha = 0f),
-                            DodamTheme.colors.staticWhite,
+                            DodamTheme.colors.backgroundNormal.copy(alpha = 0f),
+                            DodamTheme.colors.backgroundNormal,
                         ),
                     ),
                 ),

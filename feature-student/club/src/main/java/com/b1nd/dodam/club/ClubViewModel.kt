@@ -36,6 +36,7 @@ import org.koin.core.qualifier.named
 
 class ClubViewModel : ViewModel(), KoinComponent {
     private val clubRepository: ClubRepository by inject()
+
     private val dispatcher: CoroutineDispatcher by inject(named(DispatcherType.IO))
 
     private val _sideEffect = MutableSharedFlow<ClubSideEffect>()
@@ -100,10 +101,10 @@ class ClubViewModel : ViewModel(), KoinComponent {
 
                 is Result.Success -> {
                     creativeClubs =
-                        club.data.filter { it.state == ClubState.PENDING && it.type == ClubType.CREATIVE_ACTIVITY_CLUB }
+                        club.data.filter { it.state != ClubState.DELETED && it.state != ClubState.WAITING && it.type == ClubType.CREATIVE_ACTIVITY_CLUB }
                             .toImmutableList()
                     selfClubs =
-                        club.data.filter { it.state == ClubState.PENDING && it.type == ClubType.SELF_DIRECT_ACTIVITY_CLUB }
+                        club.data.filter { it.state != ClubState.DELETED && it.state != ClubState.WAITING && it.type == ClubType.SELF_DIRECT_ACTIVITY_CLUB }
                             .toImmutableList()
 
                     _state.update {
@@ -129,6 +130,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
                 clubPendingUiState = ClubPendingUiState.Loading,
             )
         }
+
         clubRepository.getClubMember(id.toInt()).collect { member ->
             when (member) {
                 is Result.Error -> {
@@ -139,7 +141,6 @@ class ClubViewModel : ViewModel(), KoinComponent {
                         )
                     }
                 }
-
                 Result.Loading -> {}
                 is Result.Success -> {
                     _state.update {
@@ -192,31 +193,6 @@ class ClubViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun postClubState(id: Int, state: ClubState, reason: String?) {
-        viewModelScope.launch {
-            clubRepository.patchClubState(
-                clubIds = persistentListOf(id),
-                status = state,
-                reason = reason,
-            ).collect {
-                when (it) {
-                    is Result.Error -> {
-                        _sideEffect.emit(ClubSideEffect.Failed(it.error))
-                        it.error.printStackTrace()
-                    }
-
-                    Result.Loading -> {}
-                    is Result.Success -> {
-                        if (state == ClubState.ALLOWED) {
-                            _sideEffect.emit(ClubSideEffect.SuccessApprove)
-                        } else {
-                            _sideEffect.emit(ClubSideEffect.SuccessReject)
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     private suspend fun loadLeaderName(id: Long): String = clubRepository.getClubLeader(id.toInt())
         .filterIsInstance<Result.Success<ClubMember>>()

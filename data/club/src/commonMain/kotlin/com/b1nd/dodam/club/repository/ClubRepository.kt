@@ -15,8 +15,7 @@ interface ClubRepository {
     suspend fun getDetailClub(id: Int): Flow<Result<Club>>
     suspend fun getClubJoinRequestReceived(): Flow<Result<ImmutableList<ClubJoin>>>
     suspend fun getClubLeader(id: Int): Flow<Result<ClubMember>>
-    suspend fun getClubAllowMember(id: Int): Flow<Result<ImmutableList<ClubMember>>>
-    suspend fun getClubAllMember(id: Int): Flow<Result<ImmutableList<ClubMember>>>
+    suspend fun getClubMember(id: Int): Flow<Result<ImmutableList<ClubMember>>>
     suspend fun getClubList(): Flow<Result<ImmutableList<Club>>>
     suspend fun getClubJoined(): Flow<Result<ImmutableList<Club>>>
     suspend fun getClubMyCreated(): Flow<Result<ImmutableList<Club>>>
