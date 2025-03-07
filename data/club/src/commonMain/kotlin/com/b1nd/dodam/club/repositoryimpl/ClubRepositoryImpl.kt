@@ -86,7 +86,7 @@ internal class ClubRepositoryImpl(
     override suspend fun getClubMember(id: Int): Flow<Result<ClubMember>> {
         return flow {
             emit(
-                network.getClubMember(id).toModel()
+                network.getClubMember(id).toModel(),
             )
         }
             .asResult()
