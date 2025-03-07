@@ -63,24 +63,23 @@ class ClubViewModel : ViewModel(), KoinComponent {
             state = ClubState.PENDING,
         ),
         clubMember =
-            ClubMember(
-                isLeader = false,
-                students = persistentListOf(
-                    ClubMemberStudent(
-                        id = -1,
-                        status = ClubState.PENDING,
-                        permissions = ClubPermission.CLUB_MEMBER,
-                        studentId = -1,
-                        name = "",
-                        grade = -1,
-                        room = -1,
-                        number = -1,
-                        profileImage = "",
-                    ),
-                )
+        ClubMember(
+            isLeader = false,
+            students = persistentListOf(
+                ClubMemberStudent(
+                    id = -1,
+                    status = ClubState.PENDING,
+                    permissions = ClubPermission.CLUB_MEMBER,
+                    studentId = -1,
+                    name = "",
+                    grade = -1,
+                    room = -1,
+                    number = -1,
+                    profileImage = "",
+                ),
             ),
+        ),
     )
-
 
     fun loadClubList() = viewModelScope.launch {
         _state.update {
@@ -161,19 +160,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
                                     club = club,
                                     clubMember = ClubMember(
                                         isLeader = member.data.isLeader,
-                                        students = member.data.students.map { ww ->
-                                            ClubMemberStudent(
-                                                id = ww.id,
-                                                status = ww.status,
-                                                permissions = ww.permissions,
-                                                studentId = ww.studentId,
-                                                name = ww.name,
-                                                grade = ww.grade,
-                                                room = ww.room,
-                                                number = ww.number,
-                                                profileImage = ww.profileImage
-                                            )
-                                        }.toImmutableList()
+                                        students = member.data.students.toImmutableList(),
                                     ),
                                 ),
                             ),
@@ -214,7 +201,6 @@ class ClubViewModel : ViewModel(), KoinComponent {
             }
         }
     }
-
 
     private suspend fun loadLeaderName(id: Long): String = clubRepository.getClubLeader(id.toInt())
         .filterIsInstance<Result.Success<ClubMemberStudent>>()

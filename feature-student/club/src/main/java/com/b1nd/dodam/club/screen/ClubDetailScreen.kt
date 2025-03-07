@@ -293,7 +293,7 @@ internal fun ClubDetailScreen(
                                         ),
                                         imageTransformer = Coil3ImageTransformerImpl,
 
-                                        )
+                                    )
                                     Spacer(modifier = Modifier.height(400.dp))
                                 }
                             }
@@ -469,7 +469,7 @@ private fun DodamLoadingClubMember(modifier: Modifier = Modifier, isFirst: Boole
                         shape = RoundedCornerShape(28.dp),
                     )
                     .width(38.dp)
-                    .height(22.dp)
+                    .height(22.dp),
             ) {
             }
         }
