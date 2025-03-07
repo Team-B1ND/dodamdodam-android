@@ -104,11 +104,6 @@ dependencies {
     implementation(projects.feature.groupDetail)
     implementation(projects.feature.groupCreate)
     implementation(projects.feature.groupWaiting)
-<<<<<<< HEAD
     implementation(projects.network.club)
     implementation(projects.data.club)
-=======
-    implementation(projects.featureStudent.joinClub)
-
->>>>>>> feature/s/291-create-new-club-scren
 }

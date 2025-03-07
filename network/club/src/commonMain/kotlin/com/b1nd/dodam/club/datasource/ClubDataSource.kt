@@ -7,7 +7,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 interface ClubDataSource {
     suspend fun postClubJoinRequestsAllow(id: Int)
-    suspend fun postClubJoinRequests(clubId: Int, clubPriority: String, introduce: String)
+    suspend fun postClubJoinRequests(clubId: Int, clubPriority: String?, introduce: String)
     suspend fun deleteClubJoinRequests(id: Int)
     suspend fun getDetailClub(id: Int): ClubResponse
     suspend fun getClubJoinRequestReceived(): ImmutableList<ClubJoinResponse>

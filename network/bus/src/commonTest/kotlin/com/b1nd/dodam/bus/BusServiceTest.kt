@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 
-class BusServiceTest {
+class BusSerbviceTest {
     private lateinit var busService: BusService
     private val testDispatcher = StandardTestDispatcher()
 
