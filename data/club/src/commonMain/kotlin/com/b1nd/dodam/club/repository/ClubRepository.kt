@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ClubRepository {
     suspend fun postClubJoinRequestsAllow(id: Int): Flow<Result<Unit>>
-    suspend fun postClubJoinRequests(clubId: Int, clubPriority: String, introduce: String): Flow<Result<Unit>>
+    suspend fun postClubJoinRequests(clubId: Int, clubPriority: String?, introduce: String): Flow<Result<Unit>>
     suspend fun deleteClubJoinRequest(id: Int): Flow<Result<Unit>>
     suspend fun getDetailClub(id: Int): Flow<Result<Club>>
     suspend fun getClubJoinRequestReceived(): Flow<Result<ImmutableList<ClubJoin>>>

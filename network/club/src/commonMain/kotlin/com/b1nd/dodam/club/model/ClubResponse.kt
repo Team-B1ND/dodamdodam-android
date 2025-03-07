@@ -9,6 +9,7 @@ data class ClubResponse(
     val createdAt: LocalDateTime? = null,
     val modifiedAt: LocalDateTime? = null,
     val id: Int,
+    val clubId: Int?,
     val name: String,
     val shortDescription: String,
     val description: String,

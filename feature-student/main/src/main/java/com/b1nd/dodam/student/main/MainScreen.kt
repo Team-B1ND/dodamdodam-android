@@ -56,7 +56,6 @@ internal fun MainScreen(
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
     navigateToClub: () -> Unit,
-    navigateToJoinClub: () -> Unit,
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,

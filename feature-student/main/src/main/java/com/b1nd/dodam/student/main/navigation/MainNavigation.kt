@@ -34,7 +34,6 @@ fun NavGraphBuilder.mainScreen(
     navigateToAddWakeUpSong: () -> Unit,
     navigateToClub: () -> Unit,
     showToast: (String, String) -> Unit,
-    navigateToJoinClub: () -> Unit,
     role: String,
 ) {
     composable(route = MAIN_ROUTE) {
@@ -53,7 +52,6 @@ fun NavGraphBuilder.mainScreen(
             refresh = { it.savedStateHandle["refresh"] ?: false },
             dispose = { it.savedStateHandle["refresh"] = false },
             role = role,
-            navigateToJoinClub = navigateToJoinClub,
         )
     }
 }

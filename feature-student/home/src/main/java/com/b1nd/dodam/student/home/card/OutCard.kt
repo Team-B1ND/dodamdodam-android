@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.outing.model.OutType
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -53,7 +54,7 @@ internal fun OutCard(
     navigateToOutApply: () -> Unit,
     fetchOut: () -> Unit,
 ) {
-    val current = LocalDateTime.now()
+    val current = DodamDate.now()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -68,14 +69,14 @@ internal fun OutCard(
                     is OutUiState.Success -> {
                         uiState.data?.let { out ->
                             val outProgress = (
-                                1 - ChronoUnit.SECONDS.between(
-                                    out.startAt.toJavaLocalDateTime(),
-                                    current,
-                                ).toFloat() / ChronoUnit.SECONDS.between(
-                                    out.startAt.toJavaLocalDateTime(),
-                                    out.endAt.toJavaLocalDateTime(),
-                                )
-                                )
+                                    ChronoUnit.SECONDS.between(
+                                        out.startAt.toJavaLocalDateTime(),
+                                        current.toJavaLocalDateTime(),
+                                    ).toFloat() / ChronoUnit.SECONDS.between(
+                                        out.startAt.toJavaLocalDateTime(),
+                                        out.endAt.toJavaLocalDateTime(),
+                                    )
+                                    ).coerceIn(0f, 1f)
 
                             val progress by animateFloatAsState(
                                 targetValue = if (playOnlyOnce || isRefreshing) 0f else outProgress,
@@ -116,7 +117,7 @@ internal fun OutCard(
                                             Column {
                                                 Text(
                                                     text = buildAnnotatedString {
-                                                        val totalMinutes = ChronoUnit.MINUTES.between(current, out.endAt.toJavaLocalDateTime())
+                                                        val totalMinutes = ChronoUnit.MINUTES.between(current.toJavaLocalDateTime(), out.endAt.toJavaLocalDateTime())
                                                         val day = totalMinutes / (24 * 60)
                                                         val hour = (totalMinutes % (24 * 60)) / 60
                                                         val minute = totalMinutes % 60
