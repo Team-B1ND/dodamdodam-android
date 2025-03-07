@@ -100,6 +100,13 @@ class NoticeViewModel : ViewModel(), KoinComponent {
                     is Result.Success -> {
                         _uiState.update {
                             KmLogging.debug("test", "${it.noticeList.map { it.id }}")
+
+                            if (result.data.isEmpty()) {
+                                return@update it.copy(
+                                    isLoading = false,
+                                )
+                            }
+
                             val newData = it.noticeList.toMutableList().apply {
                                 addAll(result.data)
                             }
