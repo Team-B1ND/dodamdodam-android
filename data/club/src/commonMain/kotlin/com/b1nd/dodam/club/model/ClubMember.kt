@@ -4,7 +4,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 data class ClubMember(
-    val isLeader: Boolean?,
+    val isLeader: Boolean,
     val students: ImmutableList<ClubMemberStudent>,
 )
 
