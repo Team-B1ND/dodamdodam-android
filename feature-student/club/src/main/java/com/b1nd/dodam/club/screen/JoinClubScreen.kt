@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +45,10 @@ import com.b1nd.dodam.club.ClubViewModel
 import com.b1nd.dodam.club.R
 import com.b1nd.dodam.club.component.DodamFullIconButton
 import com.b1nd.dodam.club.model.Club
+import com.b1nd.dodam.club.model.ClubState
+import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.JoinedClubUiState
+import com.b1nd.dodam.data.core.model.Teacher
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
@@ -57,6 +61,8 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,6 +71,7 @@ internal fun JoinClubScreen(
     modifier: Modifier = Modifier,
     popBackStack: () -> Unit,
     viewModel: ClubViewModel = koinViewModel(),
+    onNavigateToJoin: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.getAllClub()
@@ -79,26 +86,25 @@ internal fun JoinClubScreen(
     val showBottomSheet = remember { mutableStateOf(false) }
     val showSelfBottomSheet = remember { mutableStateOf(false) }
 
-    var allClubList = emptyList<Club>()
-    var allSelfClubList = emptyList<Club>()
+    var allClubList = state.allClubList
+    var allSelfClubList = state.allSelfClubList
 
     when (state.joinedClubUiState) {
         is JoinedClubUiState.Success -> {
             allClubList = state.allClubList
             allSelfClubList = state.allSelfClubList
+            Log.d("Cool", "JoinClubScreen: ${state.allClubList}")
         }
-        else -> {}
+        else -> {
+            Log.d("Cool", "JoinClubScreen: ${state.allClubList}")
+        }
     }
 
     val text = listOf(
         "창체",
         "자율",
     )
-    val clubIdList = persistentListOf<Int>()
-    val introduceList = persistentListOf<String>()
-
-    val selfClubIdList = persistentListOf<Int>()
-    val selfIntroduceList = persistentListOf<String>()
+    val introduceList = listOf("창체는 자기소개가 없습니다.", "창체는 자기소개가 없습니다.", "창체는 자기소개가 없습니다.")
 
     val clickedNum = remember { mutableIntStateOf(1) }
 
@@ -116,6 +122,52 @@ internal fun JoinClubScreen(
     val thirdClub = remember { mutableStateOf("") }
 
     val clubIntroduces = remember { mutableStateMapOf<String, String>() }
+
+    val clubIdList = remember { mutableStateListOf<Int>() }
+
+    LaunchedEffect(selectedClubs.value) {
+        clubIdList.clear()
+
+        val orderedSelectedClubs = listOf(firstClub.value, secondClub.value, thirdClub.value)
+            .filter { it.isNotEmpty() }
+
+        clubIdList.addAll(orderedSelectedClubs.mapNotNull { clubName ->
+            allClubList.find { it.name == clubName }?.id
+        })
+    }
+
+    val selfClubIdList = remember { mutableStateListOf<Int>() }
+    val selfIntroduceList = remember { mutableStateListOf<String>() }
+
+    LaunchedEffect(selectedSelfClubs.value) {
+        selfClubIdList.clear()
+        selfIntroduceList.clear()
+
+        val selectedSelfClubNames = selectedSelfClubs.value.toList()
+
+        Log.d("ClubData", "Selected self clubs: $selectedSelfClubNames")
+        Log.d("ClubData", "Club introduces: $clubIntroduces")
+
+        selectedSelfClubNames.forEach { clubName ->
+            allSelfClubList.find { it.name == clubName }?.id?.let { id ->
+                selfClubIdList.add(id)
+
+                val nonEmptyIntroductions = selectedSelfClubNames
+                    .filter { clubName -> clubIntroduces.getOrDefault(clubName, "").isNotEmpty() }
+                    .map { clubName -> clubIntroduces.getOrDefault(clubName, "") }
+
+                selfIntroduceList.addAll(nonEmptyIntroductions)
+
+                Log.d(
+                    "ClubData",
+                    "Added self club: name=$clubName, id=$id, intro=$nonEmptyIntroductions"
+                )
+            }
+        }
+
+        Log.d("ClubData", "Final selfClubIdList: $selfClubIdList")
+        Log.d("ClubData", "Final selfIntroduceList: $selfIntroduceList")
+    }
 
 
     if (showSelfBottomSheet.value) {
@@ -141,6 +193,7 @@ internal fun JoinClubScreen(
                         itemsIndexed(filteredSelfClubList) { index, item ->
                             Box(
                                 modifier = modifier
+                                    .fillMaxWidth()
                                     .padding(8.dp)
                                     .clickable {
                                         selectedSelfClubs.value += item
@@ -183,6 +236,7 @@ internal fun JoinClubScreen(
                     filteredClubList.forEachIndexed { index, item ->
                         Box(
                             modifier = modifier
+                                .fillMaxWidth()
                                 .padding(8.dp)
                                 .clickable {
                                     when (clickedNum.intValue) {
@@ -204,6 +258,8 @@ internal fun JoinClubScreen(
                                         secondClub.value,
                                         thirdClub.value
                                     ).filter { it.isNotEmpty() }.toSet()
+
+                                    showBottomSheet.value = false
                                 }
                         ) {
                             Text(
@@ -226,13 +282,18 @@ internal fun JoinClubScreen(
         ) {
             DodamButtonDialog(
                 confirmButton = {
-                    showClubPicker = false
                     viewModel.applyClub(
                         clubId = clubIdList,
                         introduce = introduceList,
                         selfClubId = selfClubIdList,
                         selfIntroduce = selfIntroduceList
                     )
+                    Log.d(
+                        "ClubData",
+                        "JoinClubScreen: $clubIdList, $introduceList, $selfClubIdList, $selfIntroduceList"
+                    )
+                    onNavigateToJoin()
+                    showClubPicker = false
                 },
                 confirmButtonText = "신청 완료하기",
                 confirmButtonRole = ButtonRole.Primary,
@@ -316,19 +377,23 @@ internal fun JoinClubScreen(
                     segments = item
                 )
                 if (titleIndex == 1) {
-                    selectedSelfClubs.value.forEach { clubName ->
+                    selectedSelfClubs.value.forEachIndexed { index, clubName ->
                         ClubCard(
                             introduce = clubIntroduces.getOrDefault(clubName, ""),
                             onRemoveClick = {
                                 clubIntroduces.remove(clubName)
                                 selectedSelfClubs.value -= clubName
                             },
-                            onIntroduceChange = {
-                                clubIntroduces[clubName] = it
+                            onIntroduceChange = { newIntroduce ->
+                                clubIntroduces[clubName] = newIntroduce
+                                if (index < selfIntroduceList.size) {
+                                    selfIntroduceList[index] = newIntroduce
+                                } else {
+                                    selfIntroduceList.add(newIntroduce)
+                                }
                             },
                             clubName = clubName
                         )
-                        Spacer(Modifier.height(8.dp))
                     }
                     Box(
                         modifier = modifier
@@ -352,6 +417,7 @@ internal fun JoinClubScreen(
                             )
                         }
                     }
+                    Spacer(Modifier.height(40.dp))
                 } else {
                     Column(
                         modifier = modifier
@@ -375,7 +441,7 @@ internal fun JoinClubScreen(
                                 }
                             ) {
                                 Text(
-                                    text = "선택해 주세요",
+                                    text = firstClub.value.ifEmpty { "선택해 주세요" },
                                     color = DodamTheme.colors.primaryNormal,
                                     fontWeight = FontWeight(400),
                                     fontSize = 18.sp
@@ -404,7 +470,7 @@ internal fun JoinClubScreen(
                                 }
                             ) {
                                 Text(
-                                    text = "선택해 주세요",
+                                    text = secondClub.value.ifEmpty { "선택해 주세요" },
                                     color = DodamTheme.colors.primaryNormal,
                                     fontWeight = FontWeight(400),
                                     fontSize = 18.sp
@@ -422,7 +488,7 @@ internal fun JoinClubScreen(
 
                         Row {
                             Text(
-                                text = "3순위 :",
+                                text = "3순위: ",
                                 fontWeight = FontWeight(700)
                             )
                             Spacer(Modifier.width(15.dp))
@@ -433,7 +499,7 @@ internal fun JoinClubScreen(
                                 }
                             ) {
                                 Text(
-                                    text = "선택해 주세요",
+                                    text = thirdClub.value.ifEmpty { "선택해 주세요" },
                                     color = DodamTheme.colors.primaryNormal,
                                     fontWeight = FontWeight(400),
                                     fontSize = 18.sp
@@ -461,11 +527,11 @@ internal fun JoinClubScreen(
                     }
                 },
                 text = "동아리 입부 신청하기",
-                enabled = clubIdList.size == 3,
+                enabled = selectedClubs.value.size == 3,
                 modifier = modifier
                     .fillMaxWidth()
-                    .align(alignment = Alignment.BottomCenter)
                     .padding(horizontal = 16.dp)
+                    .align(alignment = Alignment.BottomCenter)
             )
         }
     }
@@ -487,7 +553,8 @@ fun ClubCard(
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(16.dp)
-    ) {
+    )
+    {
         Row {
             Text(
                 text = "자율동아리 : ",
@@ -506,7 +573,11 @@ fun ClubCard(
             modifier = modifier
                 .fillMaxWidth(),
             value = introduce,
-            onValueChange = onIntroduceChange,
+            onValueChange = { newIntroduce ->
+                if (newIntroduce.length <= 300) {
+                    onIntroduceChange(newIntroduce)
+                }
+            },
             singleLine = false,
             minLines = 6,
             maxLines = 8,
@@ -538,4 +609,3 @@ private object IconButtonDefaults {
     val NormalIconColor @Composable get() = DodamTheme.colors.labelAlternative.copy(alpha = 0.5f)
     val StrongIconColor @Composable get() = DodamTheme.colors.labelStrong
 }
-

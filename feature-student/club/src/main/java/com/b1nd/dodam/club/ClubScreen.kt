@@ -49,6 +49,9 @@ internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), popBackStack
                     viewModel.getClub()
                     nowPage = ClubPage.MY
                 },
+                onNavigateToJoin = {
+                    nowPage = ClubPage.MY
+                }
             )
         }
     }
