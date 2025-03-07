@@ -27,7 +27,7 @@ data class ClubPendingList(
 
 data class DetailClubAndMember(
     val club: Club,
-    val clubMember: ImmutableList<ClubMember>,
+    val clubMember: ClubMember,
 )
 
 data class DetailClub(
