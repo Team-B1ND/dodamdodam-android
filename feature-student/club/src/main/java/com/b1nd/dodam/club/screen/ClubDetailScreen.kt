@@ -37,7 +37,9 @@ import com.b1nd.dodam.club.model.ClubUiState
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DodamAvatar
+import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamDivider
+import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.effect.shimmerEffect
@@ -48,7 +50,7 @@ import com.mikepenz.markdown.model.DefaultMarkdownTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
+internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit, navigateToApply: () -> Unit) {
     val bottomSheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.PartiallyExpanded,
     )
@@ -75,49 +77,71 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
         ) {
             BottomSheetScaffold(
                 sheetContent = {
-                    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight(0.666f),
-                        ) {
-                            when (val data = state.clubPendingUiState) {
-                                ClubPendingUiState.Error -> {}
-                                ClubPendingUiState.Loading -> {
-                                    item {
-                                        Box(
-                                            modifier = Modifier
-                                                .padding(top = 2.dp)
-                                                .width(50.dp)
-                                                .height(20.dp)
-                                                .background(brush = shimmerEffect()),
-                                        )
-                                        DodamLoadingClubMember(isFirst = true)
-                                        DodamLoadingClubMember()
-                                        DodamLoadingClubMember()
+                    Box {
+                        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight(0.666f),
+                            ) {
+                                when (val data = state.clubPendingUiState) {
+                                    ClubPendingUiState.Error -> {}
+                                    ClubPendingUiState.Loading -> {
+                                        item {
+                                            Row {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .padding(top = 2.dp)
+                                                        .width(50.dp)
+                                                        .height(20.dp)
+                                                        .background(brush = shimmerEffect()),
+                                                )
+                                                Spacer(modifier = Modifier.weight(1f))
+                                                Box(
+                                                    modifier = Modifier
+                                                        .padding(top = 2.dp)
+                                                        .width(40.dp)
+                                                        .height(20.dp)
+                                                        .background(brush = shimmerEffect()),
+                                                )
+                                            }
+                                            DodamLoadingClubMember(isFirst = true)
+                                            DodamLoadingClubMember()
+                                            DodamLoadingClubMember()
+                                        }
                                     }
-                                }
 
-                                is ClubPendingUiState.Success -> {
-                                    item {
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                        Text(
-                                            text = "멤버현황",
-                                            style = DodamTheme.typography.headlineBold(),
-                                            color = DodamTheme.colors.labelNormal,
-                                        )
-                                        Spacer(modifier = Modifier.height(6.dp))
-                                    }
-                                    items(data.detailClubMember.clubMember.students.size) { index ->
-                                        DodamClubMember(
-                                            image = data.detailClubMember.clubMember.students[index].profileImage,
-                                            permission = data.detailClubMember.clubMember.students[index].permissions.toString(),
-                                            name = data.detailClubMember.clubMember.students[index].name,
-                                            grade = data.detailClubMember.clubMember.students[index].grade,
-                                            room = data.detailClubMember.clubMember.students[index].room,
-                                            state = data.detailClubMember.clubMember.students[index].status,
-                                        )
-                                        Spacer(modifier = Modifier.height(4.dp))
+                                    is ClubPendingUiState.Success -> {
+                                        item {
+                                            Spacer(modifier = Modifier.height(6.dp))
+                                            Row {
+                                                Text(
+                                                    text = "멤버" + if (data.detailClubMember.clubMember.isLeader) "현황" else "",
+                                                    style = DodamTheme.typography.headlineBold(),
+                                                    color = DodamTheme.colors.labelNormal,
+                                                )
+                                                Spacer(modifier = Modifier.weight(1f))
+                                                Text(
+                                                    text = "${data.detailClubMember.clubMember.students.size}명",
+                                                    style = DodamTheme.typography.headlineBold(),
+                                                    color = DodamTheme.colors.labelNormal,
+                                                )
+                                            }
+
+                                            Spacer(modifier = Modifier.height(6.dp))
+                                        }
+                                        items(data.detailClubMember.clubMember.students.size) { index ->
+                                            DodamClubMember(
+                                                image = data.detailClubMember.clubMember.students[index].profileImage,
+                                                permission = data.detailClubMember.clubMember.students[index].permissions.toString(),
+                                                name = data.detailClubMember.clubMember.students[index].name,
+                                                grade = data.detailClubMember.clubMember.students[index].grade,
+                                                room = data.detailClubMember.clubMember.students[index].room,
+                                                state = data.detailClubMember.clubMember.students[index].status,
+                                                isLeader = data.detailClubMember.clubMember.isLeader,
+                                            )
+                                            Spacer(modifier = Modifier.height(4.dp))
+                                        }
                                     }
                                 }
                             }
@@ -148,11 +172,16 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                 content = {
                     when (val data = state.clubPendingUiState) {
                         ClubPendingUiState.Error -> {
-                            Text(
-                                text = "에러",
-                                style = DodamTheme.typography.heading1Bold(),
-                                color = DodamTheme.colors.labelNormal,
-                            )
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                DodamEmpty(
+                                    modifier = Modifier
+                                        .align(Alignment.TopCenter)
+                                        .padding(top = 16.dp),
+                                    onClick = popBackStack,
+                                    title = "에러가 발생했어요!",
+                                    buttonText = "뒤로가기",
+                                )
+                            }
                         }
 
                         ClubPendingUiState.Loading -> {
@@ -267,6 +296,32 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                     }
                 },
             )
+            when (val data = state.clubPendingUiState) {
+                ClubPendingUiState.Error -> {}
+                ClubPendingUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .height(80.dp)
+                            .padding(vertical = 12.dp, horizontal = 4.dp)
+                            .background(shape = RoundedCornerShape(16.dp), brush = shimmerEffect()),
+                    )
+                }
+
+                is ClubPendingUiState.Success -> {
+                    if (!data.detailClubMember.clubMember.isLeader) {
+                        DodamButton(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .fillMaxWidth()
+                                .padding(vertical = 12.dp, horizontal = 16.dp),
+                            onClick = navigateToApply,
+                            text = "가입 신청",
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -280,7 +335,7 @@ private fun DodamClubMember(
     grade: Int,
     room: Int,
     state: ClubState,
-    isMyClub: Boolean = false,
+    isLeader: Boolean = false,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -293,11 +348,19 @@ private fun DodamClubMember(
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = name,
-                    style = DodamTheme.typography.body1Medium(),
-                    color = DodamTheme.colors.labelNormal,
-                )
+                Column {
+                    Text(
+                        text = name,
+                        style = DodamTheme.typography.body1Medium(),
+                        color = DodamTheme.colors.labelNormal,
+                    )
+                    Text(
+                        text = "$grade-$room",
+                        style = DodamTheme.typography.body2Medium(),
+                        color = DodamTheme.colors.labelAlternative,
+                    )
+                }
+
                 Spacer(modifier = Modifier.width(4.dp))
                 if (permission == "CLUB_LEADER") {
                     Image(
@@ -312,44 +375,38 @@ private fun DodamClubMember(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-//                    if (isMyClub) {
-                    Box(
-                        modifier = Modifier
-                            .background(
-                                color = when (state) {
-                                    ClubState.ALLOWED -> DodamTheme.colors.primaryNormal
-                                    ClubState.PENDING -> DodamTheme.colors.lineNormal
-                                    ClubState.REJECTED -> DodamTheme.colors.statusNegative
-                                    ClubState.WAITING -> DodamTheme.colors.lineNormal
-                                    ClubState.DELETED -> DodamTheme.colors.lineNormal
+                    if (isLeader) {
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = when (state) {
+                                        ClubState.ALLOWED -> DodamTheme.colors.primaryNormal
+                                        ClubState.PENDING -> DodamTheme.colors.lineNormal
+                                        ClubState.REJECTED -> DodamTheme.colors.statusNegative
+                                        ClubState.WAITING -> DodamTheme.colors.lineNormal
+                                        ClubState.DELETED -> DodamTheme.colors.lineNormal
+                                    },
+                                    shape = RoundedCornerShape(28.dp),
+                                )
+                                .padding(vertical = 4.dp, horizontal = 8.dp),
+                        ) {
+                            Text(
+                                modifier = Modifier.align(Alignment.Center),
+                                text = when (state) {
+                                    ClubState.ALLOWED -> "승인됨"
+                                    ClubState.PENDING -> "대기중"
+                                    ClubState.REJECTED -> "거절됨"
+                                    ClubState.WAITING -> "대기중"
+                                    ClubState.DELETED -> "삭제됨"
                                 },
-                                shape = RoundedCornerShape(28.dp),
+                                style = DodamTheme.typography.caption2Bold(),
+                                color = DodamTheme.colors.staticWhite,
                             )
-                            .padding(vertical = 4.dp, horizontal = 8.dp),
-                    ) {
-                        Text(
-                            modifier = Modifier.align(Alignment.Center),
-                            text = when (state) {
-                                ClubState.ALLOWED -> "승인됨"
-                                ClubState.PENDING -> "대기중"
-                                ClubState.REJECTED -> "거절됨"
-                                ClubState.WAITING -> "대기중"
-                                ClubState.DELETED -> "삭제됨"
-                            },
-                            style = DodamTheme.typography.caption2Bold(),
-                            color = DodamTheme.colors.staticWhite,
-                        )
+                        }
                     }
-//                    }
                 }
             }
         }
-
-        Text(
-            text = "$grade-$room",
-            style = DodamTheme.typography.body2Medium(),
-            color = DodamTheme.colors.labelAlternative,
-        )
     }
 }
 
