@@ -47,6 +47,8 @@ import com.b1nd.dodam.approveouting.approveOutingScreen
 import com.b1nd.dodam.approveouting.navigateToApproveOuting
 import com.b1nd.dodam.busmanagement.navigation.busManagementScreen
 import com.b1nd.dodam.busmanagement.navigation.navigateToBusManagement
+import com.b1nd.dodam.busregister.navigation.busRegisterScreen
+import com.b1nd.dodam.busregister.navigation.navigateToBusRegister
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
@@ -338,6 +340,11 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
 
                         busManagementScreen(
+                            popBackStack = navHostController::popBackStack,
+                            navigateToBusRegister = navHostController::navigateToBusRegister,
+                        )
+
+                        busRegisterScreen(
                             popBackStack = navHostController::popBackStack,
                         )
                     }

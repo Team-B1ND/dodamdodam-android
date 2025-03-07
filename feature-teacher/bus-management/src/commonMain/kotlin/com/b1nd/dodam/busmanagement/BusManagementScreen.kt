@@ -37,6 +37,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun BusManagementScreen(
     popBackStack: () -> Unit,
+    navigateToBusRegister: () -> Unit,
 ) {
     var searchText by remember { mutableStateOf("") }
 
@@ -50,7 +51,7 @@ internal fun BusManagementScreen(
                 actionIcons = persistentListOf(
                     ActionIcon(
                         icon = DodamIcons.Plus,
-                        onClick = {},
+                        onClick = navigateToBusRegister,
                     )
                 )
             )

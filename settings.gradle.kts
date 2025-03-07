@@ -91,6 +91,7 @@ include(
     ":network:notice",
     ":feature-student:bus-apply",
     ":feature-teacher:bus-management",
+    ":feature-teacher:bus-register",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")
