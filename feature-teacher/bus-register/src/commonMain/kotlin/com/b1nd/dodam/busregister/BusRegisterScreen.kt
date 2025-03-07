@@ -51,7 +51,8 @@ import kotlinx.datetime.toInstant
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun BusRegisterScreen(
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
+    navigateToBusPreset: () -> Unit,
 ) {
 
     var busName by remember { mutableStateOf("") }
@@ -210,9 +211,7 @@ internal fun BusRegisterScreen(
                     .padding(bottom = 12.dp)
             ) {
                 DodamButton(
-                    onClick = {
-
-                    },
+                    onClick = navigateToBusPreset,
                     text = "프리셋",
                     buttonSize = ButtonSize.Large,
                     buttonRole = ButtonRole.Assistive,

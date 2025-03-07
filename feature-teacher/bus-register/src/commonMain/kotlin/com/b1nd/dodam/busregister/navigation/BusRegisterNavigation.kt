@@ -12,11 +12,13 @@ fun NavController.navigateToBusRegister(navOptions: NavOptions? = null) =
     navigate(BUS_REGISTER_ROUTE, navOptions)
 
 fun NavGraphBuilder.busRegisterScreen(
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
+    navigateToBusPreset: () -> Unit,
 ) {
     composable(BUS_REGISTER_ROUTE) {
         BusRegisterScreen(
             popBackStack = popBackStack,
+            navigateToBusPreset = navigateToBusPreset,
         )
     }
 }
