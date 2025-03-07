@@ -62,22 +62,22 @@ class ClubViewModel : ViewModel(), KoinComponent {
             state = ClubState.PENDING,
         ),
         clubMember =
-            ClubMember(
-                isLeader = false,
-                students = persistentListOf(
-                    ClubMemberStudent(
-                        id = -1,
-                        status = ClubState.PENDING,
-                        permissions = ClubPermission.CLUB_MEMBER,
-                        studentId = -1,
-                        name = "",
-                        grade = -1,
-                        room = -1,
-                        number = -1,
-                        profileImage = "",
-                    ),
-                )
+        ClubMember(
+            isLeader = false,
+            students = persistentListOf(
+                ClubMemberStudent(
+                    id = -1,
+                    status = ClubState.PENDING,
+                    permissions = ClubPermission.CLUB_MEMBER,
+                    studentId = -1,
+                    name = "",
+                    grade = -1,
+                    room = -1,
+                    number = -1,
+                    profileImage = "",
+                ),
             ),
+        ),
     )
 
     fun loadClubList() = viewModelScope.launch {
@@ -168,9 +168,9 @@ class ClubViewModel : ViewModel(), KoinComponent {
                                                 grade = ww.grade,
                                                 room = ww.room,
                                                 number = ww.number,
-                                                profileImage = ww.profileImage
+                                                profileImage = ww.profileImage,
                                             )
-                                        }.toImmutableList()
+                                        }.toImmutableList(),
                                     ),
                                 ),
                             ),
