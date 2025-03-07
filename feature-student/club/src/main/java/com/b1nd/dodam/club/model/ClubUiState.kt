@@ -3,14 +3,14 @@ package com.b1nd.dodam.club.model
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-enum class ClubPage {
+enum class MyClubPage {
     MY,
     JOIN,
 }
 
-data class ClubUiState(
+data class MyClubUiState(
     val joinedClubUiState: JoinedClubUiState = JoinedClubUiState.Loading,
-    val clubSideEffect: ClubSideEffect = ClubSideEffect.NotExist,
+    val clubSideEffect: MyClubSideEffect = MyClubSideEffect.NotExist,
     val createdClubList: ImmutableList<Club> = persistentListOf(),
     val receivedCLub: ImmutableList<ClubJoin> = persistentListOf(),
     val allClubList: ImmutableList<Club> = persistentListOf(),

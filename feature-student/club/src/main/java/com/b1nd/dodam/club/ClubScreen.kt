@@ -12,7 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.b1nd.dodam.club.model.ClubPage
+import com.b1nd.dodam.club.model.MyClubPage
 import com.b1nd.dodam.club.screen.JoinClubScreen
 import com.b1nd.dodam.club.screen.MyClubScreen
 import org.koin.androidx.compose.koinViewModel
@@ -20,14 +20,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), popBackStack: () -> Unit) {
     val state by viewModel.state.collectAsState()
-    var nowPage by remember { mutableStateOf(ClubPage.MY) }
+    var nowPage by remember { mutableStateOf(MyClubPage.MY) }
 
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
 
         AnimatedVisibility(
-            visible = nowPage == ClubPage.MY,
+            visible = nowPage == MyClubPage.MY,
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
@@ -35,22 +35,22 @@ internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), popBackStack
                 popBackStack = popBackStack,
                 sideEffect = state.clubSideEffect,
                 onNavigateToJoin = {
-                    nowPage = ClubPage.JOIN
+                    nowPage = MyClubPage.JOIN
                 },
             )
         }
         AnimatedVisibility(
-            visible = nowPage == ClubPage.JOIN,
+            visible = nowPage == MyClubPage.JOIN,
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
             JoinClubScreen(
                 popBackStack = {
                     viewModel.getClub()
-                    nowPage = ClubPage.MY
+                    nowPage = MyClubPage.MY
                 },
                 onNavigateToJoin = {
-                    nowPage = ClubPage.MY
+                    nowPage = MyClubPage.MY
                 }
             )
         }

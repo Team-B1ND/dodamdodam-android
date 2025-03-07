@@ -18,6 +18,7 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 
+//DodamconButtonclick의 크기가 작고, 클릭 영역이 좁아 임시로 만들었습니다. 여유 나면 수정해서 dds에 올리겠습니다.
 @Composable
 fun DodamFullIconButton(
     onClick: () -> Unit,
