@@ -80,13 +80,13 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                             Box(
                                                 modifier = Modifier.padding(top = 2.dp).width(50.dp)
                                                     .height(20.dp)
-                                                    .background(brush = shimmerEffect())
+                                                    .background(brush = shimmerEffect()),
                                             )
                                             Spacer(modifier = Modifier.weight(1f))
                                             Box(
                                                 modifier = Modifier.padding(top = 2.dp).width(40.dp)
                                                     .height(20.dp)
-                                                    .background(brush = shimmerEffect())
+                                                    .background(brush = shimmerEffect()),
                                             )
                                         }
 
@@ -156,7 +156,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
                                         .padding(top = 16.dp),
                                     onClick = popBackStack,
                                     title = "에러가 발생했어요!",
-                                    buttonText = "뒤로가기"
+                                    buttonText = "뒤로가기",
                                 )
                             }
                         }
@@ -265,14 +265,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit) {
 }
 
 @Composable
-private fun DodamClubMember(
-    modifier: Modifier = Modifier,
-    image: String? = "",
-    permission: String = "",
-    name: String,
-    grade: Int,
-    room: Int,
-) {
+private fun DodamClubMember(modifier: Modifier = Modifier, image: String? = "", permission: String = "", name: String, grade: Int, room: Int) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,

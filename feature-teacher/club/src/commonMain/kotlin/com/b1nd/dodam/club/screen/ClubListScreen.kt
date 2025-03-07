@@ -45,7 +45,6 @@ import com.b1nd.dodam.club.model.ClubPendingUiState
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.ClubUiState
-import com.b1nd.dodam.club.model.DetailClub
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
@@ -209,7 +208,6 @@ internal fun ClubListScreen(
                                                         ),
                                                     )
                                                 }
-
                                             },
                                             club = clubs[index],
                                             isSelected = clubs[index] == selectedItemIndex,
@@ -402,12 +400,7 @@ internal fun ClubListScreen(
 
 // TODO : 컴포넌트로 뺄 예정입니다.
 @Composable
-private fun DodamClub(
-    modifier: Modifier = Modifier,
-    club: Club,
-    isSelected: Boolean,
-    onDetailButtonClick: () -> Unit,
-) {
+private fun DodamClub(modifier: Modifier = Modifier, club: Club, isSelected: Boolean, onDetailButtonClick: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()

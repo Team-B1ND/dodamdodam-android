@@ -50,11 +50,7 @@ import com.mikepenz.markdown.model.DefaultMarkdownTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ClubDetailScreen(
-    state: ClubUiState,
-    popBackStack: () -> Unit,
-    navigateToApply: () -> Unit,
-) {
+internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit, navigateToApply: () -> Unit) {
     val bottomSheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.PartiallyExpanded,
     )
@@ -98,7 +94,7 @@ internal fun ClubDetailScreen(
                                                         .padding(top = 2.dp)
                                                         .width(50.dp)
                                                         .height(20.dp)
-                                                        .background(brush = shimmerEffect())
+                                                        .background(brush = shimmerEffect()),
                                                 )
                                                 Spacer(modifier = Modifier.weight(1f))
                                                 Box(
@@ -106,7 +102,7 @@ internal fun ClubDetailScreen(
                                                         .padding(top = 2.dp)
                                                         .width(40.dp)
                                                         .height(20.dp)
-                                                        .background(brush = shimmerEffect())
+                                                        .background(brush = shimmerEffect()),
                                                 )
                                             }
                                             DodamLoadingClubMember(isFirst = true)
@@ -142,7 +138,7 @@ internal fun ClubDetailScreen(
                                                 grade = data.detailClubMember.clubMember.students[index].grade,
                                                 room = data.detailClubMember.clubMember.students[index].room,
                                                 state = data.detailClubMember.clubMember.students[index].status,
-                                                isLeader = data.detailClubMember.clubMember.isLeader
+                                                isLeader = data.detailClubMember.clubMember.isLeader,
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
                                         }
@@ -151,7 +147,6 @@ internal fun ClubDetailScreen(
                             }
                         }
                     }
-
                 },
                 modifier = Modifier.fillMaxSize(),
                 scaffoldState = scaffoldState,
@@ -184,7 +179,7 @@ internal fun ClubDetailScreen(
                                         .padding(top = 16.dp),
                                     onClick = popBackStack,
                                     title = "에러가 발생했어요!",
-                                    buttonText = "뒤로가기"
+                                    buttonText = "뒤로가기",
                                 )
                             }
                         }
@@ -322,10 +317,9 @@ internal fun ClubDetailScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 12.dp, horizontal = 16.dp),
                             onClick = navigateToApply,
-                            text = "가입 신청"
+                            text = "가입 신청",
                         )
                     }
-
                 }
             }
         }
@@ -413,8 +407,6 @@ private fun DodamClubMember(
                 }
             }
         }
-
-
     }
 }
 
