@@ -14,5 +14,3 @@ internal fun ClubMemberResponse.toModel(): ClubMember = ClubMember(
         it.toModel()
     }.toImmutableList(),
 )
-
-
