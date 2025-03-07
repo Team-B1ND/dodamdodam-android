@@ -11,12 +11,12 @@ const val CLUB_ROUTE = "club"
 
 fun NavController.navigateToClub(navOptions: NavOptions? = null) = this.navigate(CLUB_ROUTE)
 
-fun NavGraphBuilder.clubScreen(popBackStack: () -> Unit) {
+fun NavGraphBuilder.clubScreen(popBackStack: () -> Unit, navigateToApply: () -> Unit) {
     composable(
         route = CLUB_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
-        ClubScreen(popBackStack = popBackStack)
+        ClubScreen(popBackStack = popBackStack, navigateToApply = navigateToApply)
     }
 }
