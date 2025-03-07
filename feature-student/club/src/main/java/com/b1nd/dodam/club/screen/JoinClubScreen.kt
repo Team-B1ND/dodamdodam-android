@@ -44,11 +44,7 @@ import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.club.ClubViewModel
 import com.b1nd.dodam.club.R
 import com.b1nd.dodam.club.component.DodamFullIconButton
-import com.b1nd.dodam.club.model.Club
-import com.b1nd.dodam.club.model.ClubState
-import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.JoinedClubUiState
-import com.b1nd.dodam.data.core.model.Teacher
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
@@ -59,10 +55,7 @@ import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -190,7 +183,7 @@ internal fun JoinClubScreen(
                         .background(color = DodamTheme.colors.backgroundNormal)
                 ) {
                     LazyColumn {
-                        itemsIndexed(filteredSelfClubList) { index, item ->
+                        itemsIndexed(filteredSelfClubList) { _, item ->
                             Box(
                                 modifier = modifier
                                     .fillMaxWidth()
@@ -233,7 +226,7 @@ internal fun JoinClubScreen(
                         .fillMaxWidth()
                         .background(DodamTheme.colors.backgroundNormal)
                 ) {
-                    filteredClubList.forEachIndexed { index, item ->
+                    filteredClubList.forEachIndexed { _, item ->
                         Box(
                             modifier = modifier
                                 .fillMaxWidth()
@@ -602,10 +595,4 @@ fun ClubCard(
             )
         }
     }
-}
-
-private object IconButtonDefaults {
-    val PrimaryIconColor @Composable get() = DodamTheme.colors.primaryNormal
-    val NormalIconColor @Composable get() = DodamTheme.colors.labelAlternative.copy(alpha = 0.5f)
-    val StrongIconColor @Composable get() = DodamTheme.colors.labelStrong
 }

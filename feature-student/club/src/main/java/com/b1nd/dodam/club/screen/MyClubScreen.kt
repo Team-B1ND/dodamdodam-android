@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -34,9 +34,9 @@ import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.club.ClubViewModel
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
-import com.b1nd.dodam.club.model.ClubSideEffect
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.JoinedClubUiState
+import com.b1nd.dodam.club.model.MyClubSideEffect
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamButtonDialog
 import com.b1nd.dodam.designsystem.component.DodamEmpty
@@ -50,7 +50,7 @@ internal fun MyClubScreen(
     modifier: Modifier = Modifier,
     viewModel: ClubViewModel = koinViewModel(),
     popBackStack: () -> Unit,
-    sideEffect: ClubSideEffect,
+    sideEffect: MyClubSideEffect,
     onNavigateToJoin: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
@@ -172,7 +172,7 @@ internal fun MyClubScreen(
         ) {
             when (sideEffect) {
 
-                ClubSideEffect.NotExist -> {
+                MyClubSideEffect.NotExist -> {
                     DodamEmpty(
                         title = "아직 동아리에 신청하지 않았어요! \n" +
                                 "신청 마감 : 2025. 03. 19.",
@@ -183,7 +183,7 @@ internal fun MyClubScreen(
                     )
                 }
 
-                ClubSideEffect.Apply -> {
+                MyClubSideEffect.Apply -> {
                     Column(
                         modifier = modifier
                             .fillMaxWidth()
@@ -244,7 +244,7 @@ internal fun MyClubScreen(
                     }
                 }
 
-                ClubSideEffect.Exist -> {
+                MyClubSideEffect.Exist -> {
                     Column(
                         modifier = modifier
                             .fillMaxWidth()
@@ -308,9 +308,9 @@ internal fun MyClubScreen(
                                     .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                joinedSelfClubNameList.forEachIndexed { index, item ->
+                                joinedSelfClubNameList.forEachIndexed { _, item ->
                                     Text(
-                                        text = joinedSelfClubNameList[index],
+                                        text = item,
                                         fontSize = 15.sp,
                                         color = DodamTheme.colors.labelNormal
                                     )

@@ -3,14 +3,10 @@ package com.b1nd.dodam.club
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.b1nd.dodam.club.di.clubViewModelModule
-import com.b1nd.dodam.club.model.Club
-import com.b1nd.dodam.club.model.ClubJoin
-import com.b1nd.dodam.club.model.ClubPermission
-import com.b1nd.dodam.club.model.ClubSideEffect
 import com.b1nd.dodam.club.model.ClubType
-import com.b1nd.dodam.club.model.ClubUiState
 import com.b1nd.dodam.club.model.JoinedClubUiState
+import com.b1nd.dodam.club.model.MyClubSideEffect
+import com.b1nd.dodam.club.model.MyClubUiState
 import com.b1nd.dodam.club.repository.ClubRepository
 import com.b1nd.dodam.common.result.Result
 import kotlinx.collections.immutable.toImmutableList
@@ -22,12 +18,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.context.GlobalContext.startKoin
 
 class ClubViewModel : ViewModel(), KoinComponent {
     private val clubRepository: ClubRepository by inject()
 
-    private val _state = MutableStateFlow(ClubUiState())
+    private val _state = MutableStateFlow(MyClubUiState())
     val state = _state.asStateFlow()
 
     private val _event = MutableSharedFlow<Event>()
@@ -73,7 +68,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
                                         joinedClubList = joinedClub,
                                         joinedSelfClubList = joinedSelfClub
                                     ),
-                                    clubSideEffect = if (joinedClub.isNotEmpty()) ClubSideEffect.Exist else ClubSideEffect.NotExist
+                                    clubSideEffect = if (joinedClub.isNotEmpty()) MyClubSideEffect.Exist else MyClubSideEffect.NotExist
                                 )
                             }
 
