@@ -311,7 +311,7 @@ fun DodamApp(
             clubScreen(
                 popBackStack = navController::popBackStack,
                 // TODO : navigateToApply로 변경
-                navigateToApply = navController::navigateToClub
+                navigateToApply = navController::navigateToClub,
             )
             childrenManageScreen(
                 popBackStack = navController::popBackStack,
