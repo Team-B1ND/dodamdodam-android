@@ -79,3 +79,10 @@ fun formatLocalDateTime(dateTime: LocalDateTime): String {
 
     return "${month}월 ${day}일 $dayOfWeek"
 }
+
+/**
+ * 시간, 날짜 표시시 두자리 숫자로 바꿔주는 함수입니다.
+ * @return 문자열을 반환하며 다음과 같이 5가 입력될 경우 `05`로 반환합니다.
+ */
+fun Int.timeFormat() =
+    this.toString().padStart(2, padChar = '0')

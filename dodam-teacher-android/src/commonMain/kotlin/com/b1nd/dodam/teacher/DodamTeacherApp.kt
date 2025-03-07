@@ -51,6 +51,8 @@ import com.b1nd.dodam.buspreset.navigation.busPresetScreen
 import com.b1nd.dodam.buspreset.navigation.navigateToBusPreset
 import com.b1nd.dodam.buspresetcreate.navigation.busPresetCreateScreen
 import com.b1nd.dodam.buspresetcreate.navigation.navigateToBusPresetCreate
+import com.b1nd.dodam.buspresetuse.navigation.busPresetUseScreen
+import com.b1nd.dodam.buspresetuse.navigation.navigateToBusPresetUse
 import com.b1nd.dodam.busregister.navigation.busRegisterScreen
 import com.b1nd.dodam.busregister.navigation.navigateToBusRegister
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -356,9 +358,14 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         busPresetScreen(
                             popBackStack = navHostController::popBackStack,
                             navigateToBusPresetCreate = navHostController::navigateToBusPresetCreate,
+                            navigateToBusPresetUse = navHostController::navigateToBusPresetUse,
                         )
 
                         busPresetCreateScreen(
+                            popBackStack = navHostController::popBackStack,
+                        )
+
+                        busPresetUseScreen(
                             popBackStack = navHostController::popBackStack,
                         )
                     }

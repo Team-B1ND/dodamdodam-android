@@ -44,7 +44,8 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun BusPresetScreen(
     popBackStack: () -> Unit,
-    navigateToBusPresetCreate: () -> Unit
+    navigateToBusPresetCreate: () -> Unit,
+    navigateToBusPresetUse: () -> Unit,
 ) {
 
     var isShowBottomSheet by remember { mutableStateOf(false) }
@@ -90,6 +91,7 @@ internal fun BusPresetScreen(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         isShowBottomSheet = false
+                        navigateToBusPresetUse()
                     },
                     text = "프리셋 사용",
                     buttonSize = ButtonSize.Large,

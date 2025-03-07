@@ -13,12 +13,14 @@ fun NavController.navigateToBusPreset(navOptions: NavOptions? = null) =
 
 fun NavGraphBuilder.busPresetScreen(
     popBackStack: () -> Unit,
-    navigateToBusPresetCreate: () -> Unit
+    navigateToBusPresetCreate: () -> Unit,
+    navigateToBusPresetUse: () -> Unit,
 ) {
     composable(BUS_PRESET_ROUTE) {
         BusPresetScreen(
             popBackStack = popBackStack,
             navigateToBusPresetCreate = navigateToBusPresetCreate,
+            navigateToBusPresetUse = navigateToBusPresetUse,
         )
     }
 }

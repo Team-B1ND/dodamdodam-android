@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.b1nd.dodam.common.date.DodamDate
+import com.b1nd.dodam.common.utiles.timeFormat
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -210,7 +212,6 @@ internal fun BusRegisterScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .padding(bottom = 12.dp)
             ) {
                 DodamButton(
                     onClick = navigateToBusPreset,
@@ -266,15 +267,10 @@ private fun BusRegisterButton(
         )
         Spacer(modifier = Modifier.width(12.dp))
         Image(
+            modifier = Modifier.size(24.dp),
             imageVector = icon.value,
             contentDescription = null,
             colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
         )
     }
 }
-
-/**
- * @return String, example input 5 -> `05`
- */
-private fun Int.timeFormat() =
-    this.toString().padStart(2, padChar = '0')
