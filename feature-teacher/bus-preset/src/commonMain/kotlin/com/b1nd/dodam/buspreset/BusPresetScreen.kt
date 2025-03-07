@@ -42,7 +42,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BusPresetScreen(
+internal fun BusPresetScreen(
     popBackStack: () -> Unit,
     navigateToBusPresetCreate: () -> Unit
 ) {
@@ -132,9 +132,7 @@ fun BusPresetScreen(
                     contentDescription = "버스 아이콘",
                     title = "프리셋이 아직 없어요.",
                     buttonText = "새 버스 등록 프리셋 생성",
-                    onClick = {
-
-                    }
+                    onClick = navigateToBusPresetCreate
                 )
             }
             items(5) {

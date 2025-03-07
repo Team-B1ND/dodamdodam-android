@@ -65,6 +65,7 @@ kotlin {
             implementation(projects.featureTeacher.busManagement)
             implementation(projects.featureTeacher.busRegister)
             implementation(projects.featureTeacher.busPreset)
+            implementation(projects.featureTeacher.busPresetCreate)
 
 
             implementation(projects.data.login)

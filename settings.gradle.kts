@@ -93,6 +93,7 @@ include(
     ":feature-teacher:bus-management",
     ":feature-teacher:bus-register",
     ":feature-teacher:bus-preset",
+    ":feature-teacher:bus-preset-create",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")
