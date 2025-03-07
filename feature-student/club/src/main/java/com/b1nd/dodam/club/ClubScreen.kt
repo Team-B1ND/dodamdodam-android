@@ -23,7 +23,11 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), popBackStack: () -> Unit) {
+internal fun ClubScreen(
+    viewModel: ClubViewModel = koinViewModel(),
+    popBackStack: () -> Unit,
+    navigateToApply: () -> Unit,
+) {
     val state by viewModel.state.collectAsState()
     var nowPage by remember { mutableStateOf(ClubPage.LIST) }
 
@@ -50,7 +54,7 @@ internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), popBackStack
                     viewModel.loadDetailClub(id, club)
                 },
 
-            )
+                )
         }
         AnimatedVisibility(
             visible = nowPage == ClubPage.DETAIL,
@@ -63,6 +67,7 @@ internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), popBackStack
                     viewModel.loadClubList()
                     nowPage = ClubPage.LIST
                 },
+                navigateToApply = navigateToApply
             )
         }
     }
