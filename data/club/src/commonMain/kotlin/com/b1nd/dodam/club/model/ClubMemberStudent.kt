@@ -1,6 +1,5 @@
 package com.b1nd.dodam.club.model
 
-
 data class ClubMemberStudent(
     val id: Int,
     val status: ClubState,

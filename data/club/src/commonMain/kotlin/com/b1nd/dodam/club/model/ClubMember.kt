@@ -8,10 +8,9 @@ data class ClubMember(
     val students: ImmutableList<ClubMemberStudent>,
 )
 
-
 internal fun ClubMemberResponse.toModel(): ClubMember = ClubMember(
     isLeader = isLeader,
-    students =  students.map {
+    students = students.map {
         ClubMemberStudent(
             id = it.id,
             status = it.status.toClubState(),
@@ -23,6 +22,6 @@ internal fun ClubMemberResponse.toModel(): ClubMember = ClubMember(
             number = it.number,
             profileImage = it.profileImage,
         )
-    }.toImmutableList()
+    }.toImmutableList(),
 
 )
