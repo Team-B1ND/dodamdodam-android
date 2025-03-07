@@ -45,6 +45,7 @@ import com.b1nd.dodam.club.model.ClubPendingUiState
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.ClubUiState
+import com.b1nd.dodam.club.model.DetailClub
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
@@ -93,7 +94,7 @@ internal fun ClubListScreen(
             onClick = { clubStateTypeIndex = index },
         )
     }.toImmutableList()
-    var selectedItemIndex by remember { mutableStateOf(-1) }
+    var selectedItemIndex: Club? by remember { mutableStateOf(null) }
 
     var selectedReject by remember { mutableStateOf(false) }
     var rejectReason by remember { mutableStateOf("") }
@@ -156,7 +157,8 @@ internal fun ClubListScreen(
                         is ClubPendingUiState.Success -> {
                             val originClubs =
                                 if (clubTypeIndex == 0) data.clubPendingList.creativeClubs else data.clubPendingList.selfClubs
-                            val clubs = originClubs.filter { ww -> if (clubStateTypeIndex == 0) ww.state == ClubState.PENDING else ww.state == ClubState.ALLOWED }
+                            val clubs =
+                                originClubs.filter { ww -> if (clubStateTypeIndex == 0) ww.state == ClubState.PENDING else ww.state == ClubState.ALLOWED }
                             if (clubs.isEmpty()) {
                                 Box(
                                     modifier = Modifier.fillMaxWidth().padding(top = 20.dp)
@@ -178,20 +180,39 @@ internal fun ClubListScreen(
                                     items(clubs.size) { index ->
                                         DodamClub(
                                             modifier = Modifier.padding(bottom = 12.dp).clickable {
-                                                if (selectedItemIndex == index) {
-                                                    selectedItemIndex = -1
+                                                if (clubStateTypeIndex == 0) {
+                                                    selectedItemIndex =
+                                                        if (selectedItemIndex == clubs[index]) {
+                                                            null
+                                                        } else {
+                                                            clubs[index]
+                                                        }
+                                                    selectClubList(
+                                                        clubs[index].id.toLong(),
+                                                        clubs[index].name,
+                                                        clubs[index].type,
+                                                        clubs[index].shortDescription,
+                                                    )
                                                 } else {
-                                                    selectedItemIndex = index
+                                                    selectDetailClub(
+                                                        clubs[index].id.toLong(),
+                                                        Club(
+                                                            id = clubs[index].id,
+                                                            name = clubs[index].name,
+                                                            shortDescription = clubs[index].shortDescription,
+                                                            description = clubs[index].description,
+                                                            subject = clubs[index].subject,
+                                                            type = clubs[index].type,
+                                                            image = clubs[index].image,
+                                                            teacher = clubs[index].teacher,
+                                                            state = clubs[index].state,
+                                                        ),
+                                                    )
                                                 }
-                                                selectClubList(
-                                                    clubs[index].id.toLong(),
-                                                    clubs[index].name,
-                                                    clubs[index].type,
-                                                    clubs[index].shortDescription,
-                                                )
+
                                             },
                                             club = clubs[index],
-                                            isSelected = index == selectedItemIndex,
+                                            isSelected = clubs[index] == selectedItemIndex,
                                             onDetailButtonClick = {
                                                 selectDetailClub(
                                                     clubs[index].id.toLong(),
@@ -217,7 +238,7 @@ internal fun ClubListScreen(
                 }
             }
         }
-        if (selectedItemIndex != -1) {
+        if (selectedItemIndex != null) {
             FakeBottomSheet(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 title = {
@@ -307,7 +328,7 @@ internal fun ClubListScreen(
                                             ClubState.ALLOWED,
                                             null,
                                         )
-                                        selectedItemIndex = -1
+                                        selectedItemIndex = null
                                     },
                                 )
                             }
@@ -367,7 +388,7 @@ internal fun ClubListScreen(
                                 ClubState.REJECTED,
                                 rejectReason,
                             )
-                            selectedItemIndex = -1
+                            selectedItemIndex = null
                             selectedReject = false
                             rejectReason = ""
                         },
