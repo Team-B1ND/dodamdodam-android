@@ -195,17 +195,7 @@ internal fun ClubListScreen(
                                                 } else {
                                                     selectDetailClub(
                                                         clubs[index].id.toLong(),
-                                                        Club(
-                                                            id = clubs[index].id,
-                                                            name = clubs[index].name,
-                                                            shortDescription = clubs[index].shortDescription,
-                                                            description = clubs[index].description,
-                                                            subject = clubs[index].subject,
-                                                            type = clubs[index].type,
-                                                            image = clubs[index].image,
-                                                            teacher = clubs[index].teacher,
-                                                            state = clubs[index].state,
-                                                        ),
+                                                        clubs[index]
                                                     )
                                                 }
                                             },
@@ -214,17 +204,7 @@ internal fun ClubListScreen(
                                             onDetailButtonClick = {
                                                 selectDetailClub(
                                                     clubs[index].id.toLong(),
-                                                    Club(
-                                                        id = clubs[index].id,
-                                                        name = clubs[index].name,
-                                                        shortDescription = clubs[index].shortDescription,
-                                                        description = clubs[index].description,
-                                                        subject = clubs[index].subject,
-                                                        type = clubs[index].type,
-                                                        image = clubs[index].image,
-                                                        teacher = clubs[index].teacher,
-                                                        state = clubs[index].state,
-                                                    ),
+                                                    clubs[index]
                                                 )
                                             },
                                         )
