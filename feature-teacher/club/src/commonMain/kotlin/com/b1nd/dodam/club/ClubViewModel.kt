@@ -158,19 +158,7 @@ class ClubViewModel : ViewModel(), KoinComponent {
                                     club = club,
                                     clubMember = ClubMember(
                                         isLeader = member.data.isLeader,
-                                        students = member.data.students.map { ww ->
-                                            ClubMemberStudent(
-                                                id = ww.id,
-                                                status = ww.status,
-                                                permissions = ww.permissions,
-                                                studentId = ww.studentId,
-                                                name = ww.name,
-                                                grade = ww.grade,
-                                                room = ww.room,
-                                                number = ww.number,
-                                                profileImage = ww.profileImage,
-                                            )
-                                        }.toImmutableList(),
+                                        students = member.data.students.toImmutableList(),
                                     ),
                                 ),
                             ),
