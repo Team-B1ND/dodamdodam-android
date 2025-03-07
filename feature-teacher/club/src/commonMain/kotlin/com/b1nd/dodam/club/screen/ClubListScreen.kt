@@ -74,7 +74,6 @@ internal fun ClubListScreen(
         "창체",
         "자율",
     )
-    var selectedItemIndex by remember { mutableStateOf(-1) }
     val clubTypeItem = List(2) { index ->
         DodamSegment(
             selected = clubTypeIndex == index,
@@ -82,6 +81,19 @@ internal fun ClubListScreen(
             onClick = { clubTypeIndex = index },
         )
     }.toImmutableList()
+    var clubStateTypeIndex by remember { mutableIntStateOf(0) }
+    val clubStateTypeList = listOf(
+        "요청중",
+        "승인됨",
+    )
+    val clubStateTypeItem = List(2) { index ->
+        DodamSegment(
+            selected = clubStateTypeIndex == index,
+            text = clubStateTypeList[index],
+            onClick = { clubStateTypeIndex = index },
+        )
+    }.toImmutableList()
+    var selectedItemIndex by remember { mutableStateOf(-1) }
 
     var selectedReject by remember { mutableStateOf(false) }
     var rejectReason by remember { mutableStateOf("") }
@@ -103,7 +115,10 @@ internal fun ClubListScreen(
                 Column(
                     modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
                 ) {
-                    Text(text = "동아리 개설 승인 관리", style = DodamTheme.typography.title2Bold())
+                    DodamSegmentedButton(
+                        segments = clubStateTypeItem,
+                        modifier = Modifier.padding(top = 16.dp),
+                    )
                     DodamSegmentedButton(
                         segments = clubTypeItem,
                         modifier = Modifier.padding(top = 16.dp),
@@ -139,9 +154,10 @@ internal fun ClubListScreen(
                         }
 
                         is ClubPendingUiState.Success -> {
-                            val clubs =
+                            val originClubs =
                                 if (clubTypeIndex == 0) data.clubPendingList.creativeClubs else data.clubPendingList.selfClubs
-                            if (clubs.size == 0) {
+                            val clubs = originClubs.filter { ww -> if (clubStateTypeIndex == 0) ww.state == ClubState.PENDING else ww.state == ClubState.ALLOWED }
+                            if (clubs.isEmpty()) {
                                 Box(
                                     modifier = Modifier.fillMaxWidth().padding(top = 20.dp)
                                         .background(
@@ -365,7 +381,12 @@ internal fun ClubListScreen(
 
 // TODO : 컴포넌트로 뺄 예정입니다.
 @Composable
-private fun DodamClub(modifier: Modifier = Modifier, club: Club, isSelected: Boolean, onDetailButtonClick: () -> Unit) {
+private fun DodamClub(
+    modifier: Modifier = Modifier,
+    club: Club,
+    isSelected: Boolean,
+    onDetailButtonClick: () -> Unit,
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()

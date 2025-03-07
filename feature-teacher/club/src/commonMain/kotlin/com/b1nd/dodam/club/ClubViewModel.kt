@@ -105,10 +105,10 @@ class ClubViewModel : ViewModel(), KoinComponent {
 
                 is Result.Success -> {
                     creativeClubs =
-                        club.data.filter { it.state == ClubState.PENDING && it.type == ClubType.CREATIVE_ACTIVITY_CLUB }
+                        club.data.filter { (it.state == ClubState.PENDING || it.state == ClubState.ALLOWED) && it.type == ClubType.CREATIVE_ACTIVITY_CLUB }
                             .toImmutableList()
                     selfClubs =
-                        club.data.filter { it.state == ClubState.PENDING && it.type == ClubType.SELF_DIRECT_ACTIVITY_CLUB }
+                        club.data.filter { (it.state == ClubState.PENDING || it.state == ClubState.ALLOWED) && it.type == ClubType.SELF_DIRECT_ACTIVITY_CLUB }
                             .toImmutableList()
 
                     _state.update {
