@@ -24,10 +24,7 @@ fun NavGraphBuilder.myClubScreen(showSnackbar: (state: SnackbarState, message: S
         route = MY_CLUB_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
-        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
-        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
-        it.savedStateHandle
         MyClubScreen(
             popBackStack = popBackStack,
             showSnackbar = showSnackbar,
