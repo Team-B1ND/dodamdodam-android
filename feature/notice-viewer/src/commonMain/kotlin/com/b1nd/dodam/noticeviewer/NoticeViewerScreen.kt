@@ -130,11 +130,6 @@ internal fun NoticeViewerScreen(popBackStack: () -> Unit, startIndex: Int, image
                     .background(
                         color = DodamTheme.colors.staticBlack.copy(alpha = 0.8f),
                     )
-                    .clickable(
-                        interactionSource = remember { NoInteractionSource() },
-                        indication = null,
-                        onClick = {},
-                    )
                     .padding(
                         vertical = 6.dp,
                         horizontal = 4.dp,
