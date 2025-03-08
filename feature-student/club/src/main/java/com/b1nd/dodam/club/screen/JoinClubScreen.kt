@@ -21,7 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,10 +35,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -120,14 +117,16 @@ internal fun JoinClubScreen(
 
     val clickedNum = remember { mutableIntStateOf(1) }
 
-    val allClubNameList = allClubList.map { it.name }
+    val allClubNameList = allClubList.filter { it.state == ClubState.ALLOWED }.map { it.name }
     val selectedClubs = remember { mutableStateOf(setOf<String>()) }
 
-    val allSelfClubNameList = allSelfClubList.map { it.name }
+    val allSelfClubNameList =
+        allSelfClubList.filter { it.state == ClubState.ALLOWED }.map { it.name }
     val selectedSelfClubs = remember { mutableStateOf(setOf<String>()) }
 
     val filteredClubList = allClubNameList.filter { it !in selectedClubs.value }
     val filteredSelfClubList = allSelfClubNameList.filter { it !in selectedSelfClubs.value }
+
 
     val firstClub = remember { mutableStateOf("") }
     val secondClub = remember { mutableStateOf("") }
@@ -208,7 +207,7 @@ internal fun JoinClubScreen(
                                 Text(
                                     text = item,
                                     color = DodamTheme.colors.labelAssistive,
-                                    fontSize = 16.sp,
+                                    style = DodamTheme.typography.body2Bold(),
                                 )
                             }
                             Spacer(modifier = modifier.height(16.dp))
@@ -238,6 +237,7 @@ internal fun JoinClubScreen(
                         .background(DodamTheme.colors.backgroundNormal),
                 ) {
                     filteredClubList.forEachIndexed { _, item ->
+
                         Box(
                             modifier = modifier
                                 .fillMaxWidth()
@@ -429,7 +429,8 @@ internal fun JoinClubScreen(
                         Row {
                             Text(
                                 text = "1순위 :",
-                                fontWeight = FontWeight(700),
+                                style = DodamTheme.typography.headlineBold(),
+                                color = DodamTheme.colors.labelNormal,
                             )
                             Spacer(Modifier.width(15.dp))
                             Row(
@@ -439,10 +440,10 @@ internal fun JoinClubScreen(
                                 },
                             ) {
                                 Text(
+                                    modifier = Modifier.align(Alignment.CenterVertically),
                                     text = firstClub.value.ifEmpty { "선택해 주세요" },
                                     color = DodamTheme.colors.primaryNormal,
-                                    fontWeight = FontWeight(400),
-                                    fontSize = 18.sp,
+                                    style = DodamTheme.typography.body1Medium(),
                                 )
                                 Spacer(Modifier.width(4.dp))
                                 Image(
@@ -457,7 +458,8 @@ internal fun JoinClubScreen(
                         Row {
                             Text(
                                 text = "2순위 :",
-                                fontWeight = FontWeight(700),
+                                style = DodamTheme.typography.headlineBold(),
+                                color = DodamTheme.colors.labelNormal,
                             )
                             Spacer(Modifier.width(15.dp))
                             Row(
@@ -467,10 +469,10 @@ internal fun JoinClubScreen(
                                 },
                             ) {
                                 Text(
+                                    modifier = Modifier.align(Alignment.CenterVertically),
                                     text = secondClub.value.ifEmpty { "선택해 주세요" },
                                     color = DodamTheme.colors.primaryNormal,
-                                    fontWeight = FontWeight(400),
-                                    fontSize = 18.sp,
+                                    style = DodamTheme.typography.body1Medium(),
                                 )
                                 Spacer(Modifier.width(4.dp))
                                 Image(
@@ -485,7 +487,8 @@ internal fun JoinClubScreen(
                         Row {
                             Text(
                                 text = "3순위: ",
-                                fontWeight = FontWeight(700),
+                                style = DodamTheme.typography.headlineBold(),
+                                color = DodamTheme.colors.labelNormal,
                             )
                             Spacer(Modifier.width(15.dp))
                             Row(
@@ -495,10 +498,10 @@ internal fun JoinClubScreen(
                                 },
                             ) {
                                 Text(
+                                    modifier = Modifier.align(Alignment.CenterVertically),
                                     text = thirdClub.value.ifEmpty { "선택해 주세요" },
                                     color = DodamTheme.colors.primaryNormal,
-                                    fontWeight = FontWeight(400),
-                                    fontSize = 18.sp,
+                                    style = DodamTheme.typography.body1Medium(),
                                 )
                                 Spacer(Modifier.width(4.dp))
                                 Image(
@@ -552,14 +555,13 @@ fun ClubCard(
         Row {
             Text(
                 text = "자율동아리 : ",
-                fontSize = 18.sp,
-                fontWeight = FontWeight(700),
+                style = DodamTheme.typography.headlineBold(),
+                color = DodamTheme.colors.labelNormal,
             )
             Text(
                 text = clubName,
-                fontSize = 18.sp,
-                fontWeight = FontWeight(400),
-                color = Color(0xFF0083F0),
+                style = DodamTheme.typography.headlineBold(),
+                color = DodamTheme.colors.primaryNormal,
             )
         }
         Spacer(Modifier.height(14.dp))
@@ -587,12 +589,12 @@ fun ClubCard(
             Text(
                 text = introduce.length.toString(),
                 color = DodamTheme.colors.primaryNormal,
-                fontSize = 16.sp,
+                style = DodamTheme.typography.body1Medium(),
             )
             Text(
                 text = "/300",
                 color = DodamTheme.colors.labelAssistive,
-                fontSize = 16.sp,
+                style = DodamTheme.typography.body1Medium(),
             )
         }
     }
