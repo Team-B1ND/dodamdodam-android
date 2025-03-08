@@ -186,7 +186,7 @@ private fun NoticeViewerIconButton(modifier: Modifier = Modifier, imageVector: I
 }
 
 @Composable
-private fun PinchToZoomView(modifier: Modifier = Modifier, model: Any, imageContentDescription: String = "", onTab: () -> Unit) {
+private fun PinchToZoomView(modifier: Modifier = Modifier, model: Any, onTab: () -> Unit) {
     var scale by remember { mutableStateOf(1f) }
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
@@ -257,7 +257,7 @@ private fun PinchToZoomView(modifier: Modifier = Modifier, model: Any, imageCont
         AsyncImage(
             modifier = Modifier.fillMaxSize(),
             model = model,
-            contentDescription = imageContentDescription,
+            contentDescription = null,
             contentScale = ContentScale.FillWidth,
         )
     }
