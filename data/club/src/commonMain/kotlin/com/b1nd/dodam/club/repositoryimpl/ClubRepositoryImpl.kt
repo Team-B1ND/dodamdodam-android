@@ -6,6 +6,7 @@ import com.b1nd.dodam.club.model.ClubJoin
 import com.b1nd.dodam.club.model.ClubMember
 import com.b1nd.dodam.club.model.ClubMemberStudent
 import com.b1nd.dodam.club.model.ClubState
+import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import com.b1nd.dodam.club.model.toModel
 import com.b1nd.dodam.club.repository.ClubRepository
 import com.b1nd.dodam.common.Dispatcher
@@ -31,13 +32,11 @@ internal class ClubRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun postClubJoinRequests(clubId: Int, clubPriority: String?, introduce: String): Flow<Result<Unit>> {
+    override suspend fun postClubJoinRequests(requests: List<ClubJoinRequest>): Flow<Result<Unit>> {
         return flow {
             emit(
                 network.postClubJoinRequests(
-                    clubId = clubId,
-                    clubPriority = clubPriority,
-                    introduce = introduce,
+                    requests
                 ),
             )
         }

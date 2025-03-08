@@ -1,12 +1,12 @@
 package com.b1nd.dodam.club
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.JoinedClubUiState
 import com.b1nd.dodam.club.model.MyClubSideEffect
 import com.b1nd.dodam.club.model.MyClubUiState
+import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import com.b1nd.dodam.club.repository.ClubRepository
 import com.b1nd.dodam.common.result.Result
 import kotlinx.collections.immutable.toImmutableList
@@ -94,11 +94,20 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                         }
 
                         is Result.Success -> {
-                            val createClub = result.data.toImmutableList()
+                            val createClubList = result.data.toImmutableList()
+
+                            val createSelfClub = createClubList.filter {
+                                it.type == ClubType.SELF_DIRECT_ACTIVITY_CLUB
+                            }.toImmutableList()
+
+                            val createClub = createClubList.filter {
+                                it.type == ClubType.CREATIVE_ACTIVITY_CLUB
+                            }.toImmutableList()
 
                             _state.update {
                                 it.copy(
                                     createdClubList = createClub,
+                                    createdSelfClubList = createSelfClub
                                 )
                             }
 
@@ -205,12 +214,10 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                                 joinedClubUiState = JoinedClubUiState.Error,
                             )
                         }
-                        Log.d("Bad", "getAllClub: Error")
                         return@collect
                     }
 
                     Result.Loading -> {
-                        Log.d("Bad", "getAllClub: Loading")
                     }
 
                     is Result.Success -> {
@@ -229,7 +236,6 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                                 allSelfClubList = allSelfClubList,
                             )
                         }
-                        Log.d("Bad", "getAllClub: Success")
 
                         return@collect
                     }
@@ -238,77 +244,104 @@ class MyClubViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun applyClub(clubId: List<Int>, introduce: List<String>, selfClubId: List<Int>?, selfIntroduce: List<String>?) {
-        Log.d("ClubData", "Starting applyClub with: clubId=$clubId, introduce=$introduce, selfClubId=$selfClubId, selfIntroduce=$selfIntroduce")
-
+    fun getJoinRequest() {
         viewModelScope.launch {
-            // Creative Activity Clubs
-            clubId.forEachIndexed { index, item ->
-                Log.d("ClubData", "Processing creative club: id=$item, priority=CREATIVE_ACTIVITY_CLUB_${index + 1}, introduce=${introduce[index]}")
+            clubRepository.getClubMyJoinRequest().collect { result ->
+                when (result) {
+                    is Result.Error -> {
+                        result.error.printStackTrace()
+                        _state.update {
+                            it.copy(
+                                joinedClubUiState = JoinedClubUiState.Error,
+                            )
+                        }
+                        return@collect
+                    }
 
-                clubRepository.postClubJoinRequests(
-                    clubId = item,
-                    clubPriority = "CREATIVE_ACTIVITY_CLUB_${index + 1}",
-                    introduce = introduce[index],
-                ).collect { result ->
-                    when (result) {
-                        is Result.Error -> {
-                            _event.emit(Event.ShowToast("동아리 신청에 실패했어요"))
-                            Log.d("ClubData", "Creative club application failed: $item, ${introduce[index]}")
-                            result.error.printStackTrace()
-                            _state.update {
-                                it.copy(
-                                    joinedClubUiState = JoinedClubUiState.Error,
-                                )
-                            }
-                            return@collect
+                    Result.Loading -> {
+                    }
+
+                    is Result.Success -> {
+                        val joinRequestClubList = result.data.toImmutableList()
+
+                        val joinRequestClub = joinRequestClubList.filter {
+                            it.club.type == ClubType.CREATIVE_ACTIVITY_CLUB
+                        }.toImmutableList()
+
+                        val joinRequestSelfClub = joinRequestClubList.filter {
+                            it.club.type == ClubType.SELF_DIRECT_ACTIVITY_CLUB
+                        }.toImmutableList()
+
+
+                        _state.update {
+                            it.copy(
+                                requestJoinClub = joinRequestClub,
+                                requestJoinSelfClub = joinRequestSelfClub
+                            )
                         }
-                        Result.Loading -> {
-                            Log.d("ClubData", "Creative club application loading: $item")
-                        }
-                        is Result.Success -> {
-                            Log.d("ClubData", "Creative club application successful: $item")
-                            _event.emit(Event.ShowToast("동아리 신청에 성공했어요"))
-                            return@collect
-                        }
+
+                        return@collect
                     }
                 }
+            }
+        }
+    }
+
+
+    fun applyClub(clubId: List<Int>, introduce: List<String>, selfClubId: List<Int>?, selfIntroduce: List<String>?) {
+        viewModelScope.launch {
+            val requestList = mutableListOf<ClubJoinRequest>()
+
+            clubId.forEachIndexed { index, item ->
+                requestList.add(
+                    ClubJoinRequest(
+                        clubId = item,
+                        clubPriority = "CREATIVE_ACTIVITY_CLUB_${index + 1}",
+                        introduction = introduce[index]
+                    )
+                )
             }
 
             if (!selfClubId.isNullOrEmpty() && !selfIntroduce.isNullOrEmpty()) {
-                if (selfClubId.size != selfIntroduce.size) {
-                    Log.e("ClubData", "Error: selfClubId.size (${selfClubId.size}) != selfIntroduce.size (${selfIntroduce.size})")
+                if (selfClubId.size == selfIntroduce.size) {
+                    selfClubId.forEachIndexed { index, item ->
+                        requestList.add(
+                            ClubJoinRequest(
+                                clubId = item,
+                                clubPriority = null,
+                                introduction = selfIntroduce[index]
+                            )
+                        )
+                    }
+                } else {
+                    _event.emit(Event.ShowToast("자율동아리 정보가 올바르지 않습니다"))
+                    _state.update {
+                        it.copy(
+                            joinedClubUiState = JoinedClubUiState.Error,
+                        )
+                    }
+                    return@launch
                 }
-                selfClubId.forEachIndexed { index, item ->
+            }
 
-                    clubRepository.postClubJoinRequests(
-                        clubId = item,
-                        clubPriority = null,
-                        introduce = selfIntroduce[index],
-                    ).collect { result ->
-                        when (result) {
-                            is Result.Error -> {
-                                Log.d("ClubData", "Self club application failed: $item, ${selfIntroduce[index]}")
-                                result.error.printStackTrace()
-                                _state.update {
-                                    it.copy(
-                                        joinedClubUiState = JoinedClubUiState.Error,
-                                    )
-                                }
-                                return@collect
-                            }
-                            Result.Loading -> {
-                                Log.d("ClubData", "Self club application loading: $item")
-                            }
-                            is Result.Success -> {
-                                Log.d("ClubData", "Self club application successful: $item")
-                                return@collect
-                            }
+            clubRepository.postClubJoinRequests(requestList).collect { result ->
+                when (result) {
+                    is Result.Error -> {
+                        _event.emit(Event.ShowToast("동아리 신청에 실패했어요"))
+                        result.error.printStackTrace()
+                        _state.update {
+                            it.copy(
+                                joinedClubUiState = JoinedClubUiState.Error,
+                            )
                         }
+                    }
+                    Result.Loading -> {
+                    }
+                    is Result.Success -> {
+                        _event.emit(Event.ShowToast("동아리 신청에 성공했어요"))
                     }
                 }
             }
-            Log.d("ClubData", "All club applications completed")
         }
     }
 }

@@ -33,16 +33,12 @@ class ClubService(
         }
     }
 
-    override suspend fun postClubJoinRequests(clubId: Int, clubPriority: String?, introduce: String) {
+    override suspend fun postClubJoinRequests(requests: List<ClubJoinRequest>) {
         defaultSafeRequest {
             client.post(DodamUrl.Club.JOIN_REQUEST) {
                 contentType(ContentType.Application.Json)
                 setBody(
-                    ClubJoinRequest(
-                        clubId = clubId,
-                        clubPriority = clubPriority,
-                        introduction = introduce,
-                    ),
+                    requests
                 )
             }.body<DefaultResponse>()
         }
