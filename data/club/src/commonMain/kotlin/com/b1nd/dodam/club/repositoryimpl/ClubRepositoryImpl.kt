@@ -5,6 +5,7 @@ import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
 import com.b1nd.dodam.club.model.ClubMember
 import com.b1nd.dodam.club.model.ClubMemberStudent
+import com.b1nd.dodam.club.model.ClubMyJoined
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import com.b1nd.dodam.club.model.toModel
@@ -102,7 +103,7 @@ internal class ClubRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun getClubJoined(): Flow<Result<ImmutableList<Club>>> {
+    override suspend fun getClubJoined(): Flow<Result<ImmutableList<ClubMyJoined>>> {
         return flow {
             emit(network.getClubJoined().map { it.toModel() }.toImmutableList())
         }

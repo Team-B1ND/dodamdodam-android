@@ -128,7 +128,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit, navi
                                                 )
                                             }
 
-                                            Spacer(modifier = Modifier.height(6.dp))
+                                            Spacer(modifier = Modifier.height(10.dp))
                                         }
                                         items(data.detailClubMember.clubMember.students.size) { index ->
                                             DodamClubMember(
@@ -140,7 +140,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit, navi
                                                 state = data.detailClubMember.clubMember.students[index].status,
                                                 isLeader = data.detailClubMember.clubMember.isLeader,
                                             )
-                                            Spacer(modifier = Modifier.height(4.dp))
+                                            Spacer(modifier = Modifier.height(10.dp))
                                         }
                                     }
                                 }

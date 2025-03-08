@@ -36,6 +36,7 @@ import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.club.MyClubViewModel
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
+import com.b1nd.dodam.club.model.ClubMyJoined
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.JoinedClubUiState
 import com.b1nd.dodam.club.model.MyClubSideEffect
@@ -63,8 +64,8 @@ internal fun MyClubScreen(
 
     val scrollState = rememberScrollState()
 
-    var joinedClubList = emptyList<Club>()
-    var joinedSelfClubList = emptyList<Club>()
+    var joinedClubList = emptyList<ClubMyJoined>()
+    var joinedSelfClubList = emptyList<ClubMyJoined>()
     var receivedClubList = emptyList<ClubJoin>()
     var createdClubList = emptyList<Club>()
     var createdSelfClubList = emptyList<Club>()
