@@ -1,6 +1,6 @@
 package com.b1nd.dodam.club.screen
 
-import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,21 +37,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.zIndex
-import com.b1nd.dodam.club.Event
 import com.b1nd.dodam.club.MyClubViewModel
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
 import com.b1nd.dodam.club.model.ClubMyJoined
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.JoinedClubUiState
-import com.b1nd.dodam.club.model.MyClubSideEffect
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamButtonDialog
 import com.b1nd.dodam.designsystem.component.DodamEmpty
@@ -72,22 +67,6 @@ internal fun MyClubScreen(
     LaunchedEffect(Unit) {
         viewModel.getClub()
         viewModel.getJoinRequest()
-    }
-
-    val context = LocalContext.current
-
-    LaunchedEffect(key1 = true) {
-        viewModel.event.collect { event ->
-            when (event) {
-                is Event.ShowToast -> {
-                    Toast.makeText(
-                        context,
-                        event.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
     }
 
     val state by viewModel.state.collectAsState()
@@ -146,6 +125,7 @@ internal fun MyClubScreen(
     val selectedSelfClubId = remember { mutableIntStateOf(0) }
     val selectedSelfClubName = remember { mutableStateOf("") }
 
+    val uriHandler = LocalUriHandler.current
     if (showDialog.value) {
         Dialog(
             onDismissRequest = { showDialog.value = false },
@@ -162,6 +142,28 @@ internal fun MyClubScreen(
                 confirmButtonText = "수락",
                 dismissButtonText = "취소",
                 body = "이 선택은 되돌릴 수 없습니다",
+            )
+        }
+    }
+
+    val showClubDialog = remember { mutableStateOf(false) }
+
+    if (showClubDialog.value) {
+        Dialog(
+            onDismissRequest = { showDialog.value = false },
+        ) {
+            DodamButtonDialog(
+                confirmButton = {
+                    uriHandler.openUri("https://dodam.b1nd.com/club")
+                    showClubDialog.value = false
+                },
+                dismissButton = {
+                    showClubDialog.value = false
+                },
+                title = "추가 신청은 웹에서 해주세요",
+                confirmButtonText = "수락",
+                dismissButtonText = "취소",
+                body = "도담도담 웹으로 추가 신청 하러 가기",
             )
         }
     }
@@ -216,27 +218,15 @@ internal fun MyClubScreen(
                 when (state.joinedClubUiState) {
                     is JoinedClubUiState.Success -> {
                         DodamEmpty(
-                            title = if (state.requestJoinClub.isEmpty()) {
-                                if (joinedClubNameList.isNotEmpty()) {
-                                    "동아리에 가입했습니다!"
-                                } else {
-                                    "아직 동아리에 신청하지 않았어요!\n신청 마감: 2025. 03. 19."
-                                }
-                            } else {
-                                "동아리를 신청했습니다!"
-                            },
-                            buttonText = if (state.requestJoinClub.isEmpty()) {
-                                if (joinedClubNameList.isNotEmpty()) {
-                                    "축하합니다"
-                                } else {
-                                    "동아리 입부 신청하기"
-                                }
-                            } else {
-                                "승인을 기다려 주세요"
-                            }
-                            ,
+                            title = if (joinedClubList.isEmpty()) "아직 동아리에 신청하지 않았어요! \n" +
+                                    "신청 마감 : 2025. 03. 19." else "신청 마감 : 2025. 03. 19.",
+                            buttonText = "동아리 입부 신청하기",
                             onClick = {
-                                onNavigateToJoin()
+                                if(joinedClubList.isEmpty()){
+                                    onNavigateToJoin()
+                                } else {
+                                    showClubDialog.value = true
+                                }
                             },
                         )
                         Spacer(Modifier.height(12.dp))
@@ -247,17 +237,18 @@ internal fun MyClubScreen(
                                     color = DodamTheme.colors.backgroundNormal,
                                     shape = RoundedCornerShape(12.dp),
                                 )
-                                .padding(16.dp),
+                                .padding(16.dp)
+                                ,
                         ) {
                             Text(
                                 text = "소속된 동아리",
-                                fontSize = 18.sp,
+                                style = DodamTheme.typography.headlineBold(),
                                 color = DodamTheme.colors.labelNormal,
                             )
                             Spacer(Modifier.height(12.dp))
                             Text(
                                 text = "창체",
-                                fontSize = 12.sp,
+                                style = DodamTheme.typography.caption2Bold(),
                                 color = DodamTheme.colors.labelNormal,
                             )
                             Spacer(Modifier.height(8.dp))
@@ -269,13 +260,13 @@ internal fun MyClubScreen(
                                 if (joinedClubNameList.isNotEmpty()) {
                                     Text(
                                         text = joinedClubNameList[0],
-                                        fontSize = 15.sp,
+                                        style = DodamTheme.typography.body2Medium(),
                                         color = DodamTheme.colors.labelNormal,
                                     )
                                     Box(
                                         modifier = modifier
                                             .background(
-                                                color = Color(0x330083F0),
+                                                color = DodamTheme.colors.primaryAssistive,
                                                 shape = RoundedCornerShape(size = 8.dp),
                                             )
                                             .padding(vertical = 4.dp, horizontal = 8.dp),
@@ -283,14 +274,14 @@ internal fun MyClubScreen(
                                     ) {
                                         Text(
                                             text = "입부 완료",
-                                            color = Color(0xFF0083F0),
-                                            fontSize = 12.sp,
+                                            style = DodamTheme.typography.caption2Bold(),
+                                            color = DodamTheme.colors.primaryNormal,
                                         )
                                     }
                                 } else {
                                     Text(
                                         text = "입부한 창체 동아리가 없습니다",
-                                        fontSize = 15.sp,
+                                        style = DodamTheme.typography.labelRegular(),
                                         color = DodamTheme.colors.labelNormal,
                                     )
                                 }
@@ -298,7 +289,7 @@ internal fun MyClubScreen(
                             Spacer(Modifier.height(16.dp))
                             Text(
                                 text = "자율",
-                                fontSize = 12.sp,
+                                style = DodamTheme.typography.caption2Bold(),
                                 color = DodamTheme.colors.labelNormal,
                             )
                             Spacer(Modifier.height(8.dp))
@@ -310,7 +301,7 @@ internal fun MyClubScreen(
                                     joinedSelfClubNameList.forEachIndexed { _, item ->
                                         Text(
                                             text = item,
-                                            fontSize = 15.sp,
+                                            style = DodamTheme.typography.body2Medium(),
                                             color = DodamTheme.colors.labelNormal,
                                         )
                                     }
@@ -318,7 +309,7 @@ internal fun MyClubScreen(
                                 } else {
                                     Text(
                                         text = "입부한 자율 동아리가 없습니다",
-                                        fontSize = 15.sp,
+                                        style = DodamTheme.typography.labelRegular(),
                                         color = DodamTheme.colors.labelNormal,
                                     )
                                 }
@@ -336,14 +327,13 @@ internal fun MyClubScreen(
                         ) {
                             Text(
                                 text = "내 신청",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight(700),
+                                style = DodamTheme.typography.headlineBold(),
                                 color = DodamTheme.colors.labelNormal,
                             )
                             Spacer(Modifier.height(12.dp))
                             Text(
                                 text = "창체",
-                                fontSize = 12.sp,
+                                style = DodamTheme.typography.caption2Bold(),
                                 color = DodamTheme.colors.labelNormal,
                             )
                             Spacer(Modifier.height(8.dp))
@@ -356,12 +346,12 @@ internal fun MyClubScreen(
                                     ) {
                                         Text(
                                             text = "${index + 1}지망",
-                                            fontSize = 15.sp,
+                                            style = DodamTheme.typography.body2Medium(),
                                             color = DodamTheme.colors.labelNormal,
                                         )
                                         Text(
                                             text = item.club.name,
-                                            fontSize = 15.sp,
+                                            style = DodamTheme.typography.body2Medium(),
                                             color = DodamTheme.colors.labelNormal,
                                         )
                                     }
@@ -370,14 +360,14 @@ internal fun MyClubScreen(
                             } else {
                                 Text(
                                     text = "신청한 창체 동아리가 없습니다",
-                                    fontSize = 15.sp,
+                                    style = DodamTheme.typography.labelRegular(),
                                     color = DodamTheme.colors.labelNormal,
                                 )
                             }
                             Spacer(Modifier.height(16.dp))
                             Text(
                                 text = "자율",
-                                fontSize = 12.sp,
+                                style = DodamTheme.typography.caption2Bold(),
                                 color = DodamTheme.colors.labelNormal,
                             )
                             if (state.requestJoinSelfClub.isNotEmpty()) {
@@ -385,14 +375,14 @@ internal fun MyClubScreen(
                                     Spacer(Modifier.height(8.dp))
                                     Text(
                                         text = item.club.name,
-                                        fontSize = 15.sp,
+                                        style = DodamTheme.typography.body2Medium(),
                                         color = DodamTheme.colors.labelNormal,
                                     )
                                 }
                             } else {
                                 Text(
                                     text = "신청한 자율 동아리가 없습니다",
-                                    fontSize = 15.sp,
+                                    style = DodamTheme.typography.labelRegular(),
                                     color = DodamTheme.colors.labelNormal,
                                 )
                             }
@@ -414,13 +404,13 @@ internal fun MyClubScreen(
                             ) {
                                 Text(
                                     text = "내 개설 신청",
-                                    fontSize = 18.sp,
+                                    style = DodamTheme.typography.headlineBold(),
                                     color = DodamTheme.colors.labelNormal,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 Text(
                                     text = "창체",
-                                    fontSize = 12.sp,
+                                    style = DodamTheme.typography.caption2Bold(),
                                     color = DodamTheme.colors.labelNormal,
                                 )
                                 Spacer(Modifier.height(8.dp))
@@ -432,22 +422,34 @@ internal fun MyClubScreen(
                                         ) {
                                             Text(
                                                 text = item.name,
-                                                fontSize = 15.sp,
+                                                style = DodamTheme.typography.body2Medium(),
                                                 color = DodamTheme.colors.labelNormal,
                                             )
-                                            Icon(
+                                            Image(
                                                 imageVector = createdClubStateList.getOrNull(
                                                     index
                                                 )
                                                     ?.let { state ->
                                                         when (state) {
-                                                            ClubState.PENDING -> DodamIcons.CheckmarkCircle.value
+                                                            ClubState.PENDING -> DodamIcons.Clock.value
                                                             ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
                                                             ClubState.REJECTED -> DodamIcons.XMarkCircle.value
                                                             else -> DodamIcons.Bell.value
                                                         }
                                                     } ?: DodamIcons.ExclamationMarkCircle.value,
                                                 contentDescription = null,
+                                                colorFilter = createdClubStateList.getOrNull(
+                                                    index
+                                                )
+                                                    ?.let { state ->
+                                                        when (state) {
+                                                            ClubState.PENDING -> ColorFilter.tint(DodamTheme.colors.statusCautionary)
+                                                            ClubState.ALLOWED -> ColorFilter.tint(DodamTheme.colors.primaryNormal)
+                                                            ClubState.REJECTED -> ColorFilter.tint(DodamTheme.colors.statusNegative)
+
+                                                            else -> ColorFilter.tint(DodamTheme.colors.statusCautionary)
+                                                        }
+                                                    } ?: ColorFilter.tint(DodamTheme.colors.statusCautionary),
                                             )
                                         }
                                         Spacer(Modifier.height(8.dp))
@@ -455,41 +457,53 @@ internal fun MyClubScreen(
                                 } else {
                                     Text(
                                         text = "개설 신청한 창체 동아리가 없습니다",
-                                        fontSize = 15.sp,
+                                        style = DodamTheme.typography.body2Medium(),
                                         color = DodamTheme.colors.labelNormal,
                                     )
                                 }
                                 Spacer(Modifier.height(16.dp))
                                 Text(
                                     text = "자율",
-                                    fontSize = 12.sp,
+                                    style = DodamTheme.typography.caption2Bold(),
                                     color = DodamTheme.colors.labelNormal,
                                 )
                                 Spacer(Modifier.height(8.dp))
                                 if (createdSelfClubList.isNotEmpty()) {
-                                    createdSelfClubStateList.forEachIndexed { index, item ->
+                                    createdSelfClubList.forEachIndexed { index, item ->
                                         Row(
                                             modifier = modifier.fillMaxWidth(),
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                         ) {
                                             Text(
                                                 text = item.name,
-                                                fontSize = 15.sp,
+                                                style = DodamTheme.typography.body2Medium(),
                                                 color = DodamTheme.colors.labelNormal,
                                             )
-                                            Icon(
+                                            Image(
                                                 imageVector = createdClubStateList.getOrNull(
                                                     index
                                                 )
                                                     ?.let { state ->
                                                         when (state) {
-                                                            ClubState.PENDING -> DodamIcons.CheckmarkCircle.value
+                                                            ClubState.PENDING -> DodamIcons.Clock.value
                                                             ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
                                                             ClubState.REJECTED -> DodamIcons.XMarkCircle.value
                                                             else -> DodamIcons.Bell.value
                                                         }
                                                     } ?: DodamIcons.ExclamationMarkCircle.value,
                                                 contentDescription = null,
+                                                colorFilter = createdClubStateList.getOrNull(
+                                                    index
+                                                )
+                                                    ?.let { state ->
+                                                        when (state) {
+                                                            ClubState.PENDING -> ColorFilter.tint(DodamTheme.colors.statusCautionary)
+                                                            ClubState.ALLOWED -> ColorFilter.tint(DodamTheme.colors.primaryNormal)
+                                                            ClubState.REJECTED -> ColorFilter.tint(DodamTheme.colors.statusNegative)
+
+                                                            else -> ColorFilter.tint(DodamTheme.colors.statusCautionary)
+                                                        }
+                                                    } ?: ColorFilter.tint(DodamTheme.colors.statusCautionary),
                                             )
                                         }
                                         Spacer(Modifier.height(8.dp))
@@ -497,7 +511,7 @@ internal fun MyClubScreen(
                                 } else {
                                     Text(
                                         text = "개설 신청한 자율 동아리가 없습니다",
-                                        fontSize = 15.sp,
+                                        style = DodamTheme.typography.body2Medium(),
                                         color = DodamTheme.colors.labelNormal,
                                     )
                                 }
@@ -516,13 +530,13 @@ internal fun MyClubScreen(
                             ) {
                                 Text(
                                     text = "받은 자율 부원 제안",
-                                    fontSize = 18.sp,
+                                    style = DodamTheme.typography.headlineBold(),
                                     color = DodamTheme.colors.labelNormal,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 Text(
                                     text = "자율",
-                                    fontSize = 12.sp,
+                                    style = DodamTheme.typography.caption2Bold(),
                                     color = DodamTheme.colors.labelNormal,
                                 )
                                 Spacer(Modifier.height(8.dp))
@@ -535,11 +549,11 @@ internal fun MyClubScreen(
                                         ) {
                                             Text(
                                                 text = item,
-                                                fontSize = 15.sp,
+                                                style = DodamTheme.typography.body2Medium(),
                                                 color = DodamTheme.colors.labelNormal,
                                             )
                                             Row {
-                                                Icon(
+                                                Image(
                                                     imageVector = DodamIcons.CheckmarkCircle.value,
                                                     contentDescription = null,
                                                     modifier = modifier
@@ -549,9 +563,10 @@ internal fun MyClubScreen(
                                                                 receivedClubList[index].id
                                                             selectedSelfClubName.value = item
                                                         },
+                                                    colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
                                                 )
                                                 Spacer(Modifier.width(16.dp))
-                                                Icon(
+                                                Image(
                                                     imageVector = DodamIcons.XMarkCircle.value,
                                                     contentDescription = null,
                                                     modifier = modifier
@@ -561,6 +576,7 @@ internal fun MyClubScreen(
                                                                 receivedClubList[index].id
                                                             selectedSelfClubName.value = item
                                                         },
+                                                    colorFilter = ColorFilter.tint(DodamTheme.colors.statusNegative)
                                                 )
                                             }
                                         }
@@ -569,7 +585,7 @@ internal fun MyClubScreen(
                                 } else {
                                     Text(
                                         text = "받은 부원 제안이 없습니다",
-                                        fontSize = 15.sp,
+                                        style = DodamTheme.typography.body2Medium(),
                                         color = DodamTheme.colors.labelNormal,
                                     )
                                 }
@@ -579,9 +595,13 @@ internal fun MyClubScreen(
                     }
 
                     else -> {
-                        DodamLoadingClub()
-                        Spacer(Modifier.height(16.dp))
-                        DodamLoadingClub()
+                        DodamLoadingClub(160)
+                        DodamLoadingClub(210)
+                        DodamLoadingClub(200)
+                        DodamLoadingClub(400)
+                        DodamLoadingClub(200)
+
+
                     }
                 }
             }
@@ -592,56 +612,8 @@ internal fun MyClubScreen(
 
 
 @Composable
-private fun DodamLoadingClub(modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .heightIn(86.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier
-                .width(83.dp)
-                .height(86.dp)
-                .background(
-                    brush = shimmerEffect(),
-                    shape = RoundedCornerShape(8.dp),
-                ),
-        )
-
-        Spacer(modifier = Modifier.width(8.dp))
-        Column {
-            Box(
-                modifier = Modifier
-                    .width(32.dp)
-                    .height(17.dp)
-                    .background(
-                        brush = shimmerEffect(),
-                        shape = RoundedCornerShape(4.dp),
-                    ),
-            )
-            Spacer(modifier = Modifier.height(1.dp))
-            Row {
-                Box(
-                    modifier = Modifier
-                        .width(46.dp)
-                        .height(27.dp)
-                        .background(
-                            brush = shimmerEffect(),
-                            shape = RoundedCornerShape(4.dp),
-                        ),
-                )
-            }
-            Spacer(modifier = Modifier.height(1.dp))
-            Box(
-                modifier = Modifier
-                    .width(273.dp)
-                    .height(21.dp)
-                    .background(
-                        brush = shimmerEffect(),
-                        shape = RoundedCornerShape(4.dp),
-                    ),
-            )
-        }
-    }
+private fun DodamLoadingClub(height: Int) {
+    Spacer(modifier = Modifier.height(12.dp))
+    Box(modifier = Modifier.fillMaxWidth().height(height.dp).background(shape = RoundedCornerShape(12.dp), brush = shimmerEffect()))
+    Spacer(modifier = Modifier.height(12.dp))
 }
