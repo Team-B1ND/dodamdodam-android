@@ -19,7 +19,6 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun MyClubScreen(viewModel: MyClubViewModel = koinViewModel(), popBackStack: () -> Unit) {
-    val state by viewModel.state.collectAsState()
     var nowPage by remember { mutableStateOf(MyClubPage.MY) }
 
     Box(

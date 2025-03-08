@@ -1,5 +1,6 @@
 package com.b1nd.dodam.club.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,11 +38,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
+import com.b1nd.dodam.club.Event
 import com.b1nd.dodam.club.MyClubViewModel
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
@@ -69,6 +72,22 @@ internal fun MyClubScreen(
     LaunchedEffect(Unit) {
         viewModel.getClub()
         viewModel.getJoinRequest()
+    }
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.event.collect { event ->
+            when (event) {
+                is Event.ShowToast -> {
+                    Toast.makeText(
+                        context,
+                        event.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
     val state by viewModel.state.collectAsState()
@@ -197,9 +216,25 @@ internal fun MyClubScreen(
                 when (state.joinedClubUiState) {
                     is JoinedClubUiState.Success -> {
                         DodamEmpty(
-                            title = "아직 동아리에 신청하지 않았어요! \n" +
-                                    "신청 마감 : 2025. 03. 19.",
-                            buttonText = "동아리 입부 신청하기",
+                            title = if (state.requestJoinClub.isEmpty()) {
+                                if (joinedClubNameList.isNotEmpty()) {
+                                    "동아리에 가입했습니다!"
+                                } else {
+                                    "아직 동아리에 신청하지 않았어요!\n신청 마감: 2025. 03. 19."
+                                }
+                            } else {
+                                "동아리를 신청했습니다!"
+                            },
+                            buttonText = if (state.requestJoinClub.isEmpty()) {
+                                if (joinedClubNameList.isNotEmpty()) {
+                                    "축하합니다"
+                                } else {
+                                    "동아리 입부 신청하기"
+                                }
+                            } else {
+                                "승인을 기다려 주세요"
+                            }
+                            ,
                             onClick = {
                                 onNavigateToJoin()
                             },
@@ -212,7 +247,6 @@ internal fun MyClubScreen(
                                     color = DodamTheme.colors.backgroundNormal,
                                     shape = RoundedCornerShape(12.dp),
                                 )
-                                .padding(paddingValues)
                                 .padding(16.dp),
                         ) {
                             Text(
