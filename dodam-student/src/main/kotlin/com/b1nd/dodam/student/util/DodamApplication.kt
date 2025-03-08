@@ -15,15 +15,18 @@ import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
 import com.b1nd.dodam.data.banner.di.bannerRepositoryModule
 import com.b1nd.dodam.data.bundleidinfo.di.bundleIdInfoRepositoryModule
+import com.b1nd.dodam.data.division.di.divisionRepositoryModule
 import com.b1nd.dodam.data.login.di.loginRepositoryModule
 import com.b1nd.dodam.data.meal.di.mealRepositoryModule
 import com.b1nd.dodam.data.nightstudy.di.nightStudyRepositoryModule
+import com.b1nd.dodam.data.notice.di.noticeRepositoryModule
 import com.b1nd.dodam.data.outing.di.outingRepositoryModule
 import com.b1nd.dodam.data.point.di.pointRepositoryModule
 import com.b1nd.dodam.data.schedule.di.scheduleRepositoryModule
 import com.b1nd.dodam.data.upload.di.uploadRepositoryModule
 import com.b1nd.dodam.datastore.di.dataStoreModule
 import com.b1nd.dodam.editmemberinfo.di.editMemberInfoViewModelModule
+import com.b1nd.dodam.group.di.groupViewModelModule
 import com.b1nd.dodam.groupadd.di.groupAddViewModelModule
 import com.b1nd.dodam.groupcreate.di.groupCreateViewModelModule
 import com.b1nd.dodam.groupdetail.di.groupDetailViewModelModule
@@ -34,9 +37,11 @@ import com.b1nd.dodam.member.di.memberDataSourceModule
 import com.b1nd.dodam.member.di.memberRepositoryModule
 import com.b1nd.dodam.network.banner.di.bannerDataSourceModule
 import com.b1nd.dodam.network.core.di.networkCoreModule
+import com.b1nd.dodam.network.division.di.divisionDataSourceModule
 import com.b1nd.dodam.network.login.di.loginDataSourceModule
 import com.b1nd.dodam.network.meal.di.mealDataSourceModule
 import com.b1nd.dodam.network.nightstudy.di.nightStudyDataSourceModule
+import com.b1nd.dodam.network.notice.di.noticeDatasourceModule
 import com.b1nd.dodam.network.outing.di.outingDataSourceModule
 import com.b1nd.dodam.network.point.di.pointDataSourceModule
 import com.b1nd.dodam.network.schedule.di.scheduleDatasourceModule
@@ -117,6 +122,7 @@ class DodamApplication : Application() {
                     parentHomeViewModelModule,
                     parentAllViewModelModule,
                     noticeViewModelModule,
+                    groupViewModelModule,
                     groupAddViewModelModule,
                     groupCreateViewModelModule,
                     groupDetailViewModelModule,
@@ -126,6 +132,10 @@ class DodamApplication : Application() {
                     clubDataSourceModule,
                     clubRepositoryModule,
                     clubViewModelModule,
+                    divisionRepositoryModule,
+                    divisionDataSourceModule,
+                    noticeRepositoryModule,
+                    noticeDatasourceModule,
                 ) + mainViewModelModules,
             )
         }

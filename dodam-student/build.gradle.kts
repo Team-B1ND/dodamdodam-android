@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.google.app.update)
     implementation(projects.featureStudent.club)
+    implementation(projects.feature.noticeViewer)
 
 
     implementation(projects.keystore)
@@ -100,10 +101,16 @@ dependencies {
     implementation(projects.featureParent.all)
     implementation(projects.featureParent.childrenManage)
     implementation(projects.feature.notice)
+    implementation(projects.feature.featureGroupAlias)
     implementation(projects.feature.groupAdd)
     implementation(projects.feature.groupDetail)
     implementation(projects.feature.groupCreate)
     implementation(projects.feature.groupWaiting)
     implementation(projects.network.club)
     implementation(projects.data.club)
+    implementation(projects.network.division)
+    implementation(projects.data.division)
+    implementation(projects.network.notice)
+    implementation(projects.data.notice)
+
 }

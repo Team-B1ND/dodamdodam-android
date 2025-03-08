@@ -7,6 +7,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.b1nd.dodam.notice.NoticeScreen
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 const val NOTICE_ROUTE = "notice"
 
@@ -17,7 +21,13 @@ fun NavController.navigateToNotice(
     },
 ) = navigate(NOTICE_ROUTE, navOptions)
 
-fun NavGraphBuilder.noticeScreen(isTeacher: Boolean, changeBottomNavVisible: (visible: Boolean) -> Unit, navigateToNoticeCreate: (() -> Unit)?) {
+@OptIn(ExperimentalEncodingApi::class)
+fun NavGraphBuilder.noticeScreen(
+    isTeacher: Boolean,
+    changeBottomNavVisible: (visible: Boolean) -> Unit,
+    navigateToNoticeCreate: (() -> Unit)?,
+    navigateToNoticeViewer: (startIndex: Int, images: String) -> Unit,
+) {
     composable(
         route = NOTICE_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -29,6 +39,12 @@ fun NavGraphBuilder.noticeScreen(isTeacher: Boolean, changeBottomNavVisible: (vi
             isTeacher = isTeacher,
             changeBottomNavVisible = changeBottomNavVisible,
             navigateToNoticeCreate = navigateToNoticeCreate,
+            navigateToNoticeViewer = { startIndex, images ->
+                navigateToNoticeViewer(
+                    startIndex,
+                    Base64.UrlSafe.encode(Json.encodeToString(images).encodeToByteArray()),
+                )
+            },
         )
     }
 }

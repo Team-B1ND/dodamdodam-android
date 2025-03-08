@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import com.b1nd.dodam.ui.util.AndroidFileDownloader
+import com.b1nd.dodam.ui.util.LocalFileDownloader
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
@@ -36,9 +39,11 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
-            DodamTeacherApp(
-                exit = this::finish,
-            )
+            CompositionLocalProvider(LocalFileDownloader provides AndroidFileDownloader(this)) {
+                DodamTeacherApp(
+                    exit = this::finish,
+                )
+            }
         }
     }
 

@@ -195,7 +195,7 @@ internal fun ClubListScreen(
                                                 } else {
                                                     selectDetailClub(
                                                         clubs[index].id.toLong(),
-                                                        clubs[index]
+                                                        clubs[index],
                                                     )
                                                 }
                                             },
@@ -204,7 +204,7 @@ internal fun ClubListScreen(
                                             onDetailButtonClick = {
                                                 selectDetailClub(
                                                     clubs[index].id.toLong(),
-                                                    clubs[index]
+                                                    clubs[index],
                                                 )
                                             },
                                         )
