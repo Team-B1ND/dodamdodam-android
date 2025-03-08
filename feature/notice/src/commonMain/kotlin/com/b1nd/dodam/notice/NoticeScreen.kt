@@ -81,6 +81,7 @@ internal fun NoticeScreen(
     isTeacher: Boolean,
     changeBottomNavVisible: (visible: Boolean) -> Unit,
     navigateToNoticeCreate: (() -> Unit)?,
+    navigateToNoticeViewer: (startIndex: Int, images: List<NoticeFile>) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val uriHandler = LocalUriHandler.current
@@ -309,10 +310,12 @@ internal fun NoticeScreen(
                             uriHandler.openUri(url)
                         },
                         onImageClick = { imageIndex ->
-
+                            navigateToNoticeViewer(
+                                imageIndex,
+                                item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE }
+                            )
                         },
                         onFileClick = { file: NoticeFile ->
-                            KmLogging.debug("LOG", "$file")
                             fileDownloader.downloadFile(
                                 fileName = file.fileName,
                                 fileUrl = file.fileUrl
@@ -339,10 +342,12 @@ internal fun NoticeScreen(
                             uriHandler.openUri(url)
                         },
                         onImageClick = { imageIndex ->
-
+                            navigateToNoticeViewer(
+                                imageIndex,
+                                item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE }
+                            )
                         },
                         onFileClick = { file: NoticeFile ->
-                            KmLogging.debug("LOG", "$file")
                             fileDownloader.downloadFile(
                                 fileName = file.fileName,
                                 fileUrl = file.fileUrl
@@ -518,7 +523,6 @@ private fun NoticeCard(
                                 radius = DodamTheme.shapes.extraSmall,
                             ),
                             onClick = {
-                                KmLogging.debug("CLick", "Click to File")
                                 onFileClick(file)
                             }
                         )

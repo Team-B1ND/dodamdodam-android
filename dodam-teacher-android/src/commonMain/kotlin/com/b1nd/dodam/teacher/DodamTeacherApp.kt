@@ -77,6 +77,8 @@ import com.b1nd.dodam.notice.navigation.NOTICE_ROUTE
 import com.b1nd.dodam.notice.navigation.noticeScreen
 import com.b1nd.dodam.noticecreate.navigation.navigateToNoticeCreate
 import com.b1nd.dodam.noticecreate.navigation.noticeCreateScreen
+import com.b1nd.dodam.noticeviewer.navigation.navigateToNoticeViewer
+import com.b1nd.dodam.noticeviewer.navigation.noticeViewerScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -298,6 +300,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             changeBottomNavVisible = { visible ->
                                 showBottomNavVisible = visible
                             },
+                            navigateToNoticeViewer = navHostController::navigateToNoticeViewer
                         )
 
                         noticeCreateScreen(
@@ -339,6 +342,10 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 
                         clubScreen(
                             showSnackbar = showSnackbar,
+                            popBackStack = navHostController::popBackStack,
+                        )
+
+                        noticeViewerScreen(
                             popBackStack = navHostController::popBackStack,
                         )
                     }
