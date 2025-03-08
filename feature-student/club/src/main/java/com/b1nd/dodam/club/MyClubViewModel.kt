@@ -170,7 +170,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
 
                     is Result.Success -> {
                         _sideEffect.emit(ApplySideEffect.SuccessApply)
-
+                        getClub()
                         return@collect
                     }
                 }
@@ -198,6 +198,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
 
                     is Result.Success -> {
                         _sideEffect.emit(ApplySideEffect.SuccessReject)
+                        getClub()
                         return@collect
                     }
                 }

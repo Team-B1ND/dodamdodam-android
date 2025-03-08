@@ -194,7 +194,6 @@ fun DodamApp(
                 navigateToAddWakeUpSong = {
                     navController.navigateToAskWakeupSong()
                 },
-                navigateToClub = navController::navigateToClub,
                 navigateToNoticeViewer = navController::navigateToNoticeViewer,
                 navigateToGroup = navController::navigateToGroup,
                 showToast = { status, text ->
