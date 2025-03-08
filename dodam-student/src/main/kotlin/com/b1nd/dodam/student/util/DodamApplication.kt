@@ -1,7 +1,7 @@
 package com.b1nd.dodam.student.util
 
 import android.app.Application
-import com.b1nd.dodam.club.di.clubViewModelModule
+import com.b1nd.dodam.club.di.myClubViewModelModule
 import com.b1nd.dodam.all.di.parentAllViewModelModule
 import com.b1nd.dodam.asknightstudy.di.askNightStudyViewModelModule
 import com.b1nd.dodam.askout.di.askOutViewModelModule
@@ -123,7 +123,7 @@ class DodamApplication : Application() {
                     childrenManageViewModelModule,
                     clubDataSourceModule,
                     clubRepositoryModule,
-                    clubViewModelModule,
+                    myClubViewModelModule,
                 ) + mainViewModelModules,
             )
         }

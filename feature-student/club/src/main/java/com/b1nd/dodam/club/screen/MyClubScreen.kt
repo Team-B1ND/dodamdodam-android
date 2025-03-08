@@ -31,7 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.b1nd.dodam.club.ClubViewModel
+import com.b1nd.dodam.club.MyClubViewModel
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
 import com.b1nd.dodam.club.model.ClubState
@@ -48,7 +48,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun MyClubScreen(
     modifier: Modifier = Modifier,
-    viewModel: ClubViewModel = koinViewModel(),
+    viewModel: MyClubViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     sideEffect: MyClubSideEffect,
     onNavigateToJoin: () -> Unit,

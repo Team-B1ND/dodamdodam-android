@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ClubViewModel : ViewModel(), KoinComponent {
+class MyClubViewModel : ViewModel(), KoinComponent {
     private val clubRepository: ClubRepository by inject()
 
     private val _state = MutableStateFlow(MyClubUiState())
