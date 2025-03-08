@@ -93,7 +93,7 @@ class ClubService(
 
     override suspend fun getClubMyCreated(): ImmutableList<ClubResponse> {
         return safeRequest {
-            client.get(DodamUrl.CLUB + "/my").body<Response<List<ClubResponse>>>()
+            client.get(DodamUrl.Club.MY).body<Response<List<ClubResponse>>>()
         }.toImmutableList()
     }
 
@@ -110,5 +110,12 @@ class ClubService(
                 )
             }.body<DefaultResponse>()
         }
+    }
+
+    override suspend fun getClubMyRequestReceived(): ImmutableList<ClubJoinResponse> {
+        return safeRequest {
+            client.get(DodamUrl.Club.MY + "/join-requests")
+                .body<Response<List<ClubJoinResponse>>>()
+        }.toImmutableList()
     }
 }

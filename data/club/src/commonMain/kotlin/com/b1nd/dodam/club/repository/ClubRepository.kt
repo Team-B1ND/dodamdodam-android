@@ -21,4 +21,6 @@ interface ClubRepository {
     suspend fun getClubJoined(): Flow<Result<ImmutableList<Club>>>
     suspend fun getClubMyCreated(): Flow<Result<ImmutableList<Club>>>
     suspend fun patchClubState(clubIds: ImmutableList<Int>, status: ClubState, reason: String?): Flow<Result<Unit>>
+    suspend fun getClubMyJoinRequest(): Flow<Result<ImmutableList<ClubJoin>>>
+
 }

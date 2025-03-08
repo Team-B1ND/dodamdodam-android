@@ -7,5 +7,7 @@ data class ClubJoinResponse(
     val id: Int,
     val clubPermission: String,
     val status: String,
+    val priority: String? = null,
+    val introduction: String? = null,
     val club: ClubResponse,
 )
