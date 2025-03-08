@@ -6,6 +6,7 @@ data class Student(
     val name: String,
     val number: Int,
     val room: Int,
+    val code: String,
 )
 
 internal fun StudentResponse.toModel(): Student = Student(
@@ -14,4 +15,5 @@ internal fun StudentResponse.toModel(): Student = Student(
     name = name,
     number = number,
     room = room,
+    code = code,
 )

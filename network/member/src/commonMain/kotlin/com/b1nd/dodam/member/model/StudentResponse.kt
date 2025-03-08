@@ -9,4 +9,5 @@ data class StudentResponse(
     val name: String,
     val number: Int,
     val room: Int,
+    val code: String,
 )

@@ -8,6 +8,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -22,31 +24,40 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ActionIcon
 import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.DividerType
 import com.b1nd.dodam.designsystem.component.DodamAvatar
+import com.b1nd.dodam.designsystem.component.DodamButtonDialog
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.ui.component.DodamMenuDialog
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.BarChart
 import com.b1nd.dodam.ui.icons.ColoredBus
+import com.b1nd.dodam.ui.icons.ColoredCreditCard
 import com.b1nd.dodam.ui.icons.ColoredGroup
 import com.b1nd.dodam.ui.icons.ColoredMegaphone
 import com.b1nd.dodam.ui.icons.ColoredMusicalNote
@@ -68,11 +79,40 @@ fun AllScreen(
     navigateToClub: () -> Unit,
     navigateToGroup: () -> Unit,
 ) {
+    val clipboardManager = LocalClipboardManager.current
     val uiState by viewModel.uiState.collectAsState()
+    var isShowStudentCodeDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
         viewModel.getMyInfo()
     }
+
+    if (isShowStudentCodeDialog) {
+        Dialog(
+            onDismissRequest = {
+                isShowStudentCodeDialog = false
+            }
+        ) {
+            DodamButtonDialog(
+                title = "학생 코드",
+                body = uiState.memberInfo?.student?.code ?: "",
+                confirmButton = {
+                    clipboardManager.setText(
+                        buildAnnotatedString {
+                            append(uiState.memberInfo?.student?.code ?: "")
+                        }
+                    )
+                    isShowStudentCodeDialog = false
+                },
+                confirmButtonText = "복사하기",
+                dismissButton = {
+                    isShowStudentCodeDialog = false
+                },
+                dismissButtonText = "닫기"
+            )
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -182,14 +222,23 @@ fun AllScreen(
                     text = "내 상벌점 보기",
                     onClick = navigateToMyPoint,
                 )
+                if (uiState.memberInfo?.student != null) {
+                    AllCardView(
+                        imageVector = ColoredCreditCard,
+                        text = "내 학생코드 보기",
+                        onClick = {
+                            isShowStudentCodeDialog = true
+                        },
+                    )
+                }
 
                 DodamDivider(type = DividerType.Normal)
 
-                AllCardView(
-                    imageVector = ColoredBus,
-                    text = "귀가 버스 신청하기",
-                    onClick = navigateToAddBus,
-                )
+//                AllCardView(
+//                    imageVector = ColoredBus,
+//                    text = "귀가 버스 신청하기",
+//                    onClick = navigateToAddBus,
+//                )
 
                 AllCardView(
                     imageVector = ColoredTent,
