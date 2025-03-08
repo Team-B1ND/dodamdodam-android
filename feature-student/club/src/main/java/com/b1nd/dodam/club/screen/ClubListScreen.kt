@@ -40,17 +40,25 @@ import com.b1nd.dodam.club.model.ClubPendingUiState
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.ClubUiState
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.ActionIcon
+import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
 @Composable
-internal fun ClubListScreen(state: ClubUiState, popBackStack: () -> Unit, selectDetailClub: (Long, Club) -> Unit, navigateToApply: () -> Unit) {
+internal fun ClubListScreen(
+    state: ClubUiState,
+    popBackStack: () -> Unit,
+    selectDetailClub: (Long, Club) -> Unit,
+    navigateToApply: () -> Unit,
+) {
     var clubTypeIndex by remember { mutableIntStateOf(0) }
     val clubTypeList = listOf(
         "창체",
@@ -77,10 +85,16 @@ internal fun ClubListScreen(state: ClubUiState, popBackStack: () -> Unit, select
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
-                DodamTopAppBar(
-                    title = "",
+                DodamDefaultTopAppBar(
+                    title = "동아리",
                     modifier = Modifier.statusBarsPadding(),
-                    onBackClick = popBackStack,
+                    actionIcons = persistentListOf(
+                        ActionIcon(
+                            icon = DodamIcons.Plus,
+                            onClick = { navigateToApply() },
+                            enabled = true
+                        )
+                    )
                 )
             },
             containerColor = DodamTheme.colors.backgroundNeutral,
@@ -95,25 +109,6 @@ internal fun ClubListScreen(state: ClubUiState, popBackStack: () -> Unit, select
                         .fillMaxSize()
                         .padding(horizontal = 16.dp),
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(text = "동아리", style = DodamTheme.typography.title2Bold())
-                        Spacer(modifier = Modifier.weight(1f))
-                        Box(
-                            modifier = Modifier.size(44.dp).clickable {
-                                navigateToApply()
-                            },
-                        ) {
-                            Image(
-                                modifier = Modifier.size(28.dp).align(Alignment.Center),
-                                imageVector = DodamIcons.Plus.value,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(DodamTheme.colors.labelAlternative),
-                            )
-                        }
-                    }
-
                     DodamSegmentedButton(
                         segments = clubTypeItem,
                         modifier = Modifier.padding(top = 16.dp),
