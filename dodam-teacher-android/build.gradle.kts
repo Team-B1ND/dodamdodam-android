@@ -63,6 +63,7 @@ kotlin {
             implementation(projects.feature.groupAdd)
             implementation(projects.feature.editMemberInfo)
             implementation(projects.featureTeacher.club)
+            implementation(projects.feature.noticeViewer)
 
 
             implementation(projects.data.login)
