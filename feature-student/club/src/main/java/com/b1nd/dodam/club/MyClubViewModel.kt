@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.club.model.ApplySideEffect
 import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.JoinedClubUiState
-import com.b1nd.dodam.club.model.MyClubSideEffect
 import com.b1nd.dodam.club.model.MyClubUiState
 import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import com.b1nd.dodam.club.repository.ClubRepository
@@ -68,7 +67,6 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                                         joinedClubList = joinedClub,
                                         joinedSelfClubList = joinedSelfClub,
                                     ),
-                                    clubSideEffect = if (joinedClub.isNotEmpty()) MyClubSideEffect.Exist else MyClubSideEffect.NotExist,
                                 )
                             }
 

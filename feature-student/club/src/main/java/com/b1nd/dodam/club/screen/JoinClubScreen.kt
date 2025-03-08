@@ -3,6 +3,7 @@ package com.b1nd.dodam.club.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -41,10 +43,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.club.MyClubViewModel
 import com.b1nd.dodam.club.R
-import com.b1nd.dodam.club.component.DodamFullIconButton
+import com.b1nd.dodam.ui.component.CustomFullIconButton
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.JoinedClubUiState
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamButtonDialog
@@ -54,7 +57,11 @@ import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,20 +100,30 @@ internal fun JoinClubScreen(
         }
     }
 
-    val text = listOf(
+    val text: ImmutableList<String> = listOf(
         "창체",
         "자율",
-    )
-    val introduceList = listOf("창체는 자기소개가 없습니다.", "창체는 자기소개가 없습니다.", "창체는 자기소개가 없습니다.")
+    ).toImmutableList()
+
+    val introduceList: ImmutableList<String> = listOf(
+        "창체는 자기소개가 없습니다.",
+        "창체는 자기소개가 없습니다.",
+        "창체는 자기소개가 없습니다."
+    ).toImmutableList()
 
     val clickedNum = remember { mutableIntStateOf(1) }
 
     val allClubNameList = allClubList.filter { it.state == ClubState.ALLOWED }.map { it.name }
     val selectedClubs = remember { mutableStateOf(setOf<String>()) }
 
-    val allSelfClubNameList =
-        allSelfClubList.filter { it.state == ClubState.ALLOWED }.map { it.name }
-    val selectedSelfClubs = remember { mutableStateOf(setOf<String>()) }
+    val allSelfClubNameList = allSelfClubList
+        .filter { it.state == ClubState.ALLOWED }
+        .map { it.name }
+        .toImmutableList()
+
+    val selectedSelfClubs = remember {
+        mutableStateOf<ImmutableSet<String>>(persistentSetOf())
+    }
 
     val filteredClubList = allClubNameList.filter { it !in selectedClubs.value }
     val filteredSelfClubList = allSelfClubNameList.filter { it !in selectedSelfClubs.value }
@@ -118,6 +135,8 @@ internal fun JoinClubScreen(
     val clubIntroduces = remember { mutableStateMapOf<String, String>() }
 
     val clubIdList = remember { mutableStateListOf<Int>() }
+
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(selectedClubs.value) {
         clubIdList.clear()
@@ -180,7 +199,7 @@ internal fun JoinClubScreen(
                                     .fillMaxWidth()
                                     .padding(8.dp)
                                     .clickable {
-                                        selectedSelfClubs.value += item
+                                        selectedSelfClubs.value = (selectedSelfClubs.value + item).toImmutableSet()
                                         clubIntroduces[item] = ""
                                         showSelfBottomSheet.value = false
                                     },
@@ -361,7 +380,7 @@ internal fun JoinClubScreen(
                             introduce = clubIntroduces.getOrDefault(clubName, ""),
                             onRemoveClick = {
                                 clubIntroduces.remove(clubName)
-                                selectedSelfClubs.value -= clubName
+                                selectedSelfClubs.value = (selectedSelfClubs.value - clubName).toImmutableSet()
                             },
                             onIntroduceChange = { newIntroduce ->
                                 clubIntroduces[clubName] = newIntroduce
@@ -386,7 +405,7 @@ internal fun JoinClubScreen(
                             modifier = modifier
                                 .fillMaxWidth(),
                         ) {
-                            DodamFullIconButton(
+                            CustomFullIconButton(
                                 onClick = {
                                     showSelfBottomSheet.value = true
                                 },
@@ -415,10 +434,14 @@ internal fun JoinClubScreen(
                             )
                             Spacer(Modifier.width(15.dp))
                             Row(
-                                Modifier.clickable {
-                                    showBottomSheet.value = true
-                                    clickedNum.intValue = 1
-                                },
+                                Modifier.clickable (
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberBounceIndication(),
+                                    onClick = {
+                                        showBottomSheet.value = true
+                                        clickedNum.intValue = 1
+                                    }
+                                ),
                             ) {
                                 Text(
                                     modifier = Modifier.align(Alignment.CenterVertically),
@@ -444,10 +467,14 @@ internal fun JoinClubScreen(
                             )
                             Spacer(Modifier.width(15.dp))
                             Row(
-                                Modifier.clickable {
-                                    showBottomSheet.value = true
-                                    clickedNum.intValue = 2
-                                },
+                                Modifier.clickable (
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberBounceIndication(),
+                                    onClick = {
+                                        showBottomSheet.value = true
+                                        clickedNum.intValue = 2
+                                    }
+                                ),
                             ) {
                                 Text(
                                     modifier = Modifier.align(Alignment.CenterVertically),
@@ -473,10 +500,14 @@ internal fun JoinClubScreen(
                             )
                             Spacer(Modifier.width(15.dp))
                             Row(
-                                Modifier.clickable {
-                                    showBottomSheet.value = true
-                                    clickedNum.intValue = 3
-                                },
+                                Modifier.clickable (
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberBounceIndication(),
+                                    onClick = {
+                                        showBottomSheet.value = true
+                                        clickedNum.intValue = 3
+                                    }
+                                ),
                             ) {
                                 Text(
                                     modifier = Modifier.align(Alignment.CenterVertically),
