@@ -54,6 +54,7 @@ import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.androidx.compose.koinViewModel
 
@@ -93,11 +94,11 @@ internal fun JoinClubScreen(
         }
     }
 
-    val text = listOf(
+    val text = persistentListOf(
         "창체",
         "자율",
     )
-    val introduceList = listOf("창체는 자기소개가 없습니다.", "창체는 자기소개가 없습니다.", "창체는 자기소개가 없습니다.")
+    val introduceList = persistentListOf("창체는 자기소개가 없습니다.", "창체는 자기소개가 없습니다.", "창체는 자기소개가 없습니다.")
 
     val clickedNum = remember { mutableIntStateOf(1) }
 
