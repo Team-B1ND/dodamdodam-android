@@ -36,7 +36,7 @@ internal fun MyClubScreen(
                     showSnackbar(SnackbarState.SUCCESS, "성공하였습니다.")
                 }
                 ApplySideEffect.SuccessReject -> {
-                    showSnackbar(SnackbarState.SUCCESS, "거절하였습니다..")
+                    showSnackbar(SnackbarState.SUCCESS, "거절하였습니다.")
                 }
             }
         }
