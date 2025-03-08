@@ -12,7 +12,6 @@ import io.ktor.client.request.HttpResponseData
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.fullPath
-import io.ktor.http.headers
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import kotlin.test.BeforeTest
@@ -123,7 +122,7 @@ class BusServiceTest {
     }
 
     @Test
-    fun 버스_전체_조회() = runTest(testDispatcher) {
+    fun getBus() = runTest(testDispatcher) {
         val response = busService.getBusList()
 
         assertEquals(
@@ -141,7 +140,7 @@ class BusServiceTest {
     }
 
     @Test
-    fun 버스_추가() = runTest(testDispatcher) {
+    fun addBus() = runTest(testDispatcher) {
         val response = busService.applyBus(1)
 
         assertEquals(
@@ -151,7 +150,7 @@ class BusServiceTest {
     }
 
     @Test
-    fun 버스_제거() = runTest(testDispatcher) {
+    fun deleteBus() = runTest(testDispatcher) {
         val response = busService.deleteBus(1)
 
         assertEquals(
@@ -161,7 +160,7 @@ class BusServiceTest {
     }
 
     @Test
-    fun 버스_변경() = runTest(testDispatcher) {
+    fun changeBus() = runTest(testDispatcher) {
         val response = busService.updateBus(1)
 
         assertEquals(
@@ -171,7 +170,7 @@ class BusServiceTest {
     }
 
     @Test
-    fun 버스_본인_조회() = runTest(testDispatcher) {
+    fun searchBus() = runTest(testDispatcher) {
         val response = busService.getMyBus()
 
         assertEquals(

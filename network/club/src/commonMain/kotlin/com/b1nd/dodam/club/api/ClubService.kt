@@ -4,6 +4,7 @@ import com.b1nd.dodam.club.datasource.ClubDataSource
 import com.b1nd.dodam.club.model.ClubJoinResponse
 import com.b1nd.dodam.club.model.ClubMemberResponse
 import com.b1nd.dodam.club.model.ClubMemberStudentResponse
+import com.b1nd.dodam.club.model.ClubMyJoinedResponse
 import com.b1nd.dodam.club.model.ClubResponse
 import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import com.b1nd.dodam.club.model.request.ClubStateRequest
@@ -33,16 +34,12 @@ class ClubService(
         }
     }
 
-    override suspend fun postClubJoinRequests(clubId: Int, clubPriority: String, introduce: String) {
+    override suspend fun postClubJoinRequests(requests: List<ClubJoinRequest>) {
         defaultSafeRequest {
             client.post(DodamUrl.Club.JOIN_REQUEST) {
                 contentType(ContentType.Application.Json)
                 setBody(
-                    ClubJoinRequest(
-                        clubId = clubId,
-                        clubPriority = clubPriority,
-                        introduction = introduce,
-                    ),
+                    requests,
                 )
             }.body<DefaultResponse>()
         }
@@ -85,15 +82,15 @@ class ClubService(
         }.toImmutableList()
     }
 
-    override suspend fun getClubJoined(): ImmutableList<ClubResponse> {
+    override suspend fun getClubJoined(): ImmutableList<ClubMyJoinedResponse> {
         return safeRequest {
-            client.get(DodamUrl.CLUB + "/joined").body<Response<List<ClubResponse>>>()
+            client.get(DodamUrl.CLUB + "/joined").body<Response<List<ClubMyJoinedResponse>>>()
         }.toImmutableList()
     }
 
     override suspend fun getClubMyCreated(): ImmutableList<ClubResponse> {
         return safeRequest {
-            client.get(DodamUrl.CLUB + "/my").body<Response<List<ClubResponse>>>()
+            client.get(DodamUrl.Club.MY).body<Response<List<ClubResponse>>>()
         }.toImmutableList()
     }
 
@@ -110,5 +107,12 @@ class ClubService(
                 )
             }.body<DefaultResponse>()
         }
+    }
+
+    override suspend fun getClubMyRequestReceived(): ImmutableList<ClubJoinResponse> {
+        return safeRequest {
+            client.get(DodamUrl.Club.MY + "/join-requests")
+                .body<Response<List<ClubJoinResponse>>>()
+        }.toImmutableList()
     }
 }

@@ -1,7 +1,6 @@
-@file:Suppress("UNREACHABLE_CODE")
-
 package com.b1nd.dodam.club.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -38,14 +38,17 @@ import coil3.compose.AsyncImage
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubPendingUiState
 import com.b1nd.dodam.club.model.ClubState
-import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.ClubUiState
 import com.b1nd.dodam.designsystem.DodamTheme
+import com.b1nd.dodam.designsystem.component.ActionIcon
+import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
@@ -53,8 +56,8 @@ import kotlinx.coroutines.delay
 internal fun ClubListScreen(
     state: ClubUiState,
     popBackStack: () -> Unit,
-    selectClubList: (Long, String, ClubType, String) -> Unit,
     selectDetailClub: (Long, Club) -> Unit,
+    navigateToApply: () -> Unit,
 ) {
     var clubTypeIndex by remember { mutableIntStateOf(0) }
     val clubTypeList = listOf(
@@ -62,11 +65,11 @@ internal fun ClubListScreen(
         "자율",
     )
 
-    var isLoading by remember { mutableStateOf(true) } // 초기 로딩 상태
+    var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        delay(2000L) // 2초 동안 대기
-        isLoading = false // 2초 후 로딩 종료
+        delay(2000L)
+        isLoading = false
     }
 
     val clubTypeItem = List(2) { index ->
@@ -78,16 +81,20 @@ internal fun ClubListScreen(
     }.toImmutableList()
 
     val uriHandler = LocalUriHandler.current
-    var selectedReject by remember { mutableStateOf(false) }
-    var rejectReason by remember { mutableStateOf("") }
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
-                DodamTopAppBar(
+                DodamDefaultTopAppBar(
                     title = "동아리",
                     modifier = Modifier.statusBarsPadding(),
-                    onBackClick = popBackStack,
+                    actionIcons = persistentListOf(
+                        ActionIcon(
+                            icon = DodamIcons.Plus,
+                            onClick = { navigateToApply() },
+                            enabled = true
+                        )
+                    )
                 )
             },
             containerColor = DodamTheme.colors.backgroundNeutral,
@@ -102,7 +109,6 @@ internal fun ClubListScreen(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp),
                 ) {
-                    Text(text = "동아리", style = DodamTheme.typography.title2Bold())
                     DodamSegmentedButton(
                         segments = clubTypeItem,
                         modifier = Modifier.padding(top = 16.dp),
@@ -112,7 +118,7 @@ internal fun ClubListScreen(
                             Spacer(modifier = Modifier.height(20.dp))
                             DodamEmpty(
                                 onClick = {
-                                    uriHandler.openUri("https://dodam.b1nd.com/clubs/create")
+                                    uriHandler.openUri("https://dodam.b1nd.com/club/create")
                                 },
                                 title = "아직 등록된 동아리가 없어요",
                                 buttonText = "동아리 생성하기",

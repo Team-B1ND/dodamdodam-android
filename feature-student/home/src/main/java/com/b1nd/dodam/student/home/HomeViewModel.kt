@@ -178,8 +178,16 @@ class HomeViewModel : ViewModel(), KoinComponent {
             }
             launch {
                 scheduleRepository.getScheduleBetweenPeriods(
-                    startAt = LocalDate.of(localDate.year, localDate.monthNumber, localDate.dayOfMonth).toKotlinLocalDate(),
-                    endAt = LocalDate.of(nextDate.year, nextDate.monthNumber, nextDate.dayOfMonth).toKotlinLocalDate(),
+                    startAt = LocalDate.of(
+                        localDate.year,
+                        localDate.monthNumber,
+                        localDate.dayOfMonth,
+                    ).toKotlinLocalDate(),
+                    endAt = LocalDate.of(
+                        nextDate.year,
+                        nextDate.monthNumber,
+                        nextDate.dayOfMonth,
+                    ).toKotlinLocalDate(),
                 ).collect { result ->
                     when (result) {
                         is Result.Success -> {
@@ -389,8 +397,16 @@ class HomeViewModel : ViewModel(), KoinComponent {
 
     fun fetchSchedule() = viewModelScope.launch {
         scheduleRepository.getScheduleBetweenPeriods(
-            startAt = LocalDate.of(localDate.year, localDate.monthNumber, localDate.dayOfMonth).toKotlinLocalDate(),
-            endAt = LocalDate.of(nextDate.year, nextDate.monthNumber, nextDate.dayOfMonth).toKotlinLocalDate(),
+            startAt = LocalDate.of(
+                localDate.year,
+                localDate.monthNumber,
+                localDate.dayOfMonth,
+            ).toKotlinLocalDate(),
+            endAt = LocalDate.of(
+                nextDate.year,
+                nextDate.monthNumber,
+                nextDate.dayOfMonth,
+            ).toKotlinLocalDate(),
         ).collect { result ->
             when (result) {
                 is Result.Success -> {
