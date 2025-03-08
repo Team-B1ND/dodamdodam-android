@@ -38,29 +38,19 @@ import coil3.compose.AsyncImage
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubPendingUiState
 import com.b1nd.dodam.club.model.ClubState
-import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.ClubUiState
 import com.b1nd.dodam.designsystem.DodamTheme
-import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
-import com.b1nd.dodam.designsystem.component.DodamTextButton
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
-import com.b1nd.dodam.designsystem.component.TextButtonSize
-import com.b1nd.dodam.designsystem.component.TextButtonType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
 @Composable
-internal fun ClubListScreen(
-    state: ClubUiState,
-    popBackStack: () -> Unit,
-    selectDetailClub: (Long, Club) -> Unit,
-    navigateToApply: () -> Unit,
-) {
+internal fun ClubListScreen(state: ClubUiState, popBackStack: () -> Unit, selectDetailClub: (Long, Club) -> Unit, navigateToApply: () -> Unit) {
     var clubTypeIndex by remember { mutableIntStateOf(0) }
     val clubTypeList = listOf(
         "창체",
@@ -106,12 +96,12 @@ internal fun ClubListScreen(
                         .padding(horizontal = 16.dp),
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(text = "동아리", style = DodamTheme.typography.title2Bold())
                         Spacer(modifier = Modifier.weight(1f))
                         Box(
-                            modifier = Modifier.size(44.dp)
+                            modifier = Modifier.size(44.dp),
                         ) {
                             Image(
                                 modifier = Modifier.size(28.dp).align(Alignment.Center),
@@ -120,7 +110,6 @@ internal fun ClubListScreen(
                                 colorFilter = ColorFilter.tint(DodamTheme.colors.labelAlternative),
                             )
                         }
-
                     }
 
                     DodamSegmentedButton(
