@@ -4,6 +4,7 @@ import com.b1nd.dodam.club.datasource.ClubDataSource
 import com.b1nd.dodam.club.model.ClubJoinResponse
 import com.b1nd.dodam.club.model.ClubMemberResponse
 import com.b1nd.dodam.club.model.ClubMemberStudentResponse
+import com.b1nd.dodam.club.model.ClubMyJoinedResponse
 import com.b1nd.dodam.club.model.ClubResponse
 import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import com.b1nd.dodam.club.model.request.ClubStateRequest
@@ -81,9 +82,9 @@ class ClubService(
         }.toImmutableList()
     }
 
-    override suspend fun getClubJoined(): ImmutableList<ClubResponse> {
+    override suspend fun getClubJoined(): ImmutableList<ClubMyJoinedResponse> {
         return safeRequest {
-            client.get(DodamUrl.CLUB + "/joined").body<Response<List<ClubResponse>>>()
+            client.get(DodamUrl.CLUB + "/joined").body<Response<List<ClubMyJoinedResponse>>>()
         }.toImmutableList()
     }
 

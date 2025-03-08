@@ -22,8 +22,8 @@ data class MyClubUiState(
 
 sealed interface JoinedClubUiState {
     data class Success(
-        val joinedClubList: ImmutableList<Club>,
-        val joinedSelfClubList: ImmutableList<Club>,
+        val joinedClubList: ImmutableList<ClubMyJoined>,
+        val joinedSelfClubList: ImmutableList<ClubMyJoined>,
     ) : JoinedClubUiState
     data object Loading : JoinedClubUiState
     data object Error : JoinedClubUiState
