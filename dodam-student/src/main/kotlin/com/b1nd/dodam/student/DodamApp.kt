@@ -346,7 +346,7 @@ fun DodamApp(
                 },
             )
             noticeViewerScreen(
-                popBackStack = navController::popBackStack
+                popBackStack = navController::popBackStack,
             )
 
             groupScreen(

@@ -11,36 +11,32 @@ import androidx.navigation.navArgument
 import com.b1nd.dodam.data.notice.model.NoticeFile
 import com.b1nd.dodam.noticeviewer.NoticeViewerScreen
 import io.ktor.utils.io.core.toByteArray
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.serialization.json.Json
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.serialization.json.Json
 
 const val NOTICE_VIEWER_ROUTE = "notice_viewer"
 
-fun NavController.navigateToNoticeViewer(
-    startIndex: Int,
-    images: String,
-    navOptions: NavOptions? = null
-) =
-    navigate("${NOTICE_VIEWER_ROUTE}/${startIndex}/${images}", navOptions)
+fun NavController.navigateToNoticeViewer(startIndex: Int, images: String, navOptions: NavOptions? = null) =
+    navigate("${NOTICE_VIEWER_ROUTE}/$startIndex/$images", navOptions)
 
 @OptIn(ExperimentalEncodingApi::class)
-fun NavGraphBuilder.noticeViewerScreen(
-    popBackStack: () -> Unit
-) {
+fun NavGraphBuilder.noticeViewerScreen(popBackStack: () -> Unit) {
     composable(
         route = "${NOTICE_VIEWER_ROUTE}/{startIndex}/{images}",
         arguments = listOf(
             navArgument(
-                name = "startIndex", {
+                name = "startIndex",
+                {
                     type = NavType.IntType
-                }
+                },
             ),
             navArgument(
-                name = "images", {
+                name = "images",
+                {
                     type = NavType.StringType
-                }
+                },
             ),
         ),
         enterTransition = { EnterTransition.None },
@@ -48,17 +44,17 @@ fun NavGraphBuilder.noticeViewerScreen(
         popEnterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None },
     ) { navBackStackEntry ->
-        val imageArgument = navBackStackEntry.arguments?.getString("images")?: ""
+        val imageArgument = navBackStackEntry.arguments?.getString("images") ?: ""
 
         val images = Json.decodeFromString<List<NoticeFile>>(
-            Base64.UrlSafe.decode(imageArgument.toByteArray()).decodeToString()
+            Base64.UrlSafe.decode(imageArgument.toByteArray()).decodeToString(),
         )
-        val startIndex = navBackStackEntry.arguments?.getInt("startIndex")?: 0
+        val startIndex = navBackStackEntry.arguments?.getInt("startIndex") ?: 0
 
         NoticeViewerScreen(
             popBackStack = popBackStack,
             images = images.toImmutableList(),
-            startIndex = startIndex
+            startIndex = startIndex,
         )
     }
 }

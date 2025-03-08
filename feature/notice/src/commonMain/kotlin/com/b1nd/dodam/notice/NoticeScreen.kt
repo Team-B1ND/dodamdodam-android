@@ -62,7 +62,6 @@ import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamTextButton
 import com.b1nd.dodam.designsystem.component.TextButtonSize
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
-import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.notice.viewmodel.NoticeViewModel
 import com.b1nd.dodam.ui.component.DodamAutoLinkText
 import com.b1nd.dodam.ui.component.modifier.`if`
@@ -312,15 +311,15 @@ internal fun NoticeScreen(
                         onImageClick = { imageIndex ->
                             navigateToNoticeViewer(
                                 imageIndex,
-                                item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE }
+                                item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE },
                             )
                         },
                         onFileClick = { file: NoticeFile ->
                             fileDownloader.downloadFile(
                                 fileName = file.fileName,
-                                fileUrl = file.fileUrl
+                                fileUrl = file.fileUrl,
                             )
-                        }
+                        },
                     )
                 }
             } else {
@@ -344,15 +343,15 @@ internal fun NoticeScreen(
                         onImageClick = { imageIndex ->
                             navigateToNoticeViewer(
                                 imageIndex,
-                                item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE }
+                                item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE },
                             )
                         },
                         onFileClick = { file: NoticeFile ->
                             fileDownloader.downloadFile(
                                 fileName = file.fileName,
-                                fileUrl = file.fileUrl
+                                fileUrl = file.fileUrl,
                             )
-                        }
+                        },
                     )
                 }
             }
@@ -462,7 +461,7 @@ private fun NoticeCard(
                                 ),
                                 onClick = {
                                     onImageClick(0)
-                                }
+                                },
                             ),
                         model = images.first().fileUrl,
                         contentDescription = null,
@@ -481,7 +480,7 @@ private fun NoticeCard(
                                     ),
                                     onClick = {
                                         onImageClick(1)
-                                    }
+                                    },
                                 ),
                         ) {
                             AsyncImage(
@@ -524,7 +523,7 @@ private fun NoticeCard(
                             ),
                             onClick = {
                                 onFileClick(file)
-                            }
+                            },
                         )
                         .border(
                             width = 1.dp,
@@ -536,7 +535,7 @@ private fun NoticeCard(
                             vertical = 16.dp,
                         ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(
                         modifier = Modifier.weight(1f),
