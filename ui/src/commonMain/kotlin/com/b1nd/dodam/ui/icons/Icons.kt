@@ -12,6 +12,7 @@ import dodamdodam_android.ui.generated.resources.ic_colored_calendar
 import dodamdodam_android.ui.generated.resources.ic_colored_checkmark_circle
 import dodamdodam_android.ui.generated.resources.ic_colored_checkmark_circle_filled
 import dodamdodam_android.ui.generated.resources.ic_colored_cookedrice
+import dodamdodam_android.ui.generated.resources.ic_colored_credit_card
 import dodamdodam_android.ui.generated.resources.ic_colored_dgit
 import dodamdodam_android.ui.generated.resources.ic_colored_exclamationmark_circle
 import dodamdodam_android.ui.generated.resources.ic_colored_group
@@ -149,3 +150,7 @@ val Crown
 val Silhouette
     @Composable
     get() = vectorResource(Res.drawable.ic_silhouette)
+
+val ColoredCreditCard
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_credit_card)

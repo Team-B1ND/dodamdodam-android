@@ -55,7 +55,6 @@ import kotlinx.coroutines.delay
 @Composable
 internal fun ClubListScreen(
     state: ClubUiState,
-    popBackStack: () -> Unit,
     selectDetailClub: (Long, Club) -> Unit,
     navigateToApply: () -> Unit,
 ) {
