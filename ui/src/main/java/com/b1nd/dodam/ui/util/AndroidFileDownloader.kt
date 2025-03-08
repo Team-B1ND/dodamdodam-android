@@ -4,7 +4,6 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
-import android.util.Log
 
 class AndroidFileDownloader(private val context: Context) : FileDownloader {
 
@@ -19,8 +18,6 @@ class AndroidFileDownloader(private val context: Context) : FileDownloader {
             val downloadManager =
                 context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             downloadManager.enqueue(request)
-        } catch (e: Exception) {
-            Log.d("TAG", "downloadFile: $e")
-        }
+        } catch (e: Exception) { }
     }
 }

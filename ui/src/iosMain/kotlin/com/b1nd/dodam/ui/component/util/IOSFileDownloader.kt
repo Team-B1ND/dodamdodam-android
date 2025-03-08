@@ -26,10 +26,7 @@ class IOSFileDownloader : FileDownloader {
                 val destinationUrl = documentsDirectory.URLByAppendingPathComponent(fileName)
                 if (destinationUrl != null) {
                     fileManager.moveItemAtURL(location, destinationUrl, null)
-                    println("File downloaded to: $destinationUrl")
                 }
-            } else if (error != null) {
-                println("Error downloading file: $error")
             }
         }
         downloadTask.resume()
