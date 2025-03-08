@@ -7,18 +7,18 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
-import com.b1nd.dodam.club.ClubScreen
+import com.b1nd.dodam.club.MyClubScreen
 
 const val CLUB_ROUTE = "club"
 
-fun NavController.navigateToClub(
+fun NavController.navigateToMyClub(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
     },
 ) = navigate(CLUB_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.clubScreen(
+fun NavGraphBuilder.myClubScreen(
     popBackStack: () -> Unit,
 ) {
     composable(
@@ -29,7 +29,7 @@ fun NavGraphBuilder.clubScreen(
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
     ) {
         it.savedStateHandle
-        ClubScreen(
+        MyClubScreen(
             popBackStack = popBackStack,
         )
     }
