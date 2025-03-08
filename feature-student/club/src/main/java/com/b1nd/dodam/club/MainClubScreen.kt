@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.b1nd.dodam.club.model.ClubSideEffect
 import com.b1nd.dodam.club.model.MyClubPage
 import com.b1nd.dodam.club.screen.JoinClubScreen
 import com.b1nd.dodam.club.screen.MyClubScreen
@@ -21,7 +19,11 @@ import com.b1nd.dodam.ui.component.SnackbarState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-internal fun MyClubScreen(viewModel: MyClubViewModel = koinViewModel(), popBackStack: () -> Unit, showSnackbar: (state: SnackbarState, message: String) -> Unit) {
+internal fun MyClubScreen(
+    viewModel: MyClubViewModel = koinViewModel(),
+    popBackStack: () -> Unit,
+    showSnackbar: (state: SnackbarState, message: String) -> Unit,
+) {
     var nowPage by remember { mutableStateOf(MyClubPage.MY) }
 
     LaunchedEffect(true) {
@@ -35,7 +37,6 @@ internal fun MyClubScreen(viewModel: MyClubViewModel = koinViewModel(), popBackS
                 }
                 ApplySideEffect.SuccessReject -> {
                     showSnackbar(SnackbarState.SUCCESS, "거절하였습니다..")
-
                 }
             }
         }

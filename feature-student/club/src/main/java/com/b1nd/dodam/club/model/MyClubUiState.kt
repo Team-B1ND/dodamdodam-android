@@ -17,7 +17,7 @@ data class MyClubUiState(
     val allClubList: ImmutableList<Club> = persistentListOf(),
     val allSelfClubList: ImmutableList<Club> = persistentListOf(),
     val requestJoinClub: ImmutableList<ClubJoin> = persistentListOf(),
-    val requestJoinSelfClub: ImmutableList<ClubJoin> = persistentListOf()
+    val requestJoinSelfClub: ImmutableList<ClubJoin> = persistentListOf(),
 )
 
 sealed interface JoinedClubUiState {

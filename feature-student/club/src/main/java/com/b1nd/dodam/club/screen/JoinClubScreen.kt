@@ -1,6 +1,5 @@
 package com.b1nd.dodam.club.screen
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -72,7 +71,6 @@ internal fun JoinClubScreen(
 
     val context = LocalContext.current
 
-
     var titleIndex by remember { mutableIntStateOf(0) }
     var showClubPicker by remember { mutableStateOf(false) }
     var showEmptyClub by remember { mutableStateOf(false) }
@@ -113,7 +111,6 @@ internal fun JoinClubScreen(
     val filteredClubList = allClubNameList.filter { it !in selectedClubs.value }
     val filteredSelfClubList = allSelfClubNameList.filter { it !in selectedSelfClubs.value }
 
-
     val firstClub = remember { mutableStateOf("") }
     val secondClub = remember { mutableStateOf("") }
     val thirdClub = remember { mutableStateOf("") }
@@ -144,7 +141,6 @@ internal fun JoinClubScreen(
 
         val selectedSelfClubNames = selectedSelfClubs.value.toList()
 
-
         selectedSelfClubNames.forEach { clubName ->
             allSelfClubList.find { it.name == clubName }?.id?.let { id ->
                 selfClubIdList.add(id)
@@ -156,7 +152,6 @@ internal fun JoinClubScreen(
                 selfIntroduceList.addAll(nonEmptyIntroductions)
             }
         }
-
     }
 
     if (showSelfBottomSheet.value) {
@@ -376,7 +371,7 @@ internal fun JoinClubScreen(
                                     selfIntroduceList.add(newIntroduce)
                                 }
                             },
-                            clubName = clubName
+                            clubName = clubName,
                         )
                     }
                     Box(
@@ -522,13 +517,7 @@ internal fun JoinClubScreen(
 }
 
 @Composable
-fun ClubCard(
-    modifier: Modifier = Modifier,
-    introduce: String,
-    clubName: String,
-    onIntroduceChange: (String) -> Unit,
-    onRemoveClick: () -> Unit,
-) {
+fun ClubCard(modifier: Modifier = Modifier, introduce: String, clubName: String, onIntroduceChange: (String) -> Unit, onRemoveClick: () -> Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -585,4 +574,3 @@ fun ClubCard(
         }
     }
 }
-
