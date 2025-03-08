@@ -87,5 +87,6 @@ object DodamUrl {
 
     object Club {
         const val JOIN_REQUEST = "$CLUB/join-requests"
+        const val MY = "$CLUB/my"
     }
 }

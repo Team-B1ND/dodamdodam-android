@@ -132,4 +132,14 @@ internal class ClubRepositoryImpl(
             .asResult()
             .flowOn(dispatcher)
     }
+
+    override suspend fun getClubMyJoinRequest(): Flow<Result<ImmutableList<ClubJoin>>> {
+        return flow {
+            emit(
+                network.getClubMyRequestReceived().map { it.toModel() }.toImmutableList(),
+            )
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
 }
