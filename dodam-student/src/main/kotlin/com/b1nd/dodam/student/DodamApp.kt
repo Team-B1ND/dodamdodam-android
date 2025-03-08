@@ -101,7 +101,6 @@ fun DodamApp(
     firebaseCrashlytics: FirebaseCrashlytics,
     scope: CoroutineScope = rememberCoroutineScope(),
     role: String,
-    refresh: () -> Boolean = { false },
 ) {
     navController.addOnDestinationChangedListener { _, destination, _ ->
         val params = Bundle().apply {
