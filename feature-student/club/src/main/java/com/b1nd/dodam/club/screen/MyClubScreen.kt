@@ -207,15 +207,17 @@ internal fun MyClubScreen(
                 .background(DodamTheme.colors.backgroundNeutral, RoundedCornerShape(16.dp)),
         ) {
             Column(
-                modifier = modifier
-                    .verticalScroll(scrollState),
+                modifier = modifier.verticalScroll(scrollState),
             ) {
                 when (state.joinedClubUiState) {
                     is JoinedClubUiState.Success -> {
                         DodamEmpty(
-                            title = if (joinedClubList.isEmpty()) {
-                                "아직 동아리에 신청하지 않았어요! \n" +
-                                    "신청 마감 : 2025. 03. 19."
+                            title = if (joinedClubList.isEmpty() &&
+                                state.requestJoinClub.isEmpty() &&
+                                state.requestJoinSelfClub.isEmpty() &&
+                                joinedSelfClubList.isEmpty()
+                            ) {
+                                "아직 동아리에 신청하지 않았어요! \n" + "신청 마감 : 2025. 03. 19."
                             } else {
                                 "신청 마감 : 2025. 03. 19."
                             },
@@ -251,8 +253,7 @@ internal fun MyClubScreen(
                             )
                             Spacer(Modifier.height(8.dp))
                             Row(
-                                modifier = modifier
-                                    .fillMaxWidth(),
+                                modifier = modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
                                 if (joinedClubNameList.isNotEmpty()) {
@@ -292,8 +293,7 @@ internal fun MyClubScreen(
                             )
                             Spacer(Modifier.height(8.dp))
                             Column(
-                                modifier = modifier
-                                    .fillMaxWidth(),
+                                modifier = modifier.fillMaxWidth(),
                             ) {
                                 if (joinedSelfClubNameList.isNotEmpty()) {
                                     joinedSelfClubNameList.forEachIndexed { _, item ->
@@ -338,8 +338,7 @@ internal fun MyClubScreen(
                             if (state.requestJoinClub.isNotEmpty()) {
                                 state.requestJoinClub.forEachIndexed { index, item ->
                                     Row(
-                                        modifier = modifier
-                                            .fillMaxWidth(),
+                                        modifier = modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                     ) {
                                         Text(
@@ -387,8 +386,7 @@ internal fun MyClubScreen(
                         }
                         Spacer(Modifier.height(12.dp))
                         Column(
-                            modifier = modifier
-                                .fillMaxWidth(),
+                            modifier = modifier.fillMaxWidth(),
                         ) {
                             Column(
                                 modifier = modifier
@@ -425,28 +423,35 @@ internal fun MyClubScreen(
                                             Image(
                                                 imageVector = createdClubStateList.getOrNull(
                                                     index,
-                                                )
-                                                    ?.let { state ->
-                                                        when (state) {
-                                                            ClubState.PENDING -> DodamIcons.Clock.value
-                                                            ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
-                                                            ClubState.REJECTED -> DodamIcons.XMarkCircle.value
-                                                            else -> DodamIcons.Bell.value
-                                                        }
-                                                    } ?: DodamIcons.ExclamationMarkCircle.value,
+                                                )?.let { state ->
+                                                    when (state) {
+                                                        ClubState.PENDING -> DodamIcons.Clock.value
+                                                        ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
+                                                        ClubState.REJECTED -> DodamIcons.XMarkCircle.value
+                                                        else -> DodamIcons.Bell.value
+                                                    }
+                                                } ?: DodamIcons.ExclamationMarkCircle.value,
                                                 contentDescription = null,
                                                 colorFilter = createdClubStateList.getOrNull(
                                                     index,
-                                                )
-                                                    ?.let { state ->
-                                                        when (state) {
-                                                            ClubState.PENDING -> ColorFilter.tint(DodamTheme.colors.statusCautionary)
-                                                            ClubState.ALLOWED -> ColorFilter.tint(DodamTheme.colors.primaryNormal)
-                                                            ClubState.REJECTED -> ColorFilter.tint(DodamTheme.colors.statusNegative)
+                                                )?.let { state ->
+                                                    when (state) {
+                                                        ClubState.PENDING -> ColorFilter.tint(
+                                                            DodamTheme.colors.statusCautionary,
+                                                        )
 
-                                                            else -> ColorFilter.tint(DodamTheme.colors.statusCautionary)
-                                                        }
-                                                    } ?: ColorFilter.tint(DodamTheme.colors.statusCautionary),
+                                                        ClubState.ALLOWED -> ColorFilter.tint(
+                                                            DodamTheme.colors.primaryNormal,
+                                                        )
+
+                                                        ClubState.REJECTED -> ColorFilter.tint(
+                                                            DodamTheme.colors.statusNegative,
+                                                        )
+
+                                                        else -> ColorFilter.tint(DodamTheme.colors.statusCautionary)
+                                                    }
+                                                }
+                                                    ?: ColorFilter.tint(DodamTheme.colors.statusCautionary),
                                             )
                                         }
                                         Spacer(Modifier.height(8.dp))
@@ -479,28 +484,35 @@ internal fun MyClubScreen(
                                             Image(
                                                 imageVector = createdClubStateList.getOrNull(
                                                     index,
-                                                )
-                                                    ?.let { state ->
-                                                        when (state) {
-                                                            ClubState.PENDING -> DodamIcons.Clock.value
-                                                            ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
-                                                            ClubState.REJECTED -> DodamIcons.XMarkCircle.value
-                                                            else -> DodamIcons.Bell.value
-                                                        }
-                                                    } ?: DodamIcons.ExclamationMarkCircle.value,
+                                                )?.let { state ->
+                                                    when (state) {
+                                                        ClubState.PENDING -> DodamIcons.Clock.value
+                                                        ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
+                                                        ClubState.REJECTED -> DodamIcons.XMarkCircle.value
+                                                        else -> DodamIcons.Bell.value
+                                                    }
+                                                } ?: DodamIcons.ExclamationMarkCircle.value,
                                                 contentDescription = null,
                                                 colorFilter = createdClubStateList.getOrNull(
                                                     index,
-                                                )
-                                                    ?.let { state ->
-                                                        when (state) {
-                                                            ClubState.PENDING -> ColorFilter.tint(DodamTheme.colors.statusCautionary)
-                                                            ClubState.ALLOWED -> ColorFilter.tint(DodamTheme.colors.primaryNormal)
-                                                            ClubState.REJECTED -> ColorFilter.tint(DodamTheme.colors.statusNegative)
+                                                )?.let { state ->
+                                                    when (state) {
+                                                        ClubState.PENDING -> ColorFilter.tint(
+                                                            DodamTheme.colors.statusCautionary,
+                                                        )
 
-                                                            else -> ColorFilter.tint(DodamTheme.colors.statusCautionary)
-                                                        }
-                                                    } ?: ColorFilter.tint(DodamTheme.colors.statusCautionary),
+                                                        ClubState.ALLOWED -> ColorFilter.tint(
+                                                            DodamTheme.colors.primaryNormal,
+                                                        )
+
+                                                        ClubState.REJECTED -> ColorFilter.tint(
+                                                            DodamTheme.colors.statusNegative,
+                                                        )
+
+                                                        else -> ColorFilter.tint(DodamTheme.colors.statusCautionary)
+                                                    }
+                                                }
+                                                    ?: ColorFilter.tint(DodamTheme.colors.statusCautionary),
                                             )
                                         }
                                         Spacer(Modifier.height(8.dp))
@@ -540,8 +552,7 @@ internal fun MyClubScreen(
                                 if (receivedClubList.isNotEmpty()) {
                                     receivedClubNameList.forEachIndexed { index, item ->
                                         Row(
-                                            modifier = modifier
-                                                .fillMaxWidth(),
+                                            modifier = modifier.fillMaxWidth(),
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                         ) {
                                             Text(
@@ -553,26 +564,24 @@ internal fun MyClubScreen(
                                                 Image(
                                                     imageVector = DodamIcons.CheckmarkCircle.value,
                                                     contentDescription = null,
-                                                    modifier = modifier
-                                                        .clickable {
-                                                            showDialog.value = true
-                                                            selectedSelfClubId.intValue =
-                                                                receivedClubList[index].id
-                                                            selectedSelfClubName.value = item
-                                                        },
+                                                    modifier = modifier.clickable {
+                                                        showDialog.value = true
+                                                        selectedSelfClubId.intValue =
+                                                            receivedClubList[index].id
+                                                        selectedSelfClubName.value = item
+                                                    },
                                                     colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                                                 )
                                                 Spacer(Modifier.width(16.dp))
                                                 Image(
                                                     imageVector = DodamIcons.XMarkCircle.value,
                                                     contentDescription = null,
-                                                    modifier = modifier
-                                                        .clickable {
-                                                            showRejectDialog.value = true
-                                                            selectedSelfClubId.intValue =
-                                                                receivedClubList[index].id
-                                                            selectedSelfClubName.value = item
-                                                        },
+                                                    modifier = modifier.clickable {
+                                                        showRejectDialog.value = true
+                                                        selectedSelfClubId.intValue =
+                                                            receivedClubList[index].id
+                                                        selectedSelfClubName.value = item
+                                                    },
                                                     colorFilter = ColorFilter.tint(DodamTheme.colors.statusNegative),
                                                 )
                                             }
@@ -607,6 +616,11 @@ internal fun MyClubScreen(
 @Composable
 private fun DodamLoadingClub(height: Int) {
     Spacer(modifier = Modifier.height(12.dp))
-    Box(modifier = Modifier.fillMaxWidth().height(height.dp).background(shape = RoundedCornerShape(12.dp), brush = shimmerEffect()))
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height.dp)
+            .background(shape = RoundedCornerShape(12.dp), brush = shimmerEffect()),
+    )
     Spacer(modifier = Modifier.height(12.dp))
 }
