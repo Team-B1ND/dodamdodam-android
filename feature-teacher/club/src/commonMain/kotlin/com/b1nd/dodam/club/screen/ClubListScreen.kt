@@ -74,7 +74,6 @@ internal fun ClubListScreen(
         "창체",
         "자율",
     )
-    var selectedItemIndex by remember { mutableStateOf(-1) }
     val clubTypeItem = List(2) { index ->
         DodamSegment(
             selected = clubTypeIndex == index,
@@ -82,6 +81,19 @@ internal fun ClubListScreen(
             onClick = { clubTypeIndex = index },
         )
     }.toImmutableList()
+    var clubStateTypeIndex by remember { mutableIntStateOf(0) }
+    val clubStateTypeList = listOf(
+        "요청중",
+        "승인됨",
+    )
+    val clubStateTypeItem = List(2) { index ->
+        DodamSegment(
+            selected = clubStateTypeIndex == index,
+            text = clubStateTypeList[index],
+            onClick = { clubStateTypeIndex = index },
+        )
+    }.toImmutableList()
+    var selectedItemIndex: Club? by remember { mutableStateOf(null) }
 
     var selectedReject by remember { mutableStateOf(false) }
     var rejectReason by remember { mutableStateOf("") }
@@ -103,7 +115,10 @@ internal fun ClubListScreen(
                 Column(
                     modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
                 ) {
-                    Text(text = "동아리 개설 승인 관리", style = DodamTheme.typography.title2Bold())
+                    DodamSegmentedButton(
+                        segments = clubStateTypeItem,
+                        modifier = Modifier.padding(top = 16.dp),
+                    )
                     DodamSegmentedButton(
                         segments = clubTypeItem,
                         modifier = Modifier.padding(top = 16.dp),
@@ -139,9 +154,11 @@ internal fun ClubListScreen(
                         }
 
                         is ClubPendingUiState.Success -> {
-                            val clubs =
+                            val originClubs =
                                 if (clubTypeIndex == 0) data.clubPendingList.creativeClubs else data.clubPendingList.selfClubs
-                            if (clubs.size == 0) {
+                            val clubs =
+                                originClubs.filter { ww -> if (clubStateTypeIndex == 0) ww.state == ClubState.PENDING else ww.state == ClubState.ALLOWED }
+                            if (clubs.isEmpty()) {
                                 Box(
                                     modifier = Modifier.fillMaxWidth().padding(top = 20.dp)
                                         .background(
@@ -162,34 +179,32 @@ internal fun ClubListScreen(
                                     items(clubs.size) { index ->
                                         DodamClub(
                                             modifier = Modifier.padding(bottom = 12.dp).clickable {
-                                                if (selectedItemIndex == index) {
-                                                    selectedItemIndex = -1
+                                                if (clubStateTypeIndex == 0) {
+                                                    selectedItemIndex =
+                                                        if (selectedItemIndex == clubs[index]) {
+                                                            null
+                                                        } else {
+                                                            clubs[index]
+                                                        }
+                                                    selectClubList(
+                                                        clubs[index].id.toLong(),
+                                                        clubs[index].name,
+                                                        clubs[index].type,
+                                                        clubs[index].shortDescription,
+                                                    )
                                                 } else {
-                                                    selectedItemIndex = index
+                                                    selectDetailClub(
+                                                        clubs[index].id.toLong(),
+                                                        clubs[index]
+                                                    )
                                                 }
-                                                selectClubList(
-                                                    clubs[index].id.toLong(),
-                                                    clubs[index].name,
-                                                    clubs[index].type,
-                                                    clubs[index].shortDescription,
-                                                )
                                             },
                                             club = clubs[index],
-                                            isSelected = index == selectedItemIndex,
+                                            isSelected = clubs[index] == selectedItemIndex,
                                             onDetailButtonClick = {
                                                 selectDetailClub(
                                                     clubs[index].id.toLong(),
-                                                    Club(
-                                                        id = clubs[index].id,
-                                                        name = clubs[index].name,
-                                                        shortDescription = clubs[index].shortDescription,
-                                                        description = clubs[index].description,
-                                                        subject = clubs[index].subject,
-                                                        type = clubs[index].type,
-                                                        image = clubs[index].image,
-                                                        teacher = clubs[index].teacher,
-                                                        state = clubs[index].state,
-                                                    ),
+                                                    clubs[index]
                                                 )
                                             },
                                         )
@@ -201,7 +216,7 @@ internal fun ClubListScreen(
                 }
             }
         }
-        if (selectedItemIndex != -1) {
+        if (selectedItemIndex != null) {
             FakeBottomSheet(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 title = {
@@ -291,7 +306,7 @@ internal fun ClubListScreen(
                                             ClubState.ALLOWED,
                                             null,
                                         )
-                                        selectedItemIndex = -1
+                                        selectedItemIndex = null
                                     },
                                 )
                             }
@@ -351,7 +366,7 @@ internal fun ClubListScreen(
                                 ClubState.REJECTED,
                                 rejectReason,
                             )
-                            selectedItemIndex = -1
+                            selectedItemIndex = null
                             selectedReject = false
                             rejectReason = ""
                         },

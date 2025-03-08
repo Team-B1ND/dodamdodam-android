@@ -12,7 +12,12 @@ android {
 
 dependencies {
     implementation(libs.dodam.design.system.cmm)
+    implementation(libs.dodam.design.system)
+    implementation(libs.google.gson)
+    implementation(projects.featureParent.childrenManage)
     implementation(projects.data.register)
+    implementation(projects.data.member)
+    implementation(projects.data.core)
     implementation(libs.bottomsheetdialog.compose)
     implementation(projects.common)
     implementation(projects.ui)

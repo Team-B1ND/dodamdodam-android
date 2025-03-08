@@ -9,4 +9,6 @@ interface MemberDataSource {
     suspend fun getMemberAll(status: String): List<MemberInfoResponse>
     suspend fun editMemberInfo(name: String, email: String, phone: String, profileImage: String?)
     suspend fun getChildren(code: String): MemberResponse
+    suspend fun getAuthCode(type: String, identifier: String)
+    suspend fun verifyAuthCode(type: String, identifier: String, authCode: String, userAgent: String)
 }

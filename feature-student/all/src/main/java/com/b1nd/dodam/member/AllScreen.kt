@@ -51,6 +51,7 @@ import com.b1nd.dodam.ui.icons.ColoredGroup
 import com.b1nd.dodam.ui.icons.ColoredMegaphone
 import com.b1nd.dodam.ui.icons.ColoredMusicalNote
 import com.b1nd.dodam.ui.icons.ColoredTent
+import com.b1nd.dodam.ui.icons.Silhouette
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
 
@@ -64,7 +65,7 @@ fun AllScreen(
     navigateToOuting: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
-    navigateToClub: () -> Unit
+    navigateToClub: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -212,9 +213,8 @@ fun AllScreen(
                     text = "그룹",
                     onClick = { },
                 )
-
                 AllCardView(
-                    imageVector = ColoredGroup,
+                    imageVector = Silhouette,
                     text = "동아리",
                     onClick = navigateToClub,
                 )
