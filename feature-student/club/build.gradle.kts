@@ -17,4 +17,6 @@ dependencies {
     implementation(projects.ui)
     implementation(projects.data.club)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.multiplatform.markdown.renderer.coil3)
+    implementation(libs.multiplatform.markdown.renderer)
 }

@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.google.app.update)
+    implementation(projects.featureStudent.club)
 
 
     implementation(projects.keystore)

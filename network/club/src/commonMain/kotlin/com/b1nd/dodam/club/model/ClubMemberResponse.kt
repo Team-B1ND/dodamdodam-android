@@ -4,6 +4,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClubMemberResponse(
+    val isLeader: Boolean,
+    val students: List<ClubMemberStudentResponse>,
+)
+
+@Serializable
+data class ClubMemberStudentResponse(
     val id: Int,
     val status: String,
     val permission: String,

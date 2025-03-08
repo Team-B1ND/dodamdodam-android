@@ -11,6 +11,7 @@ import com.b1nd.dodam.bus.di.busRepositoryModule
 import com.b1nd.dodam.bus.di.busViewModelModule
 import com.b1nd.dodam.club.di.clubDataSourceModule
 import com.b1nd.dodam.club.di.clubRepositoryModule
+import com.b1nd.dodam.club.di.clubViewModelModule
 import com.b1nd.dodam.common.network.di.coroutineScopeModule
 import com.b1nd.dodam.common.network.di.dispatchersModule
 import com.b1nd.dodam.data.banner.di.bannerRepositoryModule
@@ -46,6 +47,7 @@ import com.b1nd.dodam.notice.di.noticeViewModelModule
 import com.b1nd.dodam.outing.di.outingViewModelModule
 import com.b1nd.dodam.parent.childrenmanage.di.childrenManageViewModelModule
 import com.b1nd.dodam.parnet.home.di.parentHomeViewModelModule
+import com.b1nd.dodam.register.di.infoViewModelModule
 import com.b1nd.dodam.register.di.registerDataSourceModule
 import com.b1nd.dodam.register.di.registerRepositoryModule
 import com.b1nd.dodam.register.di.registerViewModelModule
@@ -121,9 +123,11 @@ class DodamApplication : Application() {
                     groupDetailViewModelModule,
                     groupWaitingViewModelModule,
                     childrenManageViewModelModule,
+                    infoViewModelModule,
                     clubDataSourceModule,
                     clubRepositoryModule,
                     myClubViewModelModule,
+                    clubViewModelModule,
                 ) + mainViewModelModules,
             )
         }

@@ -3,6 +3,7 @@ package com.b1nd.dodam.club.api
 import com.b1nd.dodam.club.datasource.ClubDataSource
 import com.b1nd.dodam.club.model.ClubJoinResponse
 import com.b1nd.dodam.club.model.ClubMemberResponse
+import com.b1nd.dodam.club.model.ClubMemberStudentResponse
 import com.b1nd.dodam.club.model.ClubResponse
 import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import com.b1nd.dodam.club.model.request.ClubStateRequest
@@ -66,23 +67,16 @@ class ClubService(
         }.toImmutableList()
     }
 
-    override suspend fun getClubLeader(id: Int): ClubMemberResponse {
+    override suspend fun getClubLeader(id: Int): ClubMemberStudentResponse {
         return safeRequest {
-            client.get(DodamUrl.CLUB + "/$id/leader").body<Response<ClubMemberResponse>>()
+            client.get(DodamUrl.CLUB + "/$id/leader").body<Response<ClubMemberStudentResponse>>()
         }
     }
 
-    override suspend fun getClubAllowMember(id: Int): ImmutableList<ClubMemberResponse> {
+    override suspend fun getClubMember(id: Int): ClubMemberResponse {
         return safeRequest {
-            client.get(DodamUrl.CLUB + "/$id/members").body<Response<List<ClubMemberResponse>>>()
-        }.toImmutableList()
-    }
-
-    override suspend fun getClubAllMember(id: Int): ImmutableList<ClubMemberResponse> {
-        return safeRequest {
-            client.get(DodamUrl.CLUB + "/$id/all-members")
-                .body<Response<List<ClubMemberResponse>>>()
-        }.toImmutableList()
+            client.get(DodamUrl.CLUB + "/$id/members").body<Response<ClubMemberResponse>>()
+        }
     }
 
     override suspend fun getClubList(): ImmutableList<ClubResponse> {

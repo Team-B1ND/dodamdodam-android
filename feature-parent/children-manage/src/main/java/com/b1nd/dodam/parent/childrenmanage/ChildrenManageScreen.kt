@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import com.b1nd.dodam.data.core.model.Children
 import com.b1nd.dodam.dds.animation.bounceClick
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.AvatarSize
@@ -66,6 +67,7 @@ internal fun ChildrenManageScreen(
     viewModel: ChildrenManageViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     changeBottomNavVisible: (visible: Boolean) -> Unit,
+    navigateToInfo: (list: List<Children>) -> Unit,
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     var code by remember { mutableStateOf("") }
@@ -145,10 +147,9 @@ internal fun ChildrenManageScreen(
                             )
                             DodamTextButton(
                                 onClick = {
-                                    if (selectedRelation != null &&
-                                        (selectedRelation != "기타" || etcRelation.isNotBlank())
-                                    ) {
-                                        viewModel.getChildren(code = code)
+                                    if (selectedRelation != null && (selectedRelation != "기타" || etcRelation.isNotBlank())) {
+                                        val relationToSend = if (selectedRelation == "기타") etcRelation else selectedRelation
+                                        viewModel.getChildren(code = code, relation = relationToSend ?: "")
                                     }
                                 },
                                 text = "등록",
@@ -288,8 +289,13 @@ internal fun ChildrenManageScreen(
                     Spacer(Modifier.height(150.dp))
                 }
             }
+
             DodamButton(
-                onClick = {},
+                onClick = {
+                    navigateToInfo(
+                        uiState,
+                    )
+                },
                 text = "완료",
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
