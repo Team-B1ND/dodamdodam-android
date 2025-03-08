@@ -46,6 +46,7 @@ internal fun ParentMainScreen(
     navController: NavHostController,
     navigateToMeal: () -> Unit,
     navigateToSetting: () -> Unit,
+    navigateToNoticeViewer: (startIndex: Int, images: String) -> Unit,
     showToast: (String, String) -> Unit,
 ) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -65,6 +66,7 @@ internal fun ParentMainScreen(
             noticeScreen(
                 isTeacher = false,
                 navigateToNoticeCreate = null,
+                navigateToNoticeViewer = navigateToNoticeViewer,
                 changeBottomNavVisible = { visible ->
                     bottomNavVisible = visible
                 },

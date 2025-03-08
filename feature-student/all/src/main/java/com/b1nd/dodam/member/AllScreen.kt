@@ -66,6 +66,7 @@ fun AllScreen(
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
     navigateToClub: () -> Unit,
+    navigateToGroup: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -211,7 +212,7 @@ fun AllScreen(
                 AllCardView(
                     imageVector = ColoredGroup,
                     text = "그룹",
-                    onClick = { },
+                    onClick = navigateToGroup,
                 )
                 AllCardView(
                     imageVector = Silhouette,

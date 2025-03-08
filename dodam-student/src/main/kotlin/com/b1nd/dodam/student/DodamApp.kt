@@ -40,10 +40,22 @@ import com.b1nd.dodam.dds.component.DodamSuccessToast
 import com.b1nd.dodam.dds.component.DodamWarningToast
 import com.b1nd.dodam.editmemberinfo.navigation.editMemberInfoScreen
 import com.b1nd.dodam.editmemberinfo.navigation.navigationToEditMemberInfo
+import com.b1nd.dodam.group.navigation.groupScreen
+import com.b1nd.dodam.group.navigation.navigateToGroup
+import com.b1nd.dodam.groupadd.navigation.groupAddScreen
+import com.b1nd.dodam.groupadd.navigation.navigateToGroupAdd
+import com.b1nd.dodam.groupcreate.navigation.groupCreateScreen
+import com.b1nd.dodam.groupcreate.navigation.navigateToGroupCreate
+import com.b1nd.dodam.groupdetail.navigation.groupDetailScreen
+import com.b1nd.dodam.groupdetail.navigation.navigateToGroupDetail
+import com.b1nd.dodam.groupwaiting.navigation.groupWaitingScreen
+import com.b1nd.dodam.groupwaiting.navigation.navigateToGroupWaiting
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.meal.navigation.navigateToMeal
+import com.b1nd.dodam.noticeviewer.navigation.navigateToNoticeViewer
+import com.b1nd.dodam.noticeviewer.navigation.noticeViewerScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -65,6 +77,7 @@ import com.b1nd.dodam.student.main.navigation.mainScreen
 import com.b1nd.dodam.student.main.navigation.navigateToMain
 import com.b1nd.dodam.student.point.navigation.navigateToPoint
 import com.b1nd.dodam.student.point.navigation.pointScreen
+import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.wakeupsong.navigation.navigateToWakeupSong
 import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -115,6 +128,12 @@ fun DodamApp(
     }
 
     var state by remember { mutableStateOf("") }
+    val showSnackbar: (SnackbarState, String) -> Unit = { snackBarState, message ->
+        state = snackBarState.name
+        scope.launch {
+            snackbarHostState.showSnackbar(message)
+        }
+    }
 
     Scaffold(
         snackbarHost = {
@@ -172,6 +191,8 @@ fun DodamApp(
                     navController.navigateToAskWakeupSong()
                 },
                 navigateToClub = navController::navigateToClub,
+                navigateToNoticeViewer = navController::navigateToNoticeViewer,
+                navigateToGroup = navController::navigateToGroup,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
@@ -182,6 +203,7 @@ fun DodamApp(
                 navController = mainNavController,
                 navigateToMeal = navController::navigateToMeal,
                 navigateToSetting = navController::navigateToSetting,
+                navigateToNoticeViewer = navController::navigateToNoticeViewer,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
@@ -322,6 +344,41 @@ fun DodamApp(
                         childrenList,
                     )
                 },
+            )
+            noticeViewerScreen(
+                popBackStack = navController::popBackStack,
+            )
+
+            groupScreen(
+                popBackStack = navController::popBackStack,
+                isTeacher = true,
+                navigateToGroupCreate = navController::navigateToGroupCreate,
+                navigateToGroupDetail = { id ->
+                    navController.navigateToGroupDetail(
+                        id = id,
+                    )
+                },
+            )
+
+            groupDetailScreen(
+                showSnackbar = showSnackbar,
+                popBackStack = navController::popBackStack,
+                navigateToGroupAdd = navController::navigateToGroupAdd,
+                navigateToGroupWaiting = navController::navigateToGroupWaiting,
+            )
+
+            groupWaitingScreen(
+                popBackStack = navController::popBackStack,
+            )
+
+            groupCreateScreen(
+                popBackStack = navController::popBackStack,
+                showSnackbar = showSnackbar,
+            )
+
+            groupAddScreen(
+                showSnackbar = showSnackbar,
+                popBackStack = navController::popBackStack,
             )
         }
     }
