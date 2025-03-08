@@ -7,7 +7,6 @@ import com.b1nd.dodam.data.division.DivisionRepository
 import com.b1nd.dodam.data.division.model.DivisionOverview
 import com.b1nd.dodam.data.notice.NoticeRepository
 import com.b1nd.dodam.data.notice.model.NoticeStatus
-import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.notice.model.NoticeUiState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -99,7 +98,12 @@ class NoticeViewModel : ViewModel(), KoinComponent {
                 when (result) {
                     is Result.Success -> {
                         _uiState.update {
-                            KmLogging.debug("test", "${it.noticeList.map { it.id }}")
+                            if (result.data.isEmpty()) {
+                                return@update it.copy(
+                                    isLoading = false,
+                                )
+                            }
+
                             val newData = it.noticeList.toMutableList().apply {
                                 addAll(result.data)
                             }
@@ -148,7 +152,6 @@ class NoticeViewModel : ViewModel(), KoinComponent {
                 when (result) {
                     is Result.Success -> {
                         _uiState.update {
-                            KmLogging.debug("test", "${it.searchNoticeList.map { it.id }}")
                             val newData = it.searchNoticeList.toMutableList().apply {
                                 addAll(result.data)
                             }

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.dodam.multiplatform)
     alias(libs.plugins.dodam.multiplatform.kotlin)
     alias(libs.plugins.dodam.multiplatform.koin)
+    alias(libs.plugins.dodam.multiplatform.kotlin.serialization)
 }
 
 kotlin {
