@@ -10,14 +10,14 @@ import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import com.b1nd.dodam.club.repository.ClubRepository
 import com.b1nd.dodam.common.result.Result
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 
 class MyClubViewModel : ViewModel(), KoinComponent {
     private val clubRepository: ClubRepository by inject()
@@ -25,8 +25,8 @@ class MyClubViewModel : ViewModel(), KoinComponent {
     private val _state = MutableStateFlow(MyClubUiState())
     val state = _state.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<ApplySideEffect>()
-    val sideEffect = _sideEffect.asSharedFlow()
+    private val _sideEffect = Channel<ApplySideEffect>(Channel.BUFFERED)
+    val sideEffect = _sideEffect.receiveAsFlow()
 
     fun getClub() {
         _state.update {
@@ -154,7 +154,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
             clubRepository.postClubJoinRequestsAllow(id).collect { result ->
                 when (result) {
                     is Result.Error -> {
-                        _sideEffect.emit(ApplySideEffect.Failed(result.error))
+                        _sideEffect.send(ApplySideEffect.Failed(result.error))
 
                         result.error.printStackTrace()
                         _state.update {
@@ -169,7 +169,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     }
 
                     is Result.Success -> {
-                        _sideEffect.emit(ApplySideEffect.SuccessApply)
+                        _sideEffect.send(ApplySideEffect.SuccessApply)
                         getClub()
                         return@collect
                     }
@@ -183,7 +183,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
             clubRepository.deleteClubJoinRequest(id).collect { result ->
                 when (result) {
                     is Result.Error -> {
-                        _sideEffect.emit(ApplySideEffect.Failed(result.error))
+                        _sideEffect.send(ApplySideEffect.Failed(result.error))
                         result.error.printStackTrace()
                         _state.update {
                             it.copy(
@@ -197,7 +197,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     }
 
                     is Result.Success -> {
-                        _sideEffect.emit(ApplySideEffect.SuccessReject)
+                        _sideEffect.send(ApplySideEffect.SuccessReject)
                         getClub()
                         return@collect
                     }
@@ -334,7 +334,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
             clubRepository.postClubJoinRequests(requestList).collect { result ->
                 when (result) {
                     is Result.Error -> {
-                        _sideEffect.emit(ApplySideEffect.Failed(result.error))
+                        _sideEffect.send(ApplySideEffect.Failed(result.error))
                         result.error.printStackTrace()
                         _state.update {
                             it.copy(
@@ -345,7 +345,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     Result.Loading -> {
                     }
                     is Result.Success -> {
-                        _sideEffect.emit(ApplySideEffect.SuccessApply)
+                        _sideEffect.send(ApplySideEffect.SuccessApply)
                     }
                 }
             }
