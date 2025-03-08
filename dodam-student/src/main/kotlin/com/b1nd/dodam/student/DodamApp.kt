@@ -165,7 +165,7 @@ fun DodamApp(
                 navigateToAddOuting = navController::navigateToAskOut,
                 navigateToSetting = navController::navigateToSetting,
                 navigateToMyPoint = navController::navigateToPoint,
-                navigateToClub = navController::navigateToMyClub,
+                navigateToClub = navController::navigateToClub,
                 navigateToAddBus = {
                     navController.navigateToBus()
                 },
@@ -316,8 +316,7 @@ fun DodamApp(
             )
             clubScreen(
                 popBackStack = navController::popBackStack,
-                // TODO : navigateToApply로 변경
-                navigateToApply = navController::navigateToClub,
+                navigateToApply = navController::navigateToMyClub,
             )
             childrenManageScreen(
                 popBackStack = navController::popBackStack,

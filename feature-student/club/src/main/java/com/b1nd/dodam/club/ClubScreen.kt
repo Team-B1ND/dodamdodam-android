@@ -1,5 +1,3 @@
-@file:Suppress("UNREACHABLE_CODE")
-
 package com.b1nd.dodam.club
 
 import androidx.compose.animation.AnimatedVisibility
@@ -21,9 +19,13 @@ import com.b1nd.dodam.club.screen.ClubListScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
-internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), popBackStack: () -> Unit, navigateToApply: () -> Unit) {
+internal fun ClubScreen(
+    viewModel: ClubViewModel = koinViewModel(),
+    popBackStack: () -> Unit,
+    navigateToApply: () -> Unit,
+
+    ) {
     val state by viewModel.state.collectAsState()
     var nowPage by remember { mutableStateOf(ClubPage.LIST) }
 
@@ -42,14 +44,11 @@ internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), popBackStack
             ClubListScreen(
                 state = state,
                 popBackStack = popBackStack,
-                selectClubList = { id, name, type, shortDescription ->
-                    viewModel.detailMember(id, name, type, shortDescription)
-                },
                 selectDetailClub = { id, club ->
                     nowPage = ClubPage.DETAIL
                     viewModel.loadDetailClub(id, club)
                 },
-
+                navigateToApply = navigateToApply,
             )
         }
         AnimatedVisibility(
