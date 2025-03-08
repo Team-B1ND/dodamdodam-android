@@ -40,7 +40,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.b1nd.dodam.club.Event
 import com.b1nd.dodam.club.MyClubViewModel
 import com.b1nd.dodam.club.R
 import com.b1nd.dodam.club.component.DodamFullIconButton
@@ -73,19 +72,6 @@ internal fun JoinClubScreen(
 
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = true) {
-        viewModel.event.collect { event ->
-            when (event) {
-                is Event.ShowToast -> {
-                    Toast.makeText(
-                        context,
-                        event.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-    }
 
     var titleIndex by remember { mutableIntStateOf(0) }
     var showClubPicker by remember { mutableStateOf(false) }

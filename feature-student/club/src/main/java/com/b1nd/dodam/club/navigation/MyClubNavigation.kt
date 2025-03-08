@@ -8,6 +8,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.b1nd.dodam.club.MyClubScreen
+import com.b1nd.dodam.ui.component.SnackbarState
 
 const val MY_CLUB_ROUTE = "myClub"
 
@@ -18,7 +19,7 @@ fun NavController.navigateToMyClub(
 ) = navigate(MY_CLUB_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.myClubScreen(popBackStack: () -> Unit) {
+fun NavGraphBuilder.myClubScreen(showSnackbar: (state: SnackbarState, message: String) -> Unit, popBackStack: () -> Unit) {
     composable(
         route = MY_CLUB_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
@@ -29,6 +30,7 @@ fun NavGraphBuilder.myClubScreen(popBackStack: () -> Unit) {
         it.savedStateHandle
         MyClubScreen(
             popBackStack = popBackStack,
+            showSnackbar = showSnackbar
         )
     }
 }

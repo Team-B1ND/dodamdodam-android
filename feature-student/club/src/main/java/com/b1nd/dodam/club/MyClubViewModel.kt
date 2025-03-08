@@ -2,6 +2,7 @@ package com.b1nd.dodam.club
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.b1nd.dodam.club.model.ClubSideEffect
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.JoinedClubUiState
@@ -26,8 +27,8 @@ class MyClubViewModel : ViewModel(), KoinComponent {
     private val _state = MutableStateFlow(MyClubUiState())
     val state = _state.asStateFlow()
 
-    private val _event = MutableSharedFlow<Event>()
-    val event = _event.asSharedFlow()
+    private val _sideEffect = MutableSharedFlow<ApplySideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
     fun getClub() {
         _state.update {
@@ -155,7 +156,8 @@ class MyClubViewModel : ViewModel(), KoinComponent {
             clubRepository.postClubJoinRequestsAllow(id).collect { result ->
                 when (result) {
                     is Result.Error -> {
-                        _event.emit(Event.ShowToast("동아리 수락에 실패했어요"))
+                        _sideEffect.emit(ApplySideEffect.Failed(result.error))
+
                         result.error.printStackTrace()
                         _state.update {
                             it.copy(
@@ -169,7 +171,8 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     }
 
                     is Result.Success -> {
-                        _event.emit(Event.ShowToast("동아리 수락에 성공했어요"))
+                        _sideEffect.emit(ApplySideEffect.SuccessApply)
+
                         return@collect
                     }
                 }
@@ -182,7 +185,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
             clubRepository.deleteClubJoinRequest(id).collect { result ->
                 when (result) {
                     is Result.Error -> {
-                        _event.emit(Event.ShowToast("동아리 거절에 실패했어요"))
+                        _sideEffect.emit(ApplySideEffect.Failed(result.error))
                         result.error.printStackTrace()
                         _state.update {
                             it.copy(
@@ -196,7 +199,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     }
 
                     is Result.Success -> {
-                        _event.emit(Event.ShowToast("동아리 거절에 성공했어요"))
+                        _sideEffect.emit(ApplySideEffect.SuccessReject)
                         return@collect
                     }
                 }
@@ -322,7 +325,6 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                         )
                     }
                 } else {
-                    _event.emit(Event.ShowToast("자율동아리 정보가 올바르지 않습니다"))
                     _state.update {
                         it.copy(
                             joinedClubUiState = JoinedClubUiState.Error,
@@ -335,7 +337,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
             clubRepository.postClubJoinRequests(requestList).collect { result ->
                 when (result) {
                     is Result.Error -> {
-                        _event.emit(Event.ShowToast("동아리 신청에 실패했어요"))
+                        _sideEffect.emit(ApplySideEffect.Failed(result.error))
                         result.error.printStackTrace()
                         _state.update {
                             it.copy(
@@ -346,7 +348,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     Result.Loading -> {
                     }
                     is Result.Success -> {
-                        _event.emit(Event.ShowToast("동아리 신청에 성공했어요"))
+                        _sideEffect.emit(ApplySideEffect.SuccessApply)
                     }
                 }
             }
@@ -354,6 +356,9 @@ class MyClubViewModel : ViewModel(), KoinComponent {
     }
 }
 
-sealed interface Event {
-    data class ShowToast(val message: String) : Event
+sealed interface ApplySideEffect {
+    data object SuccessApply : ApplySideEffect
+    data object SuccessReject : ApplySideEffect
+    data class Failed(val throwable: Throwable) : ApplySideEffect
 }
+
