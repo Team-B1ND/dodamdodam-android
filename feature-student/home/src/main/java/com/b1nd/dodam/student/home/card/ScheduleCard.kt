@@ -72,7 +72,9 @@ fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchSchedule: 
                                 .animateContentSize()
                                 .padding(horizontal = 10.dp)
                                 .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
+                                    interactionSource = remember {
+                                        MutableInteractionSource()
+                                    },
                                     indication = rememberBounceIndication(),
                                     onClick = onContentClick,
                                 )
@@ -92,7 +94,13 @@ fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchSchedule: 
                             }
 
                             ScheduleComponent(
-                                day = "${if (current == latestSchedule) current.dayOfMonth else latestSchedule.dayOfMonth}일",
+                                day = "${
+                                    if (current == latestSchedule) {
+                                        current.dayOfMonth
+                                    } else {
+                                        latestSchedule.dayOfMonth
+                                    }
+                                }일",
                                 dayOfWeek = listOf(
                                     "월",
                                     "화",
@@ -101,7 +109,13 @@ fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchSchedule: 
                                     "금",
                                     "토",
                                     "일",
-                                )[if (current == latestSchedule) current.dayOfWeek.isoDayNumber - 1 else latestSchedule.dayOfWeek.isoDayNumber - 1] + "요일",
+                                )[
+                                    if (current == latestSchedule) {
+                                        current.dayOfWeek.isoDayNumber - 1
+                                    } else {
+                                        latestSchedule.dayOfWeek.isoDayNumber - 1
+                                    },
+                                ] + "요일",
                                 body = remember {
                                     schedules.filter {
                                         latestSchedule in it.date
@@ -110,7 +124,9 @@ fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchSchedule: 
                             )
 
                             val nextSchedule = remember {
-                                if (schedules.first().date.size > 1 && schedules[0].date[0] != schedules[0].date[1]) {
+                                if (schedules.first().date.size > 1 &&
+                                    schedules[0].date[0] != schedules[0].date[1]
+                                ) {
                                     if (tomorrow in schedules.first().date) {
                                         tomorrow
                                     } else {
@@ -281,7 +297,13 @@ fun ScheduleCard(uiState: ScheduleUiState, showShimmer: Boolean, fetchSchedule: 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ScheduleComponent(modifier: Modifier = Modifier, day: String, dayOfWeek: String, body: ImmutableList<Schedule>) {
+private fun ScheduleComponent(
+    modifier: Modifier =
+        Modifier,
+    day: String,
+    dayOfWeek: String,
+    body: ImmutableList<Schedule>,
+) {
     Column(
         modifier = modifier,
     ) {

@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
@@ -39,7 +40,6 @@ import com.b1nd.dodam.student.home.DefaultText
 import com.b1nd.dodam.student.home.DodamContainer
 import com.b1nd.dodam.student.home.model.NightStudyUiState
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlinx.datetime.toJavaLocalDateTime
 
@@ -52,7 +52,7 @@ internal fun NightStudyCard(
     navigateToNightStudy: () -> Unit,
     fetchNightStudy: () -> Unit,
 ) {
-    val current = LocalDateTime.now()
+    val current = DodamDate.now()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -66,13 +66,15 @@ internal fun NightStudyCard(
                 when (uiState) {
                     is NightStudyUiState.Success -> {
                         uiState.data?.let { nightStudy ->
-                            val nightStudyProgress = 1 - ChronoUnit.SECONDS.between(
-                                nightStudy.startAt.toJavaLocalDateTime(),
-                                current,
-                            ).toFloat() / ChronoUnit.SECONDS.between(
-                                nightStudy.startAt.toJavaLocalDateTime(),
-                                nightStudy.endAt.toJavaLocalDateTime(),
-                            )
+                            val nightStudyProgress = (
+                                ChronoUnit.SECONDS.between(
+                                    nightStudy.startAt.toJavaLocalDateTime(),
+                                    current.toJavaLocalDateTime(),
+                                ).toFloat() / ChronoUnit.SECONDS.between(
+                                    nightStudy.startAt.toJavaLocalDateTime(),
+                                    nightStudy.endAt.toJavaLocalDateTime(),
+                                )
+                                ).coerceIn(0f, 1f)
 
                             val progress by animateFloatAsState(
                                 targetValue = if (playOnlyOnce || isRefreshing) 0f else nightStudyProgress,
@@ -103,7 +105,9 @@ internal fun NightStudyCard(
                                                 .fillMaxWidth()
                                                 .clickable(
                                                     indication = rememberBounceIndication(),
-                                                    interactionSource = remember { MutableInteractionSource() },
+                                                    interactionSource = remember {
+                                                        MutableInteractionSource()
+                                                    },
                                                     onClick = navigateToNightStudy,
                                                 )
                                                 .padding(6.dp),
@@ -112,7 +116,12 @@ internal fun NightStudyCard(
                                             Column {
                                                 Text(
                                                     text = buildAnnotatedString {
-                                                        val totalMinutes = ChronoUnit.MINUTES.between(current, nightStudy.endAt.toJavaLocalDateTime())
+                                                        val totalMinutes =
+                                                            ChronoUnit.MINUTES.between(
+                                                                current.toJavaLocalDateTime(),
+                                                                nightStudy
+                                                                    .endAt.toJavaLocalDateTime(),
+                                                            )
                                                         val day = totalMinutes / (24 * 60)
                                                         val hour = (totalMinutes % (24 * 60)) / 60
                                                         val minute = totalMinutes % 60
@@ -127,7 +136,10 @@ internal fun NightStudyCard(
                                                             },
                                                         )
                                                         withStyle(
-                                                            style = DodamTheme.typography.labelMedium().toSpanStyle(),
+                                                            style = DodamTheme
+                                                                .typography
+                                                                .labelMedium()
+                                                                .toSpanStyle(),
                                                         ) {
                                                             append("남음")
                                                         }
@@ -136,7 +148,12 @@ internal fun NightStudyCard(
                                                     color = DodamTheme.colors.labelNormal,
                                                 )
                                                 Spacer(modifier = Modifier.height(12.dp))
-                                                DodamLinerProgressIndicator(progress = progress.coerceIn(0f, 1f))
+                                                DodamLinerProgressIndicator(
+                                                    progress = progress.coerceIn(
+                                                        0f,
+                                                        1f,
+                                                    ),
+                                                )
 
                                                 Spacer(modifier = Modifier.height(4.dp))
 
@@ -169,7 +186,9 @@ internal fun NightStudyCard(
                                             .padding(horizontal = 10.dp)
                                             .clickable(
                                                 indication = rememberBounceIndication(),
-                                                interactionSource = remember { MutableInteractionSource() },
+                                                interactionSource = remember {
+                                                    MutableInteractionSource()
+                                                },
                                                 onClick = navigateToNightStudy,
                                             )
                                             .padding(6.dp),
@@ -229,6 +248,7 @@ internal fun NightStudyCard(
                             body = "다시 불러오기",
                         )
                     }
+
                     else -> {}
                 }
             } else {

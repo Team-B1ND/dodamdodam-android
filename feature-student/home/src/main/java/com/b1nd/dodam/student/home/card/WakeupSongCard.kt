@@ -76,9 +76,14 @@ internal fun WakeupSongCard(
                                         .padding(horizontal = 10.dp)
                                         .clickable(
                                             onClick = {
-                                                urlHandler.openUri(wakeupSongs[wakeupSongPagerState.currentPage].videoUrl)
+                                                urlHandler.openUri(
+                                                    wakeupSongs[wakeupSongPagerState.currentPage]
+                                                        .videoUrl,
+                                                )
                                             },
-                                            interactionSource = remember { MutableInteractionSource() },
+                                            interactionSource = remember {
+                                                MutableInteractionSource()
+                                            },
                                             indication = rememberBounceIndication(),
                                         )
                                         .padding(6.dp),

@@ -160,7 +160,8 @@ class ClubViewModel : ViewModel(), KoinComponent {
                                     club = club,
                                     clubMember = ClubMember(
                                         isLeader = member.data.isLeader,
-                                        students = member.data.students.toImmutableList(),
+                                        students = member.data.students.sortedBy { student -> student.permissions == ClubPermission.CLUB_LEADER }
+                                            .reversed().toImmutableList(),
                                     ),
                                 ),
                             ),

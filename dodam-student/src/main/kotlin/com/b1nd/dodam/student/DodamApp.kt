@@ -34,7 +34,9 @@ import com.b1nd.dodam.askwakeupsong.navigation.navigateToAskWakeupSong
 import com.b1nd.dodam.bus.navigation.busScreen
 import com.b1nd.dodam.bus.navigation.navigateToBus
 import com.b1nd.dodam.club.navigation.clubScreen
+import com.b1nd.dodam.club.navigation.myClubScreen
 import com.b1nd.dodam.club.navigation.navigateToClub
+import com.b1nd.dodam.club.navigation.navigateToMyClub
 import com.b1nd.dodam.dds.component.DodamErrorToast
 import com.b1nd.dodam.dds.component.DodamSuccessToast
 import com.b1nd.dodam.dds.component.DodamWarningToast
@@ -181,6 +183,7 @@ fun DodamApp(
                 navigateToAddOuting = navController::navigateToAskOut,
                 navigateToSetting = navController::navigateToSetting,
                 navigateToMyPoint = navController::navigateToPoint,
+                navigateToClub = navController::navigateToClub,
                 navigateToAddBus = {
                     navController.navigateToBus()
                 },
@@ -190,7 +193,6 @@ fun DodamApp(
                 navigateToAddWakeUpSong = {
                     navController.navigateToAskWakeupSong()
                 },
-                navigateToClub = navController::navigateToClub,
                 navigateToNoticeViewer = navController::navigateToNoticeViewer,
                 navigateToGroup = navController::navigateToGroup,
                 showToast = { status, text ->
@@ -198,6 +200,13 @@ fun DodamApp(
                     scope.launch { snackbarHostState.showSnackbar(text) }
                 },
                 role = role,
+            )
+            myClubScreen(
+                showSnackbar = { status, text ->
+                    state = status.toString()
+                    scope.launch { snackbarHostState.showSnackbar(text) }
+                },
+                popBackStack = navController::popBackStack,
             )
             parentMainScreen(
                 navController = mainNavController,
@@ -332,8 +341,7 @@ fun DodamApp(
             )
             clubScreen(
                 popBackStack = navController::popBackStack,
-                // TODO : navigateToApply로 변경
-                navigateToApply = navController::navigateToClub,
+                navigateToApply = navController::navigateToMyClub,
             )
             childrenManageScreen(
                 popBackStack = navController::popBackStack,

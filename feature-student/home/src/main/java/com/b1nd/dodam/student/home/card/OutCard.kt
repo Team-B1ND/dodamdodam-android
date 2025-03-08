@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.data.core.model.Status
 import com.b1nd.dodam.data.outing.model.OutType
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -40,7 +41,6 @@ import com.b1nd.dodam.student.home.DefaultText
 import com.b1nd.dodam.student.home.DodamContainer
 import com.b1nd.dodam.student.home.model.OutUiState
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlinx.datetime.toJavaLocalDateTime
 
@@ -53,7 +53,7 @@ internal fun OutCard(
     navigateToOutApply: () -> Unit,
     fetchOut: () -> Unit,
 ) {
-    val current = LocalDateTime.now()
+    val current = DodamDate.now()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -68,14 +68,14 @@ internal fun OutCard(
                     is OutUiState.Success -> {
                         uiState.data?.let { out ->
                             val outProgress = (
-                                1 - ChronoUnit.SECONDS.between(
+                                ChronoUnit.SECONDS.between(
                                     out.startAt.toJavaLocalDateTime(),
-                                    current,
+                                    current.toJavaLocalDateTime(),
                                 ).toFloat() / ChronoUnit.SECONDS.between(
                                     out.startAt.toJavaLocalDateTime(),
                                     out.endAt.toJavaLocalDateTime(),
                                 )
-                                )
+                                ).coerceIn(0f, 1f)
 
                             val progress by animateFloatAsState(
                                 targetValue = if (playOnlyOnce || isRefreshing) 0f else outProgress,
@@ -107,7 +107,9 @@ internal fun OutCard(
                                                 .padding(horizontal = 10.dp)
                                                 .clickable(
                                                     indication = rememberBounceIndication(),
-                                                    interactionSource = remember { MutableInteractionSource() },
+                                                    interactionSource = remember {
+                                                        MutableInteractionSource()
+                                                    },
                                                     onClick = navigateToOut,
                                                 )
                                                 .padding(6.dp),
@@ -116,7 +118,11 @@ internal fun OutCard(
                                             Column {
                                                 Text(
                                                     text = buildAnnotatedString {
-                                                        val totalMinutes = ChronoUnit.MINUTES.between(current, out.endAt.toJavaLocalDateTime())
+                                                        val totalMinutes = ChronoUnit
+                                                            .MINUTES.between(
+                                                                current.toJavaLocalDateTime(),
+                                                                out.endAt.toJavaLocalDateTime(),
+                                                            )
                                                         val day = totalMinutes / (24 * 60)
                                                         val hour = (totalMinutes % (24 * 60)) / 60
                                                         val minute = totalMinutes % 60
@@ -145,9 +151,12 @@ internal fun OutCard(
                                                             }
                                                         }
                                                         withStyle(
-                                                            style = DodamTheme.typography.labelMedium().copy(
-                                                                color = DodamTheme.colors.labelAlternative,
-                                                            ).toSpanStyle(),
+                                                            style = DodamTheme.typography
+                                                                .labelMedium()
+                                                                .copy(
+                                                                    color = DodamTheme.colors
+                                                                        .labelAlternative,
+                                                                ).toSpanStyle(),
                                                         ) {
                                                             append("남음")
                                                         }
@@ -156,7 +165,12 @@ internal fun OutCard(
                                                     color = DodamTheme.colors.labelNormal,
                                                 )
                                                 Spacer(modifier = Modifier.height(12.dp))
-                                                DodamLinerProgressIndicator(progress = progress.coerceIn(0f, 1f))
+                                                DodamLinerProgressIndicator(
+                                                    progress = progress.coerceIn(
+                                                        0f,
+                                                        1f,
+                                                    ),
+                                                )
                                                 Spacer(modifier = Modifier.height(4.dp))
                                                 Text(
                                                     text = when (out.outType) {
@@ -184,7 +198,14 @@ internal fun OutCard(
                                     DefaultText(
                                         onClick = navigateToOutApply,
                                         label =
-                                        "${if (out.outType == OutType.OUTING) "외출" else "외박"}이 거절되었어요",
+                                        "${
+                                            if
+                                                (out.outType == OutType.OUTING) {
+                                                "외출"
+                                            } else {
+                                                "외박"
+                                            }
+                                        }이 거절되었어요",
                                         body = "다시 신청하기",
                                     )
                                 }
@@ -196,7 +217,9 @@ internal fun OutCard(
                                             .padding(horizontal = 10.dp)
                                             .clickable(
                                                 onClick = navigateToOut,
-                                                interactionSource = remember { MutableInteractionSource() },
+                                                interactionSource = remember {
+                                                    MutableInteractionSource()
+                                                },
                                                 indication = rememberBounceIndication(),
                                             )
                                             .padding(6.dp),

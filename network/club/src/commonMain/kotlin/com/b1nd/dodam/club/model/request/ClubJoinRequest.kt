@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ClubJoinRequest(
     val clubId: Int,
-    val clubPriority: String,
+    val clubPriority: String?,
     val introduction: String,
 )
