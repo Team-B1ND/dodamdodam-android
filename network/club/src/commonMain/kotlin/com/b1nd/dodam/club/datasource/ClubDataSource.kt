@@ -4,11 +4,12 @@ import com.b1nd.dodam.club.model.ClubJoinResponse
 import com.b1nd.dodam.club.model.ClubMemberResponse
 import com.b1nd.dodam.club.model.ClubMemberStudentResponse
 import com.b1nd.dodam.club.model.ClubResponse
+import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import kotlinx.collections.immutable.ImmutableList
 
 interface ClubDataSource {
     suspend fun postClubJoinRequestsAllow(id: Int)
-    suspend fun postClubJoinRequests(clubId: Int, clubPriority: String?, introduce: String)
+    suspend fun postClubJoinRequests(requests: List<ClubJoinRequest>)
     suspend fun deleteClubJoinRequests(id: Int)
     suspend fun getDetailClub(id: Int): ClubResponse
     suspend fun getClubJoinRequestReceived(): ImmutableList<ClubJoinResponse>

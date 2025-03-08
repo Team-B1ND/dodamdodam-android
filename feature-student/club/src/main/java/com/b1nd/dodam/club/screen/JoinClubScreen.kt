@@ -1,6 +1,5 @@
 package com.b1nd.dodam.club.screen
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -86,10 +86,9 @@ internal fun JoinClubScreen(
         is JoinedClubUiState.Success -> {
             allClubList = state.allClubList
             allSelfClubList = state.allSelfClubList
-            Log.d("Cool", "JoinClubScreen: ${state.allClubList}")
         }
+
         else -> {
-            Log.d("Cool", "JoinClubScreen: ${state.allClubList}")
         }
     }
 
@@ -140,8 +139,6 @@ internal fun JoinClubScreen(
 
         val selectedSelfClubNames = selectedSelfClubs.value.toList()
 
-        Log.d("ClubData", "Selected self clubs: $selectedSelfClubNames")
-        Log.d("ClubData", "Club introduces: $clubIntroduces")
 
         selectedSelfClubNames.forEach { clubName ->
             allSelfClubList.find { it.name == clubName }?.id?.let { id ->
@@ -152,16 +149,9 @@ internal fun JoinClubScreen(
                     .map { clubName -> clubIntroduces.getOrDefault(clubName, "") }
 
                 selfIntroduceList.addAll(nonEmptyIntroductions)
-
-                Log.d(
-                    "ClubData",
-                    "Added self club: name=$clubName, id=$id, intro=$nonEmptyIntroductions",
-                )
             }
         }
 
-        Log.d("ClubData", "Final selfClubIdList: $selfClubIdList")
-        Log.d("ClubData", "Final selfIntroduceList: $selfIntroduceList")
     }
 
     if (showSelfBottomSheet.value) {
@@ -281,10 +271,6 @@ internal fun JoinClubScreen(
                         selfClubId = selfClubIdList,
                         selfIntroduce = selfIntroduceList,
                     )
-                    Log.d(
-                        "ClubData",
-                        "JoinClubScreen: $clubIdList, $introduceList, $selfClubIdList, $selfIntroduceList",
-                    )
                     onNavigateToJoin()
                     showClubPicker = false
                 },
@@ -338,7 +324,6 @@ internal fun JoinClubScreen(
             text = text[index],
             onClick = {
                 titleIndex = index
-                Log.d("doog", "JoinClubScreen: $titleIndex")
             },
         )
     }.toImmutableList()
@@ -385,7 +370,7 @@ internal fun JoinClubScreen(
                                     selfIntroduceList.add(newIntroduce)
                                 }
                             },
-                            clubName = clubName,
+                            clubName = clubName
                         )
                     }
                     Box(
@@ -410,7 +395,7 @@ internal fun JoinClubScreen(
                             )
                         }
                     }
-                    Spacer(Modifier.height(40.dp))
+                    Spacer(Modifier.height(50.dp))
                 } else {
                     Column(
                         modifier = modifier
@@ -520,6 +505,7 @@ internal fun JoinClubScreen(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
+                    .padding(bottom = 10.dp)
                     .align(alignment = Alignment.BottomCenter),
             )
         }
@@ -527,7 +513,13 @@ internal fun JoinClubScreen(
 }
 
 @Composable
-fun ClubCard(modifier: Modifier = Modifier, introduce: String, clubName: String, onIntroduceChange: (String) -> Unit, onRemoveClick: () -> Unit) {
+fun ClubCard(
+    modifier: Modifier = Modifier,
+    introduce: String,
+    clubName: String,
+    onIntroduceChange: (String) -> Unit,
+    onRemoveClick: () -> Unit,
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -550,38 +542,39 @@ fun ClubCard(modifier: Modifier = Modifier, introduce: String, clubName: String,
                 color = Color(0xFF0083F0),
             )
         }
-        Spacer(Modifier.height(14.dp))
-        DodamTextField(
-            modifier = modifier
-                .fillMaxWidth(),
-            value = introduce,
-            onValueChange = { newIntroduce ->
-                if (newIntroduce.length <= 300) {
-                    onIntroduceChange(newIntroduce)
-                }
-            },
-            singleLine = false,
-            minLines = 6,
-            maxLines = 8,
-            label = "자기소개",
-            onClickRemoveRequest = onRemoveClick,
+    }
+    Spacer(Modifier.height(14.dp))
+    DodamTextField(
+        modifier = modifier
+            .fillMaxWidth(),
+        value = introduce,
+        onValueChange = { newIntroduce ->
+            if (newIntroduce.length <= 300) {
+                onIntroduceChange(newIntroduce)
+            }
+        },
+        singleLine = false,
+        minLines = 6,
+        maxLines = 8,
+        label = "자기소개",
+        onClickRemoveRequest = onRemoveClick,
+    )
+    Spacer(Modifier.height(7.dp))
+    Row(
+        modifier = modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
+    ) {
+        Text(
+            text = introduce.length.toString(),
+            color = DodamTheme.colors.primaryNormal,
+            fontSize = 16.sp,
         )
-        Spacer(Modifier.height(7.dp))
-        Row(
-            modifier = modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Text(
-                text = introduce.length.toString(),
-                color = DodamTheme.colors.primaryNormal,
-                fontSize = 16.sp,
-            )
-            Text(
-                text = "/300",
-                color = DodamTheme.colors.labelAssistive,
-                fontSize = 16.sp,
-            )
-        }
+        Text(
+            text = "/300",
+            color = DodamTheme.colors.labelAssistive,
+            fontSize = 16.sp,
+        )
     }
 }
+

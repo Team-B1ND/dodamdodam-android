@@ -32,7 +32,6 @@ internal fun MyClubScreen(viewModel: MyClubViewModel = koinViewModel(), popBackS
         ) {
             MyClubScreen(
                 popBackStack = popBackStack,
-                sideEffect = state.clubSideEffect,
                 onNavigateToJoin = {
                     nowPage = MyClubPage.JOIN
                 },

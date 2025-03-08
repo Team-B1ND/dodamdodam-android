@@ -12,9 +12,12 @@ data class MyClubUiState(
     val joinedClubUiState: JoinedClubUiState = JoinedClubUiState.Loading,
     val clubSideEffect: MyClubSideEffect = MyClubSideEffect.NotExist,
     val createdClubList: ImmutableList<Club> = persistentListOf(),
+    val createdSelfClubList: ImmutableList<Club> = persistentListOf(),
     val receivedCLub: ImmutableList<ClubJoin> = persistentListOf(),
     val allClubList: ImmutableList<Club> = persistentListOf(),
     val allSelfClubList: ImmutableList<Club> = persistentListOf(),
+    val requestJoinClub: ImmutableList<ClubJoin> = persistentListOf(),
+    val requestJoinSelfClub: ImmutableList<ClubJoin> = persistentListOf()
 )
 
 sealed interface JoinedClubUiState {
