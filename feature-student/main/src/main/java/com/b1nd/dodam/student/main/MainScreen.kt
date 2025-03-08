@@ -56,6 +56,8 @@ internal fun MainScreen(
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
     navigateToClub: () -> Unit,
+    navigateToNoticeViewer: (startIndex: Int, images: String) -> Unit,
+    navigateToGroup: () -> Unit,
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,
@@ -90,6 +92,7 @@ internal fun MainScreen(
             noticeScreen(
                 isTeacher = false,
                 navigateToNoticeCreate = null,
+                navigateToNoticeViewer = navigateToNoticeViewer,
                 changeBottomNavVisible = { visible ->
                     bottomNavVisible = visible
                 },
@@ -124,6 +127,7 @@ internal fun MainScreen(
                 navigateToWakeUpSong = navigateToWakeUpSong,
                 navigateToAddWakeUpSong = navigateToAddWakeUpSong,
                 navigateToClub = navigateToClub,
+                navigateToGroup = navigateToGroup,
             )
         }
 

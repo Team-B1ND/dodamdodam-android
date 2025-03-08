@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Surface
@@ -42,12 +43,15 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.util.fastForEach
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.common.utiles.buildPersistentList
 import com.b1nd.dodam.common.utiles.formatLocalDateTime
 import com.b1nd.dodam.data.division.model.DivisionOverview
+import com.b1nd.dodam.data.notice.model.NoticeFile
 import com.b1nd.dodam.data.notice.model.NoticeFileType
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
@@ -61,6 +65,7 @@ import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.notice.viewmodel.NoticeViewModel
 import com.b1nd.dodam.ui.component.DodamAutoLinkText
 import com.b1nd.dodam.ui.component.modifier.`if`
+import com.b1nd.dodam.ui.util.LocalFileDownloader
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -75,11 +80,13 @@ internal fun NoticeScreen(
     isTeacher: Boolean,
     changeBottomNavVisible: (visible: Boolean) -> Unit,
     navigateToNoticeCreate: (() -> Unit)?,
+    navigateToNoticeViewer: (startIndex: Int, images: List<NoticeFile>) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val uriHandler = LocalUriHandler.current
     val focusRequester = remember { FocusRequester() }
     val coroutineScope = rememberCoroutineScope()
+    val fileDownloader = LocalFileDownloader.current
 
     var selectCategory by remember { mutableStateOf(DivisionOverview(id = 0, name = "전체")) }
     var isSearchMode by remember { mutableStateOf(false) }
@@ -99,7 +106,6 @@ internal fun NoticeScreen(
         viewModel.loadNextNoticeWithCategory(
             categoryId = selectCategory.id,
         )
-        lazyListState.scrollToItem(0)
     }
 
     LaunchedEffect(searchLazyListState.canScrollForward, isSearchMode) {
@@ -295,11 +301,24 @@ internal fun NoticeScreen(
                         content = item.content,
                         images = item.noticeFileRes
                             .filter { it.fileType == NoticeFileType.IMAGE }
-                            .map {
-                                it.fileUrl
-                            }.toImmutableList(),
+                            .toImmutableList(),
+                        files = item.noticeFileRes
+                            .filter { it.fileType == NoticeFileType.FILE }
+                            .toImmutableList(),
                         onLinkClick = { url ->
                             uriHandler.openUri(url)
+                        },
+                        onImageClick = { imageIndex ->
+                            navigateToNoticeViewer(
+                                imageIndex,
+                                item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE },
+                            )
+                        },
+                        onFileClick = { file: NoticeFile ->
+                            fileDownloader.downloadFile(
+                                fileName = file.fileName,
+                                fileUrl = file.fileUrl,
+                            )
                         },
                     )
                 }
@@ -314,11 +333,24 @@ internal fun NoticeScreen(
                         content = item.content,
                         images = item.noticeFileRes
                             .filter { it.fileType == NoticeFileType.IMAGE }
-                            .map {
-                                it.fileUrl
-                            }.toImmutableList(),
+                            .toImmutableList(),
+                        files = item.noticeFileRes
+                            .filter { it.fileType == NoticeFileType.FILE }
+                            .toImmutableList(),
                         onLinkClick = { url ->
                             uriHandler.openUri(url)
+                        },
+                        onImageClick = { imageIndex ->
+                            navigateToNoticeViewer(
+                                imageIndex,
+                                item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE },
+                            )
+                        },
+                        onFileClick = { file: NoticeFile ->
+                            fileDownloader.downloadFile(
+                                fileName = file.fileName,
+                                fileUrl = file.fileUrl,
+                            )
                         },
                     )
                 }
@@ -374,8 +406,11 @@ private fun NoticeCard(
     date: String,
     title: String,
     content: String,
-    images: ImmutableList<String>,
+    images: ImmutableList<NoticeFile>,
+    files: ImmutableList<NoticeFile>,
     onLinkClick: (url: String) -> Unit,
+    onFileClick: (file: NoticeFile) -> Unit,
+    onImageClick: (imageIndex: Int) -> Unit,
 ) {
     Surface(
         modifier = modifier
@@ -418,8 +453,17 @@ private fun NoticeCard(
                         modifier = Modifier
                             .weight(1f)
                             .height(172.dp)
-                            .clip(RoundedCornerShape(12.dp)),
-                        model = images.first(),
+                            .clip(RoundedCornerShape(12.dp))
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberBounceIndication(
+                                    radius = RoundedCornerShape(12.dp),
+                                ),
+                                onClick = {
+                                    onImageClick(0)
+                                },
+                            ),
+                        model = images.first().fileUrl,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                     )
@@ -428,11 +472,20 @@ private fun NoticeCard(
                             modifier = Modifier
                                 .weight(1f)
                                 .height(172.dp)
-                                .clip(RoundedCornerShape(12.dp)),
+                                .clip(RoundedCornerShape(12.dp))
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberBounceIndication(
+                                        radius = RoundedCornerShape(12.dp),
+                                    ),
+                                    onClick = {
+                                        onImageClick(1)
+                                    },
+                                ),
                         ) {
                             AsyncImage(
                                 modifier = Modifier.fillMaxSize(),
-                                model = images[1],
+                                model = images[1].fileUrl,
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                             )
@@ -455,6 +508,57 @@ private fun NoticeCard(
                                 }
                             }
                         }
+                    }
+                }
+            }
+
+            files.fastForEach { file ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberBounceIndication(
+                                radius = DodamTheme.shapes.extraSmall,
+                            ),
+                            onClick = {
+                                onFileClick(file)
+                            },
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = DodamTheme.colors.lineNormal,
+                            shape = DodamTheme.shapes.extraSmall,
+                        )
+                        .padding(
+                            horizontal = 10.dp,
+                            vertical = 16.dp,
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = file.fileName,
+                        style = DodamTheme.typography.labelMedium(),
+                        color = DodamTheme.colors.labelNeutral,
+                        textAlign = TextAlign.Start,
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(28.dp)
+                            .background(
+                                color = DodamTheme.colors.primaryNormal,
+                                shape = CircleShape,
+                            ),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            imageVector = DodamIcons.File.value,
+                            contentDescription = "파일 아이콘",
+                            tint = DodamTheme.colors.staticWhite,
+                        )
                     }
                 }
             }

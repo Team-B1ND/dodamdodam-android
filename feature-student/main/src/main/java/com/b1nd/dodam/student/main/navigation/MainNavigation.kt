@@ -33,6 +33,8 @@ fun NavGraphBuilder.mainScreen(
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
     navigateToClub: () -> Unit,
+    navigateToNoticeViewer: (startIndex: Int, images: String) -> Unit,
+    navigateToGroup: () -> Unit,
     showToast: (String, String) -> Unit,
     role: String,
 ) {
@@ -48,6 +50,8 @@ fun NavGraphBuilder.mainScreen(
             navigateToWakeUpSong = navigateToWakeUpSong,
             navigateToAddWakeUpSong = navigateToAddWakeUpSong,
             navigateToClub = navigateToClub,
+            navigateToNoticeViewer = navigateToNoticeViewer,
+            navigateToGroup = navigateToGroup,
             showToast = showToast,
             refresh = { it.savedStateHandle["refresh"] ?: false },
             dispose = { it.savedStateHandle["refresh"] = false },
