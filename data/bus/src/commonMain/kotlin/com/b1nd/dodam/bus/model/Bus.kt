@@ -1,7 +1,5 @@
 package com.b1nd.dodam.bus.model
 
-import com.b1nd.dodam.bus.model.BusResponse
-
 data class Bus(
     val applyCount: Int,
     val busName: String,

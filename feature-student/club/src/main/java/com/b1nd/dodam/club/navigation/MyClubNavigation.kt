@@ -9,20 +9,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.b1nd.dodam.club.MyClubScreen
 
-const val CLUB_ROUTE = "club"
+const val MY_CLUB_ROUTE = "myClub"
 
 fun NavController.navigateToMyClub(
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
     },
-) = navigate(CLUB_ROUTE, navOptions)
+) = navigate(MY_CLUB_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.myClubScreen(
-    popBackStack: () -> Unit,
-) {
+fun NavGraphBuilder.myClubScreen(popBackStack: () -> Unit) {
     composable(
-        route = CLUB_ROUTE,
+        route = MY_CLUB_ROUTE,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
         popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Down) },

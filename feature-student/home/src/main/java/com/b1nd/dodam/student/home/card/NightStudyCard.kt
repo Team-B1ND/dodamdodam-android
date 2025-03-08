@@ -40,7 +40,6 @@ import com.b1nd.dodam.student.home.DefaultText
 import com.b1nd.dodam.student.home.DodamContainer
 import com.b1nd.dodam.student.home.model.NightStudyUiState
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlinx.datetime.toJavaLocalDateTime
 
@@ -68,14 +67,14 @@ internal fun NightStudyCard(
                     is NightStudyUiState.Success -> {
                         uiState.data?.let { nightStudy ->
                             val nightStudyProgress = (
-                                    ChronoUnit.SECONDS.between(
-                                        nightStudy.startAt.toJavaLocalDateTime(),
-                                        current.toJavaLocalDateTime(),
-                                    ).toFloat() / ChronoUnit.SECONDS.between(
-                                        nightStudy.startAt.toJavaLocalDateTime(),
-                                        nightStudy.endAt.toJavaLocalDateTime(),
-                                    )
-                                    ).coerceIn(0f, 1f)
+                                ChronoUnit.SECONDS.between(
+                                    nightStudy.startAt.toJavaLocalDateTime(),
+                                    current.toJavaLocalDateTime(),
+                                ).toFloat() / ChronoUnit.SECONDS.between(
+                                    nightStudy.startAt.toJavaLocalDateTime(),
+                                    nightStudy.endAt.toJavaLocalDateTime(),
+                                )
+                                ).coerceIn(0f, 1f)
 
                             val progress by animateFloatAsState(
                                 targetValue = if (playOnlyOnce || isRefreshing) 0f else nightStudyProgress,
@@ -106,7 +105,9 @@ internal fun NightStudyCard(
                                                 .fillMaxWidth()
                                                 .clickable(
                                                     indication = rememberBounceIndication(),
-                                                    interactionSource = remember { MutableInteractionSource() },
+                                                    interactionSource = remember {
+                                                        MutableInteractionSource()
+                                                    },
                                                     onClick = navigateToNightStudy,
                                                 )
                                                 .padding(6.dp),
@@ -118,7 +119,8 @@ internal fun NightStudyCard(
                                                         val totalMinutes =
                                                             ChronoUnit.MINUTES.between(
                                                                 current.toJavaLocalDateTime(),
-                                                                nightStudy.endAt.toJavaLocalDateTime()
+                                                                nightStudy
+                                                                    .endAt.toJavaLocalDateTime(),
                                                             )
                                                         val day = totalMinutes / (24 * 60)
                                                         val hour = (totalMinutes % (24 * 60)) / 60
@@ -134,7 +136,9 @@ internal fun NightStudyCard(
                                                             },
                                                         )
                                                         withStyle(
-                                                            style = DodamTheme.typography.labelMedium()
+                                                            style = DodamTheme
+                                                                .typography
+                                                                .labelMedium()
                                                                 .toSpanStyle(),
                                                         ) {
                                                             append("남음")
@@ -147,8 +151,8 @@ internal fun NightStudyCard(
                                                 DodamLinerProgressIndicator(
                                                     progress = progress.coerceIn(
                                                         0f,
-                                                        1f
-                                                    )
+                                                        1f,
+                                                    ),
                                                 )
 
                                                 Spacer(modifier = Modifier.height(4.dp))
@@ -182,7 +186,9 @@ internal fun NightStudyCard(
                                             .padding(horizontal = 10.dp)
                                             .clickable(
                                                 indication = rememberBounceIndication(),
-                                                interactionSource = remember { MutableInteractionSource() },
+                                                interactionSource = remember {
+                                                    MutableInteractionSource()
+                                                },
                                                 onClick = navigateToNightStudy,
                                             )
                                             .padding(6.dp),

@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 
-class BusSerbviceTest {
+class BusServiceTest {
     private lateinit var busService: BusService
     private val testDispatcher = StandardTestDispatcher()
 
@@ -122,7 +122,7 @@ class BusSerbviceTest {
     }
 
     @Test
-    fun 버스_전체_조회() = runTest(testDispatcher) {
+    fun getBus() = runTest(testDispatcher) {
         val response = busService.getBusList()
 
         assertEquals(
@@ -140,7 +140,7 @@ class BusSerbviceTest {
     }
 
     @Test
-    fun 버스_추가() = runTest(testDispatcher) {
+    fun addBus() = runTest(testDispatcher) {
         val response = busService.applyBus(1)
 
         assertEquals(
@@ -150,7 +150,7 @@ class BusSerbviceTest {
     }
 
     @Test
-    fun 버스_제거() = runTest(testDispatcher) {
+    fun deleteBus() = runTest(testDispatcher) {
         val response = busService.deleteBus(1)
 
         assertEquals(
@@ -160,7 +160,7 @@ class BusSerbviceTest {
     }
 
     @Test
-    fun 버스_변경() = runTest(testDispatcher) {
+    fun changeBus() = runTest(testDispatcher) {
         val response = busService.updateBus(1)
 
         assertEquals(
@@ -170,7 +170,7 @@ class BusSerbviceTest {
     }
 
     @Test
-    fun 버스_본인_조회() = runTest(testDispatcher) {
+    fun searchBus() = runTest(testDispatcher) {
         val response = busService.getMyBus()
 
         assertEquals(

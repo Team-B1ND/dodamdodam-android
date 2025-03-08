@@ -25,7 +25,6 @@ internal fun MyClubScreen(viewModel: MyClubViewModel = koinViewModel(), popBackS
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
-
         AnimatedVisibility(
             visible = nowPage == MyClubPage.MY,
             enter = fadeIn(),
@@ -51,10 +50,8 @@ internal fun MyClubScreen(viewModel: MyClubViewModel = koinViewModel(), popBackS
                 },
                 onNavigateToJoin = {
                     nowPage = MyClubPage.MY
-                }
+                },
             )
         }
     }
 }
-
-

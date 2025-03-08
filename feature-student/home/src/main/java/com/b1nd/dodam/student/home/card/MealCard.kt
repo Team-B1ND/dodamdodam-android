@@ -61,15 +61,18 @@ fun MealCard(uiState: MealUiState, showShimmer: Boolean, navigateToMeal: () -> U
                         LaunchedEffect(Unit) {
                             if (isRefreshing || playOnlyOnce) {
                                 when {
-                                    currentTime <= LocalTime.of(8, 10) -> { // 아침 식사 시간 전이라면{
+                                    currentTime <= LocalTime.of(8, 10) -> {
+                                        // 아침 식사 시간 전이라면{
                                         mealPagerState.animateScrollToPage(page = 0)
                                     }
 
-                                    currentTime <= LocalTime.of(13, 30) -> { // 점심 식사 시간 전이라면
+                                    currentTime <= LocalTime.of(13, 30) -> {
+                                        // 점심 식사 시간 전이라면
                                         mealPagerState.animateScrollToPage(1)
                                     }
 
-                                    currentTime <= LocalTime.of(19, 10) -> { // 저녁 식사 시간 전이라면
+                                    currentTime <= LocalTime.of(19, 10) -> {
+                                        // 저녁 식사 시간 전이라면
                                         mealPagerState.animateScrollToPage(2)
                                     }
 

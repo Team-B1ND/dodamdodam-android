@@ -36,7 +36,7 @@ internal class ClubRepositoryImpl(
             emit(
                 network.postClubJoinRequests(
                     clubId = clubId,
-                    clubPriority = clubPriority,   // Nullable 값 전달
+                    clubPriority = clubPriority,
                     introduce = introduce,
                 ),
             )
@@ -44,7 +44,6 @@ internal class ClubRepositoryImpl(
             .asResult()
             .flowOn(dispatcher)
     }
-
 
     override suspend fun deleteClubJoinRequest(id: Int): Flow<Result<Unit>> {
         return flow {

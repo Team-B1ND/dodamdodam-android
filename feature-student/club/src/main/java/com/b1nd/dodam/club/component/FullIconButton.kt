@@ -18,7 +18,7 @@ import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 
-//DodamconButtonclick의 크기가 작고, 클릭 영역이 좁아 임시로 만들었습니다. 여유 나면 수정해서 dds에 올리겠습니다.
+// DodamconButtonclick의 크기가 작고, 클릭 영역이 좁아 임시로 만들었습니다. 여유 나면 수정해서 dds에 올리겠습니다.
 @Composable
 fun DodamFullIconButton(
     onClick: () -> Unit,
@@ -64,23 +64,22 @@ fun DodamFullIconButton(
                 onClick = onClick,
                 enabled = enabled,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberBounceIndication(iconButtonConfig.shape)
+                indication = rememberBounceIndication(iconButtonConfig.shape),
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Box(
             modifier = Modifier
                 .size(iconButtonConfig.iconSize),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 modifier = Modifier
                     .size(iconButtonConfig.iconSize)
-                    .align(alignment = Alignment.Center)
-                ,
+                    .align(alignment = Alignment.Center),
                 imageVector = icon.value,
                 contentDescription = "Icon Button",
-                tint = color.takeIf { enabled } ?: color.copy(alpha = 0.2f)
+                tint = color.takeIf { enabled } ?: color.copy(alpha = 0.2f),
             )
         }
     }

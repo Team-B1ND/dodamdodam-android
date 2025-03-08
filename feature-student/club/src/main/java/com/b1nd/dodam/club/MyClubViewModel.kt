@@ -50,7 +50,6 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                         }
 
                         Result.Loading -> {
-
                         }
 
                         is Result.Success -> {
@@ -66,9 +65,9 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                                 it.copy(
                                     joinedClubUiState = JoinedClubUiState.Success(
                                         joinedClubList = joinedClub,
-                                        joinedSelfClubList = joinedSelfClub
+                                        joinedSelfClubList = joinedSelfClub,
                                     ),
-                                    clubSideEffect = if (joinedClub.isNotEmpty()) MyClubSideEffect.Exist else MyClubSideEffect.NotExist
+                                    clubSideEffect = if (joinedClub.isNotEmpty()) MyClubSideEffect.Exist else MyClubSideEffect.NotExist,
                                 )
                             }
 
@@ -77,7 +76,6 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     }
                 }
             }
-
 
             launch {
                 clubRepository.getClubMyCreated().collect { result ->
@@ -93,7 +91,6 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                         }
 
                         Result.Loading -> {
-
                         }
 
                         is Result.Success -> {
@@ -101,7 +98,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
 
                             _state.update {
                                 it.copy(
-                                    createdClubList = createClub
+                                    createdClubList = createClub,
                                 )
                             }
 
@@ -125,14 +122,13 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                         }
 
                         Result.Loading -> {
-
                         }
 
                         is Result.Success -> {
                             val receivedClub = result.data.toImmutableList()
                             _state.update {
                                 it.copy(
-                                    receivedCLub = receivedClub
+                                    receivedCLub = receivedClub,
                                 )
                             }
 
@@ -141,13 +137,10 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     }
                 }
             }
-
         }
     }
 
-    fun acceptClub(
-        id: Int
-    ) {
+    fun acceptClub(id: Int) {
         viewModelScope.launch {
             clubRepository.postClubJoinRequestsAllow(id).collect { result ->
                 when (result) {
@@ -163,7 +156,6 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     }
 
                     Result.Loading -> {
-
                     }
 
                     is Result.Success -> {
@@ -171,14 +163,11 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                         return@collect
                     }
                 }
-
             }
         }
     }
 
-    fun rejectClub(
-        id: Int
-    ) {
+    fun rejectClub(id: Int) {
         viewModelScope.launch {
             clubRepository.deleteClubJoinRequest(id).collect { result ->
                 when (result) {
@@ -194,7 +183,6 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     }
 
                     Result.Loading -> {
-
                     }
 
                     is Result.Success -> {
@@ -202,7 +190,6 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                         return@collect
                     }
                 }
-
             }
         }
     }
@@ -239,7 +226,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                         _state.update {
                             it.copy(
                                 allClubList = allClubList,
-                                allSelfClubList = allSelfClubList
+                                allSelfClubList = allSelfClubList,
                             )
                         }
                         Log.d("Bad", "getAllClub: Success")
@@ -247,18 +234,11 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                         return@collect
                     }
                 }
-
             }
         }
-
     }
 
-    fun applyClub(
-        clubId: List<Int>,
-        introduce: List<String>,
-        selfClubId: List<Int>?,
-        selfIntroduce: List<String>?
-    ) {
+    fun applyClub(clubId: List<Int>, introduce: List<String>, selfClubId: List<Int>?, selfIntroduce: List<String>?) {
         Log.d("ClubData", "Starting applyClub with: clubId=$clubId, introduce=$introduce, selfClubId=$selfClubId, selfIntroduce=$selfIntroduce")
 
         viewModelScope.launch {
@@ -269,7 +249,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                 clubRepository.postClubJoinRequests(
                     clubId = item,
                     clubPriority = "CREATIVE_ACTIVITY_CLUB_${index + 1}",
-                    introduce = introduce[index]
+                    introduce = introduce[index],
                 ).collect { result ->
                     when (result) {
                         is Result.Error -> {
@@ -304,7 +284,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     clubRepository.postClubJoinRequests(
                         clubId = item,
                         clubPriority = null,
-                        introduce = selfIntroduce[index]
+                        introduce = selfIntroduce[index],
                     ).collect { result ->
                         when (result) {
                             is Result.Error -> {
