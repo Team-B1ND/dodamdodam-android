@@ -159,7 +159,7 @@ class OutingServiceTest {
     }
 
     @Test
-    fun 외출_조회() = runTest(testDispatcher) {
+    fun getOuting() = runTest(testDispatcher) {
         val response = outingService.getMyOuting()
 
         assertEquals(
@@ -187,7 +187,7 @@ class OutingServiceTest {
     }
 
     @Test
-    fun 외박_조회() = runTest(testDispatcher) {
+    fun getOutSleep() = runTest(testDispatcher) {
         val response = outingService.getMySleepover()
 
         assertEquals(
@@ -215,21 +215,22 @@ class OutingServiceTest {
     }
 
     @Test
-    fun 외출_신청() = runTest(testDispatcher) {
+    fun applyOuting() = runTest(testDispatcher) {
         val response = outingService.askOuting(
             reason = "test",
             startAt = LocalDateTime.parse("2024-07-31T14:30:00"),
             endAt = LocalDateTime.parse("2024-07-31T17:30:00"),
+            isDinner = true,
         )
 
         assertEquals(
             Unit,
-            response,;
+            response,
         )
     }
 
     @Test
-    fun 외박_신청() = runTest(testDispatcher) {
+    fun applyOutSleep() = runTest(testDispatcher) {
         val response = outingService.askSleepover(
             reason = "test",
             startAt = LocalDate.parse("2024-07-31"),
@@ -243,7 +244,7 @@ class OutingServiceTest {
     }
 
     @Test
-    fun 외출_삭제() = runTest(testDispatcher) {
+    fun delOuting() = runTest(testDispatcher) {
         val response = outingService.deleteOuting(1)
 
         assertEquals(
@@ -253,7 +254,7 @@ class OutingServiceTest {
     }
 
     @Test
-    fun 외박_삭제() = runTest(testDispatcher) {
+    fun dleOutSleep() = runTest(testDispatcher) {
         val response = outingService.deleteSleepover(1)
 
         assertEquals(

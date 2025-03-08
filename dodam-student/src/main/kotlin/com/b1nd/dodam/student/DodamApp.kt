@@ -33,10 +33,10 @@ import com.b1nd.dodam.askwakeupsong.navigation.askWakeupSongScreen
 import com.b1nd.dodam.askwakeupsong.navigation.navigateToAskWakeupSong
 import com.b1nd.dodam.bus.navigation.busScreen
 import com.b1nd.dodam.bus.navigation.navigateToBus
-import com.b1nd.dodam.club.navigation.myClubScreen
-import com.b1nd.dodam.club.navigation.navigateToMyClub
 import com.b1nd.dodam.club.navigation.clubScreen
+import com.b1nd.dodam.club.navigation.myClubScreen
 import com.b1nd.dodam.club.navigation.navigateToClub
+import com.b1nd.dodam.club.navigation.navigateToMyClub
 import com.b1nd.dodam.dds.component.DodamErrorToast
 import com.b1nd.dodam.dds.component.DodamSuccessToast
 import com.b1nd.dodam.dds.component.DodamWarningToast
@@ -88,7 +88,7 @@ fun DodamApp(
     firebaseCrashlytics: FirebaseCrashlytics,
     scope: CoroutineScope = rememberCoroutineScope(),
     role: String,
-    refresh: () -> Boolean = { false }
+    refresh: () -> Boolean = { false },
 ) {
     navController.addOnDestinationChangedListener { _, destination, _ ->
         val params = Bundle().apply {
@@ -175,7 +175,6 @@ fun DodamApp(
                 navigateToAddWakeUpSong = {
                     navController.navigateToAskWakeupSong()
                 },
-                navigateToClub = navController::navigateToClub,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }

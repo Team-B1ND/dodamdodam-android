@@ -317,7 +317,7 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit, navi
                                 .fillMaxWidth()
                                 .padding(vertical = 12.dp, horizontal = 16.dp),
                             onClick = navigateToApply,
-                            text = "가입 신청",
+                            text = "내 동아리 신청하기",
                         )
                     }
                 }

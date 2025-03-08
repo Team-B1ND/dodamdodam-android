@@ -359,7 +359,7 @@ class ClubServiceTest {
                         tel = "010-1234-5678",
                     ),
                     state = "ALLOWED",
-                    clubId = 4
+                    clubId = 4,
                 ),
             ),
             response.first(),
@@ -423,7 +423,7 @@ class ClubServiceTest {
                     tel = "010-1234-5678",
                 ),
                 state = "ALLOWED",
-                clubId = 5
+                clubId = 5,
             ),
             response.first(),
         )
@@ -443,7 +443,7 @@ class ClubServiceTest {
                 type = "CREATIVE_ACTIVITY_CLUB",
                 teacher = null,
                 state = "ALLOWED",
-                clubId = 6
+                clubId = 6,
             ),
             response.first(),
         )
