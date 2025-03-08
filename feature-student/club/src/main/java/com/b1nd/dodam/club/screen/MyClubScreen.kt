@@ -280,7 +280,7 @@ internal fun MyClubScreen(
                                     Text(
                                         text = "입부한 창체 동아리가 없습니다",
                                         style = DodamTheme.typography.labelRegular(),
-                                        color = DodamTheme.colors.labelNormal,
+                                        color = DodamTheme.colors.labelAlternative,
                                     )
                                 }
                             }
@@ -308,7 +308,7 @@ internal fun MyClubScreen(
                                     Text(
                                         text = "입부한 자율 동아리가 없습니다",
                                         style = DodamTheme.typography.labelRegular(),
-                                        color = DodamTheme.colors.labelNormal,
+                                        color = DodamTheme.colors.labelAlternative,
                                     )
                                 }
                             }
@@ -359,7 +359,7 @@ internal fun MyClubScreen(
                                 Text(
                                     text = "신청한 창체 동아리가 없습니다",
                                     style = DodamTheme.typography.labelRegular(),
-                                    color = DodamTheme.colors.labelNormal,
+                                    color = DodamTheme.colors.labelAlternative,
                                 )
                             }
                             Spacer(Modifier.height(16.dp))
@@ -381,7 +381,7 @@ internal fun MyClubScreen(
                                 Text(
                                     text = "신청한 자율 동아리가 없습니다",
                                     style = DodamTheme.typography.labelRegular(),
-                                    color = DodamTheme.colors.labelNormal,
+                                    color = DodamTheme.colors.labelAlternative,
                                 )
                             }
                         }
@@ -454,8 +454,8 @@ internal fun MyClubScreen(
                                 } else {
                                     Text(
                                         text = "개설 신청한 창체 동아리가 없습니다",
-                                        style = DodamTheme.typography.body2Medium(),
-                                        color = DodamTheme.colors.labelNormal,
+                                        style = DodamTheme.typography.labelRegular(),
+                                        color = DodamTheme.colors.labelAlternative,
                                     )
                                 }
                                 Spacer(Modifier.height(16.dp))
@@ -508,8 +508,8 @@ internal fun MyClubScreen(
                                 } else {
                                     Text(
                                         text = "개설 신청한 자율 동아리가 없습니다",
-                                        style = DodamTheme.typography.body2Medium(),
-                                        color = DodamTheme.colors.labelNormal,
+                                        style = DodamTheme.typography.labelRegular(),
+                                        color = DodamTheme.colors.labelAlternative,
                                     )
                                 }
                             }
@@ -583,7 +583,7 @@ internal fun MyClubScreen(
                                     Text(
                                         text = "받은 부원 제안이 없습니다",
                                         style = DodamTheme.typography.labelRegular(),
-                                        color = DodamTheme.colors.labelNormal,
+                                        color = DodamTheme.colors.labelAlternative,
                                     )
                                 }
                             }
