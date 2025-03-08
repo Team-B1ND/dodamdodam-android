@@ -10,12 +10,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.zIndex
 import com.b1nd.dodam.club.MyClubViewModel
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
@@ -46,8 +55,10 @@ import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.DodamMemberLoadingCard
+import com.b1nd.dodam.ui.effect.shimmerEffect
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun MyClubScreen(
     modifier: Modifier = Modifier,
@@ -69,6 +80,16 @@ internal fun MyClubScreen(
     var receivedClubList = emptyList<ClubJoin>()
     var createdClubList = emptyList<Club>()
     var createdSelfClubList = emptyList<Club>()
+
+    var isRefreshing by remember { mutableStateOf(false) }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            viewModel.getClub()
+            viewModel.getJoinRequest()
+            isRefreshing = false
+        },
+    )
 
     when (state.joinedClubUiState) {
         is JoinedClubUiState.Success -> {
@@ -145,7 +166,6 @@ internal fun MyClubScreen(
             )
         }
     }
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -174,348 +194,420 @@ internal fun MyClubScreen(
                 modifier = modifier
                     .verticalScroll(scrollState)
             ) {
-                DodamEmpty(
-                    title = "아직 동아리에 신청하지 않았어요! \n" +
-                            "신청 마감 : 2025. 03. 19.",
-                    buttonText = "동아리 입부 신청하기",
-                    onClick = {
-                        onNavigateToJoin()
-                    },
-                )
-                Spacer(Modifier.height(12.dp))
-                Column(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = DodamTheme.colors.backgroundNormal,
-                            shape = RoundedCornerShape(12.dp),
+                when (state.joinedClubUiState) {
+                    is JoinedClubUiState.Success -> {
+                        DodamEmpty(
+                            title = "아직 동아리에 신청하지 않았어요! \n" +
+                                    "신청 마감 : 2025. 03. 19.",
+                            buttonText = "동아리 입부 신청하기",
+                            onClick = {
+                                onNavigateToJoin()
+                            },
                         )
-                        .padding(16.dp),
-                ) {
-                    Text(
-                        text = "소속된 동아리",
-                        fontSize = 18.sp,
-                        color = DodamTheme.colors.labelNormal,
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    Text(
-                        text = "창체",
-                        fontSize = 12.sp,
-                        color = DodamTheme.colors.labelNormal,
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    Row(
-                        modifier = modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        if (joinedClubNameList.isNotEmpty()) {
+                        Spacer(Modifier.height(12.dp))
+                        Column(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = DodamTheme.colors.backgroundNormal,
+                                    shape = RoundedCornerShape(12.dp),
+                                )
+                                .padding(paddingValues)
+                                .padding(16.dp),
+                        ) {
                             Text(
-                                text = joinedClubNameList[0],
-                                fontSize = 15.sp,
+                                text = "소속된 동아리",
+                                fontSize = 18.sp,
                                 color = DodamTheme.colors.labelNormal,
                             )
-                            Box(
-                                modifier = modifier
-                                    .background(
-                                        color = Color(0x330083F0),
-                                        shape = RoundedCornerShape(size = 8.dp),
-                                    )
-                                    .padding(vertical = 4.dp, horizontal = 8.dp),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Text(
-                                    text = "입부 완료",
-                                    color = Color(0xFF0083F0),
-                                    fontSize = 12.sp,
-                                )
-                            }
-                        } else {
+                            Spacer(Modifier.height(12.dp))
                             Text(
-                                text = "입부한 창체 동아리가 없습니다",
-                                fontSize = 15.sp,
+                                text = "창체",
+                                fontSize = 12.sp,
                                 color = DodamTheme.colors.labelNormal,
                             )
-                        }
-                    }
-                    Spacer(Modifier.height(16.dp))
-                    Text(
-                        text = "자율",
-                        fontSize = 12.sp,
-                        color = DodamTheme.colors.labelNormal,
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    Column (
-                        modifier = modifier
-                            .fillMaxWidth(),
-                    ) {
-                        if (joinedSelfClubNameList.isNotEmpty()) {
-                            joinedSelfClubNameList.forEachIndexed { _, item ->
-                                Text(
-                                    text = item,
-                                    fontSize = 15.sp,
-                                    color = DodamTheme.colors.labelNormal,
-                                )
-                            }
                             Spacer(Modifier.height(8.dp))
-                        } else {
-                            Text(
-                                text = "입부한 창체 동아리가 없습니다",
-                                fontSize = 15.sp,
-                                color = DodamTheme.colors.labelNormal,
-                            )
-                        }
-                    }
-                }
-                Spacer(Modifier.height(12.dp))
-                Column(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = DodamTheme.colors.backgroundNormal,
-                            shape = RoundedCornerShape(12.dp),
-                        )
-                        .padding(16.dp),
-                ) {
-                    Text(
-                        text = "내 신청",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight(700),
-                        color = DodamTheme.colors.labelNormal,
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    Text(
-                        text = "창체",
-                        fontSize = 12.sp,
-                        color = DodamTheme.colors.labelNormal,
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    if (state.requestJoinClub.isNotEmpty()) {
-                        state.requestJoinClub.forEachIndexed { index, item ->
                             Row(
                                 modifier = modifier
                                     .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                Text(
-                                    text = "${index + 1}지망",
-                                    fontSize = 15.sp,
-                                    color = DodamTheme.colors.labelNormal,
-                                )
-                                Text(
-                                    text = item.club.name,
-                                    fontSize = 15.sp,
-                                    color = DodamTheme.colors.labelNormal,
-                                )
-                            }
-                            Spacer(Modifier.height(8.dp))
-                        }
-                    } else {
-                        Text(
-                            text = "신청한 창체 동아리가 없습니다",
-                            fontSize = 15.sp,
-                            color = DodamTheme.colors.labelNormal,
-                        )
-                    }
-                    Spacer(Modifier.height(16.dp))
-                    Text(
-                        text = "자율",
-                        fontSize = 12.sp,
-                        color = DodamTheme.colors.labelNormal,
-                    )
-                    if (state.requestJoinSelfClub.isNotEmpty()) {
-                        state.requestJoinSelfClub.forEachIndexed { _, item ->
-                            Spacer(Modifier.height(8.dp))
-                            Text(
-                                text = item.club.name,
-                                fontSize = 15.sp,
-                                color = DodamTheme.colors.labelNormal,
-                            )
-                        }
-                    } else {
-                        Text(
-                            text = "신청한 자율 동아리가 없습니다",
-                            fontSize = 15.sp,
-                            color = DodamTheme.colors.labelNormal,
-                        )
-                    }
-
-                }
-                Spacer(Modifier.height(12.dp))
-                Column(
-                    modifier = modifier
-                        .fillMaxWidth(),
-                ) {
-                    Column(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = DodamTheme.colors.backgroundNormal,
-                                shape = RoundedCornerShape(12.dp),
-                            )
-                            .padding(16.dp),
-                    ) {
-                        Text(
-                            text = "내 개설 신청",
-                            fontSize = 18.sp,
-                            color = DodamTheme.colors.labelNormal,
-                        )
-                        Spacer(Modifier.height(12.dp))
-                        Text(
-                            text = "창체",
-                            fontSize = 12.sp,
-                            color = DodamTheme.colors.labelNormal,
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        if (createdClubList.isNotEmpty()) {
-                            createdClubList.forEachIndexed { index, item ->
-                                Row(
-                                    modifier = modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                ) {
+                                if (joinedClubNameList.isNotEmpty()) {
                                     Text(
-                                        text = item.name,
+                                        text = joinedClubNameList[0],
                                         fontSize = 15.sp,
                                         color = DodamTheme.colors.labelNormal,
                                     )
-                                    Icon(
-                                        imageVector = createdClubStateList.getOrNull(index)
-                                            ?.let { state ->
-                                                when (state) {
-                                                    ClubState.PENDING -> DodamIcons.CheckmarkCircle.value
-                                                    ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
-                                                    ClubState.REJECTED -> DodamIcons.XMarkCircle.value
-                                                    else -> DodamIcons.Bell.value
-                                                }
-                                            } ?: DodamIcons.ExclamationMarkCircle.value,
-                                        contentDescription = null,
-                                    )
-                                }
-                                Spacer(Modifier.height(8.dp))
-                            }
-                        } else {
-                            Text(
-                                text = "개설 신청한 창체 동아리가 없습니다",
-                                fontSize = 15.sp,
-                                color = DodamTheme.colors.labelNormal,
-                            )
-                        }
-                        Spacer(Modifier.height(16.dp))
-                        Text(
-                            text = "자율",
-                            fontSize = 12.sp,
-                            color = DodamTheme.colors.labelNormal,
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        if (createdSelfClubList.isNotEmpty()) {
-                            createdSelfClubStateList.forEachIndexed { index, item ->
-                                Row(
-                                    modifier = modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                ) {
-                                    Text(
-                                        text = item.name,
-                                        fontSize = 15.sp,
-                                        color = DodamTheme.colors.labelNormal,
-                                    )
-                                    Icon(
-                                        imageVector = createdClubStateList.getOrNull(index)
-                                            ?.let { state ->
-                                                when (state) {
-                                                    ClubState.PENDING -> DodamIcons.CheckmarkCircle.value
-                                                    ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
-                                                    ClubState.REJECTED -> DodamIcons.XMarkCircle.value
-                                                    else -> DodamIcons.Bell.value
-                                                }
-                                            } ?: DodamIcons.ExclamationMarkCircle.value,
-                                        contentDescription = null,
-                                    )
-                                }
-                                Spacer(Modifier.height(8.dp))
-                            }
-                        } else {
-                            Text(
-                                text = "개설 신청한 자율 동아리가 없습니다",
-                                fontSize = 15.sp,
-                                color = DodamTheme.colors.labelNormal,
-                            )
-                        }
-                    }
-
-                    Spacer(Modifier.height(12.dp))
-
-                    Column(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = DodamTheme.colors.backgroundNormal,
-                                shape = RoundedCornerShape(12.dp),
-                            )
-                            .padding(16.dp),
-                    ) {
-                        Text(
-                            text = "받은 자율 부원 제안",
-                            fontSize = 18.sp,
-                            color = DodamTheme.colors.labelNormal,
-                        )
-                        Spacer(Modifier.height(12.dp))
-                        Text(
-                            text = "자율",
-                            fontSize = 12.sp,
-                            color = DodamTheme.colors.labelNormal,
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        if (receivedClubList.isNotEmpty()) {
-                            receivedClubNameList.forEachIndexed { index, item ->
-                                Row(
-                                    modifier = modifier
-                                        .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                ) {
-                                    Text(
-                                        text = item,
-                                        fontSize = 15.sp,
-                                        color = DodamTheme.colors.labelNormal,
-                                    )
-                                    Row {
-                                        Icon(
-                                            imageVector = DodamIcons.CheckmarkCircle.value,
-                                            contentDescription = null,
-                                            modifier = modifier
-                                                .clickable {
-                                                    showDialog.value = true
-                                                    selectedSelfClubId.intValue =
-                                                        receivedClubList[index].id
-                                                    selectedSelfClubName.value = item
-                                                },
-                                        )
-                                        Spacer(Modifier.width(16.dp))
-                                        Icon(
-                                            imageVector = DodamIcons.XMarkCircle.value,
-                                            contentDescription = null,
-                                            modifier = modifier
-                                                .clickable {
-                                                    showRejectDialog.value = true
-                                                    selectedSelfClubId.intValue =
-                                                        receivedClubList[index].id
-                                                    selectedSelfClubName.value = item
-                                                },
+                                    Box(
+                                        modifier = modifier
+                                            .background(
+                                                color = Color(0x330083F0),
+                                                shape = RoundedCornerShape(size = 8.dp),
+                                            )
+                                            .padding(vertical = 4.dp, horizontal = 8.dp),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        Text(
+                                            text = "입부 완료",
+                                            color = Color(0xFF0083F0),
+                                            fontSize = 12.sp,
                                         )
                                     }
+                                } else {
+                                    Text(
+                                        text = "입부한 창체 동아리가 없습니다",
+                                        fontSize = 15.sp,
+                                        color = DodamTheme.colors.labelNormal,
+                                    )
                                 }
-                                Spacer(Modifier.height(8.dp))
                             }
-                        } else {
+                            Spacer(Modifier.height(16.dp))
                             Text(
-                                text = "받은 부원 제안이 없습니다",
-                                fontSize = 15.sp,
+                                text = "자율",
+                                fontSize = 12.sp,
                                 color = DodamTheme.colors.labelNormal,
                             )
+                            Spacer(Modifier.height(8.dp))
+                            Column(
+                                modifier = modifier
+                                    .fillMaxWidth(),
+                            ) {
+                                if (joinedSelfClubNameList.isNotEmpty()) {
+                                    joinedSelfClubNameList.forEachIndexed { _, item ->
+                                        Text(
+                                            text = item,
+                                            fontSize = 15.sp,
+                                            color = DodamTheme.colors.labelNormal,
+                                        )
+                                    }
+                                    Spacer(Modifier.height(8.dp))
+                                } else {
+                                    Text(
+                                        text = "입부한 자율 동아리가 없습니다",
+                                        fontSize = 15.sp,
+                                        color = DodamTheme.colors.labelNormal,
+                                    )
+                                }
+                            }
+                        }
+                        Spacer(Modifier.height(12.dp))
+                        Column(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = DodamTheme.colors.backgroundNormal,
+                                    shape = RoundedCornerShape(12.dp),
+                                )
+                                .padding(16.dp),
+                        ) {
+                            Text(
+                                text = "내 신청",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight(700),
+                                color = DodamTheme.colors.labelNormal,
+                            )
+                            Spacer(Modifier.height(12.dp))
+                            Text(
+                                text = "창체",
+                                fontSize = 12.sp,
+                                color = DodamTheme.colors.labelNormal,
+                            )
+                            Spacer(Modifier.height(8.dp))
+                            if (state.requestJoinClub.isNotEmpty()) {
+                                state.requestJoinClub.forEachIndexed { index, item ->
+                                    Row(
+                                        modifier = modifier
+                                            .fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                    ) {
+                                        Text(
+                                            text = "${index + 1}지망",
+                                            fontSize = 15.sp,
+                                            color = DodamTheme.colors.labelNormal,
+                                        )
+                                        Text(
+                                            text = item.club.name,
+                                            fontSize = 15.sp,
+                                            color = DodamTheme.colors.labelNormal,
+                                        )
+                                    }
+                                    Spacer(Modifier.height(8.dp))
+                                }
+                            } else {
+                                Text(
+                                    text = "신청한 창체 동아리가 없습니다",
+                                    fontSize = 15.sp,
+                                    color = DodamTheme.colors.labelNormal,
+                                )
+                            }
+                            Spacer(Modifier.height(16.dp))
+                            Text(
+                                text = "자율",
+                                fontSize = 12.sp,
+                                color = DodamTheme.colors.labelNormal,
+                            )
+                            if (state.requestJoinSelfClub.isNotEmpty()) {
+                                state.requestJoinSelfClub.forEachIndexed { _, item ->
+                                    Spacer(Modifier.height(8.dp))
+                                    Text(
+                                        text = item.club.name,
+                                        fontSize = 15.sp,
+                                        color = DodamTheme.colors.labelNormal,
+                                    )
+                                }
+                            } else {
+                                Text(
+                                    text = "신청한 자율 동아리가 없습니다",
+                                    fontSize = 15.sp,
+                                    color = DodamTheme.colors.labelNormal,
+                                )
+                            }
+
+                        }
+                        Spacer(Modifier.height(12.dp))
+                        Column(
+                            modifier = modifier
+                                .fillMaxWidth(),
+                        ) {
+                            Column(
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        color = DodamTheme.colors.backgroundNormal,
+                                        shape = RoundedCornerShape(12.dp),
+                                    )
+                                    .padding(16.dp),
+                            ) {
+                                Text(
+                                    text = "내 개설 신청",
+                                    fontSize = 18.sp,
+                                    color = DodamTheme.colors.labelNormal,
+                                )
+                                Spacer(Modifier.height(12.dp))
+                                Text(
+                                    text = "창체",
+                                    fontSize = 12.sp,
+                                    color = DodamTheme.colors.labelNormal,
+                                )
+                                Spacer(Modifier.height(8.dp))
+                                if (createdClubList.isNotEmpty()) {
+                                    createdClubList.forEachIndexed { index, item ->
+                                        Row(
+                                            modifier = modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                        ) {
+                                            Text(
+                                                text = item.name,
+                                                fontSize = 15.sp,
+                                                color = DodamTheme.colors.labelNormal,
+                                            )
+                                            Icon(
+                                                imageVector = createdClubStateList.getOrNull(
+                                                    index
+                                                )
+                                                    ?.let { state ->
+                                                        when (state) {
+                                                            ClubState.PENDING -> DodamIcons.CheckmarkCircle.value
+                                                            ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
+                                                            ClubState.REJECTED -> DodamIcons.XMarkCircle.value
+                                                            else -> DodamIcons.Bell.value
+                                                        }
+                                                    } ?: DodamIcons.ExclamationMarkCircle.value,
+                                                contentDescription = null,
+                                            )
+                                        }
+                                        Spacer(Modifier.height(8.dp))
+                                    }
+                                } else {
+                                    Text(
+                                        text = "개설 신청한 창체 동아리가 없습니다",
+                                        fontSize = 15.sp,
+                                        color = DodamTheme.colors.labelNormal,
+                                    )
+                                }
+                                Spacer(Modifier.height(16.dp))
+                                Text(
+                                    text = "자율",
+                                    fontSize = 12.sp,
+                                    color = DodamTheme.colors.labelNormal,
+                                )
+                                Spacer(Modifier.height(8.dp))
+                                if (createdSelfClubList.isNotEmpty()) {
+                                    createdSelfClubStateList.forEachIndexed { index, item ->
+                                        Row(
+                                            modifier = modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                        ) {
+                                            Text(
+                                                text = item.name,
+                                                fontSize = 15.sp,
+                                                color = DodamTheme.colors.labelNormal,
+                                            )
+                                            Icon(
+                                                imageVector = createdClubStateList.getOrNull(
+                                                    index
+                                                )
+                                                    ?.let { state ->
+                                                        when (state) {
+                                                            ClubState.PENDING -> DodamIcons.CheckmarkCircle.value
+                                                            ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
+                                                            ClubState.REJECTED -> DodamIcons.XMarkCircle.value
+                                                            else -> DodamIcons.Bell.value
+                                                        }
+                                                    } ?: DodamIcons.ExclamationMarkCircle.value,
+                                                contentDescription = null,
+                                            )
+                                        }
+                                        Spacer(Modifier.height(8.dp))
+                                    }
+                                } else {
+                                    Text(
+                                        text = "개설 신청한 자율 동아리가 없습니다",
+                                        fontSize = 15.sp,
+                                        color = DodamTheme.colors.labelNormal,
+                                    )
+                                }
+                            }
+
+                            Spacer(Modifier.height(12.dp))
+
+                            Column(
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        color = DodamTheme.colors.backgroundNormal,
+                                        shape = RoundedCornerShape(12.dp),
+                                    )
+                                    .padding(16.dp),
+                            ) {
+                                Text(
+                                    text = "받은 자율 부원 제안",
+                                    fontSize = 18.sp,
+                                    color = DodamTheme.colors.labelNormal,
+                                )
+                                Spacer(Modifier.height(12.dp))
+                                Text(
+                                    text = "자율",
+                                    fontSize = 12.sp,
+                                    color = DodamTheme.colors.labelNormal,
+                                )
+                                Spacer(Modifier.height(8.dp))
+                                if (receivedClubList.isNotEmpty()) {
+                                    receivedClubNameList.forEachIndexed { index, item ->
+                                        Row(
+                                            modifier = modifier
+                                                .fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                        ) {
+                                            Text(
+                                                text = item,
+                                                fontSize = 15.sp,
+                                                color = DodamTheme.colors.labelNormal,
+                                            )
+                                            Row {
+                                                Icon(
+                                                    imageVector = DodamIcons.CheckmarkCircle.value,
+                                                    contentDescription = null,
+                                                    modifier = modifier
+                                                        .clickable {
+                                                            showDialog.value = true
+                                                            selectedSelfClubId.intValue =
+                                                                receivedClubList[index].id
+                                                            selectedSelfClubName.value = item
+                                                        },
+                                                )
+                                                Spacer(Modifier.width(16.dp))
+                                                Icon(
+                                                    imageVector = DodamIcons.XMarkCircle.value,
+                                                    contentDescription = null,
+                                                    modifier = modifier
+                                                        .clickable {
+                                                            showRejectDialog.value = true
+                                                            selectedSelfClubId.intValue =
+                                                                receivedClubList[index].id
+                                                            selectedSelfClubName.value = item
+                                                        },
+                                                )
+                                            }
+                                        }
+                                        Spacer(Modifier.height(8.dp))
+                                    }
+                                } else {
+                                    Text(
+                                        text = "받은 부원 제안이 없습니다",
+                                        fontSize = 15.sp,
+                                        color = DodamTheme.colors.labelNormal,
+                                    )
+                                }
+                            }
+                            Spacer(Modifier.height(20.dp))
                         }
                     }
-                    Spacer(Modifier.height(20.dp))
+
+                    else -> {
+                        DodamLoadingClub()
+                        Spacer(Modifier.height(16.dp))
+                        DodamLoadingClub()
+                    }
                 }
             }
+        }
+    }
+}
+
+
+
+@Composable
+private fun DodamLoadingClub(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(86.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .width(83.dp)
+                .height(86.dp)
+                .background(
+                    brush = shimmerEffect(),
+                    shape = RoundedCornerShape(8.dp),
+                ),
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+        Column {
+            Box(
+                modifier = Modifier
+                    .width(32.dp)
+                    .height(17.dp)
+                    .background(
+                        brush = shimmerEffect(),
+                        shape = RoundedCornerShape(4.dp),
+                    ),
+            )
+            Spacer(modifier = Modifier.height(1.dp))
+            Row {
+                Box(
+                    modifier = Modifier
+                        .width(46.dp)
+                        .height(27.dp)
+                        .background(
+                            brush = shimmerEffect(),
+                            shape = RoundedCornerShape(4.dp),
+                        ),
+                )
+            }
+            Spacer(modifier = Modifier.height(1.dp))
+            Box(
+                modifier = Modifier
+                    .width(273.dp)
+                    .height(21.dp)
+                    .background(
+                        brush = shimmerEffect(),
+                        shape = RoundedCornerShape(4.dp),
+                    ),
+            )
         }
     }
 }

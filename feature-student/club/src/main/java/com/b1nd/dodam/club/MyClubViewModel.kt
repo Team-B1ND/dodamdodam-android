@@ -2,6 +2,7 @@ package com.b1nd.dodam.club
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.JoinedClubUiState
 import com.b1nd.dodam.club.model.MyClubSideEffect
@@ -266,6 +267,13 @@ class MyClubViewModel : ViewModel(), KoinComponent {
 
                         val joinRequestClub = joinRequestClubList.filter {
                             it.club.type == ClubType.CREATIVE_ACTIVITY_CLUB
+                        }.sortedBy { clubJoin ->
+                            when {
+                                clubJoin.clubPermission.toString().endsWith("_1") -> 1
+                                clubJoin.clubPermission.toString().endsWith("_2") -> 2
+                                clubJoin.clubPermission.toString().endsWith("_3") -> 3
+                                else -> Int.MAX_VALUE
+                            }
                         }.toImmutableList()
 
                         val joinRequestSelfClub = joinRequestClubList.filter {

@@ -44,6 +44,7 @@ import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.club.MyClubViewModel
 import com.b1nd.dodam.club.R
 import com.b1nd.dodam.club.component.DodamFullIconButton
+import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.JoinedClubUiState
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -79,7 +80,7 @@ internal fun JoinClubScreen(
     val showBottomSheet = remember { mutableStateOf(false) }
     val showSelfBottomSheet = remember { mutableStateOf(false) }
 
-    var allClubList = state.allClubList
+    var allClubList = state.allClubList.filter { it.state == ClubState.ALLOWED }
     var allSelfClubList = state.allSelfClubList
 
     when (state.joinedClubUiState) {
@@ -542,39 +543,39 @@ fun ClubCard(
                 color = Color(0xFF0083F0),
             )
         }
-    }
-    Spacer(Modifier.height(14.dp))
-    DodamTextField(
-        modifier = modifier
-            .fillMaxWidth(),
-        value = introduce,
-        onValueChange = { newIntroduce ->
-            if (newIntroduce.length <= 300) {
-                onIntroduceChange(newIntroduce)
-            }
-        },
-        singleLine = false,
-        minLines = 6,
-        maxLines = 8,
-        label = "자기소개",
-        onClickRemoveRequest = onRemoveClick,
-    )
-    Spacer(Modifier.height(7.dp))
-    Row(
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.End,
-    ) {
-        Text(
-            text = introduce.length.toString(),
-            color = DodamTheme.colors.primaryNormal,
-            fontSize = 16.sp,
+        Spacer(Modifier.height(14.dp))
+        DodamTextField(
+            modifier = modifier
+                .fillMaxWidth(),
+            value = introduce,
+            onValueChange = { newIntroduce ->
+                if (newIntroduce.length <= 300) {
+                    onIntroduceChange(newIntroduce)
+                }
+            },
+            singleLine = false,
+            minLines = 6,
+            maxLines = 8,
+            label = "자기소개",
+            onClickRemoveRequest = onRemoveClick,
         )
-        Text(
-            text = "/300",
-            color = DodamTheme.colors.labelAssistive,
-            fontSize = 16.sp,
-        )
+        Spacer(Modifier.height(7.dp))
+        Row(
+            modifier = modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+        ) {
+            Text(
+                text = introduce.length.toString(),
+                color = DodamTheme.colors.primaryNormal,
+                fontSize = 16.sp,
+            )
+            Text(
+                text = "/300",
+                color = DodamTheme.colors.labelAssistive,
+                fontSize = 16.sp,
+            )
+        }
     }
 }
 
