@@ -39,7 +39,7 @@ class ClubService(
             client.post(DodamUrl.Club.JOIN_REQUEST) {
                 contentType(ContentType.Application.Json)
                 setBody(
-                    requests
+                    requests,
                 )
             }.body<DefaultResponse>()
         }

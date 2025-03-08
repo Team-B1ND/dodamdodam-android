@@ -221,10 +221,10 @@ internal fun MyClubScreen(
                             },
                             buttonText = "동아리 입부 신청하기",
                             onClick = {
-                                if (joinedClubList.isEmpty()) {
-                                    onNavigateToJoin()
-                                } else {
+                                if (joinedClubList.isNotEmpty() || state.requestJoinClub.isNotEmpty() || state.requestJoinSelfClub.isNotEmpty()) {
                                     showClubDialog.value = true
+                                } else {
+                                    onNavigateToJoin()
                                 }
                             },
                         )
@@ -582,7 +582,7 @@ internal fun MyClubScreen(
                                 } else {
                                     Text(
                                         text = "받은 부원 제안이 없습니다",
-                                        style = DodamTheme.typography.body2Medium(),
+                                        style = DodamTheme.typography.labelRegular(),
                                         color = DodamTheme.colors.labelNormal,
                                     )
                                 }
