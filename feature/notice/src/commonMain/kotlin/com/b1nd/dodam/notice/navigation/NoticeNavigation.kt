@@ -2,17 +2,15 @@ package com.b1nd.dodam.notice.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.b1nd.dodam.notice.NoticeScreen
-import io.ktor.utils.io.core.toByteArray
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 const val NOTICE_ROUTE = "notice"
 
@@ -44,9 +42,9 @@ fun NavGraphBuilder.noticeScreen(
             navigateToNoticeViewer = { startIndex, images ->
                 navigateToNoticeViewer(
                     startIndex,
-                    Base64.UrlSafe.encode(Json.encodeToString(images).encodeToByteArray())
+                    Base64.UrlSafe.encode(Json.encodeToString(images).encodeToByteArray()),
                 )
-            }
+            },
         )
     }
 }

@@ -32,7 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.PointerEventPass
@@ -41,33 +40,25 @@ import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
 import com.b1nd.dodam.data.notice.model.NoticeFile
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
-import com.b1nd.dodam.designsystem.component.DodamIconButton
-import com.b1nd.dodam.designsystem.component.IconButtonType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.DodamMenuDialog
 import com.b1nd.dodam.ui.component.DodamMenuItem
 import com.b1nd.dodam.ui.component.DodamMenuItemColor
 import com.b1nd.dodam.ui.util.LocalFileDownloader
 import com.b1nd.dodam.ui.util.NoInteractionSource
+import kotlin.math.abs
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlin.math.abs
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun NoticeViewerScreen(
-    popBackStack: () -> Unit,
-    startIndex: Int,
-    images: ImmutableList<NoticeFile>
-) {
+internal fun NoticeViewerScreen(popBackStack: () -> Unit, startIndex: Int, images: ImmutableList<NoticeFile>) {
     var topBarVisible by remember { mutableStateOf(true) }
     val pagerState = rememberPagerState(initialPage = startIndex, pageCount = { images.size })
     val fileDownloader = LocalFileDownloader.current
@@ -88,10 +79,10 @@ internal fun NoticeViewerScreen(
                                 val item = images[pagerState.currentPage]
                                 fileDownloader.downloadFile(
                                     fileName = item.fileName,
-                                    fileUrl = item.fileUrl
+                                    fileUrl = item.fileUrl,
                                 )
                                 showFileDownloadDialog = false
-                            }
+                            },
                         ),
                         DodamMenuItem(
                             item = "전체 이미지 다운로드",
@@ -100,22 +91,22 @@ internal fun NoticeViewerScreen(
                                 for (image in images) {
                                     fileDownloader.downloadFile(
                                         fileName = image.fileName,
-                                        fileUrl = image.fileUrl
+                                        fileUrl = image.fileUrl,
                                     )
                                 }
                                 showFileDownloadDialog = false
-                            }
-                        )
-                    )
+                            },
+                        ),
+                    ),
                 )
-            }
+            },
         )
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(DodamTheme.colors.staticBlack)
+            .background(DodamTheme.colors.staticBlack),
     ) {
         HorizontalPager(
             state = pagerState,
@@ -125,9 +116,9 @@ internal fun NoticeViewerScreen(
                     model = images[page].fileUrl,
                     onTab = {
                         topBarVisible = !topBarVisible
-                    }
+                    },
                 )
-            }
+            },
         )
 
         if (topBarVisible) {
@@ -137,19 +128,19 @@ internal fun NoticeViewerScreen(
                     .fillMaxWidth()
                     .height(60.dp)
                     .background(
-                        color = DodamTheme.colors.staticBlack.copy(alpha = 0.8f)
+                        color = DodamTheme.colors.staticBlack.copy(alpha = 0.8f),
                     )
                     .clickable(
                         interactionSource = remember { NoInteractionSource() },
                         indication = null,
-                        onClick = {}
+                        onClick = {},
                     )
                     .padding(
                         vertical = 6.dp,
-                        horizontal = 4.dp
+                        horizontal = 4.dp,
                     ),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 NoticeViewerIconButton(
                     onClick = popBackStack,
@@ -168,15 +159,11 @@ internal fun NoticeViewerScreen(
 }
 
 @Composable
-private fun NoticeViewerIconButton(
-    modifier: Modifier = Modifier,
-    imageVector: ImageVector,
-    onClick: () -> Unit,
-) {
+private fun NoticeViewerIconButton(modifier: Modifier = Modifier, imageVector: ImageVector, onClick: () -> Unit) {
     Box(
         modifier = modifier
             .size(48.dp),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Box(
             modifier = Modifier
@@ -184,27 +171,22 @@ private fun NoticeViewerIconButton(
                 .clickable(
                     onClick = onClick,
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberBounceIndication(DodamTheme.shapes.medium)
+                    indication = rememberBounceIndication(DodamTheme.shapes.medium),
                 ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 modifier = Modifier.size(24.dp),
                 imageVector = imageVector,
                 contentDescription = "Icon Button",
-                tint = DodamTheme.colors.staticWhite
+                tint = DodamTheme.colors.staticWhite,
             )
         }
     }
 }
 
 @Composable
-private fun PinchToZoomView(
-    modifier: Modifier = Modifier,
-    model: Any,
-    imageContentDescription: String = "",
-    onTab: () -> Unit,
-) {
+private fun PinchToZoomView(modifier: Modifier = Modifier, model: Any, imageContentDescription: String = "", onTab: () -> Unit) {
     var scale by remember { mutableStateOf(1f) }
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
@@ -246,7 +228,7 @@ private fun PinchToZoomView(
                         if (pan != Offset(0f, 0f) && initialOffset == Offset(0f, 0f)) {
                             initialOffset = Offset(offsetX, offsetY)
                         }
-                    }
+                    },
                 )
             }
             .pointerInput(Unit) {
@@ -262,7 +244,7 @@ private fun PinchToZoomView(
                         } else {
                             scale = 2f
                         }
-                    }
+                    },
                 )
             }
             .graphicsLayer {
@@ -270,13 +252,13 @@ private fun PinchToZoomView(
                 scaleY = scale
                 translationX = offsetX
                 translationY = offsetY
-            }
+            },
     ) {
         AsyncImage(
             modifier = Modifier.fillMaxSize(),
             model = model,
             contentDescription = imageContentDescription,
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.FillWidth,
         )
     }
 }
@@ -292,9 +274,9 @@ private suspend fun PointerInputScope.detectCustomTransformGestures(
         zoom: Float,
         rotation: Float,
         mainPointer: PointerInputChange,
-        changes: List<PointerInputChange>
+        changes: List<PointerInputChange>,
     ) -> Unit,
-    onGestureEnd: (PointerInputChange) -> Unit = {}
+    onGestureEnd: (PointerInputChange) -> Unit = {},
 ) {
     awaitEachGesture {
         var rotation = 0f
@@ -307,7 +289,7 @@ private suspend fun PointerInputScope.detectCustomTransformGestures(
         // Wait for at least one pointer to press down, and set first contact position
         val down: PointerInputChange = awaitFirstDown(
             requireUnconsumed = false,
-            pass = pass
+            pass = pass,
         )
         onGestureStart(down)
 
@@ -324,7 +306,6 @@ private suspend fun PointerInputScope.detectCustomTransformGestures(
                 event.changes.any { it.isConsumed }
 
             if (!canceled) {
-
                 // Get pointer that is down, if first pointer is up
                 // get another and use it if other pointers are also down
                 // event.changes.first() doesn't return same order
@@ -373,7 +354,7 @@ private suspend fun PointerInputScope.detectCustomTransformGestures(
                             zoomChange,
                             effectiveRotation,
                             pointer,
-                            event.changes
+                            event.changes,
                         )
                     }
 

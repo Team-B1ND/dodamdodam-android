@@ -300,7 +300,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             changeBottomNavVisible = { visible ->
                                 showBottomNavVisible = visible
                             },
-                            navigateToNoticeViewer = navHostController::navigateToNoticeViewer
+                            navigateToNoticeViewer = navHostController::navigateToNoticeViewer,
                         )
 
                         noticeCreateScreen(

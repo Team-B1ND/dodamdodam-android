@@ -1,9 +1,14 @@
 package com.b1nd.dodam.ui.component.util
 
-
 import com.b1nd.dodam.ui.util.FileDownloader
 import kotlinx.cinterop.ExperimentalForeignApi
-import platform.Foundation.*
+import platform.Foundation.NSDocumentDirectory
+import platform.Foundation.NSFileManager
+import platform.Foundation.NSURL
+import platform.Foundation.NSURLRequest
+import platform.Foundation.NSURLSession
+import platform.Foundation.NSUserDomainMask
+import platform.Foundation.downloadTaskWithRequest
 
 class IOSFileDownloader : FileDownloader {
     @OptIn(ExperimentalForeignApi::class)
