@@ -2,6 +2,7 @@ package com.b1nd.dodam.club
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.b1nd.dodam.club.model.ApplySideEffect
 import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.JoinedClubUiState
 import com.b1nd.dodam.club.model.MyClubSideEffect
@@ -351,10 +352,4 @@ class MyClubViewModel : ViewModel(), KoinComponent {
             }
         }
     }
-}
-
-sealed interface ApplySideEffect {
-    data object SuccessApply : ApplySideEffect
-    data object SuccessReject : ApplySideEffect
-    data class Failed(val throwable: Throwable) : ApplySideEffect
 }

@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.b1nd.dodam.club.model.ApplySideEffect
 import com.b1nd.dodam.club.model.MyClubPage
 import com.b1nd.dodam.club.screen.JoinClubScreen
 import com.b1nd.dodam.club.screen.MyClubScreen
