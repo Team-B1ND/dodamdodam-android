@@ -101,7 +101,9 @@ internal fun ClubListScreen(state: ClubUiState, popBackStack: () -> Unit, select
                         Text(text = "동아리", style = DodamTheme.typography.title2Bold())
                         Spacer(modifier = Modifier.weight(1f))
                         Box(
-                            modifier = Modifier.size(44.dp),
+                            modifier = Modifier.size(44.dp).clickable {
+                                navigateToApply()
+                            },
                         ) {
                             Image(
                                 modifier = Modifier.size(28.dp).align(Alignment.Center),
