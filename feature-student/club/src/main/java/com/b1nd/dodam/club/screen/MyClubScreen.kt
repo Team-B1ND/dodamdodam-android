@@ -11,20 +11,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -213,16 +208,20 @@ internal fun MyClubScreen(
         ) {
             Column(
                 modifier = modifier
-                    .verticalScroll(scrollState)
+                    .verticalScroll(scrollState),
             ) {
                 when (state.joinedClubUiState) {
                     is JoinedClubUiState.Success -> {
                         DodamEmpty(
-                            title = if (joinedClubList.isEmpty()) "아직 동아리에 신청하지 않았어요! \n" +
-                                    "신청 마감 : 2025. 03. 19." else "신청 마감 : 2025. 03. 19.",
+                            title = if (joinedClubList.isEmpty()) {
+                                "아직 동아리에 신청하지 않았어요! \n" +
+                                    "신청 마감 : 2025. 03. 19."
+                            } else {
+                                "신청 마감 : 2025. 03. 19."
+                            },
                             buttonText = "동아리 입부 신청하기",
                             onClick = {
-                                if(joinedClubList.isEmpty()){
+                                if (joinedClubList.isEmpty()) {
                                     onNavigateToJoin()
                                 } else {
                                     showClubDialog.value = true
@@ -237,8 +236,7 @@ internal fun MyClubScreen(
                                     color = DodamTheme.colors.backgroundNormal,
                                     shape = RoundedCornerShape(12.dp),
                                 )
-                                .padding(16.dp)
-                                ,
+                                .padding(16.dp),
                         ) {
                             Text(
                                 text = "소속된 동아리",
@@ -386,7 +384,6 @@ internal fun MyClubScreen(
                                     color = DodamTheme.colors.labelNormal,
                                 )
                             }
-
                         }
                         Spacer(Modifier.height(12.dp))
                         Column(
@@ -427,7 +424,7 @@ internal fun MyClubScreen(
                                             )
                                             Image(
                                                 imageVector = createdClubStateList.getOrNull(
-                                                    index
+                                                    index,
                                                 )
                                                     ?.let { state ->
                                                         when (state) {
@@ -439,7 +436,7 @@ internal fun MyClubScreen(
                                                     } ?: DodamIcons.ExclamationMarkCircle.value,
                                                 contentDescription = null,
                                                 colorFilter = createdClubStateList.getOrNull(
-                                                    index
+                                                    index,
                                                 )
                                                     ?.let { state ->
                                                         when (state) {
@@ -481,7 +478,7 @@ internal fun MyClubScreen(
                                             )
                                             Image(
                                                 imageVector = createdClubStateList.getOrNull(
-                                                    index
+                                                    index,
                                                 )
                                                     ?.let { state ->
                                                         when (state) {
@@ -493,7 +490,7 @@ internal fun MyClubScreen(
                                                     } ?: DodamIcons.ExclamationMarkCircle.value,
                                                 contentDescription = null,
                                                 colorFilter = createdClubStateList.getOrNull(
-                                                    index
+                                                    index,
                                                 )
                                                     ?.let { state ->
                                                         when (state) {
@@ -563,7 +560,7 @@ internal fun MyClubScreen(
                                                                 receivedClubList[index].id
                                                             selectedSelfClubName.value = item
                                                         },
-                                                    colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
+                                                    colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                                                 )
                                                 Spacer(Modifier.width(16.dp))
                                                 Image(
@@ -576,7 +573,7 @@ internal fun MyClubScreen(
                                                                 receivedClubList[index].id
                                                             selectedSelfClubName.value = item
                                                         },
-                                                    colorFilter = ColorFilter.tint(DodamTheme.colors.statusNegative)
+                                                    colorFilter = ColorFilter.tint(DodamTheme.colors.statusNegative),
                                                 )
                                             }
                                         }
@@ -600,16 +597,12 @@ internal fun MyClubScreen(
                         DodamLoadingClub(200)
                         DodamLoadingClub(400)
                         DodamLoadingClub(200)
-
-
                     }
                 }
             }
         }
     }
 }
-
-
 
 @Composable
 private fun DodamLoadingClub(height: Int) {

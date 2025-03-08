@@ -37,7 +37,7 @@ internal class ClubRepositoryImpl(
         return flow {
             emit(
                 network.postClubJoinRequests(
-                    requests
+                    requests,
                 ),
             )
         }

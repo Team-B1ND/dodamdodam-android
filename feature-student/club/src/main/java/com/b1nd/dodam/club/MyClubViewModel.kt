@@ -2,8 +2,6 @@ package com.b1nd.dodam.club
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.b1nd.dodam.club.model.ClubSideEffect
-import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.ClubType
 import com.b1nd.dodam.club.model.JoinedClubUiState
 import com.b1nd.dodam.club.model.MyClubSideEffect
@@ -109,7 +107,7 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                             _state.update {
                                 it.copy(
                                     createdClubList = createClub,
-                                    createdSelfClubList = createSelfClub
+                                    createdSelfClubList = createSelfClub,
                                 )
                             }
 
@@ -283,11 +281,10 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                             it.club.type == ClubType.SELF_DIRECT_ACTIVITY_CLUB
                         }.toImmutableList()
 
-
                         _state.update {
                             it.copy(
                                 requestJoinClub = joinRequestClub,
-                                requestJoinSelfClub = joinRequestSelfClub
+                                requestJoinSelfClub = joinRequestSelfClub,
                             )
                         }
 
@@ -298,7 +295,6 @@ class MyClubViewModel : ViewModel(), KoinComponent {
         }
     }
 
-
     fun applyClub(clubId: List<Int>, introduce: List<String>, selfClubId: List<Int>?, selfIntroduce: List<String>?) {
         viewModelScope.launch {
             val requestList = mutableListOf<ClubJoinRequest>()
@@ -308,8 +304,8 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                     ClubJoinRequest(
                         clubId = item,
                         clubPriority = "CREATIVE_ACTIVITY_CLUB_${index + 1}",
-                        introduction = introduce[index]
-                    )
+                        introduction = introduce[index],
+                    ),
                 )
             }
 
@@ -320,8 +316,8 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                             ClubJoinRequest(
                                 clubId = item,
                                 clubPriority = null,
-                                introduction = selfIntroduce[index]
-                            )
+                                introduction = selfIntroduce[index],
+                            ),
                         )
                     }
                 } else {
@@ -361,4 +357,3 @@ sealed interface ApplySideEffect {
     data object SuccessReject : ApplySideEffect
     data class Failed(val throwable: Throwable) : ApplySideEffect
 }
-

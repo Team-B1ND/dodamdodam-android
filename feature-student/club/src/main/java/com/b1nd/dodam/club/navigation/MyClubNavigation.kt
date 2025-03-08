@@ -30,7 +30,7 @@ fun NavGraphBuilder.myClubScreen(showSnackbar: (state: SnackbarState, message: S
         it.savedStateHandle
         MyClubScreen(
             popBackStack = popBackStack,
-            showSnackbar = showSnackbar
+            showSnackbar = showSnackbar,
         )
     }
 }

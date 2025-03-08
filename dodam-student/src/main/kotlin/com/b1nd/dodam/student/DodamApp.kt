@@ -67,7 +67,6 @@ import com.b1nd.dodam.student.main.navigation.mainScreen
 import com.b1nd.dodam.student.main.navigation.navigateToMain
 import com.b1nd.dodam.student.point.navigation.navigateToPoint
 import com.b1nd.dodam.student.point.navigation.pointScreen
-import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.wakeupsong.navigation.navigateToWakeupSong
 import com.b1nd.dodam.wakeupsong.navigation.wakeupSongScreen
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -91,7 +90,6 @@ fun DodamApp(
     role: String,
     refresh: () -> Boolean = { false },
 ) {
-
     navController.addOnDestinationChangedListener { _, destination, _ ->
         val params = Bundle().apply {
             putString(FirebaseAnalytics.Param.SCREEN_NAME, destination.route)
