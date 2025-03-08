@@ -48,6 +48,9 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.DodamMemberLoadingCard
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -67,11 +70,11 @@ internal fun MyClubScreen(
 
     val scrollState = rememberScrollState()
 
-    var joinedClubList = emptyList<ClubMyJoined>()
-    var joinedSelfClubList = emptyList<ClubMyJoined>()
-    var receivedClubList = emptyList<ClubJoin>()
-    var createdClubList = emptyList<Club>()
-    var createdSelfClubList = emptyList<Club>()
+    var joinedClubList by remember { mutableStateOf<ImmutableList<ClubMyJoined>>(persistentListOf()) }
+    var joinedSelfClubList by remember { mutableStateOf<ImmutableList<ClubMyJoined>>(persistentListOf()) }
+    var receivedClubList by remember { mutableStateOf<ImmutableList<ClubJoin>>(persistentListOf()) }
+    var createdClubList by remember { mutableStateOf<ImmutableList<Club>>(persistentListOf()) }
+    var createdSelfClubList by remember { mutableStateOf<ImmutableList<Club>>(persistentListOf()) }
 
     var isRefreshing by remember { mutableStateOf(false) }
     val pullRefreshState = rememberPullRefreshState(
@@ -98,20 +101,20 @@ internal fun MyClubScreen(
         }
     }
 
-    val joinedClubNameList = joinedClubList.map {
-        it.name
+    val joinedClubNameList by remember(joinedClubList) {
+        mutableStateOf(joinedClubList.map { it.name }.toImmutableList())
     }
-    val createdClubStateList = createdClubList.map {
-        it.state
+
+    val createdClubStateList by remember(createdClubList) {
+        mutableStateOf(createdClubList.map { it.state }.toImmutableList())
     }
-    val createdSelfClubStateList = createdSelfClubList.map {
-        it.state
+
+    val joinedSelfClubNameList by remember(joinedSelfClubList) {
+        mutableStateOf(joinedSelfClubList.map { it.name }.toImmutableList())
     }
-    val joinedSelfClubNameList = joinedSelfClubList.map {
-        it.name
-    }
-    val receivedClubNameList = receivedClubList.map {
-        it.club.name
+
+    val receivedClubNameList by remember(receivedClubList) {
+        mutableStateOf(receivedClubList.map { it.club.name }.toImmutableList())
     }
 
     val showDialog = remember { mutableStateOf(false) }

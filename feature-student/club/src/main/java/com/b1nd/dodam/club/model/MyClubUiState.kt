@@ -10,7 +10,6 @@ enum class MyClubPage {
 
 data class MyClubUiState(
     val joinedClubUiState: JoinedClubUiState = JoinedClubUiState.Loading,
-    val clubSideEffect: MyClubSideEffect = MyClubSideEffect.NotExist,
     val createdClubList: ImmutableList<Club> = persistentListOf(),
     val createdSelfClubList: ImmutableList<Club> = persistentListOf(),
     val receivedCLub: ImmutableList<ClubJoin> = persistentListOf(),

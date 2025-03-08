@@ -1,4 +1,4 @@
-package com.b1nd.dodam.club.component
+package com.b1nd.dodam.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,7 +20,7 @@ import com.b1nd.dodam.designsystem.foundation.DodamIcons
 
 // DodamconButtonclick의 크기가 작고, 클릭 영역이 좁아 임시로 만들었습니다. 여유 나면 수정해서 dds에 올리겠습니다.
 @Composable
-fun DodamFullIconButton(
+fun CustomFullIconButton(
     onClick: () -> Unit,
     icon: DodamIcons,
     modifier: Modifier = Modifier,
