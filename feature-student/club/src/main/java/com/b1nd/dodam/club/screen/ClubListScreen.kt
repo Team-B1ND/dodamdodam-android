@@ -123,7 +123,7 @@ internal fun ClubListScreen(state: ClubUiState, popBackStack: () -> Unit, select
                             Spacer(modifier = Modifier.height(20.dp))
                             DodamEmpty(
                                 onClick = {
-                                    uriHandler.openUri("https://dodam.b1nd.com/clubs/create")
+                                    uriHandler.openUri("https://dodam.b1nd.com/club/create")
                                 },
                                 title = "아직 등록된 동아리가 없어요",
                                 buttonText = "동아리 생성하기",
