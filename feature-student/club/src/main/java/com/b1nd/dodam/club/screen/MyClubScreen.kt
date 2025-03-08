@@ -428,7 +428,7 @@ internal fun MyClubScreen(
                                                         ClubState.PENDING -> DodamIcons.Clock.value
                                                         ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
                                                         ClubState.REJECTED -> DodamIcons.XMarkCircle.value
-                                                        else -> DodamIcons.Bell.value
+                                                        else -> DodamIcons.Clock.value
                                                     }
                                                 } ?: DodamIcons.ExclamationMarkCircle.value,
                                                 contentDescription = null,
@@ -489,7 +489,7 @@ internal fun MyClubScreen(
                                                         ClubState.PENDING -> DodamIcons.Clock.value
                                                         ClubState.ALLOWED -> DodamIcons.CheckmarkCircleFilled.value
                                                         ClubState.REJECTED -> DodamIcons.XMarkCircle.value
-                                                        else -> DodamIcons.Bell.value
+                                                        else -> DodamIcons.Clock.value
                                                     }
                                                 } ?: DodamIcons.ExclamationMarkCircle.value,
                                                 contentDescription = null,
