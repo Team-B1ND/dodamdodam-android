@@ -80,6 +80,7 @@ internal fun InfoScreen(
     var showEmailCodeTextField by remember { mutableStateOf(false) }
     var showEmailTextField by remember { mutableStateOf(false) }
     var buttonEnabled by remember { mutableStateOf(false) }
+
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collect {
             when (it) {
@@ -110,6 +111,7 @@ internal fun InfoScreen(
                 is InfoSideEffect.SuccessGetAuthPhoneCode -> {
                     buttonText = "인증"
                     showPhoneCodeTextField = true
+                    buttonEnabled = false
                 }
 
                 is InfoSideEffect.SuccessGetAuthEmailCode -> {
@@ -119,7 +121,12 @@ internal fun InfoScreen(
 
                 is InfoSideEffect.SuccessVerifyAuthPhoneCode -> {
                     buttonText = "이메일 인증코드 전송"
+                    buttonEnabled = false
                     showEmailTextField = true
+                    phoneCodeState = TextFieldState(
+                        value = phoneCodeState.value,
+                        isValid = true
+                    )
                     authType = "EMAIL"
                 }
 
@@ -168,6 +175,17 @@ internal fun InfoScreen(
             buttonEnabled = true
         }
     }
+    LaunchedEffect(phoneNumberState.value) {
+        if(phoneNumberState.value.length == 11){
+            buttonEnabled = true
+        }
+    }
+
+    LaunchedEffect(emailState.value) {
+        if (emailState.value.isNotEmpty()){
+            buttonEnabled = true
+        }
+    }
 
     LaunchedEffect(true) {
         role = if (childrenList.isNotEmpty()) "PARENT" else "STUDENT"
@@ -200,6 +218,10 @@ internal fun InfoScreen(
                 ),
                 title = when {
                     role == "PARENT" -> when {
+                        setOf(
+                            nameState,
+                            phoneNumberState
+                        ).all { it.isValid } -> "인증번호를\n입력해주세요"
                         nameState.isValid -> "전화번호를\n입력해주세요"
                         else -> "이름을\n입력해주세요"
                     }
@@ -207,11 +229,23 @@ internal fun InfoScreen(
                     else -> when {
                         setOf(
                             nameState,
-                            emailState,
+                            phoneNumberState,
                             classInfoState,
-                        ).all { it.isValid } -> "전화번호를\n입력해주세요"
-
-                        setOf(nameState, classInfoState).all { it.isValid } -> "이메일을\n입력해주세요"
+                            phoneCodeState,
+                            emailState
+                        ).all { it.isValid } -> "인증번호를\n입력해주세요"
+                        setOf(
+                            nameState,
+                            phoneNumberState,
+                            classInfoState,
+                            phoneCodeState
+                        ).all { it.isValid } -> "이메일을\n입력해주세요"
+                        setOf(
+                            nameState,
+                            classInfoState,
+                            phoneNumberState
+                        ).all { it.isValid } -> "인증번호를\n입력해주세요"
+                        setOf(nameState, classInfoState).all { it.isValid } -> "전화번호를\n입력해주세요"
                         nameState.isValid -> "학반번호를\n입력해주세요"
                         else -> "이름을\n입력해주세요"
                     }
@@ -275,7 +309,10 @@ internal fun InfoScreen(
                             emailCodeState = emailCodeState.copy(value = "")
                         },
                         supportText = if (emailCodeState.isError) emailCodeState.errorMessage else "",
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number
+                        ),
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.clearFocus()
                         }),
@@ -345,7 +382,10 @@ internal fun InfoScreen(
                             phoneCodeState = phoneCodeState.copy(value = "")
                         },
                         supportText = if (phoneCodeState.isError) phoneCodeState.errorMessage else "",
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number
+                        ),
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.clearFocus()
                         }),
@@ -608,6 +648,13 @@ internal fun InfoScreen(
                         .padding(top = 24.dp)
                         .fillMaxWidth(),
                     onClick = {
+                        if (emailState.value.isNotEmpty()){
+                            val updatedEmailState = checkEmailStateValid(emailState)
+                            emailState = updatedEmailState
+                            if (updatedEmailState.isError){
+                                return@DodamButton
+                            }
+                        }
                         if (buttonText == "인증") {
                             viewModel.verifyAuthCode(
                                 type = authType,
@@ -623,21 +670,7 @@ internal fun InfoScreen(
                             )
                         }
                     },
-                    enabled =
-                    when {
-                        buttonText == "인증" -> {
-                            buttonEnabled
-                        }
-
-                        role == "STUDENT" -> {
-                            nameState.value.length in 2..4 &&
-                                classInfoState.value.length == 4 &&
-                                phoneNumberState.value.length == 11
-                        }
-                        else -> {
-                            nameState.value.length in 2..4 && phoneNumberState.value.length == 11
-                        }
-                    },
+                    enabled = buttonEnabled,
                     text = buttonText,
                     buttonRole = ButtonRole.Primary,
                     buttonSize = ButtonSize.Large,
