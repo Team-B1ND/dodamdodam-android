@@ -51,7 +51,6 @@ import com.b1nd.dodam.ui.component.DodamMenuDialog
 import com.b1nd.dodam.ui.component.DodamMenuItem
 import com.b1nd.dodam.ui.component.DodamMenuItemColor
 import com.b1nd.dodam.ui.util.LocalFileDownloader
-import com.b1nd.dodam.ui.util.NoInteractionSource
 import kotlin.math.abs
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

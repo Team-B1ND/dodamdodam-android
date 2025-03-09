@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -24,7 +22,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,11 +49,9 @@ import com.b1nd.dodam.designsystem.component.DodamButtonDialog
 import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
-import com.b1nd.dodam.ui.component.DodamMenuDialog
 import com.b1nd.dodam.ui.component.modifier.`if`
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.icons.BarChart
-import com.b1nd.dodam.ui.icons.ColoredBus
 import com.b1nd.dodam.ui.icons.ColoredCreditCard
 import com.b1nd.dodam.ui.icons.ColoredGroup
 import com.b1nd.dodam.ui.icons.ColoredMegaphone
@@ -91,7 +86,7 @@ fun AllScreen(
         Dialog(
             onDismissRequest = {
                 isShowStudentCodeDialog = false
-            }
+            },
         ) {
             DodamButtonDialog(
                 title = "학생 코드",
@@ -100,7 +95,7 @@ fun AllScreen(
                     clipboardManager.setText(
                         buildAnnotatedString {
                             append(uiState.memberInfo?.student?.code ?: "")
-                        }
+                        },
                     )
                     isShowStudentCodeDialog = false
                 },
@@ -108,7 +103,7 @@ fun AllScreen(
                 dismissButton = {
                     isShowStudentCodeDialog = false
                 },
-                dismissButtonText = "닫기"
+                dismissButtonText = "닫기",
             )
         }
     }
