@@ -59,6 +59,8 @@ import com.b1nd.dodam.designsystem.component.TextButtonType
 import com.b1nd.dodam.designsystem.component.TopAppBarType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.parent.childrenmanage.model.ChildrenSideEffect
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -77,7 +79,7 @@ internal fun ChildrenManageScreen(
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val bottomSheetMaxHeight = screenHeight * 0.8f
-    val relations = listOf("부", "모", "조부", "조모", "기타")
+    val relations: ImmutableList<String> = persistentListOf("부", "모", "조부", "조모", "기타")
     var selectedRelation by remember { mutableStateOf<String?>(null) }
     val uiState by viewModel.uiState.collectAsState()
     var showError by remember { mutableStateOf(false) }
@@ -302,6 +304,7 @@ internal fun ChildrenManageScreen(
                     .fillMaxWidth()
                     .padding(bottom = 24.dp)
                     .padding(horizontal = 16.dp),
+                enabled = uiState.isNotEmpty(),
             )
         }
     }

@@ -13,6 +13,6 @@ data class RegisterParentRequest(
 
 @Serializable
 data class ChildrenRequest(
-    val name: String,
+    val code: String,
     val relation: String,
 )
