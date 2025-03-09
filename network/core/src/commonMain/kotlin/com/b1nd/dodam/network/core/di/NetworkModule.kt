@@ -11,6 +11,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.UserAgent
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -34,6 +35,7 @@ private const val TIME_OUT = 60_000L
 val log = logging()
 
 internal expect fun getHttpClient(block: HttpClientConfig<*>.() -> Unit = {}): HttpClient
+internal expect fun getUserAgent(): String
 
 val networkCoreModule = module {
     single<HttpClient> {
@@ -48,6 +50,10 @@ val networkCoreModule = module {
                         ignoreUnknownKeys = true
                     },
                 )
+            }
+
+            install(UserAgent) {
+                agent = getUserAgent()
             }
             install(Logging) {
                 logger = object : Logger {

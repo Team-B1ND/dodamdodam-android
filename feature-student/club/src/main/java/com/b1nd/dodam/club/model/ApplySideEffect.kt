@@ -1,6 +1,5 @@
 package com.b1nd.dodam.club.model
 
-
 sealed interface ApplySideEffect {
     data object SuccessApply : ApplySideEffect
     data object SuccessReject : ApplySideEffect

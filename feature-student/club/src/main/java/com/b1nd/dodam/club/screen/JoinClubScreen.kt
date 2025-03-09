@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.club.MyClubViewModel
 import com.b1nd.dodam.club.R
-import com.b1nd.dodam.ui.component.CustomFullIconButton
 import com.b1nd.dodam.club.model.ClubState
 import com.b1nd.dodam.club.model.JoinedClubUiState
 import com.b1nd.dodam.designsystem.DodamTheme
@@ -57,10 +55,10 @@ import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.ui.component.CustomFullIconButton
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import org.koin.androidx.compose.koinViewModel
@@ -109,7 +107,7 @@ internal fun JoinClubScreen(
     val introduceList: ImmutableList<String> = listOf(
         "창체는 자기소개가 없습니다.",
         "창체는 자기소개가 없습니다.",
-        "창체는 자기소개가 없습니다."
+        "창체는 자기소개가 없습니다.",
     ).toImmutableList()
 
     val clickedNum = remember { mutableIntStateOf(1) }
@@ -435,13 +433,13 @@ internal fun JoinClubScreen(
                             )
                             Spacer(Modifier.width(15.dp))
                             Row(
-                                Modifier.clickable (
+                                Modifier.clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = rememberBounceIndication(),
                                     onClick = {
                                         showBottomSheet.value = true
                                         clickedNum.intValue = 1
-                                    }
+                                    },
                                 ),
                             ) {
                                 Text(
@@ -468,13 +466,13 @@ internal fun JoinClubScreen(
                             )
                             Spacer(Modifier.width(15.dp))
                             Row(
-                                Modifier.clickable (
+                                Modifier.clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = rememberBounceIndication(),
                                     onClick = {
                                         showBottomSheet.value = true
                                         clickedNum.intValue = 2
-                                    }
+                                    },
                                 ),
                             ) {
                                 Text(
@@ -501,13 +499,13 @@ internal fun JoinClubScreen(
                             )
                             Spacer(Modifier.width(15.dp))
                             Row(
-                                Modifier.clickable (
+                                Modifier.clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = rememberBounceIndication(),
                                     onClick = {
                                         showBottomSheet.value = true
                                         clickedNum.intValue = 3
-                                    }
+                                    },
                                 ),
                             ) {
                                 Text(

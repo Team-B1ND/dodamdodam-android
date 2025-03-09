@@ -1,6 +1,5 @@
 package com.b1nd.dodam.club.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -45,7 +43,6 @@ import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
-import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import kotlinx.collections.immutable.persistentListOf
@@ -53,12 +50,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
 @Composable
-internal fun ClubListScreen(
-    state: ClubUiState,
-    popBackStack: () -> Unit,
-    selectDetailClub: (Long, Club) -> Unit,
-    navigateToApply: () -> Unit,
-) {
+internal fun ClubListScreen(state: ClubUiState, selectDetailClub: (Long, Club) -> Unit, navigateToApply: () -> Unit) {
     var clubTypeIndex by remember { mutableIntStateOf(0) }
     val clubTypeList = listOf(
         "창체",
@@ -92,9 +84,9 @@ internal fun ClubListScreen(
                         ActionIcon(
                             icon = DodamIcons.Plus,
                             onClick = { navigateToApply() },
-                            enabled = true
-                        )
-                    )
+                            enabled = true,
+                        ),
+                    ),
                 )
             },
             containerColor = DodamTheme.colors.backgroundNeutral,

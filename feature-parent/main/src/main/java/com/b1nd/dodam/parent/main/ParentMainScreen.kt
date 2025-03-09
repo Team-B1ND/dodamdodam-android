@@ -47,6 +47,7 @@ internal fun ParentMainScreen(
     navigateToMeal: () -> Unit,
     navigateToSetting: () -> Unit,
     navigateToNoticeViewer: (startIndex: Int, images: String) -> Unit,
+    navigateToGroup: () -> Unit,
     showToast: (String, String) -> Unit,
 ) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -74,6 +75,7 @@ internal fun ParentMainScreen(
             parentAllScreen(
                 navigateToSetting = navigateToSetting,
                 navigateToChildrenManage = navController::navigateToChildrenManageScreen,
+                navigateToGroup = navigateToGroup,
             )
             childrenManageScreen(
                 popBackStack = navController::popBackStack,

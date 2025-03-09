@@ -37,7 +37,6 @@ internal fun ClubScreen(viewModel: ClubViewModel = koinViewModel(), popBackStack
         ) {
             ClubListScreen(
                 state = state,
-                popBackStack = popBackStack,
                 selectDetailClub = { id, club ->
                     nowPage = ClubPage.DETAIL
                     viewModel.loadDetailClub(id, club)
