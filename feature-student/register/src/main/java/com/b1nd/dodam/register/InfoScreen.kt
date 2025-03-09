@@ -125,7 +125,7 @@ internal fun InfoScreen(
                     showEmailTextField = true
                     phoneCodeState = TextFieldState(
                         value = phoneCodeState.value,
-                        isValid = true
+                        isValid = true,
                     )
                     authType = "EMAIL"
                 }
@@ -176,13 +176,13 @@ internal fun InfoScreen(
         }
     }
     LaunchedEffect(phoneNumberState.value) {
-        if(phoneNumberState.value.length == 11){
+        if (phoneNumberState.value.length == 11) {
             buttonEnabled = true
         }
     }
 
     LaunchedEffect(emailState.value) {
-        if (emailState.value.isNotEmpty()){
+        if (emailState.value.isNotEmpty()) {
             buttonEnabled = true
         }
     }
@@ -220,7 +220,7 @@ internal fun InfoScreen(
                     role == "PARENT" -> when {
                         setOf(
                             nameState,
-                            phoneNumberState
+                            phoneNumberState,
                         ).all { it.isValid } -> "인증번호를\n입력해주세요"
                         nameState.isValid -> "전화번호를\n입력해주세요"
                         else -> "이름을\n입력해주세요"
@@ -232,18 +232,18 @@ internal fun InfoScreen(
                             phoneNumberState,
                             classInfoState,
                             phoneCodeState,
-                            emailState
+                            emailState,
                         ).all { it.isValid } -> "인증번호를\n입력해주세요"
                         setOf(
                             nameState,
                             phoneNumberState,
                             classInfoState,
-                            phoneCodeState
+                            phoneCodeState,
                         ).all { it.isValid } -> "이메일을\n입력해주세요"
                         setOf(
                             nameState,
                             classInfoState,
-                            phoneNumberState
+                            phoneNumberState,
                         ).all { it.isValid } -> "인증번호를\n입력해주세요"
                         setOf(nameState, classInfoState).all { it.isValid } -> "전화번호를\n입력해주세요"
                         nameState.isValid -> "학반번호를\n입력해주세요"
@@ -311,7 +311,7 @@ internal fun InfoScreen(
                         supportText = if (emailCodeState.isError) emailCodeState.errorMessage else "",
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Number,
                         ),
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.clearFocus()
@@ -384,7 +384,7 @@ internal fun InfoScreen(
                         supportText = if (phoneCodeState.isError) phoneCodeState.errorMessage else "",
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Number,
                         ),
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.clearFocus()
@@ -648,10 +648,10 @@ internal fun InfoScreen(
                         .padding(top = 24.dp)
                         .fillMaxWidth(),
                     onClick = {
-                        if (emailState.value.isNotEmpty()){
+                        if (emailState.value.isNotEmpty()) {
                             val updatedEmailState = checkEmailStateValid(emailState)
                             emailState = updatedEmailState
-                            if (updatedEmailState.isError){
+                            if (updatedEmailState.isError) {
                                 return@DodamButton
                             }
                         }
