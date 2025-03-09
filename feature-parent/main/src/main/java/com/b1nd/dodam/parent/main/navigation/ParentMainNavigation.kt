@@ -26,6 +26,7 @@ fun NavGraphBuilder.parentMainScreen(
     navigateToMeal: () -> Unit,
     navigateToSetting: () -> Unit,
     navigateToNoticeViewer: (startIndex: Int, images: String) -> Unit,
+    navigateToGroup: () -> Unit,
     showToast: (String, String) -> Unit,
 ) {
     composable(route = PARENT_MAIN_ROUTE) {
@@ -34,6 +35,7 @@ fun NavGraphBuilder.parentMainScreen(
             navController = navController,
             navigateToSetting = navigateToSetting,
             navigateToNoticeViewer = navigateToNoticeViewer,
+            navigateToGroup = navigateToGroup,
             showToast = showToast,
         )
     }

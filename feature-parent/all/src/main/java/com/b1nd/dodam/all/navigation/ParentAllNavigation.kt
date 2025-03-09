@@ -16,7 +16,11 @@ fun NavController.navigateToParentAllScreen(
     },
 ) = navigate(PARENT_ALL_ROUTE, navOptions)
 
-fun NavGraphBuilder.parentAllScreen(navigateToSetting: () -> Unit, navigateToChildrenManage: () -> Unit) {
+fun NavGraphBuilder.parentAllScreen(
+    navigateToSetting: () -> Unit,
+    navigateToChildrenManage: () -> Unit,
+    navigateToGroup: () -> Unit,
+) {
     composable(
         route = PARENT_ALL_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -27,6 +31,7 @@ fun NavGraphBuilder.parentAllScreen(navigateToSetting: () -> Unit, navigateToChi
         ParentAllScreen(
             navigateToSetting = navigateToSetting,
             navigateToChildrenManage = navigateToChildrenManage,
+            navigateToGroup = navigateToGroup,
         )
     }
 }
