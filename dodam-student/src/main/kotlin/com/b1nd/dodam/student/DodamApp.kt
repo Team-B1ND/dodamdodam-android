@@ -164,9 +164,10 @@ fun DodamApp(
     ) {
         NavHost(
             navController = navController,
-            startDestination = when {
-                role == "STUDENT" -> MAIN_ROUTE
-                role == "PARENT" -> PARENT_MAIN_ROUTE
+            startDestination = when (role) {
+                "STUDENT" -> MAIN_ROUTE
+                "PARENT" -> PARENT_MAIN_ROUTE
+                "ADMIN" -> MAIN_ROUTE
                 else -> ONBOARDING_ROUTE
             },
             enterTransition = { fadeIn(initialAlpha = 100f) },
@@ -213,6 +214,7 @@ fun DodamApp(
                 navigateToMeal = navController::navigateToMeal,
                 navigateToSetting = navController::navigateToSetting,
                 navigateToNoticeViewer = navController::navigateToNoticeViewer,
+                navigateToGroup = navController::navigateToGroup,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
@@ -314,7 +316,7 @@ fun DodamApp(
                 },
             )
             settingScreen(
-                versionInfo = "3.4.2",
+                versionInfo = "3.5.0",
                 popBackStack = navController::popBackStack,
                 logout = logout,
                 navigationToEditMemberInfo = { profileImage, name, email, phone ->

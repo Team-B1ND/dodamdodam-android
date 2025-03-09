@@ -51,7 +51,6 @@ import com.b1nd.dodam.ui.component.DodamMenuDialog
 import com.b1nd.dodam.ui.component.DodamMenuItem
 import com.b1nd.dodam.ui.component.DodamMenuItemColor
 import com.b1nd.dodam.ui.util.LocalFileDownloader
-import com.b1nd.dodam.ui.util.NoInteractionSource
 import kotlin.math.abs
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -129,11 +128,6 @@ internal fun NoticeViewerScreen(popBackStack: () -> Unit, startIndex: Int, image
                     .height(60.dp)
                     .background(
                         color = DodamTheme.colors.staticBlack.copy(alpha = 0.8f),
-                    )
-                    .clickable(
-                        interactionSource = remember { NoInteractionSource() },
-                        indication = null,
-                        onClick = {},
                     )
                     .padding(
                         vertical = 6.dp,

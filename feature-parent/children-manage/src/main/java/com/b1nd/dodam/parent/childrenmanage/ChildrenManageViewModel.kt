@@ -31,6 +31,7 @@ class ChildrenManageViewModel : ViewModel(), KoinComponent {
                 when (it) {
                     is Result.Success -> {
                         val newChild = Children(
+                            code = code,
                             childrenName = it.data.name,
                             relation = relation,
                         )
