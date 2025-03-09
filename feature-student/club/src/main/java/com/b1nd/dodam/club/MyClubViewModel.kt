@@ -10,14 +10,14 @@ import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import com.b1nd.dodam.club.repository.ClubRepository
 import com.b1nd.dodam.common.result.Result
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 
 class MyClubViewModel : ViewModel(), KoinComponent {
     private val clubRepository: ClubRepository by inject()
