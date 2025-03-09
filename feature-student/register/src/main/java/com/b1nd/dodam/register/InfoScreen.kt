@@ -612,7 +612,7 @@ internal fun InfoScreen(
                             viewModel.verifyAuthCode(
                                 type = authType,
                                 identifier = if (authType == "PHONE") phoneNumberState.value else emailState.value,
-                                authCode = phoneCodeState.value,
+                                authCode = if (authType == "PHONE") phoneCodeState.value else emailCodeState.value,
                                 userAgent = Build.PRODUCT,
                                 role = role,
                             )

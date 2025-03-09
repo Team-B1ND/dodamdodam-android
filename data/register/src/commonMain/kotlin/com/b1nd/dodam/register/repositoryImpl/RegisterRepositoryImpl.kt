@@ -67,7 +67,7 @@ internal class RegisterRepositoryImpl constructor(
                 name = name,
                 childrenList = childrenList.map {
                     ChildrenRequest(
-                        name = it.childrenName,
+                        code = it.code,
                         relation = it.relation,
                     )
                 },

@@ -8,3 +8,5 @@ internal actual fun getHttpClient(block: HttpClientConfig<*>.() -> Unit): HttpCl
     engine = Darwin.create(),
     block = block,
 )
+
+internal actual fun getUserAgent() = "DodamDodam iOS"
