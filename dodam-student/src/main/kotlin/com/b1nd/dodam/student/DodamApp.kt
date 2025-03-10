@@ -241,6 +241,10 @@ fun DodamApp(
                     )
                 },
                 onBackClick = navController::popBackStack,
+                showToast = { status, text ->
+                    state = status
+                    scope.launch { snackbarHostState.showSnackbar(text) }
+                },
             )
             authScreen(
                 onRegisterClick = {

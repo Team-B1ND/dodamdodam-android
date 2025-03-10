@@ -245,7 +245,7 @@ fun OnboardingScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
                     DodamButton(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = onRegisterClick,
-                        enabled = isPrivacyChecked,
+                        enabled = isPrivacyChecked && isTermsChecked,
                         text = "다음",
                         buttonRole = ButtonRole.Primary,
                         buttonSize = ButtonSize.Large,
