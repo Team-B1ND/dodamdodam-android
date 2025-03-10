@@ -1,14 +1,16 @@
 package com.b1nd.dodam.bus.model
 
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class BusResponse(
-    val applyCount: Int,
+    val id: Int,
     val busName: String,
     val description: String,
-    val id: Int,
-    val leaveTime: String,
     val peopleLimit: Int,
-    val timeRequired: String,
+    val applyCount: Int,
+    val leaveTime: LocalDateTime,
+    val timeRequired: LocalTime,
 )

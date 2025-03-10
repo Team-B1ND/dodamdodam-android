@@ -3,16 +3,20 @@ package com.b1nd.dodam.bus
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.b1nd.dodam.bus.model.Bus
 import com.b1nd.dodam.bus.model.BusUiState
 import com.b1nd.dodam.bus.repository.BusRepository
+import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.common.exception.DataNotFoundException
 import com.b1nd.dodam.common.result.Result
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -207,14 +211,33 @@ class BusViewModel : ViewModel(), KoinComponent {
                 _uiState.update { uiState ->
                     when (result) {
                         is Result.Success -> {
-                            if (result.data.isEmpty()) {
-                                _event.emit(Event.ShowDialog)
-                            }
-                            getMyBus()
+//                            if (result.data.isEmpty()) {
+//                                _event.emit(Event.ShowDialog)
+//                            }
+//                            getMyBus()
                             uiState.copy(
                                 isError = false,
                                 isLoading = false,
-                                buses = result.data,
+                                buses = persistentListOf(
+                                    Bus(
+                                        applyCount = 25,
+                                        busName = "test 1",
+                                        description = "test",
+                                        id = 0,
+                                        leaveTime = DodamDate.now(),
+                                        peopleLimit = 45,
+                                        timeRequired = LocalTime(hour = 1, minute = 3)
+                                    )
+                                ),//result.data,
+                                selectedBus = Bus(
+                                    applyCount = 25,
+                                    busName = "test 1",
+                                    description = "test",
+                                    id = 0,
+                                    leaveTime = DodamDate.now(),
+                                    peopleLimit = 45,
+                                    timeRequired = LocalTime(hour = 1, minute = 3)
+                                )
                             )
                         }
 

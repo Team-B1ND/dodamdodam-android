@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,8 +41,6 @@ internal fun BusManagementScreen(
     popBackStack: () -> Unit,
     navigateToBusRegister: () -> Unit,
 ) {
-    var searchText by remember { mutableStateOf("") }
-
     Scaffold(
         topBar = {
             DodamTopAppBar(
@@ -63,21 +63,7 @@ internal fun BusManagementScreen(
                 .padding(paddingValues)
                 .padding(top = 4.dp)
         ) {
-            DodamTextField(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                value = searchText,
-                label = "버스 검색",
-                onValueChange = {
-                    searchText = it
-                },
-                onClickRemoveRequest = {
-                    searchText = ""
-                },
-                singleLine = true,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -86,8 +72,7 @@ internal fun BusManagementScreen(
             ) {
                 items(10) {
                     BusCard(
-                        title = "버스 ${it}호",
-                        isRace = it % 2 == 0,
+                        title = "3월 2 ~ 4월 1일",
                         onClick = {}
                     )
                 }
@@ -100,7 +85,6 @@ internal fun BusManagementScreen(
 private fun BusCard(
     modifier: Modifier = Modifier,
     title: String,
-    isRace: Boolean,
     onClick: () -> Unit
 ) {
     Row(
@@ -120,10 +104,11 @@ private fun BusCard(
             style = DodamTheme.typography.body1Medium(),
             color = DodamTheme.colors.labelNormal,
         )
-        DodamTag(
-            modifier = Modifier.padding(vertical = 10.dp),
-            text = if (isRace) "운행" else "미운행",
-            tagType = if (isRace) TagType.Primary else TagType.Negative
+        Icon(
+            modifier = Modifier.size(16.dp),
+            imageVector = DodamIcons.ChevronRight.value,
+            contentDescription = "오른쪽 방향표",
+            tint = DodamTheme.colors.labelAssistive
         )
     }
 }

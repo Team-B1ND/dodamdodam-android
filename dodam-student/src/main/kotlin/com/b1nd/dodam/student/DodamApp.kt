@@ -139,12 +139,11 @@ fun DodamApp(
     ) {
         NavHost(
             navController = navController,
-            startDestination = BUS_APPLY_ROUTE,
-//            when {
-//                role == "STUDENT" -> MAIN_ROUTE
-//                role == "PARENT" -> PARENT_MAIN_ROUTE
-//                else -> ONBOARDING_ROUTE
-//            },
+            startDestination = when (role) {
+                "STUDENT" -> MAIN_ROUTE
+                "PARENT" -> PARENT_MAIN_ROUTE
+                else -> ONBOARDING_ROUTE
+            },
             enterTransition = { fadeIn(initialAlpha = 100f) },
             exitTransition = { fadeOut(targetAlpha = 100f) },
         ) {

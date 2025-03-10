@@ -18,6 +18,8 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 
 fun <T1, T2, R> combineWhenAllComplete(flow1: Flow<T1>, flow2: Flow<T2>, transform: suspend (T1, T2) -> R): Flow<R> = flow {
     var lastValue1: T1? = null
@@ -86,3 +88,7 @@ fun formatLocalDateTime(dateTime: LocalDateTime): String {
  */
 fun Int.timeFormat() =
     this.toString().padStart(2, padChar = '0')
+
+operator fun LocalDateTime.minus(other: LocalDateTime): kotlin.time.Duration {
+    return this.toInstant(TimeZone.currentSystemDefault()) - other.toInstant(TimeZone.currentSystemDefault())
+}
