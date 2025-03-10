@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,6 +63,7 @@ internal fun InfoScreen(
         childrenList: List<Children>,
     ) -> Unit,
     childrenList: List<Children>,
+    showToast: (String, String) -> Unit,
 ) {
     var nameState by remember { mutableStateOf(TextFieldState()) }
     var phoneNumberState by remember { mutableStateOf(TextFieldState()) }
@@ -80,7 +82,10 @@ internal fun InfoScreen(
     var showEmailCodeTextField by remember { mutableStateOf(false) }
     var showEmailTextField by remember { mutableStateOf(false) }
     var buttonEnabled by remember { mutableStateOf(false) }
-    LaunchedEffect(viewModel.sideEffect) {
+
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(key1 = true) {
         viewModel.sideEffect.collect {
             when (it) {
                 is InfoSideEffect.NavigateToAuth -> {
@@ -110,6 +115,7 @@ internal fun InfoScreen(
                 is InfoSideEffect.SuccessGetAuthPhoneCode -> {
                     buttonText = "인증"
                     showPhoneCodeTextField = true
+                    buttonEnabled = false
                 }
 
                 is InfoSideEffect.SuccessGetAuthEmailCode -> {
@@ -119,7 +125,12 @@ internal fun InfoScreen(
 
                 is InfoSideEffect.SuccessVerifyAuthPhoneCode -> {
                     buttonText = "이메일 인증코드 전송"
+                    buttonEnabled = false
                     showEmailTextField = true
+                    phoneCodeState = TextFieldState(
+                        value = phoneCodeState.value,
+                        isValid = true,
+                    )
                     authType = "EMAIL"
                 }
 
@@ -139,6 +150,9 @@ internal fun InfoScreen(
                             errorMessage = "인증번호가 틀렸습니다.",
                         )
                     }
+                }
+                is InfoSideEffect.FiledGetAuthCode -> {
+                    showToast("ERROR", "인증코드 발급에 실패했습니다.")
                 }
             }
         }
@@ -165,6 +179,17 @@ internal fun InfoScreen(
     }
     LaunchedEffect(emailCodeState.value) {
         if (emailCodeState.value.length == 6) {
+            buttonEnabled = true
+        }
+    }
+    LaunchedEffect(phoneNumberState.value) {
+        if (phoneNumberState.value.length == 11) {
+            buttonEnabled = true
+        }
+    }
+
+    LaunchedEffect(emailState.value) {
+        if (emailState.value.isNotEmpty()) {
             buttonEnabled = true
         }
     }
@@ -200,6 +225,10 @@ internal fun InfoScreen(
                 ),
                 title = when {
                     role == "PARENT" -> when {
+                        setOf(
+                            nameState,
+                            phoneNumberState,
+                        ).all { it.isValid } -> "인증번호를\n입력해주세요"
                         nameState.isValid -> "전화번호를\n입력해주세요"
                         else -> "이름을\n입력해주세요"
                     }
@@ -207,11 +236,23 @@ internal fun InfoScreen(
                     else -> when {
                         setOf(
                             nameState,
-                            emailState,
+                            phoneNumberState,
                             classInfoState,
-                        ).all { it.isValid } -> "전화번호를\n입력해주세요"
-
-                        setOf(nameState, classInfoState).all { it.isValid } -> "이메일을\n입력해주세요"
+                            phoneCodeState,
+                            emailState,
+                        ).all { it.isValid } -> "인증번호를\n입력해주세요"
+                        setOf(
+                            nameState,
+                            phoneNumberState,
+                            classInfoState,
+                            phoneCodeState,
+                        ).all { it.isValid } -> "이메일을\n입력해주세요"
+                        setOf(
+                            nameState,
+                            classInfoState,
+                            phoneNumberState,
+                        ).all { it.isValid } -> "인증번호를\n입력해주세요"
+                        setOf(nameState, classInfoState).all { it.isValid } -> "전화번호를\n입력해주세요"
                         nameState.isValid -> "학반번호를\n입력해주세요"
                         else -> "이름을\n입력해주세요"
                     }
@@ -275,7 +316,10 @@ internal fun InfoScreen(
                             emailCodeState = emailCodeState.copy(value = "")
                         },
                         supportText = if (emailCodeState.isError) emailCodeState.errorMessage else "",
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number,
+                        ),
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.clearFocus()
                         }),
@@ -345,7 +389,10 @@ internal fun InfoScreen(
                             phoneCodeState = phoneCodeState.copy(value = "")
                         },
                         supportText = if (phoneCodeState.isError) phoneCodeState.errorMessage else "",
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number,
+                        ),
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.clearFocus()
                         }),
@@ -354,7 +401,8 @@ internal fun InfoScreen(
                 }
 
                 AnimatedVisibility(
-                    visible = setOf(
+                    visible =
+                    role == "STUDENT" && setOf(
                         nameState,
                         classInfoState,
                     ).all { it.isValid } || role == "PARENT" && nameState.isValid,
@@ -608,6 +656,13 @@ internal fun InfoScreen(
                         .padding(top = 24.dp)
                         .fillMaxWidth(),
                     onClick = {
+                        if (emailState.value.isNotEmpty()) {
+                            val updatedEmailState = checkEmailStateValid(emailState)
+                            emailState = updatedEmailState
+                            if (updatedEmailState.isError) {
+                                return@DodamButton
+                            }
+                        }
                         if (buttonText == "인증") {
                             viewModel.verifyAuthCode(
                                 type = authType,
@@ -623,24 +678,11 @@ internal fun InfoScreen(
                             )
                         }
                     },
-                    enabled =
-                    when {
-                        buttonText == "인증" -> {
-                            buttonEnabled
-                        }
-
-                        role == "STUDENT" -> {
-                            nameState.value.length in 2..4 &&
-                                classInfoState.value.length == 4 &&
-                                phoneNumberState.value.length == 11
-                        }
-                        else -> {
-                            nameState.value.length in 2..4 && phoneNumberState.value.length == 11
-                        }
-                    },
+                    enabled = buttonEnabled,
                     text = buttonText,
                     buttonRole = ButtonRole.Primary,
                     buttonSize = ButtonSize.Large,
+                    loading = uiState.isLoading,
                 )
             }
         }

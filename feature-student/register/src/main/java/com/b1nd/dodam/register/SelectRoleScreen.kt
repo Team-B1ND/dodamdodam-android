@@ -5,9 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,28 +41,27 @@ internal fun SelectRoleScreen(onBackClick: () -> Unit, navigateToChildrenManage:
     var selectedIndex by remember { mutableStateOf(0) }
 
     Scaffold(
-        modifier = Modifier
-            .statusBarsPadding(),
         topBar = {
             DodamTopAppBar(
+                modifier = Modifier.statusBarsPadding(),
                 title = "해당하는 곳을\n선택해 주세요",
                 onBackClick = onBackClick,
                 type = TopAppBarType.Medium,
             )
         },
-        backgroundColor = DodamTheme.colors.backgroundNormal,
+        containerColor = DodamTheme.colors.backgroundNormal,
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .background(DodamTheme.colors.backgroundNormal),
         ) {
-            Spacer(Modifier.weight(1f))
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .align(Alignment.Center),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 listOf("학생" to StudentImage, "학부모" to ParentImage).forEachIndexed { index, (title, image) ->
@@ -114,9 +111,9 @@ internal fun SelectRoleScreen(onBackClick: () -> Unit, navigateToChildrenManage:
                     }
                 }
             }
-            Spacer(Modifier.weight(1f))
             DodamButton(
                 modifier = Modifier
+                    .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
                 onClick = {
