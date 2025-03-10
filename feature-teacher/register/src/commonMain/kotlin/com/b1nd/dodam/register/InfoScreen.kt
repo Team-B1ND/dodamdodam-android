@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -86,6 +87,8 @@ fun InfoScreen(
     val focusManager = LocalFocusManager.current
 
     val coroutineScope = rememberCoroutineScope()
+
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(phoneCodeState.isValid) {
         if (phoneCodeState.isValid && !phoneCodeState.focused) {
@@ -593,6 +596,7 @@ fun InfoScreen(
                     text = buttonText,
                     buttonSize = ButtonSize.Large,
                     buttonRole = ButtonRole.Primary,
+                    loading = uiState.isLoading
                 )
             }
         }
