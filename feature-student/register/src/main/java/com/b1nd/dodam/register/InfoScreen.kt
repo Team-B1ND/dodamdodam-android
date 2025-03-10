@@ -394,7 +394,8 @@ internal fun InfoScreen(
                 }
 
                 AnimatedVisibility(
-                    visible = setOf(
+                    visible =
+                    role == "STUDENT" && setOf(
                         nameState,
                         classInfoState,
                     ).all { it.isValid } || role == "PARENT" && nameState.isValid,
