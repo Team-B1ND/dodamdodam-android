@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class InfoViewModel: ViewModel(), KoinComponent {
+class InfoViewModel : ViewModel(), KoinComponent {
 
     private val memberRepository: MemberRepository by inject()
 
@@ -43,7 +43,6 @@ class InfoViewModel: ViewModel(), KoinComponent {
                     is Result.Error -> {
                         if (it.error.message?.substringBefore(":") == "인증코드가 일치하지 않음") {
                             _event.emit(InfoEvent.FiledVerifyAuthCode)
-
                         }
                         it.error.printStackTrace()
                     }

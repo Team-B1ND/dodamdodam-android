@@ -113,7 +113,7 @@ fun initKoin(block: KoinApplication.() -> Unit = {}) {
             clubDataSourceModule,
             clubViewModelModule,
             clubRepositoryModule,
-            infoViewModelModule
+            infoViewModelModule,
         )
         block()
     }

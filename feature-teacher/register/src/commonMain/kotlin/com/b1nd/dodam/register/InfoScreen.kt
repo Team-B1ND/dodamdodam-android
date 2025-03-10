@@ -47,7 +47,6 @@ import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.register.shared.getProductName
 import com.b1nd.dodam.register.state.TextFieldState
-import com.b1nd.dodam.register.viewmodel.Event
 import com.b1nd.dodam.register.viewmodel.InfoEvent
 import com.b1nd.dodam.register.viewmodel.InfoViewModel
 import com.b1nd.dodam.ui.util.PhoneVisualTransformation
@@ -81,7 +80,6 @@ fun InfoScreen(
     var buttonText by remember { mutableStateOf("전화번호 인증코드 전송") }
     var buttonEnabled by remember { mutableStateOf(false) }
     var showExtensionNumber by remember { mutableStateOf(false) }
-
 
     val focusManager = LocalFocusManager.current
 
@@ -160,7 +158,7 @@ fun InfoScreen(
                             if (phoneNumberState.value.isNotEmpty()) {
                                 phoneNumberState = checkPhoneNumberStateValid(phoneNumberState)
                             }
-                            if (phoneCodeState.value.isNotEmpty()){
+                            if (phoneCodeState.value.isNotEmpty()) {
                                 phoneCodeState = checkPhoneCodeStateValid(phoneCodeState)
                             }
                             if (extensionNumberState.value.isNotEmpty()) {
@@ -240,7 +238,7 @@ fun InfoScreen(
                         if (phoneNumberState.value.isNotEmpty()) {
                             phoneNumberState = checkPhoneNumberStateValid(phoneNumberState)
                         }
-                        if (phoneCodeState.value.isNotEmpty()){
+                        if (phoneCodeState.value.isNotEmpty()) {
                             phoneCodeState = checkPhoneCodeStateValid(phoneCodeState)
                         }
                         if (extensionNumberState.value.isNotEmpty()) {
@@ -303,7 +301,7 @@ fun InfoScreen(
                                 isError = false,
                                 errorMessage = "",
                             )
-                        }
+                        },
                     )
                 }
                 AnimatedVisibility(
@@ -311,7 +309,7 @@ fun InfoScreen(
                         nameState,
                         emailState,
                         teacherRoleState,
-                        phoneNumberState
+                        phoneNumberState,
                     ).all { it.isValid },
                 ) {
                     DodamTextField(
@@ -362,7 +360,7 @@ fun InfoScreen(
                                 isError = false,
                                 errorMessage = "",
                             )
-                        }
+                        },
                     )
                 }
                 AnimatedVisibility(
@@ -424,7 +422,7 @@ fun InfoScreen(
                                 isError = false,
                                 errorMessage = "",
                             )
-                        }
+                        },
                     )
                 }
                 AnimatedVisibility(visible = nameState.isValid && teacherRoleState.isValid) {
@@ -469,7 +467,7 @@ fun InfoScreen(
                                 isError = false,
                                 errorMessage = "",
                             )
-                        }
+                        },
                     )
                 }
                 AnimatedVisibility(visible = nameState.isValid) {
@@ -511,7 +509,7 @@ fun InfoScreen(
                                 isError = false,
                                 errorMessage = "",
                             )
-                        }
+                        },
                     )
                 }
 
@@ -563,7 +561,7 @@ fun InfoScreen(
                         )
                         .padding(top = 24.dp),
                     onClick = {
-                        if (buttonText == "다음"){
+                        if (buttonText == "다음") {
                             onNextClick(
                                 nameState.value,
                                 teacherRoleState.value,
@@ -571,18 +569,17 @@ fun InfoScreen(
                                 phoneNumberState.value,
                                 extensionNumberState.value,
                             )
-                        }
-                        else if (buttonText == "인증"){
+                        } else if (buttonText == "인증") {
                             viewModel.verifyAuthCode(
                                 type = "PHONE",
                                 identifier = phoneNumberState.value,
                                 authCode = phoneCodeState.value,
-                                userAgent = getProductName()
+                                userAgent = getProductName(),
                             )
-                        }else{
+                        } else {
                             viewModel.getAuthCode(
                                 type = "PHONE",
-                                identifier = phoneNumberState.value
+                                identifier = phoneNumberState.value,
                             )
                         }
                     },
