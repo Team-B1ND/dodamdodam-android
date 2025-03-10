@@ -31,6 +31,7 @@ class InfoViewModel : ViewModel(), KoinComponent {
                         }
                     }
                     is Result.Error -> {
+                        _sideEffect.send(InfoSideEffect.FiledGetAuthCode)
                         it.error.printStackTrace()
                     }
                     is Result.Loading -> {}

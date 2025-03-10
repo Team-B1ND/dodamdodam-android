@@ -8,6 +8,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.b1nd.dodam.register.InfoScreen
+import com.b1nd.dodam.ui.component.SnackbarState
 
 const val INFO_ROUTE = "info"
 
@@ -21,6 +22,7 @@ fun NavController.navigateToInfo(
 fun NavGraphBuilder.infoScreen(
     onNextClick: (name: String, teacherRole: String, email: String, phoneNumber: String, extensionNumber: String) -> Unit,
     onBackClick: () -> Unit,
+    showSnackbar :(state: SnackbarState, message: String) -> Unit
 ) {
     composable(
         route = INFO_ROUTE,
@@ -32,6 +34,7 @@ fun NavGraphBuilder.infoScreen(
         InfoScreen(
             onNextClick = onNextClick,
             onBackClick = onBackClick,
+            showSnackbar = showSnackbar
         )
     }
 }
