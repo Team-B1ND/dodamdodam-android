@@ -4,4 +4,5 @@ import com.b1nd.dodam.network.login.model.LoginResponse
 
 interface LoginDataSource {
     suspend fun login(id: String, pw: String, pushToken: String): LoginResponse
+    fun clearToken()
 }
