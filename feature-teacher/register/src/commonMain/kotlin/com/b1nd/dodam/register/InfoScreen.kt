@@ -112,7 +112,7 @@ fun InfoScreen(
         }
     }
 
-    LaunchedEffect(viewModel.event) {
+    LaunchedEffect(key1 = true) {
         viewModel.event.collect { event ->
             when (event) {
                 is InfoEvent.SuccessGetAuthPhoneCode -> {

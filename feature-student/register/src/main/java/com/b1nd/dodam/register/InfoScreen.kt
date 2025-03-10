@@ -81,7 +81,7 @@ internal fun InfoScreen(
     var showEmailTextField by remember { mutableStateOf(false) }
     var buttonEnabled by remember { mutableStateOf(false) }
 
-    LaunchedEffect(viewModel.sideEffect) {
+    LaunchedEffect(key1 = true) {
         viewModel.sideEffect.collect {
             when (it) {
                 is InfoSideEffect.NavigateToAuth -> {
