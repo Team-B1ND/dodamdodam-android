@@ -32,7 +32,7 @@ class InfoViewModel : ViewModel(), KoinComponent {
                         _event.send(InfoEvent.SuccessGetAuthPhoneCode)
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -41,14 +41,14 @@ class InfoViewModel : ViewModel(), KoinComponent {
                         it.error.printStackTrace()
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }
@@ -65,7 +65,7 @@ class InfoViewModel : ViewModel(), KoinComponent {
                         _event.send(InfoEvent.SuccessVerifyAuthPhoneCode)
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -76,14 +76,14 @@ class InfoViewModel : ViewModel(), KoinComponent {
                         it.error.printStackTrace()
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }

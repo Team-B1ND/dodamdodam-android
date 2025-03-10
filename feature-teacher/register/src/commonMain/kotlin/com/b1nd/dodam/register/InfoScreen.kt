@@ -71,7 +71,7 @@ fun InfoScreen(
         phoneNumber: String,
         extensionNumber: String,
     ) -> Unit,
-    showSnackbar:(state: SnackbarState, message: String) -> Unit
+    showSnackbar: (state: SnackbarState, message: String) -> Unit,
 ) {
     var nameState by remember { mutableStateOf(TextFieldState()) }
     var teacherRoleState by remember { mutableStateOf(TextFieldState()) }
@@ -596,7 +596,7 @@ fun InfoScreen(
                     text = buttonText,
                     buttonSize = ButtonSize.Large,
                     buttonRole = ButtonRole.Primary,
-                    loading = uiState.isLoading
+                    loading = uiState.isLoading,
                 )
             }
         }

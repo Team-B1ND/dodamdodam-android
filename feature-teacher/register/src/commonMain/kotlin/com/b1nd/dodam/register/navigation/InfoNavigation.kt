@@ -22,7 +22,7 @@ fun NavController.navigateToInfo(
 fun NavGraphBuilder.infoScreen(
     onNextClick: (name: String, teacherRole: String, email: String, phoneNumber: String, extensionNumber: String) -> Unit,
     onBackClick: () -> Unit,
-    showSnackbar :(state: SnackbarState, message: String) -> Unit
+    showSnackbar: (state: SnackbarState, message: String) -> Unit,
 ) {
     composable(
         route = INFO_ROUTE,
@@ -34,7 +34,7 @@ fun NavGraphBuilder.infoScreen(
         InfoScreen(
             onNextClick = onNextClick,
             onBackClick = onBackClick,
-            showSnackbar = showSnackbar
+            showSnackbar = showSnackbar,
         )
     }
 }

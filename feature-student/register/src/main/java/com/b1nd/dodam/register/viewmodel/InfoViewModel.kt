@@ -1,6 +1,5 @@
 package com.b1nd.dodam.register.viewmodel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
@@ -37,7 +36,7 @@ class InfoViewModel : ViewModel(), KoinComponent {
                         }
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -46,14 +45,14 @@ class InfoViewModel : ViewModel(), KoinComponent {
                         it.error.printStackTrace()
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }
@@ -77,7 +76,7 @@ class InfoViewModel : ViewModel(), KoinComponent {
                         }
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -88,14 +87,14 @@ class InfoViewModel : ViewModel(), KoinComponent {
                         it.error.printStackTrace()
                         _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
                     is Result.Loading -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }
