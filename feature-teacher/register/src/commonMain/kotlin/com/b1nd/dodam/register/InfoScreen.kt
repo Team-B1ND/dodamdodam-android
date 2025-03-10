@@ -49,6 +49,7 @@ import com.b1nd.dodam.register.shared.getProductName
 import com.b1nd.dodam.register.state.TextFieldState
 import com.b1nd.dodam.register.viewmodel.InfoEvent
 import com.b1nd.dodam.register.viewmodel.InfoViewModel
+import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.util.PhoneVisualTransformation
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import com.b1nd.dodam.ui.util.moveFocus
@@ -69,6 +70,7 @@ fun InfoScreen(
         phoneNumber: String,
         extensionNumber: String,
     ) -> Unit,
+    showSnackbar:(state: SnackbarState, message: String) -> Unit
 ) {
     var nameState by remember { mutableStateOf(TextFieldState()) }
     var teacherRoleState by remember { mutableStateOf(TextFieldState()) }
@@ -129,6 +131,10 @@ fun InfoScreen(
                 is InfoEvent.SuccessVerifyAuthPhoneCode -> {
                     showExtensionNumber = true
                     buttonText = "다음"
+                }
+
+                is InfoEvent.FiledGetAuthCode -> {
+                    showSnackbar(SnackbarState.ERROR, "인증코드 발급에 실패했습니다.")
                 }
             }
         }

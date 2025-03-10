@@ -200,6 +200,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                                 )
                             },
                             onBackClick = navHostController::popBackStack,
+                            showSnackbar = showSnackbar
                         )
 
                         authScreen(

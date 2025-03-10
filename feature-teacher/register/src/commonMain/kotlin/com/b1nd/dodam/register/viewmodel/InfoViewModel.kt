@@ -27,6 +27,7 @@ class InfoViewModel : ViewModel(), KoinComponent {
                         _event.send(InfoEvent.SuccessGetAuthPhoneCode)
                     }
                     is Result.Error -> {
+                        _event.send(InfoEvent.FiledGetAuthCode)
                         it.error.printStackTrace()
                     }
                     is Result.Loading -> {}
@@ -59,4 +60,5 @@ sealed interface InfoEvent {
     data object SuccessGetAuthPhoneCode : InfoEvent
     data object SuccessVerifyAuthPhoneCode : InfoEvent
     data object FiledVerifyAuthCode : InfoEvent
+    data object FiledGetAuthCode : InfoEvent
 }

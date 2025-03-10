@@ -62,6 +62,7 @@ internal fun InfoScreen(
         childrenList: List<Children>,
     ) -> Unit,
     childrenList: List<Children>,
+    showToast: (String, String) -> Unit
 ) {
     var nameState by remember { mutableStateOf(TextFieldState()) }
     var phoneNumberState by remember { mutableStateOf(TextFieldState()) }
@@ -146,6 +147,9 @@ internal fun InfoScreen(
                             errorMessage = "인증번호가 틀렸습니다.",
                         )
                     }
+                }
+                is InfoSideEffect.FiledGetAuthCode ->{
+                    showToast("ERROR", "인증코드 발급에 실패했습니다.")
                 }
             }
         }
