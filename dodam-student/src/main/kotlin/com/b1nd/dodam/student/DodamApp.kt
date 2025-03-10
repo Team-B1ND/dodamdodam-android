@@ -244,7 +244,7 @@ fun DodamApp(
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
-                }
+                },
             )
             authScreen(
                 onRegisterClick = {
