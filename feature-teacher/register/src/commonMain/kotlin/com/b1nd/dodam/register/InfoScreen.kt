@@ -45,18 +45,24 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.register.shared.getProductName
 import com.b1nd.dodam.register.state.TextFieldState
+import com.b1nd.dodam.register.viewmodel.Event
+import com.b1nd.dodam.register.viewmodel.InfoEvent
+import com.b1nd.dodam.register.viewmodel.InfoViewModel
 import com.b1nd.dodam.ui.util.PhoneVisualTransformation
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import com.b1nd.dodam.ui.util.moveFocus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun InfoScreen(
     onBackClick: () -> Unit,
+    viewModel: InfoViewModel = koinViewModel(),
     onNextClick: (
         name: String,
         teacherRole: String,
@@ -70,13 +76,25 @@ fun InfoScreen(
     var emailState by remember { mutableStateOf(TextFieldState()) }
     var phoneNumberState by remember { mutableStateOf(TextFieldState()) }
     var extensionNumberState by remember { mutableStateOf(TextFieldState()) }
+    var phoneCodeState by remember { mutableStateOf(TextFieldState()) }
+
+    var buttonText by remember { mutableStateOf("전화번호 인증코드 전송") }
+    var buttonEnabled by remember { mutableStateOf(false) }
+    var showExtensionNumber by remember { mutableStateOf(false) }
+
 
     val focusManager = LocalFocusManager.current
 
     val coroutineScope = rememberCoroutineScope()
 
+    LaunchedEffect(phoneCodeState.isValid) {
+        if (phoneCodeState.isValid && !phoneCodeState.focused) {
+            focusManager.moveFocus(FocusDirection.Up, 6)
+        }
+    }
     LaunchedEffect(phoneNumberState.isValid) {
         if (phoneNumberState.isValid && !phoneNumberState.focused) {
+            buttonEnabled = true
             focusManager.moveFocus(FocusDirection.Up, 5)
         }
     }
@@ -93,6 +111,28 @@ fun InfoScreen(
     LaunchedEffect(nameState.isValid) {
         if (nameState.isValid && !nameState.focused) {
             focusManager.moveFocus(FocusDirection.Up, 2)
+        }
+    }
+
+    LaunchedEffect(viewModel.event) {
+        viewModel.event.collect { event ->
+            when (event) {
+                is InfoEvent.SuccessGetAuthPhoneCode -> {
+                    buttonText = "인증"
+                }
+                is InfoEvent.FiledVerifyAuthCode -> {
+                    phoneCodeState = TextFieldState(
+                        value = phoneCodeState.value,
+                        isValid = false,
+                        isError = true,
+                        errorMessage = "인증번호가 틀렸습니다.",
+                    )
+                }
+                is InfoEvent.SuccessVerifyAuthPhoneCode -> {
+                    showExtensionNumber = true
+                    buttonText = "다음"
+                }
+            }
         }
     }
 
@@ -120,7 +160,9 @@ fun InfoScreen(
                             if (phoneNumberState.value.isNotEmpty()) {
                                 phoneNumberState = checkPhoneNumberStateValid(phoneNumberState)
                             }
-
+                            if (phoneCodeState.value.isNotEmpty()){
+                                phoneCodeState = checkPhoneCodeStateValid(phoneCodeState)
+                            }
                             if (extensionNumberState.value.isNotEmpty()) {
                                 extensionNumberState = checkExtensionNumberStateValid(extensionNumberState)
                             }
@@ -152,12 +194,14 @@ fun InfoScreen(
                 Text(
                     modifier = Modifier.padding(start = 16.dp),
                     text = when {
+                        showExtensionNumber -> "내선 번호를\n입력해주세요"
+
                         setOf(
                             nameState,
                             emailState,
                             teacherRoleState,
                             phoneNumberState,
-                        ).all { it.isValid } -> "내선 번호를\n입력해주세요"
+                        ).all { it.isValid } -> "인증번호를\n입력해주세요"
 
                         setOf(
                             nameState,
@@ -196,6 +240,9 @@ fun InfoScreen(
                         if (phoneNumberState.value.isNotEmpty()) {
                             phoneNumberState = checkPhoneNumberStateValid(phoneNumberState)
                         }
+                        if (phoneCodeState.value.isNotEmpty()){
+                            phoneCodeState = checkPhoneCodeStateValid(phoneCodeState)
+                        }
                         if (extensionNumberState.value.isNotEmpty()) {
                             extensionNumberState = checkExtensionNumberStateValid(extensionNumberState)
                         }
@@ -209,12 +256,7 @@ fun InfoScreen(
             ) {
                 Spacer(Modifier.height(0.dp))
                 AnimatedVisibility(
-                    visible = setOf(
-                        nameState,
-                        emailState,
-                        teacherRoleState,
-                        phoneNumberState,
-                    ).all { it.isValid },
+                    visible = showExtensionNumber,
                 ) {
                     DodamTextField(
                         modifier = Modifier
@@ -254,6 +296,73 @@ fun InfoScreen(
                             focusManager.clearFocus()
                         }),
                         singleLine = true,
+                        onClickRemoveRequest = {
+                            extensionNumberState = extensionNumberState.copy(
+                                value = "",
+                                isValid = false,
+                                isError = false,
+                                errorMessage = "",
+                            )
+                        }
+                    )
+                }
+                AnimatedVisibility(
+                    visible = setOf(
+                        nameState,
+                        emailState,
+                        teacherRoleState,
+                        phoneNumberState
+                    ).all { it.isValid },
+                ) {
+                    DodamTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged {
+                                phoneCodeState = phoneCodeState.copy(focused = it.isFocused)
+                            },
+                        value = phoneCodeState.value,
+                        onValueChange = {
+                            if (it.length <= 6) {
+                                phoneCodeState =
+                                    phoneCodeState.copy(
+                                        value = it,
+                                        isValid = phoneCodeState.isValid,
+                                        isError = false,
+                                        errorMessage = "",
+                                    )
+                            }
+                            if (it.length == 6) {
+                                phoneCodeState = checkPhoneCodeStateValid(phoneCodeState)
+                                focusManager.clearFocus()
+                            }
+                        },
+                        label = "인증번호",
+                        isError = phoneCodeState.isError,
+                        supportText = if (phoneCodeState.isError) phoneCodeState.errorMessage else "",
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Number,
+                        ),
+                        keyboardActions = KeyboardActions(onDone = {
+                            phoneCodeState = checkPhoneCodeStateValid(phoneCodeState)
+                            if (phoneCodeState.isValid) {
+                                coroutineScope.launch {
+                                    delay(100)
+                                    focusManager.moveFocus(FocusDirection.Up)
+                                }
+                            } else {
+                                focusManager.clearFocus()
+                            }
+                        }),
+                        singleLine = true,
+                        onClickRemoveRequest = {
+                            phoneCodeState = phoneCodeState.copy(
+                                value = "",
+                                isValid = false,
+                                isError = false,
+                                errorMessage = "",
+                            )
+                        }
                     )
                 }
                 AnimatedVisibility(
@@ -308,6 +417,14 @@ fun InfoScreen(
                             }
                         }),
                         singleLine = true,
+                        onClickRemoveRequest = {
+                            phoneNumberState = phoneNumberState.copy(
+                                value = "",
+                                isValid = false,
+                                isError = false,
+                                errorMessage = "",
+                            )
+                        }
                     )
                 }
                 AnimatedVisibility(visible = nameState.isValid && teacherRoleState.isValid) {
@@ -345,6 +462,14 @@ fun InfoScreen(
                             }
                         }),
                         singleLine = true,
+                        onClickRemoveRequest = {
+                            emailState = emailState.copy(
+                                value = "",
+                                isValid = false,
+                                isError = false,
+                                errorMessage = "",
+                            )
+                        }
                     )
                 }
                 AnimatedVisibility(visible = nameState.isValid) {
@@ -379,6 +504,14 @@ fun InfoScreen(
                             }
                         }),
                         singleLine = true,
+                        onClickRemoveRequest = {
+                            teacherRoleState = teacherRoleState.copy(
+                                value = "",
+                                isValid = false,
+                                isError = false,
+                                errorMessage = "",
+                            )
+                        }
                     )
                 }
 
@@ -422,34 +555,43 @@ fun InfoScreen(
                     },
                     singleLine = true,
                 )
+                DodamButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = 16.dp,
+                        )
+                        .padding(top = 24.dp),
+                    onClick = {
+                        if (buttonText == "다음"){
+                            onNextClick(
+                                nameState.value,
+                                teacherRoleState.value,
+                                emailState.value,
+                                phoneNumberState.value,
+                                extensionNumberState.value,
+                            )
+                        }
+                        else if (buttonText == "인증"){
+                            viewModel.verifyAuthCode(
+                                type = "PHONE",
+                                identifier = phoneNumberState.value,
+                                authCode = phoneCodeState.value,
+                                userAgent = getProductName()
+                            )
+                        }else{
+                            viewModel.getAuthCode(
+                                type = "PHONE",
+                                identifier = phoneNumberState.value
+                            )
+                        }
+                    },
+                    enabled = buttonEnabled,
+                    text = buttonText,
+                    buttonSize = ButtonSize.Large,
+                    buttonRole = ButtonRole.Primary,
+                )
             }
-
-            DodamButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = 16.dp,
-                    )
-                    .padding(bottom = 24.dp)
-                    .align(Alignment.BottomCenter),
-                onClick = {
-                    onNextClick(
-                        nameState.value,
-                        teacherRoleState.value,
-                        emailState.value,
-                        phoneNumberState.value,
-                        extensionNumberState.value,
-                    )
-                },
-                enabled = nameState.value.length in 2..4 &&
-                    teacherRoleState.value.isNotEmpty() &&
-                    emailState.value.isNotBlank() &&
-                    phoneNumberState.value.length == 11 &&
-                    extensionNumberState.isValid,
-                text = "다음",
-                buttonSize = ButtonSize.Large,
-                buttonRole = ButtonRole.Primary,
-            )
         }
     }
 }
@@ -532,6 +674,24 @@ private fun checkPhoneNumberStateValid(phoneNumber: TextFieldState): TextFieldSt
             isValid = false,
             isError = true,
             errorMessage = "전화번호를 입력해주세요",
+        )
+    }
+}
+
+private fun checkPhoneCodeStateValid(phoneCode: TextFieldState): TextFieldState {
+    return if (phoneCode.value.length == 6) {
+        TextFieldState(
+            value = phoneCode.value,
+            isValid = true,
+            isError = false,
+            errorMessage = "",
+        )
+    } else {
+        TextFieldState(
+            value = phoneCode.value,
+            isValid = false,
+            isError = true,
+            errorMessage = "인증번호를 입력해주세요",
         )
     }
 }
