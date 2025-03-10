@@ -3,6 +3,7 @@ package com.b1nd.dodam.setting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.data.login.repository.LoginRepository
 import com.b1nd.dodam.datastore.repository.DataStoreRepository
 import com.b1nd.dodam.member.MemberRepository
 import com.b1nd.dodam.setting.model.SettingUiState
@@ -17,6 +18,7 @@ class SettingViewModel : ViewModel(), KoinComponent {
 
     private val memberRepository: MemberRepository by inject()
     private val dataStoreRepository: DataStoreRepository by inject()
+    private val loginRepository: LoginRepository by inject()
 
     private val _uiState = MutableStateFlow(SettingUiState())
     val uiState = _uiState.asStateFlow()
@@ -81,12 +83,14 @@ class SettingViewModel : ViewModel(), KoinComponent {
                     }
                 }
             }
+            loginRepository.clearToken()
         }
     }
 
     fun logout() {
         viewModelScope.launch {
             dataStoreRepository.deleteUser()
+            loginRepository.clearToken()
         }
     }
 }

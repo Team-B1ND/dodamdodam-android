@@ -2,6 +2,7 @@ package com.b1nd.dodam.network.login.api
 
 import com.b1nd.dodam.network.core.DodamUrl
 import com.b1nd.dodam.network.core.model.Response
+import com.b1nd.dodam.network.core.util.clearToken
 import com.b1nd.dodam.network.core.util.safeRequest
 import com.b1nd.dodam.network.login.datasource.LoginDataSource
 import com.b1nd.dodam.network.login.model.LoginRequest
@@ -24,5 +25,9 @@ internal class LoginService(
                 setBody(LoginRequest(id, pw, pushToken))
             }.body<Response<LoginResponse>>()
         }
+    }
+
+    override fun clearToken() {
+        client.clearToken()
     }
 }
