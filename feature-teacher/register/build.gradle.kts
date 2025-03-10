@@ -30,6 +30,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.dodam.design.system.cmm)
             implementation(projects.data.register)
+            implementation(projects.data.member)
             implementation(projects.common)
             implementation(projects.ui)
         }
