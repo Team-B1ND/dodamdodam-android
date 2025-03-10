@@ -246,7 +246,6 @@ private fun HomeScreen(
                         navigateToMeal = navigateToMeal,
                     )
                 }
-
                 item {
                     WakeupSongCard(
                         uiState = wakeupSongUiState,

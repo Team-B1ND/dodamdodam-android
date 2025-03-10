@@ -8,9 +8,25 @@ plugins {
     alias(libs.plugins.dodam.multiplatform.kotlin)
     alias(libs.plugins.dodam.multiplatform.coil)
     alias(libs.plugins.dodam.multiplatform.koin)
+    alias(libs.plugins.google.services)
 }
 kotlin {
-    setIOS("DodamTeacher", "com.b1nd.dodam.teacher")
+    
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            export(libs.kmp.notification)
+            baseName = "DodamTeacher"
+            isStatic = true
+
+            binaryOptions["bundleId"] = "com.b1nd.dodam.teacher"
+
+        }
+        iosTarget.run({})
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -18,7 +34,7 @@ kotlin {
             implementation(projects.common)
             implementation(projects.ui)
             implementation(projects.network.login)
-
+            api(libs.kmp.notification)
             implementation(projects.feature.onboarding)
             implementation(projects.featureTeacher.nightstudy)
             api(projects.feature.login)
@@ -38,6 +54,17 @@ kotlin {
             implementation(projects.featureTeacher.point)
             implementation(projects.featureTeacher.all)
             implementation(projects.feature.setting)
+            implementation(projects.feature.notice)
+            implementation(projects.featureTeacher.noticeCreate)
+            implementation(projects.feature.featureGroupAlias)
+            implementation(projects.feature.groupDetail)
+            implementation(projects.feature.groupWaiting)
+            implementation(projects.feature.groupCreate)
+            implementation(projects.feature.groupAdd)
+            implementation(projects.feature.editMemberInfo)
+            implementation(projects.featureTeacher.club)
+            implementation(projects.feature.noticeViewer)
+
 
             implementation(projects.data.login)
             implementation(projects.data.banner)
@@ -47,6 +74,12 @@ kotlin {
             implementation(projects.data.schedule)
             implementation(projects.data.member)
             implementation(projects.data.point)
+            implementation(projects.data.upload)
+            implementation(projects.data.bundleidInfo)
+            implementation(projects.data.division)
+            implementation(projects.data.notice)
+            implementation(projects.data.club)
+
             implementation(projects.network.banner)
             implementation(projects.network.meal)
             implementation(projects.network.outing)
@@ -55,20 +88,22 @@ kotlin {
             implementation(projects.network.member)
             implementation(projects.network.point)
             implementation(projects.network.bundleidInfo)
-            implementation(projects.data.bundleidInfo)
-            implementation(projects.feature.editMemberInfo)
             implementation(projects.network.upload)
-            implementation(projects.data.upload)
-        }
+            implementation(projects.network.division)
+            implementation(projects.network.notice)
+            implementation(projects.network.club)
 
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.compose.activity)
-            implementation(libs.koin.android)
-            implementation(projects.keystore)
-            implementation(libs.google.app.update)
+            androidMain.dependencies {
+                implementation(compose.preview)
+                implementation(libs.androidx.compose.activity)
+                implementation(libs.koin.android)
+                implementation(projects.keystore)
+                implementation(libs.google.app.update)
+            }
         }
     }
+
+
 }
 
 android {
@@ -81,8 +116,8 @@ android {
         applicationId = "com.b1nd.dodam.teacher"
         minSdk = 28
         targetSdk = 34
-        versionCode = 3
-        versionName = "3.1.0"
+        versionCode = 4
+        versionName = "3.2.0"
 
     }
     compileOptions {

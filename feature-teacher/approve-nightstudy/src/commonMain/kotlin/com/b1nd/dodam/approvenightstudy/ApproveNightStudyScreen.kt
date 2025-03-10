@@ -54,7 +54,7 @@ import com.b1nd.dodam.designsystem.component.DodamTopAppBar
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.DodamMemberLoadingCard
 import com.b1nd.dodam.ui.component.SnackbarState
-import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircle
+import com.b1nd.dodam.ui.icons.ColoredCheckmarkCircleFilled
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
@@ -199,21 +199,6 @@ fun ApproveNightStudyScreen(
                                 Spacer(modifier = Modifier.weight(1f))
                                 Text(
                                     text = state.detailMember.endDay,
-                                    style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelNeutral,
-                                )
-                            }
-                            Row(
-                                modifier = Modifier.padding(bottom = 12.dp),
-                            ) {
-                                Text(
-                                    text = "자습 장소",
-                                    style = DodamTheme.typography.headlineMedium(),
-                                    color = DodamTheme.colors.labelAssistive,
-                                )
-                                Spacer(modifier = Modifier.weight(1f))
-                                Text(
-                                    text = state.detailMember.place,
                                     style = DodamTheme.typography.headlineMedium(),
                                     color = DodamTheme.colors.labelNeutral,
                                 )
@@ -373,7 +358,6 @@ fun ApproveNightStudyScreen(
                                                     id = filterMemberData.id,
                                                     start = getDate(filterMemberData.startAt.date),
                                                     end = getDate(filterMemberData.endAt.date),
-                                                    place = filterMemberData.place,
                                                     doNeedPhone = filterMemberData.doNeedPhone,
                                                     reasonForPhone = filterMemberData.reasonForPhone,
                                                     reason = filterMemberData.content,
@@ -386,7 +370,7 @@ fun ApproveNightStudyScreen(
                                                     modifier = Modifier
                                                         .align(Alignment.CenterVertically)
                                                         .size(24.dp),
-                                                    imageVector = ColoredCheckmarkCircle,
+                                                    imageVector = ColoredCheckmarkCircleFilled,
                                                     contentDescription = null,
                                                     colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                                                 )

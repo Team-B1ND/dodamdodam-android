@@ -45,6 +45,8 @@ import com.b1nd.dodam.approvenightstudy.navigation.approveNightStudyScreen
 import com.b1nd.dodam.approvenightstudy.navigation.navigateToApproveNightStudy
 import com.b1nd.dodam.approveouting.approveOutingScreen
 import com.b1nd.dodam.approveouting.navigateToApproveOuting
+import com.b1nd.dodam.club.navigation.clubScreen
+import com.b1nd.dodam.club.navigation.navigateToClub
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
@@ -52,16 +54,31 @@ import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.editmemberinfo.navigation.editMemberInfoScreen
 import com.b1nd.dodam.editmemberinfo.navigation.navigationToEditMemberInfo
+import com.b1nd.dodam.group.navigation.groupScreen
+import com.b1nd.dodam.group.navigation.navigateToGroup
+import com.b1nd.dodam.groupadd.navigation.groupAddScreen
+import com.b1nd.dodam.groupadd.navigation.navigateToGroupAdd
+import com.b1nd.dodam.groupcreate.navigation.groupCreateScreen
+import com.b1nd.dodam.groupcreate.navigation.navigateToGroupCreate
+import com.b1nd.dodam.groupdetail.navigation.groupDetailScreen
+import com.b1nd.dodam.groupdetail.navigation.navigateToGroupDetail
+import com.b1nd.dodam.groupwaiting.navigation.groupWaitingScreen
+import com.b1nd.dodam.groupwaiting.navigation.navigateToGroupWaiting
 import com.b1nd.dodam.home.navigation.HOME_ROUTE
 import com.b1nd.dodam.home.navigation.homeScreen
 import com.b1nd.dodam.home.navigation.navigateToHome
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
-import com.b1nd.dodam.meal.navigation.MEAL_ROUTE
 import com.b1nd.dodam.meal.navigation.mealScreen
-import com.b1nd.dodam.meal.navigation.navigationToMeal
+import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
+import com.b1nd.dodam.notice.navigation.NOTICE_ROUTE
+import com.b1nd.dodam.notice.navigation.noticeScreen
+import com.b1nd.dodam.noticecreate.navigation.navigateToNoticeCreate
+import com.b1nd.dodam.noticecreate.navigation.noticeCreateScreen
+import com.b1nd.dodam.noticeviewer.navigation.navigateToNoticeViewer
+import com.b1nd.dodam.noticeviewer.navigation.noticeViewerScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
 import com.b1nd.dodam.onboarding.navigation.navigateToOnboarding
 import com.b1nd.dodam.onboarding.navigation.onboardingScreen
@@ -84,7 +101,7 @@ import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-const val VERSION_INFO = "3.1.0"
+const val VERSION_INFO = "3.2.0"
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class, KoinExperimentalAPI::class)
 @Composable
@@ -101,6 +118,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
     var snackbarState: SnackbarState = remember { SnackbarState.SUCCESS }
     var showVersionDialog by remember { mutableStateOf(false) }
+    var showBottomNavVisible by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         viewModel.loadToken()
@@ -192,6 +210,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         loginScreen(
                             onBackClick = navHostController::popBackStack,
                             navigateToMain = navHostController::navigateToHome,
+                            navigateToParentMain = {},
                             role = "TEACHER",
                         )
 
@@ -200,7 +219,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         )
                         homeScreen(
                             navigateToMeal = {
-                                navHostController.navigationToMeal(
+                                navHostController.navigateToMeal(
                                     navOptions = navOptions {
                                         popUpTo(navHostController.graph.findStartDestination().route.toString()) {
                                             saveState = true
@@ -223,13 +242,15 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                         )
 
-                        mealScreen()
+                        mealScreen(
+                            popBackStack = navHostController::popBackStack,
+                        )
 
                         pointScreen(
                             showSnackbar = showSnackbar,
                             popBackStack = navHostController::popBackStack,
                         )
-                        mealScreen()
+
                         outingScreen(
                             navigateToApprove = { title ->
                                 navHostController.navigateToApproveOuting(
@@ -247,6 +268,8 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             navigateToOut = navHostController::navigateToApproveOuting,
                             navigateToNightStudy = navHostController::navigateToApproveNightStudy,
                             navigateToPoint = navHostController::navigateToPoint,
+                            navigateToGroup = navHostController::navigateToGroup,
+                            navigateToClub = navHostController::navigateToClub,
                         )
 
                         approveNightStudyScreen(
@@ -271,6 +294,60 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                         editMemberInfoScreen(
                             popBackStack = navHostController::popBackStack,
                         )
+                        noticeScreen(
+                            isTeacher = true,
+                            navigateToNoticeCreate = navHostController::navigateToNoticeCreate,
+                            changeBottomNavVisible = { visible ->
+                                showBottomNavVisible = visible
+                            },
+                            navigateToNoticeViewer = navHostController::navigateToNoticeViewer,
+                        )
+
+                        noticeCreateScreen(
+                            popBackStack = navHostController::popBackStack,
+                            showSnackbar = showSnackbar,
+                        )
+
+                        groupScreen(
+                            popBackStack = navHostController::popBackStack,
+                            isTeacher = true,
+                            navigateToGroupCreate = navHostController::navigateToGroupCreate,
+                            navigateToGroupDetail = { id ->
+                                navHostController.navigateToGroupDetail(
+                                    id = id,
+                                )
+                            },
+                        )
+
+                        groupDetailScreen(
+                            showSnackbar = showSnackbar,
+                            popBackStack = navHostController::popBackStack,
+                            navigateToGroupAdd = navHostController::navigateToGroupAdd,
+                            navigateToGroupWaiting = navHostController::navigateToGroupWaiting,
+                        )
+
+                        groupWaitingScreen(
+                            popBackStack = navHostController::popBackStack,
+                        )
+
+                        groupCreateScreen(
+                            popBackStack = navHostController::popBackStack,
+                            showSnackbar = showSnackbar,
+                        )
+
+                        groupAddScreen(
+                            showSnackbar = showSnackbar,
+                            popBackStack = navHostController::popBackStack,
+                        )
+
+                        clubScreen(
+                            showSnackbar = showSnackbar,
+                            popBackStack = navHostController::popBackStack,
+                        )
+
+                        noticeViewerScreen(
+                            popBackStack = navHostController::popBackStack,
+                        )
                     }
 
                     // Bottom Navigation
@@ -283,6 +360,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                                 end = 16.dp,
                                 bottom = 8.dp,
                             ),
+                        visible = showBottomNavVisible,
                         backStackEntry = backStackEntry,
                         onClick = { destination ->
                             navHostController.navigate(
@@ -305,12 +383,17 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 expect fun getPlatformName(): String
 
 @Composable
-private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStackEntry: NavBackStackEntry?, onClick: (destination: String) -> Unit) {
+private fun DodamTeacherBottomNavigation(
+    modifier: Modifier = Modifier,
+    backStackEntry: NavBackStackEntry?,
+    visible: Boolean,
+    onClick: (destination: String) -> Unit,
+) {
     val route = backStackEntry?.destination?.route
 
-    if (route != null && route in listOf(
+    if (visible && route != null && route in listOf(
             HOME_ROUTE,
-            MEAL_ROUTE,
+            NOTICE_ROUTE,
             NIGHT_STUDY_ROUTE,
             ALL_ROUTE,
             OUTING_ROUTE,
@@ -328,12 +411,12 @@ private fun DodamTeacherBottomNavigation(modifier: Modifier = Modifier, backStac
                     enable = route != HOME_ROUTE,
                 ),
                 DodamNavigationBarItem(
-                    selected = route == MEAL_ROUTE,
-                    icon = DodamIcons.ForkAndKnife,
+                    selected = route == NOTICE_ROUTE,
+                    icon = DodamIcons.Bell,
                     onClick = {
-                        onClick(MEAL_ROUTE)
+                        onClick(NOTICE_ROUTE)
                     },
-                    enable = route != MEAL_ROUTE,
+                    enable = route != NOTICE_ROUTE,
                 ),
                 DodamNavigationBarItem(
                     selected = route == OUTING_ROUTE,

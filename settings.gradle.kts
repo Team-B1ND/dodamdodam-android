@@ -49,7 +49,6 @@ include(
     ":data:wakeup-song",
     ":data:outing",
     ":data:register",
-    ":data:meal",
     ":data:night-study",
     ":data:schedule",
     ":data:banner",
@@ -72,6 +71,7 @@ include(
     ":network:point",
     ":data:point",
     ":feature-student:point",
+    ":feature-student:club",
     ":feature-student:ask-wakeup-song",
     ":logging",
     ":dodam-teacher-android",
@@ -79,6 +79,17 @@ include(
     ":feature-teacher:home",
     ":feature-teacher:point",
     ":feature-teacher:all",
+    ":feature:notice",
+    ":feature-teacher:notice-create",
+    ":feature:group-detail",
+    ":feature:group-waiting",
+    ":feature:group-create",
+    ":feature:group-add",
+    ":data:division",
+    ":network:division",
+    ":data:notice",
+    ":network:notice",
+    ":feature:notice-viewer",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")
@@ -89,3 +100,15 @@ include(":data:bundleid-info")
 include(":feature:edit-member-info")
 include(":network:upload")
 include(":data:upload")
+include(":feature-parent")
+include(":feature-parent:main")
+include(":feature-parent:home")
+include(":feature-parent:all")
+
+include(":feature:group")
+project(":feature:group").name = "feature-group-alias"
+include(":data:club")
+include(":feature-parent:children-manage")
+include(":feature-student:club")
+include(":feature-teacher:club")
+include(":network:club")

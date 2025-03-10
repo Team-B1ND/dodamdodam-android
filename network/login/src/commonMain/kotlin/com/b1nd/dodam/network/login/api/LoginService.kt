@@ -17,11 +17,11 @@ import io.ktor.http.HttpHeaders
 internal class LoginService(
     private val client: HttpClient,
 ) : LoginDataSource {
-    override suspend fun login(id: String, pw: String): LoginResponse {
+    override suspend fun login(id: String, pw: String, pushToken: String): LoginResponse {
         return safeRequest {
             client.post(DodamUrl.Auth.LOGIN) {
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
-                setBody(LoginRequest(id, pw))
+                setBody(LoginRequest(id, pw, pushToken))
             }.body<Response<LoginResponse>>()
         }
     }

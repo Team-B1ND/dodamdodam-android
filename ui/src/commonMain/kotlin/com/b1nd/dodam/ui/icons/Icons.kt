@@ -4,22 +4,34 @@ import androidx.compose.runtime.Composable
 import dodamdodam_android.ui.generated.resources.Res
 import dodamdodam_android.ui.generated.resources.ic_b1ndlogo
 import dodamdodam_android.ui.generated.resources.ic_bar_chart
+import dodamdodam_android.ui.generated.resources.ic_checkmark
 import dodamdodam_android.ui.generated.resources.ic_close
 import dodamdodam_android.ui.generated.resources.ic_colored_bullseye
 import dodamdodam_android.ui.generated.resources.ic_colored_bus
 import dodamdodam_android.ui.generated.resources.ic_colored_calendar
+import dodamdodam_android.ui.generated.resources.ic_colored_checkmark_circle
 import dodamdodam_android.ui.generated.resources.ic_colored_checkmark_circle_filled
 import dodamdodam_android.ui.generated.resources.ic_colored_cookedrice
+import dodamdodam_android.ui.generated.resources.ic_colored_credit_card
+import dodamdodam_android.ui.generated.resources.ic_colored_dgit
 import dodamdodam_android.ui.generated.resources.ic_colored_exclamationmark_circle
+import dodamdodam_android.ui.generated.resources.ic_colored_group
 import dodamdodam_android.ui.generated.resources.ic_colored_megaphone
 import dodamdodam_android.ui.generated.resources.ic_colored_musical_note
 import dodamdodam_android.ui.generated.resources.ic_colored_pencil
+import dodamdodam_android.ui.generated.resources.ic_colored_school
+import dodamdodam_android.ui.generated.resources.ic_colored_smail_man
+import dodamdodam_android.ui.generated.resources.ic_colored_smiling_eyes
 import dodamdodam_android.ui.generated.resources.ic_colored_tent
 import dodamdodam_android.ui.generated.resources.ic_colored_trophy
 import dodamdodam_android.ui.generated.resources.ic_colored_xmark_circle
+import dodamdodam_android.ui.generated.resources.ic_crown
 import dodamdodam_android.ui.generated.resources.ic_default_profile
 import dodamdodam_android.ui.generated.resources.ic_default_user
 import dodamdodam_android.ui.generated.resources.ic_dodamlogo
+import dodamdodam_android.ui.generated.resources.ic_silhouette
+import dodamdodam_android.ui.generated.resources.img_parent
+import dodamdodam_android.ui.generated.resources.img_student
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -75,7 +87,7 @@ val ColoredBullseye
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_bullseye)
 
-val ColoredCheckmarkCircle
+val ColoredCheckmarkCircleFilled
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_checkmark_circle_filled)
 
@@ -94,3 +106,51 @@ val ColoredXMarkCircle
 val ColoredCookedRice
     @Composable
     get() = vectorResource(Res.drawable.ic_colored_cookedrice)
+
+val ColoredSmailMan
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_smail_man)
+
+val ColoredGroup
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_group)
+
+val ColoredDGIT
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_dgit)
+
+val ColoredSmilingFaceEyes
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_smiling_eyes)
+
+val ColoredSchool
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_school)
+
+val ColoredCheckmarkCircle
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_checkmark_circle)
+
+val Checkmark
+    @Composable
+    get() = vectorResource(Res.drawable.ic_checkmark)
+
+val StudentImage
+    @Composable
+    get() = imageResource(Res.drawable.img_student)
+
+val ParentImage
+    @Composable
+    get() = imageResource(Res.drawable.img_parent)
+
+val Crown
+    @Composable
+    get() = vectorResource(Res.drawable.ic_crown)
+
+val Silhouette
+    @Composable
+    get() = vectorResource(Res.drawable.ic_silhouette)
+
+val ColoredCreditCard
+    @Composable
+    get() = vectorResource(Res.drawable.ic_colored_credit_card)

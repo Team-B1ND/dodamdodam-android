@@ -24,6 +24,7 @@ fun NavController.navigateToMain(
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.mainScreen(
     navController: NavHostController,
+    navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
     navigateToSetting: () -> Unit,
@@ -31,10 +32,15 @@ fun NavGraphBuilder.mainScreen(
     navigateToAddBus: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
+    navigateToClub: () -> Unit,
+    navigateToNoticeViewer: (startIndex: Int, images: String) -> Unit,
+    navigateToGroup: () -> Unit,
     showToast: (String, String) -> Unit,
+    role: String,
 ) {
     composable(route = MAIN_ROUTE) {
         MainScreen(
+            navigateToMeal = navigateToMeal,
             navController = navController,
             navigateToAskNightStudy = navigateToAskNightStudy,
             navigateToAddOuting = navigateToAddOuting,
@@ -43,9 +49,13 @@ fun NavGraphBuilder.mainScreen(
             navigateToAddBus = navigateToAddBus,
             navigateToWakeUpSong = navigateToWakeUpSong,
             navigateToAddWakeUpSong = navigateToAddWakeUpSong,
+            navigateToClub = navigateToClub,
+            navigateToNoticeViewer = navigateToNoticeViewer,
+            navigateToGroup = navigateToGroup,
             showToast = showToast,
             refresh = { it.savedStateHandle["refresh"] ?: false },
             dispose = { it.savedStateHandle["refresh"] = false },
+            role = role,
         )
     }
 }

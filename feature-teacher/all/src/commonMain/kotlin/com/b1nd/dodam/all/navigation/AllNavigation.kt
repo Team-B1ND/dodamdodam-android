@@ -15,7 +15,14 @@ fun NavController.navigateToAll(navOptions: NavOptions? = null) = this.navigate(
     navOptions = navOptions,
 )
 
-fun NavGraphBuilder.allScreen(navigateToSetting: () -> Unit, navigateToOut: () -> Unit, navigateToNightStudy: () -> Unit, navigateToPoint: () -> Unit) {
+fun NavGraphBuilder.allScreen(
+    navigateToSetting: () -> Unit,
+    navigateToOut: () -> Unit,
+    navigateToNightStudy: () -> Unit,
+    navigateToPoint: () -> Unit,
+    navigateToGroup: () -> Unit,
+    navigateToClub: () -> Unit,
+) {
     composable(
         route = ALL_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -28,6 +35,8 @@ fun NavGraphBuilder.allScreen(navigateToSetting: () -> Unit, navigateToOut: () -
             navigateToOut = navigateToOut,
             navigateToNightStudy = navigateToNightStudy,
             navigateToPoint = navigateToPoint,
+            navigateToGroup = navigateToGroup,
+            navigateToClub = navigateToClub,
         )
     }
 }

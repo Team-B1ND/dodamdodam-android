@@ -5,7 +5,7 @@ plugins {
 //    alias(libs.plugins.dodam.android.hilt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firbase.crashlytics)
-    alias(libs.plugins.dodam.koin)
+    alias(libs.plugins.dodam.android.koin)
 }
 
 android {
@@ -36,6 +36,7 @@ android {
 dependencies {
     implementation(libs.dodam.design.system)
     implementation(libs.dodam.design.system.cmm)
+    implementation(libs.firebase.message)
     implementation(projects.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
@@ -44,6 +45,7 @@ dependencies {
     implementation(projects.feature.onboarding)
     implementation(projects.featureStudent.main)
     implementation(projects.featureStudent.register)
+    implementation(projects.feature.meal)
     implementation(projects.feature.login)
     implementation(projects.featureStudent.bus)
     implementation(projects.featureStudent.nightstudy)
@@ -59,6 +61,9 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.google.app.update)
+    implementation(projects.featureStudent.club)
+    implementation(projects.feature.noticeViewer)
+
 
     implementation(projects.keystore)
     implementation(projects.datastore)
@@ -91,4 +96,21 @@ dependencies {
     implementation(projects.feature.editMemberInfo)
     implementation(projects.network.upload)
     implementation(projects.data.upload)
+    implementation(projects.featureParent.main)
+    implementation(projects.featureParent.home)
+    implementation(projects.featureParent.all)
+    implementation(projects.featureParent.childrenManage)
+    implementation(projects.feature.notice)
+    implementation(projects.feature.featureGroupAlias)
+    implementation(projects.feature.groupAdd)
+    implementation(projects.feature.groupDetail)
+    implementation(projects.feature.groupCreate)
+    implementation(projects.feature.groupWaiting)
+    implementation(projects.network.club)
+    implementation(projects.data.club)
+    implementation(projects.network.division)
+    implementation(projects.data.division)
+    implementation(projects.network.notice)
+    implementation(projects.data.notice)
+
 }

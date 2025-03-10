@@ -57,6 +57,7 @@ class DataStoreRepositoryImpl : DataStoreRepository {
             id = value("id") ?: "",
             pw = value("pw") ?: "",
             token = value("token") ?: "",
+            pushToken = value("pushToken") ?: "",
         ),
     )
     override val user: Flow<User>
@@ -66,15 +67,21 @@ class DataStoreRepositoryImpl : DataStoreRepository {
     override val token: Flow<String>
         get() = _token
 
-    override suspend fun saveUser(id: String, pw: String, token: String) {
+    private val _pushToken = MutableStateFlow(value("pushToken") ?: "")
+    override val pushToken: Flow<String>
+        get() = _pushToken
+
+    override suspend fun saveUser(id: String, pw: String, token: String, pushToken: String, role: String) {
         add("id", id)
         add("pw", pw)
         add("token", token)
+        add("pushToken", pushToken)
         _user.value =
             User(
                 id = id,
                 pw = pw,
                 token = token,
+                pushToken = pushToken,
             )
         _token.emit(token)
     }
@@ -84,8 +91,13 @@ class DataStoreRepositoryImpl : DataStoreRepository {
         _token.emit(token)
     }
 
+    override suspend fun savePushToken(pushToken: String) {
+        update("pushToken", pushToken)
+        _pushToken.emit(pushToken)
+    }
+
     override suspend fun deleteUser() {
-        listOf("id", "pw", "token").forEach {
+        listOf("id", "pw", "token", "pushToken").forEach {
             delete(it)
         }
         _user.emit(User())

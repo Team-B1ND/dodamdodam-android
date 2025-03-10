@@ -24,6 +24,8 @@ fun NavGraphBuilder.allScreen(
     navigateToOuting: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
+    navigateToClub: () -> Unit,
+    navigateToGroup: () -> Unit,
 ) {
     composable(
         route = ALL_ROUTE,
@@ -39,6 +41,8 @@ fun NavGraphBuilder.allScreen(
             navigateToOuting = navigateToOuting,
             navigateToWakeUpSong = navigateToWakeUpSong,
             navigateToAddWakeUpSong = navigateToAddWakeUpSong,
+            navigateToClub = navigateToClub,
+            navigateToGroup = navigateToGroup,
         )
     }
 }

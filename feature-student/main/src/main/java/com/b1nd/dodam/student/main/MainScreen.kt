@@ -12,10 +12,11 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -27,11 +28,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
+import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.component.DodamNavigationBar
 import com.b1nd.dodam.designsystem.component.DodamNavigationBarItem
-import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.member.navigation.allScreen
 import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
+import com.b1nd.dodam.notice.navigation.noticeScreen
 import com.b1nd.dodam.outing.nanigation.navigateToOuting
 import com.b1nd.dodam.outing.nanigation.outingScreen
 import com.b1nd.dodam.student.home.navigation.HOME_ROUTE
@@ -45,6 +47,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun MainScreen(
     navController: NavHostController,
+    navigateToMeal: () -> Unit,
     navigateToAskNightStudy: () -> Unit,
     navigateToAddOuting: () -> Unit,
     navigateToSetting: () -> Unit,
@@ -52,12 +55,17 @@ internal fun MainScreen(
     navigateToAddBus: () -> Unit,
     navigateToWakeUpSong: () -> Unit,
     navigateToAddWakeUpSong: () -> Unit,
+    navigateToClub: () -> Unit,
+    navigateToNoticeViewer: (startIndex: Int, images: String) -> Unit,
+    navigateToGroup: () -> Unit,
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,
+    role: String,
 ) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
     val mainScreenState = rememberMainScreenState(navController)
+    var bottomNavVisible by remember { mutableStateOf(true) }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -68,10 +76,7 @@ internal fun MainScreen(
         ) {
             homeScreen(
                 navigateToAskNightStudy = navigateToAskNightStudy,
-                navigateToMeal = {
-                    selectedIndex = 1
-                    mainScreenState.navigateToMainDestination(MainDestination.MEAL)
-                },
+                navigateToMeal = navigateToMeal,
                 navigateToNightStudy = {
                     selectedIndex = 3
                     mainScreenState.navigateToMainDestination(MainDestination.NIGHT_STUDY)
@@ -84,7 +89,14 @@ internal fun MainScreen(
                 navigateToWakeupSongScreen = navigateToWakeUpSong,
                 navigateToAskWakeupSongScreen = navigateToAddWakeUpSong,
             )
-            mealScreen()
+            noticeScreen(
+                isTeacher = false,
+                navigateToNoticeCreate = null,
+                navigateToNoticeViewer = navigateToNoticeViewer,
+                changeBottomNavVisible = { visible ->
+                    bottomNavVisible = visible
+                },
+            )
             nightStudyScreen(
                 navigateToAskNightStudy,
                 showToast,
@@ -114,6 +126,8 @@ internal fun MainScreen(
                 },
                 navigateToWakeUpSong = navigateToWakeUpSong,
                 navigateToAddWakeUpSong = navigateToAddWakeUpSong,
+                navigateToClub = navigateToClub,
+                navigateToGroup = navigateToGroup,
             )
         }
 
@@ -125,34 +139,36 @@ internal fun MainScreen(
                 .background(
                     Brush.verticalGradient(
                         listOf(
-                            MaterialTheme.colorScheme.surface.copy(alpha = 0f),
-                            MaterialTheme.colorScheme.surface,
+                            DodamTheme.colors.backgroundNormal.copy(alpha = 0f),
+                            DodamTheme.colors.backgroundNormal,
                         ),
                     ),
                 ),
         )
+        if (bottomNavVisible) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .navigationBarsPadding()
+                    .align(Alignment.BottomCenter),
+            ) {
+                val currentRoute =
+                    navController.currentBackStackEntryAsState().value?.destination?.route
 
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .navigationBarsPadding()
-                .align(Alignment.BottomCenter),
-        ) {
-            val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-
-            DodamNavigationBar(
-                items = mainScreenState.mainDestinations.map {
-                    DodamNavigationBarItem(
-                        selected = currentRoute == it.route,
-                        icon = it.icon,
-                        enable = currentRoute != it.route,
-                        onClick = {
-                            mainScreenState.navigateToMainDestination(it)
-                        },
-                    )
-                }.toImmutableList(),
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+                DodamNavigationBar(
+                    items = mainScreenState.mainDestinations.map {
+                        DodamNavigationBarItem(
+                            selected = currentRoute == it.route,
+                            icon = it.icon,
+                            enable = currentRoute != it.route,
+                            onClick = {
+                                mainScreenState.navigateToMainDestination(it)
+                            },
+                        )
+                    }.toImmutableList(),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 }

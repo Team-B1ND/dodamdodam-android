@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -30,10 +31,11 @@ class LoginViewModel : ViewModel(), KoinComponent {
     val event = _event.asSharedFlow()
 
     fun login(id: String, pw: String, role: String) = viewModelScope.launch {
-        loginRepository.login(id, pw).collect { result ->
+        val pushToken = datastoreRepository.pushToken.first()
+        loginRepository.login(id, pw, pushToken).collect { result ->
             when (result) {
                 is Result.Success -> {
-                    if (result.data.role == role) {
+                    if (result.data.role == role || result.data.role == "ADMIN") {
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
@@ -44,9 +46,24 @@ class LoginViewModel : ViewModel(), KoinComponent {
                             id = id,
                             pw = pw,
                             token = result.data.accessToken,
-
+                            pushToken = pushToken,
+                            role = result.data.role,
                         )
                         _event.emit(Event.NavigateToMain)
+                    } else if (result.data.role == "PARENT") {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                            )
+                        }
+                        datastoreRepository.saveUser(
+                            id = id,
+                            pw = pw,
+                            token = result.data.accessToken,
+                            pushToken = pushToken,
+                            role = result.data.role,
+                        )
+                        _event.emit(Event.NavigateToParentMain)
                     } else {
                         _event.emit(Event.ShowDialog)
                         _uiState.update {
@@ -93,6 +110,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
 
 sealed interface Event {
     data object NavigateToMain : Event
+    data object NavigateToParentMain : Event
     data object ShowDialog : Event
     data class ShowBodyDialog(val message: String) : Event
     data class CheckId(val message: String) : Event

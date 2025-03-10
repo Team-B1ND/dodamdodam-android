@@ -16,6 +16,9 @@ object DodamUrl {
     const val POINT = "$BASE_URL/point"
     const val GET_BUNDLE_ID = "https://itunes.apple.com/lookup?bundleId=com.b1nd.dodam.teacher&country=br"
     const val UPLOAD = "$BASE_URL/upload"
+    const val DIVISION = "$BASE_URL/divisions"
+    const val NOTICE = "$BASE_URL/notice"
+    const val CLUB = "$BASE_URL/clubs"
 
     object Meal {
         const val MONTH = "$MEAL/month"
@@ -32,10 +35,13 @@ object DodamUrl {
     object Member {
         const val REGISTER = "$MEMBER/join-student"
         const val REGISTER_TEACHER = "$MEMBER/join-teacher"
+        const val REGISTER_PARENT = "$MEMBER/join-parent"
         const val MY = "$MEMBER/my"
         const val DEACTIVATION = "$MEMBER/deactivate"
         const val STATUS = "$MEMBER/status"
         const val EDIT = "$MEMBER/info"
+        const val CODE = "$MEMBER/code"
+        const val AUTH_CODE = "$MEMBER/auth-code"
     }
 
     object WakeupSong {
@@ -73,5 +79,14 @@ object DodamUrl {
     object Point {
         const val MY = "$POINT/my"
         const val REASON = "$POINT/reason"
+    }
+
+    object Division {
+        const val MY = "$DIVISION/my"
+    }
+
+    object Club {
+        const val JOIN_REQUEST = "$CLUB/join-requests"
+        const val MY = "$CLUB/my"
     }
 }
