@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.member.MemberRepository
 import com.b1nd.dodam.register.state.InfoSideEffect
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -14,8 +16,8 @@ import org.koin.core.component.inject
 class InfoViewModel : ViewModel(), KoinComponent {
     private val memberRepository: MemberRepository by inject()
 
-    private val _sideEffect = MutableSharedFlow<InfoSideEffect>()
-    val sideEffect = _sideEffect.asSharedFlow()
+    private val _sideEffect = Channel<InfoSideEffect>()
+    val sideEffect = _sideEffect.receiveAsFlow()
 
     fun getAuthCode(type: String, identifier: String) {
         viewModelScope.launch {
@@ -23,9 +25,9 @@ class InfoViewModel : ViewModel(), KoinComponent {
                 when (it) {
                     is Result.Success -> {
                         if (type == "PHONE") {
-                            _sideEffect.emit(InfoSideEffect.SuccessGetAuthPhoneCode)
+                            _sideEffect.send(InfoSideEffect.SuccessGetAuthPhoneCode)
                         } else if (type == "EMAIL") {
-                            _sideEffect.emit(InfoSideEffect.SuccessGetAuthEmailCode)
+                            _sideEffect.send(InfoSideEffect.SuccessGetAuthEmailCode)
                         }
                     }
                     is Result.Error -> {
@@ -43,17 +45,17 @@ class InfoViewModel : ViewModel(), KoinComponent {
                     is Result.Success -> {
                         if (type == "PHONE") {
                             if (role == "PARENT") {
-                                _sideEffect.emit(InfoSideEffect.NavigateToAuth)
+                                _sideEffect.send(InfoSideEffect.NavigateToAuth)
                             } else if (role == "STUDENT") {
-                                _sideEffect.emit(InfoSideEffect.SuccessVerifyAuthPhoneCode)
+                                _sideEffect.send(InfoSideEffect.SuccessVerifyAuthPhoneCode)
                             }
                         } else if (type == "EMAIL") {
-                            _sideEffect.emit(InfoSideEffect.NavigateToAuth)
+                            _sideEffect.send(InfoSideEffect.NavigateToAuth)
                         }
                     }
                     is Result.Error -> {
                         if (it.error.message?.substringBefore(":") == "인증코드가 일치하지 않음") {
-                            _sideEffect.emit(InfoSideEffect.FiledVerifyAuthCode(type))
+                            _sideEffect.send(InfoSideEffect.FiledVerifyAuthCode(type))
                         }
                         it.error.printStackTrace()
                     }

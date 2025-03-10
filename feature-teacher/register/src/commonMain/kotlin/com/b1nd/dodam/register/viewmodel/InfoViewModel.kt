@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.member.MemberRepository
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -14,15 +16,15 @@ class InfoViewModel : ViewModel(), KoinComponent {
 
     private val memberRepository: MemberRepository by inject()
 
-    private val _event = MutableSharedFlow<InfoEvent>()
-    val event = _event.asSharedFlow()
+    private val _event = Channel<InfoEvent>()
+    val event = _event.receiveAsFlow()
 
     fun getAuthCode(type: String, identifier: String) {
         viewModelScope.launch {
             memberRepository.getAuthCode(type, identifier).collect {
                 when (it) {
                     is Result.Success -> {
-                        _event.emit(InfoEvent.SuccessGetAuthPhoneCode)
+                        _event.send(InfoEvent.SuccessGetAuthPhoneCode)
                     }
                     is Result.Error -> {
                         it.error.printStackTrace()
@@ -38,11 +40,11 @@ class InfoViewModel : ViewModel(), KoinComponent {
             memberRepository.verifyAuthCode(type, identifier, authCode, userAgent).collect {
                 when (it) {
                     is Result.Success -> {
-                        _event.emit(InfoEvent.SuccessVerifyAuthPhoneCode)
+                        _event.send(InfoEvent.SuccessVerifyAuthPhoneCode)
                     }
                     is Result.Error -> {
                         if (it.error.message?.substringBefore(":") == "인증코드가 일치하지 않음") {
-                            _event.emit(InfoEvent.FiledVerifyAuthCode)
+                            _event.send(InfoEvent.FiledVerifyAuthCode)
                         }
                         it.error.printStackTrace()
                     }
