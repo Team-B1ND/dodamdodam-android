@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface LoginRepository {
     fun login(id: String, pw: String, pushToken: String): Flow<Result<Member>>
+    fun clearToken()
 }

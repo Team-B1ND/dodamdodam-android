@@ -17,6 +17,7 @@ kotlin {
     sourceSets.commonMain.dependencies {
         implementation(libs.dodam.design.system.cmm)
         implementation(projects.data.member)
+        implementation(projects.data.login)
         implementation(projects.common)
         implementation(projects.ui)
         implementation(projects.logging)

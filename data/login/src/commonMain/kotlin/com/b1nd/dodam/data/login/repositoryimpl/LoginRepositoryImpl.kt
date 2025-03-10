@@ -23,6 +23,13 @@ internal class LoginRepositoryImpl(
             emit(
                 loginDataSource.login(id, pw, pushToken).toModel(),
             )
-        }.asResult().flowOn(dispatcher)
+            loginDataSource.clearToken()
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
+
+    override fun clearToken() {
+        loginDataSource.clearToken()
     }
 }
