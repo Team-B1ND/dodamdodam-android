@@ -47,8 +47,8 @@ import com.b1nd.dodam.designsystem.component.DodamContentTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.register.shared.getProductName
+import com.b1nd.dodam.register.state.InfoEvent
 import com.b1nd.dodam.register.state.TextFieldState
-import com.b1nd.dodam.register.viewmodel.InfoEvent
 import com.b1nd.dodam.register.viewmodel.InfoViewModel
 import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.util.PhoneVisualTransformation

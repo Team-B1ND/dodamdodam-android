@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.member.MemberRepository
+import com.b1nd.dodam.register.state.InfoEvent
 import com.b1nd.dodam.register.state.InfoUiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -91,11 +92,4 @@ class InfoViewModel : ViewModel(), KoinComponent {
             }
         }
     }
-}
-
-sealed interface InfoEvent {
-    data object SuccessGetAuthPhoneCode : InfoEvent
-    data object SuccessVerifyAuthPhoneCode : InfoEvent
-    data object FiledVerifyAuthCode : InfoEvent
-    data object FiledGetAuthCode : InfoEvent
 }
