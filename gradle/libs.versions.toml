@@ -57,6 +57,7 @@ koin = "4.0.0"
 koin-compose = "1.1.5"
 koin-compose-viewModel = "1.2.0-Beta5"
 stately = "2.0.6"
+qr-kit = "2.0.0"
 
 # test
 junit = "4.13.2"
@@ -153,6 +154,7 @@ koin-compose-multiplatform = { group = "io.insert-koin", name = "koin-compose", 
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin-compose-viewModel" }
 stately-concurrency = { group = "co.touchlab", name = "stately-concurrency", version.ref = "stately"}
 dodam-design-system-cmm = { group = "com.b1nd.dodam", name = "dodam-design-system", version.ref = "dds-cmm" }
+qr-kit = { group = "network.chaintech", name = "qr-kit", version.ref = "qr-kit" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }

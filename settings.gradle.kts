@@ -95,6 +95,7 @@ include(
     ":feature-teacher:bus-preset",
     ":feature-teacher:bus-preset-create",
     ":feature-teacher:bus-preset-use",
+    ":feature-student:bus-qr",
 )
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")

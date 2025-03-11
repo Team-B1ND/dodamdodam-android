@@ -35,6 +35,8 @@ import com.b1nd.dodam.bus.navigation.busScreen
 import com.b1nd.dodam.bus.navigation.navigateToBus
 import com.b1nd.dodam.busapply.navigation.BUS_APPLY_ROUTE
 import com.b1nd.dodam.busapply.navigation.busApplyScreen
+import com.b1nd.dodam.busqr.navigation.BUS_QR_ROUTE
+import com.b1nd.dodam.busqr.navigation.busQRScreen
 import com.b1nd.dodam.dds.component.DodamErrorToast
 import com.b1nd.dodam.dds.component.DodamSuccessToast
 import com.b1nd.dodam.dds.component.DodamWarningToast
@@ -139,11 +141,12 @@ fun DodamApp(
     ) {
         NavHost(
             navController = navController,
-            startDestination = when (role) {
-                "STUDENT" -> MAIN_ROUTE
-                "PARENT" -> PARENT_MAIN_ROUTE
-                else -> ONBOARDING_ROUTE
-            },
+            startDestination = BUS_QR_ROUTE,
+//            when (role) {
+//                "STUDENT" -> MAIN_ROUTE
+//                "PARENT" -> PARENT_MAIN_ROUTE
+//                else -> ONBOARDING_ROUTE
+//            },
             enterTransition = { fadeIn(initialAlpha = 100f) },
             exitTransition = { fadeOut(targetAlpha = 100f) },
         ) {
@@ -302,6 +305,9 @@ fun DodamApp(
                 popBackStack = navController::popBackStack,
             )
             editMemberInfoScreen(
+                popBackStack = navController::popBackStack,
+            )
+            busQRScreen(
                 popBackStack = navController::popBackStack,
             )
         }
