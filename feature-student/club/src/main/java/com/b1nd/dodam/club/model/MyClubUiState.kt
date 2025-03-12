@@ -1,5 +1,6 @@
 package com.b1nd.dodam.club.model
 
+import com.b1nd.dodam.club.model.request.ClubJoinRequest
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -15,8 +16,8 @@ data class MyClubUiState(
     val receivedCLub: ImmutableList<ClubJoin> = persistentListOf(),
     val allClubList: ImmutableList<Club> = persistentListOf(),
     val allSelfClubList: ImmutableList<Club> = persistentListOf(),
-    val requestJoinClub: ImmutableList<ClubJoin> = persistentListOf(),
-    val requestJoinSelfClub: ImmutableList<ClubJoin> = persistentListOf(),
+    val requestJoinClub: ImmutableList<ClubJoinResponse> = persistentListOf(),
+    val requestJoinSelfClub: ImmutableList<ClubJoinResponse> = persistentListOf(),
 )
 
 sealed interface JoinedClubUiState {

@@ -267,18 +267,18 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                         val joinRequestClubList = result.data.toImmutableList()
 
                         val joinRequestClub = joinRequestClubList.filter {
-                            it.club.type == ClubType.CREATIVE_ACTIVITY_CLUB
+                            it.club.type == "CREATIVE_ACTIVITY_CLUB"
                         }.sortedBy { clubJoin ->
                             when {
-                                clubJoin.clubPermission.toString().endsWith("_1") -> 1
-                                clubJoin.clubPermission.toString().endsWith("_2") -> 2
-                                clubJoin.clubPermission.toString().endsWith("_3") -> 3
+                                clubJoin.priority?.endsWith("_1") == true -> 1
+                                clubJoin.priority?.endsWith("_2") == true -> 2
+                                clubJoin.priority?.endsWith("_3") == true -> 3
                                 else -> Int.MAX_VALUE
                             }
                         }.toImmutableList()
 
                         val joinRequestSelfClub = joinRequestClubList.filter {
-                            it.club.type == ClubType.SELF_DIRECT_ACTIVITY_CLUB
+                            it.club.type == "SELF_DIRECT_ACTIVITY_CLUB"
                         }.toImmutableList()
 
                         _state.update {
