@@ -7,14 +7,19 @@ import com.b1nd.dodam.data.division.DivisionRepository
 import com.b1nd.dodam.data.division.model.DivisionOverview
 import com.b1nd.dodam.data.notice.NoticeRepository
 import com.b1nd.dodam.data.notice.model.NoticeStatus
+import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.notice.model.NoticeUiState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -169,6 +174,92 @@ class NoticeViewModel : ViewModel(), KoinComponent {
                     }
                 }
             }
+        }
+    }
+
+    fun refreshNotice() {
+        loadCategoryJob?.cancel()
+        loadSearchJob?.cancel()
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLoading = true,
+                    isRefresh = true,
+                )
+            }
+            loadSearchJob = async {
+                noticeRepository.getNotice(
+                    keyword = _uiState.value.searchNoticeLastText,
+                    lastId = null,
+                    limit = PAGE_SIZE,
+                    status = NoticeStatus.CREATED,
+                ).collect { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            _uiState.update {
+                                it.copy(
+                                    searchNoticeLastId = result.data.lastOrNull()?.id,
+                                    searchNoticeList = result.data.toImmutableList(),
+                                )
+                            }
+                        }
+                        Result.Loading -> {}
+                        is Result.Error -> {
+                            result.error.printStackTrace()
+                        }
+                    }
+                }
+            }
+
+            loadCategoryJob = launch {
+                    (
+                            if (_uiState.value.noticeLastCategoryId == 0) {
+                                noticeRepository.getNotice(
+                                    keyword = null,
+                                    lastId = _uiState.value.noticeLastId,
+                                    limit = PAGE_SIZE,
+                                    status = NoticeStatus.CREATED,
+                                )
+                            } else {
+                                noticeRepository.getNoticeWithCategory(
+                                    id = _uiState.value.noticeLastCategoryId,
+                                    lastId = _uiState.value.noticeLastId,
+                                    limit = PAGE_SIZE,
+                                )
+                            }
+                            ).collect { result ->
+                            when (result) {
+                                is Result.Success -> {
+                                    _uiState.update {
+                                        if (result.data.isEmpty()) {
+                                            return@update it.copy(
+                                                isLoading = false,
+                                            )
+                                        }
+                                        it.copy(
+                                            noticeLastId = result.data.lastOrNull()?.id,
+                                            noticeList = result.data.toImmutableList(),
+                                        )
+                                    }
+                                }
+
+                                Result.Loading -> {}
+                                is Result.Error -> {
+                                    result.error.printStackTrace()
+                                }
+                            }
+                        }
+            }
+
+            joinAll(loadSearchJob!!, loadCategoryJob!!)
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    isRefresh = false,
+                    isSearchLoading = false
+                )
+            }
+            KmLogging.debug("test", "refresh reset")
         }
     }
 
