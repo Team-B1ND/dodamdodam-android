@@ -25,8 +25,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -80,8 +78,11 @@ import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(ExperimentalFoundationApi::class, KoinExperimentalAPI::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class
+@OptIn(
+    ExperimentalFoundationApi::class,
+    KoinExperimentalAPI::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class,
 )
 @Composable
 internal fun NoticeScreen(
@@ -267,7 +268,7 @@ internal fun NoticeScreen(
             modifier = Modifier
                 .nestedScroll(pullRefreshState.nestedScrollConnection)
                 .fillMaxSize()
-                .padding(it)
+                .padding(it),
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -314,7 +315,7 @@ internal fun NoticeScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 40.dp),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = "등록된 공지사항이 없습니다",
@@ -363,7 +364,7 @@ internal fun NoticeScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 40.dp),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = "공지를 찾을 수 없습니다",

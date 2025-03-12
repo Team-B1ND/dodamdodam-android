@@ -11,7 +11,6 @@ import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.notice.model.NoticeUiState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
@@ -212,43 +211,43 @@ class NoticeViewModel : ViewModel(), KoinComponent {
             }
 
             loadCategoryJob = launch {
-                    (
-                            if (_uiState.value.noticeLastCategoryId == 0) {
-                                noticeRepository.getNotice(
-                                    keyword = null,
-                                    lastId = _uiState.value.noticeLastId,
-                                    limit = PAGE_SIZE,
-                                    status = NoticeStatus.CREATED,
-                                )
-                            } else {
-                                noticeRepository.getNoticeWithCategory(
-                                    id = _uiState.value.noticeLastCategoryId,
-                                    lastId = _uiState.value.noticeLastId,
-                                    limit = PAGE_SIZE,
-                                )
-                            }
-                            ).collect { result ->
-                            when (result) {
-                                is Result.Success -> {
-                                    _uiState.update {
-                                        if (result.data.isEmpty()) {
-                                            return@update it.copy(
-                                                isLoading = false,
-                                            )
-                                        }
-                                        it.copy(
-                                            noticeLastId = result.data.lastOrNull()?.id,
-                                            noticeList = result.data.toImmutableList(),
-                                        )
-                                    }
+                (
+                    if (_uiState.value.noticeLastCategoryId == 0) {
+                        noticeRepository.getNotice(
+                            keyword = null,
+                            lastId = _uiState.value.noticeLastId,
+                            limit = PAGE_SIZE,
+                            status = NoticeStatus.CREATED,
+                        )
+                    } else {
+                        noticeRepository.getNoticeWithCategory(
+                            id = _uiState.value.noticeLastCategoryId,
+                            lastId = _uiState.value.noticeLastId,
+                            limit = PAGE_SIZE,
+                        )
+                    }
+                    ).collect { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            _uiState.update {
+                                if (result.data.isEmpty()) {
+                                    return@update it.copy(
+                                        isLoading = false,
+                                    )
                                 }
-
-                                Result.Loading -> {}
-                                is Result.Error -> {
-                                    result.error.printStackTrace()
-                                }
+                                it.copy(
+                                    noticeLastId = result.data.lastOrNull()?.id,
+                                    noticeList = result.data.toImmutableList(),
+                                )
                             }
                         }
+
+                        Result.Loading -> {}
+                        is Result.Error -> {
+                            result.error.printStackTrace()
+                        }
+                    }
+                }
             }
 
             joinAll(loadSearchJob!!, loadCategoryJob!!)
@@ -256,7 +255,7 @@ class NoticeViewModel : ViewModel(), KoinComponent {
                 it.copy(
                     isLoading = false,
                     isRefresh = false,
-                    isSearchLoading = false
+                    isSearchLoading = false,
                 )
             }
             KmLogging.debug("test", "refresh reset")
