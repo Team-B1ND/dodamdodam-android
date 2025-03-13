@@ -3,7 +3,6 @@ package com.b1nd.dodam.club.repositoryimpl
 import com.b1nd.dodam.club.datasource.ClubDataSource
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
-import com.b1nd.dodam.club.model.ClubJoinResponse
 import com.b1nd.dodam.club.model.ClubMember
 import com.b1nd.dodam.club.model.ClubMemberStudent
 import com.b1nd.dodam.club.model.ClubMyJoined
@@ -134,10 +133,10 @@ internal class ClubRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    override suspend fun getClubMyJoinRequest(): Flow<Result<ImmutableList<ClubJoinResponse>>> {
+    override suspend fun getClubMyJoinRequest(): Flow<Result<ImmutableList<ClubJoin>>> {
         return flow {
             emit(
-                network.getClubMyRequestReceived().toImmutableList(),
+                network.getClubMyRequestReceived().map { it.toModel() }.toImmutableList(),
             )
         }
             .asResult()

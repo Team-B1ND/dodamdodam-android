@@ -2,7 +2,6 @@ package com.b1nd.dodam.club.repository
 
 import com.b1nd.dodam.club.model.Club
 import com.b1nd.dodam.club.model.ClubJoin
-import com.b1nd.dodam.club.model.ClubJoinResponse
 import com.b1nd.dodam.club.model.ClubMember
 import com.b1nd.dodam.club.model.ClubMemberStudent
 import com.b1nd.dodam.club.model.ClubMyJoined
@@ -24,5 +23,5 @@ interface ClubRepository {
     suspend fun getClubJoined(): Flow<Result<ImmutableList<ClubMyJoined>>>
     suspend fun getClubMyCreated(): Flow<Result<ImmutableList<Club>>>
     suspend fun patchClubState(clubIds: ImmutableList<Int>, status: ClubState, reason: String?): Flow<Result<Unit>>
-    suspend fun getClubMyJoinRequest(): Flow<Result<ImmutableList<ClubJoinResponse>>>
+    suspend fun getClubMyJoinRequest(): Flow<Result<ImmutableList<ClubJoin>>>
 }
