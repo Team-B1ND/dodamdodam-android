@@ -119,14 +119,21 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
     var snackbarState: SnackbarState = remember { SnackbarState.SUCCESS }
     var showVersionDialog by remember { mutableStateOf(false) }
     var showBottomNavVisible by remember { mutableStateOf(true) }
+    var platform by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         viewModel.loadToken()
-        viewModel.getBundleId()
+        platform = getPlatformName()
+    }
+
+    LaunchedEffect(platform){
+        if (platform == PlatformModel.IOS.name){
+            viewModel.getBundleId()
+        }
     }
 
     LaunchedEffect(bundleData.bundleId) {
-        if (bundleData.bundleId?.isNotEmpty() == true && bundleData.bundleId != VERSION_INFO && getPlatformName() == PlatformModel.IOS.name) {
+        if (bundleData.bundleId?.isNotEmpty() == true && bundleData.bundleId != VERSION_INFO && platform == PlatformModel.IOS.name) {
             showVersionDialog = true
         }
     }
