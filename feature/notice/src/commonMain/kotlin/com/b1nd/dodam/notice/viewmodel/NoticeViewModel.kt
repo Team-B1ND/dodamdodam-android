@@ -7,7 +7,6 @@ import com.b1nd.dodam.data.division.DivisionRepository
 import com.b1nd.dodam.data.division.model.DivisionOverview
 import com.b1nd.dodam.data.notice.NoticeRepository
 import com.b1nd.dodam.data.notice.model.NoticeStatus
-import com.b1nd.dodam.logging.KmLogging
 import com.b1nd.dodam.notice.model.NoticeUiState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
