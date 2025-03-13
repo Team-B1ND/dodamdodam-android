@@ -101,7 +101,7 @@ import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-const val VERSION_INFO = "3.2.1"
+const val VERSION_INFO = "3.2.2"
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class, KoinExperimentalAPI::class)
 @Composable
@@ -119,14 +119,21 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
     var snackbarState: SnackbarState = remember { SnackbarState.SUCCESS }
     var showVersionDialog by remember { mutableStateOf(false) }
     var showBottomNavVisible by remember { mutableStateOf(true) }
+    var platform by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         viewModel.loadToken()
-        viewModel.getBundleId()
+        platform = getPlatformName()
+    }
+
+    LaunchedEffect(platform) {
+        if (platform == PlatformModel.IOS.name) {
+            viewModel.getBundleId()
+        }
     }
 
     LaunchedEffect(bundleData.bundleId) {
-        if (bundleData.bundleId?.isNotEmpty() == true && bundleData.bundleId != VERSION_INFO && getPlatformName() == PlatformModel.IOS.name) {
+        if (bundleData.bundleId?.isNotEmpty() == true && bundleData.bundleId != VERSION_INFO) {
             showVersionDialog = true
         }
     }

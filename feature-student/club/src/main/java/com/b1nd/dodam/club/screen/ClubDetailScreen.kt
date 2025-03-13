@@ -142,6 +142,10 @@ internal fun ClubDetailScreen(state: ClubUiState, popBackStack: () -> Unit, navi
                                             )
                                             Spacer(modifier = Modifier.height(10.dp))
                                         }
+
+                                        item {
+                                            Spacer(modifier = Modifier.height(100.dp))
+                                        }
                                     }
                                 }
                             }

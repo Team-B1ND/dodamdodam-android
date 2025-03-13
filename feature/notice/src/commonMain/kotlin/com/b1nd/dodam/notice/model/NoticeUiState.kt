@@ -7,6 +7,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class NoticeUiState(
     val isLoading: Boolean = false,
+    val isRefresh: Boolean = false,
     val divisionList: ImmutableList<DivisionOverview> = persistentListOf(
         DivisionOverview(id = 0, name = "전체"),
     ),

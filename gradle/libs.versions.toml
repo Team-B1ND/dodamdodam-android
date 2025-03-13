@@ -5,7 +5,7 @@ compileSdk = "34"
 minSdk = "28"
 multiplatformMarkdownRenderer = "0.22.0"
 targetSdk = "34"
-appVersion = "3.5.1"
+appVersion = "3.5.2"
 urlencoderLib = "1.6.0"
 versionCode = "13"
 
