@@ -258,7 +258,6 @@ class NoticeViewModel : ViewModel(), KoinComponent {
                     isSearchLoading = false,
                 )
             }
-            KmLogging.debug("test", "refresh reset")
         }
     }
 
