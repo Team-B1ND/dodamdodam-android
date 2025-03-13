@@ -230,42 +230,43 @@ private fun DodamClub(modifier: Modifier = Modifier, club: Club) {
                     style = DodamTheme.typography.headlineBold(),
                     color = DodamTheme.colors.labelNormal,
                 )
+                Spacer(modifier = Modifier.weight(1f))
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .background(
+                            color = when (club.state) {
+                                ClubState.ALLOWED -> DodamTheme.colors.primaryNormal
+                                ClubState.PENDING -> DodamTheme.colors.lineNormal
+                                ClubState.REJECTED -> DodamTheme.colors.statusNegative
+                                ClubState.WAITING -> DodamTheme.colors.lineNormal
+                                ClubState.DELETED -> DodamTheme.colors.lineNormal
+                            },
+                            shape = RoundedCornerShape(28.dp),
+                        )
+                        .padding(vertical = 4.dp, horizontal = 8.dp),
+                ) {
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = when (club.state) {
+                            ClubState.ALLOWED -> "승인됨"
+                            ClubState.PENDING -> "대기중"
+                            ClubState.REJECTED -> "거절됨"
+                            ClubState.WAITING -> "웨이팅"
+                            ClubState.DELETED -> "삭제됨"
+                        },
+                        style = DodamTheme.typography.caption2Bold(),
+                        color = DodamTheme.colors.staticWhite,
+                    )
+                }
             }
             Text(
+                modifier = Modifier.fillMaxWidth(0.7f),
                 text = club.description,
                 style = DodamTheme.typography.body2Medium(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = DodamTheme.colors.labelNormal,
-            )
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        Box(
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .background(
-                    color = when (club.state) {
-                        ClubState.ALLOWED -> DodamTheme.colors.primaryNormal
-                        ClubState.PENDING -> DodamTheme.colors.lineNormal
-                        ClubState.REJECTED -> DodamTheme.colors.statusNegative
-                        ClubState.WAITING -> DodamTheme.colors.lineNormal
-                        ClubState.DELETED -> DodamTheme.colors.lineNormal
-                    },
-                    shape = RoundedCornerShape(28.dp),
-                )
-                .padding(vertical = 4.dp, horizontal = 8.dp),
-        ) {
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = when (club.state) {
-                    ClubState.ALLOWED -> "승인됨"
-                    ClubState.PENDING -> "대기중"
-                    ClubState.REJECTED -> "거절됨"
-                    ClubState.WAITING -> "웨이팅"
-                    ClubState.DELETED -> "삭제됨"
-                },
-                style = DodamTheme.typography.caption2Bold(),
-                color = DodamTheme.colors.staticWhite,
             )
         }
     }
