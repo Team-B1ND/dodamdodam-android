@@ -122,7 +122,7 @@ internal fun OutCard(
                                                             .MINUTES.between(
                                                                 current.toJavaLocalDateTime(),
                                                                 out.endAt.toJavaLocalDateTime(),
-                                                            )
+                                                            ).coerceAtLeast(0)
                                                         val day = totalMinutes / (24 * 60)
                                                         val hour = (totalMinutes % (24 * 60)) / 60
                                                         val minute = totalMinutes % 60
