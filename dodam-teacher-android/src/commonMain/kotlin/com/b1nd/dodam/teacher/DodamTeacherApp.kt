@@ -126,8 +126,8 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
         platform = getPlatformName()
     }
 
-    LaunchedEffect(platform){
-        if (platform == PlatformModel.IOS.name){
+    LaunchedEffect(platform) {
+        if (platform == PlatformModel.IOS.name) {
             viewModel.getBundleId()
         }
     }
