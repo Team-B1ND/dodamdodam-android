@@ -7,7 +7,7 @@ multiplatformMarkdownRenderer = "0.22.0"
 targetSdk = "34"
 appVersion = "3.5.2"
 urlencoderLib = "1.6.0"
-versionCode = "13"
+versionCode = "14"
 
 # kotlin
 kotlin = "2.0.20"
