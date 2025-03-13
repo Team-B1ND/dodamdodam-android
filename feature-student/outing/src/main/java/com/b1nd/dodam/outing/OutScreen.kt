@@ -481,7 +481,7 @@ private fun OutApplyCell(
                 val totalMinutes = ChronoUnit.MINUTES.between(
                     current.toJavaLocalDateTime(),
                     endAt.toJavaLocalDateTime(),
-                )
+                ).coerceAtLeast(0)
                 val day = totalMinutes / (24 * 60)
                 val hour = (totalMinutes % (24 * 60)) / 60
                 val minute = totalMinutes % 60

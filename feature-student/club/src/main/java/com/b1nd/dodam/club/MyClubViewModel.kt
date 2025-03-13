@@ -270,9 +270,9 @@ class MyClubViewModel : ViewModel(), KoinComponent {
                             it.club.type == ClubType.CREATIVE_ACTIVITY_CLUB
                         }.sortedBy { clubJoin ->
                             when {
-                                clubJoin.clubPermission.toString().endsWith("_1") -> 1
-                                clubJoin.clubPermission.toString().endsWith("_2") -> 2
-                                clubJoin.clubPermission.toString().endsWith("_3") -> 3
+                                clubJoin.priority?.endsWith("_1") == true -> 1
+                                clubJoin.priority?.endsWith("_2") == true -> 2
+                                clubJoin.priority?.endsWith("_3") == true -> 3
                                 else -> Int.MAX_VALUE
                             }
                         }.toImmutableList()

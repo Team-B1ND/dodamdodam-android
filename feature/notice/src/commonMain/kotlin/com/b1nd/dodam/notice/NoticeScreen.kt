@@ -23,10 +23,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
@@ -73,7 +78,12 @@ import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(ExperimentalFoundationApi::class, KoinExperimentalAPI::class)
+@OptIn(
+    ExperimentalFoundationApi::class,
+    KoinExperimentalAPI::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class,
+)
 @Composable
 internal fun NoticeScreen(
     viewModel: NoticeViewModel = koinViewModel(),
@@ -94,6 +104,7 @@ internal fun NoticeScreen(
 
     val searchLazyListState = rememberLazyListState()
     val lazyListState = rememberLazyListState()
+    val pullRefreshState = rememberPullToRefreshState()
 
     LaunchedEffect(true) {
         viewModel.loadDivision()
@@ -244,121 +255,180 @@ internal fun NoticeScreen(
                             size = TextButtonSize.Large,
                         )
                     }
-                    DodamDivider(
-                        type = DividerType.Normal,
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
         },
         containerColor = DodamTheme.colors.backgroundNeutral,
     ) {
-        LazyColumn(
-            modifier = Modifier.padding(it),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            state = if (isSearchMode) searchLazyListState else lazyListState,
+        Box(
+            modifier = Modifier
+                .nestedScroll(pullRefreshState.nestedScrollConnection)
+                .fillMaxSize()
+                .padding(it),
         ) {
-            if (!isSearchMode) {
-                stickyHeader {
-                    Column {
-                        LazyRow(
-                            modifier = Modifier
-                                .background(DodamTheme.colors.backgroundNeutral)
-                                .padding(
-                                    start = 16.dp,
-                                    top = 20.dp,
-                                    bottom = 20.dp,
-                                ),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            items(uiState.divisionList.size) { index ->
-                                val item = uiState.divisionList[index]
-                                NoticeCategoryCard(
-                                    text = item.name,
-                                    isChecked = item == selectCategory,
-                                    onClick = {
-                                        selectCategory = item
-                                        viewModel.loadNextNoticeWithCategory(
-                                            categoryId = item.id,
-                                        )
-                                    },
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                state = if (isSearchMode) searchLazyListState else lazyListState,
+            ) {
+                if (!isSearchMode) {
+                    stickyHeader {
+                        Column {
+                            LazyRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(DodamTheme.colors.backgroundNeutral)
+                                    .padding(
+                                        start = 16.dp,
+                                        top = 20.dp,
+                                        bottom = 20.dp,
+                                    ),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                items(uiState.divisionList.size) { index ->
+                                    val item = uiState.divisionList[index]
+                                    NoticeCategoryCard(
+                                        text = item.name,
+                                        isChecked = item == selectCategory,
+                                        onClick = {
+                                            selectCategory = item
+                                            viewModel.loadNextNoticeWithCategory(
+                                                categoryId = item.id,
+                                            )
+                                        },
+                                    )
+                                }
+                            }
+                            DodamDivider(
+                                type = DividerType.Normal,
+                            )
+                        }
+                    }
+
+                    if (!uiState.isLoading && uiState.noticeList.isEmpty()) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 40.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = "등록된 공지사항이 없습니다",
+                                    style = DodamTheme.typography.labelMedium(),
+                                    color = DodamTheme.colors.labelNeutral,
                                 )
                             }
                         }
-                        DodamDivider(
-                            type = DividerType.Normal,
-                        )
+                    } else {
+                        items(uiState.noticeList.size) { index ->
+                            val item = uiState.noticeList[index]
+                            NoticeCard(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                author = item.memberInfoRes.name,
+                                date = formatLocalDateTime(item.createdAt),
+                                title = item.title,
+                                content = item.content,
+                                images = item.noticeFileRes
+                                    .filter { it.fileType == NoticeFileType.IMAGE }
+                                    .toImmutableList(),
+                                files = item.noticeFileRes
+                                    .filter { it.fileType == NoticeFileType.FILE }
+                                    .toImmutableList(),
+                                onLinkClick = { url ->
+                                    uriHandler.openUri(url)
+                                },
+                                onImageClick = { imageIndex ->
+                                    navigateToNoticeViewer(
+                                        imageIndex,
+                                        item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE },
+                                    )
+                                },
+                                onFileClick = { file: NoticeFile ->
+                                    fileDownloader.downloadFile(
+                                        fileName = file.fileName,
+                                        fileUrl = file.fileUrl,
+                                    )
+                                },
+                            )
+                        }
+                    }
+                } else {
+                    if (!uiState.isSearchLoading && uiState.searchNoticeList.isEmpty()) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 40.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = "공지를 찾을 수 없습니다",
+                                    style = DodamTheme.typography.labelMedium(),
+                                    color = DodamTheme.colors.labelNeutral,
+                                )
+                            }
+                        }
+                    } else {
+                        items(uiState.searchNoticeList.size) { index ->
+                            val item = uiState.searchNoticeList[index]
+                            NoticeCard(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                author = item.memberInfoRes.name,
+                                date = formatLocalDateTime(item.createdAt),
+                                title = item.title,
+                                content = item.content,
+                                images = item.noticeFileRes
+                                    .filter { it.fileType == NoticeFileType.IMAGE }
+                                    .toImmutableList(),
+                                files = item.noticeFileRes
+                                    .filter { it.fileType == NoticeFileType.FILE }
+                                    .toImmutableList(),
+                                onLinkClick = { url ->
+                                    uriHandler.openUri(url)
+                                },
+                                onImageClick = { imageIndex ->
+                                    navigateToNoticeViewer(
+                                        imageIndex,
+                                        item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE },
+                                    )
+                                },
+                                onFileClick = { file: NoticeFile ->
+                                    fileDownloader.downloadFile(
+                                        fileName = file.fileName,
+                                        fileUrl = file.fileUrl,
+                                    )
+                                },
+                            )
+                        }
                     }
                 }
 
-                items(uiState.noticeList.size) { index ->
-                    val item = uiState.noticeList[index]
-                    NoticeCard(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        author = item.memberInfoRes.name,
-                        date = formatLocalDateTime(item.createdAt),
-                        title = item.title,
-                        content = item.content,
-                        images = item.noticeFileRes
-                            .filter { it.fileType == NoticeFileType.IMAGE }
-                            .toImmutableList(),
-                        files = item.noticeFileRes
-                            .filter { it.fileType == NoticeFileType.FILE }
-                            .toImmutableList(),
-                        onLinkClick = { url ->
-                            uriHandler.openUri(url)
-                        },
-                        onImageClick = { imageIndex ->
-                            navigateToNoticeViewer(
-                                imageIndex,
-                                item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE },
-                            )
-                        },
-                        onFileClick = { file: NoticeFile ->
-                            fileDownloader.downloadFile(
-                                fileName = file.fileName,
-                                fileUrl = file.fileUrl,
-                            )
-                        },
-                    )
+                item {
+                    Spacer(Modifier.height(80.dp))
                 }
-            } else {
-                items(uiState.searchNoticeList.size) { index ->
-                    val item = uiState.searchNoticeList[index]
-                    NoticeCard(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        author = item.memberInfoRes.name,
-                        date = formatLocalDateTime(item.createdAt),
-                        title = item.title,
-                        content = item.content,
-                        images = item.noticeFileRes
-                            .filter { it.fileType == NoticeFileType.IMAGE }
-                            .toImmutableList(),
-                        files = item.noticeFileRes
-                            .filter { it.fileType == NoticeFileType.FILE }
-                            .toImmutableList(),
-                        onLinkClick = { url ->
-                            uriHandler.openUri(url)
-                        },
-                        onImageClick = { imageIndex ->
-                            navigateToNoticeViewer(
-                                imageIndex,
-                                item.noticeFileRes.filter { it.fileType == NoticeFileType.IMAGE },
-                            )
-                        },
-                        onFileClick = { file: NoticeFile ->
-                            fileDownloader.downloadFile(
-                                fileName = file.fileName,
-                                fileUrl = file.fileUrl,
-                            )
-                        },
-                    )
+            }
+            if (pullRefreshState.isRefreshing) {
+                LaunchedEffect(true) {
+                    viewModel.loadDivision()
+                    viewModel.refreshNotice()
                 }
             }
 
-            item {
-                Spacer(Modifier.height(80.dp))
+            LaunchedEffect(uiState.isRefresh) {
+                if (uiState.isRefresh) {
+                    pullRefreshState.startRefresh()
+                } else {
+                    pullRefreshState.endRefresh()
+                }
             }
+
+            PullToRefreshContainer(
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter),
+                containerColor = DodamTheme.colors.backgroundNeutral,
+                contentColor = DodamTheme.colors.labelStrong,
+            )
         }
     }
 }
