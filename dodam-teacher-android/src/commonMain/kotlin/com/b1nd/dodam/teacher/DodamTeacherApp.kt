@@ -133,7 +133,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
     }
 
     LaunchedEffect(bundleData.bundleId) {
-        if (bundleData.bundleId?.isNotEmpty() == true && bundleData.bundleId != VERSION_INFO && platform == PlatformModel.IOS.name) {
+        if (bundleData.bundleId?.isNotEmpty() == true && bundleData.bundleId != VERSION_INFO) {
             showVersionDialog = true
         }
     }
