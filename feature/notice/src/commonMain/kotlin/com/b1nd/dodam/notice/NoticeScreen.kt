@@ -70,6 +70,7 @@ import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.notice.viewmodel.NoticeViewModel
 import com.b1nd.dodam.ui.component.DodamAutoLinkText
 import com.b1nd.dodam.ui.component.modifier.`if`
+import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.LocalFileDownloader
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -274,34 +275,58 @@ internal fun NoticeScreen(
                 if (!isSearchMode) {
                     stickyHeader {
                         Column {
-                            LazyRow(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(DodamTheme.colors.backgroundNeutral)
-                                    .padding(
-                                        start = 16.dp,
-                                        top = 20.dp,
-                                        bottom = 20.dp,
-                                    ),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            ) {
-                                items(uiState.divisionList.size) { index ->
-                                    val item = uiState.divisionList[index]
-                                    NoticeCategoryCard(
-                                        text = item.name,
-                                        isChecked = item == selectCategory,
-                                        onClick = {
-                                            selectCategory = item
-                                            viewModel.loadNextNoticeWithCategory(
-                                                categoryId = item.id,
-                                            )
-                                        },
-                                    )
+                            if (uiState.isDivisionLoading) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(DodamTheme.colors.backgroundNeutral)
+                                        .padding(
+                                            start = 16.dp,
+                                            top = 20.dp,
+                                            bottom = 20.dp
+                                        ),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    NoticeDivisionLoadingCard()
+                                    NoticeDivisionLoadingCard()
+                                    NoticeDivisionLoadingCard()
+                                }
+                            } else {
+                                LazyRow(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(DodamTheme.colors.backgroundNeutral)
+                                        .padding(
+                                            start = 16.dp,
+                                            top = 20.dp,
+                                            bottom = 20.dp,
+                                        ),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                ) {
+                                    items(uiState.divisionList.size) { index ->
+                                        val item = uiState.divisionList[index]
+                                        NoticeCategoryCard(
+                                            text = item.name,
+                                            isChecked = item == selectCategory,
+                                            onClick = {
+                                                selectCategory = item
+                                                viewModel.loadNextNoticeWithCategory(
+                                                    categoryId = item.id,
+                                                )
+                                            },
+                                        )
+                                    }
                                 }
                             }
                             DodamDivider(
                                 type = DividerType.Normal,
                             )
+                        }
+                    }
+
+                    if (uiState.isFirstLoading && uiState.isLoading ) {
+                        item {
+                            NoticeLoadingCard()
                         }
                     }
 
@@ -634,4 +659,64 @@ private fun NoticeCard(
             }
         }
     }
+}
+
+@Composable
+private fun NoticeLoadingCard() {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        color = DodamTheme.colors.backgroundNormal,
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(132.dp)
+                    .height(18.dp)
+                    .background(
+                        brush = shimmerEffect(),
+                        shape = CircleShape,
+                    ),
+            )
+
+            Box(
+                modifier = Modifier
+                    .width(200.dp)
+                    .height(23.dp)
+                    .background(
+                        brush = shimmerEffect(),
+                        shape = CircleShape,
+                    ),
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .background(
+                        brush = shimmerEffect(),
+                        shape = RoundedCornerShape(8.dp),
+                    ),
+            )
+        }
+    }
+}
+
+@Composable
+private fun NoticeDivisionLoadingCard(
+
+) {
+    Box(
+        modifier = Modifier
+            .width(61.dp)
+            .height(34.dp)
+            .background(
+                brush = shimmerEffect(),
+                shape = RoundedCornerShape(31.dp),
+            )
+    )
 }
