@@ -283,9 +283,9 @@ internal fun NoticeScreen(
                                         .padding(
                                             start = 16.dp,
                                             top = 20.dp,
-                                            bottom = 20.dp
+                                            bottom = 20.dp,
                                         ),
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                                 ) {
                                     NoticeDivisionLoadingCard()
                                     NoticeDivisionLoadingCard()
@@ -324,7 +324,7 @@ internal fun NoticeScreen(
                         }
                     }
 
-                    if (uiState.isFirstLoading && uiState.isLoading ) {
+                    if (uiState.isFirstLoading && uiState.isLoading) {
                         item {
                             NoticeLoadingCard()
                         }
@@ -707,9 +707,7 @@ private fun NoticeLoadingCard() {
 }
 
 @Composable
-private fun NoticeDivisionLoadingCard(
-
-) {
+private fun NoticeDivisionLoadingCard() {
     Box(
         modifier = Modifier
             .width(61.dp)
@@ -717,6 +715,6 @@ private fun NoticeDivisionLoadingCard(
             .background(
                 brush = shimmerEffect(),
                 shape = RoundedCornerShape(31.dp),
-            )
+            ),
     )
 }
