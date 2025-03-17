@@ -6,11 +6,11 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class NoticeUiState(
+    val isFirstLoading: Boolean = true,
     val isLoading: Boolean = false,
+    val isDivisionLoading: Boolean = false,
     val isRefresh: Boolean = false,
-    val divisionList: ImmutableList<DivisionOverview> = persistentListOf(
-        DivisionOverview(id = 0, name = "전체"),
-    ),
+    val divisionList: ImmutableList<DivisionOverview> = persistentListOf(),
     val noticeLastCategoryId: Int = 0,
     val noticeLastId: Int? = null,
     val noticeList: ImmutableList<Notice> = persistentListOf(),
