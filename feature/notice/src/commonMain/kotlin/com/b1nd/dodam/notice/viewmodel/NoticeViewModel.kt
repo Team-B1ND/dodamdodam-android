@@ -35,6 +35,11 @@ class NoticeViewModel : ViewModel(), KoinComponent {
 
     fun loadDivision() {
         viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isDivisionLoading = true,
+                )
+            }
             divisionRepository.getMyDivisions(
                 lastId = 0,
                 limit = 9999,
@@ -47,6 +52,7 @@ class NoticeViewModel : ViewModel(), KoinComponent {
                                 divisionList = result.data.toMutableList().apply {
                                     add(0, DivisionOverview(0, "전체"))
                                 }.toImmutableList(),
+                                isDivisionLoading = false,
                             )
                         }
                     }
@@ -114,6 +120,7 @@ class NoticeViewModel : ViewModel(), KoinComponent {
                                 noticeLastId = newData.lastOrNull()?.id,
                                 noticeList = newData.toImmutableList(),
                                 isLoading = false,
+                                isFirstLoading = false,
                             )
                         }
                     }
@@ -162,6 +169,7 @@ class NoticeViewModel : ViewModel(), KoinComponent {
                                 searchNoticeLastId = newData.lastOrNull()?.id,
                                 searchNoticeList = newData.toImmutableList(),
                                 isSearchLoading = false,
+                                isFirstLoading = false,
                             )
                         }
                     }
