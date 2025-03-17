@@ -282,8 +282,8 @@ internal fun NoticeScreen(
                                         .background(DodamTheme.colors.backgroundNeutral)
                                         .padding(
                                             start = 16.dp,
-                                            top = 20.dp,
-                                            bottom = 20.dp,
+                                            top = 12.dp,
+                                            bottom = 12.dp,
                                         ),
                                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                                 ) {
@@ -298,8 +298,8 @@ internal fun NoticeScreen(
                                         .background(DodamTheme.colors.backgroundNeutral)
                                         .padding(
                                             start = 16.dp,
-                                            top = 20.dp,
-                                            bottom = 20.dp,
+                                            top = 12.dp,
+                                            bottom = 12.dp,
                                         ),
                                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                                 ) {
