@@ -38,6 +38,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,6 +61,8 @@ import com.b1nd.dodam.designsystem.component.DodamDefaultTopAppBar
 import com.b1nd.dodam.designsystem.component.DodamDivider
 import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamLinerProgressIndicator
+import com.b1nd.dodam.designsystem.component.DodamSegment
+import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTag
 import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
@@ -68,6 +71,7 @@ import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import java.time.temporal.ChronoUnit
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import org.koin.androidx.compose.koinViewModel
@@ -92,17 +96,36 @@ fun NightStudyScreen(
     var reason by remember { mutableStateOf("") }
     var id by remember { mutableLongStateOf(0) }
 
+    var isBanned by remember { mutableStateOf(false) }
+
     var isRefreshing by remember { mutableStateOf(false) }
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isRefreshing,
         onRefresh = {
             isRefreshing = false
-            viewModel.getMyNigthStudy()
+            viewModel.getMyNightStudy()
+            viewModel.getMyBan()
         },
     )
+    var nightTypeIndex by remember { mutableIntStateOf(0) }
+    val nightTypeList = listOf(
+        "개인",
+        "프로젝트",
+    )
+
+    val nightTypeItem = List(2) { index ->
+        DodamSegment(
+            selected = nightTypeIndex == index,
+            text = nightTypeList[index],
+            onClick = { nightTypeIndex = index },
+        )
+    }.toImmutableList()
 
     DisposableEffect(Unit) {
-        if (refresh()) viewModel.getMyNigthStudy()
+        if (refresh()) {
+            viewModel.getMyNightStudy()
+            viewModel.getMyBan()
+        }
 
         onDispose(dispose)
     }
@@ -168,12 +191,48 @@ fun NightStudyScreen(
             )
             Column {
                 Spacer(modifier = Modifier.height(12.dp))
-
+                if (!isBanned) {
+                    DodamSegmentedButton(
+                        segments = nightTypeItem
+                    )
+                }
+                Spacer(modifier = Modifier.height(20.dp))
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     state = nightStudyScreenState.lazyListState,
                 ) {
                     when (val nightStudyUiState = uiState) {
+                        is NightStudyUiState.IsBanned -> {
+                            val date = nightStudyUiState.myBan.ended
+                            isBanned = true
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 16.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(
+                                        imageVector = DodamIcons.FullMoonFace.value,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(36.dp),
+                                    )
+                                    Spacer(Modifier.height(12.dp))
+                                    Text(
+                                        text = "~ ${date?.month?.ordinal?.plus(1)}월 ${date?.dayOfMonth}일",
+                                        style = DodamTheme.typography.labelMedium(),
+                                        color = DodamTheme.colors.labelNormal,
+                                    )
+                                    Spacer(Modifier.height(4.dp))
+                                    Text(
+                                        text = "심자가 정지 당한 상태 입니다!",
+                                        style = DodamTheme.typography.labelMedium(),
+                                        color = DodamTheme.colors.labelAlternative
+                                    )
+                                }
+                            }
+                        }
+
                         is NightStudyUiState.Success -> {
                             if (nightStudyUiState.nightStudies.isNotEmpty()) {
                                 items(
@@ -201,6 +260,7 @@ fun NightStudyScreen(
                                                 playOnlyOnce = playOnlyOnce,
                                             )
                                         }
+
                                         Status.ALLOWED -> {
                                             NightStudyApplyCell(
                                                 tagType = TagType.Primary,
@@ -216,6 +276,7 @@ fun NightStudyScreen(
                                                 playOnlyOnce = playOnlyOnce,
                                             )
                                         }
+
                                         Status.REJECTED -> {
                                             NightStudyApplyRejectCell(
                                                 reason = nightStudy.content,
@@ -357,6 +418,12 @@ fun NightStudyScreen(
                             showDialog = false
                             showToast("ERROR", "심야 자습 삭제를 실패했어요")
                         }
+
+
+                        is NightStudyUiState.BanError -> {
+                            showDialog = false
+                            showToast("ERROR", "내 심자 상태를 불러오는데 실패했어요")
+                        }
                     }
                     item {
                         Spacer(modifier = Modifier.height(80.dp))
@@ -380,14 +447,14 @@ private fun NightStudyApplyCell(
     playOnlyOnce: Boolean,
 ) {
     val nightStudyProgress = (
-        ChronoUnit.SECONDS.between(
-            startAt.toJavaLocalDateTime(),
-            current.toJavaLocalDateTime(),
-        ).toFloat() / ChronoUnit.SECONDS.between(
-            startAt.toJavaLocalDateTime(),
-            endAt.toJavaLocalDateTime(),
-        )
-        ).coerceIn(0f, 1f)
+            ChronoUnit.SECONDS.between(
+                startAt.toJavaLocalDateTime(),
+                current.toJavaLocalDateTime(),
+            ).toFloat() / ChronoUnit.SECONDS.between(
+                startAt.toJavaLocalDateTime(),
+                endAt.toJavaLocalDateTime(),
+            )
+            ).coerceIn(0f, 1f)
 
     val progress by animateFloatAsState(
         targetValue = if (playOnlyOnce) 0f else nightStudyProgress,
@@ -531,7 +598,12 @@ private fun NightStudyApplyCell(
 }
 
 @Composable
-private fun NightStudyApplyRejectCell(modifier: Modifier = Modifier, reason: String, rejectReason: String, onTrashClick: () -> Unit) {
+private fun NightStudyApplyRejectCell(
+    modifier: Modifier = Modifier,
+    reason: String,
+    rejectReason: String,
+    onTrashClick: () -> Unit
+) {
     Surface(
         modifier = modifier,
         shape = DodamTheme.shapes.large,

@@ -66,6 +66,8 @@ object DodamUrl {
     object NightStudy {
         const val MY = "$NIGHT_STUDY/my"
         const val PENDING = "$NIGHT_STUDY/pending"
+        const val PROJECT = "$NIGHT_STUDY/project"
+        const val BAN = "$NIGHT_STUDY/ban/my"
     }
 
     object Schedule {

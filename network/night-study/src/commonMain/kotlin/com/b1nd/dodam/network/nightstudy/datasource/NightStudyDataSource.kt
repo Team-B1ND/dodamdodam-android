@@ -1,5 +1,6 @@
 package com.b1nd.dodam.network.nightstudy.datasource
 
+import com.b1nd.dodam.network.nightstudy.model.MyBanResponse
 import com.b1nd.dodam.network.nightstudy.model.NightStudyResponse
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.datetime.LocalDate
@@ -22,4 +23,8 @@ interface NightStudyDataSource {
     suspend fun allowNightStudy(id: Long)
 
     suspend fun rejectNightStudy(id: Long)
+
+    suspend fun askProjectStudy(type: String, startAt: LocalDate, endAt: LocalDate, room: String, title: String, content: String, members: List<Int>)
+
+    suspend fun myBan(): MyBanResponse
 }

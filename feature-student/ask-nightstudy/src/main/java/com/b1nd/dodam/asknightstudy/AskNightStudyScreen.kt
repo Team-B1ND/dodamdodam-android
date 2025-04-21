@@ -77,7 +77,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
     var nightStudyStartDate by remember { mutableStateOf(LocalDate.now()) }
     var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(13)) }
 
-    var nightStudyPlace by remember { mutableStateOf(Place.PROGRAMMING_1) }
+    var nightStudyPlace by remember { mutableStateOf(Place.PROJECT5) }
 
     var showDatePicker by remember { mutableStateOf(Pair(false, "시작")) }
     var showPlacePicker by remember { mutableStateOf(false) }

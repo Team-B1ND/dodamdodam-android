@@ -5,11 +5,14 @@ import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.data.core.model.Place
+import com.b1nd.dodam.data.core.model.ProjectPlace
 import com.b1nd.dodam.data.core.model.toRequest
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
+import com.b1nd.dodam.data.nightstudy.model.MyBan
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.nightstudy.model.toModel
 import com.b1nd.dodam.network.nightstudy.datasource.NightStudyDataSource
+import com.b1nd.dodam.network.nightstudy.model.MyBanResponse
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -89,6 +92,36 @@ internal class NightStudyRepositoryImpl(
     override fun rejectNightStudy(id: Long): Flow<Result<Unit>> {
         return flow {
             emit(remote.rejectNightStudy(id))
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun askProjectStudy(
+        type: String,
+        startAt: LocalDate,
+        endAt: LocalDate,
+        room: ProjectPlace,
+        title: String,
+        content: String,
+        members: List<Int>
+    ): Flow<Result<Unit>> {
+        return flow {
+            emit(
+                remote.askProjectStudy(
+                    type,
+                    startAt,
+                    endAt,
+                    room.toRequest(),
+                    title,
+                    content,
+                    members
+                )
+            )
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun myBan(): Flow<Result<MyBan>> {
+        return flow {
+            emit(remote.myBan().toModel())
         }.asResult().flowOn(dispatcher)
     }
 }

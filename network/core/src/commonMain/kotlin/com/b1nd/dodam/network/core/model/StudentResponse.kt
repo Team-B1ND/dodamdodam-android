@@ -10,3 +10,13 @@ data class StudentResponse(
     val room: Int,
     val number: Int,
 )
+
+@Serializable
+data class StudentImageResponse(
+    val id: Long,
+    val name: String,
+    val grade: Int,
+    val room: Int,
+    val number: Int,
+    val profileImage: String?
+)
