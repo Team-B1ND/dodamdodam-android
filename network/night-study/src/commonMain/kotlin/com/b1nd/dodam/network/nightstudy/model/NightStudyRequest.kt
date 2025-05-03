@@ -13,3 +13,15 @@ NightStudyRequest(
     val startAt: LocalDate,
     val endAt: LocalDate,
 )
+
+@Serializable
+data class
+ProjectRequest(
+    val type: String,
+    val startAt: LocalDate,
+    val endAt: LocalDate,
+    val string: String,
+    val title: String,
+    val content: String,
+    val members: List<Int>
+)

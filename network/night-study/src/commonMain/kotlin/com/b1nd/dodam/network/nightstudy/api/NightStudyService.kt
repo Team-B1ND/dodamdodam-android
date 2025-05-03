@@ -6,8 +6,10 @@ import com.b1nd.dodam.network.core.model.Response
 import com.b1nd.dodam.network.core.util.defaultSafeRequest
 import com.b1nd.dodam.network.core.util.safeRequest
 import com.b1nd.dodam.network.nightstudy.datasource.NightStudyDataSource
+import com.b1nd.dodam.network.nightstudy.model.MyBanResponse
 import com.b1nd.dodam.network.nightstudy.model.NightStudyRequest
 import com.b1nd.dodam.network.nightstudy.model.NightStudyResponse
+import com.b1nd.dodam.network.nightstudy.model.ProjectRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -94,6 +96,40 @@ internal class NightStudyService(
     override suspend fun rejectNightStudy(id: Long) {
         return defaultSafeRequest {
             network.patch(DodamUrl.NIGHT_STUDY + "/$id/reject")
+                .body()
+        }
+    }
+
+    override suspend fun askProjectStudy(
+        type: String,
+        startAt: LocalDate,
+        endAt: LocalDate,
+        room: String,
+        title: String,
+        content: String,
+        members: List<Int>
+    ) {
+        return defaultSafeRequest {
+            network.post(DodamUrl.NightStudy.PROJECT) {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    ProjectRequest(
+                        type,
+                        startAt,
+                        endAt,
+                        room,
+                        title,
+                        content,
+                        members
+                    )
+                )
+            }.body<DefaultResponse>()
+        }
+    }
+
+    override suspend fun myBan(): MyBanResponse {
+        return safeRequest {
+            network.get(DodamUrl.NightStudy.BAN)
                 .body()
         }
     }

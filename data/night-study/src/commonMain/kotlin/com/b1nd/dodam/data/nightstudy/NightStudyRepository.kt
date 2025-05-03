@@ -2,7 +2,10 @@ package com.b1nd.dodam.data.nightstudy
 
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.core.model.Place
+import com.b1nd.dodam.data.core.model.ProjectPlace
+import com.b1nd.dodam.data.nightstudy.model.MyBan
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
+import com.b1nd.dodam.network.nightstudy.model.MyBanResponse
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
@@ -25,4 +28,9 @@ interface NightStudyRepository {
     fun allowNightStudy(id: Long): Flow<Result<Unit>>
 
     fun rejectNightStudy(id: Long): Flow<Result<Unit>>
+
+    fun askProjectStudy(type: String, startAt: LocalDate, endAt: LocalDate, room: ProjectPlace, title: String, content: String, members: List<Int>): Flow<Result<Unit>>
+
+    fun myBan(): Flow<Result<MyBan>>
 }
+
