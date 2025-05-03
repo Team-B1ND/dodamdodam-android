@@ -1,6 +1,7 @@
 package com.b1nd.dodam.asknightstudy
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -33,11 +34,13 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -52,13 +55,18 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamCheckBox
 import com.b1nd.dodam.designsystem.component.DodamDatePickerBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamDialog
+import com.b1nd.dodam.designsystem.component.DodamIconButton
+import com.b1nd.dodam.designsystem.component.DodamSegment
+import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
+import com.b1nd.dodam.designsystem.component.IconButtonSize
 import com.b1nd.dodam.designsystem.component.rememberDodamDatePickerState
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.InputField
 import com.b1nd.dodam.ui.icons.UpDownArrow
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlinx.datetime.daysUntil
@@ -67,12 +75,17 @@ import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
+internal fun AskNightStudyScreen(
+    viewModel: AskNightStudyViewModel = koinViewModel(),
+    popBackStack: () -> Unit,
+    showToast: (String, String) -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
 
     var nightStudyReason by remember { mutableStateOf("") }
+    var projectOverview by remember { mutableStateOf("") }
 
     var nightStudyStartDate by remember { mutableStateOf(LocalDate.now()) }
     var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(13)) }
@@ -85,11 +98,29 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
     var doNeedPhone by remember { mutableStateOf(false) }
     var reasonForPhone by remember { mutableStateOf("") }
 
+    var searchStuent by remember { mutableStateOf("") }
+
     var showDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDodamDatePickerState()
     val nowDate = DodamDate.localDateNow()
 
     val focusManager = LocalFocusManager.current
+
+    var nightTypeIndex by remember { mutableIntStateOf(0) }
+
+
+    val nightTypeList = listOf(
+        "개인",
+        "프로젝트",
+    )
+
+    val nightTypeItem = List(2) { index ->
+        DodamSegment(
+            selected = nightTypeIndex == index,
+            text = nightTypeList[index],
+            onClick = { nightTypeIndex = index },
+        )
+    }.toImmutableList()
 
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect {
@@ -253,6 +284,9 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
                     .verticalScroll(scrollState)
                     .padding(horizontal = 16.dp),
             ) {
+                DodamSegmentedButton(
+                    segments = nightTypeItem
+                )
                 Column(
                     modifier = Modifier,
                 ) {
@@ -261,37 +295,51 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
                         modifier = Modifier.fillMaxWidth(),
                         value = nightStudyReason,
                         onValueChange = { nightStudyReason = it },
-                        label = "심야 자습 사유",
+                        label = if (nightTypeIndex.isProject()) "심야 자습 사유" else "프로젝트 명",
                         isError = nightStudyReason.length !in 10..250 && uiState.message.isNotBlank(),
                         supportText = if (nightStudyReason.length !in 10..250) "사유를 10자 이상 입력해주세요." else "",
                     )
+                    if (nightTypeIndex.isProject()) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        DodamTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = projectOverview,
+                            onValueChange = { projectOverview = it },
+                            label = "프로젝트 개요",
+                            isError = projectOverview.length !in 10..250 && uiState.message.isNotBlank(),
+                            supportText = if (projectOverview.length !in 10..250) "개요를 10자 이상 입력해주세요." else "",
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                AskNightStudyCard(
-                    text = "자습 장소",
-                    action = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        ) {
-                            Text(
-                                text = nightStudyPlace.place,
-                                style = DodamTheme.typography.headlineRegular(),
-                                color = DodamTheme.colors.primaryNormal,
-                            )
-                            Icon(
-                                imageVector = UpDownArrow,
-                                contentDescription = "위아래 화살표",
-                                tint = DodamTheme.colors.primaryNormal,
-                            )
-                        }
-                    },
-                    onClick = {
-                        showPlacePicker = true
-                    },
-                )
+                if (nightTypeIndex.isProject()) {
+                    AskNightStudyCard(
+                        text = "학습 장소",
+                        action = {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                Text(
+                                    text = nightStudyPlace.place,
+                                    style = DodamTheme.typography.headlineRegular(),
+                                    color = DodamTheme.colors.primaryNormal,
+                                )
+                                Icon(
+                                    imageVector = UpDownArrow,
+                                    contentDescription = "위아래 화살표",
+                                    tint = DodamTheme.colors.primaryNormal,
+                                )
+                            }
+                        },
+                        onClick = {
+                            showPlacePicker = true
+                        },
+                    )
+                }
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -360,31 +408,53 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                AskNightStudyCard(
-                    text = "휴대폰 사용",
-                    action = {
-                        DodamCheckBox(
-                            onClick = { doNeedPhone = !doNeedPhone },
-                            checked = doNeedPhone,
-                        )
-                    },
-                    onClick = {
-                        doNeedPhone = !doNeedPhone
-                    },
-                )
-
-                AnimatedVisibility(doNeedPhone) {
-                    Column {
-                        Spacer(modifier = Modifier.height(16.dp))
+                if (nightTypeIndex.isProject()) {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+                    ) {
                         DodamTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = reasonForPhone,
-                            onValueChange = { reasonForPhone = it },
-                            label = "휴대폰 사용 사유",
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 24.dp),
+                            value = searchStuent,
+                            onValueChange = { searchStuent = it },
+                            label = "학생 검색",
+                        )
+                        Image(
+                            modifier = Modifier.size(24.dp),
+                            imageVector = DodamIcons.MagnifyingGlass.value,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(DodamTheme.colors.labelAssistive),
                         )
                     }
+                } else {
+                    AskNightStudyCard(
+                        text = "휴대폰 사용",
+                        action = {
+                            DodamCheckBox(
+                                onClick = { doNeedPhone = !doNeedPhone },
+                                checked = doNeedPhone,
+                            )
+                        },
+                        onClick = {
+                            doNeedPhone = !doNeedPhone
+                        },
+                    )
+
+                    AnimatedVisibility(doNeedPhone) {
+                        Column {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            DodamTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = reasonForPhone,
+                                onValueChange = { reasonForPhone = it },
+                                label = "휴대폰 사용 사유",
+                            )
+                        }
+                    }
                 }
+
 
                 Spacer(modifier = Modifier.height(100.dp))
             }
@@ -414,8 +484,15 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
     }
 }
 
+private fun Int.isProject() = this == 1
+
 @Composable
-private fun AskNightStudyCard(modifier: Modifier = Modifier, text: String, action: @Composable () -> Unit, onClick: () -> Unit) {
+private fun AskNightStudyCard(
+    modifier: Modifier = Modifier,
+    text: String,
+    action: @Composable () -> Unit,
+    onClick: () -> Unit,
+) {
     Row(
         modifier = modifier
             .clickable(
