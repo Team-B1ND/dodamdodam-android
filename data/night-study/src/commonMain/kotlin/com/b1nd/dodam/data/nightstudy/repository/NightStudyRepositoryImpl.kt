@@ -10,6 +10,7 @@ import com.b1nd.dodam.data.core.model.toRequest
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.MyBan
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
+import com.b1nd.dodam.data.nightstudy.model.NightStudyStudent
 import com.b1nd.dodam.data.nightstudy.model.toModel
 import com.b1nd.dodam.network.nightstudy.datasource.NightStudyDataSource
 import com.b1nd.dodam.network.nightstudy.model.MyBanResponse
@@ -102,7 +103,7 @@ internal class NightStudyRepositoryImpl(
         room: ProjectPlace,
         title: String,
         content: String,
-        members: List<Int>
+        members: List<Int>,
     ): Flow<Result<Unit>> {
         return flow {
             emit(
@@ -122,6 +123,12 @@ internal class NightStudyRepositoryImpl(
     override fun myBan(): Flow<Result<MyBan>> {
         return flow {
             emit(remote.myBan().toModel())
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun getNightStudyStudent(): Flow<Result<ImmutableList<NightStudyStudent>>> {
+        return flow {
+            emit(remote.getNightStudyStudent().map { it.toModel() }.toImmutableList())
         }.asResult().flowOn(dispatcher)
     }
 }
