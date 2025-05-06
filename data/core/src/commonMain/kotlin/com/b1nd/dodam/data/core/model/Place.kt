@@ -41,8 +41,8 @@ fun Place.toRequest(): String = when (this) {
 }
 
 fun ProjectPlace.toRequest(): String = when (this) {
-    ProjectPlace.LAB12 -> "랩 12실"
-    ProjectPlace.LAB13 -> "랩 13실"
-    ProjectPlace.LAB14 -> "랩 14실"
-    ProjectPlace.LAB15 -> "랩 15실"
+    ProjectPlace.LAB12 -> "LAB_12"
+    ProjectPlace.LAB13 -> "LAB_13"
+    ProjectPlace.LAB14 -> "LAB_14"
+    ProjectPlace.LAB15 -> "LAB_15"
 }

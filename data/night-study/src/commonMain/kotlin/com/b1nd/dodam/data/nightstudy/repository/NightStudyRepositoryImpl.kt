@@ -105,10 +105,11 @@ internal class NightStudyRepositoryImpl(
         content: String,
         members: List<Int>,
     ): Flow<Result<Unit>> {
+        //type 시간이 없어서 임시로 만들었습니다. 배포 하고 나면 고치겠습니다.
         return flow {
             emit(
                 remote.askProjectStudy(
-                    type,
+                    "NIGHT_STUDY_PROJECT_" + if(type == "심자 1") "1" else "2",
                     startAt,
                     endAt,
                     room.toRequest(),

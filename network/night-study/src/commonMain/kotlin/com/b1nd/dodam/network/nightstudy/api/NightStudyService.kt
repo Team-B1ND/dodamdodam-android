@@ -123,11 +123,11 @@ internal class NightStudyService(
                 setBody(
                     ProjectRequest(
                         type,
+                        title,
+                        content,
                         startAt,
                         endAt,
                         room,
-                        title,
-                        content,
                         members
                     )
                 )
@@ -144,7 +144,7 @@ internal class NightStudyService(
 
     override suspend fun getNightStudyStudent(): ImmutableList<NightStudyStudentResponse> {
         return safeRequest {
-            network.get(DodamUrl.NIGHT_STUDY + "students")
+            network.get(DodamUrl.NIGHT_STUDY + "/students")
                 .body<Response<List<NightStudyStudentResponse>>>()
         }.toImmutableList()
     }

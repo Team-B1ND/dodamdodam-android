@@ -18,10 +18,10 @@ NightStudyRequest(
 data class
 ProjectRequest(
     val type: String,
+    val name: String,
+    val description: String,
     val startAt: LocalDate,
     val endAt: LocalDate,
-    val string: String,
-    val title: String,
-    val content: String,
-    val members: List<Int>
+    val room: String,
+    val students: List<Int>
 )
