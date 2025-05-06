@@ -32,7 +32,7 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
 
     init {
         getMyNightStudy()
-        getMyBan()
+//        getMyBan()
     }
 
     fun getMyNightStudy() {

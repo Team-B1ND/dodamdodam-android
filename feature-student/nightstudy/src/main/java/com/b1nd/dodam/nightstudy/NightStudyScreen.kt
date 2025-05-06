@@ -104,7 +104,7 @@ fun NightStudyScreen(
         onRefresh = {
             isRefreshing = false
             viewModel.getMyNightStudy()
-            viewModel.getMyBan()
+//            viewModel.getMyBan()
         },
     )
     var nightTypeIndex by remember { mutableIntStateOf(0) }
@@ -124,7 +124,7 @@ fun NightStudyScreen(
     DisposableEffect(Unit) {
         if (refresh()) {
             viewModel.getMyNightStudy()
-            viewModel.getMyBan()
+//            viewModel.getMyBan()
         }
 
         onDispose(dispose)
