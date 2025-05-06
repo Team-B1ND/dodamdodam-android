@@ -526,7 +526,6 @@ internal fun AskNightStudyScreen(
                         ) {
                             items(
                                 items = filteredStudentList,
-                                key = { it.id },
                             ) {
                                 DodamNightStudyMemberComponent(
                                     modifier = Modifier.clickable(
