@@ -98,7 +98,7 @@ internal fun AskNightStudyScreen(
     val projectNightStudyTimeList = arrayListOf("심자 1", "심자 2")
     var projectNightStudyMembers by remember { mutableStateOf(emptyList<Int>()) }
 
-    var projectNightStudyTime by remember { mutableStateOf("") }
+    var projectNightStudyTime by remember { mutableStateOf("심자 1") }
     var nightStudyPlace by remember { mutableStateOf(Place.PROJECT5) }
     var projectNightStudyPlace by remember { mutableStateOf(ProjectPlace.LAB12) }
 
@@ -229,7 +229,6 @@ internal fun AskNightStudyScreen(
                 )
 
                 if (showPlacePicker.second.isPlace()) {
-                    
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
