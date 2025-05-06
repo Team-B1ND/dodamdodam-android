@@ -9,6 +9,7 @@ import com.b1nd.dodam.common.exception.ForbiddenException
 import com.b1nd.dodam.common.exception.NotFoundException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.core.model.Place
+import com.b1nd.dodam.data.core.model.ProjectPlace
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -75,6 +76,57 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
                 }
             }
         }
+
+
+    fun askProjectNightStudy(type: String, startAt: LocalDate, endAt: LocalDate, room: ProjectPlace, title: String, content: String, members: List<Int>) =
+        viewModelScope.launch {
+            nightStudyRepository.askProjectStudy(
+                type,
+                startAt,
+                endAt,
+                room,
+                title,
+                content,
+                members
+            ).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _event.emit(Event.Success)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                            )
+                        }
+                    }
+
+                    is Result.Loading -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = true,
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                message = result.error.message.toString(),
+                            )
+                        }
+
+                        when (result.error) {
+                            is ForbiddenException, is NotFoundException, is BadRequestException, is ConflictException -> {
+                                _event.emit(Event.ShowDialog)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
 }
 
 sealed interface Event {
