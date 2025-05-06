@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 data class NightStudyStudentResponse(
     val id: Long,
     val name: String,
-    val grade: Long,
-    val room: Long,
-    val number: Long,
+    val grade: Int,
+    val room: Int,
+    val number: Int,
     val phone: String,
     val profileImage: String,
     val isBanned: Boolean
