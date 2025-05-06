@@ -349,12 +349,11 @@ internal fun AskNightStudyScreen(
                         },
                         label = if (nightTypeIndex.isProject()) "프로젝트 명" else "심야 자습 사유",
                         isError = nightStudyReason.length !in 10..250 && uiState.message.isNotBlank(),
-                        supportText = if (if (nightTypeIndex.isProject()) {
-                                projectNightStudyReason.length
-                            } else {
-                                nightStudyReason.length
-                            } !in 10..250
-                        ) "사유를 10자 이상 입력해주세요." else "",
+                        supportText = if (nightTypeIndex.isProject()) {
+                            if (projectNightStudyReason.length !in 1..250) "프로젝트 이름을 입력해주세요" else ""
+                        } else {
+                            if (nightStudyReason.length !in 10..250) "사유를 10자 이상 입력해주세요." else ""
+                        },
                     )
                     if (nightTypeIndex.isProject()) {
                         Spacer(modifier = Modifier.height(20.dp))
@@ -622,7 +621,7 @@ internal fun AskNightStudyScreen(
                         )
                     }
                 },
-                enabled = if (nightTypeIndex.isProject()) (projectNightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate && projectOverview.length >= 10) && !uiState.isLoading else (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading,
+                enabled = if (nightTypeIndex.isProject()) (projectNightStudyReason.isNotEmpty() && nightStudyStartDate < nightStudyEndDate && projectOverview.length >= 10) && !uiState.isLoading else (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading,
                 text = "신청",
                 loading = uiState.isLoading,
             )
