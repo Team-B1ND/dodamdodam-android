@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -48,9 +49,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.b1nd.dodam.common.date.DodamDate
 import com.b1nd.dodam.common.utiles.utcTimeMill
 import com.b1nd.dodam.data.core.model.Place
+import com.b1nd.dodam.data.core.model.ProjectPlace
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
+import com.b1nd.dodam.designsystem.component.AvatarSize
 import com.b1nd.dodam.designsystem.component.CalendarDate
+import com.b1nd.dodam.designsystem.component.DodamAvatar
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamCheckBox
 import com.b1nd.dodam.designsystem.component.DodamDatePickerBottomSheet
@@ -85,15 +89,21 @@ internal fun AskNightStudyScreen(
     val scrollState = rememberScrollState()
 
     var nightStudyReason by remember { mutableStateOf("") }
+    var projectNightStudyReason by remember { mutableStateOf("") }
     var projectOverview by remember { mutableStateOf("") }
 
     var nightStudyStartDate by remember { mutableStateOf(LocalDate.now()) }
     var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(13)) }
 
+    val projectNightStudyTimeList = arrayListOf("심자 1", "심자 2")
+    var projectNightStudyMembers by remember { mutableStateOf(emptyList<Int>()) }
+
+    var projectNightStudyTime by remember { mutableStateOf("") }
     var nightStudyPlace by remember { mutableStateOf(Place.PROJECT5) }
+    var projectNightStudyPlace by remember { mutableStateOf(ProjectPlace.LAB12) }
 
     var showDatePicker by remember { mutableStateOf(Pair(false, "시작")) }
-    var showPlacePicker by remember { mutableStateOf(false) }
+    var showPlacePicker by remember { mutableStateOf(Pair(false, "시각")) }
 
     var doNeedPhone by remember { mutableStateOf(false) }
     var reasonForPhone by remember { mutableStateOf("") }
@@ -171,9 +181,7 @@ internal fun AskNightStudyScreen(
                     return@DodamDatePickerBottomSheet 0 <= nowDate.daysUntil(kotlinDate)
                 }
 
-                val days = nightStudyStartDate
-                    .toKotlinLocalDate()
-                    .daysUntil(kotlinDate)
+                val days = nightStudyStartDate.toKotlinLocalDate().daysUntil(kotlinDate)
                 days in 0..13
             },
             onClickDate = { date, isValid ->
@@ -183,8 +191,7 @@ internal fun AskNightStudyScreen(
                 if (showDatePicker.second == "시작") {
                     nightStudyStartDate = localDate
 
-                    val days = nightStudyStartDate
-                        .toKotlinLocalDate()
+                    val days = nightStudyStartDate.toKotlinLocalDate()
                         .daysUntil(nightStudyEndDate.toKotlinLocalDate())
                     if (nightStudyStartDate > nightStudyEndDate) {
                         nightStudyEndDate = localDate
@@ -204,11 +211,11 @@ internal fun AskNightStudyScreen(
         )
     }
 
-    if (showPlacePicker) {
+    if (showPlacePicker.first) {
         ModalBottomSheet(
             modifier = Modifier.navigationBarsPadding(),
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            onDismissRequest = { showPlacePicker = false },
+            onDismissRequest = { showPlacePicker = Pair(false, "") },
         ) {
             Column(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -216,42 +223,79 @@ internal fun AskNightStudyScreen(
             ) {
                 Text(
                     modifier = Modifier.padding(8.dp),
-                    text = "자습 장소",
+                    text = if (showPlacePicker.second.isPlace()) "자습 장소" else "진행 시각",
                     style = DodamTheme.typography.heading2Bold(),
                     color = DodamTheme.colors.labelNormal,
                 )
 
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                ) {
-                    items(
-                        items = Place.entries,
-                        key = { it.name },
+                if (showPlacePicker.second.isPlace()) {
+                    
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        InputField(
-                            onClick = {
-                                nightStudyPlace = it
-                            },
-                            text = {
-                                Text(
-                                    text = it.place,
-                                    color = DodamTheme.colors.labelAssistive,
-                                    style = DodamTheme.typography.headlineMedium(),
-                                )
-                            },
-                            content = {
-                                if (it == nightStudyPlace) {
-                                    Icon(
-                                        imageVector = DodamIcons.Checkmark.value,
-                                        contentDescription = "체크마크",
-                                        tint = DodamTheme.colors.primaryNormal,
+                        items(
+                            items = ProjectPlace.entries,
+                            key = { it.name },
+                        ) {
+                            InputField(
+                                onClick = {
+                                    projectNightStudyPlace = it
+                                },
+                                text = {
+                                    Text(
+                                        text = it.place,
+                                        color = DodamTheme.colors.labelAssistive,
+                                        style = DodamTheme.typography.headlineMedium(),
                                     )
-                                }
-                            },
-                        )
+                                },
+                                content = {
+                                    if (it == projectNightStudyPlace) {
+                                        Icon(
+                                            imageVector = DodamIcons.Checkmark.value,
+                                            contentDescription = "체크마크",
+                                            tint = DodamTheme.colors.primaryNormal,
+                                        )
+                                    }
+                                },
+                            )
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
                     }
-                    item {
-                        Spacer(modifier = Modifier.height(4.dp))
+                } else {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        items(
+                            items = projectNightStudyTimeList,
+                            key = {it},
+                        ) {
+                            InputField(
+                                onClick = {
+                                    projectNightStudyTime = it
+                                },
+                                text = {
+                                    Text(
+                                        text = it,
+                                        color = DodamTheme.colors.labelAssistive,
+                                        style = DodamTheme.typography.headlineMedium(),
+                                    )
+                                },
+                                content = {
+                                    if (it == projectNightStudyTime) {
+                                        Icon(
+                                            imageVector = DodamIcons.Checkmark.value,
+                                            contentDescription = "체크마크",
+                                            tint = DodamTheme.colors.primaryNormal,
+                                        )
+                                    }
+                                },
+                            )
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
                     }
                 }
             }
@@ -293,14 +337,22 @@ internal fun AskNightStudyScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     DodamTextField(
                         modifier = Modifier.fillMaxWidth(),
-                        value = nightStudyReason,
-                        onValueChange = { nightStudyReason = it },
-                        label = if (nightTypeIndex.isProject()) "심야 자습 사유" else "프로젝트 명",
+                        value = if (nightTypeIndex.isProject()) projectNightStudyReason else nightStudyReason,
+                        onValueChange = {
+                            if (nightTypeIndex.isProject()) projectNightStudyReason =
+                                it else nightStudyReason = it
+                        },
+                        label = if (nightTypeIndex.isProject()) "프로젝트 명" else "심야 자습 사유",
                         isError = nightStudyReason.length !in 10..250 && uiState.message.isNotBlank(),
-                        supportText = if (nightStudyReason.length !in 10..250) "사유를 10자 이상 입력해주세요." else "",
+                        supportText = if (if (nightTypeIndex.isProject()) {
+                                projectNightStudyReason.length
+                            } else {
+                                nightStudyReason.length
+                            } !in 10..250
+                        ) "사유를 10자 이상 입력해주세요." else "",
                     )
                     if (nightTypeIndex.isProject()) {
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(20.dp))
                         DodamTextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = projectOverview,
@@ -316,14 +368,14 @@ internal fun AskNightStudyScreen(
 
                 if (nightTypeIndex.isProject()) {
                     AskNightStudyCard(
-                        text = "학습 장소",
+                        text = "진행 시각",
                         action = {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                             ) {
                                 Text(
-                                    text = nightStudyPlace.place,
+                                    text = projectNightStudyTime,
                                     style = DodamTheme.typography.headlineRegular(),
                                     color = DodamTheme.colors.primaryNormal,
                                 )
@@ -335,7 +387,31 @@ internal fun AskNightStudyScreen(
                             }
                         },
                         onClick = {
-                            showPlacePicker = true
+                            showPlacePicker = Pair(true, "시각")
+                        },
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    AskNightStudyCard(
+                        text = "학습 장소",
+                        action = {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                Text(
+                                    text = projectNightStudyPlace.place,
+                                    style = DodamTheme.typography.headlineRegular(),
+                                    color = DodamTheme.colors.primaryNormal,
+                                )
+                                Icon(
+                                    imageVector = UpDownArrow,
+                                    contentDescription = "위아래 화살표",
+                                    tint = DodamTheme.colors.primaryNormal,
+                                )
+                            }
+                        },
+                        onClick = {
+                            showPlacePicker = Pair(true, "장소")
                         },
                     )
                 }
@@ -409,25 +485,43 @@ internal fun AskNightStudyScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 if (nightTypeIndex.isProject()) {
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        DodamTextField(
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(end = 24.dp),
-                            value = searchStuent,
-                            onValueChange = { searchStuent = it },
-                            label = "학생 검색",
-                        )
-                        Image(
-                            modifier = Modifier.size(24.dp),
-                            imageVector = DodamIcons.MagnifyingGlass.value,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(DodamTheme.colors.labelAssistive),
-                        )
+                    Column {
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            DodamTextField(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(end = 24.dp),
+                                value = searchStuent,
+                                onValueChange = { searchStuent = it },
+                                label = "학생 검색",
+                            )
+                            Image(
+                                modifier = Modifier.size(24.dp),
+                                imageVector = DodamIcons.MagnifyingGlass.value,
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(DodamTheme.colors.labelAssistive),
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(20.dp))
+                        LazyColumn(
+                            modifier = Modifier.height(200.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(5) {
+                                DodamNightStudyMemberComponent(
+                                    name = "이름",
+                                    grade = 1,
+                                    room = 1,
+                                    isInclude = false,
+                                )
+                            }
+                        }
                     }
+
                 } else {
                     AskNightStudyCard(
                         text = "휴대폰 사용",
@@ -454,8 +548,6 @@ internal fun AskNightStudyScreen(
                         }
                     }
                 }
-
-
                 Spacer(modifier = Modifier.height(100.dp))
             }
 
@@ -467,16 +559,28 @@ internal fun AskNightStudyScreen(
                     .padding(bottom = 8.dp)
                     .align(Alignment.BottomCenter),
                 onClick = {
-                    viewModel.askNightStudy(
-                        place = nightStudyPlace,
-                        content = nightStudyReason,
-                        doNeedPhone = doNeedPhone,
-                        reasonForPhone = if (doNeedPhone) reasonForPhone else null,
-                        startAt = nightStudyStartDate.toKotlinLocalDate(),
-                        endAt = nightStudyEndDate.toKotlinLocalDate(),
-                    )
+                    if (nightTypeIndex.isProject()) {
+                        viewModel.askProjectNightStudy(
+                            type = projectNightStudyTime,
+                            startAt = nightStudyStartDate.toKotlinLocalDate(),
+                            endAt = nightStudyEndDate.toKotlinLocalDate(),
+                            room = projectNightStudyPlace,
+                            title = projectNightStudyReason,
+                            content = projectOverview,
+                            members = projectNightStudyMembers
+                        )
+                    } else {
+                        viewModel.askNightStudy(
+                            place = nightStudyPlace,
+                            content = nightStudyReason,
+                            doNeedPhone = doNeedPhone,
+                            reasonForPhone = if (doNeedPhone) reasonForPhone else null,
+                            startAt = nightStudyStartDate.toKotlinLocalDate(),
+                            endAt = nightStudyEndDate.toKotlinLocalDate(),
+                        )
+                    }
                 },
-                enabled = (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading,
+                enabled = if (nightTypeIndex.isProject()) (projectNightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate && projectOverview.length >= 10) && !uiState.isLoading else (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading,
                 text = "신청",
                 loading = uiState.isLoading,
             )
@@ -486,6 +590,8 @@ internal fun AskNightStudyScreen(
 
 private fun Int.isProject() = this == 1
 
+private fun String.isPlace() = this == "장소"
+
 @Composable
 private fun AskNightStudyCard(
     modifier: Modifier = Modifier,
@@ -494,12 +600,11 @@ private fun AskNightStudyCard(
     onClick: () -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .clickable(
-                onClick = onClick,
-                indication = rememberBounceIndication(),
-                interactionSource = remember { MutableInteractionSource() },
-            ),
+        modifier = modifier.clickable(
+            onClick = onClick,
+            indication = rememberBounceIndication(),
+            interactionSource = remember { MutableInteractionSource() },
+        ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -512,6 +617,52 @@ private fun AskNightStudyCard(
             modifier = Modifier.padding(vertical = 8.dp),
         ) {
             action()
+        }
+    }
+}
+
+@Composable
+private fun DodamNightStudyMemberComponent(
+    modifier: Modifier = Modifier,
+    image: String? = "",
+    name: String,
+    grade: Int,
+    room: Int,
+    isInclude: Boolean,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        DodamAvatar(
+            model = image,
+            avatarSize = AvatarSize.Large,
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column {
+                    Text(
+                        text = name,
+                        style = DodamTheme.typography.body1Medium(),
+                        color = DodamTheme.colors.labelNormal,
+                    )
+                    Text(
+                        text = "$grade-$room",
+                        style = DodamTheme.typography.body2Medium(),
+                        color = DodamTheme.colors.labelAlternative,
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                if (isInclude) {
+                    Image(
+                        modifier = Modifier.size(16.dp),
+                        imageVector = DodamIcons.Checkmark.value,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
+                    )
+                }
+            }
         }
     }
 }
