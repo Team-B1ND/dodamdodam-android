@@ -36,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -59,6 +60,7 @@ import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamCheckBox
 import com.b1nd.dodam.designsystem.component.DodamDatePickerBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamDialog
+import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamIconButton
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
@@ -96,7 +98,7 @@ internal fun AskNightStudyScreen(
     var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(13)) }
 
     val projectNightStudyTimeList = arrayListOf("심자 1", "심자 2")
-    var projectNightStudyMembers by remember { mutableStateOf(emptyList<Int>()) }
+    var projectNightStudyMembers = remember { mutableStateListOf<Long>() }
 
     var projectNightStudyTime by remember { mutableStateOf("심자 1") }
     var nightStudyPlace by remember { mutableStateOf(Place.PROJECT5) }
@@ -131,6 +133,10 @@ internal fun AskNightStudyScreen(
             onClick = { nightTypeIndex = index },
         )
     }.toImmutableList()
+
+    LaunchedEffect(Unit) {
+        viewModel.getNightStudyStudent()
+    }
 
     LaunchedEffect(viewModel.event) {
         viewModel.event.collect {
@@ -268,7 +274,7 @@ internal fun AskNightStudyScreen(
                     ) {
                         items(
                             items = projectNightStudyTimeList,
-                            key = {it},
+                            key = { it },
                         ) {
                             InputField(
                                 onClick = {
@@ -497,6 +503,7 @@ internal fun AskNightStudyScreen(
                                 value = searchStuent,
                                 onValueChange = { searchStuent = it },
                                 label = "학생 검색",
+                                onClickRemoveRequest = { searchStuent = "" }
                             )
                             Image(
                                 modifier = Modifier.size(24.dp),
@@ -506,17 +513,53 @@ internal fun AskNightStudyScreen(
                             )
                         }
                         Spacer(modifier = Modifier.height(20.dp))
+
+                        val filteredStudentList = uiState.students.let { list ->
+                            if (searchStuent.isNotEmpty()) {
+                                list.filter { it.name.contains(searchStuent) }
+                            } else {
+                                list
+                            }
+                        }.sortedByDescending { it.id in projectNightStudyMembers }
                         LazyColumn(
                             modifier = Modifier.height(200.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            items(5) {
+                            items(
+                                items = filteredStudentList,
+                                key = { it.id },
+                            ) {
                                 DodamNightStudyMemberComponent(
-                                    name = "이름",
-                                    grade = 1,
-                                    room = 1,
-                                    isInclude = false,
+                                    modifier = Modifier.clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = rememberBounceIndication(),
+                                        onClick = {
+                                            if (!it.isBanned) {
+                                                if (it.id in projectNightStudyMembers) {
+                                                    projectNightStudyMembers.remove(it.id)
+                                                } else {
+                                                    projectNightStudyMembers.add(it.id)
+                                                }
+                                            }
+                                        }
+                                    ),
+                                    name = it.name,
+                                    grade = it.grade,
+                                    room = it.room,
+                                    image = it.profileImage,
+                                    isInclude = it.id in projectNightStudyMembers,
+                                    isBan = it.isBanned
                                 )
+                            }
+
+                            item {
+                                if (filteredStudentList.isEmpty()) {
+                                    DodamEmpty(
+                                        onClick = {},
+                                        title = "검색결과가 없어요!",
+                                        buttonText = "학생 이름을 잘 작성해주세요"
+                                    )
+                                }
                             }
                         }
                     }
@@ -566,7 +609,7 @@ internal fun AskNightStudyScreen(
                             room = projectNightStudyPlace,
                             title = projectNightStudyReason,
                             content = projectOverview,
-                            members = projectNightStudyMembers
+                            members = projectNightStudyMembers.map { it.toInt() }
                         )
                     } else {
                         viewModel.askNightStudy(
@@ -628,6 +671,7 @@ private fun DodamNightStudyMemberComponent(
     grade: Int,
     room: Int,
     isInclude: Boolean,
+    isBan: Boolean,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -655,10 +699,17 @@ private fun DodamNightStudyMemberComponent(
                 Spacer(modifier = Modifier.weight(1f))
                 if (isInclude) {
                     Image(
-                        modifier = Modifier.size(16.dp),
-                        imageVector = DodamIcons.Checkmark.value,
+                        modifier = Modifier.size(22.dp),
+                        imageVector = DodamIcons.CheckmarkCircleFilled.value,
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
+                        colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
+                    )
+                }
+                if (isBan) {
+                    Image(
+                        modifier = Modifier.size(22.dp),
+                        imageVector = DodamIcons.ColorXMark.value,
+                        contentDescription = null,
                     )
                 }
             }

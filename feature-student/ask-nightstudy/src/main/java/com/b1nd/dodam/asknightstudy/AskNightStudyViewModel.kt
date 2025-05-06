@@ -129,7 +129,6 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
         nightStudyRepository.getNightStudyStudent().collect{ result ->
             when (result) {
                 is Result.Success -> {
-                    _event.emit(Event.Success)
                     _uiState.update {
                         it.copy(
                             isLoading = false,
