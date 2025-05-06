@@ -10,6 +10,6 @@ data class NightStudyStudentResponse(
     val room: Int,
     val number: Int,
     val phone: String,
-    val profileImage: String,
+    val profileImage: String?,
     val isBanned: Boolean
 )
