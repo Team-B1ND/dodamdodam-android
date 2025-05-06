@@ -9,6 +9,7 @@ import com.b1nd.dodam.network.nightstudy.datasource.NightStudyDataSource
 import com.b1nd.dodam.network.nightstudy.model.MyBanResponse
 import com.b1nd.dodam.network.nightstudy.model.NightStudyRequest
 import com.b1nd.dodam.network.nightstudy.model.NightStudyResponse
+import com.b1nd.dodam.network.nightstudy.model.NightStudyStudentResponse
 import com.b1nd.dodam.network.nightstudy.model.ProjectRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -47,7 +48,14 @@ internal class NightStudyService(
         }.toImmutableList()
     }
 
-    override suspend fun askNightStudy(place: String, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) {
+    override suspend fun askNightStudy(
+        place: String,
+        content: String,
+        doNeedPhone: Boolean,
+        reasonForPhone: String?,
+        startAt: LocalDate,
+        endAt: LocalDate,
+    ) {
         return defaultSafeRequest {
             network.post(DodamUrl.NIGHT_STUDY) {
                 contentType(ContentType.Application.Json)
@@ -107,7 +115,7 @@ internal class NightStudyService(
         room: String,
         title: String,
         content: String,
-        members: List<Int>
+        members: List<Int>,
     ) {
         return defaultSafeRequest {
             network.post(DodamUrl.NightStudy.PROJECT) {
@@ -132,5 +140,12 @@ internal class NightStudyService(
             network.get(DodamUrl.NightStudy.BAN)
                 .body()
         }
+    }
+
+    override suspend fun getNightStudyStudent(): ImmutableList<NightStudyStudentResponse> {
+        return safeRequest {
+            network.get(DodamUrl.NIGHT_STUDY + "students")
+                .body<Response<List<NightStudyStudentResponse>>>()
+        }.toImmutableList()
     }
 }
