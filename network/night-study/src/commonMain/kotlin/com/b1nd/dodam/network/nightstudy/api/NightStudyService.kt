@@ -11,6 +11,7 @@ import com.b1nd.dodam.network.nightstudy.model.NightStudyRequest
 import com.b1nd.dodam.network.nightstudy.model.NightStudyResponse
 import com.b1nd.dodam.network.nightstudy.model.NightStudyStudentResponse
 import com.b1nd.dodam.network.nightstudy.model.ProjectRequest
+import com.b1nd.dodam.network.nightstudy.model.ProjectResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -80,6 +81,13 @@ internal class NightStudyService(
         }
     }
 
+    override suspend fun deleteProject(id: Long) {
+        return defaultSafeRequest {
+            network.delete(DodamUrl.PROJECT + "/${id}")
+                .body<DefaultResponse>()
+        }
+    }
+
     override suspend fun getNightStudy(): ImmutableList<NightStudyResponse> {
         return safeRequest {
             network.get(DodamUrl.NIGHT_STUDY)
@@ -110,25 +118,25 @@ internal class NightStudyService(
 
     override suspend fun askProjectStudy(
         type: String,
+        name: String,
+        description: String,
         startAt: LocalDate,
         endAt: LocalDate,
         room: String,
-        title: String,
-        content: String,
-        members: List<Int>,
+        students: List<Int>,
     ) {
         return defaultSafeRequest {
-            network.post(DodamUrl.NightStudy.PROJECT) {
+            network.post(DodamUrl.PROJECT) {
                 contentType(ContentType.Application.Json)
                 setBody(
                     ProjectRequest(
                         type,
-                        title,
-                        content,
+                        name,
+                        description,
                         startAt,
                         endAt,
                         room,
-                        members
+                        students
                     )
                 )
             }.body<DefaultResponse>()
@@ -144,8 +152,15 @@ internal class NightStudyService(
 
     override suspend fun getNightStudyStudent(): ImmutableList<NightStudyStudentResponse> {
         return safeRequest {
-            network.get(DodamUrl.NIGHT_STUDY + "/students")
+            network.get(DodamUrl.NightStudy.STUDENT)
                 .body<Response<List<NightStudyStudentResponse>>>()
+        }.toImmutableList()
+    }
+
+    override suspend fun getProject(): ImmutableList<ProjectResponse> {
+        return safeRequest {
+            network.get(DodamUrl.NightStudy.MYPROJECT)
+                .body<Response<List<ProjectResponse>>>()
         }.toImmutableList()
     }
 }
