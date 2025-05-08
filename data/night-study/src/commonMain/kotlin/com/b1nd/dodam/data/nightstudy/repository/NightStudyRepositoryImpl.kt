@@ -111,18 +111,18 @@ internal class NightStudyRepositoryImpl(
         room: ProjectPlace,
         students: List<Int>,
     ): Flow<Result<Unit>> {
-        //type 시간이 없어서 임시로 만들었습니다. 배포 하고 나면 고치겠습니다.
+        // type 시간이 없어서 임시로 만들었습니다. 배포 하고 나면 고치겠습니다.
         return flow {
             emit(
                 remote.askProjectStudy(
-                    "NIGHT_STUDY_PROJECT_" + if(type == "심자 1") "1" else "2",
+                    "NIGHT_STUDY_PROJECT_" + if (type == "심자 1") "1" else "2",
                     name,
                     description,
                     startAt,
                     endAt,
                     room.toRequest(),
-                    students
-                )
+                    students,
+                ),
             )
         }.asResult().flowOn(dispatcher)
     }

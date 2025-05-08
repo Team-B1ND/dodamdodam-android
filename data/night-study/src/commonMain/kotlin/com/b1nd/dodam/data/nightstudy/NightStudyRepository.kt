@@ -32,7 +32,15 @@ interface NightStudyRepository {
 
     fun rejectNightStudy(id: Long): Flow<Result<Unit>>
 
-    fun askProjectStudy(type: String, name: String, description: String, startAt: LocalDate, endAt: LocalDate, room: ProjectPlace, students: List<Int>): Flow<Result<Unit>>
+    fun askProjectStudy(
+        type: String,
+        name: String,
+        description: String,
+        startAt: LocalDate,
+        endAt: LocalDate,
+        room: ProjectPlace,
+        students: List<Int>,
+    ): Flow<Result<Unit>>
 
     fun myBan(): Flow<Result<MyBan>>
 
@@ -40,4 +48,3 @@ interface NightStudyRepository {
 
     fun getProject(): Flow<Result<ImmutableList<Project>>>
 }
-

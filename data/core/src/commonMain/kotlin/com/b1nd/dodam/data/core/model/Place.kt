@@ -5,7 +5,7 @@ enum class Place(val place: String) {
     PROJECT6("프로젝트 6실"),
     LAB1718("랩 17, 18실"),
     LAB1920("랩 19, 20실"),
-    LAB2122("랩 21, 22")
+    LAB2122("랩 21, 22"),
 }
 
 enum class ProjectPlace(val place: String) {

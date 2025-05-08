@@ -618,7 +618,10 @@ internal fun AskNightStudyScreen(
                         )
                     }
                 },
-                enabled = if (nightTypeIndex.isProject()) (projectNightStudyReason.isNotEmpty() && nightStudyStartDate < nightStudyEndDate && projectOverview.length >= 10) && !uiState.isLoading else (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading,
+                enabled = if (nightTypeIndex.isProject())
+                    (projectNightStudyReason.isNotEmpty() && nightStudyStartDate
+                            < nightStudyEndDate && projectOverview.length >= 10) && !uiState.isLoading
+                else (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading,
                 text = "신청",
                 loading = uiState.isLoading,
             )

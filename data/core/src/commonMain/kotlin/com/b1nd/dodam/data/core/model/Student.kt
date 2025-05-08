@@ -17,7 +17,7 @@ data class StudentImage(
     val grade: Int,
     val room: Int,
     val number: Int,
-    val profileImage: String?
+    val profileImage: String?,
 )
 
 fun StudentResponse.toModel(): Student = Student(
@@ -34,5 +34,5 @@ fun StudentImageResponse.toModel(): StudentImage = StudentImage(
     grade = grade,
     room = room,
     number = number,
-    profileImage = profileImage
+    profileImage = profileImage,
 )
