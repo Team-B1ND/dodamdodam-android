@@ -19,6 +19,7 @@ object DodamUrl {
     const val DIVISION = "$BASE_URL/divisions"
     const val NOTICE = "$BASE_URL/notice"
     const val CLUB = "$BASE_URL/clubs"
+    const val PROJECT = "$NIGHT_STUDY/project"
 
     object Meal {
         const val MONTH = "$MEAL/month"
@@ -66,6 +67,9 @@ object DodamUrl {
     object NightStudy {
         const val MY = "$NIGHT_STUDY/my"
         const val PENDING = "$NIGHT_STUDY/pending"
+        const val BAN = "$NIGHT_STUDY/ban/my"
+        const val MYPROJECT = "$PROJECT/my"
+        const val STUDENT = "$NIGHT_STUDY/students"
     }
 
     object Schedule {
