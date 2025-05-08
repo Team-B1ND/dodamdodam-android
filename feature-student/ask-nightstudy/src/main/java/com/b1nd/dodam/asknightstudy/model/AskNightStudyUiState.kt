@@ -7,5 +7,5 @@ import kotlinx.collections.immutable.persistentListOf
 data class AskNightStudyUiState(
     val isLoading: Boolean = false,
     val message: String = "",
-    val students: ImmutableList<NightStudyStudent> = persistentListOf()
+    val students: ImmutableList<NightStudyStudent> = persistentListOf(),
 )
