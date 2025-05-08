@@ -27,7 +27,7 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
 
     init {
         getMyNightStudy()
-        getMyBan()
+        getMyProject()
     }
 
     fun getMyNightStudy() {
