@@ -78,16 +78,16 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
         }
 
 
-    fun askProjectNightStudy(type: String, startAt: LocalDate, endAt: LocalDate, room: ProjectPlace, title: String, content: String, members: List<Int>) =
+    fun askProjectNightStudy(type: String, name: String, description: String, startAt: LocalDate, endAt: LocalDate, room: ProjectPlace, students: List<Int>) =
         viewModelScope.launch {
             nightStudyRepository.askProjectStudy(
                 type,
+                name,
+                description,
                 startAt,
                 endAt,
                 room,
-                title,
-                content,
-                members
+                students
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {

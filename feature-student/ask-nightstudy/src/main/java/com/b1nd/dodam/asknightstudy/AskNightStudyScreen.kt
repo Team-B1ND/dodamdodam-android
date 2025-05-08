@@ -61,23 +61,21 @@ import com.b1nd.dodam.designsystem.component.DodamCheckBox
 import com.b1nd.dodam.designsystem.component.DodamDatePickerBottomSheet
 import com.b1nd.dodam.designsystem.component.DodamDialog
 import com.b1nd.dodam.designsystem.component.DodamEmpty
-import com.b1nd.dodam.designsystem.component.DodamIconButton
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.DodamTopAppBar
-import com.b1nd.dodam.designsystem.component.IconButtonSize
 import com.b1nd.dodam.designsystem.component.rememberDodamDatePickerState
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.InputField
 import com.b1nd.dodam.ui.icons.UpDownArrow
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toKotlinLocalDate
 import org.koin.androidx.compose.koinViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @ExperimentalMaterial3Api
 @Composable
@@ -98,10 +96,10 @@ internal fun AskNightStudyScreen(
     var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(13)) }
 
     val projectNightStudyTimeList = arrayListOf("심자 1", "심자 2")
-    var projectNightStudyMembers = remember { mutableStateListOf<Long>() }
+    val projectNightStudyMembers = remember { mutableStateListOf<Long>() }
 
     var projectNightStudyTime by remember { mutableStateOf("심자 1") }
-    var nightStudyPlace by remember { mutableStateOf(Place.PROJECT5) }
+    val nightStudyPlace by remember { mutableStateOf(Place.PROJECT5) }
     var projectNightStudyPlace by remember { mutableStateOf(ProjectPlace.LAB12) }
 
     var showDatePicker by remember { mutableStateOf(Pair(false, "시작")) }
@@ -110,7 +108,7 @@ internal fun AskNightStudyScreen(
     var doNeedPhone by remember { mutableStateOf(false) }
     var reasonForPhone by remember { mutableStateOf("") }
 
-    var searchStuent by remember { mutableStateOf("") }
+    var searchStudent by remember { mutableStateOf("") }
 
     var showDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDodamDatePickerState()
@@ -499,10 +497,10 @@ internal fun AskNightStudyScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .padding(end = 24.dp),
-                                value = searchStuent,
-                                onValueChange = { searchStuent = it },
+                                value = searchStudent,
+                                onValueChange = { searchStudent = it },
                                 label = "학생 검색",
-                                onClickRemoveRequest = { searchStuent = "" }
+                                onClickRemoveRequest = { searchStudent = "" }
                             )
                             Image(
                                 modifier = Modifier.size(24.dp),
@@ -514,8 +512,8 @@ internal fun AskNightStudyScreen(
                         Spacer(modifier = Modifier.height(20.dp))
 
                         val filteredStudentList = uiState.students.let { list ->
-                            if (searchStuent.isNotEmpty()) {
-                                list.filter { it.name.contains(searchStuent) }
+                            if (searchStudent.isNotEmpty()) {
+                                list.filter { it.name.contains(searchStudent) }
                             } else {
                                 list
                             }
@@ -602,12 +600,12 @@ internal fun AskNightStudyScreen(
                     if (nightTypeIndex.isProject()) {
                         viewModel.askProjectNightStudy(
                             type = projectNightStudyTime,
+                            name = projectNightStudyReason,
+                            description = projectOverview,
                             startAt = nightStudyStartDate.toKotlinLocalDate(),
                             endAt = nightStudyEndDate.toKotlinLocalDate(),
                             room = projectNightStudyPlace,
-                            title = projectNightStudyReason,
-                            content = projectOverview,
-                            members = projectNightStudyMembers.map { it.toInt() }
+                            students = projectNightStudyMembers.map { it.toInt() }
                         )
                     } else {
                         viewModel.askNightStudy(
