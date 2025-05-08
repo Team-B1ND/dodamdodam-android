@@ -395,7 +395,6 @@ fun NightStudyScreen(
                         when (val nightStudyUiState = uiState) {
                             is NightStudyUiState.Success -> {
                                 if (nightStudyUiState.nightStudies.isNotEmpty()) {
-                                    Log.d("nighStudy", "NightStudyScreen: Is")
                                     items(
                                         items = nightStudyUiState.nightStudies,
                                         key = { it.id },
