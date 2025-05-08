@@ -347,11 +347,13 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
                         },
                         label = if (nightTypeIndex.isProject()) "프로젝트 명" else "심야 자습 사유",
                         isError = nightStudyReason.length !in 10..250 && uiState.message.isNotBlank(),
-                        supportText = if (nightTypeIndex.isProject()) {
-                            if (projectNightStudyReason.length !in 1..250) "프로젝트 이름을 입력해주세요" else ""
-                        } else {
-                            if (nightStudyReason.length !in 10..250) "사유를 10자 이상 입력해주세요." else ""
-                        },
+                        supportText = when {
+                            nightTypeIndex.isProject() && projectNightStudyReason.length !in 1..250 ->
+                                "프로젝트 이름을 입력해주세요"
+                            !nightTypeIndex.isProject() && nightStudyReason.length !in 10..250 ->
+                                "사유를 10자 이상 입력해주세요."
+                            else -> ""
+                        }
                     )
                     if (nightTypeIndex.isProject()) {
                         Spacer(modifier = Modifier.height(20.dp))
