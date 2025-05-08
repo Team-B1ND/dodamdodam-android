@@ -70,6 +70,7 @@ import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.InputField
 import com.b1nd.dodam.ui.icons.UpDownArrow
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlinx.collections.immutable.toImmutableList
@@ -91,7 +92,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
     var nightStudyStartDate by remember { mutableStateOf(LocalDate.now()) }
     var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(13)) }
 
-    val projectNightStudyTimeList = arrayListOf("심자 1", "심자 2")
+    val projectNightStudyTimeList = persistentListOf("심자 1", "심자 2")
     val projectNightStudyMembers = remember { mutableStateListOf<Long>() }
 
     var projectNightStudyTime by remember { mutableStateOf("심자 1") }
@@ -114,7 +115,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
 
     var nightTypeIndex by remember { mutableIntStateOf(0) }
 
-    val nightTypeList = listOf(
+    val nightTypeList = persistentListOf(
         "개인",
         "프로젝트",
     )
