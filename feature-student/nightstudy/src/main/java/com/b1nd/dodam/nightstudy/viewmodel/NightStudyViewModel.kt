@@ -68,7 +68,7 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
             when (result) {
                 is Result.Success -> {
                     _projectUiState.emit(ProjectUiState.SuccessDelete)
-                    getMyNightStudy()
+                    getMyProject()
                 }
 
                 is Result.Loading -> _projectUiState.emit(ProjectUiState.Loading)
