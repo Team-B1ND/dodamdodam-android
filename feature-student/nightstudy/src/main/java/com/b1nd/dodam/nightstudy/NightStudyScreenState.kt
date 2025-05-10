@@ -14,6 +14,11 @@ internal fun rememberNightStudyScreenState(lazyListState: LazyListState = rememb
     NightStudyScreenState(lazyListState)
 }
 
+@Composable
+internal fun rememberProjectScreenState(lazyListState: LazyListState = rememberLazyListState()): ProjectScreenState = remember(lazyListState) {
+    ProjectScreenState(lazyListState)
+}
+
 @Stable
 internal class NightStudyScreenState(
     val lazyListState: LazyListState,
@@ -32,4 +37,12 @@ internal class NightStudyScreenState(
             endAt.toJavaLocalDateTime(),
         )
     }
+}
+
+@Stable
+internal class ProjectScreenState(
+    val lazyListState: LazyListState,
+) {
+    val canScrollBackward: Boolean
+        get() = lazyListState.canScrollBackward
 }

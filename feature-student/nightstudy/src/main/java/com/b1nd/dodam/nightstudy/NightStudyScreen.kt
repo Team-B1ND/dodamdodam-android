@@ -93,6 +93,7 @@ fun NightStudyScreen(
     val uiState by viewModel.uiState.collectAsState()
     val projectUiState by viewModel.projectUiState.collectAsState()
     val nightStudyScreenState = rememberNightStudyScreenState()
+    val projectScreenState = rememberProjectScreenState()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
 
@@ -169,13 +170,25 @@ fun NightStudyScreen(
                         ),
                     ),
                 )
-                AnimatedVisibility(nightStudyScreenState.canScrollBackward) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(DodamTheme.colors.fillNeutral),
-                    )
+                if (nightTypeIndex.isProject()) {
+                    AnimatedVisibility(projectScreenState.canScrollBackward) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(DodamTheme.colors.fillNeutral),
+                        )
+                    }
+
+                } else {
+                    AnimatedVisibility(nightStudyScreenState.canScrollBackward) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(DodamTheme.colors.fillNeutral),
+                        )
+                    }
                 }
             }
         },
@@ -201,11 +214,11 @@ fun NightStudyScreen(
                     segments = nightTypeItem,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    state = nightStudyScreenState.lazyListState,
-                ) {
-                    if (nightTypeIndex.isProject()) {
+                if (nightTypeIndex.isProject()) {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        state = projectScreenState.lazyListState
+                    ) {
                         when (val projectUiState = projectUiState) {
                             is ProjectUiState.Success -> {
                                 if (projectUiState.project.isNotEmpty()) {
@@ -391,7 +404,12 @@ fun NightStudyScreen(
                                 showToast("ERROR", "프로젝트 심자 삭제를 실패했어요")
                             }
                         }
-                    } else {
+                    }
+                } else {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        state = nightStudyScreenState.lazyListState,
+                    ) {
                         when (val nightStudyUiState = uiState) {
                             is NightStudyUiState.Success -> {
                                 if (nightStudyUiState.nightStudies.isNotEmpty()) {
@@ -440,7 +458,8 @@ fun NightStudyScreen(
                                             Status.REJECTED -> {
                                                 NightStudyApplyRejectCell(
                                                     reason = nightStudy.content,
-                                                    rejectReason = nightStudy.rejectReason ?: "",
+                                                    rejectReason = nightStudy.rejectReason
+                                                        ?: "",
                                                     onTrashClick = {
                                                         id = nightStudy.id
                                                         reason = nightStudy.content
