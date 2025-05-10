@@ -93,7 +93,6 @@ fun NightStudyScreen(
     val uiState by viewModel.uiState.collectAsState()
     val projectUiState by viewModel.projectUiState.collectAsState()
     val nightStudyScreenState = rememberNightStudyScreenState()
-    val projectScreenState = rememberProjectScreenState()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
 
@@ -171,7 +170,7 @@ fun NightStudyScreen(
                     ),
                 )
                 if (nightTypeIndex.isProject()) {
-                    AnimatedVisibility(projectScreenState.canScrollBackward) {
+                    AnimatedVisibility(nightStudyScreenState.canScrollBackward) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -217,7 +216,7 @@ fun NightStudyScreen(
                 if (nightTypeIndex.isProject()) {
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
-                        state = projectScreenState.lazyListState
+                        state = nightStudyScreenState.lazyListState
                     ) {
                         when (val projectUiState = projectUiState) {
                             is ProjectUiState.Success -> {
