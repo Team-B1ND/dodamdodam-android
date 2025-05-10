@@ -28,5 +28,5 @@ data class MyBanResponse(
     val student: StudentImageResponse,
     val banReason: String?,
     val started: LocalDate?,
-    val ended: LocalDate?
+    val ended: LocalDate?,
 )

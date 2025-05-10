@@ -43,5 +43,3 @@ suspend inline fun defaultSafeRequest(crossinline request: suspend () -> Default
         else -> throw Exception(response.message)
     }
 }
-
-

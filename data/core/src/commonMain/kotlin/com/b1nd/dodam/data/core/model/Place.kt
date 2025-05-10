@@ -5,7 +5,7 @@ enum class Place(val place: String) {
     PROJECT6("프로젝트 6실"),
     LAB1718("랩 17, 18실"),
     LAB1920("랩 19, 20실"),
-    LAB2122("랩 21, 22")
+    LAB2122("랩 21, 22실"),
 }
 
 enum class ProjectPlace(val place: String) {
@@ -20,7 +20,7 @@ fun String.toPlace(): Place = when (this) {
     "프로젝트 6실" -> Place.PROJECT6
     "랩 17, 18실" -> Place.LAB1718
     "랩 19, 20실" -> Place.LAB1920
-    "랩 21, 22" -> Place.LAB2122
+    "랩 21, 22실" -> Place.LAB2122
     else -> Place.PROJECT5
 }
 
@@ -34,7 +34,7 @@ fun String.toProjectPlace(): ProjectPlace = when (this) {
 
 fun Place.toRequest(): String = when (this) {
     Place.PROJECT5 -> "프로젝트 5실"
-    Place.PROJECT6 -> "프로젝ㅌ 6실"
+    Place.PROJECT6 -> "프로젝트 6실"
     Place.LAB1718 -> "랩 17, 18실"
     Place.LAB1920 -> "랩 19, 20실"
     Place.LAB2122 -> "랩 21, 21실"

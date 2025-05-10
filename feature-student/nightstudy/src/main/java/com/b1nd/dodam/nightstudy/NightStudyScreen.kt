@@ -72,12 +72,12 @@ import com.b1nd.dodam.nightstudy.viewmodel.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.nightstudy.viewmodel.ProjectUiState
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import java.time.temporal.ChronoUnit
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import org.koin.androidx.compose.koinViewModel
-import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalFoundationApi
@@ -198,7 +198,7 @@ fun NightStudyScreen(
             Column {
                 Spacer(modifier = Modifier.height(12.dp))
                 DodamSegmentedButton(
-                    segments = nightTypeItem
+                    segments = nightTypeItem,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 LazyColumn(
@@ -395,7 +395,6 @@ fun NightStudyScreen(
                         when (val nightStudyUiState = uiState) {
                             is NightStudyUiState.Success -> {
                                 if (nightStudyUiState.nightStudies.isNotEmpty()) {
-                                    Log.d("nighStudy", "NightStudyScreen: Is")
                                     items(
                                         items = nightStudyUiState.nightStudies,
                                         key = { it.id },
@@ -604,14 +603,14 @@ private fun NightStudyApplyCell(
     playOnlyOnce: Boolean,
 ) {
     val nightStudyProgress = (
-            ChronoUnit.SECONDS.between(
-                startAt.toJavaLocalDateTime(),
-                current.toJavaLocalDateTime(),
-            ).toFloat() / ChronoUnit.SECONDS.between(
-                startAt.toJavaLocalDateTime(),
-                endAt.toJavaLocalDateTime(),
-            )
-            ).coerceIn(0f, 1f)
+        ChronoUnit.SECONDS.between(
+            startAt.toJavaLocalDateTime(),
+            current.toJavaLocalDateTime(),
+        ).toFloat() / ChronoUnit.SECONDS.between(
+            startAt.toJavaLocalDateTime(),
+            endAt.toJavaLocalDateTime(),
+        )
+        ).coerceIn(0f, 1f)
 
     val progress by animateFloatAsState(
         targetValue = if (playOnlyOnce) 0f else nightStudyProgress,
@@ -755,12 +754,7 @@ private fun NightStudyApplyCell(
 }
 
 @Composable
-private fun NightStudyApplyRejectCell(
-    modifier: Modifier = Modifier,
-    reason: String,
-    rejectReason: String,
-    onTrashClick: () -> Unit
-) {
+private fun NightStudyApplyRejectCell(modifier: Modifier = Modifier, reason: String, rejectReason: String, onTrashClick: () -> Unit) {
     Surface(
         modifier = modifier,
         shape = DodamTheme.shapes.large,

@@ -25,6 +25,5 @@ internal fun ProjectResponse.toModel(): Project = Project(
     name = name,
     description = description,
     startAt = startAt.atTime(hour = 23, minute = 0, second = 0),
-    endAt = endAt.atTime(hour = 23, minute = 0, second = 0)
+    endAt = endAt.atTime(hour = 23, minute = 0, second = 0),
 )
-

@@ -50,5 +50,5 @@ internal fun MyBanResponse.toModel(): MyBan = MyBan(
     student = student.toModel(),
     banReason = banReason,
     started = started?.atTime(hour = 23, minute = 0, second = 0),
-    ended = ended?.atTime(hour = 23, minute = 0, second = 0)
+    ended = ended?.atTime(hour = 23, minute = 0, second = 0),
 )

@@ -70,20 +70,17 @@ import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.InputField
 import com.b1nd.dodam.ui.icons.UpDownArrow
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import kotlinx.collections.immutable.persistentListOf
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toKotlinLocalDate
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun AskNightStudyScreen(
-    viewModel: AskNightStudyViewModel = koinViewModel(),
-    popBackStack: () -> Unit,
-    showToast: (String, String) -> Unit,
-) {
+internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
@@ -95,7 +92,7 @@ internal fun AskNightStudyScreen(
     var nightStudyStartDate by remember { mutableStateOf(LocalDate.now()) }
     var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(13)) }
 
-    val projectNightStudyTimeList = arrayListOf("심자 1", "심자 2")
+    val projectNightStudyTimeList = persistentListOf("심자 1", "심자 2")
     val projectNightStudyMembers = remember { mutableStateListOf<Long>() }
 
     var projectNightStudyTime by remember { mutableStateOf("심자 1") }
@@ -118,8 +115,7 @@ internal fun AskNightStudyScreen(
 
     var nightTypeIndex by remember { mutableIntStateOf(0) }
 
-
-    val nightTypeList = listOf(
+    val nightTypeList = persistentListOf(
         "개인",
         "프로젝트",
     )
@@ -332,7 +328,7 @@ internal fun AskNightStudyScreen(
                     .padding(horizontal = 16.dp),
             ) {
                 DodamSegmentedButton(
-                    segments = nightTypeItem
+                    segments = nightTypeItem,
                 )
                 Column(
                     modifier = Modifier,
@@ -342,16 +338,22 @@ internal fun AskNightStudyScreen(
                         modifier = Modifier.fillMaxWidth(),
                         value = if (nightTypeIndex.isProject()) projectNightStudyReason else nightStudyReason,
                         onValueChange = {
-                            if (nightTypeIndex.isProject()) projectNightStudyReason =
-                                it else nightStudyReason = it
+                            if (nightTypeIndex.isProject()) {
+                                projectNightStudyReason =
+                                    it
+                            } else {
+                                nightStudyReason = it
+                            }
                         },
                         label = if (nightTypeIndex.isProject()) "프로젝트 명" else "심야 자습 사유",
                         isError = nightStudyReason.length !in 10..250 && uiState.message.isNotBlank(),
-                        supportText = if (nightTypeIndex.isProject()) {
-                            if (projectNightStudyReason.length !in 1..250) "프로젝트 이름을 입력해주세요" else ""
-                        } else {
-                            if (nightStudyReason.length !in 10..250) "사유를 10자 이상 입력해주세요." else ""
-                        },
+                        supportText = when {
+                            nightTypeIndex.isProject() && projectNightStudyReason.length !in 1..250 ->
+                                "프로젝트 이름을 입력해주세요"
+                            !nightTypeIndex.isProject() && nightStudyReason.length !in 10..250 ->
+                                "사유를 10자 이상 입력해주세요."
+                            else -> ""
+                        }
                     )
                     if (nightTypeIndex.isProject()) {
                         Spacer(modifier = Modifier.height(20.dp))
@@ -417,7 +419,6 @@ internal fun AskNightStudyScreen(
                         },
                     )
                 }
-
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -491,7 +492,7 @@ internal fun AskNightStudyScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             DodamTextField(
                                 modifier = Modifier
@@ -500,7 +501,7 @@ internal fun AskNightStudyScreen(
                                 value = searchStudent,
                                 onValueChange = { searchStudent = it },
                                 label = "학생 검색",
-                                onClickRemoveRequest = { searchStudent = "" }
+                                onClickRemoveRequest = { searchStudent = "" },
                             )
                             Image(
                                 modifier = Modifier.size(24.dp),
@@ -520,7 +521,7 @@ internal fun AskNightStudyScreen(
                         }.sortedByDescending { it.id in projectNightStudyMembers }
                         LazyColumn(
                             modifier = Modifier.height(200.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
                             items(
                                 items = filteredStudentList,
@@ -537,14 +538,14 @@ internal fun AskNightStudyScreen(
                                                     projectNightStudyMembers.add(it.id)
                                                 }
                                             }
-                                        }
+                                        },
                                     ),
                                     name = it.name,
                                     grade = it.grade,
                                     room = it.room,
                                     image = it.profileImage,
                                     isInclude = it.id in projectNightStudyMembers,
-                                    isBan = it.isBanned
+                                    isBan = it.isBanned,
                                 )
                             }
 
@@ -553,13 +554,12 @@ internal fun AskNightStudyScreen(
                                     DodamEmpty(
                                         onClick = {},
                                         title = "검색결과가 없어요!",
-                                        buttonText = "학생 이름을 잘 작성해주세요"
+                                        buttonText = "학생 이름을 잘 작성해주세요",
                                     )
                                 }
                             }
                         }
                     }
-
                 } else {
                     AskNightStudyCard(
                         text = "휴대폰 사용",
@@ -605,7 +605,7 @@ internal fun AskNightStudyScreen(
                             startAt = nightStudyStartDate.toKotlinLocalDate(),
                             endAt = nightStudyEndDate.toKotlinLocalDate(),
                             room = projectNightStudyPlace,
-                            students = projectNightStudyMembers.map { it.toInt() }
+                            students = projectNightStudyMembers.map { it.toInt() },
                         )
                     } else {
                         viewModel.askNightStudy(
@@ -618,7 +618,14 @@ internal fun AskNightStudyScreen(
                         )
                     }
                 },
-                enabled = if (nightTypeIndex.isProject()) (projectNightStudyReason.isNotEmpty() && nightStudyStartDate < nightStudyEndDate && projectOverview.length >= 10) && !uiState.isLoading else (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading,
+                enabled = if (nightTypeIndex.isProject()) {
+                    (
+                        projectNightStudyReason.isNotEmpty() && nightStudyStartDate
+                            < nightStudyEndDate && projectOverview.length >= 10
+                        ) && !uiState.isLoading
+                } else {
+                    (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading
+                },
                 text = "신청",
                 loading = uiState.isLoading,
             )
@@ -631,12 +638,7 @@ private fun Int.isProject() = this == 1
 private fun String.isPlace() = this == "장소"
 
 @Composable
-private fun AskNightStudyCard(
-    modifier: Modifier = Modifier,
-    text: String,
-    action: @Composable () -> Unit,
-    onClick: () -> Unit,
-) {
+private fun AskNightStudyCard(modifier: Modifier = Modifier, text: String, action: @Composable () -> Unit, onClick: () -> Unit) {
     Row(
         modifier = modifier.clickable(
             onClick = onClick,
@@ -698,7 +700,7 @@ private fun DodamNightStudyMemberComponent(
                         modifier = Modifier.size(22.dp),
                         imageVector = DodamIcons.CheckmarkCircleFilled.value,
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal)
+                        colorFilter = ColorFilter.tint(DodamTheme.colors.primaryNormal),
                     )
                 }
                 if (isBan) {

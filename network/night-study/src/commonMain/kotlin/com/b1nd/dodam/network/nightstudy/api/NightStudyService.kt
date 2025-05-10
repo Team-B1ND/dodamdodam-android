@@ -49,14 +49,7 @@ internal class NightStudyService(
         }.toImmutableList()
     }
 
-    override suspend fun askNightStudy(
-        place: String,
-        content: String,
-        doNeedPhone: Boolean,
-        reasonForPhone: String?,
-        startAt: LocalDate,
-        endAt: LocalDate,
-    ) {
+    override suspend fun askNightStudy(place: String, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) {
         return defaultSafeRequest {
             network.post(DodamUrl.NIGHT_STUDY) {
                 contentType(ContentType.Application.Json)
@@ -83,7 +76,7 @@ internal class NightStudyService(
 
     override suspend fun deleteProject(id: Long) {
         return defaultSafeRequest {
-            network.delete(DodamUrl.PROJECT + "/${id}")
+            network.delete(DodamUrl.PROJECT + "/$id")
                 .body<DefaultResponse>()
         }
     }
@@ -136,8 +129,8 @@ internal class NightStudyService(
                         startAt,
                         endAt,
                         room,
-                        students
-                    )
+                        students,
+                    ),
                 )
             }.body<DefaultResponse>()
         }

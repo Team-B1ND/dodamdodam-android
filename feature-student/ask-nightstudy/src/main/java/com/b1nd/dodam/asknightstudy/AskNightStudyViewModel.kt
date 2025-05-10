@@ -77,7 +77,6 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
             }
         }
 
-
     fun askProjectNightStudy(type: String, name: String, description: String, startAt: LocalDate, endAt: LocalDate, room: ProjectPlace, students: List<Int>) =
         viewModelScope.launch {
             nightStudyRepository.askProjectStudy(
@@ -87,7 +86,7 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
                 startAt,
                 endAt,
                 room,
-                students
+                students,
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {
@@ -126,13 +125,13 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
         }
 
     fun getNightStudyStudent() = viewModelScope.launch {
-        nightStudyRepository.getNightStudyStudent().collect{ result ->
+        nightStudyRepository.getNightStudyStudent().collect { result ->
             when (result) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            students = result.data
+                            students = result.data,
                         )
                     }
                 }
@@ -161,9 +160,7 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
                 }
             }
         }
-
     }
-
 }
 
 sealed interface Event {

@@ -10,11 +10,10 @@ data class NightStudyStudent(
     val number: Int,
     val phone: String,
     val profileImage: String?,
-    val isBanned: Boolean
+    val isBanned: Boolean,
 )
 
-
-internal fun NightStudyStudentResponse.toModel() : NightStudyStudent = NightStudyStudent(
+internal fun NightStudyStudentResponse.toModel(): NightStudyStudent = NightStudyStudent(
     id = id,
     name = name,
     grade = grade,
@@ -22,5 +21,5 @@ internal fun NightStudyStudentResponse.toModel() : NightStudyStudent = NightStud
     number = number,
     phone = phone,
     profileImage = profileImage,
-    isBanned = isBanned
+    isBanned = isBanned,
 )

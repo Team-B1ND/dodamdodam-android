@@ -107,7 +107,7 @@ sealed interface NightStudyUiState {
 
 sealed interface ProjectUiState {
     data class Success(
-        val project: ImmutableList<Project> = persistentListOf()
+        val project: ImmutableList<Project> = persistentListOf(),
     ) : ProjectUiState
 
     data object Loading : ProjectUiState
@@ -116,5 +116,5 @@ sealed interface ProjectUiState {
 
     data object SuccessDelete : ProjectUiState
 
-    data object FailDelete: ProjectUiState
+    data object FailDelete : ProjectUiState
 }
