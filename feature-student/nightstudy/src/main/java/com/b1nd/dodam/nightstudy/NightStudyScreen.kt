@@ -1,7 +1,6 @@
 package com.b1nd.dodam.nightstudy
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -68,17 +67,19 @@ import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTag
 import com.b1nd.dodam.designsystem.component.TagType
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.nightstudy.viewmodel.MyBanUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.nightstudy.viewmodel.ProjectUiState
 import com.b1nd.dodam.ui.effect.shimmerEffect
-import java.time.temporal.ChronoUnit
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import org.koin.androidx.compose.koinViewModel
+import java.time.temporal.ChronoUnit
 
+@SuppressLint("DefaultLocale")
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
@@ -92,6 +93,7 @@ fun NightStudyScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val projectUiState by viewModel.projectUiState.collectAsState()
+    val myBanUiState by viewModel.myBanUiState.collectAsState()
     val nightStudyScreenState = rememberNightStudyScreenState()
 
     var playOnlyOnce by rememberSaveable { mutableStateOf(true) }
@@ -99,6 +101,7 @@ fun NightStudyScreen(
     var showDialog by remember { mutableStateOf(false) }
     var reason by remember { mutableStateOf("") }
     var id by remember { mutableLongStateOf(0) }
+    var showTopBar by remember { mutableStateOf(false) }
 
     var isRefreshing by remember { mutableStateOf(false) }
     val pullRefreshState = rememberPullRefreshState(
@@ -107,6 +110,7 @@ fun NightStudyScreen(
             isRefreshing = false
             viewModel.getMyNightStudy()
             viewModel.getMyProject()
+            viewModel.getMyBan()
         },
     )
     var nightTypeIndex by remember { mutableIntStateOf(0) }
@@ -127,6 +131,7 @@ fun NightStudyScreen(
         if (refresh()) {
             viewModel.getMyNightStudy()
             viewModel.getMyProject()
+            viewModel.getMyBan()
         }
 
         onDispose(dispose)
@@ -166,7 +171,8 @@ fun NightStudyScreen(
                         ActionIcon(
                             icon = DodamIcons.Plus,
                             onClick = onAddClick,
-                        ),
+                            enabled = showTopBar
+                        )
                     ),
                 )
                 if (nightTypeIndex.isProject()) {
@@ -209,396 +215,531 @@ fun NightStudyScreen(
             )
             Column {
                 Spacer(modifier = Modifier.height(12.dp))
-                DodamSegmentedButton(
-                    segments = nightTypeItem,
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                if (nightTypeIndex.isProject()) {
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        state = nightStudyScreenState.lazyListState
-                    ) {
-                        when (val projectUiState = projectUiState) {
-                            is ProjectUiState.Success -> {
-                                if (projectUiState.project.isNotEmpty()) {
-                                    items(
-                                        items = projectUiState.project,
-                                        key = { it.id },
-                                    ) { project ->
+                when (val myBanUiState = myBanUiState) {
+                    is MyBanUiState.Success -> {
+                        if (myBanUiState.banData == null) {
+                            showTopBar = true
+                            DodamSegmentedButton(
+                                segments = nightTypeItem,
+                            )
+                            Spacer(modifier = Modifier.height(20.dp))
+                            if (nightTypeIndex.isProject()) {
+                                LazyColumn(
+                                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                                    state = nightStudyScreenState.lazyListState
+                                ) {
+                                    when (val projectUiState = projectUiState) {
+                                        is ProjectUiState.Success -> {
+                                            if (projectUiState.project.isNotEmpty()) {
+                                                items(
+                                                    items = projectUiState.project,
+                                                    key = { it.id },
+                                                ) { project ->
 
-                                        LaunchedEffect(Unit) {
-                                            playOnlyOnce = false
-                                        }
+                                                    LaunchedEffect(Unit) {
+                                                        playOnlyOnce = false
+                                                    }
 
-                                        when (project.status) {
-                                            Status.PENDING -> {
-                                                NightStudyApplyCell(
-                                                    tagType = TagType.Secondary,
-                                                    reason = project.description,
-                                                    startAt = project.startAt,
-                                                    endAt = project.endAt,
-                                                    onTrashClick = {
-                                                        id = project.id
-                                                        reason = ""
-                                                        showDialog = true
-                                                    },
-                                                    playOnlyOnce = playOnlyOnce,
-                                                )
-                                            }
+                                                    when (project.status) {
+                                                        Status.PENDING -> {
+                                                            NightStudyApplyCell(
+                                                                tagType = TagType.Secondary,
+                                                                reason = project.description,
+                                                                startAt = project.startAt,
+                                                                endAt = project.endAt,
+                                                                onTrashClick = {
+                                                                    id = project.id
+                                                                    reason = ""
+                                                                    showDialog = true
+                                                                },
+                                                                playOnlyOnce = playOnlyOnce,
+                                                            )
+                                                        }
 
-                                            Status.ALLOWED -> {
-                                                NightStudyApplyCell(
-                                                    tagType = TagType.Primary,
-                                                    reason = project.description,
-                                                    startAt = project.startAt,
-                                                    endAt = project.endAt,
-                                                    onTrashClick = {
-                                                        id = project.id
-                                                        reason = ""
-                                                        showDialog = true
-                                                    },
-                                                    playOnlyOnce = playOnlyOnce,
-                                                )
-                                            }
+                                                        Status.ALLOWED -> {
+                                                            NightStudyApplyCell(
+                                                                tagType = TagType.Primary,
+                                                                reason = project.description,
+                                                                startAt = project.startAt,
+                                                                endAt = project.endAt,
+                                                                onTrashClick = {
+                                                                    id = project.id
+                                                                    reason = ""
+                                                                    showDialog = true
+                                                                },
+                                                                playOnlyOnce = playOnlyOnce,
+                                                            )
+                                                        }
 
-                                            Status.REJECTED -> {
-                                                NightStudyApplyRejectCell(
-                                                    reason = project.description,
-                                                    rejectReason = "",
-                                                    onTrashClick = {
-                                                        id = project.id
-                                                        reason = ""
-                                                        showDialog = true
-                                                    },
-                                                )
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    item {
-                                        DodamEmpty(
-                                            onClick = onAddClick,
-                                            title = "아직 신청한 프로젝트 심자가 없어요.",
-                                            buttonText = "프로젝트 심자 신청하기",
-                                        )
-                                    }
-                                }
-                            }
-
-                            is ProjectUiState.Loading -> {
-                                item {
-                                    Surface(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        shape = DodamTheme.shapes.large,
-                                        color = DodamTheme.colors.backgroundNormal,
-                                    ) {
-                                        Column(
-                                            modifier = Modifier
-                                                .padding(
-                                                    vertical = 16.dp,
-                                                    horizontal = 12.dp,
-                                                ),
-                                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                                        ) {
-                                            Row(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                verticalAlignment = Alignment.CenterVertically,
-                                            ) {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .width(66.dp)
-                                                        .height(28.dp)
-                                                        .background(
-                                                            brush = shimmerEffect(),
-                                                            shape = CircleShape,
-                                                        ),
-                                                )
-                                                Spacer(modifier = Modifier.weight(1f))
-                                                Box(
-                                                    modifier = Modifier
-                                                        .size(24.dp)
-                                                        .background(
-                                                            brush = shimmerEffect(),
-                                                            shape = RoundedCornerShape(4.dp),
-                                                        ),
-                                                )
-                                            }
-
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .height(24.dp)
-                                                    .background(
-                                                        brush = shimmerEffect(),
-                                                        shape = RoundedCornerShape(8.dp),
-                                                    ),
-                                            )
-                                            DodamDivider(type = DividerType.Normal)
-                                            Box(
-                                                modifier = Modifier
-                                                    .width(120.dp)
-                                                    .height(28.dp)
-                                                    .background(
-                                                        brush = shimmerEffect(),
-                                                        shape = RoundedCornerShape(8.dp),
-                                                    ),
-                                            )
-
-                                            Column(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                verticalArrangement = Arrangement.spacedBy(4.dp),
-                                            ) {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .height(14.dp)
-                                                        .background(
-                                                            brush = shimmerEffect(),
-                                                            shape = RoundedCornerShape(8.dp),
-                                                        ),
-                                                )
-                                                Row(
-                                                    modifier = Modifier.fillMaxWidth(),
-                                                    verticalAlignment = Alignment.CenterVertically,
-                                                ) {
-                                                    Box(
-                                                        modifier = Modifier
-                                                            .width(101.dp)
-                                                            .height(24.dp)
-                                                            .background(
-                                                                brush = shimmerEffect(),
-                                                                shape = CircleShape,
-                                                            ),
-                                                    )
-
-                                                    Spacer(modifier = Modifier.weight(1f))
-                                                    Box(
-                                                        modifier = Modifier
-                                                            .width(101.dp)
-                                                            .height(24.dp)
-                                                            .background(
-                                                                brush = shimmerEffect(),
-                                                                shape = CircleShape,
-                                                            ),
+                                                        Status.REJECTED -> {
+                                                            NightStudyApplyRejectCell(
+                                                                reason = project.description,
+                                                                rejectReason = "",
+                                                                onTrashClick = {
+                                                                    id = project.id
+                                                                    reason = ""
+                                                                    showDialog = true
+                                                                },
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                item {
+                                                    DodamEmpty(
+                                                        onClick = onAddClick,
+                                                        title = "아직 신청한 프로젝트 심자가 없어요.",
+                                                        buttonText = "프로젝트 심자 신청하기",
                                                     )
                                                 }
                                             }
                                         }
+
+                                        is ProjectUiState.Loading -> {
+                                            item {
+                                                Surface(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    shape = DodamTheme.shapes.large,
+                                                    color = DodamTheme.colors.backgroundNormal,
+                                                ) {
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                vertical = 16.dp,
+                                                                horizontal = 12.dp,
+                                                            ),
+                                                        verticalArrangement = Arrangement.spacedBy(
+                                                            12.dp
+                                                        ),
+                                                    ) {
+                                                        Row(
+                                                            modifier = Modifier.fillMaxWidth(),
+                                                            verticalAlignment = Alignment.CenterVertically,
+                                                        ) {
+                                                            Box(
+                                                                modifier = Modifier
+                                                                    .width(66.dp)
+                                                                    .height(28.dp)
+                                                                    .background(
+                                                                        brush = shimmerEffect(),
+                                                                        shape = CircleShape,
+                                                                    ),
+                                                            )
+                                                            Spacer(modifier = Modifier.weight(1f))
+                                                            Box(
+                                                                modifier = Modifier
+                                                                    .size(24.dp)
+                                                                    .background(
+                                                                        brush = shimmerEffect(),
+                                                                        shape = RoundedCornerShape(4.dp),
+                                                                    ),
+                                                            )
+                                                        }
+
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .fillMaxWidth()
+                                                                .height(24.dp)
+                                                                .background(
+                                                                    brush = shimmerEffect(),
+                                                                    shape = RoundedCornerShape(8.dp),
+                                                                ),
+                                                        )
+                                                        DodamDivider(type = DividerType.Normal)
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .width(120.dp)
+                                                                .height(28.dp)
+                                                                .background(
+                                                                    brush = shimmerEffect(),
+                                                                    shape = RoundedCornerShape(8.dp),
+                                                                ),
+                                                        )
+
+                                                        Column(
+                                                            modifier = Modifier.fillMaxWidth(),
+                                                            verticalArrangement = Arrangement.spacedBy(
+                                                                4.dp
+                                                            ),
+                                                        ) {
+                                                            Box(
+                                                                modifier = Modifier
+                                                                    .fillMaxWidth()
+                                                                    .height(14.dp)
+                                                                    .background(
+                                                                        brush = shimmerEffect(),
+                                                                        shape = RoundedCornerShape(8.dp),
+                                                                    ),
+                                                            )
+                                                            Row(
+                                                                modifier = Modifier.fillMaxWidth(),
+                                                                verticalAlignment = Alignment.CenterVertically,
+                                                            ) {
+                                                                Box(
+                                                                    modifier = Modifier
+                                                                        .width(101.dp)
+                                                                        .height(24.dp)
+                                                                        .background(
+                                                                            brush = shimmerEffect(),
+                                                                            shape = CircleShape,
+                                                                        ),
+                                                                )
+
+                                                                Spacer(modifier = Modifier.weight(1f))
+                                                                Box(
+                                                                    modifier = Modifier
+                                                                        .width(101.dp)
+                                                                        .height(24.dp)
+                                                                        .background(
+                                                                            brush = shimmerEffect(),
+                                                                            shape = CircleShape,
+                                                                        ),
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        is ProjectUiState.Error -> showToast(
+                                            "ERROR",
+                                            "프로젝트 심자를 불러올 수 없어요",
+                                        )
+
+                                        is ProjectUiState.SuccessDelete -> {
+                                            showDialog = false
+                                            showToast("SUCCESS", "프로젝트 심자를 삭제했어요")
+                                        }
+
+                                        is ProjectUiState.FailDelete -> {
+                                            showDialog = false
+                                            showToast("ERROR", "프로젝트 심자 삭제를 실패했어요")
+                                        }
+                                    }
+                                }
+                            } else {
+                                LazyColumn(
+                                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                                    state = nightStudyScreenState.lazyListState,
+                                ) {
+                                    when (val nightStudyUiState = uiState) {
+                                        is NightStudyUiState.Success -> {
+                                            if (nightStudyUiState.nightStudies.isNotEmpty()) {
+                                                items(
+                                                    items = nightStudyUiState.nightStudies,
+                                                    key = { it.id },
+                                                ) { nightStudy ->
+
+                                                    LaunchedEffect(Unit) {
+                                                        playOnlyOnce = false
+                                                    }
+
+                                                    when (nightStudy.status) {
+                                                        Status.PENDING -> {
+                                                            NightStudyApplyCell(
+                                                                tagType = TagType.Secondary,
+                                                                reason = nightStudy.content,
+                                                                startAt = nightStudy.startAt,
+                                                                endAt = nightStudy.endAt,
+                                                                phoneReason = nightStudy.reasonForPhone,
+                                                                onTrashClick = {
+                                                                    id = nightStudy.id
+                                                                    reason = nightStudy.content
+                                                                    showDialog = true
+                                                                },
+                                                                playOnlyOnce = playOnlyOnce,
+                                                            )
+                                                        }
+
+                                                        Status.ALLOWED -> {
+                                                            NightStudyApplyCell(
+                                                                tagType = TagType.Primary,
+                                                                reason = nightStudy.content,
+                                                                startAt = nightStudy.startAt,
+                                                                endAt = nightStudy.endAt,
+                                                                phoneReason = nightStudy.reasonForPhone,
+                                                                onTrashClick = {
+                                                                    id = nightStudy.id
+                                                                    reason = nightStudy.content
+                                                                    showDialog = true
+                                                                },
+                                                                playOnlyOnce = playOnlyOnce,
+                                                            )
+                                                        }
+
+                                                        Status.REJECTED -> {
+                                                            NightStudyApplyRejectCell(
+                                                                reason = nightStudy.content,
+                                                                rejectReason = nightStudy.rejectReason
+                                                                    ?: "",
+                                                                onTrashClick = {
+                                                                    id = nightStudy.id
+                                                                    reason = nightStudy.content
+                                                                    showDialog = true
+                                                                },
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                item {
+                                                    DodamEmpty(
+                                                        onClick = onAddClick,
+                                                        title = "아직 신청한 심야 자습이 없어요.",
+                                                        buttonText = "심야 자습 신청하기",
+                                                    )
+                                                }
+                                            }
+                                        }
+
+                                        is NightStudyUiState.Loading -> {
+                                            item {
+                                                Surface(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    shape = DodamTheme.shapes.large,
+                                                    color = DodamTheme.colors.backgroundNormal,
+                                                ) {
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                vertical = 16.dp,
+                                                                horizontal = 12.dp,
+                                                            ),
+                                                        verticalArrangement = Arrangement.spacedBy(
+                                                            12.dp
+                                                        ),
+                                                    ) {
+                                                        Row(
+                                                            modifier = Modifier.fillMaxWidth(),
+                                                            verticalAlignment = Alignment.CenterVertically,
+                                                        ) {
+                                                            Box(
+                                                                modifier = Modifier
+                                                                    .width(66.dp)
+                                                                    .height(28.dp)
+                                                                    .background(
+                                                                        brush = shimmerEffect(),
+                                                                        shape = CircleShape,
+                                                                    ),
+                                                            )
+                                                            Spacer(modifier = Modifier.weight(1f))
+                                                            Box(
+                                                                modifier = Modifier
+                                                                    .size(24.dp)
+                                                                    .background(
+                                                                        brush = shimmerEffect(),
+                                                                        shape = RoundedCornerShape(4.dp),
+                                                                    ),
+                                                            )
+                                                        }
+
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .fillMaxWidth()
+                                                                .height(24.dp)
+                                                                .background(
+                                                                    brush = shimmerEffect(),
+                                                                    shape = RoundedCornerShape(8.dp),
+                                                                ),
+                                                        )
+                                                        DodamDivider(type = DividerType.Normal)
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .width(120.dp)
+                                                                .height(28.dp)
+                                                                .background(
+                                                                    brush = shimmerEffect(),
+                                                                    shape = RoundedCornerShape(8.dp),
+                                                                ),
+                                                        )
+
+                                                        Column(
+                                                            modifier = Modifier.fillMaxWidth(),
+                                                            verticalArrangement = Arrangement.spacedBy(
+                                                                4.dp
+                                                            ),
+                                                        ) {
+                                                            Box(
+                                                                modifier = Modifier
+                                                                    .fillMaxWidth()
+                                                                    .height(14.dp)
+                                                                    .background(
+                                                                        brush = shimmerEffect(),
+                                                                        shape = RoundedCornerShape(8.dp),
+                                                                    ),
+                                                            )
+                                                            Row(
+                                                                modifier = Modifier.fillMaxWidth(),
+                                                                verticalAlignment = Alignment.CenterVertically,
+                                                            ) {
+                                                                Box(
+                                                                    modifier = Modifier
+                                                                        .width(101.dp)
+                                                                        .height(24.dp)
+                                                                        .background(
+                                                                            brush = shimmerEffect(),
+                                                                            shape = CircleShape,
+                                                                        ),
+                                                                )
+
+                                                                Spacer(modifier = Modifier.weight(1f))
+                                                                Box(
+                                                                    modifier = Modifier
+                                                                        .width(101.dp)
+                                                                        .height(24.dp)
+                                                                        .background(
+                                                                            brush = shimmerEffect(),
+                                                                            shape = CircleShape,
+                                                                        ),
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        is NightStudyUiState.Error -> showToast(
+                                            "ERROR",
+                                            "심야 자습을 불러올 수 없어요",
+                                        )
+
+                                        is NightStudyUiState.SuccessDelete -> {
+                                            showDialog = false
+                                            showToast("SUCCESS", "심야 자습을 삭제했어요")
+                                        }
+
+                                        is NightStudyUiState.FailDelete -> {
+                                            showDialog = false
+                                            showToast("ERROR", "심야 자습 삭제를 실패했어요")
+                                        }
+                                    }
+                                    item {
+                                        Spacer(modifier = Modifier.height(80.dp))
                                     }
                                 }
                             }
-
-                            is ProjectUiState.Error -> showToast(
-                                "ERROR",
-                                "프로젝트 심자를 불러올 수 없어요",
+                        } else {
+                            DodamEmpty(
+                                onClick = {},
+                                title = "심자가 정지되었습니다!",
+                                buttonText = "~" + String.format(
+                                    "%d월 %d일",
+                                    myBanUiState.banData.ended?.monthNumber,
+                                    myBanUiState.banData.ended?.dayOfMonth,
+                                ),
                             )
-
-                            is ProjectUiState.SuccessDelete -> {
-                                showDialog = false
-                                showToast("SUCCESS", "프로젝트 심자를 삭제했어요")
-                            }
-
-                            is ProjectUiState.FailDelete -> {
-                                showDialog = false
-                                showToast("ERROR", "프로젝트 심자 삭제를 실패했어요")
-                            }
                         }
                     }
-                } else {
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        state = nightStudyScreenState.lazyListState,
-                    ) {
-                        when (val nightStudyUiState = uiState) {
-                            is NightStudyUiState.Success -> {
-                                if (nightStudyUiState.nightStudies.isNotEmpty()) {
-                                    items(
-                                        items = nightStudyUiState.nightStudies,
-                                        key = { it.id },
-                                    ) { nightStudy ->
 
-                                        LaunchedEffect(Unit) {
-                                            playOnlyOnce = false
-                                        }
+                    is MyBanUiState.Error -> {
+                        showDialog = false
+                        showToast("ERROR", "내 심자 정지 여부를 불러오는데 실패했어요")
+                    }
 
-                                        when (nightStudy.status) {
-                                            Status.PENDING -> {
-                                                NightStudyApplyCell(
-                                                    tagType = TagType.Secondary,
-                                                    reason = nightStudy.content,
-                                                    startAt = nightStudy.startAt,
-                                                    endAt = nightStudy.endAt,
-                                                    phoneReason = nightStudy.reasonForPhone,
-                                                    onTrashClick = {
-                                                        id = nightStudy.id
-                                                        reason = nightStudy.content
-                                                        showDialog = true
-                                                    },
-                                                    playOnlyOnce = playOnlyOnce,
-                                                )
-                                            }
+                    is MyBanUiState.Loading -> {
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = DodamTheme.shapes.large,
+                            color = DodamTheme.colors.backgroundNormal,
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(
+                                        vertical = 16.dp,
+                                        horizontal = 12.dp,
+                                    ),
+                                verticalArrangement = Arrangement.spacedBy(
+                                    12.dp
+                                ),
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .width(66.dp)
+                                            .height(28.dp)
+                                            .background(
+                                                brush = shimmerEffect(),
+                                                shape = CircleShape,
+                                            ),
+                                    )
+                                    Spacer(modifier = Modifier.weight(1f))
+                                    Box(
+                                        modifier = Modifier
+                                            .size(24.dp)
+                                            .background(
+                                                brush = shimmerEffect(),
+                                                shape = RoundedCornerShape(4.dp),
+                                            ),
+                                    )
+                                }
 
-                                            Status.ALLOWED -> {
-                                                NightStudyApplyCell(
-                                                    tagType = TagType.Primary,
-                                                    reason = nightStudy.content,
-                                                    startAt = nightStudy.startAt,
-                                                    endAt = nightStudy.endAt,
-                                                    phoneReason = nightStudy.reasonForPhone,
-                                                    onTrashClick = {
-                                                        id = nightStudy.id
-                                                        reason = nightStudy.content
-                                                        showDialog = true
-                                                    },
-                                                    playOnlyOnce = playOnlyOnce,
-                                                )
-                                            }
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(24.dp)
+                                        .background(
+                                            brush = shimmerEffect(),
+                                            shape = RoundedCornerShape(8.dp),
+                                        ),
+                                )
+                                DodamDivider(type = DividerType.Normal)
+                                Box(
+                                    modifier = Modifier
+                                        .width(120.dp)
+                                        .height(28.dp)
+                                        .background(
+                                            brush = shimmerEffect(),
+                                            shape = RoundedCornerShape(8.dp),
+                                        ),
+                                )
 
-                                            Status.REJECTED -> {
-                                                NightStudyApplyRejectCell(
-                                                    reason = nightStudy.content,
-                                                    rejectReason = nightStudy.rejectReason
-                                                        ?: "",
-                                                    onTrashClick = {
-                                                        id = nightStudy.id
-                                                        reason = nightStudy.content
-                                                        showDialog = true
-                                                    },
-                                                )
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    item {
-                                        DodamEmpty(
-                                            onClick = onAddClick,
-                                            title = "아직 신청한 심야 자습이 없어요.",
-                                            buttonText = "심야 자습 신청하기",
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalArrangement = Arrangement.spacedBy(
+                                        4.dp
+                                    ),
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(14.dp)
+                                            .background(
+                                                brush = shimmerEffect(),
+                                                shape = RoundedCornerShape(8.dp),
+                                            ),
+                                    )
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .width(101.dp)
+                                                .height(24.dp)
+                                                .background(
+                                                    brush = shimmerEffect(),
+                                                    shape = CircleShape,
+                                                ),
+                                        )
+
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Box(
+                                            modifier = Modifier
+                                                .width(101.dp)
+                                                .height(24.dp)
+                                                .background(
+                                                    brush = shimmerEffect(),
+                                                    shape = CircleShape,
+                                                ),
                                         )
                                     }
                                 }
                             }
-
-                            is NightStudyUiState.Loading -> {
-                                item {
-                                    Surface(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        shape = DodamTheme.shapes.large,
-                                        color = DodamTheme.colors.backgroundNormal,
-                                    ) {
-                                        Column(
-                                            modifier = Modifier
-                                                .padding(
-                                                    vertical = 16.dp,
-                                                    horizontal = 12.dp,
-                                                ),
-                                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                                        ) {
-                                            Row(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                verticalAlignment = Alignment.CenterVertically,
-                                            ) {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .width(66.dp)
-                                                        .height(28.dp)
-                                                        .background(
-                                                            brush = shimmerEffect(),
-                                                            shape = CircleShape,
-                                                        ),
-                                                )
-                                                Spacer(modifier = Modifier.weight(1f))
-                                                Box(
-                                                    modifier = Modifier
-                                                        .size(24.dp)
-                                                        .background(
-                                                            brush = shimmerEffect(),
-                                                            shape = RoundedCornerShape(4.dp),
-                                                        ),
-                                                )
-                                            }
-
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .height(24.dp)
-                                                    .background(
-                                                        brush = shimmerEffect(),
-                                                        shape = RoundedCornerShape(8.dp),
-                                                    ),
-                                            )
-                                            DodamDivider(type = DividerType.Normal)
-                                            Box(
-                                                modifier = Modifier
-                                                    .width(120.dp)
-                                                    .height(28.dp)
-                                                    .background(
-                                                        brush = shimmerEffect(),
-                                                        shape = RoundedCornerShape(8.dp),
-                                                    ),
-                                            )
-
-                                            Column(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                verticalArrangement = Arrangement.spacedBy(4.dp),
-                                            ) {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .height(14.dp)
-                                                        .background(
-                                                            brush = shimmerEffect(),
-                                                            shape = RoundedCornerShape(8.dp),
-                                                        ),
-                                                )
-                                                Row(
-                                                    modifier = Modifier.fillMaxWidth(),
-                                                    verticalAlignment = Alignment.CenterVertically,
-                                                ) {
-                                                    Box(
-                                                        modifier = Modifier
-                                                            .width(101.dp)
-                                                            .height(24.dp)
-                                                            .background(
-                                                                brush = shimmerEffect(),
-                                                                shape = CircleShape,
-                                                            ),
-                                                    )
-
-                                                    Spacer(modifier = Modifier.weight(1f))
-                                                    Box(
-                                                        modifier = Modifier
-                                                            .width(101.dp)
-                                                            .height(24.dp)
-                                                            .background(
-                                                                brush = shimmerEffect(),
-                                                                shape = CircleShape,
-                                                            ),
-                                                    )
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            is NightStudyUiState.Error -> showToast(
-                                "ERROR",
-                                "심야 자습을 불러올 수 없어요",
-                            )
-
-                            is NightStudyUiState.SuccessDelete -> {
-                                showDialog = false
-                                showToast("SUCCESS", "심야 자습을 삭제했어요")
-                            }
-
-                            is NightStudyUiState.FailDelete -> {
-                                showDialog = false
-                                showToast("ERROR", "심야 자습 삭제를 실패했어요")
-                            }
-                        }
-                        item {
-                            Spacer(modifier = Modifier.height(80.dp))
                         }
                     }
                 }
@@ -621,14 +762,14 @@ private fun NightStudyApplyCell(
     playOnlyOnce: Boolean,
 ) {
     val nightStudyProgress = (
-        ChronoUnit.SECONDS.between(
-            startAt.toJavaLocalDateTime(),
-            current.toJavaLocalDateTime(),
-        ).toFloat() / ChronoUnit.SECONDS.between(
-            startAt.toJavaLocalDateTime(),
-            endAt.toJavaLocalDateTime(),
-        )
-        ).coerceIn(0f, 1f)
+            ChronoUnit.SECONDS.between(
+                startAt.toJavaLocalDateTime(),
+                current.toJavaLocalDateTime(),
+            ).toFloat() / ChronoUnit.SECONDS.between(
+                startAt.toJavaLocalDateTime(),
+                endAt.toJavaLocalDateTime(),
+            )
+            ).coerceIn(0f, 1f)
 
     val progress by animateFloatAsState(
         targetValue = if (playOnlyOnce) 0f else nightStudyProgress,
@@ -772,7 +913,12 @@ private fun NightStudyApplyCell(
 }
 
 @Composable
-private fun NightStudyApplyRejectCell(modifier: Modifier = Modifier, reason: String, rejectReason: String, onTrashClick: () -> Unit) {
+private fun NightStudyApplyRejectCell(
+    modifier: Modifier = Modifier,
+    reason: String,
+    rejectReason: String,
+    onTrashClick: () -> Unit
+) {
     Surface(
         modifier = modifier,
         shape = DodamTheme.shapes.large,

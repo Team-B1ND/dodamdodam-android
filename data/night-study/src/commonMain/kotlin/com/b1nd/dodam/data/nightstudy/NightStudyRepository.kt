@@ -2,7 +2,6 @@ package com.b1nd.dodam.data.nightstudy
 
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.core.model.Place
-import com.b1nd.dodam.data.core.model.ProjectPlace
 import com.b1nd.dodam.data.nightstudy.model.MyBan
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.nightstudy.model.NightStudyStudent
@@ -38,11 +37,10 @@ interface NightStudyRepository {
         description: String,
         startAt: LocalDate,
         endAt: LocalDate,
-        room: ProjectPlace,
         students: List<Int>,
     ): Flow<Result<Unit>>
 
-    fun myBan(): Flow<Result<MyBan>>
+    fun myBan(): Flow<Result<MyBan?>>
 
     fun getNightStudyStudent(): Flow<Result<ImmutableList<NightStudyStudent>>>
 
