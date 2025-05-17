@@ -5,7 +5,6 @@ import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
 import com.b1nd.dodam.data.core.model.Place
-import com.b1nd.dodam.data.core.model.ProjectPlace
 import com.b1nd.dodam.data.core.model.toRequest
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.MyBan
@@ -108,7 +107,6 @@ internal class NightStudyRepositoryImpl(
         description: String,
         startAt: LocalDate,
         endAt: LocalDate,
-        room: ProjectPlace,
         students: List<Int>,
     ): Flow<Result<Unit>> {
         // type 시간이 없어서 임시로 만들었습니다. 배포 하고 나면 고치겠습니다.
@@ -120,16 +118,15 @@ internal class NightStudyRepositoryImpl(
                     description,
                     startAt,
                     endAt,
-                    room.toRequest(),
                     students,
                 ),
             )
         }.asResult().flowOn(dispatcher)
     }
 
-    override fun myBan(): Flow<Result<MyBan>> {
+    override fun myBan(): Flow<Result<MyBan?>> {
         return flow {
-            emit(remote.myBan().toModel())
+            emit(remote.myBan()?.toModel())
         }.asResult().flowOn(dispatcher)
     }
 

@@ -115,7 +115,6 @@ internal class NightStudyService(
         description: String,
         startAt: LocalDate,
         endAt: LocalDate,
-        room: String,
         students: List<Int>,
     ) {
         return defaultSafeRequest {
@@ -128,7 +127,6 @@ internal class NightStudyService(
                         description,
                         startAt,
                         endAt,
-                        room,
                         students,
                     ),
                 )
@@ -136,10 +134,10 @@ internal class NightStudyService(
         }
     }
 
-    override suspend fun myBan(): MyBanResponse {
+    override suspend fun myBan(): MyBanResponse? {
         return safeRequest {
             network.get(DodamUrl.NightStudy.BAN)
-                .body()
+                .body<Response<MyBanResponse?>>()
         }
     }
 

@@ -20,6 +20,5 @@ data class ProjectRequest(
     val description: String,
     val startAt: LocalDate,
     val endAt: LocalDate,
-    val room: String,
     val students: List<Int>,
 )

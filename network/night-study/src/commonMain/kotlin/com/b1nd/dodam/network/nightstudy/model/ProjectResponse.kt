@@ -9,7 +9,6 @@ data class ProjectResponse(
     val id: Long,
     val type: String,
     val status: NetworkStatus,
-    val room: String,
     val name: String,
     val description: String,
     val startAt: LocalDate,

@@ -28,9 +28,9 @@ interface NightStudyDataSource {
 
     suspend fun rejectNightStudy(id: Long)
 
-    suspend fun askProjectStudy(type: String, name: String, description: String, startAt: LocalDate, endAt: LocalDate, room: String, students: List<Int>)
+    suspend fun askProjectStudy(type: String, name: String, description: String, startAt: LocalDate, endAt: LocalDate, students: List<Int>)
 
-    suspend fun myBan(): MyBanResponse
+    suspend fun myBan(): MyBanResponse?
 
     suspend fun getNightStudyStudent(): ImmutableList<NightStudyStudentResponse>
 

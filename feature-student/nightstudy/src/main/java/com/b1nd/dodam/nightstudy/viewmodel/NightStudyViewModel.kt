@@ -1,9 +1,12 @@
 package com.b1nd.dodam.nightstudy.viewmodel
 
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.b1nd.dodam.common.exception.DataNotFoundException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
+import com.b1nd.dodam.data.nightstudy.model.MyBan
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.nightstudy.model.Project
 import kotlinx.collections.immutable.ImmutableList
@@ -25,9 +28,14 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
         MutableStateFlow(ProjectUiState.Loading)
     val projectUiState = _projectUiState.asStateFlow()
 
+    private val _myBanUiState: MutableStateFlow<MyBanUiState> =
+        MutableStateFlow(MyBanUiState.Loading)
+    val myBanUiState = _myBanUiState.asStateFlow()
+
     init {
         getMyNightStudy()
         getMyProject()
+        getMyBan()
     }
 
     fun getMyNightStudy() {
@@ -89,6 +97,27 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
             }
         }
     }
+
+    fun getMyBan() = viewModelScope.launch {
+        nightStudyRepository.myBan().collect { result ->
+            when (result) {
+                is Result.Success -> _myBanUiState.emit(MyBanUiState.Success(result.data))
+
+                is Result.Loading -> _myBanUiState.emit(MyBanUiState.Loading)
+
+                is Result.Error -> {
+                    when (result.error) {
+                        is DataNotFoundException -> {
+                            _myBanUiState.emit(MyBanUiState.Success(null))
+                        }
+                        else -> {
+                            _myBanUiState.emit(MyBanUiState.Error)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 sealed interface NightStudyUiState {
@@ -117,4 +146,14 @@ sealed interface ProjectUiState {
     data object SuccessDelete : ProjectUiState
 
     data object FailDelete : ProjectUiState
+}
+
+sealed interface MyBanUiState {
+    data object Loading : MyBanUiState
+
+    data class Success(
+        val banData: MyBan?
+    ) : MyBanUiState
+
+    data object Error : MyBanUiState
 }
