@@ -75,6 +75,90 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
                 }
             }
         }
+
+    fun askProjectNightStudy(type: String, name: String, description: String, startAt: LocalDate, endAt: LocalDate, students: List<Int>) =
+        viewModelScope.launch {
+            nightStudyRepository.askProjectStudy(
+                type,
+                name,
+                description,
+                startAt,
+                endAt,
+                students,
+            ).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _event.emit(Event.Success)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                            )
+                        }
+                    }
+
+                    is Result.Loading -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = true,
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                message = result.error.message.toString(),
+                            )
+                        }
+
+                        when (result.error) {
+                            is ForbiddenException, is NotFoundException, is BadRequestException, is ConflictException -> {
+                                _event.emit(Event.ShowDialog)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    fun getNightStudyStudent() = viewModelScope.launch {
+        nightStudyRepository.getNightStudyStudent().collect { result ->
+            when (result) {
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            students = result.data,
+                        )
+                    }
+                }
+
+                is Result.Loading -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = true,
+                        )
+                    }
+                }
+
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            message = result.error.message.toString(),
+                        )
+                    }
+
+                    when (result.error) {
+                        is ForbiddenException, is NotFoundException, is BadRequestException, is ConflictException -> {
+                            _event.emit(Event.ShowDialog)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 sealed interface Event {
