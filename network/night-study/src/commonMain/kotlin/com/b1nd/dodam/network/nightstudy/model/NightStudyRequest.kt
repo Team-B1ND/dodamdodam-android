@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NightStudyRequest(
+    val place: String,
     val content: String,
-    val type: String,
     val doNeedPhone: Boolean,
     val reasonForPhone: String?,
     val startAt: LocalDate,

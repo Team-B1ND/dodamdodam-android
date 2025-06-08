@@ -14,7 +14,7 @@ interface NightStudyDataSource {
 
     suspend fun getStudyingNightStudy(): ImmutableList<NightStudyResponse>
 
-    suspend fun askNightStudy(content: String, type: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate)
+    suspend fun askNightStudy(place: String, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate)
 
     suspend fun deleteNightStudy(id: Long)
 

@@ -10,8 +10,6 @@ import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.MyBan
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.nightstudy.model.NightStudyStudent
-import com.b1nd.dodam.data.core.model.NightStudyType
-import com.b1nd.dodam.data.core.model.ProjectNightStudyType
 import com.b1nd.dodam.data.nightstudy.model.Project
 import com.b1nd.dodam.data.nightstudy.model.toModel
 import com.b1nd.dodam.network.nightstudy.datasource.NightStudyDataSource
@@ -46,8 +44,8 @@ internal class NightStudyRepositoryImpl(
     }
 
     override fun askNightStudy(
+        place: Place,
         content: String,
-        type: NightStudyType,
         doNeedPhone: Boolean,
         reasonForPhone: String?,
         startAt: LocalDate,
@@ -56,8 +54,8 @@ internal class NightStudyRepositoryImpl(
         return flow {
             emit(
                 remote.askNightStudy(
+                    place.toRequest(),
                     content,
-                    type.name,
                     doNeedPhone,
                     reasonForPhone,
                     startAt,
@@ -104,17 +102,18 @@ internal class NightStudyRepositoryImpl(
     }
 
     override fun askProjectStudy(
-        type: ProjectNightStudyType,
+        type: String,
         name: String,
         description: String,
         startAt: LocalDate,
         endAt: LocalDate,
         students: List<Int>,
     ): Flow<Result<Unit>> {
+        // type 시간이 없어서 임시로 만들었습니다. 배포 하고 나면 고치겠습니다.
         return flow {
             emit(
                 remote.askProjectStudy(
-                    type.name,
+                    "NIGHT_STUDY_PROJECT_" + if (type == "심자 1") "1" else "2",
                     name,
                     description,
                     startAt,
