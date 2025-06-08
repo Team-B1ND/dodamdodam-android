@@ -8,7 +8,9 @@ import com.b1nd.dodam.common.exception.ConflictException
 import com.b1nd.dodam.common.exception.ForbiddenException
 import com.b1nd.dodam.common.exception.NotFoundException
 import com.b1nd.dodam.common.result.Result
+import com.b1nd.dodam.data.core.model.NightStudyType
 import com.b1nd.dodam.data.core.model.Place
+import com.b1nd.dodam.data.core.model.ProjectNightStudyType
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,11 +32,11 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
     private val _event = MutableSharedFlow<Event>()
     val event = _event.asSharedFlow()
 
-    fun askNightStudy(place: Place, content: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) =
+    fun askNightStudy(content: String, type: NightStudyType, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) =
         viewModelScope.launch {
             nightStudyRepository.askNightStudy(
-                place,
                 content,
+                type,
                 doNeedPhone,
                 reasonForPhone,
                 startAt,
@@ -76,7 +78,7 @@ class AskNightStudyViewModel : ViewModel(), KoinComponent {
             }
         }
 
-    fun askProjectNightStudy(type: String, name: String, description: String, startAt: LocalDate, endAt: LocalDate, students: List<Int>) =
+    fun askProjectNightStudy(type: ProjectNightStudyType, name: String, description: String, startAt: LocalDate, endAt: LocalDate, students: List<Int>) =
         viewModelScope.launch {
             nightStudyRepository.askProjectStudy(
                 type,
