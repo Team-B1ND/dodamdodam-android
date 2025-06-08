@@ -5,9 +5,9 @@ compileSdk = "34"
 minSdk = "28"
 multiplatformMarkdownRenderer = "0.22.0"
 targetSdk = "34"
-appVersion = "3.6.4"
+appVersion = "3.7.0"
 urlencoderLib = "1.6.0"
-versionCode = "17"
+versionCode = "18"
 
 # kotlin
 kotlin = "2.0.20"
