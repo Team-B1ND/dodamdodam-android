@@ -73,13 +73,14 @@ fun AllScreen(
     navigateToAddWakeUpSong: () -> Unit,
     navigateToClub: () -> Unit,
     navigateToGroup: () -> Unit,
+    navigateToApproveNightStudy: () -> Unit,
 ) {
     val clipboardManager = LocalClipboardManager.current
     val uiState by viewModel.uiState.collectAsState()
     var isShowStudentCodeDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
-        viewModel.getMyInfo()
+        viewModel.getMyInfoAndCheckDormitory()
     }
 
     if (isShowStudentCodeDialog) {
@@ -263,6 +264,14 @@ fun AllScreen(
                     text = "동아리",
                     onClick = navigateToClub,
                 )
+                if(uiState.isDormitoryManagementStudent){
+                    AllCardView(
+                        imageVector = Silhouette,
+                        text = "심자 관리하기",
+                        onClick = navigateToApproveNightStudy,
+                    )
+                }
+
             }
         }
     }

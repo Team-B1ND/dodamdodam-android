@@ -25,6 +25,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.b1nd.dodam.approvenightstudy.navigation.approveNightStudyScreen
+import com.b1nd.dodam.approvenightstudy.navigation.navigateToApproveNightStudy
 import com.b1nd.dodam.asknightstudy.navigation.askNightStudyScreen
 import com.b1nd.dodam.asknightstudy.navigation.navigateToAskNightStudy
 import com.b1nd.dodam.askout.navigation.askOutScreen
@@ -173,6 +175,10 @@ fun DodamApp(
             enterTransition = { fadeIn(initialAlpha = 100f) },
             exitTransition = { fadeOut(targetAlpha = 100f) },
         ) {
+            approveNightStudyScreen(
+                onBackClick = navController::popBackStack,
+                showSnackbar = showSnackbar,
+            )
             onboardingScreen(
                 onRegisterClick = navController::navigateToSelectRole,
                 onLoginClick = navController::navigationToLogin,
@@ -196,6 +202,7 @@ fun DodamApp(
                 },
                 navigateToNoticeViewer = navController::navigateToNoticeViewer,
                 navigateToGroup = navController::navigateToGroup,
+                navigateToApproveNightStudy = navController::navigateToApproveNightStudy,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
