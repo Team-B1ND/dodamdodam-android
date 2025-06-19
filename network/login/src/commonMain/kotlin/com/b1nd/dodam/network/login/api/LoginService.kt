@@ -7,6 +7,7 @@ import com.b1nd.dodam.network.core.util.safeRequest
 import com.b1nd.dodam.network.login.datasource.LoginDataSource
 import com.b1nd.dodam.network.login.model.LoginRequest
 import com.b1nd.dodam.network.login.model.LoginResponse
+import com.b1nd.dodam.network.login.model.QrLoginRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.header
@@ -23,6 +24,15 @@ internal class LoginService(
             client.post(DodamUrl.Auth.LOGIN) {
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 setBody(LoginRequest(id, pw, pushToken))
+            }.body<Response<LoginResponse>>()
+        }
+    }
+
+    override suspend fun qrLogin(code: String, access: String, refresh: String, clientId: String, word: String): LoginResponse {
+        return safeRequest {
+            client.post(DodamUrl.Auth.QR_LOGIN) {
+                header(HttpHeaders.ContentType, ContentType.Application.Json)
+                setBody(QrLoginRequest(code, access, refresh, clientId, word))
             }.body<Response<LoginResponse>>()
         }
     }

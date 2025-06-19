@@ -44,6 +44,10 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import android.util.Log
+import com.b1nd.dodam.network.login.datasource.LoginDataSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
@@ -51,6 +55,7 @@ import org.koin.android.ext.android.inject
 class MainActivity : ComponentActivity() {
 
     private val datastoreRepository: DataStoreRepository by inject()
+    private val loginDataSource: LoginDataSource by inject()
 
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
 
@@ -64,6 +69,45 @@ class MainActivity : ComponentActivity() {
 
         val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         val firebaseCrashlytics = FirebaseCrashlytics.getInstance()
+
+        intent?.data?.let { uri ->
+
+            if (uri.toString().startsWith("https://deeplink.b1nd.com/student")) {
+                val clientId = uri.getQueryParameter("clientId")
+                val word = uri.getQueryParameter("words")
+                val code = uri.getQueryParameter("code")
+
+                if (clientId != null && word != null && code != null) {
+                    lifecycleScope.launch {
+                        try {
+                            val user = datastoreRepository.user.first()
+                            val token = user.token
+
+                            val response = loginDataSource.qrLogin(
+                                code = code,
+                                access = token,
+                                refresh = token,
+                                clientId = clientId,
+                                word = word
+                            )
+                            Log.d("QR_LOGIN", "QR login successful: ${response.accessToken}")
+
+                            // Update token if needed
+                            if (response.accessToken != token) {
+                                withContext(Dispatchers.Main) {
+                                    datastoreRepository.saveToken(response.accessToken)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.e("QR_LOGIN", "QR login failed", e)
+                        }
+                    }
+                } else {
+                    Log.e("QR_LOGIN", "Missing parameters in QR code URL")
+                }
+            }
+        }
+
         checkAppUpdate()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
@@ -148,7 +192,6 @@ class MainActivity : ComponentActivity() {
                 if (appUpdateInfo.updateAvailability()
                     == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
                 ) {
-                    // 인앱 업데이트가 이미 실행 중인 경우 재개 업데이트.
                     appUpdateManager.startUpdateFlow(
                         appUpdateInfo,
                         this,

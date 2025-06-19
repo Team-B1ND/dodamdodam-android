@@ -27,6 +27,7 @@ object DodamUrl {
 
     object Auth {
         const val LOGIN = "$AUTH/login"
+        const val QR_LOGIN = "$AUTH/qr-login"
     }
 
     object Bus {
