@@ -43,6 +43,7 @@ object DodamUrl {
         const val EDIT = "$MEMBER/info"
         const val CODE = "$MEMBER/code"
         const val AUTH_CODE = "$MEMBER/auth-code"
+        const val CHECK = "$MEMBER/check"
     }
 
     object WakeupSong {
