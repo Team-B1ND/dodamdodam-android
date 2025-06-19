@@ -94,7 +94,7 @@ include(
 include(":feature-teacher:nightstudy")
 include(":feature-teacher:outing")
 include(":feature-teacher:approve-outing")
-include(":feature-teacher:approve-nightstudy")
+
 include(":network:bundleid-info")
 include(":data:bundleid-info")
 include(":feature:edit-member-info")
@@ -103,6 +103,7 @@ include(":data:upload")
 include(":feature-parent")
 include(":feature-parent:main")
 include(":feature-parent:home")
+include(":feature:approve-nightstudy")
 include(":feature-parent:all")
 
 include(":feature:group")
