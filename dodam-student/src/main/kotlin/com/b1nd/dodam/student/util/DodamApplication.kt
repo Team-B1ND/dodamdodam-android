@@ -2,6 +2,7 @@ package com.b1nd.dodam.student.util
 
 import android.app.Application
 import com.b1nd.dodam.all.di.parentAllViewModelModule
+import com.b1nd.dodam.approvenightstudy.approveNightStudyViewModelModule
 import com.b1nd.dodam.asknightstudy.di.askNightStudyViewModelModule
 import com.b1nd.dodam.askout.di.askOutViewModelModule
 import com.b1nd.dodam.askwakeupsong.di.askWakeUpSongViewModelModule
@@ -138,6 +139,7 @@ class DodamApplication : Application() {
                     divisionDataSourceModule,
                     noticeRepositoryModule,
                     noticeDatasourceModule,
+                    approveNightStudyViewModelModule
                 ) + mainViewModelModules,
             )
         }
