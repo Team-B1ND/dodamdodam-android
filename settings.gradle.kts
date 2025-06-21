@@ -91,7 +91,7 @@ include(
     ":network:notice",
     ":feature:notice-viewer",
 )
-include(":feature-teacher:nightstudy")
+include(":feature:management-nightstudy")
 include(":feature-teacher:outing")
 include(":feature-teacher:approve-outing")
 

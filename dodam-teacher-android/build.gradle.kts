@@ -36,7 +36,7 @@ kotlin {
             implementation(projects.network.login)
             api(libs.kmp.notification)
             implementation(projects.feature.onboarding)
-            implementation(projects.featureTeacher.nightstudy)
+            implementation(projects.feature.managementNightstudy)
             api(projects.feature.login)
             implementation(projects.datastore)
             implementation(projects.logging)
