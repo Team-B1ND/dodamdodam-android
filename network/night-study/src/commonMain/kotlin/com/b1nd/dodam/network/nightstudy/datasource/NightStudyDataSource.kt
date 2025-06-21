@@ -35,4 +35,5 @@ interface NightStudyDataSource {
     suspend fun getNightStudyStudent(): ImmutableList<NightStudyStudentResponse>
 
     suspend fun getProject(): ImmutableList<ProjectResponse>
+    suspend fun postNightStudyBan(student: Long, reason: String, ended: String)
 }
