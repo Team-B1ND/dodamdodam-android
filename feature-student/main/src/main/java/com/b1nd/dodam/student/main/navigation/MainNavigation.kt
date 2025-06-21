@@ -36,6 +36,7 @@ fun NavGraphBuilder.mainScreen(
     navigateToNoticeViewer: (startIndex: Int, images: String) -> Unit,
     navigateToGroup: () -> Unit,
     navigateToApproveNightStudy: () -> Unit,
+    navigateToManagementNightStudy: () -> Unit,
     showToast: (String, String) -> Unit,
     role: String,
 ) {
@@ -54,6 +55,7 @@ fun NavGraphBuilder.mainScreen(
             navigateToNoticeViewer = navigateToNoticeViewer,
             navigateToGroup = navigateToGroup,
             navigateToApproveNightStudy = navigateToApproveNightStudy,
+            navigateToManagementNightStudy = navigateToManagementNightStudy,
             showToast = showToast,
             refresh = { it.savedStateHandle["refresh"] ?: false },
             dispose = { it.savedStateHandle["refresh"] = false },

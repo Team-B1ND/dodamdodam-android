@@ -74,6 +74,7 @@ fun AllScreen(
     navigateToClub: () -> Unit,
     navigateToGroup: () -> Unit,
     navigateToApproveNightStudy: () -> Unit,
+    navigateToManagementNightStudy: () -> Unit,
 ) {
     val clipboardManager = LocalClipboardManager.current
     val uiState by viewModel.uiState.collectAsState()
@@ -267,8 +268,13 @@ fun AllScreen(
                 if(uiState.isDormitoryManagementStudent){
                     AllCardView(
                         imageVector = Silhouette,
-                        text = "심자 관리하기",
+                        text = "심자 승인하기",
                         onClick = navigateToApproveNightStudy,
+                    )
+                    AllCardView(
+                        imageVector = Silhouette,
+                        text = "심자 진행 관리하기",
+                        onClick = navigateToManagementNightStudy,
                     )
                 }
 

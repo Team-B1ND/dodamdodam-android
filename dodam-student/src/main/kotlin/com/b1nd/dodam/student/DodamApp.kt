@@ -58,6 +58,7 @@ import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.meal.navigation.navigateToMeal
+import com.b1nd.dodam.managementnightstudy.navigation.navigateToManagementNightStudy
 import com.b1nd.dodam.noticeviewer.navigation.navigateToNoticeViewer
 import com.b1nd.dodam.noticeviewer.navigation.noticeViewerScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
@@ -203,6 +204,7 @@ fun DodamApp(
                 navigateToNoticeViewer = navController::navigateToNoticeViewer,
                 navigateToGroup = navController::navigateToGroup,
                 navigateToApproveNightStudy = navController::navigateToApproveNightStudy,
+                navigateToManagementNightStudy = navController::navigateToManagementNightStudy,
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
