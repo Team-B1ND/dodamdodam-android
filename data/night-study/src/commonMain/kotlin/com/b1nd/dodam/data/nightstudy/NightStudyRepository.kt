@@ -47,4 +47,5 @@ interface NightStudyRepository {
     fun getNightStudyStudent(): Flow<Result<ImmutableList<NightStudyStudent>>>
 
     fun getProject(): Flow<Result<ImmutableList<Project>>>
+    fun postNightStudyBan(student: Long, reason: String, ended: String): Flow<Result<Unit>>
 }
