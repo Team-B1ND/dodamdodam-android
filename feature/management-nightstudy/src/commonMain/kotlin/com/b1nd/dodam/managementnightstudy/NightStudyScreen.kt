@@ -1,4 +1,4 @@
-package com.b1nd.dodam.nightstudy
+package com.b1nd.dodam.managementnightstudy
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -42,8 +42,8 @@ import com.b1nd.dodam.designsystem.component.DodamEmpty
 import com.b1nd.dodam.designsystem.component.DodamSegment
 import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
-import com.b1nd.dodam.nightstudy.state.NightStudyUiState
-import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
+import com.b1nd.dodam.managementnightstudy.state.NightStudyUiState
+import com.b1nd.dodam.managementnightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner

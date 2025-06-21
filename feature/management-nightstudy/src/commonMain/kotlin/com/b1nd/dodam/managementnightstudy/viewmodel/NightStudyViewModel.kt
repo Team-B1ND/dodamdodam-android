@@ -1,4 +1,4 @@
-package com.b1nd.dodam.nightstudy.viewmodel
+package com.b1nd.dodam.managementnightstudy.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,8 +6,8 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.utiles.combineWhenAllComplete
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
-import com.b1nd.dodam.nightstudy.state.NightStudyScreenUiState
-import com.b1nd.dodam.nightstudy.state.NightStudyUiState
+import com.b1nd.dodam.managementnightstudy.state.NightStudyScreenUiState
+import com.b1nd.dodam.managementnightstudy.state.NightStudyUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

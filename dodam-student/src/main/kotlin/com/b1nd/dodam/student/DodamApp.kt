@@ -56,9 +56,10 @@ import com.b1nd.dodam.groupwaiting.navigation.groupWaitingScreen
 import com.b1nd.dodam.groupwaiting.navigation.navigateToGroupWaiting
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
+import com.b1nd.dodam.managementnightstudy.navigation.managementNightStudyScreen
+import com.b1nd.dodam.managementnightstudy.navigation.navigateToManagementNightStudy
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.meal.navigation.navigateToMeal
-import com.b1nd.dodam.managementnightstudy.navigation.navigateToManagementNightStudy
 import com.b1nd.dodam.noticeviewer.navigation.navigateToNoticeViewer
 import com.b1nd.dodam.noticeviewer.navigation.noticeViewerScreen
 import com.b1nd.dodam.onboarding.navigation.ONBOARDING_ROUTE
@@ -179,6 +180,9 @@ fun DodamApp(
             approveNightStudyScreen(
                 onBackClick = navController::popBackStack,
                 showSnackbar = showSnackbar,
+            )
+            managementNightStudyScreen(
+                navigateToApproveStudy = navController::navigateToApproveNightStudy
             )
             onboardingScreen(
                 onRegisterClick = navController::navigateToSelectRole,

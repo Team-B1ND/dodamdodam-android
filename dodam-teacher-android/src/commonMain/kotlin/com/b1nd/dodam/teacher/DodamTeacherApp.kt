@@ -71,8 +71,8 @@ import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.meal.navigation.navigateToMeal
-import com.b1nd.dodam.nightstudy.navigation.NIGHT_STUDY_ROUTE
-import com.b1nd.dodam.nightstudy.navigation.nightStudyScreen
+import com.b1nd.dodam.managementnightstudy.navigation.NIGHT_STUDY_ROUTE
+import com.b1nd.dodam.managementnightstudy.navigation.managementNightStudyScreen
 import com.b1nd.dodam.notice.navigation.NOTICE_ROUTE
 import com.b1nd.dodam.notice.navigation.noticeScreen
 import com.b1nd.dodam.noticecreate.navigation.navigateToNoticeCreate
@@ -222,7 +222,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
                             role = "TEACHER",
                         )
 
-                        nightStudyScreen(
+                        managementNightStudyScreen(
                             navigateToApproveStudy = navHostController::navigateToApproveNightStudy,
                         )
                         homeScreen(
