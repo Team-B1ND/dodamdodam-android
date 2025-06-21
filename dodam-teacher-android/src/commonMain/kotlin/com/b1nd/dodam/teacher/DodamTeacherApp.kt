@@ -224,6 +224,7 @@ fun DodamTeacherApp(exit: () -> Unit, viewModel: DodamTeacherAppViewModel = koin
 
                         managementNightStudyScreen(
                             navigateToApproveStudy = navHostController::navigateToApproveNightStudy,
+                            showSnackbar = showSnackbar
                         )
                         homeScreen(
                             navigateToMeal = {

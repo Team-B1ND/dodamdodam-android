@@ -43,7 +43,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.window.Dialog
-import com.b1nd.dodam.common.utiles.utcTimeMill
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
@@ -62,6 +61,7 @@ import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.managementnightstudy.state.NightStudyUiState
 import com.b1nd.dodam.managementnightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
+import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner
 import kotlinx.collections.immutable.toImmutableList
@@ -80,6 +80,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 fun NightStudyScreen(
     viewModel: NightStudyViewModel = koinViewModel(),
     navigateToApproveStudy: () -> Unit,
+    showSnackbar: (state: SnackbarState, message: String) -> Unit,
 ) {
     var gradeIndex by remember { mutableIntStateOf(0) }
     val gradeNumber = listOf(
