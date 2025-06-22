@@ -20,4 +20,3 @@ data class NightStudyResponse(
     val modifiedAt: LocalDateTime,
     val rejectReason: String?,
 )
-
