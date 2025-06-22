@@ -35,6 +35,7 @@ import com.b1nd.dodam.groupdetail.di.groupDetailViewModelModule
 import com.b1nd.dodam.groupwaiting.di.groupWaitingViewModelModule
 import com.b1nd.dodam.keystore.keystoreManagerModule
 import com.b1nd.dodam.login.di.loginViewModelModule
+import com.b1nd.dodam.managementnightstudy.di.managementNightStudyViewModelModule
 import com.b1nd.dodam.member.di.memberDataSourceModule
 import com.b1nd.dodam.member.di.memberRepositoryModule
 import com.b1nd.dodam.network.banner.di.bannerDataSourceModule
@@ -48,7 +49,6 @@ import com.b1nd.dodam.network.outing.di.outingDataSourceModule
 import com.b1nd.dodam.network.point.di.pointDataSourceModule
 import com.b1nd.dodam.network.schedule.di.scheduleDatasourceModule
 import com.b1nd.dodam.network.upload.di.uploadDatasourceModule
-import com.b1nd.dodam.managementnightstudy.di.managementNightStudyViewModelModule
 import com.b1nd.dodam.notice.di.noticeViewModelModule
 import com.b1nd.dodam.outing.di.outingViewModelModule
 import com.b1nd.dodam.parent.childrenmanage.di.childrenManageViewModelModule

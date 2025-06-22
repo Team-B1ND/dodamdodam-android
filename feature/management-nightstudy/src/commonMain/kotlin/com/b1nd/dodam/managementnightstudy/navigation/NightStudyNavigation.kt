@@ -19,7 +19,7 @@ fun NavController.navigateToManagementNightStudy(
 ) = navigate(NIGHT_STUDY_ROUTE, navOptions)
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.managementNightStudyScreen(navigateToApproveStudy: () -> Unit, showSnackbar: (state: SnackbarState, message: String) -> Unit,) {
+fun NavGraphBuilder.managementNightStudyScreen(navigateToApproveStudy: () -> Unit, showSnackbar: (state: SnackbarState, message: String) -> Unit) {
     composable(
         route = NIGHT_STUDY_ROUTE,
         enterTransition = { EnterTransition.None },
@@ -29,7 +29,7 @@ fun NavGraphBuilder.managementNightStudyScreen(navigateToApproveStudy: () -> Uni
     ) {
         NightStudyScreen(
             navigateToApproveStudy = navigateToApproveStudy,
-            showSnackbar = showSnackbar
+            showSnackbar = showSnackbar,
         )
     }
 }

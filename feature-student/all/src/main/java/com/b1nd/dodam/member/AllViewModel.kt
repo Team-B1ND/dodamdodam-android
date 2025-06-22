@@ -22,7 +22,7 @@ class AllViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             combine(
                 memberRepository.getMyInfo(),
-                memberRepository.checkDormitoryMangeStudent()
+                memberRepository.checkDormitoryMangeStudent(),
             ) { myInfoResult, dormitoryResult ->
                 Pair(myInfoResult, dormitoryResult)
             }.collect { (myInfoResult, dormitoryResult) ->
@@ -33,7 +33,7 @@ class AllViewModel : ViewModel(), KoinComponent {
                         is Result.Success -> currentState.copy(
                             memberInfo = myInfoResult.data,
                             isLoading = false,
-                            isSimmer = false
+                            isSimmer = false,
                         )
                     }
 
@@ -46,7 +46,6 @@ class AllViewModel : ViewModel(), KoinComponent {
             }
         }
     }
-
 }
 
 sealed interface Event {

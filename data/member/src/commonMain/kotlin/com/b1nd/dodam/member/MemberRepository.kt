@@ -14,5 +14,5 @@ interface MemberRepository {
     suspend fun getChildren(code: String): Flow<Result<Member>>
     suspend fun getAuthCode(type: String, identifier: String): Flow<Result<Unit>>
     suspend fun verifyAuthCode(type: String, identifier: String, authCode: String, userAgent: String): Flow<Result<Unit>>
-    suspend fun checkDormitoryMangeStudent() : Flow<Result<Boolean>>
+    suspend fun checkDormitoryMangeStudent(): Flow<Result<Boolean>>
 }

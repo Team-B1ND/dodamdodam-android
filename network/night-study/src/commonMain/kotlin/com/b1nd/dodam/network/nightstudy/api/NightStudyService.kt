@@ -50,7 +50,7 @@ internal class NightStudyService(
         }.toImmutableList()
     }
 
-    override suspend fun askNightStudy( content: String, type:String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) {
+    override suspend fun askNightStudy(content: String, type: String, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate) {
         return defaultSafeRequest {
             network.post(DodamUrl.NIGHT_STUDY) {
                 contentType(ContentType.Application.Json)
@@ -110,14 +110,7 @@ internal class NightStudyService(
         }
     }
 
-    override suspend fun askProjectStudy(
-        type: String,
-        name: String,
-        description: String,
-        startAt: LocalDate,
-        endAt: LocalDate,
-        students: List<Int>,
-    ) {
+    override suspend fun askProjectStudy(type: String, name: String, description: String, startAt: LocalDate, endAt: LocalDate, students: List<Int>) {
         return defaultSafeRequest {
             network.post(DodamUrl.PROJECT) {
                 contentType(ContentType.Application.Json)
@@ -137,7 +130,7 @@ internal class NightStudyService(
 
     override suspend fun myBan(): MyBanResponse? {
         return safeRequest {
-            network.get(DodamUrl.NightStudy.BAN +"/my")
+            network.get(DodamUrl.NightStudy.BAN + "/my")
                 .body<Response<MyBanResponse?>>()
         }
     }
@@ -158,13 +151,15 @@ internal class NightStudyService(
 
     override suspend fun postNightStudyBan(student: Long, reason: String, ended: String) {
         return defaultSafeRequest {
-            network.post(DodamUrl.NightStudy.BAN){
+            network.post(DodamUrl.NightStudy.BAN) {
                 contentType(ContentType.Application.Json)
-                setBody(BanRequest(
-                    student = student,
-                    reason = reason,
-                    ended = ended
-                ))
+                setBody(
+                    BanRequest(
+                        student = student,
+                        reason = reason,
+                        ended = ended,
+                    ),
+                )
             }.body<DefaultResponse>()
         }
     }

@@ -131,7 +131,7 @@ internal fun MainScreen(
                 navigateToClub = navigateToClub,
                 navigateToGroup = navigateToGroup,
                 navigateToApproveNightStudy = navigateToApproveNightStudy,
-                navigateToManagementNightStudy= navigateToManagementNightStudy
+                navigateToManagementNightStudy = navigateToManagementNightStudy,
 
             )
         }

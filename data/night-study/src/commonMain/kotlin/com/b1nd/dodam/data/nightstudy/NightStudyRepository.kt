@@ -1,12 +1,11 @@
 package com.b1nd.dodam.data.nightstudy
 
 import com.b1nd.dodam.common.result.Result
-import com.b1nd.dodam.data.core.model.Place
+import com.b1nd.dodam.data.core.model.NightStudyType
+import com.b1nd.dodam.data.core.model.ProjectNightStudyType
 import com.b1nd.dodam.data.nightstudy.model.MyBan
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.nightstudy.model.NightStudyStudent
-import com.b1nd.dodam.data.core.model.NightStudyType
-import com.b1nd.dodam.data.core.model.ProjectNightStudyType
 import com.b1nd.dodam.data.nightstudy.model.Project
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +18,14 @@ interface NightStudyRepository {
 
     fun getStudyingNightStudy(): Flow<Result<ImmutableList<NightStudy>>>
 
-    fun askNightStudy(content: String, type:NightStudyType, doNeedPhone: Boolean, reasonForPhone: String?, startAt: LocalDate, endAt: LocalDate): Flow<Result<Unit>>
+    fun askNightStudy(
+        content: String,
+        type: NightStudyType,
+        doNeedPhone: Boolean,
+        reasonForPhone: String?,
+        startAt: LocalDate,
+        endAt: LocalDate,
+    ): Flow<Result<Unit>>
 
     fun deleteNightStudy(id: Long): Flow<Result<Unit>>
 

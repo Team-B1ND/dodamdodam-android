@@ -2,7 +2,6 @@ package com.b1nd.dodam.member.datasource
 
 import com.b1nd.dodam.member.model.MemberInfoResponse
 import com.b1nd.dodam.network.core.model.MemberResponse
-import com.b1nd.dodam.network.core.model.Response
 
 interface MemberDataSource {
     suspend fun getMyInfo(): MemberInfoResponse
@@ -12,5 +11,5 @@ interface MemberDataSource {
     suspend fun getChildren(code: String): MemberResponse
     suspend fun getAuthCode(type: String, identifier: String)
     suspend fun verifyAuthCode(type: String, identifier: String, authCode: String, userAgent: String)
-    suspend fun checkDormitoryMangeStudent() : Boolean
+    suspend fun checkDormitoryMangeStudent(): Boolean
 }

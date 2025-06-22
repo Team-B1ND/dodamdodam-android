@@ -183,7 +183,7 @@ fun DodamApp(
             )
             managementNightStudyScreen(
                 navigateToApproveStudy = navController::navigateToApproveNightStudy,
-                showSnackbar = showSnackbar
+                showSnackbar = showSnackbar,
             )
             onboardingScreen(
                 onRegisterClick = navController::navigateToSelectRole,

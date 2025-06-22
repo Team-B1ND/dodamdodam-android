@@ -13,8 +13,8 @@ import com.b1nd.dodam.managementnightstudy.state.NightStudyUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -97,16 +97,15 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
         load()
     }
 
-    fun ban(student: Long, reason: String, ended: String) =
-        viewModelScope.launch {
-            nightStudyRepository.postNightStudyBan(student, reason, ended).collect { ban ->
-                when (ban) {
-                    is Result.Error -> _sideEffect.emit(NightStudySideEffect.Failed(ban.error))
-                    Result.Loading -> {}
-                    is Result.Success -> _sideEffect.emit(NightStudySideEffect.SuccessBan)
-                }
+    fun ban(student: Long, reason: String, ended: String) = viewModelScope.launch {
+        nightStudyRepository.postNightStudyBan(student, reason, ended).collect { ban ->
+            when (ban) {
+                is Result.Error -> _sideEffect.emit(NightStudySideEffect.Failed(ban.error))
+                Result.Loading -> {}
+                is Result.Success -> _sideEffect.emit(NightStudySideEffect.SuccessBan)
             }
         }
+    }
 
     fun detailMember(nightStudy: NightStudy) {
         _uiState.update {
@@ -118,8 +117,8 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
                     endDay = nightStudy.endAt.toString(),
                     content = nightStudy.content,
                     doNeedPhone = nightStudy.doNeedPhone,
-                    reasonForPhone = nightStudy.reasonForPhone
-                )
+                    reasonForPhone = nightStudy.reasonForPhone,
+                ),
             )
         }
     }

@@ -66,17 +66,14 @@ import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
-import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-
 
 @OptIn(ExperimentalMaterialApi::class, KoinExperimentalAPI::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -102,12 +99,14 @@ fun NightStudyScreen(
 
     var selectedItemIndex by remember { mutableStateOf(-1) }
 
-
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDodamDatePickerState()
-    var endBanDate by remember { mutableStateOf(Clock.System.now()
-        .toLocalDateTime(TimeZone.currentSystemDefault()).date) }
-
+    var endBanDate by remember {
+        mutableStateOf(
+            Clock.System.now()
+                .toLocalDateTime(TimeZone.currentSystemDefault()).date,
+        )
+    }
 
     var roomIndex by remember { mutableIntStateOf(0) }
     val roomNumber = listOf(
@@ -147,14 +146,13 @@ fun NightStudyScreen(
             DodamButtonDialog(
                 confirmButtonText = "정지",
                 confirmButton = {
-
                 },
                 confirmButtonRole = ButtonRole.Negative,
                 dismissButton = { showDialog = false },
                 dismissButtonRole = ButtonRole.Assistive,
                 title = "정지 사유와 기한을 작성해주세요",
 
-                )
+            )
         }
     }
     LaunchedEffect(true) {
@@ -206,7 +204,7 @@ fun NightStudyScreen(
                         val date = LocalDate(
                             calendarDate.year,
                             calendarDate.month,
-                            calendarDate.dayOfMonth
+                            calendarDate.dayOfMonth,
                         )
                         date >= currentDate
                     },
@@ -257,7 +255,7 @@ fun NightStudyScreen(
                                         ) {
                                             Text(
                                                 text = formatToMonthDay(endBanDate.toString()),
-                                            style = DodamTheme.typography.headlineRegular(),
+                                                style = DodamTheme.typography.headlineRegular(),
                                                 color = DodamTheme.colors.primaryNormal,
                                             )
                                             Icon(
@@ -273,7 +271,7 @@ fun NightStudyScreen(
                                             year = endBanDate.year,
                                             month = endBanDate.monthNumber,
                                             dayOfMonth = endBanDate.dayOfMonth,
-                                            utcTimeMillis = endBanDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()                 // 밀리초 반환
+                                            utcTimeMillis = endBanDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds(),
                                         )
 
                                         showDatePicker = true
@@ -286,7 +284,7 @@ fun NightStudyScreen(
                             DodamTextField(
                                 value = banReason,
                                 onValueChange = { banReason = it },
-                                label = "정지사유를 입력해주세요"
+                                label = "정지사유를 입력해주세요",
                             )
 
                             Row(
@@ -306,7 +304,7 @@ fun NightStudyScreen(
                                 Spacer(modifier = Modifier.width(8.dp))
                                 DodamButton(
                                     onClick = {
-                                        viewModel.ban(state.detailMember.id,banReason,endBanDate.toString())
+                                        viewModel.ban(state.detailMember.id, banReason, endBanDate.toString())
                                         selectedItemIndex = -1
                                     },
                                     text = "정지하기",
@@ -454,9 +452,9 @@ fun NightStudyScreen(
                                                 Spacer(modifier = Modifier.weight(1f))
 
                                                 Text(
-                                                    text = if(filteredMemberList[index].doNeedPhone) "O" else "X",
+                                                    text = if (filteredMemberList[index].doNeedPhone) "O" else "X",
                                                     style = DodamTheme.typography.headlineMedium(),
-                                                    color =  DodamTheme.colors.labelAssistive,
+                                                    color = DodamTheme.colors.labelAssistive,
                                                 )
                                                 Spacer(modifier = Modifier.weight(2f))
                                                 DodamButton(
@@ -620,17 +618,11 @@ fun NightStudyScreen(
             refreshing = state.isRefresh,
             state = pullRefreshState,
         )
-
-
     }
 }
+
 @Composable
-private fun AskNightStudyCard(
-    modifier: Modifier = Modifier,
-    text: String,
-    action: @Composable () -> Unit,
-    onClick: () -> Unit,
-) {
+private fun AskNightStudyCard(modifier: Modifier = Modifier, text: String, action: @Composable () -> Unit, onClick: () -> Unit) {
     Row(
         modifier = modifier.clickable(
             onClick = onClick,
