@@ -58,12 +58,14 @@ import com.b1nd.dodam.designsystem.component.DodamSegmentedButton
 import com.b1nd.dodam.designsystem.component.DodamTextField
 import com.b1nd.dodam.designsystem.component.rememberDodamDatePickerState
 import com.b1nd.dodam.designsystem.foundation.DodamIcons
+import com.b1nd.dodam.managementnightstudy.state.NightStudySideEffect
 import com.b1nd.dodam.managementnightstudy.state.NightStudyUiState
 import com.b1nd.dodam.managementnightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.ui.component.DodamMember
 import com.b1nd.dodam.ui.component.SnackbarState
 import com.b1nd.dodam.ui.effect.shimmerEffect
 import com.b1nd.dodam.ui.util.addFocusCleaner
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
@@ -152,6 +154,19 @@ fun NightStudyScreen(
                 title = "정지 사유와 기한을 작성해주세요",
 
                 )
+        }
+    }
+    LaunchedEffect(true) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is NightStudySideEffect.Failed -> {
+                    showSnackbar(SnackbarState.ERROR, sideEffect.throwable.message.toString())
+                }
+                NightStudySideEffect.SuccessBan -> {
+                    showSnackbar(SnackbarState.SUCCESS, "심자 정지에 성공하였습니다.")
+                    viewModel.load()
+                }
+            }
         }
     }
 
@@ -293,9 +308,9 @@ fun NightStudyScreen(
                                         viewModel.ban(state.detailMember.id,banReason,endBanDate.toString())
                                         selectedItemIndex = -1
                                     },
-                                    text = "승인하기",
+                                    text = "정지하기",
                                     buttonSize = _root_ide_package_.com.b1nd.dodam.designsystem.component.ButtonSize.Large,
-                                    buttonRole = ButtonRole.Primary,
+                                    buttonRole = ButtonRole.Negative,
                                     modifier = Modifier.weight(3f),
                                     enabled = state.nightStudyUiState != NightStudyUiState.Loading,
                                     loading = state.nightStudyUiState == NightStudyUiState.Loading,
@@ -444,6 +459,7 @@ fun NightStudyScreen(
                                                 DodamButton(
                                                     onClick = {
                                                         selectedItemIndex = index
+                                                        viewModel.detailMember(filteredMemberList[index])
                                                     },
                                                     text = "심자 정지",
                                                     buttonRole = ButtonRole.Negative,
