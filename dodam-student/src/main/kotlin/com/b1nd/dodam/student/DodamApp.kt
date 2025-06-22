@@ -334,7 +334,7 @@ fun DodamApp(
                 },
             )
             settingScreen(
-                versionInfo = "3.7.0",
+                versionInfo = "3.8.0",
                 popBackStack = navController::popBackStack,
                 logout = logout,
                 navigationToEditMemberInfo = { profileImage, name, email, phone ->
