@@ -46,6 +46,7 @@ import androidx.compose.ui.window.Dialog
 import com.b1nd.dodam.designsystem.DodamTheme
 import com.b1nd.dodam.designsystem.animation.rememberBounceIndication
 import com.b1nd.dodam.designsystem.component.ButtonRole
+import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.CalendarDate
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamButtonDialog
@@ -442,31 +443,33 @@ fun NightStudyScreen(
                                                     .padding(bottom = 12.dp),
                                                 icon = null,
                                             ) {
-                                                val currentDate =
-                                                    Clock.System.now().toLocalDateTime(
-                                                        TimeZone.currentSystemDefault(),
-                                                    ).date
-                                                val end = filteredMemberList[index].endAt.date
-
-                                                val a = currentDate.daysUntil(end)
-
                                                 Text(
-                                                    text = if (a <= 1) "오늘 종료" else "${a}일 남음",
+                                                    text = with(filteredMemberList[index].student) {
+                                                        "$grade$room${pad2(number)}"
+                                                    },
                                                     style = DodamTheme.typography.headlineMedium(),
-                                                    color = if (a <= 1) DodamTheme.colors.primaryNormal else DodamTheme.colors.labelAssistive,
+                                                    color = DodamTheme.colors.labelAssistive,
                                                 )
 
+                                                Spacer(modifier = Modifier.weight(1f))
+
+                                                Text(
+                                                    text = if(filteredMemberList[index].doNeedPhone) "O" else "X",
+                                                    style = DodamTheme.typography.headlineMedium(),
+                                                    color =  DodamTheme.colors.labelAssistive,
+                                                )
+                                                Spacer(modifier = Modifier.weight(2f))
                                                 DodamButton(
                                                     onClick = {
                                                         selectedItemIndex = index
                                                         viewModel.detailMember(filteredMemberList[index])
                                                     },
                                                     text = "심자 정지",
+                                                    buttonSize = ButtonSize.Small,
                                                     buttonRole = ButtonRole.Negative,
                                                     modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(horizontal = 16.dp)
-                                                        .padding(top = 12.dp, bottom = 16.dp),
+                                                        .padding(horizontal = 8.dp)
+                                                        .padding(top = 4.dp, bottom = 4.dp),
                                                 )
                                             }
                                         }
@@ -660,3 +663,5 @@ private fun formatToMonthDay(dateStr: String): String {
 
     return "${month}월 ${day}일"
 }
+
+fun pad2(n: Int): String = if (n < 10) "0$n" else "$n"
