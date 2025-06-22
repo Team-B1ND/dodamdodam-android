@@ -6,6 +6,7 @@ import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.utiles.combineWhenAllComplete
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
+import com.b1nd.dodam.managementnightstudy.state.DetailMember
 import com.b1nd.dodam.managementnightstudy.state.NightStudyScreenUiState
 import com.b1nd.dodam.managementnightstudy.state.NightStudySideEffect
 import com.b1nd.dodam.managementnightstudy.state.NightStudyUiState
@@ -98,7 +99,7 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
 
     fun ban(student: Long, reason: String, ended: String) =
         viewModelScope.launch {
-            nightStudyRepository.postNightStudyBan(student, reason, ended).collect {ban ->
+            nightStudyRepository.postNightStudyBan(student, reason, ended).collect { ban ->
                 when (ban) {
                     is Result.Error -> _sideEffect.emit(NightStudySideEffect.Failed(ban.error))
                     Result.Loading -> {}
@@ -107,4 +108,19 @@ class NightStudyViewModel : ViewModel(), KoinComponent {
             }
         }
 
+    fun detailMember(nightStudy: NightStudy) {
+        _uiState.update {
+            it.copy(
+                detailMember = DetailMember(
+                    id = nightStudy.student.id,
+                    name = nightStudy.student.name,
+                    startDay = nightStudy.startAt.toString(),
+                    endDay = nightStudy.endAt.toString(),
+                    content = nightStudy.content,
+                    doNeedPhone = nightStudy.doNeedPhone,
+                    reasonForPhone = nightStudy.reasonForPhone
+                )
+            )
+        }
+    }
 }
