@@ -56,8 +56,10 @@ import com.b1nd.dodam.ui.icons.ColoredCreditCard
 import com.b1nd.dodam.ui.icons.ColoredGroup
 import com.b1nd.dodam.ui.icons.ColoredMegaphone
 import com.b1nd.dodam.ui.icons.ColoredMusicalNote
+import com.b1nd.dodam.ui.icons.ColoredPencil
 import com.b1nd.dodam.ui.icons.ColoredTent
 import com.b1nd.dodam.ui.icons.Silhouette
+import com.b1nd.dodam.ui.icons.SmileMoon
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
 
@@ -266,13 +268,15 @@ fun AllScreen(
                     onClick = navigateToClub,
                 )
                 if(uiState.isDormitoryManagementStudent){
+                    DodamDivider(type = DividerType.Normal)
+
                     AllCardView(
-                        imageVector = Silhouette,
+                        imageVector = ColoredPencil,
                         text = "심자 승인하기",
                         onClick = navigateToApproveNightStudy,
                     )
                     AllCardView(
-                        imageVector = Silhouette,
+                        imageVector = DodamIcons.MoonPlus.value,
                         text = "심자 진행 관리하기",
                         onClick = navigateToManagementNightStudy,
                     )
