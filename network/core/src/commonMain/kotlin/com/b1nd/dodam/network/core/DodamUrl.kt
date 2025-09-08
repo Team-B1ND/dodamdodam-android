@@ -43,6 +43,7 @@ object DodamUrl {
         const val EDIT = "$MEMBER/info"
         const val CODE = "$MEMBER/code"
         const val AUTH_CODE = "$MEMBER/auth-code"
+        const val CHECK = "$MEMBER/check"
     }
 
     object WakeupSong {
@@ -67,7 +68,7 @@ object DodamUrl {
     object NightStudy {
         const val MY = "$NIGHT_STUDY/my"
         const val PENDING = "$NIGHT_STUDY/pending"
-        const val BAN = "$NIGHT_STUDY/ban/my"
+        const val BAN = "$NIGHT_STUDY/ban"
         const val MYPROJECT = "$PROJECT/my"
         const val STUDENT = "$NIGHT_STUDY/students"
     }

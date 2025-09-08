@@ -58,6 +58,8 @@ internal fun MainScreen(
     navigateToClub: () -> Unit,
     navigateToNoticeViewer: (startIndex: Int, images: String) -> Unit,
     navigateToGroup: () -> Unit,
+    navigateToApproveNightStudy: () -> Unit,
+    navigateToManagementNightStudy: () -> Unit,
     showToast: (String, String) -> Unit,
     refresh: () -> Boolean,
     dispose: () -> Unit,
@@ -128,6 +130,9 @@ internal fun MainScreen(
                 navigateToAddWakeUpSong = navigateToAddWakeUpSong,
                 navigateToClub = navigateToClub,
                 navigateToGroup = navigateToGroup,
+                navigateToApproveNightStudy = navigateToApproveNightStudy,
+                navigateToManagementNightStudy = navigateToManagementNightStudy,
+
             )
         }
 

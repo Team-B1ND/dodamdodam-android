@@ -4,14 +4,12 @@ import com.b1nd.dodam.common.Dispatcher
 import com.b1nd.dodam.common.DispatcherType
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.common.result.asResult
-import com.b1nd.dodam.data.core.model.Place
-import com.b1nd.dodam.data.core.model.toRequest
+import com.b1nd.dodam.data.core.model.NightStudyType
+import com.b1nd.dodam.data.core.model.ProjectNightStudyType
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import com.b1nd.dodam.data.nightstudy.model.MyBan
 import com.b1nd.dodam.data.nightstudy.model.NightStudy
 import com.b1nd.dodam.data.nightstudy.model.NightStudyStudent
-import com.b1nd.dodam.data.core.model.NightStudyType
-import com.b1nd.dodam.data.core.model.ProjectNightStudyType
 import com.b1nd.dodam.data.nightstudy.model.Project
 import com.b1nd.dodam.data.nightstudy.model.toModel
 import com.b1nd.dodam.network.nightstudy.datasource.NightStudyDataSource
@@ -140,6 +138,12 @@ internal class NightStudyRepositoryImpl(
     override fun getProject(): Flow<Result<ImmutableList<Project>>> {
         return flow {
             emit(remote.getProject().map { it.toModel() }.toImmutableList())
+        }.asResult().flowOn(dispatcher)
+    }
+
+    override fun postNightStudyBan(student: Long, reason: String, ended: String): Flow<Result<Unit>> {
+        return flow {
+            emit(remote.postNightStudyBan(student, reason, ended))
         }.asResult().flowOn(dispatcher)
     }
 }
