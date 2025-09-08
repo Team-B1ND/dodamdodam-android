@@ -97,7 +97,7 @@ internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewMod
     var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(13)) }
 
     val projectNightStudyTypeList = persistentListOf("심자 1", "심자 2")
-    val nightStudyTypeList = persistentListOf("심자 1", "심자 2", "심자 3")
+    val nightStudyTypeList = persistentListOf("심자 1", "심자 2")
     val projectNightStudyMembers = remember { mutableStateListOf<Long>() }
 
     var projectNightStudyType by remember { mutableStateOf(ProjectNightStudyType.NIGHT_STUDY_PROJECT_2) }
