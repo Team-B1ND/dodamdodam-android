@@ -87,6 +87,7 @@ val networkCoreModule = module {
                     sendWithoutRequest { request ->
                         when (request.url.toString()) {
                             DodamUrl.Auth.LOGIN -> false
+                            DodamUrl.Auth.QR_LOGIN -> false
                             DodamUrl.Member.REGISTER -> false
                             DodamUrl.GET_BUNDLE_ID -> false
                             else -> true

@@ -41,7 +41,7 @@ fun BusScreen(viewModel: BusViewModel = koinViewModel(), popBackStack: () -> Uni
     var selectedIndex: Int? by remember {
         mutableStateOf(null)
     }
-    var toastMessage by remember {
+        var toastMessage by remember {
         mutableStateOf("")
     }
 

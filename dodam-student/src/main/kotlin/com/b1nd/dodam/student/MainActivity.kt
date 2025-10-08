@@ -33,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +59,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import android.widget.Toast
 import com.b1nd.dodam.network.login.datasource.LoginDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -144,6 +144,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             var role: String? by remember { mutableStateOf(null) }
+            val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
+            val scope = rememberCoroutineScope()
 
             if (showWordSelectionSheet) {
                 DodamModalBottomSheet(
@@ -243,7 +245,7 @@ class MainActivity : ComponentActivity() {
                                 DodamButton(
                                     modifier = Modifier.weight(1f),
                                     onClick = {
-                                        performQrLogin()
+                                        performQrLogin(scope, snackbarHostState)
                                         showLoginConfirmationSheet = false
                                     },
                                     text = "확인",
@@ -275,12 +277,13 @@ class MainActivity : ComponentActivity() {
             }
 
             CompositionLocalProvider(LocalFileDownloader provides AndroidFileDownloader(this)) {
-                com.b1nd.dodam.designsystem.DodamTheme {
+                DodamTheme {
                     DodamTheme {
                         if (toastState != null && toastMessage.isNotEmpty()) {
                             when (toastState) {
                                 "SUCCESS", "ERROR" -> {
                                     LaunchedEffect(toastState, toastMessage) {
+                                        scope.launch { snackbarHostState.showSnackbar(toastMessage) }
                                         kotlinx.coroutines.delay(3000)
                                         toastState = null
                                         toastMessage = ""
@@ -365,7 +368,7 @@ class MainActivity : ComponentActivity() {
             }
     }
 
-    private fun performQrLogin() {
+    private fun performQrLogin(scope: kotlinx.coroutines.CoroutineScope, snackbarHostState: androidx.compose.material3.SnackbarHostState) {
         val clientId = qrClientId
         val code = qrCode
         val word = selectedWord
@@ -399,23 +402,16 @@ class MainActivity : ComponentActivity() {
                     qrClientName = null
 
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(this@MainActivity, "로그인 성공!", Toast.LENGTH_SHORT).show()
-
-                        toastState = "SUCCESS"
-                        toastMessage = "로그인에 성공했습니다!"
+                        scope.launch { snackbarHostState.showSnackbar("로그인에 성공했습니다!") }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(this@MainActivity, "로그인 실패: ${e.message}", Toast.LENGTH_SHORT).show()
-
-                        toastState = "ERROR"
-                        toastMessage = e.message ?: "로그인에 실패했습니다"
+                        scope.launch { snackbarHostState.showSnackbar(e.message ?: "로그인에 실패했습니다") }
                     }
                 }
             }
         } else {
-            toastState = "ERROR"
-            toastMessage = "로그인 정보가 부족합니다"
+            scope.launch { snackbarHostState.showSnackbar("로그인 정보가 부족합니다") }
         }
     }
 }
