@@ -262,11 +262,7 @@ fun NightStudyScreen(
                                                                 reason = project.description,
                                                                 startAt = project.startAt,
                                                                 endAt = project.endAt,
-                                                                onTrashClick = {
-                                                                    id = project.id
-                                                                    reason = ""
-                                                                    showDialog = true
-                                                                },
+                                                                onTrashClick = null,
                                                                 playOnlyOnce = playOnlyOnce,
                                                             )
                                                         }
@@ -459,11 +455,7 @@ fun NightStudyScreen(
                                                                 startAt = nightStudy.startAt,
                                                                 endAt = nightStudy.endAt,
                                                                 phoneReason = nightStudy.reasonForPhone,
-                                                                onTrashClick = {
-                                                                    id = nightStudy.id
-                                                                    reason = nightStudy.content
-                                                                    showDialog = true
-                                                                },
+                                                                onTrashClick = null,
                                                                 playOnlyOnce = playOnlyOnce,
                                                             )
                                                         }
@@ -758,7 +750,7 @@ private fun NightStudyApplyCell(
     endAt: LocalDateTime,
     current: LocalDateTime = DodamDate.now(),
     phoneReason: String? = null,
-    onTrashClick: () -> Unit,
+    onTrashClick: (() -> Unit)?,
     playOnlyOnce: Boolean,
 ) {
     val nightStudyProgress = (
@@ -803,18 +795,20 @@ private fun NightStudyApplyCell(
                     tagType = tagType,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable(
-                            indication = rememberBounceIndication(),
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = onTrashClick,
-                        ),
-                    imageVector = DodamIcons.Trash.value,
-                    contentDescription = "쓰레기통",
-                    tint = DodamTheme.colors.lineNormal,
-                )
+                if (onTrashClick != null) {
+                    Icon(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable(
+                                indication = rememberBounceIndication(),
+                                interactionSource = remember { MutableInteractionSource() },
+                                onClick = onTrashClick,
+                            ),
+                        imageVector = DodamIcons.Trash.value,
+                        contentDescription = "쓰레기통",
+                        tint = DodamTheme.colors.lineNormal,
+                    )
+                }
             }
 
             Text(
