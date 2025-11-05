@@ -1,10 +1,10 @@
 [versions]
 calfFilePicker = "0.5.5"
 coilVersion = "2.7.0"
-compileSdk = "34"
+compileSdk = "35"
 minSdk = "28"
 multiplatformMarkdownRenderer = "0.22.0"
-targetSdk = "34"
+targetSdk = "35"
 appVersion = "3.7.0"
 urlencoderLib = "1.6.0"
 versionCode = "18"
