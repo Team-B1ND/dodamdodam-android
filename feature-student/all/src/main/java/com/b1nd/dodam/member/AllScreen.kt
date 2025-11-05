@@ -56,6 +56,7 @@ import com.b1nd.dodam.ui.icons.ColoredCreditCard
 import com.b1nd.dodam.ui.icons.ColoredGroup
 import com.b1nd.dodam.ui.icons.ColoredMegaphone
 import com.b1nd.dodam.ui.icons.ColoredMusicalNote
+import com.b1nd.dodam.ui.icons.ColoredPencil
 import com.b1nd.dodam.ui.icons.ColoredTent
 import com.b1nd.dodam.ui.icons.Silhouette
 import kotlinx.collections.immutable.persistentListOf
@@ -73,13 +74,15 @@ fun AllScreen(
     navigateToAddWakeUpSong: () -> Unit,
     navigateToClub: () -> Unit,
     navigateToGroup: () -> Unit,
+    navigateToApproveNightStudy: () -> Unit,
+    navigateToManagementNightStudy: () -> Unit,
 ) {
     val clipboardManager = LocalClipboardManager.current
     val uiState by viewModel.uiState.collectAsState()
     var isShowStudentCodeDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
-        viewModel.getMyInfo()
+        viewModel.getMyInfoAndCheckDormitory()
     }
 
     if (isShowStudentCodeDialog) {
@@ -263,6 +266,20 @@ fun AllScreen(
                     text = "동아리",
                     onClick = navigateToClub,
                 )
+                if (uiState.isDormitoryManagementStudent) {
+                    DodamDivider(type = DividerType.Normal)
+
+                    AllCardView(
+                        imageVector = ColoredPencil,
+                        text = "심자 승인하기",
+                        onClick = navigateToApproveNightStudy,
+                    )
+                    AllCardView(
+                        imageVector = DodamIcons.MoonPlus.value,
+                        text = "심자 진행 관리하기",
+                        onClick = navigateToManagementNightStudy,
+                    )
+                }
             }
         }
     }
