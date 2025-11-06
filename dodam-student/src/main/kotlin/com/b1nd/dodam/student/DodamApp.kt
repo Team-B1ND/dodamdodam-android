@@ -25,8 +25,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.b1nd.dodam.approvenightstudy.navigation.approveNightStudyScreen
-import com.b1nd.dodam.approvenightstudy.navigation.navigateToApproveNightStudy
 import com.b1nd.dodam.asknightstudy.navigation.askNightStudyScreen
 import com.b1nd.dodam.asknightstudy.navigation.navigateToAskNightStudy
 import com.b1nd.dodam.askout.navigation.askOutScreen
@@ -56,8 +54,6 @@ import com.b1nd.dodam.groupwaiting.navigation.groupWaitingScreen
 import com.b1nd.dodam.groupwaiting.navigation.navigateToGroupWaiting
 import com.b1nd.dodam.login.navigation.loginScreen
 import com.b1nd.dodam.login.navigation.navigationToLogin
-import com.b1nd.dodam.managementnightstudy.navigation.managementNightStudyScreen
-import com.b1nd.dodam.managementnightstudy.navigation.navigateToManagementNightStudy
 import com.b1nd.dodam.meal.navigation.mealScreen
 import com.b1nd.dodam.meal.navigation.navigateToMeal
 import com.b1nd.dodam.noticeviewer.navigation.navigateToNoticeViewer
@@ -177,14 +173,6 @@ fun DodamApp(
             enterTransition = { fadeIn(initialAlpha = 100f) },
             exitTransition = { fadeOut(targetAlpha = 100f) },
         ) {
-            approveNightStudyScreen(
-                onBackClick = navController::popBackStack,
-                showSnackbar = showSnackbar,
-            )
-            managementNightStudyScreen(
-                navigateToApproveStudy = navController::navigateToApproveNightStudy,
-                showSnackbar = showSnackbar,
-            )
             onboardingScreen(
                 onRegisterClick = navController::navigateToSelectRole,
                 onLoginClick = navController::navigationToLogin,
@@ -208,8 +196,8 @@ fun DodamApp(
                 },
                 navigateToNoticeViewer = navController::navigateToNoticeViewer,
                 navigateToGroup = navController::navigateToGroup,
-                navigateToApproveNightStudy = navController::navigateToApproveNightStudy,
-                navigateToManagementNightStudy = navController::navigateToManagementNightStudy,
+                navigateToApproveNightStudy = {},
+                navigateToManagementNightStudy = {},
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
@@ -334,7 +322,7 @@ fun DodamApp(
                 },
             )
             settingScreen(
-                versionInfo = "3.8.0",
+                versionInfo = "3.9.0",
                 popBackStack = navController::popBackStack,
                 logout = logout,
                 navigationToEditMemberInfo = { profileImage, name, email, phone ->
