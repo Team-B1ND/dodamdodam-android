@@ -75,4 +75,12 @@ internal class MemberRepositoryImpl(
             .asResult()
             .flowOn(dispatcher)
     }
+
+    override suspend fun checkDormitoryMangeStudent(): Flow<Result<Boolean>> {
+        return flow {
+            emit(network.checkDormitoryMangeStudent())
+        }
+            .asResult()
+            .flowOn(dispatcher)
+    }
 }

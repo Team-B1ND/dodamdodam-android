@@ -9,7 +9,6 @@ import com.b1nd.dodam.common.exception.ForbiddenException
 import com.b1nd.dodam.common.exception.NotFoundException
 import com.b1nd.dodam.common.result.Result
 import com.b1nd.dodam.data.core.model.NightStudyType
-import com.b1nd.dodam.data.core.model.Place
 import com.b1nd.dodam.data.core.model.ProjectNightStudyType
 import com.b1nd.dodam.data.nightstudy.NightStudyRepository
 import kotlinx.coroutines.flow.MutableSharedFlow

@@ -1,6 +1,5 @@
 package com.b1nd.dodam.nightstudy.viewmodel
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.b1nd.dodam.common.exception.DataNotFoundException
@@ -152,7 +151,7 @@ sealed interface MyBanUiState {
     data object Loading : MyBanUiState
 
     data class Success(
-        val banData: MyBan?
+        val banData: MyBan?,
     ) : MyBanUiState
 
     data object Error : MyBanUiState
