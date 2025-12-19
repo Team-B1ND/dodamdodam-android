@@ -8,5 +8,4 @@ data class QrLoginRequest(
     val access: String,
     val refresh: String,
     val clientId: String,
-    val word: String,
 )

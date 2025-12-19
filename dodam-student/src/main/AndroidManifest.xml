@@ -37,7 +37,6 @@
 
                 <data android:scheme="https"/>
                 <data android:host="deeplink.b1nd.com"/>
-                <data android:pathPrefix="/student"/>
             </intent-filter>
 
         </activity>

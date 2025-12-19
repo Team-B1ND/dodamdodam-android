@@ -79,13 +79,9 @@ class MainActivity : ComponentActivity() {
     ) { _ ->
     }
 
-    private var showWordSelectionSheet by mutableStateOf(false)
-    private var showLoginConfirmationSheet by mutableStateOf(false)
-    private var qrClientId by mutableStateOf<String?>(null)
-    private var qrWords by mutableStateOf<List<String>>(emptyList())
-    private var qrCode by mutableStateOf<String?>(null)
-    private var selectedWord by mutableStateOf<String?>(null)
-    private var qrClientName by mutableStateOf<String?>(null)
+    private var showLoginResultSheet by mutableStateOf(false)
+    private var loginResultSuccess by mutableStateOf(false)
+    private var loginResultMessage by mutableStateOf("")
 
     private var toastState by mutableStateOf<String?>(null)
     private var toastMessage by mutableStateOf("")
@@ -97,28 +93,16 @@ class MainActivity : ComponentActivity() {
         val firebaseCrashlytics = FirebaseCrashlytics.getInstance()
 
         intent?.data?.let { uri ->
-
-            if (uri.toString().startsWith("https://deeplink.b1nd.com/student") || uri.toString().startsWith("https://deeplink.blind.com/student")) {
+            if (uri.toString().startsWith("https://deeplink.b1nd.com/")) {
                 val clientId = uri.getQueryParameter("clientId")
-                val wordsParam = uri.getQueryParameter("words")
                 val code = uri.getQueryParameter("code")
-                val encodedClientName = uri.getQueryParameter("clientName")
-                val clientName = encodedClientName?.let { URLDecoder.decode(it, "UTF-8") }
 
-                if (clientId != null && wordsParam != null && code != null) {
-                    val decodedWords = URLDecoder.decode(wordsParam, "UTF-8")
-                    val characters = decodedWords.map { it.toString() }
-
-                    qrClientId = clientId
-                    qrWords = characters
-                    qrCode = code
-                    qrClientName = clientName
-
+                if (clientId != null && code != null) {
                     lifecycleScope.launch {
                         try {
                             val user = datastoreRepository.user.first()
                             if (user.token.isNotEmpty()) {
-                                showWordSelectionSheet = true
+                                performQrLogin(clientId, code, user.token)
                             } else {
                                 toastState = "ERROR"
                                 toastMessage = "로그인이 필요합니다"
@@ -128,7 +112,6 @@ class MainActivity : ComponentActivity() {
                             toastMessage = "로그인이 필요합니다"
                         }
                     }
-                } else {
                 }
             }
         }
@@ -147,18 +130,14 @@ class MainActivity : ComponentActivity() {
             val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
             val scope = rememberCoroutineScope()
 
-            if (showWordSelectionSheet) {
+            if (showLoginResultSheet) {
                 DodamModalBottomSheet(
                     onDismissRequest = {
-                        showWordSelectionSheet = false
-                        qrClientId = null
-                        qrWords = emptyList()
-                        qrCode = null
-                        qrClientName = null
+                        showLoginResultSheet = false
                     },
                     title = {
                         Text(
-                            text = "단어를 선택해주세요",
+                            text = if (loginResultSuccess) "로그인에 성공했습니다" else "로그인에 실패했습니다",
                             style = DodamTheme.typography.heading2Bold(),
                             color = DodamTheme.colors.labelNormal,
                         )
@@ -168,93 +147,31 @@ class MainActivity : ComponentActivity() {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                                .background(color = DodamTheme.colors.backgroundNormal),
                         ) {
-                            Text(
-                                text = "웹에서 뜬 단어를 선택하여 인증해주세요.",
-                                style = DodamTheme.typography.body1Medium(),
-                                color = DodamTheme.colors.labelAssistive,
-                            )
-                            Spacer(Modifier.height(24.dp))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                qrWords.forEach { character ->
-                                    DodamButton(
-                                        modifier = Modifier.weight(1f),
-                                        onClick = {
-                                            selectedWord = character
-                                            showWordSelectionSheet = false
-                                            showLoginConfirmationSheet = true
-                                        },
-                                        text = character,
-                                        buttonSize = ButtonSize.Large,
-                                        buttonRole = ButtonRole.Assistive,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                )
-            }
-
-            if (showLoginConfirmationSheet) {
-                DodamModalBottomSheet(
-                    onDismissRequest = {
-                        showLoginConfirmationSheet = false
-                        selectedWord = null
-                        qrClientName = null
-                    },
-                    title = {
-                        Text(
-                            text = "${qrClientName ?: ""}에 로그인 하시겠습니까?",
-                            style = DodamTheme.typography.heading2Bold(),
-                            color = DodamTheme.colors.labelNormal,
-                        )
-                        Spacer(Modifier.height(8.dp))
-                    },
-                    content = {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                        ) {
-                            Text(
-                                text = "확인을 클릭하면 자동으로 로그인 됩니다.",
-                                style = DodamTheme.typography.body1Medium(),
-                                color = DodamTheme.colors.labelAssistive,
-                            )
-                            Spacer(Modifier.height(24.dp))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            ) {
-                                DodamButton(
-                                    modifier = Modifier.weight(1f),
-                                    onClick = {
-                                        showLoginConfirmationSheet = false
-                                        selectedWord = null
-                                        qrClientName = null
-                                    },
-                                    text = "취소",
-                                    buttonSize = ButtonSize.Large,
-                                    buttonRole = ButtonRole.Assistive,
+                            if (loginResultMessage.isNotEmpty()) {
+                                Text(
+                                    text = loginResultMessage,
+                                    style = DodamTheme.typography.body1Medium(),
+                                    color = DodamTheme.colors.labelAssistive,
+                                    modifier = Modifier.padding(horizontal = 8.dp)
                                 )
-                                DodamButton(
-                                    modifier = Modifier.weight(1f),
-                                    onClick = {
-                                        performQrLogin(scope, snackbarHostState)
-                                        showLoginConfirmationSheet = false
-                                    },
-                                    text = "확인",
-                                    buttonSize = ButtonSize.Large,
-                                    buttonRole = ButtonRole.Primary,
-                                )
+                                Spacer(Modifier.height(24.dp))
                             }
+                            DodamButton(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp),
+                                onClick = {
+                                    showLoginResultSheet = false
+                                },
+                                text = "확인",
+                                buttonSize = ButtonSize.Large,
+                                buttonRole = ButtonRole.Primary,
+                            )
+                            Spacer(Modifier.height(16.dp))
                         }
-                    }
+                    },
                 )
             }
 
@@ -368,50 +285,28 @@ class MainActivity : ComponentActivity() {
             }
     }
 
-    private fun performQrLogin(scope: kotlinx.coroutines.CoroutineScope, snackbarHostState: androidx.compose.material3.SnackbarHostState) {
-        val clientId = qrClientId
-        val code = qrCode
-        val word = selectedWord
+    private fun performQrLogin(clientId: String, code: String, token: String) {
+        lifecycleScope.launch {
+            try {
+                val response = loginDataSource.qrLogin(
+                    code = code,
+                    access = token,
+                    refresh = token,
+                    clientId = clientId
+                )
 
-
-        if (clientId != null && code != null && word != null) {
-
-            lifecycleScope.launch {
-                try {
-                    val user = datastoreRepository.user.first()
-                    val token = user.token
-
-                    val response = loginDataSource.qrLogin(
-                        code = code,
-                        access = token,
-                        refresh = token,
-                        clientId = clientId,
-                        word = word
-                    )
-
-                    if (response.accessToken != token) {
-                        withContext(Dispatchers.Main) {
-                            datastoreRepository.saveToken(response.accessToken)
-                        }
-                    }
-
-                    qrClientId = null
-                    qrWords = emptyList()
-                    qrCode = null
-                    selectedWord = null
-                    qrClientName = null
-
-                    withContext(Dispatchers.Main) {
-                        scope.launch { snackbarHostState.showSnackbar("로그인에 성공했습니다!") }
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        scope.launch { snackbarHostState.showSnackbar(e.message ?: "로그인에 실패했습니다") }
-                    }
+                withContext(Dispatchers.Main) {
+                    loginResultSuccess = response.status == 200
+                    loginResultMessage = response.message
+                    showLoginResultSheet = true
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    loginResultSuccess = false
+                    loginResultMessage = e.message ?: "알 수 없는 오류가 발생했습니다"
+                    showLoginResultSheet = true
                 }
             }
-        } else {
-            scope.launch { snackbarHostState.showSnackbar("로그인 정보가 부족합니다") }
         }
     }
 }
