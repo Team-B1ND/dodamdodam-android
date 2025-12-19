@@ -11,18 +11,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -46,6 +42,7 @@ import com.b1nd.dodam.designsystem.component.ButtonRole
 import com.b1nd.dodam.designsystem.component.ButtonSize
 import com.b1nd.dodam.designsystem.component.DodamButton
 import com.b1nd.dodam.designsystem.component.DodamModalBottomSheet
+import com.b1nd.dodam.network.login.datasource.LoginDataSource
 import com.b1nd.dodam.ui.icons.B1NDLogo
 import com.b1nd.dodam.ui.icons.DodamLogo
 import com.b1nd.dodam.ui.util.AndroidFileDownloader
@@ -56,13 +53,11 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import com.b1nd.dodam.network.login.datasource.LoginDataSource
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.net.URLDecoder
+import org.koin.android.ext.android.inject
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
@@ -154,7 +149,7 @@ class MainActivity : ComponentActivity() {
                                     text = loginResultMessage,
                                     style = DodamTheme.typography.body1Medium(),
                                     color = DodamTheme.colors.labelAssistive,
-                                    modifier = Modifier.padding(horizontal = 8.dp)
+                                    modifier = Modifier.padding(horizontal = 8.dp),
                                 )
                                 Spacer(Modifier.height(24.dp))
                             }
@@ -292,7 +287,7 @@ class MainActivity : ComponentActivity() {
                     code = code,
                     access = token,
                     refresh = token,
-                    clientId = clientId
+                    clientId = clientId,
                 )
 
                 withContext(Dispatchers.Main) {
