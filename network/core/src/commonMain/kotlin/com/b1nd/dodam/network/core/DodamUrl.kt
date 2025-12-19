@@ -2,6 +2,7 @@ package com.b1nd.dodam.network.core
 
 object DodamUrl {
     private const val BASE_URL = "https://dodamapi.b1nd.com"
+    private const val DAUTH_URL = "https://dauthapi.b1nd.com"
 
     const val MEAL = "$BASE_URL/meal"
     const val AUTH = "$BASE_URL/auth"
@@ -27,6 +28,10 @@ object DodamUrl {
 
     object Auth {
         const val LOGIN = "$AUTH/login"
+    }
+
+    object Dauth {
+        const val QR_LOGIN = "$DAUTH_URL/auth/qr-login"
     }
 
     object Bus {
