@@ -86,4 +86,10 @@ internal class MemberService(
             }.body<DefaultResponse>()
         }
     }
+
+    override suspend fun checkDormitoryMangeStudent(): Boolean {
+        return safeRequest {
+            client.get("${DodamUrl.Member.CHECK}/dormitory-manage-member").body<Response<Boolean>>()
+        }
+    }
 }

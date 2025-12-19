@@ -72,12 +72,12 @@ import com.b1nd.dodam.nightstudy.viewmodel.NightStudyUiState
 import com.b1nd.dodam.nightstudy.viewmodel.NightStudyViewModel
 import com.b1nd.dodam.nightstudy.viewmodel.ProjectUiState
 import com.b1nd.dodam.ui.effect.shimmerEffect
+import java.time.temporal.ChronoUnit
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import org.koin.androidx.compose.koinViewModel
-import java.time.temporal.ChronoUnit
 
 @SuppressLint("DefaultLocale")
 @OptIn(ExperimentalMaterialApi::class)
@@ -171,8 +171,8 @@ fun NightStudyScreen(
                         ActionIcon(
                             icon = DodamIcons.Plus,
                             onClick = onAddClick,
-                            enabled = showTopBar
-                        )
+                            enabled = showTopBar,
+                        ),
                     ),
                 )
                 if (nightTypeIndex.isProject()) {
@@ -184,7 +184,6 @@ fun NightStudyScreen(
                                 .background(DodamTheme.colors.fillNeutral),
                         )
                     }
-
                 } else {
                     AnimatedVisibility(nightStudyScreenState.canScrollBackward) {
                         Box(
@@ -226,7 +225,7 @@ fun NightStudyScreen(
                             if (nightTypeIndex.isProject()) {
                                 LazyColumn(
                                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                                    state = nightStudyScreenState.lazyListState
+                                    state = nightStudyScreenState.lazyListState,
                                 ) {
                                     when (val projectUiState = projectUiState) {
                                         is ProjectUiState.Success -> {
@@ -262,11 +261,7 @@ fun NightStudyScreen(
                                                                 reason = project.description,
                                                                 startAt = project.startAt,
                                                                 endAt = project.endAt,
-                                                                onTrashClick = {
-                                                                    id = project.id
-                                                                    reason = ""
-                                                                    showDialog = true
-                                                                },
+                                                                onTrashClick = null,
                                                                 playOnlyOnce = playOnlyOnce,
                                                             )
                                                         }
@@ -309,7 +304,7 @@ fun NightStudyScreen(
                                                                 horizontal = 12.dp,
                                                             ),
                                                         verticalArrangement = Arrangement.spacedBy(
-                                                            12.dp
+                                                            12.dp,
                                                         ),
                                                     ) {
                                                         Row(
@@ -359,7 +354,7 @@ fun NightStudyScreen(
                                                         Column(
                                                             modifier = Modifier.fillMaxWidth(),
                                                             verticalArrangement = Arrangement.spacedBy(
-                                                                4.dp
+                                                                4.dp,
                                                             ),
                                                         ) {
                                                             Box(
@@ -459,11 +454,7 @@ fun NightStudyScreen(
                                                                 startAt = nightStudy.startAt,
                                                                 endAt = nightStudy.endAt,
                                                                 phoneReason = nightStudy.reasonForPhone,
-                                                                onTrashClick = {
-                                                                    id = nightStudy.id
-                                                                    reason = nightStudy.content
-                                                                    showDialog = true
-                                                                },
+                                                                onTrashClick = null,
                                                                 playOnlyOnce = playOnlyOnce,
                                                             )
                                                         }
@@ -507,7 +498,7 @@ fun NightStudyScreen(
                                                                 horizontal = 12.dp,
                                                             ),
                                                         verticalArrangement = Arrangement.spacedBy(
-                                                            12.dp
+                                                            12.dp,
                                                         ),
                                                     ) {
                                                         Row(
@@ -557,7 +548,7 @@ fun NightStudyScreen(
                                                         Column(
                                                             modifier = Modifier.fillMaxWidth(),
                                                             verticalArrangement = Arrangement.spacedBy(
-                                                                4.dp
+                                                                4.dp,
                                                             ),
                                                         ) {
                                                             Box(
@@ -651,7 +642,7 @@ fun NightStudyScreen(
                                         horizontal = 12.dp,
                                     ),
                                 verticalArrangement = Arrangement.spacedBy(
-                                    12.dp
+                                    12.dp,
                                 ),
                             ) {
                                 Row(
@@ -701,7 +692,7 @@ fun NightStudyScreen(
                                 Column(
                                     modifier = Modifier.fillMaxWidth(),
                                     verticalArrangement = Arrangement.spacedBy(
-                                        4.dp
+                                        4.dp,
                                     ),
                                 ) {
                                     Box(
@@ -758,18 +749,18 @@ private fun NightStudyApplyCell(
     endAt: LocalDateTime,
     current: LocalDateTime = DodamDate.now(),
     phoneReason: String? = null,
-    onTrashClick: () -> Unit,
+    onTrashClick: (() -> Unit)?,
     playOnlyOnce: Boolean,
 ) {
     val nightStudyProgress = (
-            ChronoUnit.SECONDS.between(
-                startAt.toJavaLocalDateTime(),
-                current.toJavaLocalDateTime(),
-            ).toFloat() / ChronoUnit.SECONDS.between(
-                startAt.toJavaLocalDateTime(),
-                endAt.toJavaLocalDateTime(),
-            )
-            ).coerceIn(0f, 1f)
+        ChronoUnit.SECONDS.between(
+            startAt.toJavaLocalDateTime(),
+            current.toJavaLocalDateTime(),
+        ).toFloat() / ChronoUnit.SECONDS.between(
+            startAt.toJavaLocalDateTime(),
+            endAt.toJavaLocalDateTime(),
+        )
+        ).coerceIn(0f, 1f)
 
     val progress by animateFloatAsState(
         targetValue = if (playOnlyOnce) 0f else nightStudyProgress,
@@ -803,18 +794,20 @@ private fun NightStudyApplyCell(
                     tagType = tagType,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable(
-                            indication = rememberBounceIndication(),
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = onTrashClick,
-                        ),
-                    imageVector = DodamIcons.Trash.value,
-                    contentDescription = "쓰레기통",
-                    tint = DodamTheme.colors.lineNormal,
-                )
+                if (onTrashClick != null) {
+                    Icon(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable(
+                                indication = rememberBounceIndication(),
+                                interactionSource = remember { MutableInteractionSource() },
+                                onClick = onTrashClick,
+                            ),
+                        imageVector = DodamIcons.Trash.value,
+                        contentDescription = "쓰레기통",
+                        tint = DodamTheme.colors.lineNormal,
+                    )
+                }
             }
 
             Text(
@@ -913,12 +906,7 @@ private fun NightStudyApplyCell(
 }
 
 @Composable
-private fun NightStudyApplyRejectCell(
-    modifier: Modifier = Modifier,
-    reason: String,
-    rejectReason: String,
-    onTrashClick: () -> Unit
-) {
+private fun NightStudyApplyRejectCell(modifier: Modifier = Modifier, reason: String, rejectReason: String, onTrashClick: () -> Unit) {
     Surface(
         modifier = modifier,
         shape = DodamTheme.shapes.large,

@@ -101,7 +101,7 @@ internal fun AskNightStudyScreen(
     var nightStudyEndDate by remember { mutableStateOf(LocalDate.now().plusDays(13)) }
 
     val projectNightStudyTypeList = persistentListOf("심자 1", "심자 2")
-    val nightStudyTypeList = persistentListOf("심자 1", "심자 2", "심자 3")
+    val nightStudyTypeList = persistentListOf("심자 1", "심자 2")
     val projectNightStudyMembers = remember { mutableStateListOf<Long>() }
 
     var projectNightStudyType by remember { mutableStateOf(ProjectNightStudyType.NIGHT_STUDY_PROJECT_2) }
@@ -445,7 +445,7 @@ internal fun AskNightStudyScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
-
+                
                 AskNightStudyCard(
                     text = "시작 날짜",
                     action = {
@@ -644,10 +644,10 @@ internal fun AskNightStudyScreen(
                 enabled = if (nightTypeIndex.isProject()) {
                     (
                             projectNightStudyReason.isNotEmpty() && nightStudyStartDate
-                                    < nightStudyEndDate && projectOverview.length >= 10
+                                    <= nightStudyEndDate && projectOverview.length >= 10
                             ) && !uiState.isLoading
                 } else {
-                    (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading
+                    (nightStudyReason.length >= 10 && nightStudyStartDate <= nightStudyEndDate) && !uiState.isLoading
                 },
                 text = "신청",
                 loading = uiState.isLoading,

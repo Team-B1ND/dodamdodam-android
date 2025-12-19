@@ -11,4 +11,5 @@ interface MemberDataSource {
     suspend fun getChildren(code: String): MemberResponse
     suspend fun getAuthCode(type: String, identifier: String)
     suspend fun verifyAuthCode(type: String, identifier: String, authCode: String, userAgent: String)
+    suspend fun checkDormitoryMangeStudent(): Boolean
 }

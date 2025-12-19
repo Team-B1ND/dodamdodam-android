@@ -196,6 +196,8 @@ fun DodamApp(
                 },
                 navigateToNoticeViewer = navController::navigateToNoticeViewer,
                 navigateToGroup = navController::navigateToGroup,
+                navigateToApproveNightStudy = {},
+                navigateToManagementNightStudy = {},
                 showToast = { status, text ->
                     state = status
                     scope.launch { snackbarHostState.showSnackbar(text) }
@@ -320,7 +322,7 @@ fun DodamApp(
                 },
             )
             settingScreen(
-                versionInfo = "3.6.4",
+                versionInfo = "3.9.0",
                 popBackStack = navController::popBackStack,
                 logout = logout,
                 navigationToEditMemberInfo = { profileImage, name, email, phone ->

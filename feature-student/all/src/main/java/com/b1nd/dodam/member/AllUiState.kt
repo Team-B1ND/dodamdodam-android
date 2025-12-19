@@ -6,4 +6,5 @@ data class AllUiState(
     val memberInfo: MemberInfo? = null,
     val isLoading: Boolean = false,
     val isSimmer: Boolean = true,
+    val isDormitoryManagementStudent: Boolean = false,
 )

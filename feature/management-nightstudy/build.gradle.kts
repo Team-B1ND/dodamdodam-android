@@ -19,7 +19,7 @@ kotlin{
     }
     setIOS(
         name = "NightStudy",
-        bundleId = "com.b1nd.dodam.nightstudy"
+        bundleId = "com.b1nd.dodam.management_nightstudy"
     )
 
     sourceSets{
@@ -37,7 +37,7 @@ kotlin{
 
 
 androidLibrary {
-    namespace = "com.b1nd.dodam.nightstudy"
+    namespace = "com.b1nd.dodam.managemen_nightstudy"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     buildFeatures {
