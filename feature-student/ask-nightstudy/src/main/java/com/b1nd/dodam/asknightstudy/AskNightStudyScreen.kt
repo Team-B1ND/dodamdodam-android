@@ -74,9 +74,9 @@ import com.b1nd.dodam.designsystem.foundation.DodamIcons
 import com.b1nd.dodam.ui.component.InputField
 import com.b1nd.dodam.ui.icons.UpDownArrow
 import com.b1nd.dodam.ui.util.addFocusCleaner
-import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toKotlinLocalDate
@@ -84,11 +84,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun AskNightStudyScreen(
-    viewModel: AskNightStudyViewModel = koinViewModel(),
-    popBackStack: () -> Unit,
-    showToast: (String, String) -> Unit,
-) {
+internal fun AskNightStudyScreen(viewModel: AskNightStudyViewModel = koinViewModel(), popBackStack: () -> Unit, showToast: (String, String) -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
@@ -274,7 +270,7 @@ internal fun AskNightStudyScreen(
                         }
                     }
                 } else {
-                    if (nightTypeIndex.isProject()){
+                    if (nightTypeIndex.isProject()) {
                         LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
                         ) {
@@ -343,7 +339,6 @@ internal fun AskNightStudyScreen(
                             }
                         }
                     }
-
                 }
             }
         }
@@ -403,7 +398,7 @@ internal fun AskNightStudyScreen(
                                 "사유를 10자 이상 입력해주세요."
 
                             else -> ""
-                        }
+                        },
                     )
                     if (nightTypeIndex.isProject()) {
                         Spacer(modifier = Modifier.height(20.dp))
@@ -428,7 +423,7 @@ internal fun AskNightStudyScreen(
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
                             Text(
-                                text = if(nightTypeIndex.isProject())projectNightStudyType.type else nightStudyType.type,
+                                text = if (nightTypeIndex.isProject())projectNightStudyType.type else nightStudyType.type,
                                 style = DodamTheme.typography.headlineRegular(),
                                 color = DodamTheme.colors.primaryNormal,
                             )
@@ -445,7 +440,6 @@ internal fun AskNightStudyScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
-                
                 AskNightStudyCard(
                     text = "시작 날짜",
                     action = {
@@ -643,11 +637,11 @@ internal fun AskNightStudyScreen(
                 },
                 enabled = if (nightTypeIndex.isProject()) {
                     (
-                            projectNightStudyReason.isNotEmpty() && nightStudyStartDate
-                                    <= nightStudyEndDate && projectOverview.length >= 10
-                            ) && !uiState.isLoading
+                        projectNightStudyReason.isNotEmpty() && nightStudyStartDate
+                            < nightStudyEndDate && projectOverview.length >= 10
+                        ) && !uiState.isLoading
                 } else {
-                    (nightStudyReason.length >= 10 && nightStudyStartDate <= nightStudyEndDate) && !uiState.isLoading
+                    (nightStudyReason.length >= 10 && nightStudyStartDate < nightStudyEndDate) && !uiState.isLoading
                 },
                 text = "신청",
                 loading = uiState.isLoading,
@@ -661,12 +655,7 @@ private fun Int.isProject() = this == 1
 private fun String.isPlace() = this == "장소"
 
 @Composable
-private fun AskNightStudyCard(
-    modifier: Modifier = Modifier,
-    text: String,
-    action: @Composable () -> Unit,
-    onClick: () -> Unit,
-) {
+private fun AskNightStudyCard(modifier: Modifier = Modifier, text: String, action: @Composable () -> Unit, onClick: () -> Unit) {
     Row(
         modifier = modifier.clickable(
             onClick = onClick,
